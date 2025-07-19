@@ -3,7 +3,6 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 
 interface DemoTabsProps {
-  demoPath: string;
   frameworks: string[];
   defaultFramework?: string;
 }
@@ -21,86 +20,137 @@ const FRAMEWORK_INFO: Record<string, FrameworkInfo> = {
 };
 
 export default function DemoTabs({
-  demoPath,
   frameworks,
   defaultFramework = frameworks[0],
 }: DemoTabsProps): JSX.Element {
   const [activeFramework, setActiveFramework] = useState(defaultFramework);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
+    () =>
+      frameworks.reduce((acc, framework) => ({ ...acc, [framework]: true }), {})
+  );
+  const [errorStates, setErrorStates] = useState<Record<string, boolean>>({});
 
   const currentFramework = FRAMEWORK_INFO[activeFramework];
-  
+
   // Use environment-aware URLs
-  const baseUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://masup9.github.io/apg-patterns-examples'
-    : 'http://localhost';
-  
+  const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://masup9.github.io/apg-patterns-examples"
+      : "http://localhost";
+
   const demoUrls = {
-    react: process.env.NODE_ENV === 'production' 
-      ? `${baseUrl}/demos/react` 
-      : "http://localhost:3001",
-    svelte: process.env.NODE_ENV === 'production' 
-      ? `${baseUrl}/demos/svelte` 
-      : "http://localhost:3002",
-    vue: process.env.NODE_ENV === 'production' 
-      ? `${baseUrl}/demos/vue` 
-      : "http://localhost:3003",
+    react:
+      process.env.NODE_ENV === "production"
+        ? `${baseUrl}/demos/react`
+        : "http://localhost:3001",
+    svelte:
+      process.env.NODE_ENV === "production"
+        ? `${baseUrl}/demos/svelte`
+        : "http://localhost:3002",
+    vue:
+      process.env.NODE_ENV === "production"
+        ? `${baseUrl}/demos/vue`
+        : "http://localhost:3003",
   };
   const demoUrl = demoUrls[activeFramework as keyof typeof demoUrls];
 
   const handleFrameworkChange = (framework: string) => {
-    setIsLoading(true);
     setActiveFramework(framework);
+    // If this framework hasn't been loaded yet, show loading
+    if (loadingStates[framework]) {
+      setLoadingStates((prev) => ({ ...prev, [framework]: true }));
+    }
   };
 
-  const handleIframeLoad = () => {
-    setIsLoading(false);
+  const handleIframeLoad = (framework: string) => {
+    setLoadingStates((prev) => ({ ...prev, [framework]: false }));
+    setErrorStates((prev) => ({ ...prev, [framework]: false }));
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-  }, [activeFramework]);
+  const handleIframeError = (framework: string) => {
+    setLoadingStates((prev) => ({ ...prev, [framework]: false }));
+    setErrorStates((prev) => ({ ...prev, [framework]: true }));
+  };
+
+  const isCurrentlyLoading = loadingStates[activeFramework];
+  const hasCurrentError = errorStates[activeFramework];
 
   return (
     <div className={styles.demoContainer}>
-      <div className={styles.demoTabs}>
+      <div className={styles.demoTabs} role="tablist">
         {frameworks.map((framework) => {
-          const info = FRAMEWORK_INFO[framework];
+          const { color, label } = FRAMEWORK_INFO[framework];
+          const isActive = framework === activeFramework;
+
           return (
             <button
               key={framework}
-              className={clsx(styles.demoTab, {
-                [styles.active]: framework === activeFramework,
-              })}
+              className={clsx(styles.demoTab, { [styles.active]: isActive })}
               onClick={() => handleFrameworkChange(framework)}
-              style={{ "--framework-color": info.color } as React.CSSProperties}
+              style={{ "--framework-color": color } as React.CSSProperties}
+              role="tab"
+              aria-selected={isActive}
             >
               <span
                 className={styles.tabIcon}
-                style={{ backgroundColor: info.color }}
+                style={{ backgroundColor: color }}
               />
-              {info.label}
+              {label}
             </button>
           );
         })}
       </div>
 
-      <div className={styles.demoContent}>
-        {isLoading && (
+      <div className={styles.demoContent} role="tabpanel">
+        {isCurrentlyLoading && (
           <div className={styles.loadingState}>
             <span>Loading {currentFramework.label} demo...</span>
           </div>
         )}
 
-        <iframe
-          src={demoUrl}
-          className={clsx(styles.demoIframe, {
-            [styles.hidden]: isLoading,
-          })}
-          title={`${currentFramework.label} Demo`}
-          onLoad={handleIframeLoad}
-          sandbox="allow-scripts allow-same-origin"
-        />
+        {hasCurrentError && (
+          <div className={styles.errorState}>
+            <span>Failed to load {currentFramework.label} demo</span>
+            <button
+              onClick={() => {
+                setErrorStates((prev) => ({
+                  ...prev,
+                  [activeFramework]: false,
+                }));
+                setLoadingStates((prev) => ({
+                  ...prev,
+                  [activeFramework]: true,
+                }));
+                // Force iframe reload by changing key
+                window.location.reload();
+              }}
+              className={styles.retryButton}
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
+        {frameworks.map((framework) => (
+          <iframe
+            key={framework}
+            src={demoUrl}
+            className={clsx(styles.demoIframe, {
+              [styles.hidden]:
+                framework !== activeFramework ||
+                isCurrentlyLoading ||
+                hasCurrentError,
+              [styles.active]:
+                framework === activeFramework &&
+                !isCurrentlyLoading &&
+                !hasCurrentError,
+            })}
+            title={`${FRAMEWORK_INFO[framework].label} Demo`}
+            onLoad={() => handleIframeLoad(framework)}
+            onError={() => handleIframeError(framework)}
+            sandbox="allow-scripts allow-same-origin"
+          />
+        ))}
       </div>
 
       <div className={styles.demoInfo}>
