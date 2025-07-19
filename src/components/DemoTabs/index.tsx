@@ -29,10 +29,22 @@ export default function DemoTabs({
   const [isLoading, setIsLoading] = useState(true);
 
   const currentFramework = FRAMEWORK_INFO[activeFramework];
+  
+  // Use environment-aware URLs
+  const baseUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://masup9.github.io/apg-patterns-examples'
+    : 'http://localhost';
+  
   const demoUrls = {
-    react: "http://localhost:3001",
-    svelte: "http://localhost:3002",
-    vue: "http://localhost:3003",
+    react: process.env.NODE_ENV === 'production' 
+      ? `${baseUrl}/demos/react` 
+      : "http://localhost:3001",
+    svelte: process.env.NODE_ENV === 'production' 
+      ? `${baseUrl}/demos/svelte` 
+      : "http://localhost:3002",
+    vue: process.env.NODE_ENV === 'production' 
+      ? `${baseUrl}/demos/vue` 
+      : "http://localhost:3003",
   };
   const demoUrl = demoUrls[activeFramework as keyof typeof demoUrls];
 

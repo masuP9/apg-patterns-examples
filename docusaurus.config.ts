@@ -8,10 +8,10 @@ const config: Config = {
     "Accessible UI component implementations across React, Svelte, and Vue",
   favicon: "img/favicon.ico",
 
-  url: "https://your-username.github.io",
+  url: "https://masup9.github.io",
   baseUrl: "/apg-patterns-examples/",
 
-  organizationName: "your-username",
+  organizationName: "masuP9",
   projectName: "apg-patterns-examples",
 
   onBrokenLinks: "throw",
@@ -30,7 +30,7 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
           routeBasePath: "/",
           editUrl:
-            "https://github.com/your-username/apg-patterns-examples/tree/main/docs/",
+            "https://github.com/masuP9/apg-patterns-examples/tree/main/docs/",
         },
         blog: false,
         theme: {
@@ -65,7 +65,7 @@ const config: Config = {
           position: "right",
         },
         {
-          href: "https://github.com/your-username/apg-patterns-examples",
+          href: "https://github.com/masuP9/apg-patterns-examples",
           label: "GitHub",
           position: "right",
         },
@@ -105,7 +105,7 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/your-username/apg-patterns-examples",
+              href: "https://github.com/masuP9/apg-patterns-examples",
             },
           ],
         },
