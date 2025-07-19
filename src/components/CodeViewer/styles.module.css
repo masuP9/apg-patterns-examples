@@ -77,13 +77,44 @@
   font-family: "Monaco", "Menlo", "Consolas", monospace;
   font-size: 0.875rem;
   line-height: 1.5;
-  background: var(--ifm-color-emphasis-100);
   overflow-x: auto;
-  white-space: pre-wrap;
+  white-space: pre;
+  counter-reset: line-number;
 }
 
-[data-theme="dark"] .codeBlock {
-  background: var(--ifm-color-emphasis-200);
+.codeBlock > div {
+  display: flex;
+  align-items: flex-start;
+  counter-increment: line-number;
+  white-space: pre;
+  min-width: 0;
+}
+
+.lineNumber {
+  display: inline-block;
+  width: 3rem;
+  text-align: right;
+  padding-right: 1rem;
+  color: var(--ifm-color-content-secondary);
+  opacity: 0.6;
+  font-size: 0.75rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .lineNumber {
+  opacity: 0.8;
+}
+
+/* Code content area - prevent wrapping */
+.codeBlock code {
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.codeBlock span {
+  white-space: pre;
 }
 
 .copyButton {
@@ -99,12 +130,84 @@
   cursor: pointer;
   transition: all 0.2s ease;
   opacity: 0.8;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .copyButton:hover {
   opacity: 1;
   background: var(--ifm-color-primary-dark);
 }
+
+.copySuccess {
+  background: var(--ifm-color-success) !important;
+  opacity: 1;
+}
+
+.copyError {
+  background: var(--ifm-color-danger) !important;
+  opacity: 1;
+}
+
+/* Copy Feedback Message */
+.copyFeedback {
+  /* Screen reader only by default (sr-only approach) */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.copyFeedbackVisible {
+  /* Visible state - undo sr-only styles and apply visual styles */
+  position: absolute;
+  top: 3.5rem;
+  right: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-color);
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  max-width: 250px;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copyFeedbackSuccess {
+  border-color: var(--ifm-color-success);
+  background: var(--ifm-color-success-contrast-background);
+  color: var(--ifm-color-success-dark);
+}
+
+.copyFeedbackError {
+  border-color: var(--ifm-color-danger);
+  background: var(--ifm-color-danger-contrast-background);
+  color: var(--ifm-color-danger-dark);
+}
+
 
 /* Loading State */
 .loadingState {

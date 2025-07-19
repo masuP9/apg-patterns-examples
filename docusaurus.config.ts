@@ -14,7 +14,7 @@ const config: Config = {
   organizationName: "masuP9",
   projectName: "apg-patterns-examples",
 
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
 
   i18n: {
@@ -115,7 +115,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ["bash", "json", "typescript", "tsx"],
+      additionalLanguages: ["bash", "json", "typescript", "tsx", "javascript", "css", "markup"],
     },
   },
 

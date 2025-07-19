@@ -3,6 +3,8 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { Highlight, themes } from "prism-react-renderer";
+import { useColorMode } from "@docusaurus/theme-common";
 import { codeCache } from "./cache";
 import type { PatternCodeData } from "../../types/code-loader";
 
@@ -51,6 +53,10 @@ export default function CodeViewer({
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "success" | "error">(
+    "idle"
+  );
+  const [copyMessage, setCopyMessage] = useState<string>("");
 
   // Get plugin metadata and Docusaurus context
   const pluginData = usePluginData(
@@ -75,7 +81,7 @@ export default function CodeViewer({
       setError(null);
 
       // Use Docusaurus baseUrl for correct path resolution
-      const baseUrl = siteConfig.baseUrl || '/';
+      const baseUrl = siteConfig.baseUrl || "/";
       const fetchUrl = `${baseUrl}code/${patternName}.json`;
       console.log(`Fetching pattern from: ${fetchUrl}`);
 
@@ -85,11 +91,19 @@ export default function CodeViewer({
       }
 
       // Check if response is actually JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
         const responseText = await response.text();
-        console.error('Non-JSON response received:', responseText.substring(0, 200));
-        throw new Error(`Expected JSON but received ${contentType}: ${responseText.substring(0, 100)}...`);
+        console.error(
+          "Non-JSON response received:",
+          responseText.substring(0, 200)
+        );
+        throw new Error(
+          `Expected JSON but received ${contentType}: ${responseText.substring(
+            0,
+            100
+          )}...`
+        );
       }
 
       const data = await response.json();
@@ -132,6 +146,7 @@ export default function CodeViewer({
 
   const currentFramework = FRAMEWORK_INFO[activeFramework];
   const currentCode = resolvedCodeData[activeFramework];
+  const { colorMode } = useColorMode();
 
   // Loading state
   if (pattern && loading) {
@@ -234,28 +249,75 @@ export default function CodeViewer({
 
       {/* Code Display */}
       <div className={styles.codeContent}>
-        <pre className={styles.codeBlock}>
-          <code
-            className={`language-${getLanguage(
-              activeTab,
-              currentFramework.extension
-            )}`}
-          >
-            {currentCode[activeTab]}
-          </code>
-        </pre>
-      </div>
+        <Highlight
+          theme={colorMode === "dark" ? themes.dracula : themes.github}
+          code={currentCode[activeTab] || ""}
+          language={getLanguage(activeTab, currentFramework.extension)}
+        >
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre className={clsx(className, styles.codeBlock)} style={style}>
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line })}>
+                  <span className={styles.lineNumber}>{i + 1}</span>
+                  {line.map((token, key) => (
+                    <span key={key} {...getTokenProps({ token })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
 
-      {/* Copy Button */}
-      <button
-        className={styles.copyButton}
-        onClick={() =>
-          navigator.clipboard.writeText(currentCode[activeTab] || "")
-        }
-        title="Copy code"
-      >
-        📋 Copy
-      </button>
+        {/* Copy Button */}
+        <button
+          className={clsx(styles.copyButton, {
+            [styles.copySuccess]: copyStatus === "success",
+            [styles.copyError]: copyStatus === "error",
+          })}
+          onClick={async () => {
+            try {
+              setCopyStatus("idle");
+              setCopyMessage("");
+              await navigator.clipboard.writeText(currentCode[activeTab] || "");
+              setCopyStatus("success");
+              setCopyMessage("✅ Code copied to clipboard successfully!");
+              setTimeout(() => {
+                setCopyStatus("idle");
+                setCopyMessage("");
+              }, 3000);
+            } catch (err) {
+              setCopyStatus("error");
+              setCopyMessage(
+                "❌ Failed to copy code to clipboard. Please try again."
+              );
+              setTimeout(() => {
+                setCopyStatus("idle");
+                setCopyMessage("");
+              }, 3000);
+              console.error("Failed to copy code:", err);
+            }
+          }}
+          title="Copy code to clipboard"
+          aria-describedby={copyMessage ? "copy-feedback" : undefined}
+        >
+          📋 Copy
+        </button>
+
+        {/* Copy Feedback Message - Always present for screen readers */}
+        <p
+          id="copy-feedback"
+          className={clsx(styles.copyFeedback, {
+            [styles.copyFeedbackVisible]: !!copyMessage,
+            [styles.copyFeedbackSuccess]: copyStatus === "success",
+            [styles.copyFeedbackError]: copyStatus === "error",
+          })}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {copyMessage && copyMessage}
+        </p>
+      </div>
     </div>
   );
 }
@@ -263,7 +325,20 @@ export default function CodeViewer({
 function getLanguage(tab: string, extension: string): string {
   switch (tab) {
     case "component":
-      return extension === "tsx" ? "typescript" : extension;
+      switch (extension) {
+        case "tsx":
+          return "tsx";
+        case "svelte":
+          return "markup"; // Svelte uses HTML-like syntax
+        case "vue":
+          return "markup"; // Vue uses HTML-like syntax
+        case "ts":
+          return "typescript";
+        case "js":
+          return "javascript";
+        default:
+          return extension;
+      }
     case "styles":
       return "css";
     case "usage":
