@@ -5,7 +5,7 @@ import { resolve } from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/demos/react/",
+  base: process.env.NODE_ENV === 'production' ? "/apg-patterns-examples/demos/react/" : "/demos/react/",
   build: {
     outDir: "dist",
     assetsDir: "assets",

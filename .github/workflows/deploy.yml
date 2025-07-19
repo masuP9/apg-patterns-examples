@@ -40,6 +40,8 @@ jobs:
           cd ../vue && npm ci
 
       - name: Build demos
+        env:
+          NODE_ENV: production
         run: |
           cd demos/react && npm run build && cd ../..
           cd demos/svelte && npm run build && cd ../..

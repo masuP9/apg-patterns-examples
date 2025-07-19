@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: "/demos/vue/",
+  base: process.env.NODE_ENV === 'production' ? "/apg-patterns-examples/demos/vue/" : "/demos/vue/",
   build: {
     outDir: "dist",
     assetsDir: "assets",

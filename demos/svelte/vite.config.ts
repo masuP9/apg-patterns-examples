@@ -5,7 +5,7 @@ import { resolve } from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svelte()],
-  base: "/demos/svelte/",
+  base: process.env.NODE_ENV === 'production' ? "/apg-patterns-examples/demos/svelte/" : "/demos/svelte/",
   build: {
     outDir: "dist",
     assetsDir: "assets",
