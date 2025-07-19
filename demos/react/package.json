@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:a11y": "vitest --config vitest.a11y.config.ts",
-    "setup-shared": "mkdir -p ../shared/styles"
+    "setup-shared": "mkdir -p ../shared/styles",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix"
   },
   "dependencies": {
     "react": "^18.2.0",

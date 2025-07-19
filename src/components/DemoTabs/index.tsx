@@ -1,25 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
+import { FRAMEWORK_INFO, type FrameworkType, getFrameworkInfo } from "../../types/framework";
 
 interface DemoTabsProps {
-  frameworks: string[];
-  defaultFramework?: string;
+  frameworks: FrameworkType[];
+  defaultFramework?: FrameworkType;
 }
 
-interface FrameworkInfo {
-  name: string;
-  label: string;
-  color: string;
-}
 
-const FRAMEWORK_INFO: Record<string, FrameworkInfo> = {
-  react: { name: "react", label: "React", color: "#61dafb" },
-  svelte: { name: "svelte", label: "Svelte", color: "#ff3e00" },
-  vue: { name: "vue", label: "Vue", color: "#4fc08d" },
-};
-
-export default function DemoTabs({
+const DemoTabs = React.memo(function DemoTabs({
   frameworks,
   defaultFramework = frameworks[0],
 }: DemoTabsProps): JSX.Element {
@@ -30,7 +20,7 @@ export default function DemoTabs({
   );
   const [errorStates, setErrorStates] = useState<Record<string, boolean>>({});
 
-  const currentFramework = FRAMEWORK_INFO[activeFramework];
+  const currentFramework = getFrameworkInfo(activeFramework)!;
 
   // Use environment-aware URLs
   const baseUrl =
@@ -52,25 +42,25 @@ export default function DemoTabs({
         ? `${baseUrl}/demos/vue`
         : "http://localhost:3003",
   };
-  const demoUrl = demoUrls[activeFramework as keyof typeof demoUrls];
+  const demoUrl = demoUrls[activeFramework];
 
-  const handleFrameworkChange = (framework: string) => {
+  const handleFrameworkChange = useCallback((framework: FrameworkType) => {
     setActiveFramework(framework);
     // If this framework hasn't been loaded yet, show loading
     if (loadingStates[framework]) {
       setLoadingStates((prev) => ({ ...prev, [framework]: true }));
     }
-  };
+  }, [loadingStates]);
 
-  const handleIframeLoad = (framework: string) => {
+  const handleIframeLoad = useCallback((framework: FrameworkType) => {
     setLoadingStates((prev) => ({ ...prev, [framework]: false }));
     setErrorStates((prev) => ({ ...prev, [framework]: false }));
-  };
+  }, []);
 
-  const handleIframeError = (framework: string) => {
+  const handleIframeError = useCallback((framework: FrameworkType) => {
     setLoadingStates((prev) => ({ ...prev, [framework]: false }));
     setErrorStates((prev) => ({ ...prev, [framework]: true }));
-  };
+  }, []);
 
   const isCurrentlyLoading = loadingStates[activeFramework];
   const hasCurrentError = errorStates[activeFramework];
@@ -79,7 +69,9 @@ export default function DemoTabs({
     <div className={styles.demoContainer}>
       <div className={styles.demoTabs} role="tablist">
         {frameworks.map((framework) => {
-          const { color, label } = FRAMEWORK_INFO[framework];
+          const frameworkInfo = getFrameworkInfo(framework);
+          if (!frameworkInfo) return null;
+          const { color, label } = frameworkInfo;
           const isActive = framework === activeFramework;
 
           return (
@@ -145,7 +137,7 @@ export default function DemoTabs({
                 !isCurrentlyLoading &&
                 !hasCurrentError,
             })}
-            title={`${FRAMEWORK_INFO[framework].label} Demo`}
+            title={`${frameworkInfo.label} Demo`}
             onLoad={() => handleIframeLoad(framework)}
             onError={() => handleIframeError(framework)}
             sandbox="allow-scripts allow-same-origin"
@@ -162,4 +154,6 @@ export default function DemoTabs({
       </div>
     </div>
   );
-}
+});
+
+export default DemoTabs;

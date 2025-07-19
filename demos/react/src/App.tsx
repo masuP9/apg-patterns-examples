@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useId } from "react";
 import ToggleButton from "./components/Button/ToggleButton";
 
 function App() {
   const [notification, setNotification] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  
+  // Generate unique IDs for accessibility
+  const emailDescId = useId();
+  const darkDescId = useId();
 
   return (
     <div className="apg-demo-container">
@@ -24,28 +28,28 @@ function App() {
 
         <div className="apg-button-group">
           <div>
-            <p id="email-desc" className="apg-toggle-button-description">
+            <p id={emailDescId} className="apg-toggle-button-description">
               Enable or disable email notifications for your account
             </p>
             <ToggleButton
               initialPressed={notification}
               onToggle={setNotification}
               aria-label="Toggle email notifications"
-              aria-describedby="email-desc"
+              aria-describedby={emailDescId}
             >
               📧 Email Notifications
             </ToggleButton>
           </div>
 
           <div>
-            <p id="dark-desc" className="apg-toggle-button-description">
+            <p id={darkDescId} className="apg-toggle-button-description">
               Switch between light and dark theme
             </p>
             <ToggleButton
               initialPressed={darkMode}
               onToggle={setDarkMode}
               aria-label="Toggle dark mode"
-              aria-describedby="dark-desc"
+              aria-describedby={darkDescId}
             >
               🌙 Dark Mode
             </ToggleButton>

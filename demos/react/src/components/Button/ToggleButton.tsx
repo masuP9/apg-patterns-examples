@@ -38,7 +38,6 @@ export function ToggleButton({
     [handleClick]
   );
 
-
   // Build CSS classes
   const stateClass = pressed
     ? "apg-toggle-button--pressed"

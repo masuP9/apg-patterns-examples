@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useId } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { Highlight, themes } from "prism-react-renderer";
 import { useColorMode } from "@docusaurus/theme-common";
-import { codeCache } from "./cache";
 import type { PatternCodeData } from "../../types/code-loader";
+import { FRAMEWORK_INFO, type FrameworkType, getFrameworkInfo } from "../../types/framework";
 
 interface CodeViewerProps {
-  frameworks: string[];
+  frameworks: FrameworkType[];
   codeData?: Record<
     string,
     {
@@ -21,7 +21,7 @@ interface CodeViewerProps {
   // Props for loading from plugin data
   pattern?: string;
   subPattern?: string;
-  defaultFramework?: string;
+  defaultFramework?: FrameworkType;
 }
 
 interface CodeLoaderPluginData {
@@ -31,13 +31,8 @@ interface CodeLoaderPluginData {
   };
 }
 
-const FRAMEWORK_INFO = {
-  react: { name: "react", label: "React", extension: "tsx" },
-  svelte: { name: "svelte", label: "Svelte", extension: "svelte" },
-  vue: { name: "vue", label: "Vue", extension: "vue" },
-};
 
-export default function CodeViewer({
+const CodeViewer = React.memo(function CodeViewer({
   frameworks,
   codeData,
   pattern,
@@ -57,6 +52,9 @@ export default function CodeViewer({
     "idle"
   );
   const [copyMessage, setCopyMessage] = useState<string>("");
+  
+  // Generate unique ID for accessibility
+  const copyFeedbackId = useId();
 
   // Get plugin metadata and Docusaurus context
   const pluginData = usePluginData(
@@ -64,18 +62,10 @@ export default function CodeViewer({
   ) as CodeLoaderPluginData;
   const { siteConfig } = useDocusaurusContext();
 
-  // Dynamic code loading function with cache
-  const loadPatternCode = async (
+  // Simple code loading function
+  const loadPatternCode = useCallback(async (
     patternName: string
   ): Promise<PatternCodeData | null> => {
-    // Check cache first
-    const cacheKey = `pattern-${patternName}`;
-    const cached = codeCache.get(cacheKey);
-    if (cached) {
-      console.log(`Cache hit for pattern: ${patternName}`);
-      return cached;
-    }
-
     try {
       setLoading(true);
       setError(null);
@@ -83,7 +73,6 @@ export default function CodeViewer({
       // Use Docusaurus baseUrl for correct path resolution
       const baseUrl = siteConfig.baseUrl || "/";
       const fetchUrl = `${baseUrl}code/${patternName}.json`;
-      console.log(`Fetching pattern from: ${fetchUrl}`);
 
       const response = await fetch(fetchUrl);
       if (!response.ok) {
@@ -94,10 +83,6 @@ export default function CodeViewer({
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const responseText = await response.text();
-        console.error(
-          "Non-JSON response received:",
-          responseText.substring(0, 200)
-        );
         throw new Error(
           `Expected JSON but received ${contentType}: ${responseText.substring(
             0,
@@ -106,22 +91,15 @@ export default function CodeViewer({
         );
       }
 
-      const data = await response.json();
-
-      // Cache the result
-      codeCache.set(cacheKey, data);
-      console.log(`Cached pattern: ${patternName}`);
-
-      return data;
+      return await response.json();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      console.error(`Failed to load pattern ${patternName}:`, errorMessage);
       setError(errorMessage);
       return null;
     } finally {
       setLoading(false);
     }
-  };
+  }, [siteConfig.baseUrl]);
 
   // Load pattern data when pattern prop changes
   useEffect(() => {
@@ -144,9 +122,32 @@ export default function CodeViewer({
     return codeData || {};
   }, [pattern, loadedCodeData, codeData]);
 
-  const currentFramework = FRAMEWORK_INFO[activeFramework];
+  const currentFramework = getFrameworkInfo(activeFramework)!;
   const currentCode = resolvedCodeData[activeFramework];
   const { colorMode } = useColorMode();
+
+  const handleCopyCode = useCallback(async () => {
+    try {
+      setCopyStatus("idle");
+      setCopyMessage("");
+      await navigator.clipboard.writeText(currentCode[activeTab] || "");
+      setCopyStatus("success");
+      setCopyMessage("✅ Code copied to clipboard successfully!");
+      setTimeout(() => {
+        setCopyStatus("idle");
+        setCopyMessage("");
+      }, 3000);
+    } catch (err) {
+      setCopyStatus("error");
+      setCopyMessage(
+        "❌ Failed to copy code to clipboard. Please try again."
+      );
+      setTimeout(() => {
+        setCopyStatus("idle");
+        setCopyMessage("");
+      }, 3000);
+    }
+  }, [currentCode, activeTab]);
 
   // Loading state
   if (pattern && loading) {
@@ -200,7 +201,8 @@ export default function CodeViewer({
       {/* Framework Selection */}
       <div className={styles.frameworkTabs}>
         {frameworks.map((framework) => {
-          const info = FRAMEWORK_INFO[framework];
+          const info = getFrameworkInfo(framework);
+          if (!info) return null;
           return (
             <button
               key={framework}
@@ -274,38 +276,16 @@ export default function CodeViewer({
             [styles.copySuccess]: copyStatus === "success",
             [styles.copyError]: copyStatus === "error",
           })}
-          onClick={async () => {
-            try {
-              setCopyStatus("idle");
-              setCopyMessage("");
-              await navigator.clipboard.writeText(currentCode[activeTab] || "");
-              setCopyStatus("success");
-              setCopyMessage("✅ Code copied to clipboard successfully!");
-              setTimeout(() => {
-                setCopyStatus("idle");
-                setCopyMessage("");
-              }, 3000);
-            } catch (err) {
-              setCopyStatus("error");
-              setCopyMessage(
-                "❌ Failed to copy code to clipboard. Please try again."
-              );
-              setTimeout(() => {
-                setCopyStatus("idle");
-                setCopyMessage("");
-              }, 3000);
-              console.error("Failed to copy code:", err);
-            }
-          }}
+          onClick={handleCopyCode}
           title="Copy code to clipboard"
-          aria-describedby={copyMessage ? "copy-feedback" : undefined}
+          aria-describedby={copyMessage ? copyFeedbackId : undefined}
         >
           📋 Copy
         </button>
 
         {/* Copy Feedback Message - Always present for screen readers */}
         <p
-          id="copy-feedback"
+          id={copyFeedbackId}
           className={clsx(styles.copyFeedback, {
             [styles.copyFeedbackVisible]: !!copyMessage,
             [styles.copyFeedbackSuccess]: copyStatus === "success",
@@ -320,7 +300,9 @@ export default function CodeViewer({
       </div>
     </div>
   );
-}
+});
+
+export default CodeViewer;
 
 function getLanguage(tab: string, extension: string): string {
   switch (tab) {

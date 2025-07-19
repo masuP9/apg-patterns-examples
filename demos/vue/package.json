@@ -8,7 +8,9 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
-    "setup-shared": "mkdir -p ../shared/styles"
+    "setup-shared": "mkdir -p ../shared/styles",
+    "lint": "vue-tsc --noEmit && echo 'Vue type checking completed'",
+    "lint:fix": "vue-tsc --noEmit && echo 'Vue type checking completed'"
   },
   "dependencies": {
     "vue": "^3.4.0"

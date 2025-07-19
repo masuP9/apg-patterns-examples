@@ -18,7 +18,10 @@
     "dev:react": "cd demos/react && npm run dev",
     "dev:svelte": "cd demos/svelte && npm run dev",
     "dev:vue": "cd demos/vue && npm run dev",
-    "generate-meta": "node scripts/generate-meta.js"
+    "generate-meta": "node scripts/generate-meta.js",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:all": "npm run lint && cd demos/react && npm run lint && cd ../svelte && npm run lint && cd ../vue && npm run lint"
   },
   "dependencies": {
     "@docusaurus/core": "^3.1.0",
@@ -35,7 +38,12 @@
     "@docusaurus/tsconfig": "^3.1.0",
     "@docusaurus/types": "^3.1.0",
     "@types/react": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
     "concurrently": "^8.2.0",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "~5.3.0"
   },
   "browserslist": {

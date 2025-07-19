@@ -23,21 +23,5 @@ export interface PatternCodeData {
 
 export interface CodeLoaderConfig {
   patterns: string[];
-  cacheTTL?: number;
   staticPath?: string;
-}
-
-export interface CacheEntry {
-  data: PatternCodeData;
-  timestamp: number;
-  ttl: number;
-}
-
-export interface CodeCache {
-  set(key: string, data: PatternCodeData, ttl?: number): void;
-  get(key: string): PatternCodeData | null;
-  has(key: string): boolean;
-  clear(): void;
-  getSize(): number;
-  cleanup(): void;
 }
