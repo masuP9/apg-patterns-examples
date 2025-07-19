@@ -41,19 +41,25 @@ jobs:
 
       - name: Build demos
         run: |
-          cd demos/react && npm run build
-          cd ../svelte && npm run build  
-          cd ../vue && npm run build
+          cd demos/react && npm run build && cd ../..
+          cd demos/svelte && npm run build && cd ../..
+          cd demos/vue && npm run build && cd ../..
 
       - name: Build website
         run: npm run build
 
       - name: Copy demo builds to website
         run: |
+          echo "Checking demo build directories..."
+          ls -la demos/react/
+          ls -la demos/svelte/
+          ls -la demos/vue/
           mkdir -p build/demos
           cp -r demos/react/dist build/demos/react
           cp -r demos/svelte/dist build/demos/svelte
           cp -r demos/vue/dist build/demos/vue
+          echo "Final build directory structure:"
+          ls -la build/demos/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
