@@ -1,0 +1,56 @@
+{
+  "name": "apg-patterns-examples",
+  "version": "0.1.0",
+  "private": true,
+  "description": "APG Authoring Patterns implementation examples for React, Svelte, and Vue with MCP integration",
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "dev:demos": "concurrently \"npm run dev:react\" \"npm run dev:svelte\" \"npm run dev:vue\"",
+    "dev:all": "concurrently --names \"DOCS,REACT,SVELTE,VUE\" --prefix-colors \"blue,green,yellow,magenta\" \"npm start -- --port 3000\" \"npm run dev:react\" \"npm run dev:svelte\" \"npm run dev:vue\"",
+    "dev:react": "cd demos/react && npm run dev",
+    "dev:svelte": "cd demos/svelte && npm run dev",
+    "dev:vue": "cd demos/vue && npm run dev",
+    "generate-meta": "node scripts/generate-meta.js"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.1.0",
+    "@docusaurus/preset-classic": "^3.1.0",
+    "@docusaurus/theme-mermaid": "^3.1.0",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.3.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.1.0",
+    "@docusaurus/tsconfig": "^3.1.0",
+    "@docusaurus/types": "^3.1.0",
+    "@types/react": "^18.0.0",
+    "concurrently": "^8.2.0",
+    "typescript": "~5.3.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0"
+  }
+}

@@ -1,0 +1,247 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Custom styles for demo integration */
+.demo-container {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-border-radius);
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.demo-iframe {
+  width: 100%;
+  border: none;
+  min-height: 300px;
+  background: white;
+}
+
+[data-theme='dark'] .demo-iframe {
+  background: var(--ifm-background-color);
+}
+
+.demo-tabs {
+  display: flex;
+  background: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.demo-tab {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+.demo-tab:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.demo-tab.active {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.demo-tab.active:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+/* Pattern metadata display */
+.pattern-metadata {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-border-radius);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.pattern-metadata h4 {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
+}
+
+.pattern-metadata dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.pattern-metadata dt {
+  font-weight: 600;
+  color: var(--ifm-color-content-secondary);
+}
+
+.pattern-metadata dd {
+  margin: 0;
+}
+
+.pattern-metadata .tag {
+  display: inline-block;
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Accessibility features highlight */
+.a11y-feature {
+  background: var(--ifm-color-success-contrast-background);
+  border-left: 4px solid var(--ifm-color-success);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 var(--ifm-border-radius) var(--ifm-border-radius) 0;
+}
+
+.a11y-feature .a11y-feature-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--ifm-color-success-dark);
+  margin-bottom: 0.5rem;
+}
+
+.a11y-feature .a11y-feature-title::before {
+  content: "♿";
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+/* Framework comparison table */
+.framework-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.framework-card {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-border-radius);
+  padding: 1rem;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.framework-card h5 {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.framework-card .framework-logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+}
+
+/* Code block enhancements */
+.code-block-with-tabs {
+  margin: 1rem 0;
+}
+
+.code-block-tabs {
+  display: flex;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: var(--ifm-border-radius) var(--ifm-border-radius) 0 0;
+  overflow: hidden;
+}
+
+.code-block-tab {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+.code-block-tab:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.code-block-tab.active {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .demo-tabs {
+    flex-direction: column;
+  }
+  
+  .demo-tab {
+    border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  }
+  
+  .demo-tab:last-child {
+    border-bottom: none;
+  }
+  
+  .framework-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading states */
+.demo-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--ifm-color-content-secondary);
+}
+
+.demo-loading::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-top: 2px solid var(--ifm-color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
