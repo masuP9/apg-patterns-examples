@@ -123,26 +123,31 @@ const DemoTabs = React.memo(function DemoTabs({
           </div>
         )}
 
-        {frameworks.map((framework) => (
-          <iframe
-            key={framework}
-            src={demoUrl}
-            className={clsx(styles.demoIframe, {
-              [styles.hidden]:
-                framework !== activeFramework ||
-                isCurrentlyLoading ||
-                hasCurrentError,
-              [styles.active]:
-                framework === activeFramework &&
-                !isCurrentlyLoading &&
-                !hasCurrentError,
-            })}
-            title={`${frameworkInfo.label} Demo`}
-            onLoad={() => handleIframeLoad(framework)}
-            onError={() => handleIframeError(framework)}
-            sandbox="allow-scripts allow-same-origin"
-          />
-        ))}
+        {frameworks.map((framework) => {
+          const info = getFrameworkInfo(framework);
+          if (!info) return null;
+          
+          return (
+            <iframe
+              key={framework}
+              src={demoUrls[framework]}
+              className={clsx(styles.demoIframe, {
+                [styles.hidden]:
+                  framework !== activeFramework ||
+                  isCurrentlyLoading ||
+                  hasCurrentError,
+                [styles.active]:
+                  framework === activeFramework &&
+                  !isCurrentlyLoading &&
+                  !hasCurrentError,
+              })}
+              title={`${info.label} Demo`}
+              onLoad={() => handleIframeLoad(framework)}
+              onError={() => handleIframeError(framework)}
+              sandbox="allow-scripts allow-same-origin"
+            />
+          );
+        })}
       </div>
 
       <div className={styles.demoInfo}>
