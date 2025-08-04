@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 
 export interface ToggleButtonProps 
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "onKeyDown" | "type" | "aria-pressed"> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "onKeyUp" | "type" | "aria-pressed"> {
   /** Initial pressed state */
   initialPressed?: boolean;
   /** Button label text */
@@ -27,7 +27,7 @@ export function ToggleButton({
     onToggle?.(newPressed);
   }, [pressed, buttonProps.disabled, onToggle]);
 
-  const handleKeyDown = useCallback(
+  const handleKeyUp = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       // Handle Space and Enter keys according to APG specification
       if (event.key === " " || event.key === "Enter") {
@@ -50,7 +50,7 @@ export function ToggleButton({
       className={`apg-toggle-button ${stateClass} ${className}`.trim()}
       aria-pressed={pressed}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
     >
       <span className="apg-toggle-button-content">{children}</span>
       <span

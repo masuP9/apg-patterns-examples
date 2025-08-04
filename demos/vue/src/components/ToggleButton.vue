@@ -5,7 +5,7 @@
     :aria-pressed="pressed"
     v-bind="$attrs"
     @click="handleClick"
-    @keydown="handleKeyDown"
+    @keyup="handleKeyUp"
   >
     <span class="apg-toggle-button-content">
       <slot />
@@ -55,7 +55,7 @@ const handleClick = () => {
   emit('toggle', newPressed)
 }
 
-const handleKeyDown = (event: KeyboardEvent) => {
+const handleKeyUp = (event: KeyboardEvent) => {
   // Handle Space and Enter keys according to APG specification
   if (event.key === ' ' || event.key === 'Enter') {
     event.preventDefault() // Prevent default behavior (scrolling for space)

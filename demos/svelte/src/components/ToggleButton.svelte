@@ -12,7 +12,7 @@
     onToggle(pressed);
   }
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function handleKeyUp(event: KeyboardEvent) {
     // Handle Space and Enter keys according to APG specification
     if (event.key === " " || event.key === "Enter") {
       event.preventDefault(); // Prevent default behavior (scrolling for space)
@@ -36,7 +36,7 @@
   aria-pressed={pressed}
   {...$$restProps}
   on:click={handleClick}
-  on:keydown={handleKeyDown}
+  on:keyup={handleKeyUp}
 >
   <span class="apg-toggle-button-content">
     <slot />
