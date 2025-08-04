@@ -2,12 +2,12 @@ import { useState } from "react";
 import Tabs from "../components/Tabs/Tabs";
 
 function TabsDemo() {
-  const [, setSelectedTab] = useState('tab1');
+  const [, setSelectedTab] = useState("tab1");
 
   const tabs = [
     {
-      id: 'tab1',
-      label: 'First Tab',
+      id: "tab1",
+      label: "First Tab",
       content: (
         <div>
           <h3>First Tab Content</h3>
@@ -16,8 +16,8 @@ function TabsDemo() {
       )
     },
     {
-      id: 'tab2',
-      label: 'Second Tab',
+      id: "tab2",
+      label: "Second Tab",
       content: (
         <div>
           <h3>Second Tab Content</h3>
@@ -26,8 +26,8 @@ function TabsDemo() {
       )
     },
     {
-      id: 'tab3',
-      label: 'Third Tab',
+      id: "tab3",
+      label: "Third Tab",
       content: (
         <div>
           <h3>Third Tab Content</h3>
@@ -65,7 +65,7 @@ function TabsDemo() {
         </section>
 
         {/* Vertical Tabs */}
-        <section style={{ marginTop: '2rem' }}>
+        <section style={{ marginTop: "2rem" }}>
           <h2 className="text-xl font-semibold mb-4">Vertical Tabs</h2>
           <Tabs
             tabs={tabs.slice(0, 2)}
@@ -75,7 +75,7 @@ function TabsDemo() {
         </section>
 
         {/* Manual Activation */}
-        <section style={{ marginTop: '2rem' }}>
+        <section style={{ marginTop: "2rem" }}>
           <h2 className="text-xl font-semibold mb-4">Manual Activation</h2>
           <p className="mb-4">Arrow keys move focus, Enter/Space activates tab</p>
           <Tabs

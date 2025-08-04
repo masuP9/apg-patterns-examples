@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 export interface ToggleButtonProps 
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'onKeyDown' | 'type' | 'aria-pressed'> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "onKeyDown" | "type" | "aria-pressed"> {
   /** Initial pressed state */
   initialPressed?: boolean;
   /** Button label text */
