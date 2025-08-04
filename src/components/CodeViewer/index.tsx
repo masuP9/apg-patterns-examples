@@ -91,7 +91,7 @@ const CodeViewer = React.memo(function CodeViewer({
         );
       }
 
-      return await response.json();
+      return await response.json() as PatternCodeData;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -110,7 +110,7 @@ const CodeViewer = React.memo(function CodeViewer({
           }`
         : pattern;
 
-      loadPatternCode(patternKey).then(setLoadedCodeData);
+      void loadPatternCode(patternKey).then(setLoadedCodeData);
     }
   }, [pattern, subPattern, pluginData?.metadata?.version, loadPatternCode]);
 
@@ -122,7 +122,7 @@ const CodeViewer = React.memo(function CodeViewer({
     return codeData || {};
   }, [pattern, loadedCodeData, codeData]);
 
-  const currentFramework = getFrameworkInfo(activeFramework)!;
+  const currentFramework = getFrameworkInfo(activeFramework);
   const currentCode = resolvedCodeData[activeFramework];
   const { colorMode } = useColorMode();
 
@@ -276,7 +276,7 @@ const CodeViewer = React.memo(function CodeViewer({
             [styles.copySuccess]: copyStatus === "success",
             [styles.copyError]: copyStatus === "error",
           })}
-          onClick={handleCopyCode}
+          onClick={() => void handleCopyCode()}
           title="Copy code to clipboard"
           aria-describedby={copyMessage ? copyFeedbackId : undefined}
         >

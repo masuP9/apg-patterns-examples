@@ -23,7 +23,7 @@ const DemoTabs = React.memo(function DemoTabs({
   );
   const [errorStates, setErrorStates] = useState<Record<string, boolean>>({});
 
-  const currentFramework = getFrameworkInfo(activeFramework)!;
+  const currentFramework = getFrameworkInfo(activeFramework);
 
   // Use environment-aware URLs
   const baseUrl =
