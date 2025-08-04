@@ -1,6 +1,4 @@
-<script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte';
-
+<script context="module" lang="ts">
   // Types
   export interface TabItem {
     id: string;
@@ -8,6 +6,10 @@
     content?: string;
     disabled?: boolean;
   }
+</script>
+
+<script lang="ts">
+  import { onMount, createEventDispatcher } from 'svelte';
 
   // Props
   export let tabs: TabItem[] = [];
@@ -157,6 +159,7 @@
     role="tablist"
     aria-orientation={orientation}
     class="tablist"
+    tabindex="-1"
     on:keydown={handleKeyDown}
   >
     {#each tabs as tab, index}
@@ -209,9 +212,9 @@
         tabindex={isSelected ? 0 : -1}
       >
         {#if tab.content}
-          {tab.content}
+          {@html tab.content}
         {:else}
-          <slot name="panel-{tab.id}" />
+          <slot />
         {/if}
       </div>
     {/each}
@@ -375,9 +378,6 @@
       min-width: 120px;
     }
     
-    .vertical .tabs-container {
-      flex-direction: column;
-    }
     
     .vertical .tablist {
       flex-direction: row;

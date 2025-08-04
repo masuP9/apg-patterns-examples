@@ -9,7 +9,7 @@
       @keydown="handleKeyDown"
     >
       <button
-        v-for="(tab, index) in tabs"
+        v-for="tab in tabs"
         :key="tab.id"
         :ref="(el) => setTabRef(tab.id, el as HTMLButtonElement)"
         role="tab"
@@ -51,7 +51,7 @@
         :tabindex="tab.id === selectedId ? 0 : -1"
       >
         <div v-if="tab.content" v-html="tab.content" />
-        <slot v-else :name="`panel-${tab.id}`" />
+        <slot v-else />
       </div>
     </div>
   </div>
