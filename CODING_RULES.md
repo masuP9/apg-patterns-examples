@@ -81,25 +81,6 @@ if (isInputElement(element)) {
   element.value = 'safe access';
 }
 
-// ✅ 推奨: 汎用的なDOM要素ヘルパー
-function getElementByIdSafe<T extends HTMLElement>(
-  id: string,
-  constructor: new (...args: any[]) => T
-): T | null {
-  const element = document.getElementById(id);
-  return element instanceof constructor ? element : null;
-}
-
-// 使用例
-const input = getElementByIdSafe('my-input', HTMLInputElement);
-if (input) {
-  input.value = 'type-safe access';
-}
-
-const button = getElementByIdSafe('my-button', HTMLButtonElement);
-if (button) {
-  button.disabled = true;
-}
 ```
 
 ### 例外的に許可される場合
