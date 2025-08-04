@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { FRAMEWORK_INFO, type FrameworkType, getFrameworkInfo } from "../../types/framework";
+import { type FrameworkType, getFrameworkInfo } from "../../types/framework";
 import { type DemoPath, getDemoUrl } from "../../types/demo";
 
 export interface DemoTabsProps {
@@ -41,7 +41,7 @@ const DemoTabs = React.memo(function DemoTabs({
     
     // Svelteはハッシュベースルーティング
     const urlPath = getDemoUrl(demoPath);
-    if (framework === 'svelte') {
+    if (framework === "svelte") {
       return `${baseUrls[framework]}/#${urlPath}`;
     }
     
@@ -49,11 +49,10 @@ const DemoTabs = React.memo(function DemoTabs({
   };
 
   const demoUrls = {
-    react: getDemoUrlForFramework('react'),
-    svelte: getDemoUrlForFramework('svelte'),
-    vue: getDemoUrlForFramework('vue'),
+    react: getDemoUrlForFramework("react"),
+    svelte: getDemoUrlForFramework("svelte"),
+    vue: getDemoUrlForFramework("vue"),
   };
-  const demoUrl = demoUrls[activeFramework];
 
   const handleFrameworkChange = useCallback((framework: FrameworkType) => {
     setActiveFramework(framework);

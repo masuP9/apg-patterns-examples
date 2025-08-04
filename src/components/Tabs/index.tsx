@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect, useId } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
@@ -54,7 +54,6 @@ const Tabs = React.memo(function Tabs({
   
   // Get available (non-disabled) tabs
   const availableTabs = tabs.filter(tab => !tab.disabled);
-  const selectedTab = tabs.find(tab => tab.id === selectedId);
 
   const handleTabSelection = useCallback((tabId: string) => {
     setSelectedId(tabId);
@@ -175,7 +174,7 @@ const Tabs = React.memo(function Tabs({
         className={styles.tablist}
         onKeyDown={handleKeyDown}
       >
-        {tabs.map((tab, index) => {
+        {tabs.map((tab, _index) => {
           const isSelected = tab.id === selectedId;
           const tabIndex = tab.disabled ? -1 : (isSelected ? 0 : -1);
           const tabPanelId = `${tablistId}-panel-${tab.id}`;

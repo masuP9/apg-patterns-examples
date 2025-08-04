@@ -1,9 +1,9 @@
 // 共通のデモパス型定義
 // この型は全フレームワークのルーター定義と同期させる必要があります
 export const DEMO_PATHS = {
-  'toggle-button': 'toggle-button',
-  'tabs': 'tabs', 
-  'accordion': 'accordion',
+  "toggle-button": "toggle-button",
+  "tabs": "tabs", 
+  "accordion": "accordion",
 } as const;
 
 export type DemoPath = keyof typeof DEMO_PATHS;

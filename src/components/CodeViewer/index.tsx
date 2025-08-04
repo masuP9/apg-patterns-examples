@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useId } from "react";
+import React, { useCallback, useEffect, useId, useMemo, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
@@ -6,7 +6,7 @@ import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { Highlight, themes } from "prism-react-renderer";
 import { useColorMode } from "@docusaurus/theme-common";
 import type { PatternCodeData } from "../../types/code-loader";
-import { FRAMEWORK_INFO, type FrameworkType, getFrameworkInfo } from "../../types/framework";
+import { type FrameworkType, getFrameworkInfo } from "../../types/framework";
 
 interface CodeViewerProps {
   frameworks: FrameworkType[];
@@ -112,7 +112,7 @@ const CodeViewer = React.memo(function CodeViewer({
 
       loadPatternCode(patternKey).then(setLoadedCodeData);
     }
-  }, [pattern, subPattern, pluginData?.metadata?.version]);
+  }, [pattern, subPattern, pluginData?.metadata?.version, loadPatternCode]);
 
   // Use loaded data if pattern is provided, otherwise use static codeData
   const resolvedCodeData = useMemo(() => {
