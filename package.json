@@ -18,7 +18,6 @@
     "dev:react": "cd demos/react && npm run dev",
     "dev:svelte": "cd demos/svelte && npm run dev",
     "dev:vue": "cd demos/vue && npm run dev",
-    "generate-meta": "node scripts/generate-meta.js",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
     "lint:all": "npm run lint && cd demos/react && npm run lint && cd ../svelte && npm run lint && cd ../vue && npm run lint"
