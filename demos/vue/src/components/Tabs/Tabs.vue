@@ -11,7 +11,7 @@
       <button
         v-for="tab in tabs"
         :key="tab.id"
-        :ref="(el) => setTabRef(tab.id, el as HTMLButtonElement)"
+        :ref="(el) => setTabRef(tab.id, el)"
         role="tab"
         type="button"
         :id="`${tablistId}-tab-${tab.id}`"
@@ -102,8 +102,8 @@ onMounted(() => {
 })
 
 // Helper to set tab refs
-const setTabRef = (id: string, el: HTMLButtonElement) => {
-  if (el) {
+const setTabRef = (id: string, el: unknown) => {
+  if (el instanceof HTMLButtonElement) {
     tabRefs.value[id] = el
   }
 }
@@ -138,7 +138,8 @@ const handleTabFocus = async (index: number) => {
 
 const handleKeyDown = async (event: KeyboardEvent) => {
   // Only handle keyboard events if focus is on a tab
-  if (!tablistRef.value?.contains(event.target as Node)) {
+  const target = event.target
+  if (!tablistRef.value || !(target instanceof Node) || !tablistRef.value.contains(target)) {
     return
   }
 

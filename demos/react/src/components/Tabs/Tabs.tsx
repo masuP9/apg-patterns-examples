@@ -72,7 +72,8 @@ const Tabs = React.memo(function Tabs({
     const { key } = event;
     
     // Only handle keyboard events if focus is on a tab
-    if (!tablistRef.current?.contains(event.target as Node)) {
+    const target = event.target;
+    if (!tablistRef.current || !(target instanceof Node) || !tablistRef.current.contains(target)) {
       return;
     }
 

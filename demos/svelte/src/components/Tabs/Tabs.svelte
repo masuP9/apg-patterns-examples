@@ -73,7 +73,8 @@
 
   function handleKeyDown(event: KeyboardEvent) {
     // Only handle keyboard events if focus is on a tab
-    if (!tablistElement?.contains(event.target as Node)) {
+    const target = event.target;
+    if (!tablistElement || !(target instanceof Node) || !tablistElement.contains(target)) {
       return;
     }
 
