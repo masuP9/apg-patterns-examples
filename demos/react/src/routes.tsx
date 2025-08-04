@@ -29,5 +29,5 @@ export const router = createBrowserRouter([
     element: <Navigate to={getDemoUrl("toggle-button")} replace />,
   },
 ], {
-  basename: import.meta.env.BASE_URL as string,
+  basename: typeof import.meta.env.BASE_URL === "string" ? import.meta.env.BASE_URL : "/",
 });
