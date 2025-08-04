@@ -89,7 +89,7 @@ const DemoTabs = React.memo(function DemoTabs({
               key={framework}
               className={clsx(styles.demoTab, { [styles.active]: isActive })}
               onClick={() => handleFrameworkChange(framework)}
-              style={{ "--framework-color": color } as React.CSSProperties}
+              style={{ "--framework-color": color } satisfies React.CSSProperties}
               role="tab"
               aria-selected={isActive}
             >

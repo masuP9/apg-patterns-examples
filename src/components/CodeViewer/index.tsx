@@ -91,7 +91,11 @@ const CodeViewer = React.memo(function CodeViewer({
         );
       }
 
-      return await response.json() as PatternCodeData;
+      const data: unknown = await response.json();
+      
+      // Runtime type validation would go here
+      // For now, we trust the JSON structure matches PatternCodeData
+      return data as PatternCodeData;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);

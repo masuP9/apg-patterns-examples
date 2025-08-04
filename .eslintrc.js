@@ -35,6 +35,13 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     
+    // 型アサーション制限: どうしても必要な場合のみ許可
+    '@typescript-eslint/consistent-type-assertions': ['error', {
+      assertionStyle: 'as',
+      objectLiteralTypeAssertions: 'never'
+    }],
+    '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+    
     // General code quality
     'prefer-const': 'error',
     'no-var': 'error',
