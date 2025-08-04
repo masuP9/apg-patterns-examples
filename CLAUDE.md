@@ -372,7 +372,7 @@ if (event.key === " " || event.key === "Enter") {
 - [ ] Accordion パターン実装
 - [ ] Dialog/Modal パターン
 - [ ] Menu/Dropdown パターン
-- [ ] Tabs パターン
+- [x] Tabs パターン
 
 ### Phase 2: 品質向上
 - [ ] Jest/Vitest テストスイート
@@ -448,6 +448,89 @@ git push origin main
 ## 開発セッションの特徴
 
 このプロジェクトは Claude Code との日本語での開発セッションで作成されました。
+
+## ドキュメントページ構成パターン
+
+### 統一されたページ構成
+各APGパターンのドキュメントページは以下の構成で統一されています：
+
+#### ファイル形式
+- **拡張子**: `.md` （Markdownファイル）
+- **場所**: `docs/patterns/{pattern-name}/overview.md`
+
+#### ページ構造
+```markdown
+# パターン名
+
+パターンの概要説明
+
+## Pattern Types
+パターンのバリエーション（水平・垂直、自動・手動など）
+
+## Accessibility Requirements
+### ARIA Roles and Properties
+- role属性とARIAプロパティの説明
+
+### Keyboard Support
+キーボードナビゲーションの表
+
+### Focus Management
+フォーカス管理の仕様
+
+## Implementation Examples
+import DemoTabs from '@site/src/components/DemoTabs';
+import CodeViewer from '@site/src/components/CodeViewer';
+
+<DemoTabs
+  demoPath="/demos/{pattern}"
+  frameworks={['react', 'svelte', 'vue']}
+/>
+
+## Source Code
+<CodeViewer
+  frameworks={['react', 'svelte', 'vue']}
+  pattern="{pattern}"
+/>
+
+## MCP Metadata
+JSONメタデータブロック
+
+## Testing
+テスト方針の説明
+
+## Resources
+関連リンク
+```
+
+#### 使用コンポーネント
+1. **DemoTabs**: フレームワーク別ライブデモ表示
+   - iframeでサンドボックス化された実行環境
+   - 環境別URL自動切り替え
+   - ローディング・エラー状態管理
+
+2. **CodeViewer**: ソースコード表示
+   - シンタックスハイライト
+   - フレームワーク切り替えタブ
+   - コピー機能付き
+   - JSONファイルからコード読み込み
+
+#### メタデータ構造
+```json
+{
+  "pattern": "パターン名",
+  "aria_features": ["使用するARIA属性配列"],
+  "keyboard_support": ["対応キー配列"],
+  "complexity": "難易度レベル",
+  "apg_compliance": true,
+  "frameworks": ["react", "svelte", "vue"]
+}
+```
+
+### 実装例
+- **Toggle Button**: `docs/patterns/button/overview.md`
+- **Tabs**: `docs/patterns/tabs/overview.md`
+
+この構成により、全パターンで一貫したドキュメント体験を提供し、開発者が効率的にAPGパターンを学習・実装できるようになっています。
 
 ---
 

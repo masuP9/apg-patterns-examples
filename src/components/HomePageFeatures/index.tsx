@@ -1,6 +1,9 @@
 import React from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
+import MountainSvg from "@site/static/img/undraw_docusaurus_mountain.svg";
+import TreeSvg from "@site/static/img/undraw_docusaurus_tree.svg";
+import ReactSvg from "@site/static/img/undraw_docusaurus_react.svg";
 
 type FeatureItem = {
   title: string;
@@ -11,7 +14,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Multiple Frameworks",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Svg: MountainSvg,
     description: (
       <>
         Implementation examples for React, Svelte, and Vue.js. Compare
@@ -21,7 +24,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Accessibility First",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Svg: TreeSvg,
     description: (
       <>
         Every component follows WAI-ARIA guidelines with proper keyboard
@@ -31,7 +34,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "MCP Integration",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: ReactSvg,
     description: (
       <>
         AI-friendly metadata structure allows tools like Claude to reference

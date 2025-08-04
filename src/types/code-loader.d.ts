@@ -2,9 +2,9 @@
  * Type definitions for code-loader plugin
  */
 
-declare module '@docusaurus/useGlobalData' {
+declare module "@docusaurus/useGlobalData" {
   interface GlobalData {
-    'code-loader-plugin': {
+    "code-loader-plugin": {
       metadata: {
         patterns: string[];
         version: number;

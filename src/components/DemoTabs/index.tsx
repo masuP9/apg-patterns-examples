@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { FRAMEWORK_INFO, type FrameworkType, getFrameworkInfo } from "../../types/framework";
+import { type FrameworkType, getFrameworkInfo } from "../../types/framework";
+import { type DemoPath, getDemoUrl } from "../../types/demo";
 
-interface DemoTabsProps {
+export interface DemoTabsProps {
   frameworks: FrameworkType[];
   defaultFramework?: FrameworkType;
+  demoPath?: DemoPath;
 }
 
 
 const DemoTabs = React.memo(function DemoTabs({
   frameworks,
   defaultFramework = frameworks[0],
+  demoPath = "toggle-button",
 }: DemoTabsProps): JSX.Element {
   const [activeFramework, setActiveFramework] = useState(defaultFramework);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
@@ -28,21 +31,28 @@ const DemoTabs = React.memo(function DemoTabs({
       ? "https://masup9.github.io/apg-patterns-examples"
       : "http://localhost";
 
-  const demoUrls = {
-    react:
-      process.env.NODE_ENV === "production"
-        ? `${baseUrl}/demos/react`
-        : "http://localhost:3001",
-    svelte:
-      process.env.NODE_ENV === "production"
-        ? `${baseUrl}/demos/svelte`
-        : "http://localhost:3002",
-    vue:
-      process.env.NODE_ENV === "production"
-        ? `${baseUrl}/demos/vue`
-        : "http://localhost:3003",
+  // 型安全なURL生成
+  const getDemoUrlForFramework = (framework: FrameworkType): string => {
+    const baseUrls = {
+      react: process.env.NODE_ENV === "production" ? `${baseUrl}/demos/react` : "http://localhost:3001/demos/react",
+      svelte: process.env.NODE_ENV === "production" ? `${baseUrl}/demos/svelte` : "http://localhost:3002/demos/svelte", 
+      vue: process.env.NODE_ENV === "production" ? `${baseUrl}/demos/vue` : "http://localhost:3003/demos/vue",
+    };
+    
+    // Svelteはハッシュベースルーティング
+    const urlPath = getDemoUrl(demoPath);
+    if (framework === "svelte") {
+      return `${baseUrls[framework]}/#${urlPath}`;
+    }
+    
+    return `${baseUrls[framework]}${urlPath}`;
   };
-  const demoUrl = demoUrls[activeFramework];
+
+  const demoUrls = {
+    react: getDemoUrlForFramework("react"),
+    svelte: getDemoUrlForFramework("svelte"),
+    vue: getDemoUrlForFramework("vue"),
+  };
 
   const handleFrameworkChange = useCallback((framework: FrameworkType) => {
     setActiveFramework(framework);
@@ -123,26 +133,31 @@ const DemoTabs = React.memo(function DemoTabs({
           </div>
         )}
 
-        {frameworks.map((framework) => (
-          <iframe
-            key={framework}
-            src={demoUrl}
-            className={clsx(styles.demoIframe, {
-              [styles.hidden]:
-                framework !== activeFramework ||
-                isCurrentlyLoading ||
-                hasCurrentError,
-              [styles.active]:
-                framework === activeFramework &&
-                !isCurrentlyLoading &&
-                !hasCurrentError,
-            })}
-            title={`${frameworkInfo.label} Demo`}
-            onLoad={() => handleIframeLoad(framework)}
-            onError={() => handleIframeError(framework)}
-            sandbox="allow-scripts allow-same-origin"
-          />
-        ))}
+        {frameworks.map((framework) => {
+          const info = getFrameworkInfo(framework);
+          if (!info) return null;
+          
+          return (
+            <iframe
+              key={framework}
+              src={demoUrls[framework]}
+              className={clsx(styles.demoIframe, {
+                [styles.hidden]:
+                  framework !== activeFramework ||
+                  isCurrentlyLoading ||
+                  hasCurrentError,
+                [styles.active]:
+                  framework === activeFramework &&
+                  !isCurrentlyLoading &&
+                  !hasCurrentError,
+              })}
+              title={`${info.label} Demo`}
+              onLoad={() => handleIframeLoad(framework)}
+              onError={() => handleIframeError(framework)}
+              sandbox="allow-scripts allow-same-origin"
+            />
+          );
+        })}
       </div>
 
       <div className={styles.demoInfo}>

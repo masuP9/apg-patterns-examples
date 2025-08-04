@@ -1,32 +1,43 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 /**
  * Docusaurus custom plugin to generate static JSON files for code loading
  */
 module.exports = function codeLoaderPlugin(context, options) {
   return {
-    name: 'code-loader-plugin',
+    name: "code-loader-plugin",
     async loadContent() {
       const { siteDir } = context;
-      
-      // Define file paths relative to site directory
-      const filePaths = {
-        react: {
-          component: 'demos/react/src/components/Button/ToggleButton.tsx',
-          app: 'demos/react/src/App.tsx',
+
+      // Define patterns and their file paths
+      const patterns = {
+        toggleButton: {
+          react: {
+            component: "demos/react/src/components/Button/ToggleButton.tsx",
+          },
+          svelte: {
+            component: "demos/svelte/src/components/ToggleButton.svelte",
+          },
+          vue: {
+            component: "demos/vue/src/components/ToggleButton.vue",
+          },
+          shared: {
+            styles: "demos/shared/styles/toggle-button.css",
+          },
         },
-        svelte: {
-          component: 'demos/svelte/src/components/ToggleButton.svelte',
-          app: 'demos/svelte/src/App.svelte',
+        tabs: {
+          react: {
+            component: "demos/react/src/components/Tabs/Tabs.tsx",
+            styles: "demos/react/src/components/Tabs/Tabs.module.css",
+          },
+          svelte: {
+            component: "demos/svelte/src/components/Tabs/Tabs.svelte",
+          },
+          vue: {
+            component: "demos/vue/src/components/Tabs/Tabs.vue",
+          },
         },
-        vue: {
-          component: 'demos/vue/src/components/ToggleButton.vue',
-          app: 'demos/vue/src/App.vue',
-        },
-        shared: {
-          styles: 'demos/shared/styles/toggle-button.css',
-        }
       };
 
       const loadedFiles = {};
@@ -36,7 +47,7 @@ module.exports = function codeLoaderPlugin(context, options) {
         try {
           const fullPath = path.join(siteDir, filePath);
           if (fs.existsSync(fullPath)) {
-            const content = fs.readFileSync(fullPath, 'utf8');
+            const content = fs.readFileSync(fullPath, "utf8");
             console.log(`✅ Successfully loaded: ${filePath}`);
             return content;
           } else {
@@ -54,7 +65,7 @@ module.exports = function codeLoaderPlugin(context, options) {
       // Helper function to extract usage example from App files
       function extractUsageExample(appContent, framework) {
         switch (framework) {
-          case 'react': {
+          case "react": {
             // Extract ToggleButton usage from return statement
             const returnMatch = appContent.match(/return\s*\(([\s\S]*?)\);/);
             if (returnMatch) {
@@ -81,9 +92,11 @@ ${jsxContent}
             }
             break;
           }
-          case 'svelte': {
+          case "svelte": {
             // Extract ToggleButton usage from template
-            const templateMatch = appContent.match(/<ToggleButton[\s\S]*?<\/ToggleButton>/g);
+            const templateMatch = appContent.match(
+              /<ToggleButton[\s\S]*?<\/ToggleButton>/g
+            );
             if (templateMatch && templateMatch.length > 0) {
               const firstToggle = templateMatch[0];
               return `<script>
@@ -105,15 +118,18 @@ ${firstToggle}`;
             }
             break;
           }
-          case 'vue': {
+          case "vue": {
             // Extract ToggleButton usage from template
-            const templateMatch = appContent.match(/<template>([\s\S]*?)<\/template>/);
-            const scriptMatch = appContent.match(/<script setup lang="ts">([\s\S]*?)<\/script>/);
-            
+            const templateMatch = appContent.match(
+              /<template>([\s\S]*?)<\/template>/
+            );
+
             if (templateMatch) {
               const templateContent = templateMatch[1];
-              const toggleMatch = templateContent.match(/<ToggleButton[\s\S]*?<\/ToggleButton>/);
-              
+              const toggleMatch = templateContent.match(
+                /<ToggleButton[\s\S]*?<\/ToggleButton>/
+              );
+
               if (toggleMatch) {
                 return `<template>
 ${toggleMatch[0]}
@@ -139,50 +155,54 @@ const setDarkMode = (pressed: boolean) => {
             break;
           }
         }
-        
+
         return `// Usage example for ${framework}\n// See the full demo application for complete implementation`;
       }
 
-      // Load all files with error tracking
+      // Load all patterns with error tracking
       const errors = [];
       const warnings = [];
-      
-      for (const [framework, files] of Object.entries(filePaths)) {
-        if (framework === 'shared') {
-          loadedFiles[framework] = {};
-          for (const [fileType, filePath] of Object.entries(files)) {
-            const content = readFileSync(filePath);
-            loadedFiles[framework][fileType] = content;
-            
-            if (content.startsWith('// File not found:')) {
-              warnings.push(`${framework}/${fileType}: ${filePath}`);
-            } else if (content.startsWith('// Error reading file:')) {
-              errors.push(`${framework}/${fileType}: ${filePath}`);
+
+      for (const [patternName, patternFiles] of Object.entries(patterns)) {
+        const patternData = {};
+
+        for (const [framework, files] of Object.entries(patternFiles)) {
+          if (framework === "shared") {
+            patternData[framework] = {};
+            for (const [fileType, filePath] of Object.entries(files)) {
+              const content = readFileSync(filePath);
+              patternData[framework][fileType] = content;
+
+              if (content.startsWith("// File not found:")) {
+                warnings.push(
+                  `${patternName}/${framework}/${fileType}: ${filePath}`
+                );
+              } else if (content.startsWith("// Error reading file:")) {
+                errors.push(
+                  `${patternName}/${framework}/${fileType}: ${filePath}`
+                );
+              }
             }
-          }
-        } else {
-          loadedFiles[framework] = {};
-          for (const [fileType, filePath] of Object.entries(files)) {
-            const content = readFileSync(filePath);
-            loadedFiles[framework][fileType] = content;
-            
-            if (content.startsWith('// File not found:')) {
-              warnings.push(`${framework}/${fileType}: ${filePath}`);
-            } else if (content.startsWith('// Error reading file:')) {
-              errors.push(`${framework}/${fileType}: ${filePath}`);
-            }
-            
-            // Generate usage example from app file
-            if (fileType === 'app' && !content.startsWith('//')) {
-              try {
-                loadedFiles[framework].usage = extractUsageExample(content, framework);
-              } catch (usageError) {
-                console.warn(`⚠️  Failed to extract usage example for ${framework}:`, usageError.message);
-                loadedFiles[framework].usage = `// Failed to extract usage example for ${framework}`;
+          } else {
+            patternData[framework] = {};
+            for (const [fileType, filePath] of Object.entries(files)) {
+              const content = readFileSync(filePath);
+              patternData[framework][fileType] = content;
+
+              if (content.startsWith("// File not found:")) {
+                warnings.push(
+                  `${patternName}/${framework}/${fileType}: ${filePath}`
+                );
+              } else if (content.startsWith("// Error reading file:")) {
+                errors.push(
+                  `${patternName}/${framework}/${fileType}: ${filePath}`
+                );
               }
             }
           }
         }
+
+        loadedFiles[patternName] = patternData;
       }
 
       // Report summary
@@ -193,65 +213,49 @@ const setDarkMode = (pressed: boolean) => {
         console.warn(`⚠️  ${warnings.length} files not found:`, warnings);
       }
       if (errors.length === 0 && warnings.length === 0) {
-        console.log('✅ All code files loaded successfully!');
+        console.log("✅ All code files loaded successfully!");
       }
 
-      // Generate static JSON files
-      const patterns = {
-        toggleButton: {
-          react: {
-            component: loadedFiles.react.component,
-            styles: loadedFiles.shared.styles,
-            usage: loadedFiles.react.usage,
-          },
-          svelte: {
-            component: loadedFiles.svelte.component,
-            styles: loadedFiles.shared.styles,
-            usage: loadedFiles.svelte.usage,
-          },
-          vue: {
-            component: loadedFiles.vue.component,
-            styles: loadedFiles.shared.styles,
-            usage: loadedFiles.vue.usage,
-          },
-        }
-      };
-
       // Create static directory if it doesn't exist
-      const staticDir = path.join(context.siteDir, 'static', 'code');
+      const staticDir = path.join(context.siteDir, "static", "code");
       if (!fs.existsSync(staticDir)) {
         fs.mkdirSync(staticDir, { recursive: true });
       }
 
       // Write individual pattern files
-      for (const [patternName, patternData] of Object.entries(patterns)) {
+      for (const [patternName, patternData] of Object.entries(loadedFiles)) {
         const jsonPath = path.join(staticDir, `${patternName}.json`);
         try {
           fs.writeFileSync(jsonPath, JSON.stringify(patternData, null, 2));
-          console.log(`✅ Generated static file: static/code/${patternName}.json`);
+          console.log(
+            `✅ Generated static file: static/code/${patternName}.json`
+          );
         } catch (error) {
-          console.error(`❌ Failed to write ${patternName}.json:`, error.message);
+          console.error(
+            `❌ Failed to write ${patternName}.json:`,
+            error.message
+          );
         }
       }
 
       // Return minimal metadata for plugin data
       return {
-        patterns: Object.keys(patterns),
+        patterns: Object.keys(loadedFiles),
         version: Date.now(), // Cache busting
       };
     },
 
     async contentLoaded({ content, actions }) {
       const { setGlobalData } = actions;
-      
+
       try {
         // Only store minimal metadata in global data
         setGlobalData({
-          metadata: content
+          metadata: content,
         });
-        console.log('✅ Code loader plugin metadata set successfully');
+        console.log("✅ Code loader plugin metadata set successfully");
       } catch (error) {
-        console.error('❌ Failed to set global data:', error);
+        console.error("❌ Failed to set global data:", error);
         throw error;
       }
     },

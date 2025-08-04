@@ -42,8 +42,8 @@ import DemoTabs from '@site/src/components/DemoTabs';
 import CodeViewer from '@site/src/components/CodeViewer';
 
 <DemoTabs
-  demoPath="/demos/button/toggle"
   frameworks={['react', 'svelte', 'vue']}
+  demoPath="toggle-button"
 />
 
 ## Source Code
