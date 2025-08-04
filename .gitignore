@@ -15,6 +15,9 @@ dist/
 coverage/
 *.tsbuildinfo
 
+# Generated code files (build-time generated)
+static/code/*.json
+
 # Environment and config files
 .env
 .env.local
