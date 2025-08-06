@@ -15,6 +15,9 @@ dist/
 coverage/
 *.tsbuildinfo
 
+# Storybook static files
+**/storybook-static/
+
 # Generated code files (build-time generated)
 static/code/*.json
 
@@ -159,3 +162,6 @@ $RECYCLE.BIN/
 
 # Claude related files (optional - remove if you want to track)
 .claude/
+.serena/
+
+*storybook.log
