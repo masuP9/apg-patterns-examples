@@ -4,22 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3003",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
-    "setup-shared": "mkdir -p ../shared/styles",
     "lint": "vue-tsc --noEmit && echo 'Vue type checking completed'",
-    "lint:fix": "vue-tsc --noEmit && echo 'Vue type checking completed'"
+    "lint:fix": "vue-tsc --noEmit && echo 'Vue type checking completed'",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
-    "vue": "^3.4.0",
-    "vue-router": "^4.5.1"
+    "vue": "^3.4.0"
   },
   "devDependencies": {
+    "@storybook/vue3": "^9.1.1",
+    "@storybook/vue3-vite": "^9.1.1",
     "@vitejs/plugin-vue": "^5.0.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
+    "storybook": "^9.1.1",
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
