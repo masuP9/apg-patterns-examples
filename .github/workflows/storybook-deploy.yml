@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       # Main Docusaurus site
@@ -30,9 +30,7 @@ jobs:
       # React Storybook
       - name: Install React dependencies
         working-directory: ./demos/react
-        run: |
-          npm ci
-          npm install -D @storybook/react@^8.0.0 @storybook/react-vite@^8.0.0 @storybook/addon-essentials@^8.0.0 @storybook/addon-controls@^8.0.0 storybook@^8.0.0
+        run: npm ci
 
       - name: Build React Storybook
         working-directory: ./demos/react
@@ -41,9 +39,7 @@ jobs:
       # Vue Storybook  
       - name: Install Vue dependencies
         working-directory: ./demos/vue
-        run: |
-          npm ci
-          npm install -D @storybook/vue3@^8.0.0 @storybook/vue3-vite@^8.0.0 @storybook/addon-essentials@^8.0.0 @storybook/addon-controls@^8.0.0 storybook@^8.0.0
+        run: npm ci
 
       - name: Build Vue Storybook
         working-directory: ./demos/vue
@@ -52,9 +48,7 @@ jobs:
       # Svelte Storybook
       - name: Install Svelte dependencies
         working-directory: ./demos/svelte
-        run: |
-          npm ci  
-          npm install -D @storybook/svelte@^8.0.0 @storybook/svelte-vite@^8.0.0 @storybook/addon-essentials@^8.0.0 @storybook/addon-controls@^8.0.0 storybook@^8.0.0
+        run: npm ci
 
       - name: Build Svelte Storybook
         working-directory: ./demos/svelte
