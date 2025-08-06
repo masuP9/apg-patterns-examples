@@ -34,7 +34,7 @@ cd apg-patterns-examples
 # Install dependencies
 npm install
 
-# Install demo dependencies
+# Install Storybook demo dependencies
 cd demos/react && npm install && cd ../..
 cd demos/svelte && npm install && cd ../..
 cd demos/vue && npm install && cd ../..
