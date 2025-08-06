@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import clsx from "clsx";
-import styles from "./Tabs.module.css";
 
 export interface TabItem {
   id: string;
@@ -164,15 +163,26 @@ const Tabs = React.memo(function Tabs({
   }, [selectedId, availableTabs]);
 
   return (
-    <div className={clsx(styles.tabsContainer, className, {
-      [styles.vertical]: orientation === "vertical"
-    })}>
+    <div className={clsx(
+      "apg-tabs",
+      {
+        "apg-tabs--horizontal": orientation === "horizontal",
+        "apg-tabs--vertical": orientation === "vertical"
+      },
+      className
+    )}>
       {/* Tablist */}
       <div
         ref={tablistRef}
         role="tablist"
         aria-orientation={orientation}
-        className={styles.tablist}
+        className={clsx(
+          "apg-tablist",
+          {
+            "apg-tablist--horizontal": orientation === "horizontal",
+            "apg-tablist--vertical": orientation === "vertical"
+          }
+        )}
         onKeyDown={handleKeyDown}
       >
         {tabs.map((tab) => {
@@ -193,17 +203,22 @@ const Tabs = React.memo(function Tabs({
               aria-controls={isSelected ? tabPanelId : undefined}
               tabIndex={tabIndex}
               disabled={tab.disabled}
-              className={clsx(styles.tab, {
-                [styles.selected]: isSelected,
-                [styles.disabled]: tab.disabled
-              })}
+              className={clsx(
+                "apg-tab",
+                {
+                  "apg-tab--horizontal": orientation === "horizontal",
+                  "apg-tab--vertical": orientation === "vertical",
+                  "apg-tab--selected": isSelected,
+                  "apg-tab--disabled": tab.disabled
+                }
+              )}
               onClick={() => !tab.disabled && handleTabSelection(tab.id)}
             >
-              <span className={styles.tabLabel}>{tab.label}</span>
+              <span className="apg-tab-label">{tab.label}</span>
               {deletable && !tab.disabled && (
                 <button
                   type="button"
-                  className={styles.deleteButton}
+                  className="apg-tab-delete"
                   aria-label={`Delete ${tab.label} tab`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -219,7 +234,7 @@ const Tabs = React.memo(function Tabs({
       </div>
 
       {/* Tab Panels */}
-      <div className={styles.tabpanels}>
+      <div className="apg-tabpanels">
         {tabs.map((tab) => {
           const isSelected = tab.id === selectedId;
           const tabPanelId = `${tablistId}-panel-${tab.id}`;
@@ -231,9 +246,13 @@ const Tabs = React.memo(function Tabs({
               id={tabPanelId}
               aria-labelledby={`${tablistId}-tab-${tab.id}`}
               hidden={!isSelected}
-              className={clsx(styles.tabpanel, {
-                [styles.active]: isSelected
-              })}
+              className={clsx(
+                "apg-tabpanel",
+                {
+                  "apg-tabpanel--active": isSelected,
+                  "apg-tabpanel--inactive": !isSelected
+                }
+              )}
               tabIndex={isSelected ? 0 : -1}
             >
               {tab.content}
