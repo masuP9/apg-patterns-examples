@@ -43,12 +43,28 @@ Mode where arrow keys move focus but don't change the active tab. Users must pre
 
 Choose a framework to see the live demo:
 
-import DemoTabs from '@site/src/components/DemoTabs';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
 import CodeViewer from '@site/src/components/CodeViewer';
 
-<DemoTabs
+### Horizontal Tabs (Default)
+
+<StorybookEmbed
   frameworks={['react', 'svelte', 'vue']}
-  demoPath="tabs"
+  story="apg-tabs--default"
+/>
+
+### Vertical Tabs
+
+<StorybookEmbed
+  frameworks={['react', 'svelte', 'vue']}
+  story="apg-tabs--vertical"
+/>
+
+### Manual Activation
+
+<StorybookEmbed
+  frameworks={['react', 'svelte', 'vue']}
+  story="apg-tabs--manual-activation"
 />
 
 ## Source Code

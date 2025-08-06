@@ -38,12 +38,12 @@ Buttons that use icons to convey meaning, requiring proper labeling for accessib
 
 Choose a framework to see the live demo:
 
-import DemoTabs from '@site/src/components/DemoTabs';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
 import CodeViewer from '@site/src/components/CodeViewer';
 
-<DemoTabs
+<StorybookEmbed
   frameworks={['react', 'svelte', 'vue']}
-  demoPath="toggle-button"
+  story="apg-togglebutton--default"
 />
 
 ## Source Code

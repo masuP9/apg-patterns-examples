@@ -17,10 +17,10 @@ module.exports = function codeLoaderPlugin(context, options) {
             component: "demos/react/src/components/Button/ToggleButton.tsx",
           },
           svelte: {
-            component: "demos/svelte/src/components/ToggleButton.svelte",
+            component: "demos/svelte/src/components/Button/ToggleButton.svelte",
           },
           vue: {
-            component: "demos/vue/src/components/ToggleButton.vue",
+            component: "demos/vue/src/components/Button/ToggleButton.vue",
           },
           shared: {
             styles: "demos/shared/styles/toggle-button.css",
@@ -29,13 +29,15 @@ module.exports = function codeLoaderPlugin(context, options) {
         tabs: {
           react: {
             component: "demos/react/src/components/Tabs/Tabs.tsx",
-            styles: "demos/react/src/components/Tabs/Tabs.module.css",
           },
           svelte: {
             component: "demos/svelte/src/components/Tabs/Tabs.svelte",
           },
           vue: {
             component: "demos/vue/src/components/Tabs/Tabs.vue",
+          },
+          shared: {
+            styles: "demos/shared/styles/tabs.css",
           },
         },
       };
