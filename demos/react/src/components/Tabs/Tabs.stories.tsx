@@ -13,8 +13,8 @@ const meta: Meta<typeof Tabs> = {
     },
     activation: {
       control: "select",
-      options: ["auto", "manual"],
-      description: "Activation mode - auto activates on focus, manual requires enter/space",
+      options: ["automatic", "manual"],
+      description: "Activation mode - automatic activates on focus, manual requires enter/space",
     },
     defaultSelectedId: {
       control: "text",
@@ -49,7 +49,7 @@ export const Default: Story = {
     tabs: sampleTabs,
     defaultSelectedId: "tab1",
     orientation: "horizontal",
-    activation: "auto",
+    activation: "automatic",
   },
 };
 
@@ -58,7 +58,7 @@ export const Vertical: Story = {
     tabs: sampleTabs.slice(0, 2),
     defaultSelectedId: "tab1",
     orientation: "vertical",
-    activation: "auto",
+    activation: "automatic",
   },
 };
 

@@ -24,9 +24,6 @@ jobs:
       - name: Install main dependencies
         run: npm ci
 
-      - name: Build main site
-        run: npm run build
-
       # React Storybook
       - name: Install React dependencies
         working-directory: ./demos/react
@@ -53,6 +50,10 @@ jobs:
       - name: Build Svelte Storybook
         working-directory: ./demos/svelte
         run: npm run build-storybook
+
+      # Build main site (after Storybook builds are complete)
+      - name: Build main site
+        run: npm run build
 
       # Copy Storybook builds to main site
       - name: Copy Storybook builds
