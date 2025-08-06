@@ -4,27 +4,27 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3002",
-    "build": "vite build",
-    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "lint": "svelte-check --tsconfig ./tsconfig.json",
-    "lint:fix": "svelte-check --tsconfig ./tsconfig.json"
+    "lint:fix": "svelte-check --tsconfig ./tsconfig.json",
+    "storybook": "storybook dev -p 6008",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "@tsconfig/svelte": "^5.0.0",
-    "@types/node": "^24.0.15",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "svelte": "^4.2.7",
-    "svelte-check": "^3.6.0",
-    "tailwindcss": "^3.3.6",
-    "tslib": "^2.4.1",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.8"
-  },
-  "dependencies": {
-    "svelte-spa-router": "^4.0.1"
+    "@storybook/addon-docs": "^9.1.1",
+    "@storybook/svelte-vite": "^9.1.1",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.11",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^24.2.0",
+    "autoprefixer": "^10.4.21",
+    "eslint-plugin-storybook": "^9.1.1",
+    "storybook": "^9.1.1",
+    "svelte": "^5.37.3",
+    "svelte-check": "^3.8.6",
+    "tailwindcss": "^4.1.11",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.2",
+    "vite": "^6.3.5"
   }
 }

@@ -1,7 +1,10 @@
 import React, { useCallback, useState } from "react";
 
-export interface ToggleButtonProps 
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "onKeyUp" | "type" | "aria-pressed"> {
+export interface ToggleButtonProps
+  extends Omit<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    "onClick" | "type" | "aria-pressed"
+  > {
   /** Initial pressed state */
   initialPressed?: boolean;
   /** Button label text */
@@ -10,33 +13,19 @@ export interface ToggleButtonProps
   onToggle?: (pressed: boolean) => void;
 }
 
-export function ToggleButton({
+export const ToggleButton: React.FC<ToggleButtonProps> = ({
   initialPressed = false,
   children,
   onToggle,
   className = "",
   ...buttonProps
-}: ToggleButtonProps): JSX.Element {
+}) => {
   const [pressed, setPressed] = useState(initialPressed);
 
   const handleClick = useCallback(() => {
-    if (buttonProps.disabled) return;
-
-    const newPressed = !pressed;
-    setPressed(newPressed);
-    onToggle?.(newPressed);
-  }, [pressed, buttonProps.disabled, onToggle]);
-
-  const handleKeyUp = useCallback(
-    (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      // Handle Space and Enter keys according to APG specification
-      if (event.key === " " || event.key === "Enter") {
-        event.preventDefault(); // Prevent default behavior (scrolling for space)
-        handleClick();
-      }
-    },
-    [handleClick]
-  );
+    setPressed(!pressed);
+    onToggle?.(!pressed);
+  }, [pressed, onToggle]);
 
   // Build CSS classes
   const stateClass = pressed
@@ -50,7 +39,6 @@ export function ToggleButton({
       className={`apg-toggle-button ${stateClass} ${className}`.trim()}
       aria-pressed={pressed}
       onClick={handleClick}
-      onKeyUp={handleKeyUp}
     >
       <span className="apg-toggle-button-content">{children}</span>
       <span
@@ -65,6 +53,6 @@ export function ToggleButton({
       </span>
     </button>
   );
-}
+};
 
 export default ToggleButton;

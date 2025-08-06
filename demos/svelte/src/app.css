@@ -1,2 +1,3 @@
 /* Svelte Demo Styles - 共通スタイルをインポート */
+@import "tailwindcss";
 @import "../../shared/styles/base.css";

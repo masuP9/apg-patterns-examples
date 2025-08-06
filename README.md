@@ -34,7 +34,7 @@ cd apg-patterns-examples
 # Install dependencies
 npm install
 
-# Install demo dependencies
+# Install Storybook demo dependencies
 cd demos/react && npm install && cd ../..
 cd demos/svelte && npm install && cd ../..
 cd demos/vue && npm install && cd ../..
@@ -43,14 +43,18 @@ cd demos/vue && npm install && cd ../..
 ### Development
 
 ```bash
-# Start all environments (Docusaurus + React + Svelte + Vue)
-npm run dev:all
+# 🚀 Start all development environments
+npm run dev                  # Docusaurus + All Storybooks
+                            # - Docusaurus: http://localhost:3000
+                            # - React Storybook: http://localhost:6006
+                            # - Vue Storybook: http://localhost:6007  
+                            # - Svelte Storybook: http://localhost:6008
 
-# Or start individually
+# Alternative: Start individual environments  
 npm start                    # Docusaurus only (port 3000)
-npm run dev:react           # React demo (port 3001)
-npm run dev:svelte          # Svelte demo (port 3002)  
-npm run dev:vue            # Vue demo (port 3003)
+npm run storybook:react      # React Storybook only (port 6006)
+npm run storybook:vue        # Vue Storybook only (port 6007)
+npm run storybook:svelte     # Svelte Storybook only (port 6008)
 ```
 
 ## 📋 Component Status
@@ -58,10 +62,10 @@ npm run dev:vue            # Vue demo (port 3003)
 | Pattern | React | Svelte | Vue | Status |
 |---------|-------|--------|-----|--------|
 | [Toggle Button](./docs/patterns/button/overview.md) | ✅ | ✅ | ✅ | Complete |
-| Accordion | 🚧 | 🚧 | 🚧 | In Progress |
+| [Tabs](./docs/patterns/tabs/overview.md) | ✅ | ✅ | ✅ | Complete |
+| Accordion | 📋 | 📋 | 📋 | Planned |
 | Dialog | 📋 | 📋 | 📋 | Planned |
 | Menu | 📋 | 📋 | 📋 | Planned |
-| Tabs | 📋 | 📋 | 📋 | Planned |
 
 ## 🏗️ Architecture
 
@@ -75,7 +79,7 @@ apg-patterns-examples/
 ├── docs/                     # Documentation pages
 ├── src/components/           # Docusaurus components
 │   ├── CodeViewer/          # Dynamic code display
-│   └── DemoTabs/            # Framework demo switcher
+│   └── StorybookEmbed/      # Storybook iframe integration
 └── plugins/                 # Custom Docusaurus plugins
     └── code-loader/         # Real-time code loading
 ```

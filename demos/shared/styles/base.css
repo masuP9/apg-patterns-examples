@@ -1,13 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* 各コンポーネントのスタイルを順序付きでインポート */
 @import "./toggle-button.css";
+@import "./tabs.css";
 /* 将来的に追加
 @import './accordion.css';
 @import './dialog.css';
 */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   /* APG Pattern共通の基本スタイル */

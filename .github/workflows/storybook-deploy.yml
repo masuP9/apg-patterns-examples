@@ -1,0 +1,72 @@
+name: Deploy Storybooks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Main Docusaurus site
+      - name: Install main dependencies
+        run: npm ci
+
+      # React Storybook
+      - name: Install React dependencies
+        working-directory: ./demos/react
+        run: npm ci
+
+      - name: Build React Storybook
+        working-directory: ./demos/react
+        run: npm run build-storybook
+
+      # Vue Storybook  
+      - name: Install Vue dependencies
+        working-directory: ./demos/vue
+        run: npm ci
+
+      - name: Build Vue Storybook
+        working-directory: ./demos/vue
+        run: npm run build-storybook
+
+      # Svelte Storybook
+      - name: Install Svelte dependencies
+        working-directory: ./demos/svelte
+        run: npm ci
+
+      - name: Build Svelte Storybook
+        working-directory: ./demos/svelte
+        run: npm run build-storybook
+
+      # Build main site (after Storybook builds are complete)
+      - name: Build main site
+        run: npm run build
+
+      # Copy Storybook builds to main site
+      - name: Copy Storybook builds
+        run: |
+          mkdir -p build/storybooks
+          cp -r demos/react/storybook-static build/storybooks/react
+          cp -r demos/vue/storybook-static build/storybooks/vue
+          cp -r demos/svelte/storybook-static build/storybooks/svelte
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
