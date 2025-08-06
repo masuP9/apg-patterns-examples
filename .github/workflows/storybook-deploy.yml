@@ -6,10 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,8 +26,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       # Main Docusaurus site
       - name: Install main dependencies
@@ -33,7 +42,7 @@ jobs:
         working-directory: ./demos/react
         run: npm run build-storybook
 
-      # Vue Storybook  
+      # Vue Storybook
       - name: Install Vue dependencies
         working-directory: ./demos/vue
         run: npm ci
@@ -66,7 +75,7 @@ jobs:
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
