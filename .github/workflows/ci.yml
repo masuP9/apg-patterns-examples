@@ -86,8 +86,9 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
       - name: lint
-        run: npm run lint
-      # Deploy to GitHub Pages
+        run: npm run lint:all
+
+  # Deploy to GitHub Pages
   deploy:
     runs-on: ubuntu-latest
     needs: [build, lint]
