@@ -16,9 +16,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
+    env:
+      TZ: "Asia/Tokyo"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,29 +33,23 @@ jobs:
       # Main Docusaurus site
       - name: Install main dependencies
         run: npm ci
-
-      # React Storybook
       - name: Install React dependencies
         working-directory: ./demos/react
+        run: npm ci
+      - name: Install Vue dependencies
+        working-directory: ./demos/vue
+        run: npm ci
+      - name: Install Svelte dependencies
+        working-directory: ./demos/svelte
         run: npm ci
 
       - name: Build React Storybook
         working-directory: ./demos/react
         run: npm run build-storybook
 
-      # Vue Storybook
-      - name: Install Vue dependencies
-        working-directory: ./demos/vue
-        run: npm ci
-
       - name: Build Vue Storybook
         working-directory: ./demos/vue
         run: npm run build-storybook
-
-      # Svelte Storybook
-      - name: Install Svelte dependencies
-        working-directory: ./demos/svelte
-        run: npm ci
 
       - name: Build Svelte Storybook
         working-directory: ./demos/svelte
@@ -71,10 +66,39 @@ jobs:
           cp -r demos/react/storybook-static build/storybooks/react
           cp -r demos/vue/storybook-static build/storybooks/vue
           cp -r demos/svelte/storybook-static build/storybooks/svelte
+      - uses: actions/cache@v4
+        with:
+          path: ./*
+          key: ${{ github.sha }}
 
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/cache@v4
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - name: lint
+        run: npm run lint
       # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, lint]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/cache@v4
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

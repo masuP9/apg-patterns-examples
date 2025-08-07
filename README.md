@@ -2,7 +2,7 @@
 
 > Accessible UI component implementations across React, Svelte, and Vue following WAI-ARIA APG patterns
 
-[![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/deploy.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml)
 
 ## 🎯 Overview
 
