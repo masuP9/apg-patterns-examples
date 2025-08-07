@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapg_patterns_examples=self.webpackChunkapg_patterns_examples||[]).push([[3956],{3956:(e,a,s)=>{s.d(a,{createRadarServices:()=>p.f});var p=s(2852);s(8198)}}]);

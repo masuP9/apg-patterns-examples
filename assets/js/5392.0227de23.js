@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapg_patterns_examples=self.webpackChunkapg_patterns_examples||[]).push([[5392],{5392:(e,a,p)=>{p.d(a,{createGitGraphServices:()=>s.b});var s=p(4087);p(8198)}}]);

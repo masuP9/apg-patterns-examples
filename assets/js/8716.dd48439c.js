@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapg_patterns_examples=self.webpackChunkapg_patterns_examples||[]).push([[8716],{8716:(e,a,s)=>{s.d(a,{createPacketServices:()=>p.$});var p=s(9811);s(8198)}}]);

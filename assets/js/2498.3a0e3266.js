@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapg_patterns_examples=self.webpackChunkapg_patterns_examples||[]).push([[2498],{2498:(e,a,s)=>{s.d(a,{createArchitectureServices:()=>p.S});var p=s(3009);s(8198)}}]);

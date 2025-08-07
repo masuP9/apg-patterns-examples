@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapg_patterns_examples=self.webpackChunkapg_patterns_examples||[]).push([[8188],{8188:(e,a,s)=>{s.d(a,{createPieServices:()=>p.f});var p=s(9786);s(8198)}}]);
