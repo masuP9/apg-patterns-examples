@@ -86,7 +86,7 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
       - name: lint
-        run: npm run lint:all
+        run: NODE_OPTIONS="--max-old-space-size=4096" npm run lint:all
 
   # Deploy to GitHub Pages
   deploy:

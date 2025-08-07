@@ -17,9 +17,10 @@
     "storybook:react": "cd demos/react && npm run storybook -- --no-open",
     "storybook:svelte": "cd demos/svelte && npm run storybook -- --no-open",
     "storybook:vue": "cd demos/vue && npm run storybook -- --no-open",
-    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
-    "lint:all": "npm run lint && cd demos/react && npm run lint && cd ../svelte && npm run lint && cd ../vue && npm run lint"
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx --cache",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --cache --fix",
+    "lint:all": "npm run lint && npm run lint:demos",
+    "lint:demos": "cd demos/react && npm run lint && cd ../svelte && npm run lint && cd ../vue && npm run lint"
   },
   "dependencies": {
     "@docusaurus/core": "^3.1.0",
