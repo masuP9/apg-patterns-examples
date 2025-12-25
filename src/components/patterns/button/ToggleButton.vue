@@ -3,6 +3,7 @@
     type="button"
     :class="buttonClasses"
     :aria-pressed="pressed"
+    :disabled="props.disabled"
     v-bind="$attrs"
     @click="handleClick"
   >
@@ -37,6 +38,7 @@ export interface ToggleButtonProps {
 
 const props = withDefaults(defineProps<ToggleButtonProps>(), {
   initialPressed: false,
+  disabled: false,
   onToggle: undefined
 })
 
