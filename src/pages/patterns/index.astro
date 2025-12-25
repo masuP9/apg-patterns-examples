@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 
 const patterns = [
   {
@@ -57,7 +58,7 @@ const patterns = [
   <div class="max-w-4xl mx-auto">
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">APG Patterns</h1>
-      <p class="text-lg text-(--color-muted)">
+      <p class="text-lg text-muted-foreground">
         Accessible component patterns based on WAI-ARIA Authoring Practices Guide.
         Each pattern is implemented in React, Vue, and Svelte.
       </p>
@@ -65,49 +66,50 @@ const patterns = [
 
     <div class="grid gap-4 md:grid-cols-2">
       {patterns.map((pattern) => (
-        <a
-          href={pattern.href}
-          class={`block p-6 rounded-lg border transition-colors ${
-            pattern.status === 'Available'
-              ? 'border-(--color-border) hover:border-(--color-primary) cursor-pointer'
-              : 'border-(--color-border) opacity-60 cursor-not-allowed pointer-events-none'
-          }`}
+        <Tile
+          variant="floating"
+          href={pattern.status === 'Available' ? pattern.href : undefined}
+          class:list={[
+            pattern.status !== 'Available' && 'opacity-60 cursor-not-allowed'
+          ]}
         >
-          <div class="flex items-start gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-2xl shrink-0">
+          <TileContent class="flex flex-row items-start gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
               {pattern.icon}
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
-                <h2 class="font-semibold">{pattern.name}</h2>
+                <TileTitle>{pattern.name}</TileTitle>
                 {pattern.status !== 'Available' && (
-                  <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-(--color-muted)">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                     {pattern.status}
                   </span>
                 )}
               </div>
-              <p class="text-sm text-(--color-muted) mb-2">{pattern.description}</p>
-              <div class="flex items-center gap-4 text-xs text-(--color-muted)">
+              <TileDescription>{pattern.description}</TileDescription>
+              <div class="flex items-center gap-4 text-xs text-muted-foreground mt-2">
                 <span>Complexity: {pattern.complexity}</span>
               </div>
             </div>
-          </div>
-        </a>
+          </TileContent>
+        </Tile>
       ))}
     </div>
 
-    <section class="mt-12 p-6 rounded-lg border border-(--color-border) bg-gray-50 dark:bg-gray-900">
-      <h2 class="text-xl font-semibold mb-4">About These Patterns</h2>
-      <p class="text-(--color-muted) mb-4">
-        Each pattern follows the <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-(--color-primary) hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a> specifications to ensure proper accessibility support.
-      </p>
-      <ul class="list-disc pl-6 space-y-2 text-(--color-muted)">
-        <li>Proper ARIA roles and attributes</li>
-        <li>Full keyboard navigation support</li>
-        <li>Screen reader compatibility</li>
-        <li>High contrast mode support</li>
-        <li>Reduced motion preferences</li>
-      </ul>
-    </section>
+    <Tile variant="floating" class="mt-12 bg-muted/50">
+      <TileContent>
+        <TileTitle class="text-xl">About These Patterns</TileTitle>
+        <TileDescription class="mb-4">
+          Each pattern follows the <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a> specifications to ensure proper accessibility support.
+        </TileDescription>
+        <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
+          <li>Proper ARIA roles and attributes</li>
+          <li>Full keyboard navigation support</li>
+          <li>Screen reader compatibility</li>
+          <li>High contrast mode support</li>
+          <li>Reduced motion preferences</li>
+        </ul>
+      </TileContent>
+    </Tile>
   </div>
 </BaseLayout>
