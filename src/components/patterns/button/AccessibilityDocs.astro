@@ -1,0 +1,72 @@
+---
+import ExternalLink from '../../ui/ExternalLink.astro';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA Roles</h3>
+  <ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>
+      <code>button</code> - Indicates a widget that triggers an action when activated<br />
+      <ExternalLink href="https://w3c.github.io/aria/#button" class="text-sm text-primary hover:underline">
+        WAI-ARIA button role
+      </ExternalLink>
+    </li>
+  </ul>
+
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA States</h3>
+  <div class="mb-6">
+    <h4 class="font-medium mb-2"><code>aria-pressed</code></h4>
+    <p class="text-muted-foreground mb-3">Indicates the current pressed state of the toggle button.</p>
+    <table class="w-full border-collapse mb-2">
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4 font-medium w-32">Values</td>
+          <td class="py-2">
+            <code>true</code> | <code>false</code>
+            <span class="text-sm text-muted-foreground ml-2">(tri-state buttons may also use <code>"mixed"</code>)</span>
+          </td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4 font-medium">Required</td>
+          <td class="py-2">Yes (for toggle buttons)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4 font-medium">Default</td>
+          <td class="py-2"><code>initialPressed</code> prop (default: <code>false</code>)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4 font-medium">Change Trigger</td>
+          <td class="py-2">Click, Enter, Space</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4 font-medium">Reference</td>
+          <td class="py-2">
+            <ExternalLink href="https://w3c.github.io/aria/#aria-pressed" class="text-primary hover:underline">
+              aria-pressed
+            </ExternalLink>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="text-lg font-medium mb-3">Keyboard Support</h3>
+  <table class="w-full border-collapse mb-4">
+    <thead>
+      <tr class="border-b border-border">
+        <th class="text-left py-2 pr-4">Key</th>
+        <th class="text-left py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b border-border">
+        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd></td>
+        <td class="py-2">Toggle the button state</td>
+      </tr>
+      <tr class="border-b border-border">
+        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
+        <td class="py-2">Toggle the button state</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
