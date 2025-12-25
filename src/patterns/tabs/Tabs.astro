@@ -43,7 +43,7 @@ const initialTab = defaultSelectedId
 const selectedId = initialTab?.id || tabs[0]?.id;
 
 // Generate unique ID for this instance
-const instanceId = `tabs-${Math.random().toString(36).substr(2, 9)}`;
+const instanceId = `tabs-${Math.random().toString(36).substring(2, 11)}`;
 
 const containerClass = `apg-tabs ${
   orientation === "vertical" ? "apg-tabs--vertical" : "apg-tabs--horizontal"
