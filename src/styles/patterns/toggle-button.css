@@ -19,7 +19,7 @@
 
 .apg-toggle-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px var(--color-background);
+  box-shadow: 0 0 0 2px var(--primary), 0 0 0 4px var(--background);
 }
 
 .apg-toggle-button:disabled {
@@ -29,15 +29,15 @@
 
 /* Pressed State */
 .apg-toggle-button--pressed {
-  background-color: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 .apg-toggle-button--pressed:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--color-primary) 85%, black);
-  border-color: color-mix(in srgb, var(--color-primary) 85%, black);
+  background-color: color-mix(in srgb, var(--primary) 85%, black);
+  border-color: color-mix(in srgb, var(--primary) 85%, black);
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
@@ -47,14 +47,14 @@
 
 /* Not Pressed State */
 .apg-toggle-button--not-pressed {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  border-color: var(--color-border);
+  background-color: var(--background);
+  color: var(--foreground);
+  border-color: var(--border);
 }
 
 .apg-toggle-button--not-pressed:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--color-background) 95%, var(--color-text));
-  border-color: var(--color-text);
+  background-color: color-mix(in srgb, var(--background) 95%, var(--foreground));
+  border-color: var(--foreground);
 }
 
 .apg-toggle-button--not-pressed:active:not(:disabled) {
@@ -83,7 +83,7 @@
 }
 
 .apg-toggle-indicator--not-pressed {
-  color: var(--color-muted);
+  color: var(--muted-foreground);
 }
 
 /* =============================================================================
@@ -127,7 +127,7 @@
 
 /* Focus Enhancement for Keyboard Users */
 .apg-toggle-button:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
