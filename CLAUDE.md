@@ -30,18 +30,23 @@
 
 ---
 
-## ディレクトリ構成（計画）
+## ディレクトリ構成
 
 ```
 src/
-├── components/
-│   ├── patterns/              # APG パターン実装
-│   │   ├── button/
-│   │   │   ├── ToggleButton.tsx
-│   │   │   ├── ToggleButton.vue
-│   │   │   └── ToggleButton.svelte
-│   │   └── tabs/
-│   └── ui/                    # サイト UI (shadcn/ui)
+├── components/                # サイト UI (shadcn/ui)
+│   └── ui/
+├── patterns/                  # APG パターン実装
+│   ├── button/
+│   │   ├── ToggleButton.tsx
+│   │   ├── ToggleButton.vue
+│   │   ├── ToggleButton.svelte
+│   │   └── AccessibilityDocs.astro
+│   └── tabs/
+│       ├── Tabs.tsx
+│       ├── Tabs.vue
+│       ├── Tabs.svelte
+│       └── AccessibilityDocs.astro
 ├── content/
 │   └── patterns/              # MDX コンテンツ
 ├── layouts/
@@ -56,6 +61,10 @@ src/
 ├── i18n/
 └── styles/
 ```
+
+**パスエイリアス**（tsconfig.json）:
+- `@/*` → `./src/*`
+- `@patterns/*` → `./src/patterns/*`
 
 ---
 
