@@ -3,20 +3,20 @@ import { useCallback, useState } from "react";
 export interface ToggleButtonProps
   extends Omit<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
-    "onClick" | "type" | "aria-pressed"
+    "onClick" | "type" | "aria-pressed" | "onToggle"
   > {
   /** Initial pressed state */
   initialPressed?: boolean;
   /** Button label text */
   children: React.ReactNode;
   /** Callback fired when toggle state changes */
-  onToggle?: (pressed: boolean) => void;
+  onPressedChange?: (pressed: boolean) => void;
 }
 
 export const ToggleButton: React.FC<ToggleButtonProps> = ({
   initialPressed = false,
   children,
-  onToggle,
+  onPressedChange,
   className = "",
   ...buttonProps
 }) => {
@@ -24,8 +24,8 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
 
   const handleClick = useCallback(() => {
     setPressed(!pressed);
-    onToggle?.(!pressed);
-  }, [pressed, onToggle]);
+    onPressedChange?.(!pressed);
+  }, [pressed, onPressedChange]);
 
   // Build CSS classes
   const stateClass = pressed

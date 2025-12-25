@@ -3,6 +3,7 @@
     <div
       ref="tablistRef"
       role="tablist"
+      :aria-label="label"
       :aria-orientation="orientation"
       :class="tablistClass"
       @keydown="handleKeyDown"
@@ -57,12 +58,14 @@ export interface TabsProps {
   tabs: TabItem[]
   defaultSelectedId?: string
   orientation?: 'horizontal' | 'vertical'
-  activation?: 'automatic' | 'manual'
+  activationMode?: 'automatic' | 'manual'
+  label?: string
 }
 
 const props = withDefaults(defineProps<TabsProps>(), {
   orientation: 'horizontal',
-  activation: 'automatic'
+  activationMode: 'automatic',
+  label: undefined
 })
 
 const emit = defineEmits<{
@@ -164,7 +167,7 @@ const handleKeyDown = async (event: KeyboardEvent) => {
 
     case 'Enter':
     case ' ':
-      if (props.activation === 'manual') {
+      if (props.activationMode === 'manual') {
         const focusedTab = availableTabs.value[focusedIndex.value]
         if (focusedTab) {
           handleTabSelection(focusedTab.id)
@@ -180,7 +183,7 @@ const handleKeyDown = async (event: KeyboardEvent) => {
     if (newIndex !== focusedIndex.value) {
       await handleTabFocus(newIndex)
 
-      if (props.activation === 'automatic') {
+      if (props.activationMode === 'automatic') {
         const newTab = availableTabs.value[newIndex]
         if (newTab) {
           handleTabSelection(newTab.id)

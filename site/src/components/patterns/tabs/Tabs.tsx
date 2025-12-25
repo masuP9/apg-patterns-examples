@@ -29,7 +29,7 @@ export function Tabs({
   activation = "automatic",
   onSelectionChange,
   className = "",
-}: TabsProps): JSX.Element {
+}: TabsProps): React.ReactElement {
   const initialTab = defaultSelectedId
     ? tabs.find((tab) => tab.id === defaultSelectedId && !tab.disabled)
     : tabs.find((tab) => !tab.disabled);

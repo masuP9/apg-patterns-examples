@@ -214,24 +214,25 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
         });
 
         // Keyboard navigation
-        tab.addEventListener('keydown', (e: KeyboardEvent) => {
+        tab.addEventListener('keydown', (e) => {
+          const event = e as KeyboardEvent;
           const tabsArray = Array.from(tabs);
           const currentIndex = tabsArray.indexOf(tab as Element);
           let newIndex = currentIndex;
 
-          if (e.key === 'ArrowRight') {
+          if (event.key === 'ArrowRight') {
             newIndex = (currentIndex + 1) % tabsArray.length;
-          } else if (e.key === 'ArrowLeft') {
+          } else if (event.key === 'ArrowLeft') {
             newIndex = (currentIndex - 1 + tabsArray.length) % tabsArray.length;
-          } else if (e.key === 'Home') {
+          } else if (event.key === 'Home') {
             newIndex = 0;
-          } else if (e.key === 'End') {
+          } else if (event.key === 'End') {
             newIndex = tabsArray.length - 1;
           } else {
             return;
           }
 
-          e.preventDefault();
+          event.preventDefault();
           (tabsArray[newIndex] as HTMLElement).click();
           (tabsArray[newIndex] as HTMLElement).focus();
         });

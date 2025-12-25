@@ -5,13 +5,17 @@
   interface ToggleButtonProps {
     children?: string | Snippet<[]>;
     initialPressed?: boolean;
+    disabled?: boolean;
     onToggle?: (pressed: boolean) => void;
+    [key: string]: unknown;
   }
 
   let {
     children,
     initialPressed = false,
+    disabled = false,
     onToggle = (_) => {},
+    ...restProps
   }: ToggleButtonProps = $props();
 
   // state
@@ -40,7 +44,9 @@
   type="button"
   aria-pressed={pressed}
   class={buttonClasses}
+  {disabled}
   onclick={handleClick}
+  {...restProps}
 >
   <span class="apg-toggle-button-content">
     {#if typeof children === "string"}

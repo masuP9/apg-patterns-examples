@@ -29,6 +29,8 @@ defineOptions({
 export interface ToggleButtonProps {
   /** Initial pressed state */
   initialPressed?: boolean;
+  /** Whether the button is disabled */
+  disabled?: boolean;
   /** Callback fired when toggle state changes */
   onToggle?: (pressed: boolean) => void;
 }

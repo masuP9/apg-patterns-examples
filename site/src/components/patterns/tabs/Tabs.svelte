@@ -12,7 +12,8 @@
     tabs: TabItem[];
     defaultSelectedId?: string;
     orientation?: 'horizontal' | 'vertical';
-    activation?: 'automatic' | 'manual';
+    activationMode?: 'automatic' | 'manual';
+    label?: string;
     onSelectionChange?: (tabId: string) => void;
   }
 
@@ -20,7 +21,8 @@
     tabs = [],
     defaultSelectedId = undefined,
     orientation = 'horizontal',
-    activation = 'automatic',
+    activationMode = 'automatic',
+    label = undefined,
     onSelectionChange = () => {},
   }: TabsProps = $props();
 
@@ -114,7 +116,7 @@
 
       case 'Enter':
       case ' ':
-        if (activation === 'manual') {
+        if (activationMode === 'manual') {
           const focusedTab = availableTabs[focusedIndex];
           if (focusedTab) {
             handleTabSelection(focusedTab.id);
@@ -130,7 +132,7 @@
       if (newIndex !== focusedIndex) {
         handleTabFocus(newIndex);
 
-        if (activation === 'automatic') {
+        if (activationMode === 'automatic') {
           const newTab = availableTabs[newIndex];
           if (newTab) {
             handleTabSelection(newTab.id);
