@@ -1,5 +1,19 @@
 ---
 import '../styles/global.css';
+import { Header, HeaderActions } from '@/components/ui/header';
+import { Logo, LogoText } from '@/components/ui/logo';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from '@/components/ui/navigation-menu';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
+import { ThemeToggle, ThemeProvider } from '@/components/ui/theme-toggle';
+import { Footer, FooterDescription, FooterGroup, FooterMenu, FooterMenuItem, FooterMenuLink } from '@/components/ui/footer';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import MenuIcon from 'lucide-static/icons/menu.svg';
 
 interface Props {
   title: string;
@@ -8,122 +22,130 @@ interface Props {
 
 const { title, description = 'APG Patterns Examples - Accessible component patterns for React, Vue, and Svelte' } = Astro.props;
 const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { text: 'Patterns', href: '/patterns/' },
+  { text: 'Guide', href: '/guide/' },
+  { text: 'About', href: '/about/' },
+];
 ---
 
 <!doctype html>
-<html lang="en" class="dark:dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | APG Patterns Examples</title>
-    <script is:inline>
-      // Dark mode initialization
-      const theme = localStorage.getItem('apg-theme');
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      }
-    </script>
+    <ThemeProvider />
   </head>
-  <body class="min-h-screen bg-(--color-background) text-(--color-text)">
+  <body class="min-h-screen bg-background text-foreground">
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header class="border-b border-(--color-border) px-4 py-3">
-      <nav class="mx-auto flex max-w-6xl items-center justify-between">
-        <a href="/" class="text-lg font-bold">
-          APG Patterns Examples
-        </a>
-
-        <div class="flex items-center gap-4">
-          <a
-            href="/patterns/"
-            class:list={[
-              "hover:text-(--color-primary)",
-              currentPath.startsWith('/patterns') && "text-(--color-primary) font-medium"
-            ]}
-          >
-            Patterns
-          </a>
-          <a
-            href="/guide/"
-            class:list={[
-              "hover:text-(--color-primary)",
-              currentPath.startsWith('/guide') && "text-(--color-primary) font-medium"
-            ]}
-          >
-            Guide
-          </a>
-          <a
-            href="/about/"
-            class:list={[
-              "hover:text-(--color-primary)",
-              currentPath === '/about/' && "text-(--color-primary) font-medium"
-            ]}
-          >
-            About
-          </a>
-
-          <!-- Framework Selector -->
-          <select
-            id="framework-selector"
-            class="rounded border border-(--color-border) bg-transparent px-2 py-1 text-sm"
-            aria-label="Select framework"
-          >
-            <option value="react">React</option>
-            <option value="vue">Vue</option>
-            <option value="svelte">Svelte</option>
-          </select>
-
-          <!-- Theme Toggle -->
-          <button
-            id="theme-toggle"
-            type="button"
-            class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="Toggle dark mode"
-          >
-            <svg class="h-5 w-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-            <svg class="hidden h-5 w-5 dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          </button>
-        </div>
-      </nav>
-    </header>
+    <Header>
+      <Logo href="/">
+        <LogoText>APG Patterns</LogoText>
+      </Logo>
+      <NavigationMenu class="mr-auto @max-3xl:hidden">
+        <NavigationMenuList>
+          {navLinks.map((link) => (
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                aria-current={currentPath.startsWith(link.href) ? 'page' : undefined}
+                href={link.href}
+              >
+                {link.text}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+      <HeaderActions class="@max-3xl:hidden">
+        <NativeSelect id="framework-selector" aria-label="Select framework">
+          <NativeSelectOption value="react">React</NativeSelectOption>
+          <NativeSelectOption value="vue">Vue</NativeSelectOption>
+          <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
+        </NativeSelect>
+        <ThemeToggle />
+      </HeaderActions>
+      <Sheet class="first:ml-auto">
+        <SheetTrigger
+          class="@3xl:hidden"
+          variant="ghost"
+          size="icon"
+          aria-label="Open menu"
+        >
+          <MenuIcon class="size-5" />
+        </SheetTrigger>
+        <SheetContent class="overflow-y-auto px-4 py-12">
+          <SidebarMenu>
+            {navLinks.map((link) => (
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  class:list={[
+                    "h-10 w-full rounded-md px-4 text-xl has-[>svg]:px-4",
+                    currentPath.startsWith(link.href) && "font-medium text-primary"
+                  ]}
+                  href={link.href}
+                >
+                  {link.text}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+          <HeaderActions class="mt-6 flex flex-col gap-2">
+            <NativeSelect id="framework-selector-mobile" aria-label="Select framework">
+              <NativeSelectOption value="react">React</NativeSelectOption>
+              <NativeSelectOption value="vue">Vue</NativeSelectOption>
+              <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
+            </NativeSelect>
+            <ThemeToggle />
+          </HeaderActions>
+        </SheetContent>
+      </Sheet>
+    </Header>
 
     <main id="main-content" class="mx-auto max-w-6xl px-4 py-8">
       <slot />
     </main>
 
-    <footer class="border-t border-(--color-border) px-4 py-6 text-center text-sm text-(--color-muted)">
-      <p>
-        APG Patterns Examples -
-        <a href="https://www.w3.org/WAI/ARIA/apg/" class="underline hover:text-(--color-primary)">
-          WAI-ARIA Authoring Practices Guide
-        </a>
-      </p>
-    </footer>
+    <Footer>
+      <FooterGroup class="items-center text-center">
+        <FooterDescription>
+          APG Patterns Examples - Accessible component implementations
+        </FooterDescription>
+        <FooterMenu orientation="horizontal">
+          <FooterMenuItem>
+            <FooterMenuLink href="https://www.w3.org/WAI/ARIA/apg/" target="_blank">
+              WAI-ARIA APG
+            </FooterMenuLink>
+          </FooterMenuItem>
+          <FooterMenuItem>
+            <FooterMenuLink href="https://github.com/masuP9/apg-patterns-examples" target="_blank">
+              GitHub
+            </FooterMenuLink>
+          </FooterMenuItem>
+        </FooterMenu>
+      </FooterGroup>
+    </Footer>
 
     <script>
-      // Theme toggle
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle?.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('apg-theme', isDark ? 'dark' : 'light');
-      });
-
-      // Framework selector
-      const frameworkSelector = document.getElementById('framework-selector') as HTMLSelectElement;
+      // Framework selector - sync both selectors
+      const frameworkSelectors = document.querySelectorAll<HTMLSelectElement>('[id^="framework-selector"]');
       const savedFramework = localStorage.getItem('apg-selected-framework') || 'react';
-      if (frameworkSelector) {
-        frameworkSelector.value = savedFramework;
-        frameworkSelector.addEventListener('change', (e) => {
+
+      frameworkSelectors.forEach((selector) => {
+        selector.value = savedFramework;
+        selector.addEventListener('change', (e) => {
           const target = e.target as HTMLSelectElement;
           localStorage.setItem('apg-selected-framework', target.value);
+          // Sync all selectors
+          frameworkSelectors.forEach((s) => {
+            if (s !== target) s.value = target.value;
+          });
         });
-      }
+      });
     </script>
   </body>
 </html>

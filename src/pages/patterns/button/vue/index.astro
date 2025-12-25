@@ -8,35 +8,35 @@ import sourceCode from '../../../../components/patterns/button/ToggleButton.vue?
 <BaseLayout title="Toggle Button - Vue">
   <div class="max-w-4xl mx-auto">
     <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-(--color-primary) hover:underline">Patterns</a>
-      <span class="mx-2 text-(--color-muted)">/</span>
+      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+      <span class="mx-2 text-muted-foreground">/</span>
       <span>Toggle Button</span>
     </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toggle Button</h1>
-      <p class="text-lg text-(--color-muted)">
+      <p class="text-lg text-muted-foreground">
         A two-state button that can be either "pressed" or "not pressed".
       </p>
     </header>
 
     <!-- Framework Selector -->
-    <div class="flex gap-2 mb-8 border-b border-(--color-border)">
+    <div class="flex gap-2 mb-8 border-b border-border">
       <a
         href="/patterns/button/react/"
-        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
       >
         React
       </a>
       <a
         href="/patterns/button/vue/"
-        class="px-4 py-2 border-b-2 border-(--color-primary) text-(--color-primary) font-medium"
+        class="px-4 py-2 border-b-2 border-primary text-primary font-medium"
       >
         Vue
       </a>
       <a
         href="/patterns/button/svelte/"
-        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
       >
         Svelte
       </a>
@@ -45,7 +45,7 @@ import sourceCode from '../../../../components/patterns/button/ToggleButton.vue?
     <!-- Demo Section -->
     <section class="mb-12">
       <h2 class="text-xl font-semibold mb-4">Demo</h2>
-      <div class="p-6 rounded-lg border border-(--color-border) bg-(--color-background)">
+      <div class="p-6 rounded-lg border border-border bg-background">
         <div class="flex flex-wrap gap-4">
           <ToggleButton client:load>
             Mute
@@ -73,17 +73,17 @@ import sourceCode from '../../../../components/patterns/button/ToggleButton.vue?
         <h3 class="text-lg font-medium mb-2">Keyboard Support</h3>
         <table class="w-full border-collapse mb-4">
           <thead>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <th class="text-left py-2 pr-4">Key</th>
               <th class="text-left py-2">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd></td>
               <td class="py-2">Toggle the button state</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
               <td class="py-2">Toggle the button state</td>
             </tr>
@@ -134,7 +134,7 @@ const handleToggle = (pressed) => {
       <h3 class="text-lg font-medium mb-2">Props</h3>
       <table class="w-full border-collapse mb-6">
         <thead>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <th class="text-left py-2 pr-4">Prop</th>
             <th class="text-left py-2 pr-4">Type</th>
             <th class="text-left py-2 pr-4">Default</th>
@@ -142,10 +142,10 @@ const handleToggle = (pressed) => {
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>initialPressed</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">boolean</td>
-            <td class="py-2 pr-4 text-(--color-muted)">false</td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
             <td class="py-2">Initial pressed state</td>
           </tr>
         </tbody>
@@ -154,22 +154,22 @@ const handleToggle = (pressed) => {
       <h3 class="text-lg font-medium mb-2">Events</h3>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <th class="text-left py-2 pr-4">Event</th>
             <th class="text-left py-2 pr-4">Payload</th>
             <th class="text-left py-2">Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>toggle</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
             <td class="py-2">Emitted when state changes</td>
           </tr>
         </tbody>
       </table>
 
-      <p class="mt-4 text-sm text-(--color-muted)">
+      <p class="mt-4 text-sm text-muted-foreground">
         All other attributes are passed to the underlying <code>&lt;button&gt;</code> element via <code>v-bind="$attrs"</code>.
       </p>
     </section>
@@ -183,7 +183,7 @@ const handleToggle = (pressed) => {
             href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-(--color-primary) hover:underline"
+            class="text-primary hover:underline"
           >
             WAI-ARIA APG: Button Pattern
           </a>

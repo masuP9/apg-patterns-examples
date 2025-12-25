@@ -78,7 +78,7 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
   .code-tabs {
     border-radius: 0.5rem;
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     margin-bottom: 1rem;
   }
 
@@ -108,13 +108,13 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
   }
 
   .code-tab:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary);
     outline-offset: -2px;
   }
 
   .code-tab.active {
     color: #f3f4f6;
-    border-bottom-color: var(--color-primary);
+    border-bottom-color: var(--primary);
   }
 
   .copy-button {
@@ -138,7 +138,7 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
   }
 
   .copy-button:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
 

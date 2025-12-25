@@ -26,35 +26,35 @@ const verticalTabs = [
 <BaseLayout title="Tabs - React">
   <div class="max-w-4xl mx-auto">
     <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-(--color-primary) hover:underline">Patterns</a>
-      <span class="mx-2 text-(--color-muted)">/</span>
+      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+      <span class="mx-2 text-muted-foreground">/</span>
       <span>Tabs</span>
     </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Tabs</h1>
-      <p class="text-lg text-(--color-muted)">
+      <p class="text-lg text-muted-foreground">
         A set of layered sections of content, known as tab panels, that display one panel of content at a time.
       </p>
     </header>
 
     <!-- Framework Selector -->
-    <div class="flex gap-2 mb-8 border-b border-(--color-border)">
+    <div class="flex gap-2 mb-8 border-b border-border">
       <a
         href="/patterns/tabs/react/"
-        class="px-4 py-2 border-b-2 border-(--color-primary) text-(--color-primary) font-medium"
+        class="px-4 py-2 border-b-2 border-primary text-primary font-medium"
       >
         React
       </a>
       <a
         href="/patterns/tabs/vue/"
-        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
       >
         Vue
       </a>
       <a
         href="/patterns/tabs/svelte/"
-        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
       >
         Svelte
       </a>
@@ -67,10 +67,10 @@ const verticalTabs = [
       <!-- Default (Automatic Activation) -->
       <div class="mb-8">
         <h3 class="text-lg font-medium mb-3">Automatic Activation (Default)</h3>
-        <p class="text-sm text-(--color-muted) mb-4">
+        <p class="text-sm text-muted-foreground mb-4">
           Tabs are activated automatically when focused with arrow keys.
         </p>
-        <div class="p-6 rounded-lg border border-(--color-border) bg-(--color-background)">
+        <div class="p-6 rounded-lg border border-border bg-background">
           <Tabs
             client:load
             tabs={demoTabs}
@@ -82,10 +82,10 @@ const verticalTabs = [
       <!-- Manual Activation -->
       <div class="mb-8">
         <h3 class="text-lg font-medium mb-3">Manual Activation</h3>
-        <p class="text-sm text-(--color-muted) mb-4">
+        <p class="text-sm text-muted-foreground mb-4">
           Tabs require Enter or Space to activate after focusing.
         </p>
-        <div class="p-6 rounded-lg border border-(--color-border) bg-(--color-background)">
+        <div class="p-6 rounded-lg border border-border bg-background">
           <Tabs
             client:load
             tabs={manualTabs}
@@ -98,10 +98,10 @@ const verticalTabs = [
       <!-- Vertical Orientation -->
       <div>
         <h3 class="text-lg font-medium mb-3">Vertical Orientation</h3>
-        <p class="text-sm text-(--color-muted) mb-4">
+        <p class="text-sm text-muted-foreground mb-4">
           Tabs arranged vertically with Up/Down arrow navigation.
         </p>
-        <div class="p-6 rounded-lg border border-(--color-border) bg-(--color-background)">
+        <div class="p-6 rounded-lg border border-border bg-background">
           <Tabs
             client:load
             tabs={verticalTabs}
@@ -130,33 +130,33 @@ const verticalTabs = [
         <h3 class="text-lg font-medium mb-2">Keyboard Support</h3>
         <table class="w-full border-collapse mb-4">
           <thead>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <th class="text-left py-2 pr-4">Key</th>
               <th class="text-left py-2">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
               <td class="py-2">Move focus into/out of the tablist</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Right</kbd> / <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Left</kbd></td>
               <td class="py-2">Navigate between tabs (horizontal)</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Down</kbd> / <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Up</kbd></td>
               <td class="py-2">Navigate between tabs (vertical)</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Home</kbd></td>
               <td class="py-2">Move focus to first tab</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">End</kbd></td>
               <td class="py-2">Move focus to last tab</td>
             </tr>
-            <tr class="border-b border-(--color-border)">
+            <tr class="border-b border-border">
               <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd> / <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd></td>
               <td class="py-2">Activate tab (manual mode only)</td>
             </tr>
@@ -208,7 +208,7 @@ function App() {
       <h3 class="text-lg font-medium mb-3">Tabs Props</h3>
       <table class="w-full border-collapse mb-6">
         <thead>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <th class="text-left py-2 pr-4">Prop</th>
             <th class="text-left py-2 pr-4">Type</th>
             <th class="text-left py-2 pr-4">Default</th>
@@ -216,34 +216,34 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>tabs</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">TabItem[]</td>
-            <td class="py-2 pr-4 text-(--color-muted)">required</td>
+            <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
+            <td class="py-2 pr-4 text-muted-foreground">required</td>
             <td class="py-2">Array of tab items</td>
           </tr>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">string</td>
-            <td class="py-2 pr-4 text-(--color-muted)">first tab</td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">first tab</td>
             <td class="py-2">ID of the initially selected tab</td>
           </tr>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>orientation</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">'horizontal' | 'vertical'</td>
-            <td class="py-2 pr-4 text-(--color-muted)">'horizontal'</td>
+            <td class="py-2 pr-4 text-muted-foreground">'horizontal' | 'vertical'</td>
+            <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
             <td class="py-2">Tab layout direction</td>
           </tr>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>activation</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">'automatic' | 'manual'</td>
-            <td class="py-2 pr-4 text-(--color-muted)">'automatic'</td>
+            <td class="py-2 pr-4 text-muted-foreground">'automatic' | 'manual'</td>
+            <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
             <td class="py-2">How tabs are activated</td>
           </tr>
-          <tr class="border-b border-(--color-border)">
+          <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>onSelectionChange</code></td>
-            <td class="py-2 pr-4 text-(--color-muted)">(tabId: string) =&gt; void</td>
-            <td class="py-2 pr-4 text-(--color-muted)">-</td>
+            <td class="py-2 pr-4 text-muted-foreground">(tabId: string) =&gt; void</td>
+            <td class="py-2 pr-4 text-muted-foreground">-</td>
             <td class="py-2">Callback when tab changes</td>
           </tr>
         </tbody>
@@ -271,7 +271,7 @@ function App() {
             href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-(--color-primary) hover:underline"
+            class="text-primary hover:underline"
           >
             WAI-ARIA APG: Tabs Pattern
           </a>
