@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import ToggleButton from '../../../../components/patterns/button/ToggleButton.svelte';
+import CodeBlock from '../../../../components/ui/CodeBlock.astro';
+import sourceCode from '../../../../components/patterns/button/ToggleButton.svelte?raw';
+---
+
+<BaseLayout title="Toggle Button - Svelte">
+  <div class="max-w-4xl mx-auto">
+    <nav class="mb-6 text-sm">
+      <a href="/patterns/" class="text-(--color-primary) hover:underline">Patterns</a>
+      <span class="mx-2 text-(--color-muted)">/</span>
+      <span>Toggle Button</span>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">Toggle Button</h1>
+      <p class="text-lg text-(--color-muted)">
+        A two-state button that can be either "pressed" or "not pressed".
+      </p>
+    </header>
+
+    <!-- Framework Selector -->
+    <div class="flex gap-2 mb-8 border-b border-(--color-border)">
+      <a
+        href="/patterns/button/react/"
+        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+      >
+        React
+      </a>
+      <a
+        href="/patterns/button/vue/"
+        class="px-4 py-2 border-b-2 border-transparent text-(--color-muted) hover:text-(--color-text)"
+      >
+        Vue
+      </a>
+      <a
+        href="/patterns/button/svelte/"
+        class="px-4 py-2 border-b-2 border-(--color-primary) text-(--color-primary) font-medium"
+      >
+        Svelte
+      </a>
+    </div>
+
+    <!-- Demo Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+      <div class="p-6 rounded-lg border border-(--color-border) bg-(--color-background)">
+        <div class="flex flex-wrap gap-4">
+          <ToggleButton client:load>
+            Mute
+          </ToggleButton>
+          <ToggleButton client:load initialPressed={true}>
+            Dark Mode
+          </ToggleButton>
+          <ToggleButton client:load disabled>
+            Disabled
+          </ToggleButton>
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessibility Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+      <div class="prose dark:prose-invert max-w-none">
+        <h3 class="text-lg font-medium mb-2">ARIA Attributes</h3>
+        <ul class="list-disc pl-6 mb-4 space-y-1">
+          <li><code>aria-pressed</code>: Indicates the current "pressed" state (true/false)</li>
+          <li><code>type="button"</code>: Prevents form submission</li>
+        </ul>
+
+        <h3 class="text-lg font-medium mb-2">Keyboard Support</h3>
+        <table class="w-full border-collapse mb-4">
+          <thead>
+            <tr class="border-b border-(--color-border)">
+              <th class="text-left py-2 pr-4">Key</th>
+              <th class="text-left py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-(--color-border)">
+              <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd></td>
+              <td class="py-2">Toggle the button state</td>
+            </tr>
+            <tr class="border-b border-(--color-border)">
+              <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
+              <td class="py-2">Toggle the button state</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Source Code Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <CodeBlock
+        code={sourceCode}
+        lang="svelte"
+        title="ToggleButton.svelte"
+      />
+    </section>
+
+    <!-- Usage Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <CodeBlock
+        code={`<script>
+  import ToggleButton from './ToggleButton.svelte';
+
+  function handleToggle(pressed) {
+    console.log('Pressed:', pressed);
+  }
+</script>
+
+<ToggleButton
+  initialPressed={false}
+  onToggle={handleToggle}
+>
+  Toggle Me
+</ToggleButton>`}
+        lang="svelte"
+        title="Example"
+      />
+    </section>
+
+    <!-- API Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">API</h2>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-(--color-border)">
+            <th class="text-left py-2 pr-4">Prop</th>
+            <th class="text-left py-2 pr-4">Type</th>
+            <th class="text-left py-2 pr-4">Default</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-(--color-border)">
+            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="py-2 pr-4 text-(--color-muted)">boolean</td>
+            <td class="py-2 pr-4 text-(--color-muted)">false</td>
+            <td class="py-2">Initial pressed state</td>
+          </tr>
+          <tr class="border-b border-(--color-border)">
+            <td class="py-2 pr-4"><code>onToggle</code></td>
+            <td class="py-2 pr-4 text-(--color-muted)">(pressed: boolean) =&gt; void</td>
+            <td class="py-2 pr-4 text-(--color-muted)">-</td>
+            <td class="py-2">Callback when state changes</td>
+          </tr>
+          <tr class="border-b border-(--color-border)">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="py-2 pr-4 text-(--color-muted)">Snippet | string</td>
+            <td class="py-2 pr-4 text-(--color-muted)">-</td>
+            <td class="py-2">Button label (slot content)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Resources -->
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>
+          <a
+            href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-(--color-primary) hover:underline"
+          >
+            WAI-ARIA APG: Button Pattern
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

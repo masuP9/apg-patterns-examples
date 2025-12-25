@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "./patterns/toggle-button.css";
+@import "./patterns/tabs.css";
+
+@theme {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-background: #ffffff;
+  --color-background-dark: #0f172a;
+  --color-text: #1e293b;
+  --color-text-dark: #f1f5f9;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-dark: #334155;
+}
+
+/* Dark mode */
+.dark {
+  --color-background: var(--color-background-dark);
+  --color-text: var(--color-text-dark);
+  --color-border: var(--color-border-dark);
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: white;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}

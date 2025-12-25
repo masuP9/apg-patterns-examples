@@ -4,25 +4,25 @@
 
 [![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml)
 
-## 🎯 Overview
+## Overview
 
 This project provides production-ready, accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) specifications. Each component is implemented across three major frontend frameworks: **React**, **Svelte**, and **Vue**.
 
-## ✨ Features
+## Features
 
-- 🌐 **Multi-framework**: React, Svelte, and Vue implementations
-- ♿ **Accessibility-first**: Full WAI-ARIA APG compliance
-- 🎨 **Design System**: Shared CSS with Tailwind utilities
-- 📚 **Interactive Docs**: Live examples with syntax highlighting
-- 🔧 **Developer Experience**: TypeScript, hot reload, unified development
-- 📱 **Responsive**: Mobile-first design approach
+- **Multi-framework**: React, Svelte, and Vue implementations
+- **Accessibility-first**: Full WAI-ARIA APG compliance
+- **Astro Islands**: Fast, optimized static site with interactive components
+- **Interactive Docs**: Live examples with syntax highlighting (Shiki)
+- **Developer Experience**: TypeScript, hot reload, unified development
+- **Responsive**: Mobile-first design approach
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn
+- Node.js 20+
+- npm
 
 ### Installation
 
@@ -33,58 +33,55 @@ cd apg-patterns-examples
 
 # Install dependencies
 npm install
-
-# Install Storybook demo dependencies
-cd demos/react && npm install && cd ../..
-cd demos/svelte && npm install && cd ../..
-cd demos/vue && npm install && cd ../..
+cd site && npm install && cd ..
 ```
 
 ### Development
 
 ```bash
-# 🚀 Start all development environments
-npm run dev                  # Docusaurus + All Storybooks
-                            # - Docusaurus: http://localhost:3000
-                            # - React Storybook: http://localhost:6006
-                            # - Vue Storybook: http://localhost:6007  
-                            # - Svelte Storybook: http://localhost:6008
+# Start development server
+npm run dev
+# Opens at http://localhost:4321
 
-# Alternative: Start individual environments  
-npm start                    # Docusaurus only (port 3000)
-npm run storybook:react      # React Storybook only (port 6006)
-npm run storybook:vue        # Vue Storybook only (port 6007)
-npm run storybook:svelte     # Svelte Storybook only (port 6008)
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-## 📋 Component Status
+## Component Status
 
 | Pattern | React | Svelte | Vue | Status |
 |---------|-------|--------|-----|--------|
-| [Toggle Button](./docs/patterns/button/overview.md) | ✅ | ✅ | ✅ | Complete |
-| [Tabs](./docs/patterns/tabs/overview.md) | ✅ | ✅ | ✅ | Complete |
+| Toggle Button | ✅ | ✅ | ✅ | Complete |
+| Tabs | ✅ | ✅ | ✅ | Complete |
 | Accordion | 📋 | 📋 | 📋 | Planned |
 | Dialog | 📋 | 📋 | 📋 | Planned |
 | Menu | 📋 | 📋 | 📋 | Planned |
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 apg-patterns-examples/
-├── demos/                    # Framework implementations
-│   ├── react/                # React components & demo
-│   ├── svelte/               # Svelte components & demo  
-│   ├── vue/                  # Vue components & demo
-│   └── shared/               # Shared CSS & utilities
-├── docs/                     # Documentation pages
-├── src/components/           # Docusaurus components
-│   ├── CodeViewer/          # Dynamic code display
-│   └── StorybookEmbed/      # Storybook iframe integration
-└── plugins/                 # Custom Docusaurus plugins
-    └── code-loader/         # Real-time code loading
+├── site/                         # Astro site
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── patterns/         # APG pattern components
+│   │   │   │   ├── button/       # ToggleButton (React/Vue/Svelte)
+│   │   │   │   └── tabs/         # Tabs (React/Vue/Svelte)
+│   │   │   └── ui/               # Site UI components
+│   │   ├── layouts/              # Page layouts
+│   │   ├── pages/                # Route pages
+│   │   └── styles/               # Global & pattern styles
+│   └── astro.config.mjs
+├── .internal/                    # Internal documentation
+├── CLAUDE.md                     # Development guide
+├── TODO.md                       # Task tracking
+└── package.json
 ```
 
-## 🧩 Component API
+## Component API
 
 ### Toggle Button
 
@@ -92,33 +89,31 @@ All components follow the same props pattern across frameworks:
 
 ```tsx
 // React
-<ToggleButton 
+<ToggleButton
   initialPressed={false}
-  onToggle={(pressed) => setPressed(pressed)}
-  aria-label="Toggle notifications"
-  className="custom-style"
+  onToggle={(pressed) => console.log(pressed)}
 >
-  📧 Email Notifications
+  Mute
 </ToggleButton>
+```
 
-// Vue  
-<ToggleButton 
+```vue
+<!-- Vue -->
+<ToggleButton
   :initial-pressed="false"
-  :on-toggle="(pressed) => setPressed(pressed)"
-  aria-label="Toggle notifications"
-  class="custom-style"
+  @toggle="(pressed) => console.log(pressed)"
 >
-  📧 Email Notifications
+  Mute
 </ToggleButton>
+```
 
-// Svelte
-<ToggleButton 
+```svelte
+<!-- Svelte -->
+<ToggleButton
   initialPressed={false}
-  onToggle={(pressed) => setPressed(pressed)}
-  aria-label="Toggle notifications"
-  class="custom-style"
+  ontoggle={(e) => console.log(e.detail)}
 >
-  📧 Email Notifications
+  Mute
 </ToggleButton>
 ```
 
@@ -129,76 +124,51 @@ All components follow the same props pattern across frameworks:
 - **Framework Agnostic**: Consistent API across React, Svelte, and Vue
 - **TypeScript**: Full type safety and IntelliSense support
 
-## 🎨 Styling
+## Styling
 
-Components use a layered styling approach:
+Components use CSS with accessibility enhancements:
 
-1. **Base Styles**: APG-compliant default styling
-2. **Tailwind Utilities**: Responsive and utility-first CSS
-3. **Custom Classes**: Override with your design system
-4. **CSS Variables**: Theme customization support
+- High contrast mode support
+- Reduced motion preferences
+- Forced colors mode support
+- CSS custom properties for theming
 
 ```css
-/* Customize APG button theme */
+/* Customize theme */
 :root {
-  --apg-primary: #2563eb;
-  --apg-primary-hover: #1d4ed8;
-  --apg-focus-ring: 0 0 0 2px rgba(37, 99, 235, 0.5);
+  --apg-toggle-bg: #e5e7eb;
+  --apg-toggle-bg-pressed: #2563eb;
+  --apg-toggle-text: #1f2937;
 }
 ```
 
-## 🧪 Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run accessibility tests  
-npm run test:a11y
-
-# Run E2E tests
-npm run test:e2e
-```
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-component`
-3. Follow our [coding standards](./CONTRIBUTING.md)
-4. Add tests for your changes
-5. Submit a pull request
+3. Follow our [coding standards](./CODING_RULES.md)
+4. Submit a pull request
 
 ### Development Guidelines
 
 - Follow APG patterns precisely
 - Maintain framework parity
-- Include comprehensive tests
 - Document accessibility features
 - Use semantic commit messages
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/)
 - Framework communities: React, Svelte, Vue
-- Docusaurus team for the documentation platform
+- Astro team for the Islands architecture
 
-## 📞 Support
+## Links
 
-- 📚 [Documentation](https://masup9.github.io/apg-patterns-examples/)
-- 🐛 [Issue Tracker](https://github.com/masuP9/apg-patterns-examples/issues)
-- 💬 [Discussions](https://github.com/masuP9/apg-patterns-examples/discussions)
-
----
-
-<div align="center">
-  
-**[🌐 Live Demo](https://masup9.github.io/apg-patterns-examples/) | [📖 Documentation](https://masup9.github.io/apg-patterns-examples/) | [🚀 Get Started](#quick-start)**
-
-Made with ❤️ for accessible web development
-
-</div>
+- [Live Demo](https://masup9.github.io/apg-patterns-examples/)
+- [Issue Tracker](https://github.com/masuP9/apg-patterns-examples/issues)
+- [Discussions](https://github.com/masuP9/apg-patterns-examples/discussions)

@@ -1,0 +1,269 @@
+---
+import { Code } from 'astro:components';
+
+interface CodeTab {
+  label: string;
+  lang: 'tsx' | 'vue' | 'svelte' | 'typescript' | 'javascript' | 'html' | 'css';
+  code: string;
+  filename?: string;
+}
+
+interface Props {
+  tabs: CodeTab[];
+  defaultTab?: number;
+}
+
+const { tabs, defaultTab = 0 } = Astro.props;
+const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="code-tabs" data-tabs-id={tabsId}>
+  <div class="code-tabs-header" role="tablist" aria-label="Code examples">
+    {tabs.map((tab, index) => (
+      <button
+        role="tab"
+        aria-selected={index === defaultTab}
+        aria-controls={`${tabsId}-panel-${index}`}
+        id={`${tabsId}-tab-${index}`}
+        class={`code-tab ${index === defaultTab ? 'active' : ''}`}
+        data-tab-index={index}
+      >
+        {tab.label}
+      </button>
+    ))}
+    <button
+      class="copy-button"
+      data-tabs-id={tabsId}
+      aria-label="Copy code to clipboard"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+      </svg>
+      <span class="copy-feedback sr-only" aria-live="polite"></span>
+    </button>
+  </div>
+
+  {tabs.map((tab, index) => (
+    <div
+      role="tabpanel"
+      id={`${tabsId}-panel-${index}`}
+      aria-labelledby={`${tabsId}-tab-${index}`}
+      class={`code-tab-panel ${index === defaultTab ? 'active' : ''}`}
+      data-tab-index={index}
+      data-code={tab.code}
+      hidden={index !== defaultTab}
+    >
+      {tab.filename && (
+        <div class="code-filename">{tab.filename}</div>
+      )}
+      <div class="code-content">
+        <Code code={tab.code} lang={tab.lang} theme="github-dark" />
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .code-tabs {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    margin-bottom: 1rem;
+  }
+
+  .code-tabs-header {
+    display: flex;
+    align-items: center;
+    background-color: #1f2937;
+    border-bottom: 1px solid #374151;
+    overflow-x: auto;
+  }
+
+  .code-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .code-tab:hover {
+    color: #f3f4f6;
+  }
+
+  .code-tab:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  .code-tab.active {
+    color: #f3f4f6;
+    border-bottom-color: var(--color-primary);
+  }
+
+  .copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    border-radius: 0.25rem;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s, background-color 0.2s;
+  }
+
+  .copy-button:hover {
+    background-color: #374151;
+    color: #f3f4f6;
+  }
+
+  .copy-button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .code-tab-panel {
+    display: none;
+  }
+
+  .code-tab-panel.active {
+    display: block;
+  }
+
+  .code-filename {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    background-color: #111827;
+    border-bottom: 1px solid #1f2937;
+  }
+
+  .code-content {
+    overflow-x: auto;
+  }
+
+  .code-content :global(pre) {
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  function initCodeTabs() {
+    document.querySelectorAll('.code-tabs').forEach((container) => {
+      const tabs = container.querySelectorAll('.code-tab');
+      const panels = container.querySelectorAll('.code-tab-panel');
+      const copyButton = container.querySelector('.copy-button');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const index = tab.getAttribute('data-tab-index');
+
+          // Update tabs
+          tabs.forEach((t) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+
+          // Update panels
+          panels.forEach((panel) => {
+            const panelIndex = panel.getAttribute('data-tab-index');
+            if (panelIndex === index) {
+              panel.classList.add('active');
+              panel.removeAttribute('hidden');
+            } else {
+              panel.classList.remove('active');
+              panel.setAttribute('hidden', '');
+            }
+          });
+        });
+
+        // Keyboard navigation
+        tab.addEventListener('keydown', (e) => {
+          const event = e as KeyboardEvent;
+          const tabsArray = Array.from(tabs);
+          const currentIndex = tabsArray.indexOf(tab as Element);
+          let newIndex = currentIndex;
+
+          if (event.key === 'ArrowRight') {
+            newIndex = (currentIndex + 1) % tabsArray.length;
+          } else if (event.key === 'ArrowLeft') {
+            newIndex = (currentIndex - 1 + tabsArray.length) % tabsArray.length;
+          } else if (event.key === 'Home') {
+            newIndex = 0;
+          } else if (event.key === 'End') {
+            newIndex = tabsArray.length - 1;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          (tabsArray[newIndex] as HTMLElement).click();
+          (tabsArray[newIndex] as HTMLElement).focus();
+        });
+      });
+
+      // Copy functionality
+      if (copyButton) {
+        copyButton.addEventListener('click', async () => {
+          const activePanel = container.querySelector('.code-tab-panel.active');
+          const code = activePanel?.getAttribute('data-code');
+          const feedback = copyButton.querySelector('.copy-feedback');
+
+          if (code && feedback) {
+            try {
+              await navigator.clipboard.writeText(code);
+              feedback.textContent = 'Copied!';
+              setTimeout(() => {
+                feedback.textContent = '';
+              }, 2000);
+            } catch {
+              feedback.textContent = 'Failed to copy';
+            }
+          }
+        });
+      }
+    });
+  }
+
+  // Initialize on page load
+  initCodeTabs();
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:after-swap', initCodeTabs);
+</script>
