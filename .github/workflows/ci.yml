@@ -29,14 +29,11 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: site/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./site
         run: npm ci
 
       - name: Build site
-        working-directory: ./site
         run: npm run build
         env:
           NODE_ENV: production
@@ -44,7 +41,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site/dist
+          path: ./dist
 
   lint:
     runs-on: ubuntu-latest
@@ -57,14 +54,11 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: site/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./site
         run: npm ci
 
       - name: Lint
-        working-directory: ./site
         run: npm run lint
 
   deploy:

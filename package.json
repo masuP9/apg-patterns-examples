@@ -1,15 +1,37 @@
 {
   "name": "apg-patterns-examples",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "description": "APG Authoring Patterns implementation examples for React, Svelte, and Vue",
   "scripts": {
-    "dev": "npm run dev --prefix site",
-    "build": "npm run build --prefix site",
-    "preview": "npm run preview --prefix site",
-    "lint": "npm run lint --prefix site"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "astro check && tsc --noEmit",
+    "astro": "astro"
   },
   "engines": {
     "node": ">=20.0"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/svelte": "^7.2.4",
+    "@astrojs/vue": "^5.1.3",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^5.16.6",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "shiki": "^3.20.0",
+    "svelte": "^5.46.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.26"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6"
   }
 }
