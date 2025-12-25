@@ -5,10 +5,9 @@ interface Props {
   code: string;
   lang: 'tsx' | 'vue' | 'svelte' | 'typescript' | 'javascript' | 'html' | 'css';
   title?: string;
-  showLineNumbers?: boolean;
 }
 
-const { code, lang, title, showLineNumbers = true } = Astro.props;
+const { code, lang, title } = Astro.props;
 ---
 
 <div class="code-block">
