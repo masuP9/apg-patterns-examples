@@ -1,6 +1,0 @@
-/* APG Pattern Styles */
-@import "../../../shared/styles/base.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

@@ -4,22 +4,14 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-# package-lock.json (comment out if you want to track it)
 yarn.lock
 pnpm-lock.yaml
 
 # Build outputs
-build/
 dist/
-.docusaurus/
+.astro/
 coverage/
 *.tsbuildinfo
-
-# Storybook static files
-**/storybook-static/
-
-# Generated code files (build-time generated)
-static/code/*.json
 
 # Environment and config files
 .env
@@ -54,30 +46,16 @@ pids/
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Coverage directory
 coverage/
 *.lcov
-
-# nyc test coverage
 .nyc_output
-
-# Dependency directories
-jspm_packages/
 
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
 
 # Temporary folders
 tmp/
@@ -87,81 +65,6 @@ temp/
 .vite/
 *.local
 
-# Svelte specific
-.svelte-kit/
-
-# Vue specific
-.nuxt/
-.output/
-.nitro/
-
-# Cache directories
-.cache/
-.parcel-cache/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional stylelint cache
-.stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test/
-
-# Local History for Visual Studio Code
-.history/
-
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-*.stackdump
-
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# Claude related files (optional - remove if you want to track)
+# Claude related files
 .claude/
 .serena/
-
-*storybook.log

@@ -1,0 +1,151 @@
+/* =============================================================================
+   TOGGLE BUTTON COMPONENT STYLES
+   ============================================================================= */
+
+/* Toggle Button Base */
+.apg-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  min-height: 44px; /* Touch target minimum size */
+  border: 2px solid;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  cursor: pointer;
+}
+
+.apg-toggle-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px var(--color-background);
+}
+
+.apg-toggle-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pressed State */
+.apg-toggle-button--pressed {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.apg-toggle-button--pressed:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-primary) 85%, black);
+  border-color: color-mix(in srgb, var(--color-primary) 85%, black);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.apg-toggle-button--pressed:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Not Pressed State */
+.apg-toggle-button--not-pressed {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.apg-toggle-button--not-pressed:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-background) 95%, var(--color-text));
+  border-color: var(--color-text);
+}
+
+.apg-toggle-button--not-pressed:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Toggle Button Content */
+.apg-toggle-button-content {
+  flex: 1;
+  text-align: left;
+}
+
+/* Toggle Button Indicator */
+.apg-toggle-indicator {
+  font-size: 1.125rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.apg-toggle-indicator--pressed {
+  color: #fde047;
+  transform: scale(1.1);
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1));
+}
+
+.apg-toggle-indicator--not-pressed {
+  color: var(--color-muted);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-toggle-button {
+    border-width: 4px;
+  }
+
+  .apg-toggle-button--pressed {
+    background-color: black;
+    color: white;
+    border-color: black;
+  }
+
+  .apg-toggle-button--not-pressed {
+    background-color: white;
+    color: black;
+    border-color: black;
+  }
+
+  .apg-toggle-indicator--pressed {
+    color: #facc15;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-toggle-button,
+  .apg-toggle-indicator {
+    transition: none;
+  }
+
+  .apg-toggle-button:active {
+    transform: none;
+  }
+}
+
+/* Focus Enhancement for Keyboard Users */
+.apg-toggle-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-toggle-button {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .apg-toggle-button--pressed {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .apg-toggle-button:focus {
+    outline: 2px solid Highlight;
+  }
+}

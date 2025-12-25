@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const patterns = [
+  {
+    name: 'Toggle Button',
+    description: 'A two-state button that can be either "pressed" or "not pressed".',
+    href: '/patterns/button/react/',
+    icon: '🔘',
+    complexity: 'Low',
+    status: 'Available',
+  },
+  {
+    name: 'Tabs',
+    description: 'A set of layered sections of content, known as tab panels, that display one panel at a time.',
+    href: '/patterns/tabs/react/',
+    icon: '📑',
+    complexity: 'Medium',
+    status: 'Available',
+  },
+  {
+    name: 'Accordion',
+    description: 'A vertically stacked set of interactive headings that each reveal a section of content.',
+    href: '#',
+    icon: '📋',
+    complexity: 'Medium',
+    status: 'Planned',
+  },
+  {
+    name: 'Dialog (Modal)',
+    description: 'A window overlaid on the primary window, rendering the content underneath inert.',
+    href: '#',
+    icon: '💬',
+    complexity: 'High',
+    status: 'Planned',
+  },
+  {
+    name: 'Menu Button',
+    description: 'A button that opens a menu of actions or options.',
+    href: '#',
+    icon: '☰',
+    complexity: 'High',
+    status: 'Planned',
+  },
+  {
+    name: 'Disclosure',
+    description: 'A button that controls the visibility of a section of content.',
+    href: '#',
+    icon: '▼',
+    complexity: 'Low',
+    status: 'Planned',
+  },
+];
+---
+
+<BaseLayout title="Patterns">
+  <div class="max-w-4xl mx-auto">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">APG Patterns</h1>
+      <p class="text-lg text-(--color-muted)">
+        Accessible component patterns based on WAI-ARIA Authoring Practices Guide.
+        Each pattern is implemented in React, Vue, and Svelte.
+      </p>
+    </header>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {patterns.map((pattern) => (
+        <a
+          href={pattern.href}
+          class={`block p-6 rounded-lg border transition-colors ${
+            pattern.status === 'Available'
+              ? 'border-(--color-border) hover:border-(--color-primary) cursor-pointer'
+              : 'border-(--color-border) opacity-60 cursor-not-allowed pointer-events-none'
+          }`}
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-2xl shrink-0">
+              {pattern.icon}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <h2 class="font-semibold">{pattern.name}</h2>
+                {pattern.status !== 'Available' && (
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-(--color-muted)">
+                    {pattern.status}
+                  </span>
+                )}
+              </div>
+              <p class="text-sm text-(--color-muted) mb-2">{pattern.description}</p>
+              <div class="flex items-center gap-4 text-xs text-(--color-muted)">
+                <span>Complexity: {pattern.complexity}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <section class="mt-12 p-6 rounded-lg border border-(--color-border) bg-gray-50 dark:bg-gray-900">
+      <h2 class="text-xl font-semibold mb-4">About These Patterns</h2>
+      <p class="text-(--color-muted) mb-4">
+        Each pattern follows the <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-(--color-primary) hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a> specifications to ensure proper accessibility support.
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-(--color-muted)">
+        <li>Proper ARIA roles and attributes</li>
+        <li>Full keyboard navigation support</li>
+        <li>Screen reader compatibility</li>
+        <li>High contrast mode support</li>
+        <li>Reduced motion preferences</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

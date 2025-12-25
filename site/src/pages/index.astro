@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Home">
+  <div class="text-center">
+    <h1 class="mb-4 text-4xl font-bold">APG Patterns Examples</h1>
+    <p class="mb-8 text-lg text-(--color-muted)">
+      Accessible component patterns for React, Vue, and Svelte
+    </p>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <a
+        href="/patterns/"
+        class="block rounded-lg border border-(--color-border) p-6 transition-colors hover:border-(--color-primary)"
+      >
+        <h2 class="mb-2 text-xl font-semibold">Patterns</h2>
+        <p class="text-(--color-muted)">
+          Browse WAI-ARIA APG pattern implementations
+        </p>
+      </a>
+
+      <a
+        href="/guide/"
+        class="block rounded-lg border border-(--color-border) p-6 transition-colors hover:border-(--color-primary)"
+      >
+        <h2 class="mb-2 text-xl font-semibold">Guide</h2>
+        <p class="text-(--color-muted)">
+          Learn how to use these patterns in your projects
+        </p>
+      </a>
+
+      <a
+        href="/about/"
+        class="block rounded-lg border border-(--color-border) p-6 transition-colors hover:border-(--color-primary)"
+      >
+        <h2 class="mb-2 text-xl font-semibold">About</h2>
+        <p class="text-(--color-muted)">
+          About this project and its goals
+        </p>
+      </a>
+    </div>
+
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-bold">Featured Patterns</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <a
+          href="/patterns/button/react/"
+          class="flex items-center gap-4 rounded-lg border border-(--color-border) p-4 text-left transition-colors hover:border-(--color-primary)"
+        >
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-2xl dark:bg-blue-900">
+            🔘
+          </div>
+          <div>
+            <h3 class="font-semibold">Toggle Button</h3>
+            <p class="text-sm text-(--color-muted)">Button with pressed state</p>
+          </div>
+        </a>
+
+        <a
+          href="/patterns/tabs/react/"
+          class="flex items-center gap-4 rounded-lg border border-(--color-border) p-4 text-left transition-colors hover:border-(--color-primary)"
+        >
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-2xl dark:bg-green-900">
+            📑
+          </div>
+          <div>
+            <h3 class="font-semibold">Tabs</h3>
+            <p class="text-sm text-(--color-muted)">Tabbed interface with keyboard navigation</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
