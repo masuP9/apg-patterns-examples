@@ -4,6 +4,7 @@ import Tabs from '@patterns/tabs/Tabs.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import sourceCode from '@patterns/tabs/Tabs.vue?raw';
 
 const demoTabs = [
@@ -41,26 +42,7 @@ const verticalTabs = [
     </header>
 
     <!-- Framework Selector -->
-    <div class="flex gap-2 mb-8 border-b border-border">
-      <a
-        href="/patterns/tabs/react/"
-        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
-      >
-        React
-      </a>
-      <a
-        href="/patterns/tabs/vue/"
-        class="px-4 py-2 border-b-2 border-primary text-primary font-medium"
-      >
-        Vue
-      </a>
-      <a
-        href="/patterns/tabs/svelte/"
-        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
-      >
-        Svelte
-      </a>
-    </div>
+    <FrameworkTabs pattern="tabs" currentFramework="vue" />
 
     <!-- Demo Section -->
     <section class="mb-12">

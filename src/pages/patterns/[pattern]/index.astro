@@ -2,14 +2,17 @@
 // Dynamic redirect to user's preferred framework page
 // This single file handles redirects for all patterns
 
+import { FRAMEWORKS, DEFAULT_FRAMEWORK } from "@/lib/frameworks";
+
 export function getStaticPaths() {
   // Add new patterns here as they are implemented
-  const patterns = ['button', 'tabs'];
-  return patterns.map(pattern => ({ params: { pattern } }));
+  const patterns = ["button", "tabs"];
+  return patterns.map((pattern) => ({ params: { pattern } }));
 }
 
 const { pattern } = Astro.params;
-const defaultFramework = 'react';
+const defaultFramework = DEFAULT_FRAMEWORK;
+const validFrameworks = FRAMEWORKS;
 ---
 
 <!doctype html>
@@ -17,9 +20,8 @@ const defaultFramework = 'react';
   <head>
     <meta charset="UTF-8" />
     <title>Redirecting...</title>
-    <script is:inline define:vars={{ pattern, defaultFramework }}>
+    <script is:inline define:vars={{ pattern, defaultFramework, validFrameworks }}>
       const framework = localStorage.getItem('apg-selected-framework') || defaultFramework;
-      const validFrameworks = ['react', 'vue', 'svelte'];
       const selectedFramework = validFrameworks.includes(framework) ? framework : defaultFramework;
       window.location.replace(`/patterns/${pattern}/${selectedFramework}/`);
     </script>

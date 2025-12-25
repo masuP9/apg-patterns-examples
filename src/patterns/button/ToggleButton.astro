@@ -1,0 +1,127 @@
+---
+/**
+ * APG Toggle Button Pattern - Astro Implementation
+ *
+ * A two-state button that can be either "pressed" or "not pressed".
+ * Uses Web Components for client-side interactivity.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/button/
+ */
+
+export interface Props {
+  /** Initial pressed state */
+  initialPressed?: boolean;
+  /** Whether the button is disabled */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  initialPressed = false,
+  disabled = false,
+  class: className = "",
+} = Astro.props;
+
+const stateClass = initialPressed
+  ? "apg-toggle-button--pressed"
+  : "apg-toggle-button--not-pressed";
+
+const indicatorClass = initialPressed
+  ? "apg-toggle-indicator--pressed"
+  : "apg-toggle-indicator--not-pressed";
+
+const indicator = initialPressed ? "●" : "○";
+---
+
+<apg-toggle-button class={className}>
+  <button
+    type="button"
+    class={`apg-toggle-button ${stateClass}`}
+    aria-pressed={initialPressed}
+    disabled={disabled}
+  >
+    <span class="apg-toggle-button-content">
+      <slot />
+    </span>
+    <span class={`apg-toggle-indicator ${indicatorClass}`} aria-hidden="true">
+      {indicator}
+    </span>
+  </button>
+</apg-toggle-button>
+
+<script>
+  class ApgToggleButton extends HTMLElement {
+    private button: HTMLButtonElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      // Use requestAnimationFrame to ensure DOM is fully constructed
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.button = this.querySelector("button");
+      if (!this.button) {
+        console.warn("apg-toggle-button: button element not found");
+        return;
+      }
+
+      this.button.addEventListener("click", this.handleClick);
+    }
+
+    disconnectedCallback() {
+      // Cancel pending initialization
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      // Remove event listeners
+      this.button?.removeEventListener("click", this.handleClick);
+      this.button = null;
+    }
+
+    private handleClick = () => {
+      if (!this.button || this.button.disabled) return;
+
+      const currentPressed =
+        this.button.getAttribute("aria-pressed") === "true";
+      const newPressed = !currentPressed;
+
+      // Update aria-pressed
+      this.button.setAttribute("aria-pressed", String(newPressed));
+
+      // Update CSS classes
+      this.button.classList.toggle("apg-toggle-button--pressed", newPressed);
+      this.button.classList.toggle(
+        "apg-toggle-button--not-pressed",
+        !newPressed
+      );
+
+      // Update indicator
+      const indicator = this.button.querySelector(".apg-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = newPressed ? "●" : "○";
+        indicator.classList.toggle("apg-toggle-indicator--pressed", newPressed);
+        indicator.classList.toggle(
+          "apg-toggle-indicator--not-pressed",
+          !newPressed
+        );
+      }
+
+      // Dispatch custom event for external listeners
+      this.dispatchEvent(
+        new CustomEvent("toggle", {
+          detail: { pressed: newPressed },
+          bubbles: true,
+        })
+      );
+    };
+  }
+
+  // Register the custom element
+  if (!customElements.get("apg-toggle-button")) {
+    customElements.define("apg-toggle-button", ApgToggleButton);
+  }
+</script>

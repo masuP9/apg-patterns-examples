@@ -1,32 +1,62 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import Tabs from '@patterns/tabs/Tabs.svelte';
-import CodeBlock from '@/components/ui/CodeBlock.astro';
-import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.astro';
-import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
-import sourceCode from '@patterns/tabs/Tabs.svelte?raw';
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import Tabs from "@patterns/tabs/Tabs.astro";
+import CodeBlock from "@/components/ui/CodeBlock.astro";
+import ExternalLink from "@/components/ui/ExternalLink.astro";
+import AccessibilityDocs from "@patterns/tabs/AccessibilityDocs.astro";
+import FrameworkTabs from "@/components/ui/FrameworkTabs.astro";
+import sourceCode from "@patterns/tabs/Tabs.astro?raw";
 
 const demoTabs = [
-  { id: 'tab1', label: 'Overview', content: 'This is the overview panel content. It provides a general introduction to the product or service.' },
-  { id: 'tab2', label: 'Features', content: 'Keyboard navigation support, ARIA compliant, Automatic and manual activation modes.' },
-  { id: 'tab3', label: 'Pricing', content: 'Pricing information would be displayed here.' }
+  {
+    id: "tab1",
+    label: "Overview",
+    content:
+      "This is the overview panel content. It provides a general introduction to the product or service.",
+  },
+  {
+    id: "tab2",
+    label: "Features",
+    content:
+      "Keyboard navigation support, ARIA compliant, Automatic and manual activation modes.",
+  },
+  {
+    id: "tab3",
+    label: "Pricing",
+    content: "Pricing information would be displayed here.",
+  },
 ];
 
 const manualTabs = [
-  { id: 'manual1', label: 'Tab One', content: 'Content for tab one. Press Enter or Space to activate tabs.' },
-  { id: 'manual2', label: 'Tab Two', content: 'Content for tab two.' },
-  { id: 'manual3', label: 'Tab Three', content: 'Content for tab three.' }
+  {
+    id: "manual1",
+    label: "Tab One",
+    content: "Content for tab one. Press Enter or Space to activate tabs.",
+  },
+  { id: "manual2", label: "Tab Two", content: "Content for tab two." },
+  { id: "manual3", label: "Tab Three", content: "Content for tab three." },
 ];
 
 const verticalTabs = [
-  { id: 'vert1', label: 'Settings', content: 'Configure your application settings here.' },
-  { id: 'vert2', label: 'Profile', content: 'Manage your profile information.' },
-  { id: 'vert3', label: 'Notifications', content: 'Set your notification preferences.' }
+  {
+    id: "vert1",
+    label: "Settings",
+    content: "Configure your application settings here.",
+  },
+  {
+    id: "vert2",
+    label: "Profile",
+    content: "Manage your profile information.",
+  },
+  {
+    id: "vert3",
+    label: "Notifications",
+    content: "Set your notification preferences.",
+  },
 ];
 ---
 
-<BaseLayout title="Tabs - Svelte">
+<BaseLayout title="Tabs - Astro">
   <div class="max-w-4xl mx-auto">
     <nav class="mb-6 text-sm">
       <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
@@ -37,12 +67,13 @@ const verticalTabs = [
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Tabs</h1>
       <p class="text-lg text-muted-foreground">
-        A set of layered sections of content, known as tab panels, that display one panel of content at a time.
+        A set of layered sections of content, known as tab panels, that display
+        one panel of content at a time.
       </p>
     </header>
 
     <!-- Framework Selector -->
-    <FrameworkTabs pattern="tabs" currentFramework="svelte" />
+    <FrameworkTabs pattern="tabs" currentFramework="astro" />
 
     <!-- Demo Section -->
     <section class="mb-12">
@@ -55,11 +86,7 @@ const verticalTabs = [
           Tabs are activated automatically when focused with arrow keys.
         </p>
         <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs
-            client:load
-            tabs={demoTabs}
-            label="Example tabs"
-          />
+          <Tabs tabs={demoTabs} defaultSelectedId="tab1" />
         </div>
       </div>
 
@@ -70,12 +97,7 @@ const verticalTabs = [
           Tabs require Enter or Space to activate after focusing.
         </p>
         <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs
-            client:load
-            tabs={manualTabs}
-            label="Manual activation tabs"
-            activationMode="manual"
-          />
+          <Tabs tabs={manualTabs} defaultSelectedId="manual1" activation="manual" />
         </div>
       </div>
 
@@ -86,12 +108,7 @@ const verticalTabs = [
           Tabs arranged vertically with Up/Down arrow navigation.
         </p>
         <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs
-            client:load
-            tabs={verticalTabs}
-            label="Vertical tabs"
-            orientation="vertical"
-          />
+          <Tabs tabs={verticalTabs} defaultSelectedId="vert1" orientation="vertical" />
         </div>
       </div>
     </section>
@@ -105,37 +122,35 @@ const verticalTabs = [
     <!-- Source Code Section -->
     <section class="mb-12">
       <h2 class="text-xl font-semibold mb-4">Source Code</h2>
-      <CodeBlock
-        code={sourceCode}
-        lang="svelte"
-        title="Tabs.svelte"
-      />
+      <CodeBlock code={sourceCode} lang="astro" title="Tabs.astro" />
     </section>
 
     <!-- Usage Section -->
     <section class="mb-12">
       <h2 class="text-xl font-semibold mb-4">Usage</h2>
       <CodeBlock
-        code={`<script>
-  import Tabs from './Tabs.svelte';
+        code={`---
+import Tabs from './Tabs.astro';
 
-  const tabs = [
-    { id: 'tab1', label: 'First', content: 'First panel content' },
-    { id: 'tab2', label: 'Second', content: 'Second panel content' },
-    { id: 'tab3', label: 'Third', content: 'Third panel content' }
-  ];
-
-  function handleTabChange(event) {
-    console.log('Tab changed:', event.detail);
-  }
-</script>
+const tabs = [
+  { id: 'tab1', label: 'First', content: 'First panel content' },
+  { id: 'tab2', label: 'Second', content: 'Second panel content' },
+  { id: 'tab3', label: 'Third', content: 'Third panel content' }
+];
+---
 
 <Tabs
-  {tabs}
-  label="My tabs"
-  ontabchange={handleTabChange}
-/>`}
-        lang="svelte"
+  tabs={tabs}
+  defaultSelectedId="tab1"
+/>
+
+<script>
+  // Listen for tab change events
+  document.querySelector('apg-tabs')?.addEventListener('tabchange', (e) => {
+    console.log('Tab changed:', e.detail.selectedId);
+  });
+</script>`}
+        lang="astro"
         title="Example"
       />
     </section>
@@ -159,49 +174,35 @@ const verticalTabs = [
             <td class="py-2 pr-4"><code>tabs</code></td>
             <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
             <td class="py-2 pr-4 text-muted-foreground">required</td>
-            <td class="py-2">Array of tab items with id, label, content</td>
+            <td class="py-2">Array of tab items</td>
           </tr>
           <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>label</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
-            <td class="py-2">Accessible label for the tablist</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>defaultTab</code></td>
+            <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
             <td class="py-2 pr-4 text-muted-foreground">string</td>
             <td class="py-2 pr-4 text-muted-foreground">first tab</td>
             <td class="py-2">ID of the initially selected tab</td>
           </tr>
           <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>orientation</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'horizontal' | 'vertical'</td>
+            <td class="py-2 pr-4 text-muted-foreground"
+              >'horizontal' | 'vertical'</td
+            >
             <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
             <td class="py-2">Tab layout direction</td>
           </tr>
           <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>activationMode</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'automatic' | 'manual'</td>
+            <td class="py-2 pr-4"><code>activation</code></td>
+            <td class="py-2 pr-4 text-muted-foreground"
+              >'automatic' | 'manual'</td
+            >
             <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
             <td class="py-2">How tabs are activated</td>
           </tr>
-        </tbody>
-      </table>
-
-      <h3 class="text-lg font-medium mb-3">Events</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
           <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Detail</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>tabchange</code></td>
+            <td class="py-2 pr-4"><code>class</code></td>
             <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2">Dispatched when the active tab changes</td>
+            <td class="py-2 pr-4 text-muted-foreground">""</td>
+            <td class="py-2">Additional CSS class</td>
           </tr>
         </tbody>
       </table>
@@ -217,6 +218,30 @@ const verticalTabs = [
         lang="typescript"
         title="Types"
       />
+
+      <h3 class="text-lg font-medium mb-3 mt-6">Custom Events</h3>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Event</th>
+            <th class="text-left py-2 pr-4">Detail</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>tabchange</code></td>
+            <td class="py-2 pr-4 text-muted-foreground"
+              >{"{ selectedId: string }"}</td
+            >
+            <td class="py-2">Fired when the selected tab changes</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mt-4 text-sm text-muted-foreground">
+        This component uses a Web Component (<code>&lt;apg-tabs&gt;</code>) for
+        client-side keyboard navigation and state management.
+      </p>
     </section>
 
     <!-- Resources -->

@@ -1,0 +1,43 @@
+---
+/**
+ * FrameworkTabs - Framework selector tabs for pattern pages
+ *
+ * A shared component for switching between framework implementations.
+ * Uses static links (no JavaScript required).
+ */
+import { FRAMEWORKS, FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
+
+interface Props {
+  /** The pattern name (e.g., 'button', 'tabs') */
+  pattern: string;
+  /** The currently active framework */
+  currentFramework: Framework;
+}
+
+const { pattern, currentFramework } = Astro.props;
+---
+
+<div class="flex gap-2 mb-8 border-b border-border">
+  {
+    FRAMEWORKS.map((fw) => {
+      const info = FRAMEWORK_INFO[fw];
+      const isActive = fw === currentFramework;
+      const href = `/patterns/${pattern}/${fw}/`;
+
+      return (
+        <a
+          href={href}
+          class:list={[
+            "px-4 py-2 border-b-2 transition-colors",
+            isActive
+              ? "border-primary text-primary font-medium"
+              : "border-transparent text-muted-foreground hover:text-foreground",
+          ]}
+          aria-current={isActive ? "page" : undefined}
+        >
+          {info.label}
+        </a>
+      );
+    })
+  }
+</div>
