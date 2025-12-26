@@ -4,6 +4,7 @@ import ToggleButton from '@patterns/button/ToggleButton.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
 ---
 
@@ -23,26 +24,7 @@ import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
     </header>
 
     <!-- Framework Selector -->
-    <div class="flex gap-2 mb-8 border-b border-border">
-      <a
-        href="/patterns/button/react/"
-        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
-      >
-        React
-      </a>
-      <a
-        href="/patterns/button/vue/"
-        class="px-4 py-2 border-b-2 border-transparent text-muted-foreground hover:text-foreground"
-      >
-        Vue
-      </a>
-      <a
-        href="/patterns/button/svelte/"
-        class="px-4 py-2 border-b-2 border-primary text-primary font-medium"
-      >
-        Svelte
-      </a>
-    </div>
+    <FrameworkTabs pattern="button" currentFramework="svelte" />
 
     <!-- Demo Section -->
     <section class="mb-12">

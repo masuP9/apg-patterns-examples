@@ -1,11 +1,11 @@
 # サイト仕様書
 
 > APG Patterns Examples - Astro リビルド
-> 最終更新: 2025-12-25
+> 最終更新: 2025-12-26
 
 ## 概要
 
-WAI-ARIA APG パターンの実装例を React / Vue / Svelte で提供するドキュメントサイト。
+WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供するドキュメントサイト。
 
 ---
 
@@ -26,7 +26,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte で提供するド
 |---------|------|------|
 | フレームワーク | Astro | Islands アーキテクチャ |
 | コンテンツ | MDX | |
-| デモ | React / Vue / Svelte | フレームワーク別ページ |
+| デモ | React / Vue / Svelte / Astro | フレームワーク別ページ |
 | スタイリング | Tailwind CSS + shadcn/ui | サイト UI に使用 |
 | コード表示 | Shiki | Astro 標準 |
 | テスト | Vitest + Playwright | ユニット + E2E |
@@ -63,7 +63,8 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte で提供するド
 │   └── /patterns/{pattern}/         # パターン概要
 │       ├── /patterns/{pattern}/react/    # React 実装
 │       ├── /patterns/{pattern}/vue/      # Vue 実装
-│       └── /patterns/{pattern}/svelte/   # Svelte 実装
+│       ├── /patterns/{pattern}/svelte/   # Svelte 実装
+│       └── /patterns/{pattern}/astro/    # Astro 実装（Web Components）
 ├── /guide/                          # 使い方ガイド
 │   ├── /guide/getting-started/
 │   └── /guide/contributing/
@@ -83,7 +84,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte で提供するド
 
 **動作仕様**:
 - ヘッダーにフレームワーク選択 UI を配置
-- 選択肢: React / Vue / Svelte
+- 選択肢: React / Vue / Svelte / Astro
 - 選択状態は localStorage に保存
 - パターン一覧等からのリンク先を選択中フレームワークに自動設定
 - パターン概要ページ（`/patterns/{pattern}/`）から選択中フレームワークページにリダイレクト
@@ -107,13 +108,14 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte で提供するド
 | `/patterns/button/react/` | React 実装 + デモ + コード |
 | `/patterns/button/vue/` | Vue 実装 + デモ + コード |
 | `/patterns/button/svelte/` | Svelte 実装 + デモ + コード |
+| `/patterns/button/astro/` | Astro 実装（Web Components）+ デモ + コード |
 
 ### フレームワーク別ページレイアウト
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Toggle Button - React                                  │
-│  [React] [Vue] [Svelte]  ← フレームワーク切り替えタブ    │
+│  [React] [Vue] [Svelte] [Astro]  ← フレームワーク切り替えタブ │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  ## 概要                                                │
@@ -153,6 +155,7 @@ src/
 │   │   │   ├── ToggleButton.tsx     # React コンポーネント
 │   │   │   ├── ToggleButton.vue     # Vue コンポーネント
 │   │   │   ├── ToggleButton.svelte  # Svelte コンポーネント
+│   │   │   ├── ToggleButton.astro   # Astro コンポーネント（Web Components）
 │   │   │   ├── ToggleButtonDemo.tsx
 │   │   │   ├── ToggleButtonDemo.vue
 │   │   │   └── ToggleButtonDemo.svelte
@@ -181,14 +184,17 @@ src/
 ├── layouts/
 │   ├── BaseLayout.astro
 │   └── PatternLayout.astro
+├── lib/
+│   └── frameworks.ts            # フレームワーク定義の一元管理
 ├── pages/
 │   ├── index.astro
 │   ├── patterns/
 │   │   └── [pattern]/
 │   │       ├── index.astro          # リダイレクト
-│   │       ├── react.astro
-│   │       ├── vue.astro
-│   │       └── svelte.astro
+│   │       ├── react/
+│   │       ├── vue/
+│   │       ├── svelte/
+│   │       └── astro/
 │   ├── guide/
 │   └── about.astro
 ├── i18n/                            # 多言語対応
@@ -229,7 +235,7 @@ import toggleButtonCode from '../components/patterns/button/ToggleButton.tsx?raw
 
 ```typescript
 const FRAMEWORK_KEY = 'apg-selected-framework';
-type Framework = 'react' | 'vue' | 'svelte';
+type Framework = 'react' | 'vue' | 'svelte' | 'astro';
 const DEFAULT_FRAMEWORK: Framework = 'react';
 ```
 
@@ -385,7 +391,7 @@ jobs:
 const patternSchema = z.object({
   title: z.string(),
   description: z.string(),
-  framework: z.enum(['react', 'vue', 'svelte']).optional(),
+  framework: z.enum(['react', 'vue', 'svelte', 'astro']).optional(),
   ariaFeatures: z.array(z.string()),
   keyboardSupport: z.array(z.string()),
   apgLink: z.string().url(),
@@ -425,32 +431,32 @@ function getFramework(): Framework {
 
 ## 移行計画
 
-### Phase 1: 基盤構築
+### Phase 1: 基盤構築 ✅ 完了
 
 **完了基準**: ビルド成功 + 空ページ表示
 
-- [ ] Astro プロジェクト作成
-- [ ] React / Vue / Svelte 統合設定
-- [ ] Tailwind + shadcn/ui 設定
-- [ ] 基本レイアウト作成
+- [x] Astro プロジェクト作成
+- [x] React / Vue / Svelte / Astro 統合設定
+- [x] Tailwind + shadcn/ui 設定
+- [x] 基本レイアウト作成
 - [ ] i18n 設定
-- [ ] ダークモード実装
+- [x] ダークモード実装
 
-### Phase 2: コア機能
+### Phase 2: コア機能 ✅ 完了
 
-- [ ] フレームワークセレクター実装
-- [ ] フレームワーク別ページテンプレート
-- [ ] コード表示コンポーネント
+- [x] フレームワークセレクター実装
+- [x] フレームワーク別ページテンプレート
+- [x] コード表示コンポーネント
 - [ ] Pagefind 設定
 
-### Phase 3: コンテンツ移行
+### Phase 3: コンテンツ移行 ✅ 完了
 
-- [ ] ToggleButton パターン移行
-- [ ] Tabs パターン移行
+- [x] ToggleButton パターン移行（React / Vue / Svelte / Astro）
+- [x] Tabs パターン移行（React / Vue / Svelte / Astro）
 
 ### Phase 4: サイト完成
 
-- [ ] トップページ
+- [x] トップページ
 - [ ] ガイドページ
 - [ ] About ページ
 - [ ] テスト整備

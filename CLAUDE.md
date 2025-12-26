@@ -2,7 +2,7 @@
 
 ## プロジェクト概要
 
-**APG Patterns Examples** は、WAI-ARIA Authoring Practices Guide (APG) のコンポーネントパターンを React、Vue、Svelte の3つのフレームワークで実装し、実際に動作するデモと詳細なコード解説を提供するプロジェクトです。
+**APG Patterns Examples** は、WAI-ARIA Authoring Practices Guide (APG) のコンポーネントパターンを React、Vue、Svelte、Astro の4つのフレームワークで実装し、実際に動作するデモと詳細なコード解説を提供するプロジェクトです。
 
 ### プロジェクトの目標
 
@@ -20,7 +20,7 @@
 |---------|------|
 | フレームワーク | Astro (Islands アーキテクチャ) |
 | コンテンツ | MDX |
-| デモ | React / Vue / Svelte |
+| デモ | React / Vue / Svelte / Astro |
 | スタイリング | Tailwind CSS + shadcn/ui |
 | コード表示 | Shiki |
 | テスト | Vitest + Playwright |
@@ -36,16 +36,20 @@
 src/
 ├── components/                # サイト UI (shadcn/ui)
 │   └── ui/
+├── lib/                       # ユーティリティ
+│   └── frameworks.ts          # フレームワーク定義の一元管理
 ├── patterns/                  # APG パターン実装
 │   ├── button/
 │   │   ├── ToggleButton.tsx
 │   │   ├── ToggleButton.vue
 │   │   ├── ToggleButton.svelte
+│   │   ├── ToggleButton.astro  # Web Components
 │   │   └── AccessibilityDocs.astro
 │   └── tabs/
 │       ├── Tabs.tsx
 │       ├── Tabs.vue
 │       ├── Tabs.svelte
+│       ├── Tabs.astro          # Web Components
 │       └── AccessibilityDocs.astro
 ├── content/
 │   └── patterns/              # MDX コンテンツ
@@ -54,9 +58,10 @@ src/
 │   ├── patterns/
 │   │   └── [pattern]/
 │   │       ├── index.astro    # リダイレクト
-│   │       ├── react.astro
-│   │       ├── vue.astro
-│   │       └── svelte.astro
+│   │       ├── react/
+│   │       ├── vue/
+│   │       ├── svelte/
+│   │       └── astro/
 │   └── ...
 ├── i18n/
 └── styles/
@@ -108,6 +113,24 @@ defineOptions({ inheritAttrs: false })
 <button {...$$restProps}>
 ```
 
+**Astro** (Web Components):
+```astro
+<apg-toggle-button>
+  <button type="button" aria-pressed={initialPressed}>
+    <slot />
+  </button>
+</apg-toggle-button>
+
+<script>
+class ApgToggleButton extends HTMLElement {
+  connectedCallback() {
+    // イベントリスナー設定
+  }
+}
+customElements.define('apg-toggle-button', ApgToggleButton);
+</script>
+```
+
 #### 2. アクセシビリティファースト
 
 - `aria-pressed` 等の ARIA 属性による状態管理
@@ -132,7 +155,8 @@ defineOptions({ inheritAttrs: false })
 │   └── /patterns/{pattern}/         # リダイレクト
 │       ├── /patterns/{pattern}/react/
 │       ├── /patterns/{pattern}/vue/
-│       └── /patterns/{pattern}/svelte/
+│       ├── /patterns/{pattern}/svelte/
+│       └── /patterns/{pattern}/astro/
 ├── /guide/
 └── /about/
 ```

@@ -20,7 +20,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'APG Patterns Examples - Accessible component patterns for React, Vue, and Svelte' } = Astro.props;
+const { title, description = 'APG Patterns Examples - Accessible component patterns for React, Vue, Svelte, and Astro' } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
@@ -66,6 +66,7 @@ const navLinks = [
           <NativeSelectOption value="react">React</NativeSelectOption>
           <NativeSelectOption value="vue">Vue</NativeSelectOption>
           <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
+          <NativeSelectOption value="astro">Astro</NativeSelectOption>
         </NativeSelect>
         <ThemeToggle />
       </HeaderActions>
@@ -99,6 +100,7 @@ const navLinks = [
               <NativeSelectOption value="react">React</NativeSelectOption>
               <NativeSelectOption value="vue">Vue</NativeSelectOption>
               <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
+              <NativeSelectOption value="astro">Astro</NativeSelectOption>
             </NativeSelect>
             <ThemeToggle />
           </HeaderActions>
