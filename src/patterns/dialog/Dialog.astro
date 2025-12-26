@@ -1,0 +1,193 @@
+---
+/**
+ * APG Dialog (Modal) Pattern - Astro Implementation
+ *
+ * A window overlaid on the primary window, rendering the content underneath inert.
+ * Uses native <dialog> element with Web Components for enhanced control.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+ */
+
+export interface Props {
+  /** Dialog title (required for accessibility) */
+  title: string;
+  /** Optional description text */
+  description?: string;
+  /** Trigger button text */
+  triggerText: string;
+  /** Close on overlay click */
+  closeOnOverlayClick?: boolean;
+  /** Additional CSS class for trigger button */
+  triggerClass?: string;
+  /** Additional CSS class for dialog */
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  triggerText,
+  closeOnOverlayClick = true,
+  triggerClass = "",
+  class: className = "",
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = `dialog-${Math.random().toString(36).substring(2, 11)}`;
+const titleId = `${instanceId}-title`;
+const descriptionId = `${instanceId}-description`;
+---
+
+<apg-dialog data-close-on-overlay={closeOnOverlayClick}>
+  <!-- Trigger Button -->
+  <button
+    type="button"
+    class={`apg-dialog-trigger ${triggerClass}`.trim()}
+    data-dialog-trigger
+  >
+    {triggerText}
+  </button>
+
+  <!-- Native Dialog Element -->
+  <dialog
+    class={`apg-dialog ${className}`.trim()}
+    aria-labelledby={titleId}
+    aria-describedby={description ? descriptionId : undefined}
+    data-dialog-content
+  >
+    <div class="apg-dialog-header">
+      <h2 id={titleId} class="apg-dialog-title">
+        {title}
+      </h2>
+      <button
+        type="button"
+        class="apg-dialog-close"
+        data-dialog-close
+        aria-label="Close dialog"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    {
+      description && (
+        <p id={descriptionId} class="apg-dialog-description">
+          {description}
+        </p>
+      )
+    }
+    <div class="apg-dialog-body">
+      <slot />
+    </div>
+  </dialog>
+</apg-dialog>
+
+<script>
+  class ApgDialog extends HTMLElement {
+    private trigger: HTMLButtonElement | null = null;
+    private dialog: HTMLDialogElement | null = null;
+    private closeButton: HTMLButtonElement | null = null;
+    private closeOnOverlayClick = true;
+
+    connectedCallback() {
+      this.trigger = this.querySelector("[data-dialog-trigger]");
+      this.dialog = this.querySelector("[data-dialog-content]");
+      this.closeButton = this.querySelector("[data-dialog-close]");
+
+      if (!this.trigger || !this.dialog) {
+        console.warn("apg-dialog: required elements not found");
+        return;
+      }
+
+      this.closeOnOverlayClick = this.dataset.closeOnOverlay !== "false";
+
+      // Attach event listeners
+      this.trigger.addEventListener("click", this.open);
+      this.closeButton?.addEventListener("click", this.close);
+      this.dialog.addEventListener("click", this.handleDialogClick);
+      this.dialog.addEventListener("close", this.handleClose);
+    }
+
+    disconnectedCallback() {
+      this.trigger?.removeEventListener("click", this.open);
+      this.closeButton?.removeEventListener("click", this.close);
+      this.dialog?.removeEventListener("click", this.handleDialogClick);
+      this.dialog?.removeEventListener("close", this.handleClose);
+    }
+
+    private open = () => {
+      if (!this.dialog) return;
+
+      this.dialog.showModal();
+
+      // Focus first focusable element (close button by default)
+      const focusableElements = this.getFocusableElements(this.dialog);
+      if (focusableElements.length > 0) {
+        focusableElements[0].focus();
+      }
+
+      // Dispatch custom event
+      this.dispatchEvent(
+        new CustomEvent("dialogopen", {
+          bubbles: true,
+        })
+      );
+    };
+
+    private close = () => {
+      this.dialog?.close();
+    };
+
+    private handleClose = () => {
+      // Return focus to trigger
+      this.trigger?.focus();
+
+      // Dispatch custom event
+      this.dispatchEvent(
+        new CustomEvent("dialogclose", {
+          bubbles: true,
+        })
+      );
+    };
+
+    private handleDialogClick = (e: Event) => {
+      // Close on backdrop click (clicking the dialog element itself, not its contents)
+      if (this.closeOnOverlayClick && e.target === this.dialog) {
+        this.close();
+      }
+    };
+
+    private getFocusableElements(container: HTMLElement): HTMLElement[] {
+      const focusableSelectors = [
+        "a[href]",
+        "button:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "textarea:not([disabled])",
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(",");
+
+      return Array.from(
+        container.querySelectorAll<HTMLElement>(focusableSelectors)
+      ).filter((el) => el.offsetParent !== null);
+    }
+  }
+
+  // Register the custom element
+  if (!customElements.get("apg-dialog")) {
+    customElements.define("apg-dialog", ApgDialog);
+  }
+</script>

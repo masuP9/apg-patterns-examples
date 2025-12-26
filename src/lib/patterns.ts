@@ -60,7 +60,7 @@ export const PATTERNS: Pattern[] = [
       "A window overlaid on the primary window, rendering the content underneath inert.",
     icon: "💬",
     complexity: "High",
-    status: "planned",
+    status: "available",
   },
   {
     id: "menu-button",
