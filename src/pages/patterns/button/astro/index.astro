@@ -7,11 +7,12 @@ import AccessibilityDocs from "@patterns/button/AccessibilityDocs.astro";
 import FrameworkTabs from "@/components/ui/FrameworkTabs.astro";
 import { ResponsiveTable } from "@/components/ui/table";
 import sourceCode from "@patterns/button/ToggleButton.astro?raw";
+import { withBase } from "@/lib/utils";
 ---
 
 <PatternLayout title="Toggle Button - Astro" pattern="button" framework="astro">
   <nav class="mb-6 text-sm">
-    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
     <span class="mx-2 text-muted-foreground">/</span>
     <span>Toggle Button</span>
   </nav>

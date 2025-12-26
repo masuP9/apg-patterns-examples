@@ -14,6 +14,7 @@ import { Footer, FooterDescription, FooterGroup, FooterMenu, FooterMenuItem, Foo
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import MenuIcon from 'lucide-static/icons/menu.svg';
+import { withBase } from '@/lib/utils';
 
 interface Props {
   title: string;
@@ -24,9 +25,9 @@ const { title, description = 'APG Patterns Examples - Accessible component patte
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { text: 'Patterns', href: '/patterns/' },
-  { text: 'Guide', href: '/guide/' },
-  { text: 'About', href: '/about/' },
+  { text: 'Patterns', href: withBase('/patterns/') },
+  { text: 'Guide', href: withBase('/guide/') },
+  { text: 'About', href: withBase('/about/') },
 ];
 ---
 
@@ -36,7 +37,7 @@ const navLinks = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <title>{title} | APG Patterns Examples</title>
     <ThemeProvider />
   </head>
@@ -44,7 +45,7 @@ const navLinks = [
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <Header>
-      <Logo href="/">
+      <Logo href={withBase('/')}>
         <LogoText>APG Patterns</LogoText>
       </Logo>
       <NavigationMenu class="mr-auto @max-lg:hidden">

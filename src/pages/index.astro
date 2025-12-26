@@ -1,24 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { withBase } from '@/lib/utils';
 
 const patterns = [
   {
     name: 'Toggle Button',
     description: 'Button with pressed state',
-    href: '/patterns/button/react/',
+    href: withBase('/patterns/button/react/'),
     icon: '🔘',
   },
   {
     name: 'Tabs',
     description: 'Tabbed interface with keyboard navigation',
-    href: '/patterns/tabs/react/',
+    href: withBase('/patterns/tabs/react/'),
     icon: '📑',
   },
   {
     name: 'Accordion',
     description: 'Collapsible content sections',
-    href: '/patterns/accordion/react/',
+    href: withBase('/patterns/accordion/react/'),
     icon: '📋',
   },
 ];
@@ -32,7 +33,7 @@ const patterns = [
     </p>
 
     <div class="grid gap-6 md:grid-cols-3">
-      <Tile variant="floating" href="/patterns/">
+      <Tile variant="floating" href={withBase('/patterns/')}>
         <TileContent>
           <TileTitle>Patterns</TileTitle>
           <TileDescription>
@@ -41,7 +42,7 @@ const patterns = [
         </TileContent>
       </Tile>
 
-      <Tile variant="floating" href="/guide/">
+      <Tile variant="floating" href={withBase('/guide/')}>
         <TileContent>
           <TileTitle>Guide</TileTitle>
           <TileDescription>
@@ -50,7 +51,7 @@ const patterns = [
         </TileContent>
       </Tile>
 
-      <Tile variant="floating" href="/about/">
+      <Tile variant="floating" href={withBase('/about/')}>
         <TileContent>
           <TileTitle>About</TileTitle>
           <TileDescription>
