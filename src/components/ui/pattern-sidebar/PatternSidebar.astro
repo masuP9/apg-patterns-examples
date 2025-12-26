@@ -1,0 +1,75 @@
+---
+import type { Framework } from "@/lib/frameworks";
+import {
+  PATTERNS,
+  getAvailablePatterns,
+  getPlannedPatterns,
+} from "@/lib/patterns";
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
+
+interface Props {
+  currentPattern: string;
+  currentFramework: Framework;
+}
+
+const { currentPattern, currentFramework } = Astro.props;
+
+const availablePatterns = getAvailablePatterns();
+const plannedPatterns = getPlannedPatterns();
+---
+
+<nav aria-label="Pattern navigation" class="w-full">
+  <div class="mb-4">
+    <h2 class="px-2 text-sm font-semibold text-foreground">Patterns</h2>
+  </div>
+
+  <SidebarMenu>
+    {
+      availablePatterns.map((pattern) => (
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            href={`/patterns/${pattern.id}/${currentFramework}/`}
+            active={currentPattern === pattern.id}
+            aria-current={currentPattern === pattern.id ? "page" : undefined}
+          >
+            <span class="text-base" aria-hidden="true">
+              {pattern.icon}
+            </span>
+            <span>{pattern.name}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))
+    }
+  </SidebarMenu>
+
+  {
+    plannedPatterns.length > 0 && (
+      <>
+        <div class="mb-2 mt-6">
+          <h3 class="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Planned
+          </h3>
+        </div>
+        <SidebarMenu>
+          {plannedPatterns.map((pattern) => (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                class="opacity-50 cursor-not-allowed pointer-events-none"
+                aria-disabled="true"
+              >
+                <span class="text-base" aria-hidden="true">
+                  {pattern.icon}
+                </span>
+                <span>{pattern.name}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </>
+    )
+  }
+</nav>

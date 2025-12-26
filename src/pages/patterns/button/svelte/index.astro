@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import ToggleButton from '@patterns/button/ToggleButton.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -8,13 +8,12 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
 ---
 
-<BaseLayout title="Toggle Button - Svelte">
-  <div class="max-w-4xl mx-auto">
-    <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
-      <span class="mx-2 text-muted-foreground">/</span>
-      <span>Toggle Button</span>
-    </nav>
+<PatternLayout title="Toggle Button - Svelte" pattern="button" framework="svelte">
+  <nav class="mb-6 text-sm">
+    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Toggle Button</span>
+  </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toggle Button</h1>
@@ -132,5 +131,4 @@ import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
         </li>
       </ul>
     </section>
-  </div>
-</BaseLayout>
+</PatternLayout>

@@ -1,57 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
-
-const patterns = [
-  {
-    name: 'Toggle Button',
-    description: 'A two-state button that can be either "pressed" or "not pressed".',
-    href: '/patterns/button/react/',
-    icon: '🔘',
-    complexity: 'Low',
-    status: 'Available',
-  },
-  {
-    name: 'Tabs',
-    description: 'A set of layered sections of content, known as tab panels, that display one panel at a time.',
-    href: '/patterns/tabs/react/',
-    icon: '📑',
-    complexity: 'Medium',
-    status: 'Available',
-  },
-  {
-    name: 'Accordion',
-    description: 'A vertically stacked set of interactive headings that each reveal a section of content.',
-    href: '#',
-    icon: '📋',
-    complexity: 'Medium',
-    status: 'Planned',
-  },
-  {
-    name: 'Dialog (Modal)',
-    description: 'A window overlaid on the primary window, rendering the content underneath inert.',
-    href: '#',
-    icon: '💬',
-    complexity: 'High',
-    status: 'Planned',
-  },
-  {
-    name: 'Menu Button',
-    description: 'A button that opens a menu of actions or options.',
-    href: '#',
-    icon: '☰',
-    complexity: 'High',
-    status: 'Planned',
-  },
-  {
-    name: 'Disclosure',
-    description: 'A button that controls the visibility of a section of content.',
-    href: '#',
-    icon: '▼',
-    complexity: 'Low',
-    status: 'Planned',
-  },
-];
+import { PATTERNS } from '@/lib/patterns';
+import { DEFAULT_FRAMEWORK } from '@/lib/frameworks';
 ---
 
 <BaseLayout title="Patterns">
@@ -65,12 +16,12 @@ const patterns = [
     </header>
 
     <div class="grid gap-4 md:grid-cols-2">
-      {patterns.map((pattern) => (
+      {PATTERNS.map((pattern) => (
         <Tile
           variant="floating"
-          href={pattern.status === 'Available' ? pattern.href : undefined}
+          href={pattern.status === 'available' ? `/patterns/${pattern.id}/${DEFAULT_FRAMEWORK}/` : undefined}
           class:list={[
-            pattern.status !== 'Available' && 'opacity-60 cursor-not-allowed'
+            pattern.status !== 'available' && 'opacity-60 cursor-not-allowed'
           ]}
         >
           <TileContent class="flex flex-row items-start gap-4">
@@ -80,9 +31,9 @@ const patterns = [
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
                 <TileTitle>{pattern.name}</TileTitle>
-                {pattern.status !== 'Available' && (
+                {pattern.status !== 'available' && (
                   <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                    {pattern.status}
+                    Planned
                   </span>
                 )}
               </div>

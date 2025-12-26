@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PatternLayout from "../../../../layouts/PatternLayout.astro";
 import Tabs from "@patterns/tabs/Tabs.astro";
 import CodeBlock from "@/components/ui/CodeBlock.astro";
 import ExternalLink from "@/components/ui/ExternalLink.astro";
@@ -56,13 +56,12 @@ const verticalTabs = [
 ];
 ---
 
-<BaseLayout title="Tabs - Astro">
-  <div class="max-w-4xl mx-auto">
-    <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
-      <span class="mx-2 text-muted-foreground">/</span>
-      <span>Tabs</span>
-    </nav>
+<PatternLayout title="Tabs - Astro" pattern="tabs" framework="astro">
+  <nav class="mb-6 text-sm">
+    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Tabs</span>
+  </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Tabs</h1>
@@ -258,5 +257,4 @@ const tabs = [
         </li>
       </ul>
     </section>
-  </div>
-</BaseLayout>
+</PatternLayout>
