@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 export interface TabItem {
   id: string;
@@ -30,18 +37,28 @@ export function Tabs({
   onSelectionChange,
   className = "",
 }: TabsProps): React.ReactElement {
-  const initialTab = defaultSelectedId
-    ? tabs.find((tab) => tab.id === defaultSelectedId && !tab.disabled)
-    : tabs.find((tab) => !tab.disabled);
+  // availableTabsの安定化（パフォーマンス最適化）
+  const availableTabs = useMemo(
+    () => tabs.filter((tab) => !tab.disabled),
+    [tabs]
+  );
 
-  const [selectedId, setSelectedId] = useState(initialTab?.id || tabs[0]?.id);
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  const initialTab = defaultSelectedId
+    ? availableTabs.find((tab) => tab.id === defaultSelectedId)
+    : availableTabs[0];
+
+  const [selectedId, setSelectedId] = useState(
+    initialTab?.id || availableTabs[0]?.id
+  );
+  const [focusedIndex, setFocusedIndex] = useState(() => {
+    const index = availableTabs.findIndex((tab) => tab.id === initialTab?.id);
+    return index >= 0 ? index : 0;
+  });
 
   const tablistRef = useRef<HTMLDivElement>(null);
-  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
   const tablistId = useId();
-  const availableTabs = tabs.filter((tab) => !tab.disabled);
 
   const handleTabSelection = useCallback(
     (tabId: string) => {
@@ -55,8 +72,8 @@ export function Tabs({
     (index: number) => {
       setFocusedIndex(index);
       const tab = availableTabs[index];
-      if (tab && tabRefs.current[tab.id]) {
-        tabRefs.current[tab.id]?.focus();
+      if (tab) {
+        tabRefs.current.get(tab.id)?.focus();
       }
     },
     [availableTabs]
@@ -131,14 +148,24 @@ export function Tabs({
     [focusedIndex, availableTabs, activation, handleTabSelection, handleTabFocus]
   );
 
+  // フォーカス同期（Activation mode考慮）
   useEffect(() => {
+    if (activation === "manual") {
+      // Manual: tabsの変更により範囲外になった場合のみ修正
+      if (focusedIndex >= availableTabs.length) {
+        setFocusedIndex(Math.max(0, availableTabs.length - 1));
+      }
+      return;
+    }
+
+    // Automatic: 選択に追従
     const selectedIndex = availableTabs.findIndex(
       (tab) => tab.id === selectedId
     );
-    if (selectedIndex >= 0) {
+    if (selectedIndex >= 0 && selectedIndex !== focusedIndex) {
       setFocusedIndex(selectedIndex);
     }
-  }, [selectedId, availableTabs]);
+  }, [selectedId, availableTabs, activation, focusedIndex]);
 
   const containerClass = `apg-tabs ${
     orientation === "vertical" ? "apg-tabs--vertical" : "apg-tabs--horizontal"
@@ -161,7 +188,12 @@ export function Tabs({
       >
         {tabs.map((tab) => {
           const isSelected = tab.id === selectedId;
-          const tabIndex = tab.disabled ? -1 : isSelected ? 0 : -1;
+          // APG準拠: Manual Activationではフォーカス位置でtabIndexを制御
+          const isFocusTarget =
+            activation === "manual"
+              ? tab.id === availableTabs[focusedIndex]?.id
+              : isSelected;
+          const tabIndex = tab.disabled ? -1 : isFocusTarget ? 0 : -1;
           const tabPanelId = `${tablistId}-panel-${tab.id}`;
 
           const tabClass = `apg-tab ${
@@ -176,7 +208,11 @@ export function Tabs({
             <button
               key={tab.id}
               ref={(el) => {
-                tabRefs.current[tab.id] = el;
+                if (el) {
+                  tabRefs.current.set(tab.id, el);
+                } else {
+                  tabRefs.current.delete(tab.id);
+                }
               }}
               role="tab"
               type="button"
