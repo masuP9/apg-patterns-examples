@@ -5,6 +5,7 @@ import CodeBlock from "@/components/ui/CodeBlock.astro";
 import ExternalLink from "@/components/ui/ExternalLink.astro";
 import AccessibilityDocs from "@patterns/tabs/AccessibilityDocs.astro";
 import FrameworkTabs from "@/components/ui/FrameworkTabs.astro";
+import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from "@patterns/tabs/Tabs.astro?raw";
 
 const demoTabs = [
@@ -159,52 +160,54 @@ const tabs = [
       <h2 class="text-xl font-semibold mb-4">API</h2>
 
       <h3 class="text-lg font-medium mb-3">Props</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>tabs</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
-            <td class="py-2 pr-4 text-muted-foreground">required</td>
-            <td class="py-2">Array of tab items</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">first tab</td>
-            <td class="py-2">ID of the initially selected tab</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>orientation</code></td>
-            <td class="py-2 pr-4 text-muted-foreground"
-              >'horizontal' | 'vertical'</td
-            >
-            <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
-            <td class="py-2">Tab layout direction</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>activation</code></td>
-            <td class="py-2 pr-4 text-muted-foreground"
-              >'automatic' | 'manual'</td
-            >
-            <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
-            <td class="py-2">How tabs are activated</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>class</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">""</td>
-            <td class="py-2">Additional CSS class</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>tabs</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
+              <td class="py-2 pr-4 text-muted-foreground">required</td>
+              <td class="py-2">Array of tab items</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">first tab</td>
+              <td class="py-2">ID of the initially selected tab</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>orientation</code></td>
+              <td class="py-2 pr-4 text-muted-foreground"
+                >'horizontal' | 'vertical'</td
+              >
+              <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
+              <td class="py-2">Tab layout direction</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>activation</code></td>
+              <td class="py-2 pr-4 text-muted-foreground"
+                >'automatic' | 'manual'</td
+              >
+              <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
+              <td class="py-2">How tabs are activated</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>class</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">""</td>
+              <td class="py-2">Additional CSS class</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">TabItem Interface</h3>
       <CodeBlock
@@ -219,24 +222,26 @@ const tabs = [
       />
 
       <h3 class="text-lg font-medium mb-3 mt-6">Custom Events</h3>
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Detail</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>tabchange</code></td>
-            <td class="py-2 pr-4 text-muted-foreground"
-              >{"{ selectedId: string }"}</td
-            >
-            <td class="py-2">Fired when the selected tab changes</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Detail</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>tabchange</code></td>
+              <td class="py-2 pr-4 text-muted-foreground"
+                >{"{ selectedId: string }"}</td
+              >
+              <td class="py-2">Fired when the selected tab changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
       <p class="mt-4 text-sm text-muted-foreground">
         This component uses a Web Component (<code>&lt;apg-tabs&gt;</code>) for
         client-side keyboard navigation and state management.

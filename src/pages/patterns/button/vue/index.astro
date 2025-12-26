@@ -5,6 +5,7 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/button/ToggleButton.vue?raw';
 ---
 
@@ -89,42 +90,46 @@ const handleToggle = (pressed) => {
       <h2 class="text-xl font-semibold mb-4">API</h2>
 
       <h3 class="text-lg font-medium mb-2">Props</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
-            <td class="py-2">Initial pressed state</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>initialPressed</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Initial pressed state</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-2">Events</h3>
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Payload</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>toggle</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2">Emitted when state changes</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Payload</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>toggle</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2">Emitted when state changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <p class="mt-4 text-sm text-muted-foreground">
         All other attributes are passed to the underlying <code>&lt;button&gt;</code> element via <code>v-bind="$attrs"</code>.
