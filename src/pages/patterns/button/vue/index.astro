@@ -4,9 +4,11 @@ import ToggleButton from '@patterns/button/ToggleButton.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/button/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/button/ToggleButton.vue?raw';
+import testCode from '@patterns/button/ToggleButton.test.vue.ts?raw';
 ---
 
 <PatternLayout title="Toggle Button - Vue" pattern="button" framework="vue">
@@ -134,6 +136,19 @@ const handleToggle = (pressed) => {
       <p class="mt-4 text-sm text-muted-foreground">
         All other attributes are passed to the underlying <code>&lt;button&gt;</code> element via <code>v-bind="$attrs"</code>.
       </p>
+    </section>
+
+    <!-- Testing Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Testing</h2>
+      <TestingDocs />
+      <div class="mt-6">
+        <CodeBlock
+          code={testCode}
+          lang="typescript"
+          title="ToggleButton.test.vue.ts"
+        />
+      </div>
     </section>
 
     <!-- Resources -->
