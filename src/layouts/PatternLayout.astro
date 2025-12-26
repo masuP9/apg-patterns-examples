@@ -1,10 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import { PatternSidebar } from "@/components/ui/pattern-sidebar";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import type { Framework } from "@/lib/frameworks";
-import { getPatternById } from "@/lib/patterns";
-import MenuIcon from "lucide-static/icons/layout-list.svg";
 
 interface Props {
   title: string;
@@ -14,7 +11,6 @@ interface Props {
 }
 
 const { title, description, pattern, framework } = Astro.props;
-const patternData = getPatternById(pattern);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -26,24 +22,6 @@ const patternData = getPatternById(pattern);
 
     <!-- Main content -->
     <div class="max-w-4xl min-w-0 overflow-x-hidden">
-      <!-- Mobile pattern navigation trigger -->
-      <div class="lg:hidden mb-4">
-        <Sheet>
-          <SheetTrigger variant="outline" size="sm">
-            <MenuIcon class="size-4 mr-2" />
-            All Patterns
-          </SheetTrigger>
-          <SheetContent side="left" class="w-[280px] overflow-y-auto">
-            <SheetHeader>
-              <SheetTitle>Patterns</SheetTitle>
-            </SheetHeader>
-            <div class="mt-4">
-              <PatternSidebar currentPattern={pattern} currentFramework={framework} />
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-
       <slot />
     </div>
   </div>
