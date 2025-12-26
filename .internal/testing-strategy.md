@@ -133,13 +133,16 @@ Tabs, RadioGroup, Menu は矢印キーナビゲーションを持つ。
 ## ファイル構成
 
 ```
-demos/react/src/components/
-├── Button/
+src/patterns/
+├── button/
 │   ├── ToggleButton.tsx
 │   └── ToggleButton.test.tsx
-└── Tabs/
-    ├── Tabs.tsx
-    └── Tabs.test.tsx
+├── tabs/
+│   ├── Tabs.tsx
+│   └── Tabs.test.tsx
+└── accordion/
+    ├── Accordion.tsx
+    └── Accordion.test.tsx
 ```
 
 1つのテストファイルに全カテゴリをまとめる。
@@ -149,9 +152,12 @@ demos/react/src/components/
 
 ## テストファイルの構成
 
+リスクベース優先順位でカテゴリを整理する。
+
 ```typescript
 describe('ComponentName', () => {
-  describe('基本動作', () => {
+  // 🔴 High Priority: APG 準拠の核心
+  describe('APG: キーボード操作', () => {
     it('...', () => {});
   });
 
@@ -159,19 +165,25 @@ describe('ComponentName', () => {
     it('...', () => {});
   });
 
-  describe('APG: キーボード操作', () => {
-    it('...', () => {});
-  });
-
-  describe('APG: フォーカス管理', () => {
-    it('...', () => {});
-  });
-
+  // 🟡 Medium Priority: アクセシビリティ検証
   describe('アクセシビリティ', () => {
     it('axe による違反がない', async () => {});
   });
+
+  describe('Props', () => {
+    // 他でカバーされない固有の props テスト
+    it('...', () => {});
+  });
+
+  // 🟢 Low Priority: 拡張性
+  describe('HTML 属性継承', () => {
+    it('...', () => {});
+  });
 });
 ```
+
+**注意**: APG: ARIA 属性で状態変化（クリック、初期状態）をテストするため、
+「基本動作」カテゴリは Props に限定し、重複を避ける。
 
 ---
 
@@ -200,7 +212,21 @@ describe('ComponentName', () => {
 | Vitest | テストランナー |
 | @testing-library/react | コンポーネントテスト |
 | @testing-library/user-event | ユーザー操作 |
+| @testing-library/jest-dom | カスタムマッチャー |
 | jest-axe | アクセシビリティ自動テスト |
+| @vitest/coverage-v8 | カバレッジ測定 |
+
+### セットアップファイル
+
+`src/test/setup.ts` でマッチャーを拡張:
+
+```typescript
+import "@testing-library/jest-dom/vitest";
+import { toHaveNoViolations } from "jest-axe";
+import { expect } from "vitest";
+
+expect.extend(toHaveNoViolations);
+```
 
 ---
 
