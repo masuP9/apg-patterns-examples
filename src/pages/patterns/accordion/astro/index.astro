@@ -1,10 +1,11 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Accordion from '@patterns/accordion/Accordion.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/accordion/Accordion.astro?raw';
 
 const defaultItems = [
@@ -64,8 +65,7 @@ const disabledItems = [
 ];
 ---
 
-<BaseLayout title="Accordion - Astro">
-  <div class="max-w-4xl mx-auto">
+<PatternLayout title="Accordion - Astro" pattern="accordion" framework="astro">
     <nav class="mb-6 text-sm">
       <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
       <span class="mx-2 text-muted-foreground">/</span>
@@ -183,66 +183,70 @@ const items = [
       <h2 class="text-xl font-semibold mb-4">API</h2>
 
       <h3 class="text-lg font-medium mb-3">Props</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>items</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">AccordionItem[]</td>
-            <td class="py-2 pr-4 text-muted-foreground">required</td>
-            <td class="py-2">Array of accordion items</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>allowMultiple</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
-            <td class="py-2">Allow multiple panels to be expanded</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>headingLevel</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">2 | 3 | 4 | 5 | 6</td>
-            <td class="py-2 pr-4 text-muted-foreground">3</td>
-            <td class="py-2">Heading level for accessibility</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">true</td>
-            <td class="py-2">Enable arrow key navigation</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>class</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">""</td>
-            <td class="py-2">Additional CSS class</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>items</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">AccordionItem[]</td>
+              <td class="py-2 pr-4 text-muted-foreground">required</td>
+              <td class="py-2">Array of accordion items</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>allowMultiple</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Allow multiple panels to be expanded</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>headingLevel</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">2 | 3 | 4 | 5 | 6</td>
+              <td class="py-2 pr-4 text-muted-foreground">3</td>
+              <td class="py-2">Heading level for accessibility</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">true</td>
+              <td class="py-2">Enable arrow key navigation</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>class</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">""</td>
+              <td class="py-2">Additional CSS class</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">Events</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Detail</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>expandedchange</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">{"{ expandedIds: string[] }"}</td>
-            <td class="py-2">Fired when the expanded panels change</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Detail</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>expandedchange</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">{"{ expandedIds: string[] }"}</td>
+              <td class="py-2">Fired when the expanded panels change</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">AccordionItem Interface</h3>
       <CodeBlock
@@ -290,5 +294,4 @@ const items = [
         </li>
       </ul>
     </section>
-  </div>
-</BaseLayout>
+</PatternLayout>

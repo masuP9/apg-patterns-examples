@@ -7,10 +7,15 @@ import { cn } from "@/lib/utils"
 
 const dialogVariants = cva(
   [
+    "group/sheet",
     "fixed inset-0 z-50 m-0 max-h-none max-w-none border-0 bg-transparent p-0",
-    "backdrop:bg-black/50",
     // Added for quick fix over horizontal scroll issue
     "overflow-x-hidden",
+    // Animation: opacity
+    "transition-discrete starting:opacity-0 transition-[opacity,overlay,display] duration-300 ease-in-out",
+    // Backdrop styles
+    "backdrop:bg-black/0 backdrop:transition-[background-color,overlay,display] backdrop:starting:bg-black/0 backdrop:duration-300 backdrop:ease-in-out",
+    "data-[state=open]:backdrop:bg-black/50"
   ],
   {
     variants: {
@@ -28,14 +33,20 @@ const dialogVariants = cva(
 )
 
 const contentVariants = cva(
-  "bg-background flex h-full flex-col gap-4 shadow-lg transition-transform duration-300 ease-out",
+  [
+    "w-3/4 fixed z-50 bg-background flex h-full flex-col gap-4 shadow-lg",
+    "transition transition-transform ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+    // Open state: on-screen
+    "group-data-[state=open]/sheet:translate-x-0 group-data-[state=open]/sheet:translate-y-0",
+  ],
   {
     variants: {
       side: {
-        right: "border-l",
-        left: "border-r",
-        top: "border-b",
-        bottom: "border-t",
+        // Default off-screen position + border
+        right: "border-l translate-x-full",
+        left: "border-r -translate-x-full",
+        top: "border-b -translate-y-full",
+        bottom: "border-t translate-y-full",
       },
     },
     defaultVariants: {
@@ -49,7 +60,7 @@ type Props = VariantProps<typeof contentVariants> &
     showClose?: boolean
   }
 
-const { class: className, side, showClose = true, ...props } = Astro.props
+const { class: className, side = "right", showClose = true, ...props } = Astro.props
 
 const slot = await Astro.slots.render("default")
 ---
@@ -70,7 +81,7 @@ const slot = await Astro.slots.render("default")
         <button
           type="button"
           data-slot="sheet-close"
-          class="focus-visible:outline-ring text-foreground absolute top-4 right-4 cursor-pointer rounded-sm border-0 bg-transparent opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-visible:outline-ring text-foreground absolute p-3.5 top-2 right-5.25 cursor-pointer rounded-sm border-0 bg-transparent opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-label="Close"
         >
           <XIcon class="size-4" />

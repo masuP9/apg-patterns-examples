@@ -29,23 +29,35 @@ const slot = await Astro.slots.render("default")
     const dialog = sheet.querySelector("[data-slot='sheet-dialog']")
     if (!(dialog instanceof HTMLDialogElement)) return
 
+    const openSheet = () => {
+      dialog.showModal()
+      dialog.dataset.state = "open"
+    }
+
+    const closeSheet = () => {
+      delete dialog.dataset.state
+      dialog.close()
+    }
+
     // Close on backdrop click
     dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close()
+      if (event.target === dialog) closeSheet()
+    })
+
+    // Close on Escape key
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault()
+      closeSheet()
     })
 
     const triggers = sheet.querySelectorAll("[data-slot='sheet-trigger']")
     triggers.forEach((trigger) => {
-      trigger.addEventListener("click", () => {
-        dialog.showModal()
-      })
+      trigger.addEventListener("click", openSheet)
     })
 
     const closes = sheet.querySelectorAll("[data-slot='sheet-close']")
     closes.forEach((close) => {
-      close.addEventListener("click", () => {
-        dialog.close()
-      })
+      close.addEventListener("click", closeSheet)
     })
   })
 </script>

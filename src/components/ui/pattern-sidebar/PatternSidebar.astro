@@ -1,10 +1,6 @@
 ---
-import type { Framework } from "@/lib/frameworks";
-import {
-  PATTERNS,
-  getAvailablePatterns,
-  getPlannedPatterns,
-} from "@/lib/patterns";
+import { FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
+import { getAvailablePatterns, getPlannedPatterns } from "@/lib/patterns";
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -20,11 +16,15 @@ const { currentPattern, currentFramework } = Astro.props;
 
 const availablePatterns = getAvailablePatterns();
 const plannedPatterns = getPlannedPatterns();
+const frameworkLabel = FRAMEWORK_INFO[currentFramework].label;
 ---
 
 <nav aria-label="Pattern navigation" class="w-full">
-  <div class="mb-4">
+  <div class="mb-4 flex items-center justify-between">
     <h2 class="px-2 text-sm font-semibold text-foreground">Patterns</h2>
+    <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+      {frameworkLabel}
+    </span>
   </div>
 
   <SidebarMenu>
@@ -54,21 +54,21 @@ const plannedPatterns = getPlannedPatterns();
             Planned
           </h3>
         </div>
-        <SidebarMenu>
+        <ul class="flex w-full min-w-0 flex-col gap-1">
           {plannedPatterns.map((pattern) => (
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                class="opacity-50 cursor-not-allowed pointer-events-none"
-                aria-disabled="true"
+            <li class="group/menu-item relative">
+              <span
+                class="flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm text-muted-foreground opacity-60 cursor-default"
               >
                 <span class="text-base" aria-hidden="true">
                   {pattern.icon}
                 </span>
-                <span>{pattern.name}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+                <span class="truncate">{pattern.name}</span>
+                <span class="sr-only">(coming soon)</span>
+              </span>
+            </li>
           ))}
-        </SidebarMenu>
+        </ul>
       </>
     )
   }

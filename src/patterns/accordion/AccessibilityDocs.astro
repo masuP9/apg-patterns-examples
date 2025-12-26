@@ -1,35 +1,38 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <h3 class="text-lg font-medium mb-3">WAI-ARIA Roles</h3>
-  <table class="w-full border-collapse mb-6">
-    <thead>
-      <tr class="border-b border-border">
-        <th class="text-left py-2 pr-4">Role</th>
-        <th class="text-left py-2 pr-4">Target Element</th>
-        <th class="text-left py-2">Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>heading</code></td>
-        <td class="py-2 pr-4">Header wrapper (h2-h6)</td>
-        <td class="py-2">Contains the accordion trigger button</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>button</code></td>
-        <td class="py-2 pr-4">Header trigger</td>
-        <td class="py-2">Interactive element that toggles panel visibility</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>region</code></td>
-        <td class="py-2 pr-4">Panel (optional)</td>
-        <td class="py-2">Content area associated with header (omit for 6+ panels)</td>
-      </tr>
-    </tbody>
-  </table>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Role</th>
+          <th class="text-left py-2 pr-4">Target Element</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>heading</code></td>
+          <td class="py-2 pr-4">Header wrapper (h2-h6)</td>
+          <td class="py-2">Contains the accordion trigger button</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>button</code></td>
+          <td class="py-2 pr-4">Header trigger</td>
+          <td class="py-2">Interactive element that toggles panel visibility</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>region</code></td>
+          <td class="py-2 pr-4">Panel (optional)</td>
+          <td class="py-2">Content area associated with header (omit for 6+ panels)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
   <p class="text-sm text-muted-foreground mb-6">
     <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" class="text-primary hover:underline">
       WAI-ARIA Accordion Pattern
@@ -37,139 +40,147 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
   </p>
 
   <h3 class="text-lg font-medium mb-3">WAI-ARIA Properties</h3>
-  <table class="w-full border-collapse mb-6">
-    <thead>
-      <tr class="border-b border-border">
-        <th class="text-left py-2 pr-4">Attribute</th>
-        <th class="text-left py-2 pr-4">Target</th>
-        <th class="text-left py-2 pr-4">Values</th>
-        <th class="text-left py-2 pr-4">Required</th>
-        <th class="text-left py-2">Configuration</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>aria-level</code></td>
-        <td class="py-2 pr-4">heading</td>
-        <td class="py-2 pr-4"><code>2</code> - <code>6</code></td>
-        <td class="py-2 pr-4">Yes</td>
-        <td class="py-2"><code>headingLevel</code> prop</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>aria-controls</code></td>
-        <td class="py-2 pr-4">button</td>
-        <td class="py-2 pr-4">ID reference to associated panel</td>
-        <td class="py-2 pr-4">Yes</td>
-        <td class="py-2">Auto-generated</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-        <td class="py-2 pr-4">region (panel)</td>
-        <td class="py-2 pr-4">ID reference to header button</td>
-        <td class="py-2 pr-4">Yes (if region used)</td>
-        <td class="py-2">Auto-generated</td>
-      </tr>
-    </tbody>
-  </table>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Attribute</th>
+          <th class="text-left py-2 pr-4">Target</th>
+          <th class="text-left py-2 pr-4">Values</th>
+          <th class="text-left py-2 pr-4">Required</th>
+          <th class="text-left py-2">Configuration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-level</code></td>
+          <td class="py-2 pr-4">heading</td>
+          <td class="py-2 pr-4"><code>2</code> - <code>6</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2"><code>headingLevel</code> prop</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2 pr-4">button</td>
+          <td class="py-2 pr-4">ID reference to associated panel</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Auto-generated</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">region (panel)</td>
+          <td class="py-2 pr-4">ID reference to header button</td>
+          <td class="py-2 pr-4">Yes (if region used)</td>
+          <td class="py-2">Auto-generated</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
 
   <h3 class="text-lg font-medium mb-3">WAI-ARIA States</h3>
   <div class="mb-6">
     <h4 class="font-medium mb-2"><code>aria-expanded</code></h4>
     <p class="text-muted-foreground mb-3">Indicates whether the accordion panel is expanded or collapsed.</p>
-    <table class="w-full border-collapse mb-2">
-      <tbody>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium w-32">Target</td>
-          <td class="py-2">button element</td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Values</td>
-          <td class="py-2"><code>true</code> | <code>false</code></td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Required</td>
-          <td class="py-2">Yes</td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Change Trigger</td>
-          <td class="py-2">Click, Enter, Space</td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Reference</td>
-          <td class="py-2">
-            <ExternalLink href="https://w3c.github.io/aria/#aria-expanded" class="text-primary hover:underline">
-              aria-expanded
-            </ExternalLink>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium w-32">Target</td>
+            <td class="py-2">button element</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code> | <code>false</code></td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Click, Enter, Space</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink href="https://w3c.github.io/aria/#aria-expanded" class="text-primary hover:underline">
+                aria-expanded
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
   </div>
 
   <div class="mb-6">
     <h4 class="font-medium mb-2"><code>aria-disabled</code></h4>
     <p class="text-muted-foreground mb-3">Indicates whether the accordion header is disabled.</p>
-    <table class="w-full border-collapse mb-2">
-      <tbody>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium w-32">Target</td>
-          <td class="py-2">button element</td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Values</td>
-          <td class="py-2"><code>true</code> | <code>false</code></td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Required</td>
-          <td class="py-2">No (only when disabled)</td>
-        </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4 font-medium">Reference</td>
-          <td class="py-2">
-            <ExternalLink href="https://w3c.github.io/aria/#aria-disabled" class="text-primary hover:underline">
-              aria-disabled
-            </ExternalLink>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium w-32">Target</td>
+            <td class="py-2">button element</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code> | <code>false</code></td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink href="https://w3c.github.io/aria/#aria-disabled" class="text-primary hover:underline">
+                aria-disabled
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
   </div>
 
   <h3 class="text-lg font-medium mb-3">Keyboard Support</h3>
-  <table class="w-full border-collapse mb-4">
-    <thead>
-      <tr class="border-b border-border">
-        <th class="text-left py-2 pr-4">Key</th>
-        <th class="text-left py-2">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
-        <td class="py-2">Move focus to the next focusable element</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd> / <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
-        <td class="py-2">Toggle the expansion of the focused accordion header</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Down</kbd></td>
-        <td class="py-2">Move focus to the next accordion header (optional)</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Up</kbd></td>
-        <td class="py-2">Move focus to the previous accordion header (optional)</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Home</kbd></td>
-        <td class="py-2">Move focus to the first accordion header (optional)</td>
-      </tr>
-      <tr class="border-b border-border">
-        <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">End</kbd></td>
-        <td class="py-2">Move focus to the last accordion header (optional)</td>
-      </tr>
-    </tbody>
-  </table>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Key</th>
+          <th class="text-left py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
+          <td class="py-2">Move focus to the next focusable element</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd> / <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
+          <td class="py-2">Toggle the expansion of the focused accordion header</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Down</kbd></td>
+          <td class="py-2">Move focus to the next accordion header (optional)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Arrow Up</kbd></td>
+          <td class="py-2">Move focus to the previous accordion header (optional)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Home</kbd></td>
+          <td class="py-2">Move focus to the first accordion header (optional)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">End</kbd></td>
+          <td class="py-2">Move focus to the last accordion header (optional)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
   <p class="text-sm text-muted-foreground">
     Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
   </p>
