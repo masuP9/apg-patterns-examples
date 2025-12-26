@@ -1,20 +1,20 @@
 ---
-import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import PatternLayout from "../../../../layouts/PatternLayout.astro";
 import ToggleButton from "@patterns/button/ToggleButton.astro";
 import CodeBlock from "@/components/ui/CodeBlock.astro";
 import ExternalLink from "@/components/ui/ExternalLink.astro";
 import AccessibilityDocs from "@patterns/button/AccessibilityDocs.astro";
 import FrameworkTabs from "@/components/ui/FrameworkTabs.astro";
+import { ResponsiveTable } from "@/components/ui/table";
 import sourceCode from "@patterns/button/ToggleButton.astro?raw";
 ---
 
-<BaseLayout title="Toggle Button - Astro">
-  <div class="max-w-4xl mx-auto">
-    <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
-      <span class="mx-2 text-muted-foreground">/</span>
-      <span>Toggle Button</span>
-    </nav>
+<PatternLayout title="Toggle Button - Astro" pattern="button" framework="astro">
+  <nav class="mb-6 text-sm">
+    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Toggle Button</span>
+  </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toggle Button</h1>
@@ -78,56 +78,60 @@ import ToggleButton from './ToggleButton.astro';
       <h2 class="text-xl font-semibold mb-4">API</h2>
 
       <h3 class="text-lg font-medium mb-3">Props</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
-            <td class="py-2">Initial pressed state</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>disabled</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
-            <td class="py-2">Whether the button is disabled</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>class</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">""</td>
-            <td class="py-2">Additional CSS class</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>initialPressed</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Initial pressed state</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>disabled</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Whether the button is disabled</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>class</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">""</td>
+              <td class="py-2">Additional CSS class</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">Custom Events</h3>
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Detail</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>toggle</code></td>
-            <td class="py-2 pr-4 text-muted-foreground"
-              >{"{ pressed: boolean }"}</td
-            >
-            <td class="py-2">Fired when the toggle state changes</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Detail</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>toggle</code></td>
+              <td class="py-2 pr-4 text-muted-foreground"
+                >{"{ pressed: boolean }"}</td
+              >
+              <td class="py-2">Fired when the toggle state changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
       <p class="mt-4 text-sm text-muted-foreground">
         This component uses a Web Component (<code>&lt;apg-toggle-button&gt;</code
         >) for client-side interactivity.
@@ -148,5 +152,4 @@ import ToggleButton from './ToggleButton.astro';
         </li>
       </ul>
     </section>
-  </div>
-</BaseLayout>
+</PatternLayout>

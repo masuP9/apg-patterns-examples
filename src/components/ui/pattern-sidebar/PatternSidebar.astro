@@ -1,0 +1,75 @@
+---
+import { FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
+import { getAvailablePatterns, getPlannedPatterns } from "@/lib/patterns";
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
+
+interface Props {
+  currentPattern: string;
+  currentFramework: Framework;
+}
+
+const { currentPattern, currentFramework } = Astro.props;
+
+const availablePatterns = getAvailablePatterns();
+const plannedPatterns = getPlannedPatterns();
+const frameworkLabel = FRAMEWORK_INFO[currentFramework].label;
+---
+
+<nav aria-label="Pattern navigation" class="w-full">
+  <div class="mb-4 flex items-center justify-between">
+    <h2 class="px-2 text-sm font-semibold text-foreground">Patterns</h2>
+    <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+      {frameworkLabel}
+    </span>
+  </div>
+
+  <SidebarMenu>
+    {
+      availablePatterns.map((pattern) => (
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            href={`/patterns/${pattern.id}/${currentFramework}/`}
+            active={currentPattern === pattern.id}
+            aria-current={currentPattern === pattern.id ? "page" : undefined}
+          >
+            <span class="text-base" aria-hidden="true">
+              {pattern.icon}
+            </span>
+            <span>{pattern.name}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))
+    }
+  </SidebarMenu>
+
+  {
+    plannedPatterns.length > 0 && (
+      <>
+        <div class="mb-2 mt-6">
+          <h3 class="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Planned
+          </h3>
+        </div>
+        <ul class="flex w-full min-w-0 flex-col gap-1">
+          {plannedPatterns.map((pattern) => (
+            <li class="group/menu-item relative">
+              <span
+                class="flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm text-muted-foreground opacity-60 cursor-default"
+              >
+                <span class="text-base" aria-hidden="true">
+                  {pattern.icon}
+                </span>
+                <span class="truncate">{pattern.name}</span>
+                <span class="sr-only">(coming soon)</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</nav>

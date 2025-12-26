@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+
+interface Props extends HTMLAttributes<"div"> {}
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div class={cn("overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0", className)} {...props}>
+  <slot />
+</div>

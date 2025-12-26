@@ -47,7 +47,7 @@ const navLinks = [
       <Logo href="/">
         <LogoText>APG Patterns</LogoText>
       </Logo>
-      <NavigationMenu class="mr-auto @max-3xl:hidden">
+      <NavigationMenu class="mr-auto @max-lg:hidden">
         <NavigationMenuList>
           {navLinks.map((link) => (
             <NavigationMenuItem>
@@ -61,7 +61,7 @@ const navLinks = [
           ))}
         </NavigationMenuList>
       </NavigationMenu>
-      <HeaderActions class="@max-3xl:hidden">
+      <HeaderActions class="@max-lg:hidden">
         <NativeSelect id="framework-selector" aria-label="Select framework">
           <NativeSelectOption value="react">React</NativeSelectOption>
           <NativeSelectOption value="vue">Vue</NativeSelectOption>
@@ -72,7 +72,7 @@ const navLinks = [
       </HeaderActions>
       <Sheet class="first:ml-auto">
         <SheetTrigger
-          class="@3xl:hidden"
+          class="@lg:hidden"
           variant="ghost"
           size="icon"
           aria-label="Open menu"

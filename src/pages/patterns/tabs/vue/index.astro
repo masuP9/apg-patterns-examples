@@ -1,10 +1,11 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Tabs from '@patterns/tabs/Tabs.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/tabs/Tabs.vue?raw';
 
 const demoTabs = [
@@ -26,13 +27,12 @@ const verticalTabs = [
 ];
 ---
 
-<BaseLayout title="Tabs - Vue">
-  <div class="max-w-4xl mx-auto">
-    <nav class="mb-6 text-sm">
-      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
-      <span class="mx-2 text-muted-foreground">/</span>
-      <span>Tabs</span>
-    </nav>
+<PatternLayout title="Tabs - Vue" pattern="tabs" framework="vue">
+  <nav class="mb-6 text-sm">
+    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Tabs</span>
+  </nav>
 
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Tabs</h1>
@@ -143,66 +143,70 @@ const tabs = [
       <h2 class="text-xl font-semibold mb-4">API</h2>
 
       <h3 class="text-lg font-medium mb-3">Props</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>tabs</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
-            <td class="py-2 pr-4 text-muted-foreground">required</td>
-            <td class="py-2">Array of tab items with id, label, content</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>label</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
-            <td class="py-2">Accessible label for the tablist</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>defaultTab</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">first tab</td>
-            <td class="py-2">ID of the initially selected tab</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>orientation</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'horizontal' | 'vertical'</td>
-            <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
-            <td class="py-2">Tab layout direction</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>activationMode</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'automatic' | 'manual'</td>
-            <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
-            <td class="py-2">How tabs are activated</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>tabs</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
+              <td class="py-2 pr-4 text-muted-foreground">required</td>
+              <td class="py-2">Array of tab items with id, label, content</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>label</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">-</td>
+              <td class="py-2">Accessible label for the tablist</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>defaultTab</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">first tab</td>
+              <td class="py-2">ID of the initially selected tab</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>orientation</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">'horizontal' | 'vertical'</td>
+              <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
+              <td class="py-2">Tab layout direction</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>activationMode</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">'automatic' | 'manual'</td>
+              <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
+              <td class="py-2">How tabs are activated</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">Events</h3>
-      <table class="w-full border-collapse mb-6">
-        <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2 pr-4">Payload</th>
-            <th class="text-left py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>tab-change</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2">Emitted when the active tab changes</td>
-          </tr>
-        </tbody>
-      </table>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Payload</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>tab-change</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2">Emitted when the active tab changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
 
       <h3 class="text-lg font-medium mb-3">TabItem Interface</h3>
       <CodeBlock
@@ -231,5 +235,4 @@ const tabs = [
         </li>
       </ul>
     </section>
-  </div>
-</BaseLayout>
+</PatternLayout>
