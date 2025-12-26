@@ -49,7 +49,7 @@
  *
  * @see https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
 /**
  * Accordion item configuration
@@ -107,17 +107,16 @@ const emit = defineEmits<{
   expandedChange: [expandedIds: string[]]
 }>()
 
-const expandedIds = ref<string[]>([])
-const instanceId = ref('')
-const buttonRefs = ref<Record<string, HTMLButtonElement>>({})
-
-onMounted(() => {
-  instanceId.value = `accordion-${Math.random().toString(36).substr(2, 9)}`
-  // Initialize with defaultExpanded items
-  expandedIds.value = props.items
+// Initialize with defaultExpanded items immediately
+const getInitialExpandedIds = () => {
+  return props.items
     .filter(item => item.defaultExpanded && !item.disabled)
     .map(item => item.id)
-})
+}
+
+const expandedIds = ref<string[]>(getInitialExpandedIds())
+const instanceId = ref(`accordion-${Math.random().toString(36).substr(2, 9)}`)
+const buttonRefs = ref<Record<string, HTMLButtonElement>>({})
 
 const setButtonRef = (id: string, el: unknown) => {
   if (el instanceof HTMLButtonElement) {

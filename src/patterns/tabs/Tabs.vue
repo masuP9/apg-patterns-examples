@@ -94,6 +94,12 @@ const initializeSelectedTab = () => {
       ? props.tabs.find(tab => tab.id === props.defaultSelectedId && !tab.disabled)
       : props.tabs.find(tab => !tab.disabled)
     selectedId.value = initialTab?.id || props.tabs[0]?.id
+
+    // focusedIndex を選択されたタブのインデックスに同期
+    const selectedIndex = availableTabs.value.findIndex(tab => tab.id === selectedId.value)
+    if (selectedIndex >= 0) {
+      focusedIndex.value = selectedIndex
+    }
   }
 }
 

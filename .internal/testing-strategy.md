@@ -205,15 +205,91 @@ describe('ComponentName', () => {
 
 ---
 
+## マルチフレームワークテスト
+
+### 方針
+
+各フレームワーク（React, Vue, Svelte, Astro）で **独立したテストファイル** を持つ。
+テスト観点は共通だが、テストコード自体は DAMP 原則に従い各フレームワークで明示的に書く。
+
+```
+src/patterns/button/
+├── ToggleButton.tsx
+├── ToggleButton.test.tsx        # React テスト
+├── ToggleButton.vue
+├── ToggleButton.test.vue.ts     # Vue テスト
+├── ToggleButton.svelte
+├── ToggleButton.test.svelte.ts  # Svelte テスト
+├── ToggleButton.astro
+└── ToggleButton.test.astro.ts   # Astro テスト（Playwright）
+```
+
+### フレームワーク別テストツール
+
+| フレームワーク | テストライブラリ | 実行環境 |
+|--------------|----------------|---------|
+| React | @testing-library/react | Vitest + jsdom |
+| Vue | @testing-library/vue | Vitest + jsdom |
+| Svelte | @testing-library/svelte | Vitest + jsdom |
+| Astro | Playwright | ブラウザ |
+
+### なぜ独立したテストか
+
+1. **DAMP 原則に従う** - 各テストが自己完結
+2. **フレームワーク固有の問題を即座に特定** - Vue の `v-bind` / Svelte の `$props()` など
+3. **並列実行可能** - CI で効率的に実行
+4. **学習リソースとして有用** - 各フレームワークのテスト手法を示す
+
+### 共通のテスト観点
+
+フレームワークが異なっても、APG 準拠コンポーネントは同じ観点でテストする。
+
+#### ToggleButton
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Space でトグル、Enter でトグル、Tab でフォーカス移動 |
+| 🔴 APG: ARIA | role="button"、aria-pressed の状態変化、type="button" |
+| 🟡 アクセシビリティ | axe 違反なし、アクセシブルネーム |
+| Props | initialPressed、onPressedChange |
+| 🟢 HTML 属性継承 | className マージ、data-* 継承 |
+
+#### Tabs
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Arrow でナビゲーション、Home/End、ループ、手動アクティベーション |
+| 🔴 APG: ARIA | role="tablist/tab/tabpanel"、aria-selected、aria-controls/labelledby |
+| 🔴 フォーカス管理 | Roving tabindex、Tab でパネルへ移動 |
+| 🟡 アクセシビリティ | axe 違反なし |
+| Props | defaultSelectedId、orientation、activationMode |
+| 🟢 HTML 属性継承 | className 適用 |
+
+#### Accordion
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Enter/Space で開閉、Arrow でナビゲーション（オプション）、Home/End |
+| 🔴 APG: ARIA | aria-expanded、aria-controls/labelledby、role="region" の条件 |
+| 🔴 見出し構造 | headingLevel で h2-h6 |
+| 🟡 アクセシビリティ | axe 違反なし |
+| Props | defaultExpanded、allowMultiple |
+| 🟢 HTML 属性継承 | className 適用 |
+
+---
+
 ## 使用ツール
 
 | ツール | 用途 |
 |-------|------|
 | Vitest | テストランナー |
-| @testing-library/react | コンポーネントテスト |
+| @testing-library/react | React コンポーネントテスト |
+| @testing-library/vue | Vue コンポーネントテスト |
+| @testing-library/svelte | Svelte コンポーネントテスト |
 | @testing-library/user-event | ユーザー操作 |
 | @testing-library/jest-dom | カスタムマッチャー |
 | jest-axe | アクセシビリティ自動テスト |
+| Playwright | Astro E2E テスト |
 | @vitest/coverage-v8 | カバレッジ測定 |
 
 ### セットアップファイル
