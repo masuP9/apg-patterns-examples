@@ -117,7 +117,7 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
     border-bottom-color: var(--primary);
   }
 
-  .copy-button {
+  .code-tabs-header :global(.copy-button) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,13 +132,13 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
     transition: color 0.2s, background-color 0.2s;
   }
 
-  .copy-button:hover {
+  .code-tabs-header :global(.copy-button:hover) {
     background-color: #374151;
     color: #f3f4f6;
   }
 
-  .copy-button:focus-visible {
-    outline: 2px solid var(--primary);
+  .code-tabs-header :global(.copy-button:focus-visible) {
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 
@@ -166,6 +166,11 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
     margin: 0;
     padding: 1rem;
     border-radius: 0;
+  }
+
+  .code-content :global(pre:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: -2px;
   }
 
   .sr-only {

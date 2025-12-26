@@ -5,7 +5,11 @@
     "**/*"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test.vue.ts",
+    "**/*.test.svelte.ts"
   ],
   "compilerOptions": {
     "baseUrl": ".",

@@ -65,7 +65,7 @@ const { code, lang, title } = Astro.props;
     color: #9ca3af;
   }
 
-  .copy-button {
+  .code-block-header :global(.copy-button) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,13 +78,13 @@ const { code, lang, title } = Astro.props;
     transition: color 0.2s, background-color 0.2s;
   }
 
-  .copy-button:hover {
+  .code-block-header :global(.copy-button:hover) {
     background-color: #374151;
     color: #f3f4f6;
   }
 
-  .copy-button:focus-visible {
-    outline: 2px solid var(--primary);
+  .code-block-header :global(.copy-button:focus-visible) {
+    outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 
@@ -96,6 +96,11 @@ const { code, lang, title } = Astro.props;
     margin: 0;
     padding: 1rem;
     border-radius: 0;
+  }
+
+  .code-block-content :global(pre:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: -2px;
   }
 
   .sr-only {

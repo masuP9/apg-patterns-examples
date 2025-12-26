@@ -133,13 +133,16 @@ Tabs, RadioGroup, Menu は矢印キーナビゲーションを持つ。
 ## ファイル構成
 
 ```
-demos/react/src/components/
-├── Button/
+src/patterns/
+├── button/
 │   ├── ToggleButton.tsx
 │   └── ToggleButton.test.tsx
-└── Tabs/
-    ├── Tabs.tsx
-    └── Tabs.test.tsx
+├── tabs/
+│   ├── Tabs.tsx
+│   └── Tabs.test.tsx
+└── accordion/
+    ├── Accordion.tsx
+    └── Accordion.test.tsx
 ```
 
 1つのテストファイルに全カテゴリをまとめる。
@@ -149,9 +152,12 @@ demos/react/src/components/
 
 ## テストファイルの構成
 
+リスクベース優先順位でカテゴリを整理する。
+
 ```typescript
 describe('ComponentName', () => {
-  describe('基本動作', () => {
+  // 🔴 High Priority: APG 準拠の核心
+  describe('APG: キーボード操作', () => {
     it('...', () => {});
   });
 
@@ -159,19 +165,25 @@ describe('ComponentName', () => {
     it('...', () => {});
   });
 
-  describe('APG: キーボード操作', () => {
-    it('...', () => {});
-  });
-
-  describe('APG: フォーカス管理', () => {
-    it('...', () => {});
-  });
-
+  // 🟡 Medium Priority: アクセシビリティ検証
   describe('アクセシビリティ', () => {
     it('axe による違反がない', async () => {});
   });
+
+  describe('Props', () => {
+    // 他でカバーされない固有の props テスト
+    it('...', () => {});
+  });
+
+  // 🟢 Low Priority: 拡張性
+  describe('HTML 属性継承', () => {
+    it('...', () => {});
+  });
 });
 ```
+
+**注意**: APG: ARIA 属性で状態変化（クリック、初期状態）をテストするため、
+「基本動作」カテゴリは Props に限定し、重複を避ける。
 
 ---
 
@@ -193,14 +205,104 @@ describe('ComponentName', () => {
 
 ---
 
+## マルチフレームワークテスト
+
+### 方針
+
+各フレームワーク（React, Vue, Svelte, Astro）で **独立したテストファイル** を持つ。
+テスト観点は共通だが、テストコード自体は DAMP 原則に従い各フレームワークで明示的に書く。
+
+```
+src/patterns/button/
+├── ToggleButton.tsx
+├── ToggleButton.test.tsx        # React テスト
+├── ToggleButton.vue
+├── ToggleButton.test.vue.ts     # Vue テスト
+├── ToggleButton.svelte
+├── ToggleButton.test.svelte.ts  # Svelte テスト
+├── ToggleButton.astro
+└── ToggleButton.test.astro.ts   # Astro テスト（Playwright）
+```
+
+### フレームワーク別テストツール
+
+| フレームワーク | テストライブラリ | 実行環境 |
+|--------------|----------------|---------|
+| React | @testing-library/react | Vitest + jsdom |
+| Vue | @testing-library/vue | Vitest + jsdom |
+| Svelte | @testing-library/svelte | Vitest + jsdom |
+| Astro | Playwright | ブラウザ |
+
+### なぜ独立したテストか
+
+1. **DAMP 原則に従う** - 各テストが自己完結
+2. **フレームワーク固有の問題を即座に特定** - Vue の `v-bind` / Svelte の `$props()` など
+3. **並列実行可能** - CI で効率的に実行
+4. **学習リソースとして有用** - 各フレームワークのテスト手法を示す
+
+### 共通のテスト観点
+
+フレームワークが異なっても、APG 準拠コンポーネントは同じ観点でテストする。
+
+#### ToggleButton
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Space でトグル、Enter でトグル、Tab でフォーカス移動 |
+| 🔴 APG: ARIA | role="button"、aria-pressed の状態変化、type="button" |
+| 🟡 アクセシビリティ | axe 違反なし、アクセシブルネーム |
+| Props | initialPressed、onPressedChange |
+| 🟢 HTML 属性継承 | className マージ、data-* 継承 |
+
+#### Tabs
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Arrow でナビゲーション、Home/End、ループ、手動アクティベーション |
+| 🔴 APG: ARIA | role="tablist/tab/tabpanel"、aria-selected、aria-controls/labelledby |
+| 🔴 フォーカス管理 | Roving tabindex、Tab でパネルへ移動 |
+| 🟡 アクセシビリティ | axe 違反なし |
+| Props | defaultSelectedId、orientation、activationMode |
+| 🟢 HTML 属性継承 | className 適用 |
+
+#### Accordion
+
+| カテゴリ | テスト観点 |
+|---------|----------|
+| 🔴 APG: キーボード | Enter/Space で開閉、Arrow でナビゲーション（オプション）、Home/End |
+| 🔴 APG: ARIA | aria-expanded、aria-controls/labelledby、role="region" の条件 |
+| 🔴 見出し構造 | headingLevel で h2-h6 |
+| 🟡 アクセシビリティ | axe 違反なし |
+| Props | defaultExpanded、allowMultiple |
+| 🟢 HTML 属性継承 | className 適用 |
+
+---
+
 ## 使用ツール
 
 | ツール | 用途 |
 |-------|------|
 | Vitest | テストランナー |
-| @testing-library/react | コンポーネントテスト |
+| @testing-library/react | React コンポーネントテスト |
+| @testing-library/vue | Vue コンポーネントテスト |
+| @testing-library/svelte | Svelte コンポーネントテスト |
 | @testing-library/user-event | ユーザー操作 |
+| @testing-library/jest-dom | カスタムマッチャー |
 | jest-axe | アクセシビリティ自動テスト |
+| Playwright | Astro E2E テスト |
+| @vitest/coverage-v8 | カバレッジ測定 |
+
+### セットアップファイル
+
+`src/test/setup.ts` でマッチャーを拡張:
+
+```typescript
+import "@testing-library/jest-dom/vitest";
+import { toHaveNoViolations } from "jest-axe";
+import { expect } from "vitest";
+
+expect.extend(toHaveNoViolations);
+```
 
 ---
 
