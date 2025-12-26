@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
+import { withBase } from "@/lib/utils";
 
 interface Props {
   title: string;
@@ -47,7 +48,7 @@ const frameworkLabel = FRAMEWORK_INFO[framework].label;
                 {availablePatterns.map((p) => (
                   <li>
                     <a
-                      href={`/patterns/${p.id}/${framework}/`}
+                      href={withBase(`/patterns/${p.id}/${framework}/`)}
                       class:list={[
                         "flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted/50 transition-colors",
                         pattern === p.id && "bg-muted font-medium"

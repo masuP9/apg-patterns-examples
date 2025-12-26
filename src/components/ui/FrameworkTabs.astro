@@ -6,6 +6,7 @@
  * Uses static links (no JavaScript required).
  */
 import { FRAMEWORKS, FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
+import { withBase } from "@/lib/utils";
 
 interface Props {
   /** The pattern name (e.g., 'button', 'tabs') */
@@ -22,7 +23,7 @@ const { pattern, currentFramework } = Astro.props;
     FRAMEWORKS.map((fw) => {
       const info = FRAMEWORK_INFO[fw];
       const isActive = fw === currentFramework;
-      const href = `/patterns/${pattern}/${fw}/`;
+      const href = withBase(`/patterns/${pattern}/${fw}/`);
 
       return (
         <a
