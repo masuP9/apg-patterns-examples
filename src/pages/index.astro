@@ -1,6 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+
+const patterns = [
+  {
+    name: 'Toggle Button',
+    description: 'Button with pressed state',
+    href: '/patterns/button/react/',
+    icon: '🔘',
+  },
+  {
+    name: 'Tabs',
+    description: 'Tabbed interface with keyboard navigation',
+    href: '/patterns/tabs/react/',
+    icon: '📑',
+  },
+  {
+    name: 'Accordion',
+    description: 'Collapsible content sections',
+    href: '/patterns/accordion/react/',
+    icon: '📋',
+  },
+];
 ---
 
 <BaseLayout title="Home">
@@ -40,31 +61,21 @@ import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/t
     </div>
 
     <section class="mt-16">
-      <h2 class="mb-6 text-2xl font-bold">Featured Patterns</h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        <Tile variant="floating" href="/patterns/button/react/">
-          <TileContent class="flex flex-row items-center gap-4 text-left">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
-              🔘
-            </div>
-            <div>
-              <TileTitle>Toggle Button</TileTitle>
-              <TileDescription>Button with pressed state</TileDescription>
-            </div>
-          </TileContent>
-        </Tile>
-
-        <Tile variant="floating" href="/patterns/tabs/react/">
-          <TileContent class="flex flex-row items-center gap-4 text-left">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
-              📑
-            </div>
-            <div>
-              <TileTitle>Tabs</TileTitle>
-              <TileDescription>Tabbed interface with keyboard navigation</TileDescription>
-            </div>
-          </TileContent>
-        </Tile>
+      <h2 class="mb-6 text-2xl font-bold">Available Patterns</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {patterns.map((pattern) => (
+          <Tile variant="floating" href={pattern.href}>
+            <TileContent class="flex flex-row items-center gap-4 text-left">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
+                {pattern.icon}
+              </div>
+              <div>
+                <TileTitle class="mb-2">{pattern.name}</TileTitle>
+                <TileDescription>{pattern.description}</TileDescription>
+              </div>
+            </TileContent>
+          </Tile>
+        ))}
       </div>
     </section>
   </div>

@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Accordion from '@patterns/accordion/Accordion.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import sourceCode from '@patterns/accordion/Accordion.vue?raw';
+
+const defaultItems = [
+  {
+    id: 'section1',
+    header: 'What is an Accordion?',
+    content: 'An accordion is a vertically stacked set of interactive headings that each reveal a section of content. They are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.',
+    defaultExpanded: true,
+  },
+  {
+    id: 'section2',
+    header: 'When to use an Accordion?',
+    content: 'Use accordions when you need to organize content into collapsible sections. This helps reduce visual clutter while keeping information accessible. They are particularly useful for FAQs, settings panels, and navigation menus.',
+  },
+  {
+    id: 'section3',
+    header: 'Accessibility Considerations',
+    content: 'Accordions must be keyboard accessible and properly announce their expanded/collapsed state to screen readers. Each header should be a proper heading element, and the panel should be associated with its header via aria-controls and aria-labelledby.',
+  },
+];
+
+const multipleItems = [
+  {
+    id: 'multi1',
+    header: 'Section One',
+    content: 'Content for section one. With allowMultiple enabled, multiple sections can be open at the same time.',
+  },
+  {
+    id: 'multi2',
+    header: 'Section Two',
+    content: 'Content for section two. Try opening this while section one is still open.',
+  },
+  {
+    id: 'multi3',
+    header: 'Section Three',
+    content: 'Content for section three. All three sections can be expanded simultaneously.',
+  },
+];
+
+const disabledItems = [
+  {
+    id: 'dis1',
+    header: 'Available Section',
+    content: 'This section can be expanded and collapsed normally.',
+  },
+  {
+    id: 'dis2',
+    header: 'Disabled Section',
+    content: 'This content is not accessible because the section is disabled.',
+    disabled: true,
+  },
+  {
+    id: 'dis3',
+    header: 'Another Available Section',
+    content: 'This section can also be expanded. Notice that arrow key navigation skips the disabled section.',
+  },
+];
+---
+
+<BaseLayout title="Accordion - Vue">
+  <div class="max-w-4xl mx-auto">
+    <nav class="mb-6 text-sm">
+      <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+      <span class="mx-2 text-muted-foreground">/</span>
+      <span>Accordion</span>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">Accordion</h1>
+      <p class="text-lg text-muted-foreground">
+        A vertically stacked set of interactive headings that each reveal a section of content.
+      </p>
+    </header>
+
+    <!-- Framework Selector -->
+    <FrameworkTabs pattern="accordion" currentFramework="vue" />
+
+    <!-- Demo Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+
+      <!-- Default (Single Expansion) -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Single Expansion (Default)</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Only one panel can be expanded at a time. Opening a new panel closes the previously open one.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Accordion
+            client:load
+            items={defaultItems}
+            headingLevel={3}
+          />
+        </div>
+      </div>
+
+      <!-- Multiple Expansion -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Multiple Expansion</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Multiple panels can be expanded simultaneously using the <code>allowMultiple</code> prop.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Accordion
+            client:load
+            items={multipleItems}
+            allowMultiple={true}
+            headingLevel={3}
+          />
+        </div>
+      </div>
+
+      <!-- Disabled Items -->
+      <div>
+        <h3 class="text-lg font-medium mb-3">With Disabled Items</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Individual accordion items can be disabled. Keyboard navigation automatically skips disabled items.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Accordion
+            client:load
+            items={disabledItems}
+            headingLevel={3}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessibility Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+      <AccessibilityDocs />
+    </section>
+
+    <!-- Source Code Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <CodeBlock
+        code={sourceCode}
+        lang="vue"
+        title="Accordion.vue"
+      />
+    </section>
+
+    <!-- Usage Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <CodeBlock
+        code={`<script setup>
+import Accordion from './Accordion.vue';
+
+const items = [
+  {
+    id: 'section1',
+    header: 'First Section',
+    content: 'Content for the first section...',
+    defaultExpanded: true,
+  },
+  {
+    id: 'section2',
+    header: 'Second Section',
+    content: 'Content for the second section...',
+  },
+];
+</script>
+
+<template>
+  <Accordion
+    :items="items"
+    :heading-level="3"
+    :allow-multiple="false"
+    @expanded-change="(ids) => console.log('Expanded:', ids)"
+  />
+</template>`}
+        lang="vue"
+        title="Example"
+      />
+    </section>
+
+    <!-- API Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">API</h2>
+
+      <h3 class="text-lg font-medium mb-3">Props</h3>
+      <table class="w-full border-collapse mb-6">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Prop</th>
+            <th class="text-left py-2 pr-4">Type</th>
+            <th class="text-left py-2 pr-4">Default</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">AccordionItem[]</td>
+            <td class="py-2 pr-4 text-muted-foreground">required</td>
+            <td class="py-2">Array of accordion items</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>allowMultiple</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="py-2">Allow multiple panels to be expanded</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>headingLevel</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">2 | 3 | 4 | 5 | 6</td>
+            <td class="py-2 pr-4 text-muted-foreground">3</td>
+            <td class="py-2">Heading level for accessibility</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">true</td>
+            <td class="py-2">Enable arrow key navigation</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="text-lg font-medium mb-3">Events</h3>
+      <table class="w-full border-collapse mb-6">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Event</th>
+            <th class="text-left py-2 pr-4">Payload</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>expanded-change</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string[]</td>
+            <td class="py-2">Emitted when the expanded panels change</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="text-lg font-medium mb-3">AccordionItem Interface</h3>
+      <CodeBlock
+        code={`interface AccordionItem {
+  id: string;
+  header: string;
+  content?: string;
+  disabled?: boolean;
+  defaultExpanded?: boolean;
+}`}
+        lang="typescript"
+        title="Types"
+      />
+    </section>
+
+    <!-- Resources -->
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>
+          <ExternalLink
+            href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/"
+            class="text-primary hover:underline"
+          >
+            WAI-ARIA APG: Accordion Pattern
+          </ExternalLink>
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
