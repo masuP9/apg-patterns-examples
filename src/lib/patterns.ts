@@ -51,7 +51,7 @@ export const PATTERNS: Pattern[] = [
       "A vertically stacked set of interactive headings that each reveal a section of content.",
     icon: "📋",
     complexity: "Medium",
-    status: "planned",
+    status: "available",
   },
   {
     id: "dialog",

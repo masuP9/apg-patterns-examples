@@ -1,0 +1,296 @@
+---
+/**
+ * APG Accordion Pattern - Astro Implementation
+ *
+ * A vertically stacked set of interactive headings that each reveal a section of content.
+ * Uses Web Components for client-side keyboard navigation and state management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
+ */
+
+export interface AccordionItem {
+  id: string;
+  header: string;
+  content: string;
+  disabled?: boolean;
+  defaultExpanded?: boolean;
+}
+
+export interface Props {
+  /** Array of accordion items */
+  items: AccordionItem[];
+  /** Allow multiple panels to be expanded simultaneously */
+  allowMultiple?: boolean;
+  /** Heading level for accessibility (2-6) */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
+  /** Enable arrow key navigation between headers */
+  enableArrowKeys?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  items,
+  allowMultiple = false,
+  headingLevel = 3,
+  enableArrowKeys = true,
+  class: className = "",
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = `accordion-${Math.random().toString(36).substring(2, 11)}`;
+
+// Determine initially expanded items
+const initialExpanded = items
+  .filter((item) => item.defaultExpanded && !item.disabled)
+  .map((item) => item.id);
+
+// Use role="region" only for 6 or fewer panels (APG recommendation)
+const useRegion = items.length <= 6;
+
+// Dynamic heading tag
+const HeadingTag = `h${headingLevel}`;
+---
+
+<apg-accordion
+  class={`apg-accordion ${className}`.trim()}
+  data-allow-multiple={allowMultiple}
+  data-enable-arrow-keys={enableArrowKeys}
+  data-expanded={JSON.stringify(initialExpanded)}
+>
+  {
+    items.map((item) => {
+      const headerId = `${instanceId}-header-${item.id}`;
+      const panelId = `${instanceId}-panel-${item.id}`;
+      const isExpanded = initialExpanded.includes(item.id);
+
+      const itemClass = `apg-accordion-item ${
+        isExpanded ? "apg-accordion-item--expanded" : ""
+      } ${item.disabled ? "apg-accordion-item--disabled" : ""}`.trim();
+
+      const triggerClass = `apg-accordion-trigger ${
+        isExpanded ? "apg-accordion-trigger--expanded" : ""
+      }`.trim();
+
+      const iconClass = `apg-accordion-icon ${
+        isExpanded ? "apg-accordion-icon--expanded" : ""
+      }`.trim();
+
+      const panelClass = `apg-accordion-panel ${
+        isExpanded
+          ? "apg-accordion-panel--expanded"
+          : "apg-accordion-panel--collapsed"
+      }`.trim();
+
+      return (
+        <div class={itemClass} data-item-id={item.id}>
+          <Fragment set:html={`<${HeadingTag} class="apg-accordion-header">`} />
+          <button
+            type="button"
+            id={headerId}
+            aria-expanded={isExpanded}
+            aria-controls={panelId}
+            aria-disabled={item.disabled || undefined}
+            disabled={item.disabled}
+            class={triggerClass}
+            data-item-id={item.id}
+          >
+            <span class="apg-accordion-trigger-content">{item.header}</span>
+            <span class={iconClass} aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </span>
+          </button>
+          <Fragment set:html={`</${HeadingTag}>`} />
+          <div
+            role={useRegion ? "region" : undefined}
+            id={panelId}
+            aria-labelledby={useRegion ? headerId : undefined}
+            class={panelClass}
+            data-panel-id={item.id}
+          >
+            <div class="apg-accordion-panel-content">
+              <Fragment set:html={item.content} />
+            </div>
+          </div>
+        </div>
+      );
+    })
+  }
+</apg-accordion>
+
+<script>
+  class ApgAccordion extends HTMLElement {
+    private buttons: HTMLButtonElement[] = [];
+    private panels: HTMLElement[] = [];
+    private availableButtons: HTMLButtonElement[] = [];
+    private expandedIds: string[] = [];
+    private allowMultiple = false;
+    private enableArrowKeys = true;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      // Use requestAnimationFrame to ensure DOM is fully constructed
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.buttons = Array.from(
+        this.querySelectorAll(".apg-accordion-trigger")
+      );
+      this.panels = Array.from(this.querySelectorAll(".apg-accordion-panel"));
+
+      if (this.buttons.length === 0 || this.panels.length === 0) {
+        console.warn("apg-accordion: buttons or panels not found");
+        return;
+      }
+
+      this.availableButtons = this.buttons.filter((btn) => !btn.disabled);
+      this.allowMultiple = this.dataset.allowMultiple === "true";
+      this.enableArrowKeys = this.dataset.enableArrowKeys !== "false";
+      this.expandedIds = JSON.parse(this.dataset.expanded || "[]");
+
+      // Attach event listeners
+      this.buttons.forEach((button) => {
+        button.addEventListener("click", this.handleClick);
+      });
+
+      if (this.enableArrowKeys) {
+        this.addEventListener("keydown", this.handleKeyDown);
+      }
+    }
+
+    disconnectedCallback() {
+      // Cancel pending initialization
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      // Remove event listeners
+      this.buttons.forEach((button) => {
+        button.removeEventListener("click", this.handleClick);
+      });
+      this.removeEventListener("keydown", this.handleKeyDown);
+      // Clean up references
+      this.buttons = [];
+      this.panels = [];
+      this.availableButtons = [];
+    }
+
+    private togglePanel(itemId: string) {
+      const isCurrentlyExpanded = this.expandedIds.includes(itemId);
+
+      if (isCurrentlyExpanded) {
+        this.expandedIds = this.expandedIds.filter((id) => id !== itemId);
+      } else {
+        if (this.allowMultiple) {
+          this.expandedIds = [...this.expandedIds, itemId];
+        } else {
+          this.expandedIds = [itemId];
+        }
+      }
+
+      this.updateDOM();
+
+      // Dispatch custom event
+      this.dispatchEvent(
+        new CustomEvent("expandedchange", {
+          detail: { expandedIds: this.expandedIds },
+          bubbles: true,
+        })
+      );
+    }
+
+    private updateDOM() {
+      this.buttons.forEach((button) => {
+        const itemId = button.dataset.itemId!;
+        const isExpanded = this.expandedIds.includes(itemId);
+        const panel = this.panels.find((p) => p.dataset.panelId === itemId);
+        const item = button.closest(".apg-accordion-item");
+        const icon = button.querySelector(".apg-accordion-icon");
+
+        // Update button
+        button.setAttribute("aria-expanded", String(isExpanded));
+        button.classList.toggle("apg-accordion-trigger--expanded", isExpanded);
+
+        // Update icon
+        icon?.classList.toggle("apg-accordion-icon--expanded", isExpanded);
+
+        // Update panel visibility via CSS classes (not hidden attribute)
+        if (panel) {
+          panel.classList.toggle("apg-accordion-panel--expanded", isExpanded);
+          panel.classList.toggle("apg-accordion-panel--collapsed", !isExpanded);
+        }
+
+        // Update item
+        item?.classList.toggle("apg-accordion-item--expanded", isExpanded);
+      });
+    }
+
+    private handleClick = (e: Event) => {
+      const button = e.currentTarget as HTMLButtonElement;
+      if (button.disabled) return;
+      this.togglePanel(button.dataset.itemId!);
+    };
+
+    private handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.classList.contains("apg-accordion-trigger")) return;
+
+      const currentIndex = this.availableButtons.indexOf(
+        target as HTMLButtonElement
+      );
+      if (currentIndex === -1) return;
+
+      let newIndex = currentIndex;
+      let shouldPreventDefault = false;
+
+      switch (e.key) {
+        case "ArrowDown":
+          // Move to next, but don't wrap (APG compliant)
+          if (currentIndex < this.availableButtons.length - 1) {
+            newIndex = currentIndex + 1;
+          }
+          shouldPreventDefault = true;
+          break;
+
+        case "ArrowUp":
+          // Move to previous, but don't wrap (APG compliant)
+          if (currentIndex > 0) {
+            newIndex = currentIndex - 1;
+          }
+          shouldPreventDefault = true;
+          break;
+
+        case "Home":
+          newIndex = 0;
+          shouldPreventDefault = true;
+          break;
+
+        case "End":
+          newIndex = this.availableButtons.length - 1;
+          shouldPreventDefault = true;
+          break;
+      }
+
+      if (shouldPreventDefault) {
+        e.preventDefault();
+        if (newIndex !== currentIndex) {
+          this.availableButtons[newIndex]?.focus();
+        }
+      }
+    };
+  }
+
+  // Register the custom element
+  if (!customElements.get("apg-accordion")) {
+    customElements.define("apg-accordion", ApgAccordion);
+  }
+</script>
