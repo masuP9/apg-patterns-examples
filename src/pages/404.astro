@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Button } from '@/components/ui/button';
+import { withBase } from '@/lib/utils';
 ---
 
 <BaseLayout title="Page Not Found">
@@ -11,8 +12,8 @@ import { Button } from '@/components/ui/button';
       The page you're looking for doesn't exist or has been moved.
     </p>
     <div class="flex gap-4">
-      <Button href="/">Go Home</Button>
-      <Button variant="outline" href="/patterns/">Browse Patterns</Button>
+      <Button href={withBase('/')}>Go Home</Button>
+      <Button variant="outline" href={withBase('/patterns/')}>Browse Patterns</Button>
     </div>
   </div>
 </BaseLayout>

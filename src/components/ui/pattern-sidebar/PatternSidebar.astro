@@ -6,6 +6,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import { withBase } from "@/lib/utils";
 
 interface Props {
   currentPattern: string;
@@ -32,7 +33,7 @@ const frameworkLabel = FRAMEWORK_INFO[currentFramework].label;
       availablePatterns.map((pattern) => (
         <SidebarMenuItem>
           <SidebarMenuButton
-            href={`/patterns/${pattern.id}/${currentFramework}/`}
+            href={withBase(`/patterns/${pattern.id}/${currentFramework}/`)}
             active={currentPattern === pattern.id}
             aria-current={currentPattern === pattern.id ? "page" : undefined}
           >
