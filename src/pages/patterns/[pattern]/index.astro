@@ -6,7 +6,7 @@ import { FRAMEWORKS, DEFAULT_FRAMEWORK } from "@/lib/frameworks";
 
 export function getStaticPaths() {
   // Add new patterns here as they are implemented
-  const patterns = ["button", "tabs"];
+  const patterns = ["button", "tabs", "accordion"];
   return patterns.map((pattern) => ({ params: { pattern } }));
 }
 
