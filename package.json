@@ -31,6 +31,8 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
     "lucide-static": "^0.562.0",
+    "lucide-svelte": "^0.562.0",
+    "lucide-vue-next": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "shiki": "^3.20.0",

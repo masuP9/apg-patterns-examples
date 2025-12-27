@@ -7,9 +7,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
+  padding: 0.5rem 1rem;
   min-height: 44px; /* Touch target minimum size */
-  border: 2px solid;
+  border: 2px solid var(--border);
   border-radius: 0.5rem;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
@@ -19,7 +19,9 @@
 
 .apg-toggle-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--primary), 0 0 0 4px var(--background);
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--primary);
 }
 
 .apg-toggle-button:disabled {
@@ -28,36 +30,37 @@
 }
 
 /* Pressed State */
-.apg-toggle-button--pressed {
+.apg-toggle-button[aria-pressed="true"] {
   background-color: var(--primary);
   color: var(--primary-foreground);
   border-color: var(--primary);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
-.apg-toggle-button--pressed:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--primary) 85%, black);
-  border-color: color-mix(in srgb, var(--primary) 85%, black);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-}
-
-.apg-toggle-button--pressed:active:not(:disabled) {
-  transform: scale(0.98);
+.apg-toggle-button[aria-pressed="true"]:hover:not(:disabled) {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 90%, var(--primary-foreground)) 100%
+  );
 }
 
 /* Not Pressed State */
-.apg-toggle-button--not-pressed {
+.apg-toggle-button[aria-pressed="false"] {
   background-color: var(--background);
   color: var(--foreground);
   border-color: var(--border);
 }
 
-.apg-toggle-button--not-pressed:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--background) 95%, var(--foreground));
+.apg-toggle-button[aria-pressed="false"]:hover:not(:disabled) {
+  background-color: color-mix(
+    in srgb,
+    var(--background) 95%,
+    var(--foreground)
+  );
   border-color: var(--foreground);
 }
 
-.apg-toggle-button--not-pressed:active:not(:disabled) {
+.apg-toggle-button[aria-pressed="false"]:active:not(:disabled) {
   transform: scale(0.98);
 }
 
@@ -69,6 +72,9 @@
 
 /* Toggle Button Indicator */
 .apg-toggle-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.125rem;
   font-weight: 700;
   transition: all 0.2s;
@@ -76,13 +82,26 @@
   text-align: center;
 }
 
-.apg-toggle-indicator--pressed {
+/* Custom indicator icon support (SVG, emoji, etc.) */
+.apg-toggle-indicator svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.apg-toggle-indicator img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.apg-toggle-button[aria-pressed="true"] .apg-toggle-indicator {
   color: #fde047;
   transform: scale(1.1);
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1));
 }
 
-.apg-toggle-indicator--not-pressed {
+.apg-toggle-button[aria-pressed="false"] .apg-toggle-indicator {
   color: var(--muted-foreground);
 }
 
@@ -96,7 +115,7 @@
     border-width: 4px;
   }
 
-  .apg-toggle-button--pressed {
+  .apg-toggle-button[aria-pressed="true"] {
     background-color: black;
     color: white;
     border-color: black;
@@ -139,7 +158,7 @@
     color: ButtonText;
   }
 
-  .apg-toggle-button--pressed {
+  .apg-toggle-button[aria-pressed="true"] {
     background: Highlight;
     color: HighlightText;
     border-color: Highlight;

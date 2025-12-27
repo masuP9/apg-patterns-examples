@@ -31,7 +31,10 @@ const indicatorClass = initialPressed
   ? "apg-toggle-indicator--pressed"
   : "apg-toggle-indicator--not-pressed";
 
-const indicator = initialPressed ? "●" : "○";
+// Check if custom indicator slots are provided
+const hasPressedIndicator = Astro.slots.has("pressed-indicator");
+const hasUnpressedIndicator = Astro.slots.has("unpressed-indicator");
+const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
 ---
 
 <apg-toggle-button class={className}>
@@ -44,8 +47,19 @@ const indicator = initialPressed ? "●" : "○";
     <span class="apg-toggle-button-content">
       <slot />
     </span>
-    <span class={`apg-toggle-indicator ${indicatorClass}`} aria-hidden="true">
-      {indicator}
+    <span class={`apg-toggle-indicator ${indicatorClass}`} aria-hidden="true" data-custom-indicators={hasCustomIndicators ? "true" : undefined}>
+      {hasCustomIndicators ? (
+        <>
+          <span class="apg-indicator-pressed" hidden={!initialPressed}>
+            <slot name="pressed-indicator">●</slot>
+          </span>
+          <span class="apg-indicator-unpressed" hidden={initialPressed}>
+            <slot name="unpressed-indicator">○</slot>
+          </span>
+        </>
+      ) : (
+        initialPressed ? "●" : "○"
+      )}
     </span>
   </button>
 </apg-toggle-button>
@@ -102,7 +116,23 @@ const indicator = initialPressed ? "●" : "○";
       // Update indicator
       const indicator = this.button.querySelector(".apg-toggle-indicator");
       if (indicator) {
-        indicator.textContent = newPressed ? "●" : "○";
+        const hasCustomIndicators = indicator.getAttribute("data-custom-indicators") === "true";
+
+        if (hasCustomIndicators) {
+          // Toggle visibility of custom indicator slots
+          const pressedIndicator = indicator.querySelector(".apg-indicator-pressed");
+          const unpressedIndicator = indicator.querySelector(".apg-indicator-unpressed");
+          if (pressedIndicator instanceof HTMLElement) {
+            pressedIndicator.hidden = !newPressed;
+          }
+          if (unpressedIndicator instanceof HTMLElement) {
+            unpressedIndicator.hidden = newPressed;
+          }
+        } else {
+          // Use default text indicators
+          indicator.textContent = newPressed ? "●" : "○";
+        }
+
         indicator.classList.toggle("apg-toggle-indicator--pressed", newPressed);
         indicator.classList.toggle(
           "apg-toggle-indicator--not-pressed",
