@@ -5,8 +5,6 @@
   This provides a simple trigger button that works seamlessly with Astro's islands architecture.
 -->
 <script lang="ts" module>
-  import type { Snippet } from 'svelte';
-
   export interface DialogDemoProps {
     /** Dialog title (required for accessibility) */
     title: string;
@@ -24,8 +22,8 @@
     className?: string;
     /** Callback when open state changes */
     onOpenChange?: (open: boolean) => void;
-    /** Dialog content */
-    children: Snippet;
+    /** Dialog content as HTML string (for Astro integration) */
+    contentHtml?: string;
   }
 </script>
 
@@ -41,7 +39,7 @@
     closeOnOverlayClick = true,
     className = '',
     onOpenChange = () => {},
-    children: contentSnippet,
+    contentHtml = '',
   }: DialogDemoProps = $props();
 </script>
 
@@ -63,6 +61,6 @@
     </button>
   {/snippet}
   {#snippet children()}
-    {@render contentSnippet()}
+    {@html contentHtml}
   {/snippet}
 </Dialog>

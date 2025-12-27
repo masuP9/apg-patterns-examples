@@ -24,8 +24,6 @@ export interface DialogDemoProps {
   defaultOpen?: boolean;
   /** Close on overlay click */
   closeOnOverlayClick?: boolean;
-  /** Close on Escape key */
-  closeOnEscape?: boolean;
   /** Additional CSS class for dialog */
   className?: string;
   /** Callback when open state changes */
@@ -40,7 +38,6 @@ export function DialogDemo({
   children,
   defaultOpen = false,
   closeOnOverlayClick = true,
-  closeOnEscape = true,
   className = "",
   onOpenChange,
 }: DialogDemoProps): React.ReactElement {
@@ -51,7 +48,6 @@ export function DialogDemo({
         title={title}
         description={description}
         closeOnOverlayClick={closeOnOverlayClick}
-        closeOnEscape={closeOnEscape}
         className={className}
       >
         {children}

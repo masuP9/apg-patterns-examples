@@ -43,14 +43,8 @@ import sourceCode from '@patterns/dialog/Dialog.svelte?raw';
           description="This is a description of the dialog content. It provides additional context for users."
           triggerText="Open Dialog"
           triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-        >
-          <p class="mb-4">
-            This is the main content of the dialog. You can place any content here, such as text, forms, or other components.
-          </p>
-          <p>
-            Press <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">Escape</kbd> or click outside to close.
-          </p>
-        </DialogDemo>
+          contentHtml={`<p class="mb-4">This is the main content of the dialog. You can place any content here, such as text, forms, or other components.</p><p>Press <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">Escape</kbd> or click outside to close.</p>`}
+        />
       </div>
     </div>
 
@@ -66,9 +60,8 @@ import sourceCode from '@patterns/dialog/Dialog.svelte?raw';
           title="Simple Dialog"
           triggerText="Open Simple Dialog"
           triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
-        >
-          <p>This dialog has no description, only a title and content.</p>
-        </DialogDemo>
+          contentHtml="<p>This dialog has no description, only a title and content.</p>"
+        />
       </div>
     </div>
   </section>
@@ -157,12 +150,6 @@ import sourceCode from '@patterns/dialog/Dialog.svelte?raw';
             <td class="py-2 pr-4 text-muted-foreground">boolean</td>
             <td class="py-2 pr-4 text-muted-foreground">true</td>
             <td class="py-2">Close when clicking overlay</td>
-          </tr>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4"><code>closeOnEscape</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">true</td>
-            <td class="py-2">Close when pressing Escape</td>
           </tr>
           <tr class="border-b border-border">
             <td class="py-2 pr-4"><code>onOpenChange</code></td>
