@@ -2,6 +2,7 @@
 @import "./patterns/toggle-button.css";
 @import "./patterns/tabs.css";
 @import "./patterns/accordion.css";
+@import "./patterns/dialog.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

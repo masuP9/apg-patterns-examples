@@ -1,0 +1,205 @@
+/* =============================================================================
+   DIALOG COMPONENT STYLES
+   ============================================================================= */
+
+/* Dialog Overlay - for non-native implementations (React, Vue, Svelte) */
+.apg-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: apg-dialog-overlay-show 0.2s ease-out;
+}
+
+@keyframes apg-dialog-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Native <dialog> backdrop */
+dialog.apg-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  animation: apg-dialog-overlay-show 0.2s ease-out;
+}
+
+/* Dialog Container */
+.apg-dialog {
+  position: relative;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 32rem;
+  width: calc(100% - 2rem);
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  animation: apg-dialog-show 0.2s ease-out;
+  padding: 0;
+}
+
+/* Native dialog element reset and positioning */
+dialog.apg-dialog {
+  margin: auto;
+}
+
+dialog.apg-dialog:not([open]) {
+  display: none;
+}
+
+@keyframes apg-dialog-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Dialog Header */
+.apg-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Dialog Title */
+.apg-dialog-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+/* Dialog Close Button */
+.apg-dialog-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  transition: background 0.2s, color 0.2s;
+}
+
+.apg-dialog-close:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.apg-dialog-close:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-dialog-close:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Dialog Description */
+.apg-dialog-description {
+  padding: 0.75rem 1.5rem;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Dialog Body */
+.apg-dialog-body {
+  padding: 1.5rem;
+}
+
+/* Dialog Trigger */
+.apg-dialog-trigger {
+  cursor: pointer;
+}
+
+.apg-dialog-trigger:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-dialog-trigger:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Focus on dialog itself (for screen readers) */
+.apg-dialog:focus {
+  outline: none;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-dialog {
+    border-width: 2px;
+  }
+
+  .apg-dialog-overlay,
+  dialog.apg-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-dialog-overlay,
+  .apg-dialog,
+  dialog.apg-dialog::backdrop {
+    animation: none;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-dialog {
+    border: 2px solid ButtonBorder;
+    background: Canvas;
+  }
+
+  .apg-dialog-overlay,
+  dialog.apg-dialog::backdrop {
+    background: Canvas;
+    opacity: 0.9;
+  }
+
+  .apg-dialog-header {
+    border-color: ButtonBorder;
+  }
+
+  .apg-dialog-description {
+    border-color: ButtonBorder;
+  }
+
+  .apg-dialog-close {
+    color: ButtonText;
+  }
+
+  .apg-dialog-close:focus {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-dialog-title {
+    color: CanvasText;
+  }
+}

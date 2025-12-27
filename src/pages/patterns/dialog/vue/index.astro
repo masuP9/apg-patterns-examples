@@ -1,0 +1,225 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import DialogDemo from '@patterns/dialog/DialogDemo.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/dialog/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import sourceCode from '@patterns/dialog/Dialog.vue?raw';
+---
+
+<PatternLayout title="Dialog - Vue" pattern="dialog" framework="vue">
+  <nav class="mb-6 text-sm">
+    <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Dialog</span>
+  </nav>
+
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold mb-4">Dialog (Modal)</h1>
+    <p class="text-lg text-muted-foreground">
+      A window overlaid on the primary window, rendering the content underneath inert.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="dialog" currentFramework="vue" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Demo</h2>
+
+    <!-- Basic Dialog -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium mb-3">Basic Dialog</h3>
+      <p class="text-sm text-muted-foreground mb-4">
+        A simple modal dialog with title, description, and close functionality.
+      </p>
+      <div class="p-6 rounded-lg border border-border bg-background">
+        <DialogDemo
+          client:only="vue"
+          title="Dialog Title"
+          description="This is a description of the dialog content. It provides additional context for users."
+          triggerText="Open Dialog"
+          triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+        >
+          <p class="mb-4">
+            This is the main content of the dialog. You can place any content here, such as text, forms, or other components.
+          </p>
+          <p>
+            Press <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">Escape</kbd> or click outside to close.
+          </p>
+        </DialogDemo>
+      </div>
+    </div>
+
+    <!-- Dialog without description -->
+    <div class="mb-8">
+      <h3 class="text-lg font-medium mb-3">Without Description</h3>
+      <p class="text-sm text-muted-foreground mb-4">
+        A dialog with only a title and content.
+      </p>
+      <div class="p-6 rounded-lg border border-border bg-background">
+        <DialogDemo
+          client:only="vue"
+          title="Simple Dialog"
+          triggerText="Open Simple Dialog"
+          triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+        >
+          <p>This dialog has no description, only a title and content.</p>
+        </DialogDemo>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+    <CodeBlock
+      code={sourceCode}
+      lang="vue"
+      title="Dialog.vue"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Usage</h2>
+    <CodeBlock
+      code={`<template>
+  <Dialog
+    title="Dialog Title"
+    description="Optional description text"
+    @open-change="handleOpenChange"
+  >
+    <template #trigger="{ open }">
+      <button @click="open" class="btn-primary">Open Dialog</button>
+    </template>
+    <p>Dialog content goes here.</p>
+  </Dialog>
+</template>
+
+<script setup>
+import Dialog from './Dialog.vue';
+
+function handleOpenChange(open) {
+  console.log('Dialog:', open);
+}
+</script>`}
+      lang="vue"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">API</h2>
+
+    <h3 class="text-lg font-medium mb-3">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Prop</th>
+            <th class="text-left py-2 pr-4">Type</th>
+            <th class="text-left py-2 pr-4">Default</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>title</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">required</td>
+            <td class="py-2">Dialog title (for accessibility)</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>description</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="py-2">Optional description text</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="py-2">Initial open state</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>closeOnOverlayClick</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">true</td>
+            <td class="py-2">Close when clicking overlay</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mb-3">Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Event</th>
+            <th class="text-left py-2 pr-4">Payload</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>openChange</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2">Emitted when open state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mb-3">Slots</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Slot</th>
+            <th class="text-left py-2 pr-4">Props</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>trigger</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">{'{ open: () => void }'}</td>
+            <td class="py-2">Trigger element to open the dialog</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>default</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="py-2">Dialog content</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4">Resources</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Dialog (Modal) Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

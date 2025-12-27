@@ -1,0 +1,133 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Role</th>
+          <th class="text-left py-2 pr-4">Target Element</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>dialog</code></td>
+          <td class="py-2 pr-4">Dialog container</td>
+          <td class="py-2">Indicates the element is a dialog window</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-sm text-muted-foreground mb-6">
+    <ExternalLink href="https://w3c.github.io/aria/#dialog" class="text-primary hover:underline">
+      WAI-ARIA dialog role
+    </ExternalLink>
+  </p>
+
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA Properties</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Attribute</th>
+          <th class="text-left py-2 pr-4">Target</th>
+          <th class="text-left py-2 pr-4">Values</th>
+          <th class="text-left py-2 pr-4">Required</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-modal</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Indicates this is a modal dialog</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4">ID reference to title element</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the dialog title</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4">ID reference to description</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">References optional description text</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="text-lg font-medium mb-3">Focus Management</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Event</th>
+          <th class="text-left py-2">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4">Dialog opens</td>
+          <td class="py-2">Focus moves to first focusable element inside the dialog</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4">Dialog closes</td>
+          <td class="py-2">Focus returns to the element that triggered the dialog</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4">Focus trap</td>
+          <td class="py-2">Tab/Shift+Tab cycles through focusable elements within the dialog only</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4">Background</td>
+          <td class="py-2">Content outside dialog is made inert (not focusable or interactive)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="text-lg font-medium mb-3">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Key</th>
+          <th class="text-left py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
+          <td class="py-2">Move focus to next focusable element within dialog. When focus is on the last element, moves to first.</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Shift</kbd> + <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
+          <td class="py-2">Move focus to previous focusable element within dialog. When focus is on the first element, moves to last.</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Escape</kbd></td>
+          <td class="py-2">Close the dialog and return focus to trigger element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="text-lg font-medium mb-3">Additional Notes</h3>
+  <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
+    <li>The dialog title is required for accessibility and should clearly describe the purpose of the dialog</li>
+    <li>Page scrolling is disabled while the dialog is open</li>
+    <li>Clicking the overlay (background) closes the dialog by default</li>
+    <li>The close button has an accessible label for screen readers</li>
+  </ul>
+</div>

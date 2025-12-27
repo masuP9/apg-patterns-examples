@@ -14,7 +14,15 @@ export default defineConfig({
   site: 'https://masup9.github.io',
   base: isProd ? '/apg-patterns-examples' : '/',
 
-  integrations: [react(), vue(), svelte(), mdx()],
+  integrations: [
+    react(),
+    vue({
+      // Disable HMR to avoid __VUE_HMR_RUNTIME__ error in development
+      devtools: false,
+    }),
+    svelte(),
+    mdx(),
+  ],
 
   vite: {
     plugins: [tailwindcss()],
