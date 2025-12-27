@@ -76,6 +76,7 @@ export function DialogRoot({
   }, []);
 
   // Handle dialog close event (from Escape key or close() call)
+  // Note: mounted must be in dependencies to re-run after Dialog component mounts
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
@@ -87,7 +88,7 @@ export function DialogRoot({
 
     dialog.addEventListener("close", handleClose);
     return () => dialog.removeEventListener("close", handleClose);
-  }, [onOpenChange]);
+  }, [onOpenChange, mounted]);
 
   const contextValue: DialogContextValue = {
     dialogRef,
