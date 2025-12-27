@@ -122,8 +122,12 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
           // Toggle visibility of custom indicator slots
           const pressedIndicator = indicator.querySelector(".apg-indicator-pressed");
           const unpressedIndicator = indicator.querySelector(".apg-indicator-unpressed");
-          if (pressedIndicator) pressedIndicator.hidden = !newPressed;
-          if (unpressedIndicator) unpressedIndicator.hidden = newPressed;
+          if (pressedIndicator instanceof HTMLElement) {
+            pressedIndicator.hidden = !newPressed;
+          }
+          if (unpressedIndicator instanceof HTMLElement) {
+            unpressedIndicator.hidden = newPressed;
+          }
         } else {
           // Use default text indicators
           indicator.textContent = newPressed ? "●" : "○";
