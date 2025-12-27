@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import { untrack } from "svelte";
 
   // properties
   interface ToggleButtonProps {
@@ -7,6 +8,10 @@
     initialPressed?: boolean;
     disabled?: boolean;
     onToggle?: (pressed: boolean) => void;
+    /** Custom indicator for pressed state (default: "●") */
+    pressedIndicator?: string | Snippet<[]>;
+    /** Custom indicator for unpressed state (default: "○") */
+    unpressedIndicator?: string | Snippet<[]>;
     [key: string]: unknown;
   }
 
@@ -15,23 +20,16 @@
     initialPressed = false,
     disabled = false,
     onToggle = (_) => {},
+    pressedIndicator = "●",
+    unpressedIndicator = "○",
     ...restProps
   }: ToggleButtonProps = $props();
 
-  // state
-  let pressed = $state(initialPressed);
-
-  // Reactive classes
-  let stateClass = $derived(
-    pressed ? "apg-toggle-button--pressed" : "apg-toggle-button--not-pressed"
+  // state - use untrack to explicitly indicate we only want the initial value
+  let pressed = $state(untrack(() => initialPressed));
+  let currentIndicator = $derived(
+    pressed ? pressedIndicator : unpressedIndicator
   );
-  let indicatorClass = $derived(
-    pressed
-      ? "apg-toggle-indicator--pressed"
-      : "apg-toggle-indicator--not-pressed"
-  );
-  let buttonClasses = $derived(`apg-toggle-button ${stateClass}`.trim());
-  let toggleIndicator = $derived(pressed ? "●" : "○");
 
   // Event handlers
   function handleClick() {
@@ -43,7 +41,7 @@
 <button
   type="button"
   aria-pressed={pressed}
-  class={buttonClasses}
+  class="apg-toggle-button"
   {disabled}
   onclick={handleClick}
   {...restProps}
@@ -55,7 +53,11 @@
       {@render children?.()}
     {/if}
   </span>
-  <span class="apg-toggle-indicator {indicatorClass}" aria-hidden="true">
-    {toggleIndicator}
+  <span class="apg-toggle-indicator" aria-hidden="true">
+    {#if typeof currentIndicator === "string"}
+      {currentIndicator}
+    {:else if currentIndicator}
+      {@render currentIndicator()}
+    {/if}
   </span>
 </button>

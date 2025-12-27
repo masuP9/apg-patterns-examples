@@ -1,6 +1,6 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import ToggleButton from '@patterns/button/ToggleButton.svelte';
+import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
@@ -33,17 +33,7 @@ import { withBase } from '@/lib/utils';
     <section class="mb-12">
       <h2 class="text-xl font-semibold mb-4">Demo</h2>
       <div class="p-6 rounded-lg border border-border bg-background">
-        <div class="flex flex-wrap gap-4">
-          <ToggleButton client:load>
-            Mute
-          </ToggleButton>
-          <ToggleButton client:load initialPressed={true}>
-            Dark Mode
-          </ToggleButton>
-          <ToggleButton client:load disabled>
-            Disabled
-          </ToggleButton>
-        </div>
+        <ToggleButtonDemo client:load />
       </div>
     </section>
 
@@ -71,15 +61,17 @@ import { withBase } from '@/lib/utils';
   import ToggleButton from './ToggleButton.svelte';
 
   function handleToggle(pressed) {
-    console.log('Pressed:', pressed);
+    console.log('Muted:', pressed);
   }
 </script>
 
 <ToggleButton
   initialPressed={false}
   onToggle={handleToggle}
+  pressedIndicator="🔇"
+  unpressedIndicator="🔊"
 >
-  Toggle Me
+  Mute
 </ToggleButton>`}
         lang="svelte"
         title="Example"
@@ -111,6 +103,18 @@ import { withBase } from '@/lib/utils';
               <td class="py-2 pr-4 text-muted-foreground">(pressed: boolean) =&gt; void</td>
               <td class="py-2 pr-4 text-muted-foreground">-</td>
               <td class="py-2">Callback when state changes</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>pressedIndicator</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">Snippet | string</td>
+              <td class="py-2 pr-4 text-muted-foreground">"●"</td>
+              <td class="py-2">Custom indicator for pressed state</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">Snippet | string</td>
+              <td class="py-2 pr-4 text-muted-foreground">"○"</td>
+              <td class="py-2">Custom indicator for unpressed state</td>
             </tr>
             <tr class="border-b border-border">
               <td class="py-2 pr-4"><code>children</code></td>

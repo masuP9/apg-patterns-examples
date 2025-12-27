@@ -1,6 +1,7 @@
 ---
 import PatternLayout from "../../../../layouts/PatternLayout.astro";
 import ToggleButton from "@patterns/button/ToggleButton.astro";
+import Icon from "@/components/ui/icon/icon.astro";
 import CodeBlock from "@/components/ui/CodeBlock.astro";
 import ExternalLink from "@/components/ui/ExternalLink.astro";
 import AccessibilityDocs from "@patterns/button/AccessibilityDocs.astro";
@@ -32,9 +33,21 @@ import { withBase } from "@/lib/utils";
       <h2 class="text-xl font-semibold mb-4">Demo</h2>
       <div class="p-6 rounded-lg border border-border bg-background">
         <div class="flex flex-wrap gap-4">
-          <ToggleButton>Mute</ToggleButton>
-          <ToggleButton initialPressed={true}>Dark Mode</ToggleButton>
-          <ToggleButton disabled>Disabled</ToggleButton>
+          <ToggleButton>
+            <Icon name="volume-off" slot="pressed-indicator" />
+            <Icon name="volume-2" slot="unpressed-indicator" />
+            Mute
+          </ToggleButton>
+          <ToggleButton initialPressed={true}>
+            <Icon name="moon" slot="pressed-indicator" />
+            <Icon name="sun" slot="unpressed-indicator" />
+            Dark Mode
+          </ToggleButton>
+          <ToggleButton disabled>
+            <Icon name="bell-off" slot="pressed-indicator" />
+            <Icon name="bell" slot="unpressed-indicator" />
+            Notifications
+          </ToggleButton>
         </div>
       </div>
     </section>
@@ -57,16 +70,19 @@ import { withBase } from "@/lib/utils";
       <CodeBlock
         code={`---
 import ToggleButton from './ToggleButton.astro';
+import Icon from './Icon.astro';
 ---
 
-<ToggleButton>Toggle Me</ToggleButton>
-<ToggleButton initialPressed={true}>Already Pressed</ToggleButton>
-<ToggleButton disabled>Disabled</ToggleButton>
+<ToggleButton>
+  <Icon name="volume-off" slot="pressed-indicator" />
+  <Icon name="volume-2" slot="unpressed-indicator" />
+  Mute
+</ToggleButton>
 
 <script>
   // Listen for toggle events
   document.querySelector('apg-toggle-button')?.addEventListener('toggle', (e) => {
-    console.log('Pressed:', e.detail.pressed);
+    console.log('Muted:', e.detail.pressed);
   });
 </script>`}
         lang="astro"
@@ -107,6 +123,36 @@ import ToggleButton from './ToggleButton.astro';
               <td class="py-2 pr-4 text-muted-foreground">string</td>
               <td class="py-2 pr-4 text-muted-foreground">""</td>
               <td class="py-2">Additional CSS class</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+
+      <h3 class="text-lg font-medium mb-3">Slots</h3>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Slot</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>default</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">-</td>
+              <td class="py-2">Button label content</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>pressed-indicator</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">"●"</td>
+              <td class="py-2">Custom indicator for pressed state</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>unpressed-indicator</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">"○"</td>
+              <td class="py-2">Custom indicator for unpressed state</td>
             </tr>
           </tbody>
         </table>

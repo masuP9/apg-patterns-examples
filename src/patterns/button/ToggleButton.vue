@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    :class="buttonClasses"
+    class="apg-toggle-button"
     :aria-pressed="pressed"
     :disabled="props.disabled"
     v-bind="$attrs"
@@ -11,16 +11,21 @@
       <slot />
     </span>
     <span
-      :class="indicatorClasses"
+      class="apg-toggle-indicator"
       aria-hidden="true"
     >
-      {{ pressed ? '●' : '○' }}
+      <template v-if="pressed">
+        <slot name="pressed-indicator">{{ props.pressedIndicator ?? '●' }}</slot>
+      </template>
+      <template v-else>
+        <slot name="unpressed-indicator">{{ props.unpressedIndicator ?? '○' }}</slot>
+      </template>
     </span>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 // Inherit all HTML button attributes
 defineOptions({
@@ -34,16 +39,28 @@ export interface ToggleButtonProps {
   disabled?: boolean;
   /** Callback fired when toggle state changes */
   onToggle?: (pressed: boolean) => void;
+  /** Custom indicator for pressed state (default: "●") */
+  pressedIndicator?: string;
+  /** Custom indicator for unpressed state (default: "○") */
+  unpressedIndicator?: string;
 }
 
 const props = withDefaults(defineProps<ToggleButtonProps>(), {
   initialPressed: false,
   disabled: false,
-  onToggle: undefined
+  onToggle: undefined,
+  pressedIndicator: undefined,
+  unpressedIndicator: undefined
 })
 
 const emit = defineEmits<{
   toggle: [pressed: boolean]
+}>()
+
+defineSlots<{
+  default(): unknown
+  'pressed-indicator'(): unknown
+  'unpressed-indicator'(): unknown
 }>()
 
 const pressed = ref(props.initialPressed)
@@ -57,21 +74,4 @@ const handleClick = () => {
   // Emit Vue event
   emit('toggle', newPressed)
 }
-
-// Build CSS classes
-const buttonClasses = computed(() => {
-  const stateClass = pressed.value
-    ? 'apg-toggle-button--pressed'
-    : 'apg-toggle-button--not-pressed'
-
-  return `apg-toggle-button ${stateClass}`.trim()
-})
-
-const indicatorClasses = computed(() => {
-  const stateClass = pressed.value
-    ? 'apg-toggle-indicator--pressed'
-    : 'apg-toggle-indicator--not-pressed'
-
-  return `apg-toggle-indicator ${stateClass}`
-})
 </script>

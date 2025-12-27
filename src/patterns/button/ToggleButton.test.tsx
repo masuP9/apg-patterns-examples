@@ -138,6 +138,85 @@ describe("ToggleButton", () => {
     });
   });
 
+  describe("カスタムインジケーター", () => {
+    it("デフォルトで●/○インジケーターが表示される", () => {
+      render(<ToggleButton>Mute</ToggleButton>);
+      const button = screen.getByRole("button");
+      const indicator = button.querySelector(".apg-toggle-indicator");
+      expect(indicator).toHaveTextContent("○");
+    });
+
+    it("pressedIndicator でカスタムインジケーターを設定できる", () => {
+      render(
+        <ToggleButton initialPressed pressedIndicator="🔇">
+          Mute
+        </ToggleButton>
+      );
+      const button = screen.getByRole("button");
+      const indicator = button.querySelector(".apg-toggle-indicator");
+      expect(indicator).toHaveTextContent("🔇");
+    });
+
+    it("unpressedIndicator でカスタムインジケーターを設定できる", () => {
+      render(
+        <ToggleButton unpressedIndicator="🔊">Mute</ToggleButton>
+      );
+      const button = screen.getByRole("button");
+      const indicator = button.querySelector(".apg-toggle-indicator");
+      expect(indicator).toHaveTextContent("🔊");
+    });
+
+    it("トグル時にカスタムインジケーターが切り替わる", async () => {
+      const user = userEvent.setup();
+      render(
+        <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
+          Mute
+        </ToggleButton>
+      );
+      const button = screen.getByRole("button");
+      const indicator = button.querySelector(".apg-toggle-indicator");
+
+      expect(indicator).toHaveTextContent("🔊");
+      await user.click(button);
+      expect(indicator).toHaveTextContent("🔇");
+      await user.click(button);
+      expect(indicator).toHaveTextContent("🔊");
+    });
+
+    it("ReactNode としてカスタムインジケーターを渡せる", () => {
+      render(
+        <ToggleButton
+          initialPressed
+          pressedIndicator={<span data-testid="custom-icon">X</span>}
+        >
+          Mute
+        </ToggleButton>
+      );
+      expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
+    });
+
+    it("カスタムインジケーターでも aria-hidden が維持される", () => {
+      render(
+        <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
+          Mute
+        </ToggleButton>
+      );
+      const button = screen.getByRole("button");
+      const indicator = button.querySelector(".apg-toggle-indicator");
+      expect(indicator).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("カスタムインジケーターでも axe 違反がない", async () => {
+      const { container } = render(
+        <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
+          Mute
+        </ToggleButton>
+      );
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+  });
+
   // 🟢 Low Priority: 拡張性
   describe("HTML 属性継承", () => {
     it("className が正しくマージされる", () => {
