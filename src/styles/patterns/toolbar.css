@@ -1,0 +1,140 @@
+/* =============================================================================
+   TOOLBAR COMPONENT STYLES
+   ============================================================================= */
+
+/* Toolbar Container */
+.apg-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background-color: var(--background);
+}
+
+.apg-toolbar[aria-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+  width: fit-content;
+}
+
+/* Toolbar Button (shared styles for button and toggle) */
+.apg-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.apg-toolbar-button:hover:not(:disabled) {
+  background-color: var(--muted);
+}
+
+.apg-toolbar-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-toolbar-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Toggle Button Pressed State */
+.apg-toolbar-button[aria-pressed="true"] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.apg-toolbar-button[aria-pressed="true"]:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+}
+
+/* Separator */
+.apg-toolbar-separator {
+  background-color: var(--border);
+}
+
+/* Separator in horizontal toolbar (separator is vertical) */
+.apg-toolbar-separator[aria-orientation="vertical"],
+.apg-toolbar[aria-orientation="horizontal"] .apg-toolbar-separator,
+.apg-toolbar:not([aria-orientation]) .apg-toolbar-separator {
+  width: 1px;
+  height: 1.5rem;
+  margin: 0 0.25rem;
+}
+
+/* Separator in vertical toolbar (separator is horizontal) */
+.apg-toolbar-separator[aria-orientation="horizontal"],
+.apg-toolbar[aria-orientation="vertical"] .apg-toolbar-separator {
+  width: 100%;
+  height: 1px;
+  margin: 0.25rem 0;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-toolbar {
+    border-width: 2px;
+  }
+
+  .apg-toolbar-button {
+    border-width: 2px;
+  }
+
+  .apg-toolbar-button[aria-pressed="true"] {
+    background-color: black;
+    color: white;
+    border-color: black;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-toolbar-button {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-toolbar {
+    border: 1px solid ButtonBorder;
+  }
+
+  .apg-toolbar-button {
+    border: 1px solid ButtonBorder;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .apg-toolbar-button[aria-pressed="true"] {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .apg-toolbar-button:focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-toolbar-separator {
+    background-color: ButtonBorder;
+  }
+}

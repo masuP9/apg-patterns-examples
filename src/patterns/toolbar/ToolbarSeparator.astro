@@ -1,0 +1,66 @@
+---
+/**
+ * APG Toolbar Separator - Astro Implementation
+ *
+ * A separator component for use within a Toolbar.
+ * Note: The aria-orientation is set by JavaScript based on the parent toolbar's orientation.
+ */
+
+export interface Props {
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  class: className = '',
+} = Astro.props;
+
+// Default to vertical (for horizontal toolbar)
+// Will be updated by JavaScript if within a vertical toolbar
+---
+
+<apg-toolbar-separator>
+  <div
+    role="separator"
+    aria-orientation="vertical"
+    class={`apg-toolbar-separator ${className}`.trim()}
+  />
+</apg-toolbar-separator>
+
+<script>
+  class ApgToolbarSeparator extends HTMLElement {
+    private separator: HTMLElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.separator = this.querySelector('[role="separator"]');
+      if (!this.separator) return;
+
+      // Find parent toolbar and get its orientation
+      const toolbar = this.closest('apg-toolbar');
+      if (toolbar) {
+        const toolbarOrientation = toolbar.getAttribute('data-orientation') || 'horizontal';
+        // Separator orientation is perpendicular to toolbar orientation
+        const separatorOrientation = toolbarOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+        this.separator.setAttribute('aria-orientation', separatorOrientation);
+      }
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.separator = null;
+    }
+  }
+
+  if (!customElements.get('apg-toolbar-separator')) {
+    customElements.define('apg-toolbar-separator', ApgToolbarSeparator);
+  }
+</script>

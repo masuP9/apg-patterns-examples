@@ -63,6 +63,15 @@ export const PATTERNS: Pattern[] = [
     status: "available",
   },
   {
+    id: "toolbar",
+    name: "Toolbar",
+    description:
+      "A container for grouping a set of controls, such as buttons, toggle buttons, or other input elements.",
+    icon: "🔧",
+    complexity: "Medium",
+    status: "available",
+  },
+  {
     id: "menu-button",
     name: "Menu Button",
     description: "A button that opens a menu of actions or options.",

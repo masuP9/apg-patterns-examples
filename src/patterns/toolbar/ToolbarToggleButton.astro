@@ -1,0 +1,100 @@
+---
+/**
+ * APG Toolbar Toggle Button - Astro Implementation
+ *
+ * A toggle button component for use within a Toolbar.
+ * Uses Web Components for client-side interactivity.
+ *
+ * Note: This component is uncontrolled-only (no `pressed` prop for controlled state).
+ * This is a limitation of the Astro/Web Components architecture where props are
+ * only available at build time. For controlled state management, use the
+ * `pressed-change` custom event to sync with external state.
+ *
+ * @example
+ * <ToolbarToggleButton id="bold-btn" defaultPressed={false}>Bold</ToolbarToggleButton>
+ *
+ * <script>
+ *   document.getElementById('bold-btn')?.addEventListener('pressed-change', (e) => {
+ *     console.log('Pressed:', e.detail.pressed);
+ *   });
+ * </script>
+ */
+
+export interface Props {
+  /** Initial pressed state (uncontrolled) */
+  defaultPressed?: boolean;
+  /** Whether the button is disabled */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  defaultPressed = false,
+  disabled = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<apg-toolbar-toggle-button>
+  <button
+    type="button"
+    class={`apg-toolbar-button ${className}`.trim()}
+    aria-pressed={defaultPressed}
+    disabled={disabled}
+  >
+    <slot />
+  </button>
+</apg-toolbar-toggle-button>
+
+<script>
+  class ApgToolbarToggleButton extends HTMLElement {
+    private button: HTMLButtonElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.button = this.querySelector('button');
+      if (!this.button) {
+        console.warn('apg-toolbar-toggle-button: button element not found');
+        return;
+      }
+
+      this.button.addEventListener('click', this.handleClick);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.button?.removeEventListener('click', this.handleClick);
+      this.button = null;
+    }
+
+    private handleClick = () => {
+      if (!this.button || this.button.disabled) return;
+
+      const currentPressed = this.button.getAttribute('aria-pressed') === 'true';
+      const newPressed = !currentPressed;
+
+      this.button.setAttribute('aria-pressed', String(newPressed));
+
+      // Dispatch custom event for external listeners
+      this.dispatchEvent(
+        new CustomEvent('pressed-change', {
+          detail: { pressed: newPressed },
+          bubbles: true,
+        })
+      );
+    };
+  }
+
+  if (!customElements.get('apg-toolbar-toggle-button')) {
+    customElements.define('apg-toolbar-toggle-button', ApgToolbarToggleButton);
+  }
+</script>
