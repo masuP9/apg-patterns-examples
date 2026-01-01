@@ -9,7 +9,6 @@ import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/switch/Switch.vue?raw';
 import testCode from '@patterns/switch/Switch.test.vue.ts?raw';
-import { withBase } from '@/lib/utils';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -23,12 +22,6 @@ const tocItems = [
 ---
 
 <PatternLayout title="Switch - Vue" pattern="switch" framework="vue" tocItems={tocItems}>
-  <nav class="mb-6 text-sm">
-    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
-    <span class="mx-2 text-muted-foreground">/</span>
-    <span>Switch</span>
-  </nav>
-
   <header class="mb-8">
     <h1 class="text-3xl font-bold mb-4">Switch</h1>
     <p class="text-lg text-muted-foreground">

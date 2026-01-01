@@ -17,7 +17,6 @@ import toggleSource from '@patterns/toolbar/ToolbarToggleButton.vue?raw';
 import separatorSource from '@patterns/toolbar/ToolbarSeparator.vue?raw';
 import TestingDocs from '@patterns/toolbar/TestingDocs.astro';
 import testCode from '@patterns/toolbar/Toolbar.test.vue.ts?raw';
-import { withBase } from '@/lib/utils';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -31,12 +30,6 @@ const tocItems = [
 ---
 
 <PatternLayout title="Toolbar - Vue" pattern="toolbar" framework="vue" tocItems={tocItems}>
-  <nav class="mb-6 text-sm">
-    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
-    <span class="mx-2 text-muted-foreground">/</span>
-    <span>Toolbar</span>
-  </nav>
-
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toolbar</h1>
       <p class="text-lg text-muted-foreground">

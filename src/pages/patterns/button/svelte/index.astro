@@ -10,7 +10,6 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
 import testCode from '@patterns/button/ToggleButton.test.svelte.ts?raw';
-import { withBase } from '@/lib/utils';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -24,12 +23,6 @@ const tocItems = [
 ---
 
 <PatternLayout title="Toggle Button - Svelte" pattern="button" framework="svelte" tocItems={tocItems}>
-  <nav class="mb-6 text-sm">
-    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
-    <span class="mx-2 text-muted-foreground">/</span>
-    <span>Toggle Button</span>
-  </nav>
-
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toggle Button</h1>
       <p class="text-lg text-muted-foreground">
