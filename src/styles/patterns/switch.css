@@ -1,0 +1,202 @@
+/* =============================================================================
+   SWITCH COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-switch {
+  display: contents;
+}
+
+/* Switch Base */
+.apg-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+}
+
+.apg-switch:focus {
+  outline: none;
+}
+
+.apg-switch:focus-visible .apg-switch-track {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Switch Track */
+.apg-switch-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: var(--input);
+  border: 2px solid var(--input);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.apg-switch[aria-checked="true"] .apg-switch-track {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.apg-switch:hover:not(:disabled) .apg-switch-track {
+  border-color: var(--foreground);
+}
+
+.apg-switch[aria-checked="true"]:hover:not(:disabled) .apg-switch-track {
+  background: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+  border-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+}
+
+/* Switch Icon (Checkmark in track background) */
+.apg-switch-icon {
+  position: absolute;
+  left: 0.35rem;
+  top: calc(50% - 0.25rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+  font-size: 0.625rem;
+  font-weight: bold;
+  color: var(--primary-foreground);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.apg-switch-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.apg-switch[aria-checked="true"] .apg-switch-icon {
+  opacity: 1;
+}
+
+/* Switch Thumb */
+.apg-switch-thumb {
+  position: absolute;
+  left: 2px;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  transition: transform 0.2s;
+}
+
+.apg-switch[aria-checked="true"] .apg-switch-thumb {
+  transform: translateX(1.5rem);
+}
+
+/* Switch Label */
+.apg-switch-label {
+  color: var(--foreground);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-switch-track {
+    border-width: 3px;
+  }
+
+  .apg-switch[aria-checked="true"] .apg-switch-track {
+    background-color: black;
+    border-color: black;
+  }
+
+  .apg-switch[aria-checked="false"] .apg-switch-track {
+    background-color: white;
+    border-color: black;
+  }
+
+  .apg-switch-thumb {
+    background-color: black;
+  }
+
+  .apg-switch[aria-checked="true"] .apg-switch-thumb {
+    background-color: white;
+  }
+
+  .apg-switch-icon {
+    color: white;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+  .apg-switch-track,
+  .apg-switch-thumb,
+  .apg-switch-icon {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-switch-track {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-switch[aria-checked="true"] .apg-switch-track {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .apg-switch-thumb {
+    background: ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .apg-switch[aria-checked="true"] .apg-switch-thumb {
+    background: HighlightText;
+  }
+
+  .apg-switch-icon {
+    color: HighlightText;
+  }
+
+  .apg-switch:focus-visible .apg-switch-track {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-switch:disabled {
+    opacity: 1;
+  }
+
+  .apg-switch:disabled .apg-switch-track {
+    border-color: GrayText;
+    background: ButtonFace;
+  }
+
+  .apg-switch:disabled .apg-switch-thumb {
+    background: GrayText;
+  }
+
+  .apg-switch-label {
+    color: ButtonText;
+  }
+
+  .apg-switch:disabled .apg-switch-label {
+    color: GrayText;
+  }
+}

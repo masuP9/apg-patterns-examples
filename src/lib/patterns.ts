@@ -72,6 +72,15 @@ export const PATTERNS: Pattern[] = [
     status: "available",
   },
   {
+    id: "switch",
+    name: "Switch",
+    description:
+      "A control that allows users to toggle between two states: on and off.",
+    icon: "🎚️",
+    complexity: "Low",
+    status: "available",
+  },
+  {
     id: "menu-button",
     name: "Menu Button",
     description: "A button that opens a menu of actions or options.",
