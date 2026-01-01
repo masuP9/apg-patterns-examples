@@ -6,10 +6,20 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/dialog/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/dialog/Dialog.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'resources', text: 'Resources' },
+];
 ---
 
-<PatternLayout title="Dialog - Astro" pattern="dialog" framework="astro">
+<PatternLayout title="Dialog - Astro" pattern="dialog" framework="astro" tocItems={tocItems}>
   <nav class="mb-6 text-sm">
     <a href="/patterns/" class="text-primary hover:underline">Patterns</a>
     <span class="mx-2 text-muted-foreground">/</span>
@@ -28,7 +38,7 @@ import sourceCode from '@patterns/dialog/Dialog.astro?raw';
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <h2 class="text-xl font-semibold mb-4">Demo</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
 
     <!-- Basic Dialog -->
     <div class="mb-8">
@@ -73,13 +83,13 @@ import sourceCode from '@patterns/dialog/Dialog.astro?raw';
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
     <CodeBlock
       code={sourceCode}
       lang="astro"
@@ -89,7 +99,7 @@ import sourceCode from '@patterns/dialog/Dialog.astro?raw';
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <h2 class="text-xl font-semibold mb-4">Usage</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
     <CodeBlock
       code={`---
 import Dialog from './Dialog.astro';
@@ -109,7 +119,7 @@ import Dialog from './Dialog.astro';
 
   <!-- API Section -->
   <section class="mb-12">
-    <h2 class="text-xl font-semibold mb-4">API</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
 
     <h3 class="text-lg font-medium mb-3">Props</h3>
     <ResponsiveTable class="mb-6">
@@ -206,7 +216,7 @@ import Dialog from './Dialog.astro';
 
   <!-- Resources -->
   <section>
-    <h2 class="text-xl font-semibold mb-4">Resources</h2>
+    <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
     <ul class="list-disc pl-6 space-y-2">
       <li>
         <ExternalLink

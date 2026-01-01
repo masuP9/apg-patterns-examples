@@ -6,8 +6,19 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/accordion/Accordion.astro?raw';
 import { withBase } from '@/lib/utils';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'implementation-notes', text: 'Implementation Notes' },
+  { id: 'resources', text: 'Resources' },
+];
 
 const defaultItems = [
   {
@@ -66,7 +77,7 @@ const disabledItems = [
 ];
 ---
 
-<PatternLayout title="Accordion - Astro" pattern="accordion" framework="astro">
+<PatternLayout title="Accordion - Astro" pattern="accordion" framework="astro" tocItems={tocItems}>
     <nav class="mb-6 text-sm">
       <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
       <span class="mx-2 text-muted-foreground">/</span>
@@ -85,7 +96,7 @@ const disabledItems = [
 
     <!-- Demo Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
 
       <!-- Default (Single Expansion) -->
       <div class="mb-8">
@@ -133,13 +144,13 @@ const disabledItems = [
 
     <!-- Accessibility Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
       <AccessibilityDocs />
     </section>
 
     <!-- Source Code Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
       <CodeBlock
         code={sourceCode}
         lang="astro"
@@ -149,7 +160,7 @@ const disabledItems = [
 
     <!-- Usage Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
       <CodeBlock
         code={`---
 import Accordion from './Accordion.astro';
@@ -181,7 +192,7 @@ const items = [
 
     <!-- API Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">API</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
 
       <h3 class="text-lg font-medium mb-3">Props</h3>
       <ResponsiveTable class="mb-6">
@@ -265,7 +276,7 @@ const items = [
 
     <!-- Implementation Notes -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Implementation Notes</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Implementation Notes</Heading>
       <div class="prose dark:prose-invert max-w-none">
         <p>
           This Astro implementation uses Web Components (<code>customElements.define</code>)
@@ -283,7 +294,7 @@ const items = [
 
     <!-- Resources -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
       <ul class="list-disc pl-6 space-y-2">
         <li>
           <ExternalLink

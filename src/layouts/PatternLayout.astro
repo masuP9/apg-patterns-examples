@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
+import { TableOfContents, type TocItem } from "@/components/ui/toc";
 import { withBase } from "@/lib/utils";
 
 interface Props {
@@ -15,58 +16,78 @@ interface Props {
   description?: string;
   pattern: string;
   framework: Framework;
+  tocItems?: TocItem[];
 }
 
-const { title, description, pattern, framework } = Astro.props;
+const { title, description, pattern, framework, tocItems = [] } = Astro.props;
 const availablePatterns = getAvailablePatterns();
 const currentPatternData = availablePatterns.find((p) => p.id === pattern);
 const frameworkLabel = FRAMEWORK_INFO[framework].label;
+const hasToc = tocItems.length > 0;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="lg:grid lg:grid-cols-[240px_1fr] lg:gap-8">
-    <!-- Sidebar (desktop only) -->
-    <aside class="hidden lg:block">
-      <PatternSidebar currentPattern={pattern} currentFramework={framework} />
-    </aside>
+  <div class="mx-auto max-w-7xl">
+    <div class:list={[
+      "lg:grid lg:gap-16 xl:gap-20",
+      hasToc
+        ? "lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_200px]"
+        : "lg:grid-cols-[240px_1fr]"
+    ]}>
+      <!-- Sidebar (desktop only) -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-20">
+          <PatternSidebar currentPattern={pattern} currentFramework={framework} />
+        </div>
+      </aside>
 
-    <!-- Main content -->
-    <div class="max-w-4xl min-w-0">
-      <!-- Mobile pattern navigation -->
-      <div class="lg:hidden mb-6">
-        <Collapsible class="border border-border rounded-lg">
-          <CollapsibleTrigger class="w-full px-4 py-3 text-left hover:bg-muted/50 rounded-lg">
-            <span class="text-base" aria-hidden="true">{currentPatternData?.icon}</span>
-            <span class="font-medium">{currentPatternData?.name}</span>
-            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
-              {frameworkLabel}
-            </span>
-          </CollapsibleTrigger>
-          <CollapsibleContent class="border-t border-border">
-            <nav aria-label="Pattern navigation" class="py-2">
-              <ul class="space-y-1">
-                {availablePatterns.map((p) => (
-                  <li>
-                    <a
-                      href={withBase(`/patterns/${p.id}/${framework}/`)}
-                      class:list={[
-                        "flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted/50 transition-colors",
-                        pattern === p.id && "bg-muted font-medium"
-                      ]}
-                      aria-current={pattern === p.id ? "page" : undefined}
-                    >
-                      <span class="text-base" aria-hidden="true">{p.icon}</span>
-                      <span>{p.name}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </CollapsibleContent>
-        </Collapsible>
+      <!-- Main content -->
+      <div class="max-w-4xl min-w-0">
+        <!-- Mobile pattern navigation -->
+        <div class="lg:hidden mb-6">
+          <Collapsible class="border border-border rounded-lg">
+            <CollapsibleTrigger class="w-full px-4 py-3 text-left hover:bg-muted/50 rounded-lg">
+              <span class="text-base" aria-hidden="true">{currentPatternData?.icon}</span>
+              <span class="font-medium">{currentPatternData?.name}</span>
+              <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                {frameworkLabel}
+              </span>
+            </CollapsibleTrigger>
+            <CollapsibleContent class="border-t border-border">
+              <nav aria-label="Pattern navigation" class="py-2">
+                <ul class="space-y-1">
+                  {availablePatterns.map((p) => (
+                    <li>
+                      <a
+                        href={withBase(`/patterns/${p.id}/${framework}/`)}
+                        class:list={[
+                          "flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted/50 transition-colors",
+                          pattern === p.id && "bg-muted font-medium"
+                        ]}
+                        aria-current={pattern === p.id ? "page" : undefined}
+                      >
+                        <span class="text-base" aria-hidden="true">{p.icon}</span>
+                        <span>{p.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </CollapsibleContent>
+          </Collapsible>
+        </div>
+
+        <slot />
       </div>
 
-      <slot />
+      <!-- Right Sidebar: TOC (xl and above) -->
+      {hasToc && (
+        <aside class="hidden xl:block">
+          <div class="sticky top-20">
+            <TableOfContents items={tocItems} />
+          </div>
+        </aside>
+      )}
     </div>
   </div>
 </BaseLayout>

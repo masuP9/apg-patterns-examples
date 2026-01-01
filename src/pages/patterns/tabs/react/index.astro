@@ -4,10 +4,23 @@ import Tabs from '@patterns/tabs/Tabs';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/tabs/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/tabs/Tabs.tsx?raw';
+import testCode from '@patterns/tabs/Tabs.test.tsx?raw';
 import { withBase } from '@/lib/utils';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
 
 const demoTabs = [
   { id: 'tab1', label: 'Overview', content: 'This is the overview panel content. It provides a general introduction to the product or service.' },
@@ -28,7 +41,7 @@ const verticalTabs = [
 ];
 ---
 
-<PatternLayout title="Tabs - React" pattern="tabs" framework="react">
+<PatternLayout title="Tabs - React" pattern="tabs" framework="react" tocItems={tocItems}>
   <nav class="mb-6 text-sm">
     <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
     <span class="mx-2 text-muted-foreground">/</span>
@@ -47,7 +60,7 @@ const verticalTabs = [
 
     <!-- Demo Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
 
       <!-- Default (Automatic Activation) -->
       <div class="mb-8">
@@ -99,13 +112,13 @@ const verticalTabs = [
 
     <!-- Accessibility Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
       <AccessibilityDocs />
     </section>
 
     <!-- Source Code Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
       <CodeBlock
         code={sourceCode}
         lang="tsx"
@@ -115,7 +128,7 @@ const verticalTabs = [
 
     <!-- Usage Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
       <CodeBlock
         code={`import { Tabs } from './Tabs';
 
@@ -141,7 +154,7 @@ function App() {
 
     <!-- API Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">API</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
 
       <h3 class="text-lg font-medium mb-3">Tabs Props</h3>
       <ResponsiveTable class="mb-6">
@@ -202,9 +215,22 @@ function App() {
       />
     </section>
 
+    <!-- Testing Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Testing</Heading>
+      <TestingDocs />
+      <div class="mt-6">
+        <CodeBlock
+          code={testCode}
+          lang="tsx"
+          title="Tabs.test.tsx"
+        />
+      </div>
+    </section>
+
     <!-- Resources -->
     <section>
-      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
       <ul class="list-disc pl-6 space-y-2">
         <li>
           <ExternalLink

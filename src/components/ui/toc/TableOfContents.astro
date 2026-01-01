@@ -1,0 +1,131 @@
+---
+export interface TocItem {
+  id: string;
+  text: string;
+}
+
+interface Props {
+  items: TocItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Table of contents" class="toc">
+  <h2 class="text-sm font-semibold mb-3 text-foreground">On this page</h2>
+  <ul class="space-y-1 text-sm">
+    {items.map((item) => (
+      <li>
+        <a
+          href={`#${item.id}`}
+          class="toc-link block py-1 text-muted-foreground hover:text-foreground transition-colors"
+          data-toc-id={item.id}
+        >
+          {item.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Store cleanup function to prevent listener duplication
+  let cleanupToc: (() => void) | null = null;
+
+  function initToc() {
+    // Cleanup previous listeners if any
+    if (cleanupToc) {
+      cleanupToc();
+      cleanupToc = null;
+    }
+
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const headings = Array.from(document.querySelectorAll('h2[id]')) as HTMLElement[];
+
+    if (tocLinks.length === 0 || headings.length === 0) return;
+
+    // Offset from top of viewport to consider a heading as "current"
+    const SCROLL_OFFSET = 100;
+
+    function getActiveHeadingId(): string | null {
+      // Find the heading that is currently at or above the scroll position
+      // (the last heading that has scrolled past the offset line)
+      let activeId: string | null = null;
+
+      for (const heading of headings) {
+        const rect = heading.getBoundingClientRect();
+        // If the heading is at or above the offset line, it's a candidate
+        if (rect.top <= SCROLL_OFFSET) {
+          activeId = heading.id;
+        } else {
+          // Headings are in DOM order, so once we find one below the line,
+          // the previous one is the active section
+          break;
+        }
+      }
+
+      // If no heading has scrolled past, default to the first one
+      if (activeId === null && headings.length > 0) {
+        activeId = headings[0].id;
+      }
+
+      // Edge case: near bottom of page, activate last heading
+      const scrollBottom = window.scrollY + window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (docHeight - scrollBottom < 50 && headings.length > 0) {
+        activeId = headings[headings.length - 1].id;
+      }
+
+      return activeId;
+    }
+
+    function updateActiveLink() {
+      const activeId = getActiveHeadingId();
+
+      tocLinks.forEach((link) => {
+        const linkId = link.getAttribute('data-toc-id');
+        const isActive = linkId === activeId;
+
+        // Use classList.toggle for efficient state updates
+        link.classList.toggle('text-muted-foreground', !isActive);
+        link.classList.toggle('text-primary', isActive);
+        link.classList.toggle('font-medium', isActive);
+
+        // Set aria-current for accessibility
+        if (isActive) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    // Throttle scroll events for performance
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateActiveLink();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Set initial active state
+    updateActiveLink();
+
+    // Store cleanup function
+    cleanupToc = () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }
+
+  // Run on initial load
+  initToc();
+
+  // Re-run on view transitions (Astro)
+  document.addEventListener('astro:page-load', initToc);
+</script>
