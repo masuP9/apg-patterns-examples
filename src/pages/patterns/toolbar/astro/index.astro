@@ -9,14 +9,24 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
 import toolbarSource from '@patterns/toolbar/Toolbar.astro?raw';
 import buttonSource from '@patterns/toolbar/ToolbarButton.astro?raw';
 import toggleSource from '@patterns/toolbar/ToolbarToggleButton.astro?raw';
 import separatorSource from '@patterns/toolbar/ToolbarSeparator.astro?raw';
 import { withBase } from '@/lib/utils';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility', text: 'Accessibility' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'resources', text: 'Resources' },
+];
 ---
 
-<PatternLayout title="Toolbar - Astro" pattern="toolbar" framework="astro">
+<PatternLayout title="Toolbar - Astro" pattern="toolbar" framework="astro" tocItems={tocItems}>
   <nav class="mb-6 text-sm">
     <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
     <span class="mx-2 text-muted-foreground">/</span>
@@ -35,7 +45,7 @@ import { withBase } from '@/lib/utils';
 
     <!-- Demo Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
 
       <!-- Text Formatting Toolbar -->
       <div class="mb-8">
@@ -162,13 +172,13 @@ import { withBase } from '@/lib/utils';
 
     <!-- Accessibility Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Accessibility</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility</Heading>
       <AccessibilityDocs />
     </section>
 
     <!-- Source Code Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
       <div class="space-y-4">
         <CodeBlock code={toolbarSource} lang="astro" title="Toolbar.astro" />
         <CodeBlock code={buttonSource} lang="astro" title="ToolbarButton.astro" />
@@ -179,7 +189,7 @@ import { withBase } from '@/lib/utils';
 
     <!-- Usage Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
       <CodeBlock
         code={`---
 import Toolbar from '@patterns/toolbar/Toolbar.astro';
@@ -210,7 +220,7 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
 
     <!-- API Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">API</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
 
       <h3 class="text-lg font-medium mb-3">Toolbar Props</h3>
       <ResponsiveTable class="mb-6">
@@ -342,7 +352,7 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
 
     <!-- Resources Section -->
     <section class="mb-12">
-      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
       <ul class="list-disc list-inside space-y-2">
         <li>
           <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" class="text-primary hover:underline">

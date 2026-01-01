@@ -1,0 +1,193 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements.
+  </p>
+
+  <h3 class="text-lg font-medium mb-3">Test Categories</h3>
+
+  <h4 class="font-medium mb-2 flex items-center gap-2">
+    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+    High Priority: APG Keyboard Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Test</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>ArrowRight/Left</code></td>
+          <td class="py-2">Moves focus between items (horizontal)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>ArrowDown/Up</code></td>
+          <td class="py-2">Moves focus between items (vertical)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">Moves focus to first item</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">Moves focus to last item</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>No wrap</code></td>
+          <td class="py-2">Focus stops at edges (no looping)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>Disabled skip</code></td>
+          <td class="py-2">Skips disabled items during navigation</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>Enter/Space</code></td>
+          <td class="py-2">Activates button or toggles toggle button</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="font-medium mb-2 flex items-center gap-2">
+    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+    High Priority: APG ARIA Attributes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Test</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>role="toolbar"</code></td>
+          <td class="py-2">Container has toolbar role</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2">Reflects horizontal/vertical orientation</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-label/labelledby</code></td>
+          <td class="py-2">Toolbar has accessible name</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>aria-pressed</code></td>
+          <td class="py-2">Toggle buttons reflect pressed state</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>role="separator"</code></td>
+          <td class="py-2">Separator has correct role and orientation</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>type="button"</code></td>
+          <td class="py-2">Buttons have explicit type attribute</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="font-medium mb-2 flex items-center gap-2">
+    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management (Roving Tabindex)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Test</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>tabIndex=0</code></td>
+          <td class="py-2">First enabled item has tabIndex=0</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>tabIndex=-1</code></td>
+          <td class="py-2">Other items have tabIndex=-1</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>Click updates focus</code></td>
+          <td class="py-2">Clicking an item updates roving focus position</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="font-medium mb-2 flex items-center gap-2">
+    <span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Test</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>Vertical toolbar</code></td>
+          <td class="py-2">Vertical orientation also passes axe</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="font-medium mb-2 flex items-center gap-2">
+    <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attribute Inheritance
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Test</th>
+          <th class="text-left py-2">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">Custom classes applied to all components</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="text-lg font-medium mb-3">Testing Tools</h3>
+  <ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">Vitest</ExternalLink>
+      - Test runner
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">Testing Library</ExternalLink>
+      - Framework-specific testing utilities
+    </li>
+    <li>
+      <ExternalLink href="https://github.com/nickcolley/jest-axe" class="text-primary hover:underline">jest-axe</ExternalLink>
+      - Automated accessibility testing
+    </li>
+  </ul>
+
+  <p class="text-sm text-muted-foreground">
+    See <ExternalLink href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md" class="text-primary hover:underline">testing-strategy.md</ExternalLink> for full documentation.
+  </p>
+</div>
