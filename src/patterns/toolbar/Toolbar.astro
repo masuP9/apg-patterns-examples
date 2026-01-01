@@ -1,0 +1,180 @@
+---
+/**
+ * APG Toolbar Pattern - Astro Implementation
+ *
+ * A container for grouping a set of controls using Web Components.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/
+ */
+
+export interface Props {
+  /** Direction of the toolbar */
+  orientation?: 'horizontal' | 'vertical';
+  /** Accessible label for the toolbar */
+  'aria-label'?: string;
+  /** ID of element that labels the toolbar */
+  'aria-labelledby'?: string;
+  /** ID for the toolbar element */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  orientation = 'horizontal',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  id,
+  class: className = '',
+} = Astro.props;
+---
+
+<apg-toolbar {...(id ? { id } : {})} class={className} data-orientation={orientation}>
+  <div
+    role="toolbar"
+    aria-orientation={orientation}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    class="apg-toolbar"
+  >
+    <slot />
+  </div>
+</apg-toolbar>
+
+<script>
+  class ApgToolbar extends HTMLElement {
+    private toolbar: HTMLElement | null = null;
+    private rafId: number | null = null;
+    private focusedIndex = 0;
+    private observer: MutationObserver | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.toolbar = this.querySelector('[role="toolbar"]');
+      if (!this.toolbar) {
+        console.warn('apg-toolbar: toolbar element not found');
+        return;
+      }
+
+      this.toolbar.addEventListener('keydown', this.handleKeyDown);
+      this.toolbar.addEventListener('focusin', this.handleFocus);
+
+      // Observe DOM changes to update roving tabindex
+      this.observer = new MutationObserver(() => this.updateTabIndices());
+      this.observer.observe(this.toolbar, { childList: true, subtree: true });
+
+      // Initialize roving tabindex
+      this.updateTabIndices();
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.observer?.disconnect();
+      this.observer = null;
+      this.toolbar?.removeEventListener('keydown', this.handleKeyDown);
+      this.toolbar?.removeEventListener('focusin', this.handleFocus);
+      this.toolbar = null;
+    }
+
+    private getButtons(): HTMLButtonElement[] {
+      if (!this.toolbar) return [];
+      return Array.from(
+        this.toolbar.querySelectorAll<HTMLButtonElement>('button:not([disabled])')
+      );
+    }
+
+    private updateTabIndices() {
+      const buttons = this.getButtons();
+      if (buttons.length === 0) return;
+
+      // Clamp focusedIndex to valid range
+      if (this.focusedIndex >= buttons.length) {
+        this.focusedIndex = buttons.length - 1;
+      }
+
+      buttons.forEach((btn, index) => {
+        btn.tabIndex = index === this.focusedIndex ? 0 : -1;
+      });
+    }
+
+    private handleFocus = (event: FocusEvent) => {
+      const buttons = this.getButtons();
+      const targetIndex = buttons.findIndex(btn => btn === event.target);
+      if (targetIndex !== -1 && targetIndex !== this.focusedIndex) {
+        this.focusedIndex = targetIndex;
+        this.updateTabIndices();
+      }
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      const buttons = this.getButtons();
+      if (buttons.length === 0) return;
+
+      const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
+      if (currentIndex === -1) return;
+
+      const orientation = this.dataset.orientation || 'horizontal';
+      const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+      const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+      const invalidKeys = orientation === 'vertical'
+        ? ['ArrowLeft', 'ArrowRight']
+        : ['ArrowUp', 'ArrowDown'];
+
+      // Ignore invalid direction keys
+      if (invalidKeys.includes(event.key)) {
+        return;
+      }
+
+      let newIndex = currentIndex;
+      let shouldPreventDefault = false;
+
+      switch (event.key) {
+        case nextKey:
+          // No wrap - stop at end
+          if (currentIndex < buttons.length - 1) {
+            newIndex = currentIndex + 1;
+          }
+          shouldPreventDefault = true;
+          break;
+
+        case prevKey:
+          // No wrap - stop at start
+          if (currentIndex > 0) {
+            newIndex = currentIndex - 1;
+          }
+          shouldPreventDefault = true;
+          break;
+
+        case 'Home':
+          newIndex = 0;
+          shouldPreventDefault = true;
+          break;
+
+        case 'End':
+          newIndex = buttons.length - 1;
+          shouldPreventDefault = true;
+          break;
+      }
+
+      if (shouldPreventDefault) {
+        event.preventDefault();
+        if (newIndex !== currentIndex) {
+          this.focusedIndex = newIndex;
+          this.updateTabIndices();
+          buttons[newIndex].focus();
+        }
+      }
+    };
+  }
+
+  if (!customElements.get('apg-toolbar')) {
+    customElements.define('apg-toolbar', ApgToolbar);
+  }
+</script>

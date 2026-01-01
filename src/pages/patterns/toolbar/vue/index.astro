@@ -1,0 +1,201 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import TextFormattingToolbarDemo from '@patterns/toolbar/TextFormattingToolbarDemo.vue';
+import VerticalToolbarDemo from '@patterns/toolbar/VerticalToolbarDemo.vue';
+import DisabledItemsToolbarDemo from '@patterns/toolbar/DisabledItemsToolbarDemo.vue';
+import ToolbarToggleDemo from '@patterns/toolbar/ToolbarToggleDemo.vue';
+import ToolbarToggleDefaultDemo from '@patterns/toolbar/ToolbarToggleDefaultDemo.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import toolbarSource from '@patterns/toolbar/Toolbar.vue?raw';
+import buttonSource from '@patterns/toolbar/ToolbarButton.vue?raw';
+import toggleSource from '@patterns/toolbar/ToolbarToggleButton.vue?raw';
+import separatorSource from '@patterns/toolbar/ToolbarSeparator.vue?raw';
+import { withBase } from '@/lib/utils';
+---
+
+<PatternLayout title="Toolbar - Vue" pattern="toolbar" framework="vue">
+  <nav class="mb-6 text-sm">
+    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Toolbar</span>
+  </nav>
+
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">Toolbar</h1>
+      <p class="text-lg text-muted-foreground">
+        A container for grouping a set of controls, such as buttons, toggle buttons, or other input elements.
+      </p>
+    </header>
+
+    <!-- Framework Selector -->
+    <FrameworkTabs pattern="toolbar" currentFramework="vue" />
+
+    <!-- Demo Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Demo</h2>
+
+      <!-- Text Formatting Toolbar -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Text Formatting Toolbar</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          A horizontal toolbar with toggle buttons and regular buttons.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <TextFormattingToolbarDemo client:load />
+        </div>
+      </div>
+
+      <!-- Vertical Toolbar -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Vertical Toolbar</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Use arrow up/down keys to navigate.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <VerticalToolbarDemo client:load />
+        </div>
+      </div>
+
+      <!-- With Disabled Items -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">With Disabled Items</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Disabled items are skipped during keyboard navigation.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <DisabledItemsToolbarDemo client:load />
+        </div>
+      </div>
+
+      <!-- Controlled Toggle Buttons -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Controlled Toggle Buttons</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Toggle buttons with controlled state using v-model. The current state is displayed and applied to the sample text.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <ToolbarToggleDemo client:load />
+        </div>
+      </div>
+
+      <!-- Default Pressed States -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Default Pressed States</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Toggle buttons with <code>default-pressed</code> for initial state, including disabled states.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <ToolbarToggleDefaultDemo client:load />
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessibility Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Accessibility</h2>
+      <AccessibilityDocs />
+    </section>
+
+    <!-- Source Code Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+      <div class="space-y-4">
+        <CodeBlock code={toolbarSource} lang="vue" title="Toolbar.vue" />
+        <CodeBlock code={buttonSource} lang="vue" title="ToolbarButton.vue" />
+        <CodeBlock code={toggleSource} lang="vue" title="ToolbarToggleButton.vue" />
+        <CodeBlock code={separatorSource} lang="vue" title="ToolbarSeparator.vue" />
+      </div>
+    </section>
+
+    <!-- Usage Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Usage</h2>
+      <CodeBlock
+        code={`<script setup>
+import Toolbar from '@patterns/toolbar/Toolbar.vue'
+import ToolbarButton from '@patterns/toolbar/ToolbarButton.vue'
+import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.vue'
+import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.vue'
+</script>
+
+<template>
+  <Toolbar aria-label="Text formatting">
+    <ToolbarToggleButton>Bold</ToolbarToggleButton>
+    <ToolbarToggleButton>Italic</ToolbarToggleButton>
+    <ToolbarSeparator />
+    <ToolbarButton>Copy</ToolbarButton>
+    <ToolbarButton>Paste</ToolbarButton>
+  </Toolbar>
+</template>`}
+        lang="vue"
+      />
+    </section>
+
+    <!-- API Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">API</h2>
+
+      <h3 class="text-lg font-medium mb-3">Toolbar Props</h3>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>orientation</code></td>
+              <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
+              <td class="py-2 pr-4"><code>'horizontal'</code></td>
+              <td class="py-2">Direction of the toolbar</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+
+      <h3 class="text-lg font-medium mb-3">ToolbarToggleButton Events</h3>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Payload</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>update:pressed</code></td>
+              <td class="py-2 pr-4"><code>boolean</code></td>
+              <td class="py-2">Emitted when pressed state changes (v-model)</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>pressed-change</code></td>
+              <td class="py-2 pr-4"><code>boolean</code></td>
+              <td class="py-2">Emitted when pressed state changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Resources</h2>
+      <ul class="list-disc list-inside space-y-2">
+        <li>
+          <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" class="text-primary hover:underline">
+            WAI-ARIA APG: Toolbar Pattern
+          </ExternalLink>
+        </li>
+      </ul>
+    </section>
+</PatternLayout>

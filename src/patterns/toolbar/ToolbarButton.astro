@@ -1,0 +1,27 @@
+---
+/**
+ * APG Toolbar Button - Astro Implementation
+ *
+ * A button component for use within a Toolbar.
+ */
+
+export interface Props {
+  /** Whether the button is disabled */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  disabled = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<button
+  type="button"
+  class={`apg-toolbar-button ${className}`.trim()}
+  disabled={disabled}
+>
+  <slot />
+</button>

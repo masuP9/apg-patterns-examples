@@ -3,6 +3,7 @@
 @import "./patterns/tabs.css";
 @import "./patterns/accordion.css";
 @import "./patterns/dialog.css";
+@import "./patterns/toolbar.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

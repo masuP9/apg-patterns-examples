@@ -145,6 +145,30 @@ customElements.define('apg-toggle-button', ApgToggleButton);
 | サイト UI（Header, Footer 等） | shadcn/ui |
 | APG パターンデモ | 純粋実装（依存なし） |
 
+#### 4. Astro でのフレームワークコンポーネント制約
+
+Astro テンプレート内で React/Vue/Svelte の子コンポーネントを使う場合、**子は静的にシリアライズされる**ため、状態管理が機能しない。
+
+```astro
+<!-- ❌ 動作しない: ToolbarToggleButton の状態が機能しない -->
+<Toolbar client:load>
+  <ToolbarToggleButton>Bold</ToolbarToggleButton>
+</Toolbar>
+
+<!-- ✅ 動作する: 全体を1つのコンポーネントにまとめる -->
+<TextFormattingToolbar client:load />
+```
+
+**ラッパーコンポーネントが必要なケース:**
+- 子コンポーネントが自身の状態を持つ（例: toggle の pressed 状態）
+- Compound Components パターン（例: Toolbar + ToolbarButton）
+- 親から Context を受け取る子コンポーネント
+
+**不要なケース:**
+- データ駆動型: `<Tabs tabs={[...]} />` のように props でデータを渡す
+- 静的な子要素のみ
+- 単一コンポーネント
+
 ---
 
 ## URL 設計
