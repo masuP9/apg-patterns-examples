@@ -7,7 +7,7 @@ import { withBase } from "@/lib/utils";
 
 export function getStaticPaths() {
   // Add new patterns here as they are implemented
-  const patterns = ["button", "tabs", "accordion", "dialog"];
+  const patterns = ["button", "tabs", "accordion", "dialog", "switch"];
   return patterns.map((pattern) => ({ params: { pattern } }));
 }
 

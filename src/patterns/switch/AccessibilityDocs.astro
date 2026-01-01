@@ -1,0 +1,137 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA Roles</h3>
+  <ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>
+      <code>switch</code> - An input widget that allows users to choose one of two values: on or off<br />
+      <ExternalLink href="https://w3c.github.io/aria/#switch" class="text-sm text-primary hover:underline">
+        WAI-ARIA switch role
+      </ExternalLink>
+    </li>
+  </ul>
+
+  <h3 class="text-lg font-medium mb-3">WAI-ARIA States</h3>
+  <div class="mb-6">
+    <h4 class="font-medium mb-2"><code>aria-checked</code></h4>
+    <p class="text-muted-foreground mb-3">Indicates the current checked state of the switch.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium w-32">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code>
+            </td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes (for switch role)</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Default</td>
+            <td class="py-2"><code>initialChecked</code> prop (default: <code>false</code>)</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Click, Enter, Space</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink href="https://w3c.github.io/aria/#aria-checked" class="text-primary hover:underline">
+                aria-checked
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="font-medium mb-2"><code>aria-disabled</code></h4>
+    <p class="text-muted-foreground mb-3">Indicates the switch is perceivable but disabled.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium w-32">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>undefined</code>
+            </td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink href="https://w3c.github.io/aria/#aria-disabled" class="text-primary hover:underline">
+                aria-disabled
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="text-lg font-medium mb-3">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b border-border">
+          <th class="text-left py-2 pr-4">Key</th>
+          <th class="text-left py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Space</kbd></td>
+          <td class="py-2">Toggle the switch state (on/off)</td>
+        </tr>
+        <tr class="border-b border-border">
+          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Enter</kbd></td>
+          <td class="py-2">Toggle the switch state (on/off)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="text-lg font-medium mb-3">Accessible Naming</h3>
+  <p class="text-muted-foreground mb-3">
+    Switches must have an accessible name. This can be provided through:
+  </p>
+  <ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>
+      <strong>Visible label (recommended)</strong> - The switch's child content provides the accessible name
+    </li>
+    <li>
+      <code>aria-label</code> - Provides an invisible label for the switch
+    </li>
+    <li>
+      <code>aria-labelledby</code> - References an external element as the label
+    </li>
+  </ul>
+
+  <h3 class="text-lg font-medium mb-3">Visual Design</h3>
+  <p class="text-muted-foreground mb-3">
+    This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state:
+  </p>
+  <ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>
+      <strong>Thumb position</strong> - Left = off, Right = on
+    </li>
+    <li>
+      <strong>Checkmark icon</strong> - Visible only when the switch is on
+    </li>
+    <li>
+      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast Mode
+    </li>
+  </ul>
+</div>

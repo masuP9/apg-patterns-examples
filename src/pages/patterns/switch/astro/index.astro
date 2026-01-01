@@ -1,0 +1,170 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Switch from '@patterns/switch/Switch.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/switch/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import sourceCode from '@patterns/switch/Switch.astro?raw';
+import { withBase } from '@/lib/utils';
+---
+
+<PatternLayout title="Switch - Astro" pattern="switch" framework="astro">
+  <nav class="mb-6 text-sm">
+    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
+    <span class="mx-2 text-muted-foreground">/</span>
+    <span>Switch</span>
+  </nav>
+
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold mb-4">Switch</h1>
+    <p class="text-lg text-muted-foreground">
+      A control that allows users to toggle between two states: on and off.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="switch" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Demo</h2>
+    <div class="p-6 rounded-lg border border-border bg-background">
+      <div class="flex flex-col items-start gap-4">
+        <Switch>Wi-Fi</Switch>
+        <Switch initialChecked={true}>Bluetooth</Switch>
+        <Switch disabled>Airplane Mode (disabled)</Switch>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Accessibility Features</h2>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Source Code</h2>
+    <CodeBlock
+      code={sourceCode}
+      lang="astro"
+      title="Switch.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">Usage</h2>
+    <CodeBlock
+      code={`---
+import Switch from './Switch.astro';
+---
+
+<Switch initialChecked={false}>
+  Enable notifications
+</Switch>
+
+<script>
+  // Listen for change events
+  document.querySelector('apg-switch')?.addEventListener('change', (e) => {
+    console.log('Checked:', e.detail.checked);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <h2 class="text-xl font-semibold mb-4">API</h2>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Prop</th>
+            <th class="text-left py-2 pr-4">Type</th>
+            <th class="text-left py-2 pr-4">Default</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>initialChecked</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="py-2">Initial checked state</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="py-2">Whether the switch is disabled</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">""</td>
+            <td class="py-2">Additional CSS classes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mt-6 mb-3">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Event</th>
+            <th class="text-left py-2 pr-4">Detail</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>change</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">{"{ checked: boolean }"}</td>
+            <td class="py-2">Fired when the switch state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mt-6 mb-3">Slots</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Slot</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>default</code></td>
+            <td class="py-2">Switch label content</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4">Resources</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/switch/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Switch Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
