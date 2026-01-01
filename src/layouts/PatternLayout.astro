@@ -1,15 +1,9 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import { PatternSidebar } from "@/components/ui/pattern-sidebar";
-import { FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
-import { getAvailablePatterns } from "@/lib/patterns";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@/components/ui/collapsible";
+import { PatternBreadcrumb } from "@/components/ui/pattern-breadcrumb";
+import { type Framework } from "@/lib/frameworks";
 import { TableOfContents, type TocItem } from "@/components/ui/toc";
-import { withBase } from "@/lib/utils";
 
 interface Props {
   title: string;
@@ -20,9 +14,6 @@ interface Props {
 }
 
 const { title, description, pattern, framework, tocItems = [] } = Astro.props;
-const availablePatterns = getAvailablePatterns();
-const currentPatternData = availablePatterns.find((p) => p.id === pattern);
-const frameworkLabel = FRAMEWORK_INFO[framework].label;
 const hasToc = tocItems.length > 0;
 ---
 
@@ -43,39 +34,8 @@ const hasToc = tocItems.length > 0;
 
       <!-- Main content -->
       <div class="max-w-4xl min-w-0">
-        <!-- Mobile pattern navigation -->
-        <div class="lg:hidden mb-6">
-          <Collapsible class="border border-border rounded-lg">
-            <CollapsibleTrigger class="w-full px-4 py-3 text-left hover:bg-muted/50 rounded-lg">
-              <span class="text-base" aria-hidden="true">{currentPatternData?.icon}</span>
-              <span class="font-medium">{currentPatternData?.name}</span>
-              <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
-                {frameworkLabel}
-              </span>
-            </CollapsibleTrigger>
-            <CollapsibleContent class="border-t border-border">
-              <nav aria-label="Pattern navigation" class="py-2">
-                <ul class="space-y-1">
-                  {availablePatterns.map((p) => (
-                    <li>
-                      <a
-                        href={withBase(`/patterns/${p.id}/${framework}/`)}
-                        class:list={[
-                          "flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted/50 transition-colors",
-                          pattern === p.id && "bg-muted font-medium"
-                        ]}
-                        aria-current={pattern === p.id ? "page" : undefined}
-                      >
-                        <span class="text-base" aria-hidden="true">{p.icon}</span>
-                        <span>{p.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
+        <!-- Pattern breadcrumb with dropdown -->
+        <PatternBreadcrumb pattern={pattern} framework={framework} />
 
         <slot />
       </div>

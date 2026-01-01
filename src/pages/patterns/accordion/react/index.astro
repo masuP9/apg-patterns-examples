@@ -10,7 +10,6 @@ import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/accordion/Accordion.tsx?raw';
 import testCode from '@patterns/accordion/Accordion.test.tsx?raw';
-import { withBase } from '@/lib/utils';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -80,12 +79,6 @@ const disabledItems = [
 ---
 
 <PatternLayout title="Accordion - React" pattern="accordion" framework="react" tocItems={tocItems}>
-    <nav class="mb-6 text-sm">
-      <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
-      <span class="mx-2 text-muted-foreground">/</span>
-      <span>Accordion</span>
-    </nav>
-
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Accordion</h1>
       <p class="text-lg text-muted-foreground">

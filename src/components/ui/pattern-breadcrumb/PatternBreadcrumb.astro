@@ -1,0 +1,114 @@
+---
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
+import { type Framework } from "@/lib/frameworks";
+import { getAvailablePatterns, getPatternById } from "@/lib/patterns";
+import { withBase } from "@/lib/utils";
+import ChevronDownIcon from "lucide-static/icons/chevron-down.svg";
+
+interface Props {
+  pattern: string;
+  framework: Framework;
+}
+
+const { pattern, framework } = Astro.props;
+const availablePatterns = getAvailablePatterns();
+const currentPattern = getPatternById(pattern);
+---
+
+<nav aria-label="Breadcrumb" class="mb-6 text-sm">
+  <ol class="flex items-center">
+    <li class="relative">
+      <Collapsible class="inline-block">
+        <CollapsibleTrigger
+          class="inline-flex items-center gap-1 text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          showChevron={false}
+        >
+          <span>Patterns</span>
+          <ChevronDownIcon class="size-4 translate-y-px transition-transform duration-200 group-open/collapsible:rotate-180" />
+        </CollapsibleTrigger>
+        <CollapsibleContent class="absolute left-0 z-10 mt-2 w-56 border border-border rounded-lg bg-background shadow-lg max-h-80 overflow-y-auto">
+          <a
+            href={withBase("/patterns/")}
+            class="flex items-center gap-2 px-4 py-2 text-sm rounded-t-lg hover:bg-muted/50 focus:bg-muted focus:ring-2 focus:ring-inset focus:ring-primary focus:outline-none transition-colors"
+          >
+            <span class="text-base" aria-hidden="true">📚</span>
+            <span>All patterns</span>
+          </a>
+          <hr class="border-border" />
+          <ul class="py-1">
+            {availablePatterns.map((p) => (
+              <li>
+                <a
+                  href={withBase(`/patterns/${p.id}/${framework}/`)}
+                  class:list={[
+                    "flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted/50 focus:bg-muted focus:ring-2 focus:ring-inset focus:ring-primary focus:outline-none transition-colors",
+                    pattern === p.id && "bg-muted font-medium",
+                  ]}
+                  aria-current={pattern === p.id ? "page" : undefined}
+                >
+                  <span class="text-base" aria-hidden="true">{p.icon}</span>
+                  <span>{p.name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </CollapsibleContent>
+      </Collapsible>
+    </li>
+    <li aria-hidden="true" class="mx-2 text-muted-foreground">/</li>
+    <li aria-current="page">{currentPattern?.name}</li>
+  </ol>
+</nav>
+
+<script>
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    const details = document.querySelectorAll(
+      'nav[aria-label="Breadcrumb"] details[open]'
+    );
+    details.forEach((detail) => {
+      if (!detail.contains(e.target as Node)) {
+        detail.removeAttribute("open");
+      }
+    });
+  });
+
+  // Keyboard navigation for dropdown
+  document.addEventListener("keydown", (e) => {
+    const openDetails = document.querySelector(
+      'nav[aria-label="Breadcrumb"] details[open]'
+    );
+
+    // Close dropdown when pressing Escape
+    if (e.key === "Escape" && openDetails) {
+      openDetails.removeAttribute("open");
+      const summary = openDetails.querySelector("summary");
+      summary?.focus();
+      return;
+    }
+
+    // Arrow key navigation within dropdown
+    if ((e.key === "ArrowDown" || e.key === "ArrowUp") && openDetails) {
+      const links = Array.from(
+        openDetails.querySelectorAll<HTMLAnchorElement>("a")
+      );
+      if (links.length === 0) return;
+
+      const currentIndex = links.findIndex((link) => link === document.activeElement);
+
+      let nextIndex: number;
+      if (e.key === "ArrowDown") {
+        nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % links.length;
+      } else {
+        nextIndex = currentIndex < 0 ? links.length - 1 : (currentIndex - 1 + links.length) % links.length;
+      }
+
+      links[nextIndex]?.focus();
+      e.preventDefault();
+    }
+  });
+</script>

@@ -17,7 +17,6 @@ import toggleSource from '@patterns/toolbar/ToolbarToggleButton.svelte?raw';
 import separatorSource from '@patterns/toolbar/ToolbarSeparator.svelte?raw';
 import TestingDocs from '@patterns/toolbar/TestingDocs.astro';
 import testCode from '@patterns/toolbar/Toolbar.test.svelte.ts?raw';
-import { withBase } from '@/lib/utils';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -31,12 +30,6 @@ const tocItems = [
 ---
 
 <PatternLayout title="Toolbar - Svelte" pattern="toolbar" framework="svelte" tocItems={tocItems}>
-  <nav class="mb-6 text-sm">
-    <a href={withBase('/patterns/')} class="text-primary hover:underline">Patterns</a>
-    <span class="mx-2 text-muted-foreground">/</span>
-    <span>Toolbar</span>
-  </nav>
-
     <header class="mb-8">
       <h1 class="text-3xl font-bold mb-4">Toolbar</h1>
       <p class="text-lg text-muted-foreground">
