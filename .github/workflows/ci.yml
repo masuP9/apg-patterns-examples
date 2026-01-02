@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          DEPLOY_TARGET: github-pages
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
