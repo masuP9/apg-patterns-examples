@@ -7,10 +7,9 @@ import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 
-// Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
-const deployTarget = process.env.DEPLOY_TARGET ||
-  (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
+/** @typedef {'github-pages' | 'cloudflare-pages' | 'local'} DeployTarget */
 
+/** @type {Record<DeployTarget, { site: string; base: string }>} */
 const siteConfig = {
   'github-pages': {
     site: 'https://masup9.github.io',
@@ -26,7 +25,16 @@ const siteConfig = {
   },
 };
 
-const { site, base } = siteConfig[deployTarget] || siteConfig['local'];
+// Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
+const deployTargetEnv = process.env.DEPLOY_TARGET ||
+  (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
+
+/** @type {DeployTarget} */
+const deployTarget = deployTargetEnv in siteConfig
+  ? /** @type {DeployTarget} */ (deployTargetEnv)
+  : 'local';
+
+const { site, base } = siteConfig[deployTarget];
 
 // https://astro.build/config
 export default defineConfig({
