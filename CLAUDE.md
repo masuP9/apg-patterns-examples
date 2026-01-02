@@ -138,7 +138,36 @@ customElements.define('apg-toggle-button', ApgToggleButton);
 - スクリーンリーダー対応
 - フォーカス管理
 
-#### 3. shadcn/ui の使い分け
+#### 3. AccessibilityDocs 構成
+
+各パターンの `AccessibilityDocs.astro` は以下のセクション構成で作成する:
+
+1. **Native HTML Considerations** (該当パターンのみ)
+   - ネイティブ HTML 要素の推奨（例: `<a>`, `<table>`, `<input type="number">`）
+   - カスタム実装が必要になるユースケース
+   - ネイティブ vs カスタムの判断基準
+
+2. **WAI-ARIA Roles**
+   - 使用する role の一覧と説明
+   - 各 role の適用対象要素
+
+3. **WAI-ARIA States / Properties**
+   - `aria-*` 属性の詳細（値、必須/任意、変更トリガー）
+   - 仕様へのリンク
+
+4. **Keyboard Support**
+   - キーボード操作の一覧表
+   - 各キーのアクション説明
+
+**ネイティブ HTML セクションが必要なパターン例:**
+- Link → `<a href>`
+- Table → `<table>`
+- Checkbox → `<input type="checkbox">`
+- Radio Group → `<input type="radio">`
+- Meter → `<meter>`
+- Spinbutton → `<input type="number">`
+
+#### 4. shadcn/ui の使い分け
 
 | 用途 | 使用 |
 |------|------|
