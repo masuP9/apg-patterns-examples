@@ -35,7 +35,7 @@ const currentPattern = getPatternById(pattern);
             href={withBase('/patterns/')}
             class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
           >
-            <span class="text-base" aria-hidden="true">📚</span>
+            <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">📚</span>
             <span>All patterns</span>
           </a>
           <hr class="border-border" />
@@ -51,7 +51,7 @@ const currentPattern = getPatternById(pattern);
                     ]}
                     aria-current={pattern === p.id ? 'page' : undefined}
                   >
-                    <span class="text-base" aria-hidden="true">
+                    <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">
                       {p.icon}
                     </span>
                     <span>{p.name}</span>
