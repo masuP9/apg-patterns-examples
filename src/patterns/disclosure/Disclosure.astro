@@ -1,0 +1,150 @@
+---
+/**
+ * APG Disclosure Pattern - Astro Implementation
+ *
+ * A button that controls the visibility of a section of content.
+ * Uses Web Components for client-side state management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
+ */
+
+export interface Props {
+  /** Content displayed in the disclosure trigger button */
+  trigger: string;
+  /** When true, the panel is expanded on initial render */
+  defaultExpanded?: boolean;
+  /** When true, the disclosure cannot be expanded/collapsed */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  trigger,
+  defaultExpanded = false,
+  disabled = false,
+  class: className = "",
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = crypto.randomUUID();
+const panelId = `${instanceId}-panel`;
+---
+
+<apg-disclosure
+  class:list={["apg-disclosure", className]}
+  data-expanded={defaultExpanded}
+>
+  <button
+    type="button"
+    aria-expanded={defaultExpanded}
+    aria-controls={panelId}
+    disabled={disabled}
+    class="apg-disclosure-trigger"
+  >
+    <span class="apg-disclosure-icon" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="9 6 15 12 9 18"></polyline>
+      </svg>
+    </span>
+    <span class="apg-disclosure-trigger-content">{trigger}</span>
+  </button>
+  <div
+    id={panelId}
+    class="apg-disclosure-panel"
+    aria-hidden={!defaultExpanded}
+    inert={!defaultExpanded ? true : undefined}
+  >
+    <div class="apg-disclosure-panel-content">
+      <slot />
+    </div>
+  </div>
+</apg-disclosure>
+
+<script>
+  class ApgDisclosure extends HTMLElement {
+    private button: HTMLButtonElement | null = null;
+    private panel: HTMLElement | null = null;
+    private expanded = false;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      // Use requestAnimationFrame to ensure DOM is fully constructed
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.button = this.querySelector(".apg-disclosure-trigger");
+      this.panel = this.querySelector(".apg-disclosure-panel");
+
+      if (!this.button || !this.panel) {
+        console.warn("apg-disclosure: button or panel not found");
+        return;
+      }
+
+      this.expanded = this.dataset.expanded === "true";
+
+      // Attach event listener
+      this.button.addEventListener("click", this.handleClick);
+    }
+
+    disconnectedCallback() {
+      // Cancel pending initialization
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      // Remove event listener
+      this.button?.removeEventListener("click", this.handleClick);
+      // Clean up references
+      this.button = null;
+      this.panel = null;
+    }
+
+    private toggle() {
+      this.expanded = !this.expanded;
+      this.updateDOM();
+
+      // Dispatch custom event
+      this.dispatchEvent(
+        new CustomEvent("expandedchange", {
+          detail: { expanded: this.expanded },
+          bubbles: true,
+        }),
+      );
+    }
+
+    private updateDOM() {
+      if (!this.button || !this.panel) return;
+
+      // Update button aria-expanded
+      this.button.setAttribute("aria-expanded", String(this.expanded));
+
+      // Update panel aria-hidden
+      this.panel.setAttribute("aria-hidden", String(!this.expanded));
+
+      // Toggle inert attribute
+      if (this.expanded) {
+        this.panel.removeAttribute("inert");
+      } else {
+        this.panel.setAttribute("inert", "");
+      }
+    }
+
+    private handleClick = () => {
+      if (this.button?.disabled) return;
+      this.toggle();
+    };
+  }
+
+  // Register the custom element
+  if (!customElements.get("apg-disclosure")) {
+    customElements.define("apg-disclosure", ApgDisclosure);
+  }
+</script>
