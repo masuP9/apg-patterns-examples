@@ -143,13 +143,15 @@ const disabledItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock code={sourceCode} lang="vue" title="Accordion.vue" />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="Accordion.vue" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`<script setup>
 import Accordion from './Accordion.vue';
 
@@ -247,6 +249,8 @@ const items = [
 
     <h3 class="mb-3 text-lg font-medium">AccordionItem Interface</h3>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`interface AccordionItem {
   id: string;
   header: string;
@@ -264,7 +268,7 @@ const items = [
     <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
     <div class="mt-6">
-      <CodeBlock code={testCode} lang="typescript" title="Accordion.test.vue.ts" />
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="typescript" title="Accordion.test.vue.ts" />
     </div>
   </section>
 

@@ -53,13 +53,15 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock code={sourceCode} lang="tsx" title="Switch.tsx" />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Switch.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`import { Switch } from './Switch';
 
 function App() {
@@ -131,7 +133,7 @@ function App() {
       validation.
     </p>
     <div class="mt-6">
-      <CodeBlock code={testCode} lang="tsx" title="Switch.test.tsx" />
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Switch.test.tsx" />
     </div>
   </section>
 

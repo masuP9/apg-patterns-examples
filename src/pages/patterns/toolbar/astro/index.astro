@@ -175,10 +175,10 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
     <div class="space-y-4">
-      <CodeBlock code={toolbarSource} lang="astro" title="Toolbar.astro" />
-      <CodeBlock code={buttonSource} lang="astro" title="ToolbarButton.astro" />
-      <CodeBlock code={toggleSource} lang="astro" title="ToolbarToggleButton.astro" />
-      <CodeBlock code={separatorSource} lang="astro" title="ToolbarSeparator.astro" />
+      <CodeBlock collapsible collapsedLines={5} code={toolbarSource} lang="astro" title="Toolbar.astro" />
+      <CodeBlock collapsible collapsedLines={5} code={buttonSource} lang="astro" title="ToolbarButton.astro" />
+      <CodeBlock collapsible collapsedLines={5} code={toggleSource} lang="astro" title="ToolbarToggleButton.astro" />
+      <CodeBlock collapsible collapsedLines={5} code={separatorSource} lang="astro" title="ToolbarSeparator.astro" />
     </div>
   </section>
 
@@ -186,6 +186,8 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`---
 import Toolbar from '@patterns/toolbar/Toolbar.astro';
 import ToolbarButton from '@patterns/toolbar/ToolbarButton.astro';

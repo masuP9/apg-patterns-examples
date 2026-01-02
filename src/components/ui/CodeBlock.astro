@@ -5,12 +5,19 @@ interface Props {
   code: string;
   lang: 'tsx' | 'vue' | 'svelte' | 'astro' | 'typescript' | 'javascript' | 'html' | 'css';
   title?: string;
+  collapsible?: boolean;
+  collapsedLines?: number;
 }
 
-const { code, lang, title } = Astro.props;
+const { code, lang, title, collapsible = false, collapsedLines = 3 } = Astro.props;
+
+const lines = code.split('\n');
+const lineCount = lines.length;
+const shouldCollapse = collapsible && lineCount > collapsedLines;
+const blockId = `code-block-${Math.random().toString(36).substring(2, 9)}`;
 ---
 
-<div class="code-block">
+<div class="code-block" data-collapsible={shouldCollapse ? 'true' : undefined}>
   {
     title && (
       <div class="code-block-header">
@@ -35,9 +42,41 @@ const { code, lang, title } = Astro.props;
       </div>
     )
   }
-  <div class="code-block-content">
+  <div
+    id={blockId}
+    class:list={['code-block-content', { 'code-collapsed': shouldCollapse }]}
+    data-collapsed-lines={shouldCollapse ? collapsedLines : undefined}
+  >
     <Code code={code} lang={lang} theme="github-dark" />
   </div>
+  {
+    shouldCollapse && (
+      <div class="code-block-toggle">
+        <button
+          class="toggle-button"
+          aria-expanded="false"
+          aria-controls={blockId}
+          data-line-count={lineCount}
+        >
+          <svg
+            class="toggle-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+          <span class="toggle-text">Show more ({lineCount} lines)</span>
+        </button>
+      </div>
+    )
+  }
 </div>
 
 <style>
@@ -90,6 +129,28 @@ const { code, lang, title } = Astro.props;
 
   .code-block-content {
     overflow-x: auto;
+
+    /* Dark scrollbar for code blocks */
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 #1f2937;
+  }
+
+  .code-block-content::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .code-block-content::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+
+  .code-block-content::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+  }
+
+  .code-block-content::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
   }
 
   .code-block-content :global(pre) {
@@ -101,6 +162,76 @@ const { code, lang, title } = Astro.props;
   .code-block-content :global(pre:focus-visible) {
     outline: 2px solid var(--ring);
     outline-offset: -2px;
+  }
+
+  /* Collapsed state */
+  .code-collapsed {
+    position: relative;
+    max-height: calc(1.5rem * var(--collapsed-lines, 3) + 2rem);
+    overflow: hidden;
+  }
+
+  .code-collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, #24292e);
+    pointer-events: none;
+  }
+
+  /* Expanded state */
+  .code-expanded {
+    max-height: none;
+  }
+
+  .code-expanded::after {
+    display: none;
+  }
+
+  /* Toggle button */
+  .code-block-toggle {
+    background-color: #1f2937;
+    border-top: 1px solid #374151;
+    padding: 0.5rem 1rem;
+  }
+
+  .toggle-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+    border-radius: 0.25rem;
+  }
+
+  .toggle-button:hover {
+    background-color: #374151;
+    color: #f3f4f6;
+  }
+
+  .toggle-button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .toggle-icon {
+    transition: transform 0.2s;
+  }
+
+  .toggle-button[aria-expanded='true'] .toggle-icon {
+    transform: rotate(180deg);
   }
 
   .sr-only {
@@ -117,22 +248,70 @@ const { code, lang, title } = Astro.props;
 </style>
 
 <script>
-  document.querySelectorAll('.copy-button').forEach((button) => {
-    button.addEventListener('click', async () => {
-      const code = button.getAttribute('data-code');
-      const feedback = button.querySelector('.copy-feedback');
+  function initCodeBlocks() {
+    // Copy button functionality
+    document.querySelectorAll('.copy-button').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const code = button.getAttribute('data-code');
+        const feedback = button.querySelector('.copy-feedback');
 
-      if (code && feedback) {
-        try {
-          await navigator.clipboard.writeText(code);
-          feedback.textContent = 'Copied!';
-          setTimeout(() => {
-            feedback.textContent = '';
-          }, 2000);
-        } catch {
-          feedback.textContent = 'Failed to copy';
+        if (code && feedback) {
+          try {
+            await navigator.clipboard.writeText(code);
+            feedback.textContent = 'Copied!';
+            setTimeout(() => {
+              feedback.textContent = '';
+            }, 2000);
+          } catch {
+            feedback.textContent = 'Failed to copy';
+          }
         }
+      });
+    });
+
+    // Toggle button functionality
+    document.querySelectorAll('.toggle-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const contentId = button.getAttribute('aria-controls');
+        const content = contentId ? document.getElementById(contentId) : null;
+        const lineCount = button.getAttribute('data-line-count');
+
+        if (content) {
+          const isExpanded = content.classList.contains('code-expanded');
+
+          if (isExpanded) {
+            content.classList.remove('code-expanded');
+            content.classList.add('code-collapsed');
+            button.setAttribute('aria-expanded', 'false');
+            const textEl = button.querySelector('.toggle-text');
+            if (textEl) {
+              textEl.textContent = `Show more (${lineCount} lines)`;
+            }
+          } else {
+            content.classList.remove('code-collapsed');
+            content.classList.add('code-expanded');
+            button.setAttribute('aria-expanded', 'true');
+            const textEl = button.querySelector('.toggle-text');
+            if (textEl) {
+              textEl.textContent = 'Show less';
+            }
+          }
+        }
+      });
+    });
+
+    // Set CSS variable for collapsed lines
+    document.querySelectorAll('.code-collapsed').forEach((el) => {
+      const lines = el.getAttribute('data-collapsed-lines');
+      if (lines) {
+        (el as HTMLElement).style.setProperty('--collapsed-lines', lines);
       }
     });
-  });
+  }
+
+  // Initialize on page load
+  initCodeBlocks();
+
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:after-swap', initCodeBlocks);
 </script>

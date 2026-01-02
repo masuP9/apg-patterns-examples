@@ -53,13 +53,15 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock code={sourceCode} lang="svelte" title="Switch.svelte" />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="svelte" title="Switch.svelte" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`<script>
   import Switch from './Switch.svelte';
 
@@ -133,7 +135,7 @@ const tocItems = [
       validation.
     </p>
     <div class="mt-6">
-      <CodeBlock code={testCode} lang="typescript" title="Switch.test.svelte.ts" />
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="typescript" title="Switch.test.svelte.ts" />
     </div>
   </section>
 
