@@ -87,13 +87,15 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock code={sourceCode} lang="astro" title="Alert.astro" />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="Alert.astro" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`---
 import Alert from './Alert.astro';
 ---

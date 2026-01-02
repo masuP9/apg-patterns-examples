@@ -55,13 +55,15 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock code={sourceCode} lang="tsx" title="Alert.tsx" />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Alert.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
+      collapsible
+      collapsedLines={5}
       code={`import { useState } from 'react';
 import { Alert } from './Alert';
 
@@ -156,7 +158,7 @@ function App() {
     <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
     <div class="mt-6">
-      <CodeBlock code={testCode} lang="tsx" title="Alert.test.tsx" />
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Alert.test.tsx" />
     </div>
   </section>
 
