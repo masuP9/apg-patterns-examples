@@ -16,53 +16,44 @@
     @open-change="(open: boolean) => $emit('openChange', open)"
   >
     <template #trigger="{ open }">
-      <button
-        type="button"
-        :class="`apg-dialog-trigger ${triggerClass}`.trim()"
-        @click="open"
-      >
+      <button type="button" :class="`apg-dialog-trigger ${triggerClass}`.trim()" @click="open">
         {{ triggerText }}
       </button>
     </template>
     <slot />
   </component>
-  <button
-    v-else
-    type="button"
-    :class="`apg-dialog-trigger ${triggerClass}`.trim()"
-    disabled
-  >
+  <button v-else type="button" :class="`apg-dialog-trigger ${triggerClass}`.trim()" disabled>
     {{ triggerText }}
   </button>
 </template>
 
 <script setup lang="ts">
-import { shallowRef, onMounted } from 'vue'
-import type { Component } from 'vue'
+import { shallowRef, onMounted } from 'vue';
+import type { Component } from 'vue';
 
-const DialogComponent = shallowRef<Component | null>(null)
+const DialogComponent = shallowRef<Component | null>(null);
 
 onMounted(async () => {
   // @vite-ignore - Disable HMR for this dynamic import to avoid __VUE_HMR_RUNTIME__ error
-  const module = await import(/* @vite-ignore */ './Dialog.vue')
-  DialogComponent.value = module.default
-})
+  const module = await import(/* @vite-ignore */ './Dialog.vue');
+  DialogComponent.value = module.default;
+});
 
 export interface DialogDemoProps {
   /** Dialog title (required for accessibility) */
-  title: string
+  title: string;
   /** Optional description text */
-  description?: string
+  description?: string;
   /** Text for the trigger button */
-  triggerText: string
+  triggerText: string;
   /** Additional CSS class for trigger button */
-  triggerClass?: string
+  triggerClass?: string;
   /** Default open state */
-  defaultOpen?: boolean
+  defaultOpen?: boolean;
   /** Close on overlay click */
-  closeOnOverlayClick?: boolean
+  closeOnOverlayClick?: boolean;
   /** Additional CSS class for dialog */
-  className?: string
+  className?: string;
 }
 
 withDefaults(defineProps<DialogDemoProps>(), {
@@ -70,10 +61,10 @@ withDefaults(defineProps<DialogDemoProps>(), {
   triggerClass: '',
   defaultOpen: false,
   closeOnOverlayClick: true,
-  className: ''
-})
+  className: '',
+});
 
 defineEmits<{
-  openChange: [open: boolean]
-}>()
+  openChange: [open: boolean];
+}>();
 </script>

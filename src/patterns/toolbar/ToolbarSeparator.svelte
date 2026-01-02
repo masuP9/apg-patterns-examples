@@ -5,9 +5,7 @@
     class?: string;
   }
 
-  let {
-    class: className = ''
-  }: ToolbarSeparatorProps = $props();
+  let { class: className = '' }: ToolbarSeparatorProps = $props();
 
   // Verify we're inside a Toolbar
   const context = getToolbarContext();

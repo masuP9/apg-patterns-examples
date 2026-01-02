@@ -11,9 +11,7 @@ export interface Props {
   class?: string;
 }
 
-const {
-  class: className = '',
-} = Astro.props;
+const { class: className = '' } = Astro.props;
 
 // Default to vertical (for horizontal toolbar)
 // Will be updated by JavaScript if within a vertical toolbar
@@ -24,7 +22,8 @@ const {
     role="separator"
     aria-orientation="vertical"
     class={`apg-toolbar-separator ${className}`.trim()}
-  />
+  >
+  </div>
 </apg-toolbar-separator>
 
 <script>
@@ -46,7 +45,8 @@ const {
       if (toolbar) {
         const toolbarOrientation = toolbar.getAttribute('data-orientation') || 'horizontal';
         // Separator orientation is perpendicular to toolbar orientation
-        const separatorOrientation = toolbarOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+        const separatorOrientation =
+          toolbarOrientation === 'horizontal' ? 'vertical' : 'horizontal';
         this.separator.setAttribute('aria-orientation', separatorOrientation);
       }
     }

@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import type { Snippet } from "svelte";
-  import type { AlertVariant } from "./alert-config";
+  import type { Snippet } from 'svelte';
+  import type { AlertVariant } from './alert-config';
 
   export type { AlertVariant };
 
@@ -44,17 +44,17 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "@/lib/utils";
-  import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from "lucide-svelte";
-  import { variantStyles } from "./alert-config";
+  import { cn } from '@/lib/utils';
+  import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from 'lucide-svelte';
+  import { variantStyles } from './alert-config';
 
   let {
     message,
     children,
-    variant = "info",
+    variant = 'info',
     id: providedId,
     dismissible = false,
-    class: className = "",
+    class: className = '',
     onDismiss,
   }: AlertProps & { onDismiss?: () => void } = $props();
 
@@ -64,10 +64,13 @@
 
   let hasContent = $derived(Boolean(message) || Boolean(children));
   let IconComponent = $derived(
-    variant === "success" ? CircleCheck :
-    variant === "warning" ? AlertTriangle :
-    variant === "error" ? OctagonAlert :
-    Info
+    variant === 'success'
+      ? CircleCheck
+      : variant === 'warning'
+        ? AlertTriangle
+        : variant === 'error'
+          ? OctagonAlert
+          : Info
   );
 
   function handleDismiss() {
@@ -77,13 +80,13 @@
 
 <div
   class={cn(
-    "apg-alert",
+    'apg-alert',
     hasContent && [
-      "relative flex items-start gap-3 px-4 py-3 rounded-lg border",
-      "transition-colors duration-150",
+      'relative flex items-start gap-3 rounded-lg border px-4 py-3',
+      'transition-colors duration-150',
       variantStyles[variant],
     ],
-    !hasContent && "contents",
+    !hasContent && 'contents',
     className
   )}
 >
@@ -91,13 +94,10 @@
   <div
     id={alertId}
     role="alert"
-    class={cn(
-      hasContent && "flex-1 flex items-start gap-3",
-      !hasContent && "contents"
-    )}
+    class={cn(hasContent && 'flex flex-1 items-start gap-3', !hasContent && 'contents')}
   >
     {#if hasContent}
-      <span class="apg-alert-icon flex-shrink-0 mt-0.5" aria-hidden="true">
+      <span class="apg-alert-icon mt-0.5 flex-shrink-0" aria-hidden="true">
         <IconComponent class="size-5" />
       </span>
       <span class="apg-alert-content flex-1">
@@ -114,11 +114,11 @@
     <button
       type="button"
       class={cn(
-        "apg-alert-dismiss",
-        "flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded",
-        "flex items-center justify-center",
-        "hover:bg-black/10 dark:hover:bg-white/10",
-        "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current"
+        'apg-alert-dismiss',
+        '-m-2 min-h-11 min-w-11 flex-shrink-0 rounded p-2',
+        'flex items-center justify-center',
+        'hover:bg-black/10 dark:hover:bg-white/10',
+        'focus:ring-2 focus:ring-current focus:ring-offset-2 focus:outline-none'
       )}
       aria-label="Dismiss alert"
       onclick={handleDismiss}

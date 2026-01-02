@@ -1,12 +1,14 @@
-import { cn } from "@/lib/utils";
-import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from "lucide-react";
-import { useId, type ReactNode } from "react";
-import { type AlertVariant, variantStyles } from "./alert-config";
+import { cn } from '@/lib/utils';
+import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from 'lucide-react';
+import { useId, type ReactNode } from 'react';
+import { type AlertVariant, variantStyles } from './alert-config';
 
 export type { AlertVariant };
 
-export interface AlertProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "role" | "children"> {
+export interface AlertProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'role' | 'children'
+> {
   /**
    * Alert message content.
    * Changes to this prop trigger screen reader announcements.
@@ -58,7 +60,7 @@ const variantIcons: Record<AlertVariant, React.ReactNode> = {
 export const Alert: React.FC<AlertProps> = ({
   message,
   children,
-  variant = "info",
+  variant = 'info',
   id: providedId,
   className,
   dismissible = false,
@@ -74,13 +76,13 @@ export const Alert: React.FC<AlertProps> = ({
   return (
     <div
       className={cn(
-        "apg-alert",
+        'apg-alert',
         hasContent && [
-          "relative flex items-start gap-3 px-4 py-3 rounded-lg border",
-          "transition-colors duration-150",
+          'relative flex items-start gap-3 rounded-lg border px-4 py-3',
+          'transition-colors duration-150',
           variantStyles[variant],
         ],
-        !hasContent && "contents",
+        !hasContent && 'contents',
         className
       )}
       {...restProps}
@@ -89,14 +91,11 @@ export const Alert: React.FC<AlertProps> = ({
       <div
         id={alertId}
         role="alert"
-        className={cn(
-          hasContent && "flex-1 flex items-start gap-3",
-          !hasContent && "contents"
-        )}
+        className={cn(hasContent && 'flex flex-1 items-start gap-3', !hasContent && 'contents')}
       >
         {hasContent && (
           <>
-            <span className="apg-alert-icon flex-shrink-0 mt-0.5" aria-hidden="true">
+            <span className="apg-alert-icon mt-0.5 flex-shrink-0" aria-hidden="true">
               {variantIcons[variant]}
             </span>
             <span className="apg-alert-content flex-1">{content}</span>
@@ -108,11 +107,11 @@ export const Alert: React.FC<AlertProps> = ({
         <button
           type="button"
           className={cn(
-            "apg-alert-dismiss",
-            "flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded",
-            "flex items-center justify-center",
-            "hover:bg-black/10 dark:hover:bg-white/10",
-            "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current"
+            'apg-alert-dismiss',
+            '-m-2 min-h-11 min-w-11 flex-shrink-0 rounded p-2',
+            'flex items-center justify-center',
+            'hover:bg-black/10 dark:hover:bg-white/10',
+            'focus:ring-2 focus:ring-current focus:ring-offset-2 focus:outline-none'
           )}
           onClick={onDismiss}
           aria-label="Dismiss alert"

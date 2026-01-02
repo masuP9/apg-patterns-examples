@@ -1,13 +1,13 @@
 ---
-import PatternLayout from "../../../../layouts/PatternLayout.astro";
-import Tabs from "@patterns/tabs/Tabs.astro";
-import CodeBlock from "@/components/ui/CodeBlock.astro";
-import ExternalLink from "@/components/ui/ExternalLink.astro";
-import AccessibilityDocs from "@patterns/tabs/AccessibilityDocs.astro";
-import FrameworkTabs from "@/components/ui/FrameworkTabs.astro";
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Tabs from '@patterns/tabs/Tabs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
-import sourceCode from "@patterns/tabs/Tabs.astro?raw";
+import sourceCode from '@patterns/tabs/Tabs.astro?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -20,120 +20,119 @@ const tocItems = [
 
 const demoTabs = [
   {
-    id: "tab1",
-    label: "Overview",
+    id: 'tab1',
+    label: 'Overview',
     content:
-      "This is the overview panel content. It provides a general introduction to the product or service.",
+      'This is the overview panel content. It provides a general introduction to the product or service.',
   },
   {
-    id: "tab2",
-    label: "Features",
-    content:
-      "Keyboard navigation support, ARIA compliant, Automatic and manual activation modes.",
+    id: 'tab2',
+    label: 'Features',
+    content: 'Keyboard navigation support, ARIA compliant, Automatic and manual activation modes.',
   },
   {
-    id: "tab3",
-    label: "Pricing",
-    content: "Pricing information would be displayed here.",
+    id: 'tab3',
+    label: 'Pricing',
+    content: 'Pricing information would be displayed here.',
   },
 ];
 
 const manualTabs = [
   {
-    id: "manual1",
-    label: "Tab One",
-    content: "Content for tab one. Press Enter or Space to activate tabs.",
+    id: 'manual1',
+    label: 'Tab One',
+    content: 'Content for tab one. Press Enter or Space to activate tabs.',
   },
-  { id: "manual2", label: "Tab Two", content: "Content for tab two." },
-  { id: "manual3", label: "Tab Three", content: "Content for tab three." },
+  { id: 'manual2', label: 'Tab Two', content: 'Content for tab two.' },
+  { id: 'manual3', label: 'Tab Three', content: 'Content for tab three.' },
 ];
 
 const verticalTabs = [
   {
-    id: "vert1",
-    label: "Settings",
-    content: "Configure your application settings here.",
+    id: 'vert1',
+    label: 'Settings',
+    content: 'Configure your application settings here.',
   },
   {
-    id: "vert2",
-    label: "Profile",
-    content: "Manage your profile information.",
+    id: 'vert2',
+    label: 'Profile',
+    content: 'Manage your profile information.',
   },
   {
-    id: "vert3",
-    label: "Notifications",
-    content: "Set your notification preferences.",
+    id: 'vert3',
+    label: 'Notifications',
+    content: 'Set your notification preferences.',
   },
 ];
 ---
 
 <PatternLayout title="Tabs - Astro" pattern="tabs" framework="astro" tocItems={tocItems}>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">Tabs</h1>
-      <p class="text-lg text-muted-foreground">
-        A set of layered sections of content, known as tab panels, that display
-        one panel of content at a time.
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Tabs</h1>
+    <p class="text-muted-foreground text-lg">
+      A set of layered sections of content, known as tab panels, that display one panel of content
+      at a time.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="tabs" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Default (Automatic Activation) -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Automatic Activation (Default)</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Tabs are activated automatically when focused with arrow keys.
       </p>
-    </header>
-
-    <!-- Framework Selector -->
-    <FrameworkTabs pattern="tabs" currentFramework="astro" />
-
-    <!-- Demo Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
-
-      <!-- Default (Automatic Activation) -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Automatic Activation (Default)</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Tabs are activated automatically when focused with arrow keys.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs tabs={demoTabs} defaultSelectedId="tab1" />
-        </div>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs tabs={demoTabs} defaultSelectedId="tab1" />
       </div>
+    </div>
 
-      <!-- Manual Activation -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Manual Activation</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Tabs require Enter or Space to activate after focusing.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs tabs={manualTabs} defaultSelectedId="manual1" activation="manual" />
-        </div>
+    <!-- Manual Activation -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Manual Activation</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Tabs require Enter or Space to activate after focusing.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs tabs={manualTabs} defaultSelectedId="manual1" activation="manual" />
       </div>
+    </div>
 
-      <!-- Vertical Orientation -->
-      <div>
-        <h3 class="text-lg font-medium mb-3">Vertical Orientation</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Tabs arranged vertically with Up/Down arrow navigation.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Tabs tabs={verticalTabs} defaultSelectedId="vert1" orientation="vertical" />
-        </div>
+    <!-- Vertical Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Vertical Orientation</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Tabs arranged vertically with Up/Down arrow navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs tabs={verticalTabs} defaultSelectedId="vert1" orientation="vertical" />
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Accessibility Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
-      <AccessibilityDocs />
-    </section>
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
 
-    <!-- Source Code Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-      <CodeBlock code={sourceCode} lang="astro" title="Tabs.astro" />
-    </section>
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock code={sourceCode} lang="astro" title="Tabs.astro" />
+  </section>
 
-    <!-- Usage Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
-      <CodeBlock
-        code={`---
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`---
 import Tabs from './Tabs.astro';
 
 const tabs = [
@@ -154,116 +153,110 @@ const tabs = [
     console.log('Tab changed:', e.detail.selectedId);
   });
 </script>`}
-        lang="astro"
-        title="Example"
-      />
-    </section>
+      lang="astro"
+      title="Example"
+    />
+  </section>
 
-    <!-- API Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-      <h3 class="text-lg font-medium mb-3">Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>tabs</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">TabItem[]</td>
-              <td class="py-2 pr-4 text-muted-foreground">required</td>
-              <td class="py-2">Array of tab items</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">string</td>
-              <td class="py-2 pr-4 text-muted-foreground">first tab</td>
-              <td class="py-2">ID of the initially selected tab</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>orientation</code></td>
-              <td class="py-2 pr-4 text-muted-foreground"
-                >'horizontal' | 'vertical'</td
-              >
-              <td class="py-2 pr-4 text-muted-foreground">'horizontal'</td>
-              <td class="py-2">Tab layout direction</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>activation</code></td>
-              <td class="py-2 pr-4 text-muted-foreground"
-                >'automatic' | 'manual'</td
-              >
-              <td class="py-2 pr-4 text-muted-foreground">'automatic'</td>
-              <td class="py-2">How tabs are activated</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>class</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">string</td>
-              <td class="py-2 pr-4 text-muted-foreground">""</td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>tabs</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TabItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of tab items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">first tab</td>
+            <td class="py-2">ID of the initially selected tab</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">Tab layout direction</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>activation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'automatic' | 'manual'</td>
+            <td class="text-muted-foreground py-2 pr-4">'automatic'</td>
+            <td class="py-2">How tabs are activated</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">TabItem Interface</h3>
-      <CodeBlock
-        code={`interface TabItem {
+    <h3 class="mb-3 text-lg font-medium">TabItem Interface</h3>
+    <CodeBlock
+      code={`interface TabItem {
   id: string;
   label: string;
   content: string;
   disabled?: boolean;
 }`}
-        lang="typescript"
-        title="Types"
-      />
+      lang="typescript"
+      title="Types"
+    />
 
-      <h3 class="text-lg font-medium mb-3 mt-6">Custom Events</h3>
-      <ResponsiveTable>
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Event</th>
-              <th class="text-left py-2 pr-4">Detail</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>tabchange</code></td>
-              <td class="py-2 pr-4 text-muted-foreground"
-                >{"{ selectedId: string }"}</td
-              >
-              <td class="py-2">Fired when the selected tab changes</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
-      <p class="mt-4 text-sm text-muted-foreground">
-        This component uses a Web Component (<code>&lt;apg-tabs&gt;</code>) for
-        client-side keyboard navigation and state management.
-      </p>
-    </section>
+    <h3 class="mt-6 mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>tabchange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ selectedId: string }'}</td>
+            <td class="py-2">Fired when the selected tab changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      This component uses a Web Component (<code>&lt;apg-tabs&gt;</code>) for client-side keyboard
+      navigation and state management.
+    </p>
+  </section>
 
-    <!-- Resources -->
-    <section>
-      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>
-          <ExternalLink
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA APG: Tabs Pattern
-          </ExternalLink>
-        </li>
-      </ul>
-    </section>
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Tabs Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
 </PatternLayout>

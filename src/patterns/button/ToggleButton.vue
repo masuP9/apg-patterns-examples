@@ -10,10 +10,7 @@
     <span class="apg-toggle-button-content">
       <slot />
     </span>
-    <span
-      class="apg-toggle-indicator"
-      aria-hidden="true"
-    >
+    <span class="apg-toggle-indicator" aria-hidden="true">
       <template v-if="pressed">
         <slot name="pressed-indicator">{{ props.pressedIndicator ?? '●' }}</slot>
       </template>
@@ -25,12 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 // Inherit all HTML button attributes
 defineOptions({
-  inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
 export interface ToggleButtonProps {
   /** Initial pressed state */
@@ -50,28 +47,28 @@ const props = withDefaults(defineProps<ToggleButtonProps>(), {
   disabled: false,
   onToggle: undefined,
   pressedIndicator: undefined,
-  unpressedIndicator: undefined
-})
+  unpressedIndicator: undefined,
+});
 
 const emit = defineEmits<{
-  toggle: [pressed: boolean]
-}>()
+  toggle: [pressed: boolean];
+}>();
 
 defineSlots<{
-  default(): unknown
-  'pressed-indicator'(): unknown
-  'unpressed-indicator'(): unknown
-}>()
+  default(): unknown;
+  'pressed-indicator'(): unknown;
+  'unpressed-indicator'(): unknown;
+}>();
 
-const pressed = ref(props.initialPressed)
+const pressed = ref(props.initialPressed);
 
 const handleClick = () => {
-  const newPressed = !pressed.value
-  pressed.value = newPressed
+  const newPressed = !pressed.value;
+  pressed.value = newPressed;
 
   // Call onToggle prop if provided (for React compatibility)
-  props.onToggle?.(newPressed)
+  props.onToggle?.(newPressed);
   // Emit Vue event
-  emit('toggle', newPressed)
-}
+  emit('toggle', newPressed);
+};
 </script>

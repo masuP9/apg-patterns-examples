@@ -19,23 +19,21 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
 
 <div class="code-tabs" data-tabs-id={tabsId}>
   <div class="code-tabs-header" role="tablist" aria-label="Code examples">
-    {tabs.map((tab, index) => (
-      <button
-        role="tab"
-        aria-selected={index === defaultTab}
-        aria-controls={`${tabsId}-panel-${index}`}
-        id={`${tabsId}-tab-${index}`}
-        class={`code-tab ${index === defaultTab ? 'active' : ''}`}
-        data-tab-index={index}
-      >
-        {tab.label}
-      </button>
-    ))}
-    <button
-      class="copy-button"
-      data-tabs-id={tabsId}
-      aria-label="Copy code to clipboard"
-    >
+    {
+      tabs.map((tab, index) => (
+        <button
+          role="tab"
+          aria-selected={index === defaultTab}
+          aria-controls={`${tabsId}-panel-${index}`}
+          id={`${tabsId}-tab-${index}`}
+          class={`code-tab ${index === defaultTab ? 'active' : ''}`}
+          data-tab-index={index}
+        >
+          {tab.label}
+        </button>
+      ))
+    }
+    <button class="copy-button" data-tabs-id={tabsId} aria-label="Copy code to clipboard">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -47,31 +45,31 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
       </svg>
       <span class="copy-feedback sr-only" aria-live="polite"></span>
     </button>
   </div>
 
-  {tabs.map((tab, index) => (
-    <div
-      role="tabpanel"
-      id={`${tabsId}-panel-${index}`}
-      aria-labelledby={`${tabsId}-tab-${index}`}
-      class={`code-tab-panel ${index === defaultTab ? 'active' : ''}`}
-      data-tab-index={index}
-      data-code={tab.code}
-      hidden={index !== defaultTab}
-    >
-      {tab.filename && (
-        <div class="code-filename">{tab.filename}</div>
-      )}
-      <div class="code-content">
-        <Code code={tab.code} lang={tab.lang} theme="github-dark" />
+  {
+    tabs.map((tab, index) => (
+      <div
+        role="tabpanel"
+        id={`${tabsId}-panel-${index}`}
+        aria-labelledby={`${tabsId}-tab-${index}`}
+        class={`code-tab-panel ${index === defaultTab ? 'active' : ''}`}
+        data-tab-index={index}
+        data-code={tab.code}
+        hidden={index !== defaultTab}
+      >
+        {tab.filename && <div class="code-filename">{tab.filename}</div>}
+        <div class="code-content">
+          <Code code={tab.code} lang={tab.lang} theme="github-dark" />
+        </div>
       </div>
-    </div>
-  ))}
+    ))
+  }
 </div>
 
 <style>
@@ -99,7 +97,9 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
     border: none;
     border-bottom: 2px solid transparent;
     cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
     white-space: nowrap;
   }
 
@@ -129,7 +129,9 @@ const tabsId = `code-tabs-${Math.random().toString(36).slice(2, 9)}`;
     border: none;
     color: #9ca3af;
     cursor: pointer;
-    transition: color 0.2s, background-color 0.2s;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
   }
 
   .code-tabs-header :global(.copy-button:hover) {

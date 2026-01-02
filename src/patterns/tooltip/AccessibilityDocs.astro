@@ -4,35 +4,43 @@ import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="text-lg font-medium mb-3">WAI-ARIA Roles</h3>
-  <ul class="list-disc pl-6 mb-6 space-y-2">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
       <code>tooltip</code> - A contextual popup that displays a description for an element<br />
-      <ExternalLink href="https://w3c.github.io/aria/#tooltip" class="text-sm text-primary hover:underline">
+      <ExternalLink
+        href="https://w3c.github.io/aria/#tooltip"
+        class="text-primary text-sm hover:underline"
+      >
         WAI-ARIA tooltip role
       </ExternalLink>
     </li>
   </ul>
 
-  <h3 class="text-lg font-medium mb-3">WAI-ARIA States &amp; Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States &amp; Properties</h3>
   <div class="mb-6">
-    <h4 class="font-medium mb-2"><code>aria-describedby</code></h4>
-    <p class="text-muted-foreground mb-3">References the tooltip element to provide an accessible description for the trigger element.</p>
+    <h4 class="mb-2 font-medium"><code>aria-describedby</code></h4>
+    <p class="text-muted-foreground mb-3">
+      References the tooltip element to provide an accessible description for the trigger element.
+    </p>
     <ResponsiveTable class="mb-2">
       <table class="w-full border-collapse">
         <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4 font-medium w-32">Applied to</td>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Applied to</td>
             <td class="py-2">Trigger element (wrapper)</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">When</td>
             <td class="py-2">Only when tooltip is visible</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">Reference</td>
             <td class="py-2">
-              <ExternalLink href="https://w3c.github.io/aria/#aria-describedby" class="text-primary hover:underline">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-describedby"
+                class="text-primary hover:underline"
+              >
                 aria-describedby
               </ExternalLink>
             </td>
@@ -43,25 +51,30 @@ import { ResponsiveTable } from '@/components/ui/table';
   </div>
 
   <div class="mb-6">
-    <h4 class="font-medium mb-2"><code>aria-hidden</code></h4>
-    <p class="text-muted-foreground mb-3">Indicates whether the tooltip is hidden from assistive technology.</p>
+    <h4 class="mb-2 font-medium"><code>aria-hidden</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates whether the tooltip is hidden from assistive technology.
+    </p>
     <ResponsiveTable class="mb-2">
       <table class="w-full border-collapse">
         <tbody>
-          <tr class="border-b border-border">
-            <td class="py-2 pr-4 font-medium w-32">Values</td>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
             <td class="py-2">
               <code>true</code> (hidden) | <code>false</code> (visible)
             </td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">Default</td>
             <td class="py-2"><code>true</code></td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">Reference</td>
             <td class="py-2">
-              <ExternalLink href="https://w3c.github.io/aria/#aria-hidden" class="text-primary hover:underline">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-hidden"
+                class="text-primary hover:underline"
+              >
                 aria-hidden
               </ExternalLink>
             </td>
@@ -71,67 +84,79 @@ import { ResponsiveTable } from '@/components/ui/table';
     </ResponsiveTable>
   </div>
 
-  <h3 class="text-lg font-medium mb-3">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Key</th>
-          <th class="text-left py-2">Action</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Escape</kbd></td>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
           <td class="py-2">Closes the tooltip</td>
         </tr>
-        <tr class="border-b border-border">
-          <td class="py-2 pr-4"><kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">Tab</kbd></td>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
           <td class="py-2">Standard focus navigation; tooltip shows when trigger receives focus</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="text-lg font-medium mb-3">Focus Management</h3>
-  <ul class="list-disc pl-6 mb-6 space-y-2">
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Tooltip never receives focus</strong> - Per APG, tooltips must not be focusable. If interactive content is needed, use a Dialog or Popover pattern instead.
+      <strong>Tooltip never receives focus</strong> - Per APG, tooltips must not be focusable. If interactive
+      content is needed, use a Dialog or Popover pattern instead.
     </li>
     <li>
-      <strong>Focus triggers display</strong> - When the trigger element receives focus, the tooltip appears after the configured delay.
+      <strong>Focus triggers display</strong> - When the trigger element receives focus, the tooltip appears
+      after the configured delay.
     </li>
     <li>
       <strong>Blur hides tooltip</strong> - When focus leaves the trigger element, the tooltip is hidden.
     </li>
   </ul>
 
-  <h3 class="text-lg font-medium mb-3">Mouse/Pointer Behavior</h3>
-  <ul class="list-disc pl-6 mb-6 space-y-2">
+  <h3 class="mb-3 text-lg font-medium">Mouse/Pointer Behavior</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Hover triggers display</strong> - Moving the pointer over the trigger shows the tooltip after the delay.
+      <strong>Hover triggers display</strong> - Moving the pointer over the trigger shows the tooltip
+      after the delay.
     </li>
     <li>
       <strong>Pointer leave hides</strong> - Moving the pointer away from the trigger hides the tooltip.
     </li>
   </ul>
 
-  <h3 class="text-lg font-medium mb-3">Important Notes</h3>
-  <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6">
-    <p class="text-amber-800 dark:text-amber-200 text-sm">
-      <strong>Note:</strong> The APG Tooltip pattern is currently marked as "work in progress" by the WAI.
-      This implementation follows the documented guidelines, but the specification may evolve.
-      <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/" class="text-amber-700 dark:text-amber-300 hover:underline ml-1">
+  <h3 class="mb-3 text-lg font-medium">Important Notes</h3>
+  <div
+    class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20"
+  >
+    <p class="text-sm text-amber-800 dark:text-amber-200">
+      <strong>Note:</strong> The APG Tooltip pattern is currently marked as "work in progress" by the
+      WAI. This implementation follows the documented guidelines, but the specification may evolve.
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/"
+        class="ml-1 text-amber-700 hover:underline dark:text-amber-300"
+      >
         View APG Tooltip Pattern
       </ExternalLink>
     </p>
   </div>
 
-  <h3 class="text-lg font-medium mb-3">Visual Design</h3>
+  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
   <p class="text-muted-foreground mb-3">
     This implementation follows best practices for tooltip visibility:
   </p>
-  <ul class="list-disc pl-6 mb-6 space-y-2">
+  <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
       <strong>High contrast</strong> - Dark background with light text ensures readability
     </li>

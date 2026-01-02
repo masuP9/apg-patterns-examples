@@ -1,5 +1,5 @@
 ---
-export type TooltipPlacement = "top" | "bottom" | "left" | "right";
+export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export interface Props {
   /** Tooltip content */
@@ -24,29 +24,29 @@ const {
   content,
   defaultOpen = false,
   delay = 300,
-  placement = "top",
+  placement = 'top',
   id,
   disabled = false,
-  class: className = "",
-  tooltipClass = "",
+  class: className = '',
+  tooltipClass = '',
 } = Astro.props;
 
 const tooltipId = id ?? `tooltip-${crypto.randomUUID().slice(0, 8)}`;
 
 const placementClasses: Record<TooltipPlacement, string> = {
-  top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-  bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-  left: "right-full top-1/2 -translate-y-1/2 mr-2",
-  right: "left-full top-1/2 -translate-y-1/2 ml-2",
+  top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+  bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+  left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+  right: 'left-full top-1/2 -translate-y-1/2 ml-2',
 };
 ---
 
 <apg-tooltip
-  class:list={["apg-tooltip-trigger", "relative inline-block", className]}
+  class:list={['apg-tooltip-trigger', 'relative inline-block', className]}
   data-delay={delay}
-  data-disabled={disabled ? "true" : undefined}
+  data-disabled={disabled ? 'true' : undefined}
   data-tooltip-id={tooltipId}
-  data-default-open={defaultOpen ? "true" : undefined}
+  data-default-open={defaultOpen ? 'true' : undefined}
 >
   <slot />
   <span
@@ -54,14 +54,14 @@ const placementClasses: Record<TooltipPlacement, string> = {
     role="tooltip"
     aria-hidden="true"
     class:list={[
-      "apg-tooltip",
-      "absolute z-50 px-3 py-1.5 text-sm",
-      "bg-gray-900 text-white rounded-md shadow-lg",
-      "dark:bg-gray-100 dark:text-gray-900",
-      "pointer-events-none whitespace-nowrap",
-      "transition-opacity duration-150",
+      'apg-tooltip',
+      'absolute z-50 px-3 py-1.5 text-sm',
+      'rounded-md bg-gray-900 text-white shadow-lg',
+      'dark:bg-gray-100 dark:text-gray-900',
+      'pointer-events-none whitespace-nowrap',
+      'transition-opacity duration-150',
       placementClasses[placement],
-      "opacity-0 invisible",
+      'invisible opacity-0',
       tooltipClass,
     ]}
   >
@@ -82,35 +82,35 @@ const placementClasses: Record<TooltipPlacement, string> = {
       super();
       this.delay = 300;
       this.disabled = false;
-      this.tooltipId = "";
+      this.tooltipId = '';
     }
 
     connectedCallback() {
-      this.delay = parseInt(this.dataset.delay ?? "300", 10);
-      this.disabled = this.dataset.disabled === "true";
-      this.tooltipId = this.dataset.tooltipId ?? "";
+      this.delay = parseInt(this.dataset.delay ?? '300', 10);
+      this.disabled = this.dataset.disabled === 'true';
+      this.tooltipId = this.dataset.tooltipId ?? '';
       this.tooltipEl = this.querySelector(`#${this.tooltipId}`);
 
-      if (this.dataset.defaultOpen === "true") {
+      if (this.dataset.defaultOpen === 'true') {
         this.showTooltip();
       }
 
-      this.addEventListener("mouseenter", this.handleMouseEnter);
-      this.addEventListener("mouseleave", this.handleMouseLeave);
-      this.addEventListener("focusin", this.handleFocusIn);
-      this.addEventListener("focusout", this.handleFocusOut);
-      document.addEventListener("keydown", this.handleKeyDown);
+      this.addEventListener('mouseenter', this.handleMouseEnter);
+      this.addEventListener('mouseleave', this.handleMouseLeave);
+      this.addEventListener('focusin', this.handleFocusIn);
+      this.addEventListener('focusout', this.handleFocusOut);
+      document.addEventListener('keydown', this.handleKeyDown);
     }
 
     disconnectedCallback() {
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
-      this.removeEventListener("mouseenter", this.handleMouseEnter);
-      this.removeEventListener("mouseleave", this.handleMouseLeave);
-      this.removeEventListener("focusin", this.handleFocusIn);
-      this.removeEventListener("focusout", this.handleFocusOut);
-      document.removeEventListener("keydown", this.handleKeyDown);
+      this.removeEventListener('mouseenter', this.handleMouseEnter);
+      this.removeEventListener('mouseleave', this.handleMouseLeave);
+      this.removeEventListener('focusin', this.handleFocusIn);
+      this.removeEventListener('focusout', this.handleFocusOut);
+      document.removeEventListener('keydown', this.handleKeyDown);
     }
 
     private handleMouseEnter = () => {
@@ -130,7 +130,7 @@ const placementClasses: Record<TooltipPlacement, string> = {
     };
 
     private handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && this.isOpen) {
+      if (event.key === 'Escape' && this.isOpen) {
         this.hideTooltip();
       }
     };
@@ -148,10 +148,10 @@ const placementClasses: Record<TooltipPlacement, string> = {
     private showTooltip() {
       if (this.disabled || !this.tooltipEl) return;
       this.isOpen = true;
-      this.tooltipEl.setAttribute("aria-hidden", "false");
-      this.tooltipEl.classList.remove("opacity-0", "invisible");
-      this.tooltipEl.classList.add("opacity-100", "visible");
-      this.setAttribute("aria-describedby", this.tooltipId);
+      this.tooltipEl.setAttribute('aria-hidden', 'false');
+      this.tooltipEl.classList.remove('opacity-0', 'invisible');
+      this.tooltipEl.classList.add('opacity-100', 'visible');
+      this.setAttribute('aria-describedby', this.tooltipId);
     }
 
     private hideTooltip() {
@@ -161,12 +161,12 @@ const placementClasses: Record<TooltipPlacement, string> = {
       }
       if (!this.tooltipEl) return;
       this.isOpen = false;
-      this.tooltipEl.setAttribute("aria-hidden", "true");
-      this.tooltipEl.classList.remove("opacity-100", "visible");
-      this.tooltipEl.classList.add("opacity-0", "invisible");
-      this.removeAttribute("aria-describedby");
+      this.tooltipEl.setAttribute('aria-hidden', 'true');
+      this.tooltipEl.classList.remove('opacity-100', 'visible');
+      this.tooltipEl.classList.add('opacity-0', 'invisible');
+      this.removeAttribute('aria-describedby');
     }
   }
 
-  customElements.define("apg-tooltip", ApgTooltip);
+  customElements.define('apg-tooltip', ApgTooltip);
 </script>

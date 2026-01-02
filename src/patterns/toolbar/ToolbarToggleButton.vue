@@ -1,11 +1,11 @@
 <script lang="ts">
 export interface ToolbarToggleButtonProps {
   /** Controlled pressed state */
-  pressed?: boolean
+  pressed?: boolean;
   /** Default pressed state (uncontrolled) */
-  defaultPressed?: boolean
+  defaultPressed?: boolean;
   /** Whether the button is disabled */
-  disabled?: boolean
+  disabled?: boolean;
 }
 </script>
 
@@ -23,51 +23,54 @@ export interface ToolbarToggleButtonProps {
 </template>
 
 <script setup lang="ts">
-import { ref, inject, computed } from 'vue'
-import { ToolbarContextKey } from './toolbar-context'
+import { ref, inject, computed } from 'vue';
+import { ToolbarContextKey } from './toolbar-context';
 
 defineOptions({
-  inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
-const props = withDefaults(defineProps<{
-  /** Controlled pressed state */
-  pressed?: boolean
-  /** Default pressed state (uncontrolled) */
-  defaultPressed?: boolean
-  /** Whether the button is disabled */
-  disabled?: boolean
-}>(), {
-  pressed: undefined,
-  defaultPressed: false,
-  disabled: false
-})
+const props = withDefaults(
+  defineProps<{
+    /** Controlled pressed state */
+    pressed?: boolean;
+    /** Default pressed state (uncontrolled) */
+    defaultPressed?: boolean;
+    /** Whether the button is disabled */
+    disabled?: boolean;
+  }>(),
+  {
+    pressed: undefined,
+    defaultPressed: false,
+    disabled: false,
+  }
+);
 
 const emit = defineEmits<{
-  'update:pressed': [pressed: boolean]
-  'pressed-change': [pressed: boolean]
-}>()
+  'update:pressed': [pressed: boolean];
+  'pressed-change': [pressed: boolean];
+}>();
 
 // Verify we're inside a Toolbar
-const context = inject(ToolbarContextKey)
+const context = inject(ToolbarContextKey);
 if (!context) {
-  console.warn('ToolbarToggleButton must be used within a Toolbar')
+  console.warn('ToolbarToggleButton must be used within a Toolbar');
 }
 
-const internalPressed = ref(props.defaultPressed)
-const isControlled = computed(() => props.pressed !== undefined)
-const currentPressed = computed(() => isControlled.value ? props.pressed : internalPressed.value)
+const internalPressed = ref(props.defaultPressed);
+const isControlled = computed(() => props.pressed !== undefined);
+const currentPressed = computed(() => (isControlled.value ? props.pressed : internalPressed.value));
 
 const handleClick = () => {
-  if (props.disabled) return
+  if (props.disabled) return;
 
-  const newPressed = !currentPressed.value
+  const newPressed = !currentPressed.value;
 
   if (!isControlled.value) {
-    internalPressed.value = newPressed
+    internalPressed.value = newPressed;
   }
 
-  emit('update:pressed', newPressed)
-  emit('pressed-change', newPressed)
-}
+  emit('update:pressed', newPressed);
+  emit('pressed-change', newPressed);
+};
 </script>

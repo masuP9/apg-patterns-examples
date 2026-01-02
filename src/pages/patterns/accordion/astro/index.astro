@@ -23,18 +23,21 @@ const defaultItems = [
   {
     id: 'section1',
     header: 'What is an Accordion?',
-    content: 'An accordion is a vertically stacked set of interactive headings that each reveal a section of content. They are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.',
+    content:
+      'An accordion is a vertically stacked set of interactive headings that each reveal a section of content. They are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.',
     defaultExpanded: true,
   },
   {
     id: 'section2',
     header: 'When to use an Accordion?',
-    content: 'Use accordions when you need to organize content into collapsible sections. This helps reduce visual clutter while keeping information accessible. They are particularly useful for FAQs, settings panels, and navigation menus.',
+    content:
+      'Use accordions when you need to organize content into collapsible sections. This helps reduce visual clutter while keeping information accessible. They are particularly useful for FAQs, settings panels, and navigation menus.',
   },
   {
     id: 'section3',
     header: 'Accessibility Considerations',
-    content: 'Accordions must be keyboard accessible and properly announce their expanded/collapsed state to screen readers. Each header should be a proper heading element, and the panel should be associated with its header via aria-controls and aria-labelledby.',
+    content:
+      'Accordions must be keyboard accessible and properly announce their expanded/collapsed state to screen readers. Each header should be a proper heading element, and the panel should be associated with its header via aria-controls and aria-labelledby.',
   },
 ];
 
@@ -42,7 +45,8 @@ const multipleItems = [
   {
     id: 'multi1',
     header: 'Section One',
-    content: 'Content for section one. With allowMultiple enabled, multiple sections can be open at the same time.',
+    content:
+      'Content for section one. With allowMultiple enabled, multiple sections can be open at the same time.',
   },
   {
     id: 'multi2',
@@ -71,91 +75,80 @@ const disabledItems = [
   {
     id: 'dis3',
     header: 'Another Available Section',
-    content: 'This section can also be expanded. Notice that arrow key navigation skips the disabled section.',
+    content:
+      'This section can also be expanded. Notice that arrow key navigation skips the disabled section.',
   },
 ];
 ---
 
 <PatternLayout title="Accordion - Astro" pattern="accordion" framework="astro" tocItems={tocItems}>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">Accordion</h1>
-      <p class="text-lg text-muted-foreground">
-        A vertically stacked set of interactive headings that each reveal a section of content.
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Accordion</h1>
+    <p class="text-muted-foreground text-lg">
+      A vertically stacked set of interactive headings that each reveal a section of content.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="accordion" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Default (Single Expansion) -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Single Expansion (Default)</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Only one panel can be expanded at a time. Opening a new panel closes the previously open
+        one.
       </p>
-    </header>
-
-    <!-- Framework Selector -->
-    <FrameworkTabs pattern="accordion" currentFramework="astro" />
-
-    <!-- Demo Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
-
-      <!-- Default (Single Expansion) -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Single Expansion (Default)</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Only one panel can be expanded at a time. Opening a new panel closes the previously open one.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Accordion
-            items={defaultItems}
-            headingLevel={3}
-          />
-        </div>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion items={defaultItems} headingLevel={3} />
       </div>
+    </div>
 
-      <!-- Multiple Expansion -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Multiple Expansion</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Multiple panels can be expanded simultaneously using the <code>allowMultiple</code> prop.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Accordion
-            items={multipleItems}
-            allowMultiple={true}
-            headingLevel={3}
-          />
-        </div>
+    <!-- Multiple Expansion -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Multiple Expansion</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Multiple panels can be expanded simultaneously using the <code>allowMultiple</code> prop.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion items={multipleItems} allowMultiple={true} headingLevel={3} />
       </div>
+    </div>
 
-      <!-- Disabled Items -->
-      <div>
-        <h3 class="text-lg font-medium mb-3">With Disabled Items</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Individual accordion items can be disabled. Keyboard navigation automatically skips disabled items.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Accordion
-            items={disabledItems}
-            headingLevel={3}
-          />
-        </div>
+    <!-- Disabled Items -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Individual accordion items can be disabled. Keyboard navigation automatically skips disabled
+        items.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion items={disabledItems} headingLevel={3} />
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Accessibility Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
-      <AccessibilityDocs />
-    </section>
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
 
-    <!-- Source Code Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-      <CodeBlock
-        code={sourceCode}
-        lang="astro"
-        title="Accordion.astro"
-      />
-    </section>
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock code={sourceCode} lang="astro" title="Accordion.astro" />
+  </section>
 
-    <!-- Usage Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
-      <CodeBlock
-        code={`---
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`---
 import Accordion from './Accordion.astro';
 
 const items = [
@@ -178,125 +171,125 @@ const items = [
   headingLevel={3}
   allowMultiple={false}
 />`}
-        lang="astro"
-        title="Example"
-      />
-    </section>
+      lang="astro"
+      title="Example"
+    />
+  </section>
 
-    <!-- API Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-      <h3 class="text-lg font-medium mb-3">Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>items</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">AccordionItem[]</td>
-              <td class="py-2 pr-4 text-muted-foreground">required</td>
-              <td class="py-2">Array of accordion items</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>allowMultiple</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-              <td class="py-2 pr-4 text-muted-foreground">false</td>
-              <td class="py-2">Allow multiple panels to be expanded</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>headingLevel</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">2 | 3 | 4 | 5 | 6</td>
-              <td class="py-2 pr-4 text-muted-foreground">3</td>
-              <td class="py-2">Heading level for accessibility</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-              <td class="py-2 pr-4 text-muted-foreground">true</td>
-              <td class="py-2">Enable arrow key navigation</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>class</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">string</td>
-              <td class="py-2 pr-4 text-muted-foreground">""</td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">AccordionItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of accordion items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>allowMultiple</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Allow multiple panels to be expanded</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>headingLevel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">2 | 3 | 4 | 5 | 6</td>
+            <td class="text-muted-foreground py-2 pr-4">3</td>
+            <td class="py-2">Heading level for accessibility</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Enable arrow key navigation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">Events</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Event</th>
-              <th class="text-left py-2 pr-4">Detail</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>expandedchange</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">{"{ expandedIds: string[] }"}</td>
-              <td class="py-2">Fired when the expanded panels change</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>expandedchange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ expandedIds: string[] }'}</td>
+            <td class="py-2">Fired when the expanded panels change</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">AccordionItem Interface</h3>
-      <CodeBlock
-        code={`interface AccordionItem {
+    <h3 class="mb-3 text-lg font-medium">AccordionItem Interface</h3>
+    <CodeBlock
+      code={`interface AccordionItem {
   id: string;
   header: string;
   content: string;
   disabled?: boolean;
   defaultExpanded?: boolean;
 }`}
-        lang="typescript"
-        title="Types"
-      />
-    </section>
+      lang="typescript"
+      title="Types"
+    />
+  </section>
 
-    <!-- Implementation Notes -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Implementation Notes</Heading>
-      <div class="prose dark:prose-invert max-w-none">
-        <p>
-          This Astro implementation uses Web Components (<code>customElements.define</code>)
-          for client-side interactivity. The accordion is rendered as static HTML on the server,
-          and the Web Component enhances it with keyboard navigation and state management.
-        </p>
-        <ul class="list-disc pl-6 mt-4 space-y-2">
-          <li>No JavaScript framework required on the client</li>
-          <li>Works with SSG (Static Site Generation)</li>
-          <li>Progressively enhanced - basic functionality works without JavaScript</li>
-          <li>Minimal JavaScript bundle size</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Resources -->
-    <section>
-      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>
-          <ExternalLink
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA APG: Accordion Pattern
-          </ExternalLink>
-        </li>
+  <!-- Implementation Notes -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Implementation Notes</Heading>
+    <div class="prose dark:prose-invert max-w-none">
+      <p>
+        This Astro implementation uses Web Components (<code>customElements.define</code>) for
+        client-side interactivity. The accordion is rendered as static HTML on the server, and the
+        Web Component enhances it with keyboard navigation and state management.
+      </p>
+      <ul class="mt-4 list-disc space-y-2 pl-6">
+        <li>No JavaScript framework required on the client</li>
+        <li>Works with SSG (Static Site Generation)</li>
+        <li>Progressively enhanced - basic functionality works without JavaScript</li>
+        <li>Minimal JavaScript bundle size</li>
       </ul>
-    </section>
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Accordion Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
 </PatternLayout>

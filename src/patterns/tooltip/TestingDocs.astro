@@ -3,48 +3,49 @@ import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="text-lg font-medium mb-3">Testing Overview</h3>
+  <h3 class="mb-3 text-lg font-medium">Testing Overview</h3>
   <p class="text-muted-foreground mb-4">
-    The Tooltip component tests are organized into priority levels based on APG compliance requirements.
+    The Tooltip component tests are organized into priority levels based on APG compliance
+    requirements.
   </p>
 
-  <h3 class="text-lg font-medium mb-3">Test Categories</h3>
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
   <div class="mb-6">
-    <h4 class="font-medium mb-2 flex items-center gap-2">
-      <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
       High Priority: APG Core Compliance
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Test</th>
-            <th class="text-left py-2">APG Requirement</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Test</th>
+            <th class="py-2 text-left">APG Requirement</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">role="tooltip" exists</td>
             <td class="py-2">Tooltip container must have tooltip role</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">aria-hidden when closed</td>
             <td class="py-2">Hidden tooltips must not be read by AT</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">aria-describedby when visible</td>
             <td class="py-2">Trigger must reference tooltip only when visible</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">Escape key closes tooltip</td>
             <td class="py-2">Keyboard dismissal support</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">Focus shows tooltip</td>
             <td class="py-2">Keyboard accessibility</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">Blur hides tooltip</td>
             <td class="py-2">Focus management</td>
           </tr>
@@ -54,28 +55,28 @@ import { ResponsiveTable } from '@/components/ui/table';
   </div>
 
   <div class="mb-6">
-    <h4 class="font-medium mb-2 flex items-center gap-2">
-      <span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
       Medium Priority: Accessibility Validation
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Test</th>
-            <th class="text-left py-2">WCAG Requirement</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Test</th>
+            <th class="py-2 text-left">WCAG Requirement</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">No axe violations (hidden state)</td>
             <td class="py-2">WCAG 2.1 AA compliance</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">No axe violations (visible state)</td>
             <td class="py-2">WCAG 2.1 AA compliance</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">Tooltip is not focusable</td>
             <td class="py-2">APG: tooltips must not receive focus</td>
           </tr>
@@ -85,44 +86,44 @@ import { ResponsiveTable } from '@/components/ui/table';
   </div>
 
   <div class="mb-6">
-    <h4 class="font-medium mb-2 flex items-center gap-2">
-      <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
       Low Priority: Props &amp; Extensibility
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Test</th>
-            <th class="text-left py-2">Feature</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Test</th>
+            <th class="py-2 text-left">Feature</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">placement prop changes position</td>
             <td class="py-2">Positioning customization</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">disabled prop prevents display</td>
             <td class="py-2">Disable functionality</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">delay prop controls timing</td>
             <td class="py-2">Delay customization</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">id prop sets custom ID</td>
             <td class="py-2">SSR/custom ID support</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">controlled open state</td>
             <td class="py-2">External state control</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">onOpenChange callback</td>
             <td class="py-2">State change notification</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4">className inheritance</td>
             <td class="py-2">Style customization</td>
           </tr>
@@ -131,8 +132,9 @@ import { ResponsiveTable } from '@/components/ui/table';
     </ResponsiveTable>
   </div>
 
-  <h3 class="text-lg font-medium mb-3">Running Tests</h3>
-  <pre class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg text-sm overflow-x-auto"><code># Run all Tooltip tests
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run all Tooltip tests
 npm run test -- tooltip
 
 # Run tests for specific framework

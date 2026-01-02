@@ -1,22 +1,15 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 /**
  * Toolbar context for managing focus state
  */
 interface ToolbarContextValue {
-  orientation: "horizontal" | "vertical";
+  orientation: 'horizontal' | 'vertical';
 }
 
 // Default context value for SSR compatibility
 const defaultContext: ToolbarContextValue = {
-  orientation: "horizontal",
+  orientation: 'horizontal',
 };
 
 const ToolbarContext = createContext<ToolbarContextValue>(defaultContext);
@@ -29,10 +22,9 @@ function useToolbarContext() {
  * Props for the Toolbar component
  * @see https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/
  */
-export interface ToolbarProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "role"> {
+export interface ToolbarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'role'> {
   /** Direction of the toolbar */
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   /** Child elements (ToolbarButton, ToolbarToggleButton, ToolbarSeparator) */
   children: React.ReactNode;
 }
@@ -51,9 +43,9 @@ export interface ToolbarProps
  * ```
  */
 export function Toolbar({
-  orientation = "horizontal",
+  orientation = 'horizontal',
   children,
-  className = "",
+  className = '',
   onKeyDown,
   ...props
 }: ToolbarProps): React.ReactElement {
@@ -63,9 +55,7 @@ export function Toolbar({
   const getButtons = useCallback((): HTMLButtonElement[] => {
     if (!toolbarRef.current) return [];
     return Array.from(
-      toolbarRef.current.querySelectorAll<HTMLButtonElement>(
-        "button:not([disabled])"
-      )
+      toolbarRef.current.querySelectorAll<HTMLButtonElement>('button:not([disabled])')
     );
   }, []);
 
@@ -74,17 +64,13 @@ export function Toolbar({
       const buttons = getButtons();
       if (buttons.length === 0) return;
 
-      const currentIndex = buttons.findIndex(
-        (btn) => btn === document.activeElement
-      );
+      const currentIndex = buttons.findIndex((btn) => btn === document.activeElement);
       if (currentIndex === -1) return;
 
-      const nextKey = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
-      const prevKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
+      const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+      const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
       const invalidKeys =
-        orientation === "vertical"
-          ? ["ArrowLeft", "ArrowRight"]
-          : ["ArrowUp", "ArrowDown"];
+        orientation === 'vertical' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
 
       // Ignore invalid direction keys
       if (invalidKeys.includes(event.key)) {
@@ -111,12 +97,12 @@ export function Toolbar({
           shouldPreventDefault = true;
           break;
 
-        case "Home":
+        case 'Home':
           newIndex = 0;
           shouldPreventDefault = true;
           break;
 
-        case "End":
+        case 'End':
           newIndex = buttons.length - 1;
           shouldPreventDefault = true;
           break;
@@ -186,8 +172,10 @@ export function Toolbar({
 /**
  * Props for the ToolbarButton component
  */
-export interface ToolbarButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+export interface ToolbarButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'type'
+> {
   /** Button content */
   children: React.ReactNode;
 }
@@ -197,7 +185,7 @@ export interface ToolbarButtonProps
  */
 export function ToolbarButton({
   children,
-  className = "",
+  className = '',
   disabled,
   ...props
 }: ToolbarButtonProps): React.ReactElement {
@@ -219,11 +207,10 @@ export function ToolbarButton({
 /**
  * Props for the ToolbarToggleButton component
  */
-export interface ToolbarToggleButtonProps
-  extends Omit<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    "type" | "aria-pressed"
-  > {
+export interface ToolbarToggleButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'type' | 'aria-pressed'
+> {
   /** Controlled pressed state */
   pressed?: boolean;
   /** Default pressed state (uncontrolled) */
@@ -242,7 +229,7 @@ export function ToolbarToggleButton({
   defaultPressed = false,
   onPressedChange,
   children,
-  className = "",
+  className = '',
   disabled,
   onClick,
   ...props
@@ -295,14 +282,11 @@ export interface ToolbarSeparatorProps {
 /**
  * Separator component for use within a Toolbar
  */
-export function ToolbarSeparator({
-  className = "",
-}: ToolbarSeparatorProps): React.ReactElement {
+export function ToolbarSeparator({ className = '' }: ToolbarSeparatorProps): React.ReactElement {
   const { orientation } = useToolbarContext();
 
   // Separator orientation is perpendicular to toolbar orientation
-  const separatorOrientation =
-    orientation === "horizontal" ? "vertical" : "horizontal";
+  const separatorOrientation = orientation === 'horizontal' ? 'vertical' : 'horizontal';
 
   return (
     <div

@@ -3,10 +3,12 @@
 ## TypeScript型アサーション制限
 
 ### 基本方針
+
 - **型アサーション（`as`）の使用は最小限に抑制**
 - 適切な型定義とランタイム型チェックで型安全性を確保
 
 ### 禁止事項
+
 ```typescript
 // ❌ 避けるべきパターン
 const data = response.json() as MyType;
@@ -17,12 +19,11 @@ const config = { ...defaultConfig } as Config;
 ### 推奨パターン
 
 #### 1. Type Guard Functions
+
 ```typescript
 // ✅ 推奨: ランタイム型チェック
 function isMyType(data: unknown): data is MyType {
-  return typeof data === 'object' && 
-         data !== null && 
-         'requiredProp' in data;
+  return typeof data === 'object' && data !== null && 'requiredProp' in data;
 }
 
 const data: unknown = response.json();
@@ -32,15 +33,17 @@ if (isMyType(data)) {
 ```
 
 #### 2. Safe Access Helpers
+
 ```typescript
 // ✅ 推奨: 安全なアクセス関数
 function getCodeForTab(code: FrameworkCode | null, tab: CodeTab): string {
-  if (!code) return "";
-  return code[tab] || "";
+  if (!code) return '';
+  return code[tab] || '';
 }
 ```
 
 #### 3. Proper Type Definitions
+
 ```typescript
 // ✅ 推奨: 適切な型定義
 interface FrameworkCode {
@@ -51,6 +54,7 @@ interface FrameworkCode {
 ```
 
 ### DOM API の適切な処理
+
 ```typescript
 // ❌ 避けるべき: 型アサーションによる強制変換
 const element = document.getElementById('my-id') as HTMLElement;
@@ -80,10 +84,10 @@ const element = document.getElementById('my-input');
 if (isInputElement(element)) {
   element.value = 'safe access';
 }
-
 ```
 
 ### 例外的に許可される場合
+
 1. **外部ライブラリ**: 型定義が不完全な場合
 2. **レガシーコード**: 段階的移行中
 
@@ -93,16 +97,18 @@ const config = thirdPartyLib.getConfig() as Config; // TODO: 型定義改善待�
 ```
 
 ### ESLintルール
+
 ```javascript
 // .eslintrc.js
 "@typescript-eslint/consistent-type-assertions": ["error", {
   "assertionStyle": "as",
-  "objectLiteralTypeAssertions": "never"  
+  "objectLiteralTypeAssertions": "never"
 }],
 "@typescript-eslint/no-unnecessary-type-assertion": "error"
 ```
 
 ### 対策手順
+
 1. **型定義の改善**: 完全な型定義を作成
 2. **Type Guard実装**: ランタイム型チェック関数
 3. **Safe Helper作成**: 安全なアクセス関数
@@ -114,14 +120,17 @@ const config = thirdPartyLib.getConfig() as Config; // TODO: 型定義改善待�
 ## その他のルール
 
 ### Import順序
+
 - React hooks は先頭でアルファベット順
 - 外部ライブラリ → 内部モジュール → 相対パス
 
 ### Error Handling
+
 - `console.error` 使用時は ESLint disable コメント必須
 - Promise の未処理は `void` オペレータで明示
 
 ### アクセシビリティ
+
 - ARIA属性の適切な使用
 - キーボードナビゲーション対応必須
 - スクリーンリーダー対応

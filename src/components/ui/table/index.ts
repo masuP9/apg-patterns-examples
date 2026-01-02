@@ -1,1 +1,1 @@
-export { default as ResponsiveTable } from "./ResponsiveTable.astro";
+export { default as ResponsiveTable } from './ResponsiveTable.astro';

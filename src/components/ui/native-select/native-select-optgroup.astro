@@ -1,11 +1,11 @@
 ---
-import type { HTMLAttributes } from "astro/types"
+import type { HTMLAttributes } from 'astro/types';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface Props extends HTMLAttributes<"optgroup"> {}
+interface Props extends HTMLAttributes<'optgroup'> {}
 
-const { class: className, ...props } = Astro.props
+const { class: className, ...props } = Astro.props;
 ---
 
 <optgroup data-slot="native-select-optgroup" class={cn(className)} {...props}>

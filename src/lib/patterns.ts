@@ -8,7 +8,7 @@
 /**
  * Pattern status
  */
-export type PatternStatus = "available" | "planned";
+export type PatternStatus = 'available' | 'planned';
 
 /**
  * Pattern definition
@@ -18,7 +18,7 @@ export interface Pattern {
   name: string;
   description: string;
   icon: string;
-  complexity: "Low" | "Medium" | "High";
+  complexity: 'Low' | 'Medium' | 'High';
   status: PatternStatus;
 }
 
@@ -31,267 +31,260 @@ export const PATTERNS: Pattern[] = [
   // Available patterns (implemented)
   // ============================================
   {
-    id: "accordion",
-    name: "Accordion",
+    id: 'accordion',
+    name: 'Accordion',
     description:
-      "A vertically stacked set of interactive headings that each reveal a section of content.",
-    icon: "📋",
-    complexity: "Medium",
-    status: "available",
+      'A vertically stacked set of interactive headings that each reveal a section of content.',
+    icon: '📋',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
-    id: "button",
-    name: "Button",
+    id: 'button',
+    name: 'Button',
     description:
-      "A widget that enables users to trigger an action or event, such as submitting a form or toggling a state.",
-    icon: "🔘",
-    complexity: "Low",
-    status: "available",
+      'A widget that enables users to trigger an action or event, such as submitting a form or toggling a state.',
+    icon: '🔘',
+    complexity: 'Low',
+    status: 'available',
   },
   {
-    id: "dialog",
-    name: "Dialog (Modal)",
-    description:
-      "A window overlaid on the primary window, rendering the content underneath inert.",
-    icon: "💬",
-    complexity: "High",
-    status: "available",
+    id: 'dialog',
+    name: 'Dialog (Modal)',
+    description: 'A window overlaid on the primary window, rendering the content underneath inert.',
+    icon: '💬',
+    complexity: 'High',
+    status: 'available',
   },
   {
-    id: "switch",
-    name: "Switch",
+    id: 'switch',
+    name: 'Switch',
     description:
-      "A type of checkbox that represents on/off values, as opposed to checked/unchecked.",
-    icon: "🎚️",
-    complexity: "Low",
-    status: "available",
+      'A type of checkbox that represents on/off values, as opposed to checked/unchecked.',
+    icon: '🎚️',
+    complexity: 'Low',
+    status: 'available',
   },
   {
-    id: "tabs",
-    name: "Tabs",
+    id: 'tabs',
+    name: 'Tabs',
     description:
-      "A set of layered sections of content, known as tab panels, that display one panel at a time.",
-    icon: "📑",
-    complexity: "Medium",
-    status: "available",
+      'A set of layered sections of content, known as tab panels, that display one panel at a time.',
+    icon: '📑',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
-    id: "toolbar",
-    name: "Toolbar",
+    id: 'toolbar',
+    name: 'Toolbar',
     description:
-      "A container for grouping a set of controls, such as buttons, toggle buttons, or checkboxes.",
-    icon: "🔧",
-    complexity: "Medium",
-    status: "available",
+      'A container for grouping a set of controls, such as buttons, toggle buttons, or checkboxes.',
+    icon: '🔧',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
-    id: "tooltip",
-    name: "Tooltip",
+    id: 'tooltip',
+    name: 'Tooltip',
     description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-    icon: "💡",
-    complexity: "Medium",
-    status: "available",
+      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    icon: '💡',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
-    id: "alert",
-    name: "Alert",
+    id: 'alert',
+    name: 'Alert',
     description:
       "An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.",
-    icon: "⚠️",
-    complexity: "Low",
-    status: "available",
+    icon: '⚠️',
+    complexity: 'Low',
+    status: 'available',
   },
   // ============================================
   // Planned patterns (not yet implemented)
   // ============================================
   {
-    id: "alert-dialog",
-    name: "Alert Dialog",
+    id: 'alert-dialog',
+    name: 'Alert Dialog',
     description:
       "A modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.",
-    icon: "🚨",
-    complexity: "High",
-    status: "planned",
+    icon: '🚨',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "breadcrumb",
-    name: "Breadcrumb",
+    id: 'breadcrumb',
+    name: 'Breadcrumb',
+    description: 'A list of links to the parent pages of the current page in hierarchical order.',
+    icon: '🔗',
+    complexity: 'Low',
+    status: 'planned',
+  },
+  {
+    id: 'carousel',
+    name: 'Carousel',
     description:
-      "A list of links to the parent pages of the current page in hierarchical order.",
-    icon: "🔗",
-    complexity: "Low",
-    status: "planned",
+      'Presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides.',
+    icon: '🎠',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "carousel",
-    name: "Carousel",
+    id: 'checkbox',
+    name: 'Checkbox',
     description:
-      "Presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides.",
-    icon: "🎠",
-    complexity: "High",
-    status: "planned",
+      'Supports dual-state (checked/unchecked) and tri-state (checked/unchecked/partially checked) checkboxes.',
+    icon: '☑️',
+    complexity: 'Low',
+    status: 'planned',
   },
   {
-    id: "checkbox",
-    name: "Checkbox",
+    id: 'combobox',
+    name: 'Combobox',
     description:
-      "Supports dual-state (checked/unchecked) and tri-state (checked/unchecked/partially checked) checkboxes.",
-    icon: "☑️",
-    complexity: "Low",
-    status: "planned",
+      'An input widget with an associated popup that enables users to select a value from a collection.',
+    icon: '🔽',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "combobox",
-    name: "Combobox",
+    id: 'menu-button',
+    name: 'Menu Button',
+    description: 'A button that opens a menu of actions or options.',
+    icon: '☰',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
+    id: 'disclosure',
+    name: 'Disclosure',
+    description: 'A button that controls the visibility of a section of content.',
+    icon: '▼',
+    complexity: 'Low',
+    status: 'planned',
+  },
+  {
+    id: 'feed',
+    name: 'Feed',
     description:
-      "An input widget with an associated popup that enables users to select a value from a collection.",
-    icon: "🔽",
-    complexity: "High",
-    status: "planned",
+      'A section of a page that automatically loads new sections of content as the user scrolls.',
+    icon: '📰',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "menu-button",
-    name: "Menu Button",
-    description: "A button that opens a menu of actions or options.",
-    icon: "☰",
-    complexity: "High",
-    status: "planned",
-  },
-  {
-    id: "disclosure",
-    name: "Disclosure",
+    id: 'grid',
+    name: 'Grid',
     description:
-      "A button that controls the visibility of a section of content.",
-    icon: "▼",
-    complexity: "Low",
-    status: "planned",
+      'A container that enables users to navigate the information or interactive elements using directional navigation keys.',
+    icon: '📊',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "feed",
-    name: "Feed",
-    description:
-      "A section of a page that automatically loads new sections of content as the user scrolls.",
-    icon: "📰",
-    complexity: "High",
-    status: "planned",
+    id: 'landmarks',
+    name: 'Landmarks',
+    description: 'A set of eight roles that identify the major sections of a page.',
+    icon: '🗺️',
+    complexity: 'Low',
+    status: 'planned',
   },
   {
-    id: "grid",
-    name: "Grid",
-    description:
-      "A container that enables users to navigate the information or interactive elements using directional navigation keys.",
-    icon: "📊",
-    complexity: "High",
-    status: "planned",
+    id: 'link',
+    name: 'Link',
+    description: 'A widget that provides an interactive reference to a resource.',
+    icon: '↗️',
+    complexity: 'Low',
+    status: 'planned',
   },
   {
-    id: "landmarks",
-    name: "Landmarks",
+    id: 'listbox',
+    name: 'Listbox',
     description:
-      "A set of eight roles that identify the major sections of a page.",
-    icon: "🗺️",
-    complexity: "Low",
-    status: "planned",
+      'A widget that allows the user to select one or more items from a list of choices.',
+    icon: '📝',
+    complexity: 'Medium',
+    status: 'planned',
   },
   {
-    id: "link",
-    name: "Link",
+    id: 'menu',
+    name: 'Menu / Menubar',
     description:
-      "A widget that provides an interactive reference to a resource.",
-    icon: "↗️",
-    complexity: "Low",
-    status: "planned",
+      'A widget that offers a list of choices to the user, such as a set of actions or functions.',
+    icon: '☰',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "listbox",
-    name: "Listbox",
-    description:
-      "A widget that allows the user to select one or more items from a list of choices.",
-    icon: "📝",
-    complexity: "Medium",
-    status: "planned",
+    id: 'meter',
+    name: 'Meter',
+    description: 'A graphical display of a numeric value that varies within a defined range.',
+    icon: '📶',
+    complexity: 'Low',
+    status: 'planned',
   },
   {
-    id: "menu",
-    name: "Menu / Menubar",
+    id: 'radio-group',
+    name: 'Radio Group',
     description:
-      "A widget that offers a list of choices to the user, such as a set of actions or functions.",
-    icon: "☰",
-    complexity: "High",
-    status: "planned",
+      'A set of checkable buttons, known as radio buttons, where only one can be checked at a time.',
+    icon: '🔘',
+    complexity: 'Medium',
+    status: 'planned',
   },
   {
-    id: "meter",
-    name: "Meter",
-    description:
-      "A graphical display of a numeric value that varies within a defined range.",
-    icon: "📶",
-    complexity: "Low",
-    status: "planned",
+    id: 'slider',
+    name: 'Slider',
+    description: 'An input where the user selects a value from within a given range.',
+    icon: '🎚️',
+    complexity: 'Medium',
+    status: 'planned',
   },
   {
-    id: "radio-group",
-    name: "Radio Group",
+    id: 'spinbutton',
+    name: 'Spinbutton',
     description:
-      "A set of checkable buttons, known as radio buttons, where only one can be checked at a time.",
-    icon: "🔘",
-    complexity: "Medium",
-    status: "planned",
+      'An input widget for selecting from a range of discrete values, typically with increment/decrement buttons.',
+    icon: '🔢',
+    complexity: 'Medium',
+    status: 'planned',
   },
   {
-    id: "slider",
-    name: "Slider",
+    id: 'table',
+    name: 'Table',
     description:
-      "An input where the user selects a value from within a given range.",
-    icon: "🎚️",
-    complexity: "Medium",
-    status: "planned",
+      'A static tabular structure containing one or more rows that each contain one or more cells.',
+    icon: '📋',
+    complexity: 'Medium',
+    status: 'planned',
   },
   {
-    id: "spinbutton",
-    name: "Spinbutton",
+    id: 'tree-view',
+    name: 'Tree View',
     description:
-      "An input widget for selecting from a range of discrete values, typically with increment/decrement buttons.",
-    icon: "🔢",
-    complexity: "Medium",
-    status: "planned",
+      'A widget that presents a hierarchical list with nested groups that can be collapsed and expanded.',
+    icon: '🌲',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "table",
-    name: "Table",
+    id: 'treegrid',
+    name: 'Treegrid',
     description:
-      "A static tabular structure containing one or more rows that each contain one or more cells.",
-    icon: "📋",
-    complexity: "Medium",
-    status: "planned",
+      'A widget that presents a hierarchical data grid consisting of tabular information that is editable or interactive.',
+    icon: '📊',
+    complexity: 'High',
+    status: 'planned',
   },
   {
-    id: "tree-view",
-    name: "Tree View",
+    id: 'window-splitter',
+    name: 'Window Splitter',
     description:
-      "A widget that presents a hierarchical list with nested groups that can be collapsed and expanded.",
-    icon: "🌲",
-    complexity: "High",
-    status: "planned",
-  },
-  {
-    id: "treegrid",
-    name: "Treegrid",
-    description:
-      "A widget that presents a hierarchical data grid consisting of tabular information that is editable or interactive.",
-    icon: "📊",
-    complexity: "High",
-    status: "planned",
-  },
-  {
-    id: "window-splitter",
-    name: "Window Splitter",
-    description:
-      "A moveable separator between two sections, or panes, that enables users to change the relative size of the panes.",
-    icon: "⬛",
-    complexity: "Medium",
-    status: "planned",
+      'A moveable separator between two sections, or panes, that enables users to change the relative size of the panes.',
+    icon: '⬛',
+    complexity: 'Medium',
+    status: 'planned',
   },
 ];
 
@@ -299,14 +292,14 @@ export const PATTERNS: Pattern[] = [
  * Get available patterns only
  */
 export function getAvailablePatterns(): Pattern[] {
-  return PATTERNS.filter((p) => p.status === "available");
+  return PATTERNS.filter((p) => p.status === 'available');
 }
 
 /**
  * Get planned patterns only
  */
 export function getPlannedPatterns(): Pattern[] {
-  return PATTERNS.filter((p) => p.status === "planned");
+  return PATTERNS.filter((p) => p.status === 'planned');
 }
 
 /**

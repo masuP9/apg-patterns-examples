@@ -28,8 +28,8 @@ const {
   description,
   triggerText,
   closeOnOverlayClick = true,
-  triggerClass = "",
-  class: className = "",
+  triggerClass = '',
+  class: className = '',
 } = Astro.props;
 
 // Generate unique ID for this instance
@@ -40,11 +40,7 @@ const descriptionId = `${instanceId}-description`;
 
 <apg-dialog data-close-on-overlay={closeOnOverlayClick}>
   <!-- Trigger Button -->
-  <button
-    type="button"
-    class={`apg-dialog-trigger ${triggerClass}`.trim()}
-    data-dialog-trigger
-  >
+  <button type="button" class={`apg-dialog-trigger ${triggerClass}`.trim()} data-dialog-trigger>
     {triggerText}
   </button>
 
@@ -59,12 +55,7 @@ const descriptionId = `${instanceId}-description`;
       <h2 id={titleId} class="apg-dialog-title">
         {title}
       </h2>
-      <button
-        type="button"
-        class="apg-dialog-close"
-        data-dialog-close
-        aria-label="Close dialog"
-      >
+      <button type="button" class="apg-dialog-close" data-dialog-close aria-label="Close dialog">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -103,29 +94,29 @@ const descriptionId = `${instanceId}-description`;
     private closeOnOverlayClick = true;
 
     connectedCallback() {
-      this.trigger = this.querySelector("[data-dialog-trigger]");
-      this.dialog = this.querySelector("[data-dialog-content]");
-      this.closeButton = this.querySelector("[data-dialog-close]");
+      this.trigger = this.querySelector('[data-dialog-trigger]');
+      this.dialog = this.querySelector('[data-dialog-content]');
+      this.closeButton = this.querySelector('[data-dialog-close]');
 
       if (!this.trigger || !this.dialog) {
-        console.warn("apg-dialog: required elements not found");
+        console.warn('apg-dialog: required elements not found');
         return;
       }
 
-      this.closeOnOverlayClick = this.dataset.closeOnOverlay !== "false";
+      this.closeOnOverlayClick = this.dataset.closeOnOverlay !== 'false';
 
       // Attach event listeners
-      this.trigger.addEventListener("click", this.open);
-      this.closeButton?.addEventListener("click", this.close);
-      this.dialog.addEventListener("click", this.handleDialogClick);
-      this.dialog.addEventListener("close", this.handleClose);
+      this.trigger.addEventListener('click', this.open);
+      this.closeButton?.addEventListener('click', this.close);
+      this.dialog.addEventListener('click', this.handleDialogClick);
+      this.dialog.addEventListener('close', this.handleClose);
     }
 
     disconnectedCallback() {
-      this.trigger?.removeEventListener("click", this.open);
-      this.closeButton?.removeEventListener("click", this.close);
-      this.dialog?.removeEventListener("click", this.handleDialogClick);
-      this.dialog?.removeEventListener("close", this.handleClose);
+      this.trigger?.removeEventListener('click', this.open);
+      this.closeButton?.removeEventListener('click', this.close);
+      this.dialog?.removeEventListener('click', this.handleDialogClick);
+      this.dialog?.removeEventListener('close', this.handleClose);
     }
 
     private open = () => {
@@ -141,7 +132,7 @@ const descriptionId = `${instanceId}-description`;
 
       // Dispatch custom event
       this.dispatchEvent(
-        new CustomEvent("dialogopen", {
+        new CustomEvent('dialogopen', {
           bubbles: true,
         })
       );
@@ -157,7 +148,7 @@ const descriptionId = `${instanceId}-description`;
 
       // Dispatch custom event
       this.dispatchEvent(
-        new CustomEvent("dialogclose", {
+        new CustomEvent('dialogclose', {
           bubbles: true,
         })
       );
@@ -172,22 +163,22 @@ const descriptionId = `${instanceId}-description`;
 
     private getFocusableElements(container: HTMLElement): HTMLElement[] {
       const focusableSelectors = [
-        "a[href]",
-        "button:not([disabled])",
-        "input:not([disabled])",
-        "select:not([disabled])",
-        "textarea:not([disabled])",
+        'a[href]',
+        'button:not([disabled])',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
         '[tabindex]:not([tabindex="-1"])',
-      ].join(",");
+      ].join(',');
 
-      return Array.from(
-        container.querySelectorAll<HTMLElement>(focusableSelectors)
-      ).filter((el) => el.offsetParent !== null);
+      return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter(
+        (el) => el.offsetParent !== null
+      );
     }
   }
 
   // Register the custom element
-  if (!customElements.get("apg-dialog")) {
-    customElements.define("apg-dialog", ApgDialog);
+  if (!customElements.get('apg-dialog')) {
+    customElements.define('apg-dialog', ApgDialog);
   }
 </script>

@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
-import { useCallback, useState } from "react";
+import { cn } from '@/lib/utils';
+import { useCallback, useState } from 'react';
 
 export interface ToggleButtonProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
-  "onClick" | "type" | "aria-pressed" | "onToggle"
+  'onClick' | 'type' | 'aria-pressed' | 'onToggle'
 > {
   /** Initial pressed state */
   initialPressed?: boolean;
@@ -21,9 +21,9 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
   initialPressed = false,
   children,
   onPressedChange,
-  pressedIndicator = "●",
-  unpressedIndicator = "○",
-  className = "",
+  pressedIndicator = '●',
+  unpressedIndicator = '○',
+  className = '',
   ...buttonProps
 }) => {
   const [pressed, setPressed] = useState(initialPressed);
@@ -37,7 +37,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
     <button
       type="button"
       {...buttonProps}
-      className={cn("apg-toggle-button", className)}
+      className={cn('apg-toggle-button', className)}
       aria-pressed={pressed}
       onClick={handleClick}
     >

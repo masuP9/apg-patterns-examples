@@ -14,6 +14,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 アクセシビリティが高いコンポーネント実装のベストプラクティスを学びたい開発者。
 
 **ユーザーのゴール**:
+
 - 自分が使うフレームワークでの実装方法を知りたい
 - コードをコピーして自分のプロジェクトに取り込みたい
 - APG 仕様の実践的な理解を深めたい
@@ -22,32 +23,32 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 
 ## 技術選定（確定）
 
-| レイヤー | 技術 | 備考 |
-|---------|------|------|
-| フレームワーク | Astro | Islands アーキテクチャ |
-| コンテンツ | MDX | |
-| デモ | React / Vue / Svelte / Astro | フレームワーク別ページ |
-| スタイリング | Tailwind CSS + shadcn/ui | サイト UI に使用 |
-| コード表示 | Shiki | Astro 標準 |
-| テスト | Vitest + Playwright | ユニット + E2E |
-| 検索 | Pagefind | 最初から導入 |
-| 多言語 | Astro i18n | 最初から考慮 |
-| デプロイ | GitHub Pages | |
+| レイヤー       | 技術                         | 備考                   |
+| -------------- | ---------------------------- | ---------------------- |
+| フレームワーク | Astro                        | Islands アーキテクチャ |
+| コンテンツ     | MDX                          |                        |
+| デモ           | React / Vue / Svelte / Astro | フレームワーク別ページ |
+| スタイリング   | Tailwind CSS + shadcn/ui     | サイト UI に使用       |
+| コード表示     | Shiki                        | Astro 標準             |
+| テスト         | Vitest + Playwright          | ユニット + E2E         |
+| 検索           | Pagefind                     | 最初から導入           |
+| 多言語         | Astro i18n                   | 最初から考慮           |
+| デプロイ       | GitHub Pages                 |                        |
 
 ### 採用しないもの
 
-| 技術 | 理由 |
-|------|------|
-| Storybook | Astro で直接確認 |
-| axe-core | Playwright で十分 |
+| 技術                    | 理由                             |
+| ----------------------- | -------------------------------- |
+| Storybook               | Astro で直接確認                 |
+| axe-core                | Playwright で十分                |
 | Dynamic Import 切り替え | フレームワーク別ページ方式を採用 |
 
 ### shadcn/ui の使い分け
 
-| 用途 | 使用 |
-|------|------|
-| サイト UI（Header, Footer, ナビゲーション等） | shadcn/ui |
-| APG パターンデモ | 純粋実装（shadcn/ui 不使用） |
+| 用途                                          | 使用                         |
+| --------------------------------------------- | ---------------------------- |
+| サイト UI（Header, Footer, ナビゲーション等） | shadcn/ui                    |
+| APG パターンデモ                              | 純粋実装（shadcn/ui 不使用） |
 
 **理由**: デモは APG パターンの実装例として、依存なしの純粋なコードを提供する
 
@@ -74,6 +75,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 ### フレームワーク別ページ方式
 
 **採用理由**:
+
 - シンプル: Dynamic Import や状態管理の複雑さがない
 - SEO 有利: 各フレームワーク専用ページが独立してインデックス
 - パフォーマンス最適: そのフレームワークのバンドルのみ読み込み
@@ -83,6 +85,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 ### グローバルフレームワークセレクター
 
 **動作仕様**:
+
 - ヘッダーにフレームワーク選択 UI を配置
 - 選択肢: React / Vue / Svelte / Astro
 - 選択状態は localStorage に保存
@@ -90,6 +93,7 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 - パターン概要ページ（`/patterns/{pattern}/`）から選択中フレームワークページにリダイレクト
 
 **UI**:
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  APG Patterns Examples              [React ▼] [🌙/☀️]   │
@@ -102,13 +106,13 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 
 ### URL 構造
 
-| URL | 内容 |
-|-----|------|
-| `/patterns/button/` | Toggle Button 概要（リダイレクト） |
-| `/patterns/button/react/` | React 実装 + デモ + コード |
-| `/patterns/button/vue/` | Vue 実装 + デモ + コード |
-| `/patterns/button/svelte/` | Svelte 実装 + デモ + コード |
-| `/patterns/button/astro/` | Astro 実装（Web Components）+ デモ + コード |
+| URL                        | 内容                                        |
+| -------------------------- | ------------------------------------------- |
+| `/patterns/button/`        | Toggle Button 概要（リダイレクト）          |
+| `/patterns/button/react/`  | React 実装 + デモ + コード                  |
+| `/patterns/button/vue/`    | Vue 実装 + デモ + コード                    |
+| `/patterns/button/svelte/` | Svelte 実装 + デモ + コード                 |
+| `/patterns/button/astro/`  | Astro 実装（Web Components）+ デモ + コード |
 
 ### フレームワーク別ページレイアウト
 
@@ -240,6 +244,7 @@ const DEFAULT_FRAMEWORK: Framework = 'react';
 ```
 
 **用途**:
+
 - パターン一覧からのリンク先決定
 - パターン概要ページからのリダイレクト先決定
 - 新規訪問時のデフォルトフレームワーク
@@ -273,6 +278,7 @@ const DEFAULT_FRAMEWORK: Framework = 'react';
 ### 採用技術: Pagefind
 
 **選定理由**:
+
 - 静的サイト向け
 - ビルド時にインデックス生成
 - 外部サービス不要
@@ -291,18 +297,20 @@ const DEFAULT_FRAMEWORK: Framework = 'react';
 
 ### ツール構成
 
-| ツール | 用途 |
-|--------|------|
-| Vitest | ユニットテスト |
+| ツール     | 用途                                   |
+| ---------- | -------------------------------------- |
+| Vitest     | ユニットテスト                         |
 | Playwright | E2E テスト、ブラウザレンダリングテスト |
 
 ### テスト対象
 
 **Vitest**:
+
 - ユーティリティ関数
 - 状態管理ロジック
 
 **Playwright**:
+
 - キーボード操作
 - フォーカス管理
 - ARIA 属性の状態変化

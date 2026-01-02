@@ -12,16 +12,9 @@ export interface Props {
   class?: string;
 }
 
-const {
-  disabled = false,
-  class: className = '',
-} = Astro.props;
+const { disabled = false, class: className = '' } = Astro.props;
 ---
 
-<button
-  type="button"
-  class={`apg-toolbar-button ${className}`.trim()}
-  disabled={disabled}
->
+<button type="button" class={`apg-toolbar-button ${className}`.trim()} disabled={disabled}>
   <slot />
 </button>

@@ -43,20 +43,9 @@
   }: DialogDemoProps = $props();
 </script>
 
-<Dialog
-  {title}
-  {description}
-  {defaultOpen}
-  {closeOnOverlayClick}
-  {className}
-  {onOpenChange}
->
+<Dialog {title} {description} {defaultOpen} {closeOnOverlayClick} {className} {onOpenChange}>
   {#snippet trigger({ open })}
-    <button
-      type="button"
-      class={`apg-dialog-trigger ${triggerClass}`.trim()}
-      onclick={open}
-    >
+    <button type="button" class={`apg-dialog-trigger ${triggerClass}`.trim()} onclick={open}>
       {triggerText}
     </button>
   {/snippet}

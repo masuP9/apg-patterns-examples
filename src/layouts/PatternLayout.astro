@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
-import { PatternSidebar } from "@/components/ui/pattern-sidebar";
-import { PatternBreadcrumb } from "@/components/ui/pattern-breadcrumb";
-import { type Framework } from "@/lib/frameworks";
-import { TableOfContents, type TocItem } from "@/components/ui/toc";
+import BaseLayout from './BaseLayout.astro';
+import { PatternSidebar } from '@/components/ui/pattern-sidebar';
+import { PatternBreadcrumb } from '@/components/ui/pattern-breadcrumb';
+import { type Framework } from '@/lib/frameworks';
+import { TableOfContents, type TocItem } from '@/components/ui/toc';
 
 interface Props {
   title: string;
@@ -19,12 +19,14 @@ const hasToc = tocItems.length > 0;
 
 <BaseLayout title={title} description={description}>
   <div class="mx-auto max-w-7xl">
-    <div class:list={[
-      "lg:grid lg:gap-16 xl:gap-20",
-      hasToc
-        ? "lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_200px]"
-        : "lg:grid-cols-[240px_1fr]"
-    ]}>
+    <div
+      class:list={[
+        'lg:grid lg:gap-16 xl:gap-20',
+        hasToc
+          ? 'lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_200px]'
+          : 'lg:grid-cols-[240px_1fr]',
+      ]}
+    >
       <!-- Sidebar (desktop only) -->
       <aside class="hidden lg:block">
         <div class="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
@@ -41,13 +43,15 @@ const hasToc = tocItems.length > 0;
       </div>
 
       <!-- Right Sidebar: TOC (xl and above) -->
-      {hasToc && (
-        <aside class="hidden xl:block">
-          <div class="sticky top-20">
-            <TableOfContents items={tocItems} />
-          </div>
-        </aside>
-      )}
+      {
+        hasToc && (
+          <aside class="hidden xl:block">
+            <div class="sticky top-20">
+              <TableOfContents items={tocItems} />
+            </div>
+          </aside>
+        )
+      }
     </div>
   </div>
 </BaseLayout>

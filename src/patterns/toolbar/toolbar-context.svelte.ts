@@ -10,7 +10,7 @@ export function setToolbarContext(getOrientation: () => 'horizontal' | 'vertical
   const context: ToolbarContext = {
     get orientation() {
       return getOrientation();
-    }
+    },
   };
   setContext<ToolbarContext>(TOOLBAR_CONTEXT_KEY, context);
 }

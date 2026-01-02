@@ -9,26 +9,20 @@
 
 <div class="space-y-4">
   <Toolbar aria-label="Text formatting with state">
-    <ToolbarToggleButton
-      pressed={isBold}
-      onPressedChange={(pressed) => isBold = pressed}
-    >
+    <ToolbarToggleButton pressed={isBold} onPressedChange={(pressed) => (isBold = pressed)}>
       Bold
     </ToolbarToggleButton>
-    <ToolbarToggleButton
-      pressed={isItalic}
-      onPressedChange={(pressed) => isItalic = pressed}
-    >
+    <ToolbarToggleButton pressed={isItalic} onPressedChange={(pressed) => (isItalic = pressed)}>
       Italic
     </ToolbarToggleButton>
     <ToolbarToggleButton
       pressed={isUnderline}
-      onPressedChange={(pressed) => isUnderline = pressed}
+      onPressedChange={(pressed) => (isUnderline = pressed)}
     >
       Underline
     </ToolbarToggleButton>
   </Toolbar>
-  <div class="text-sm text-muted-foreground">
+  <div class="text-muted-foreground text-sm">
     <p>
       Current state:
       <span class="font-mono">
@@ -37,7 +31,7 @@
     </p>
   </div>
   <div
-    class="p-4 border border-border rounded-lg"
+    class="border-border rounded-lg border p-4"
     style:font-weight={isBold ? 'bold' : 'normal'}
     style:font-style={isItalic ? 'italic' : 'normal'}
     style:text-decoration={isUnderline ? 'underline' : 'none'}

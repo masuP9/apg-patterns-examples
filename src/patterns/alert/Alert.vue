@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
-import { cn } from "@/lib/utils";
-import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from "lucide-vue-next";
-import { type AlertVariant, variantStyles } from "./alert-config";
+import { computed, useId } from 'vue';
+import { cn } from '@/lib/utils';
+import { Info, CircleCheck, AlertTriangle, OctagonAlert, X } from 'lucide-vue-next';
+import { type AlertVariant, variantStyles } from './alert-config';
 
 export type { AlertVariant };
 
@@ -35,10 +35,10 @@ export interface AlertProps {
 
 const props = withDefaults(defineProps<AlertProps>(), {
   message: undefined,
-  variant: "info",
+  variant: 'info',
   id: undefined,
   dismissible: false,
-  class: "",
+  class: '',
 });
 
 const emit = defineEmits<{
@@ -63,7 +63,7 @@ const variantIcons = {
 };
 
 const handleDismiss = () => {
-  emit("dismiss");
+  emit('dismiss');
 };
 </script>
 
@@ -73,7 +73,7 @@ const handleDismiss = () => {
       cn(
         'apg-alert',
         hasContent && [
-          'relative flex items-start gap-3 px-4 py-3 rounded-lg border',
+          'relative flex items-start gap-3 rounded-lg border px-4 py-3',
           'transition-colors duration-150',
           variantStyles[variant],
         ],
@@ -86,13 +86,10 @@ const handleDismiss = () => {
     <div
       :id="alertId"
       role="alert"
-      :class="cn(
-        hasContent && 'flex-1 flex items-start gap-3',
-        !hasContent && 'contents'
-      )"
+      :class="cn(hasContent && 'flex flex-1 items-start gap-3', !hasContent && 'contents')"
     >
       <template v-if="hasContent">
-        <span class="apg-alert-icon flex-shrink-0 mt-0.5" aria-hidden="true">
+        <span class="apg-alert-icon mt-0.5 flex-shrink-0" aria-hidden="true">
           <component :is="variantIcons[variant]" class="size-5" />
         </span>
         <span class="apg-alert-content flex-1">
@@ -108,10 +105,10 @@ const handleDismiss = () => {
       :class="
         cn(
           'apg-alert-dismiss',
-          'flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded',
+          '-m-2 min-h-11 min-w-11 flex-shrink-0 rounded p-2',
           'flex items-center justify-center',
           'hover:bg-black/10 dark:hover:bg-white/10',
-          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current'
+          'focus:ring-2 focus:ring-current focus:ring-offset-2 focus:outline-none'
         )
       "
       aria-label="Dismiss alert"

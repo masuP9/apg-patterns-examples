@@ -17,23 +17,17 @@ export interface Props {
   class?: string;
 }
 
-const {
-  initialPressed = false,
-  disabled = false,
-  class: className = "",
-} = Astro.props;
+const { initialPressed = false, disabled = false, class: className = '' } = Astro.props;
 
-const stateClass = initialPressed
-  ? "apg-toggle-button--pressed"
-  : "apg-toggle-button--not-pressed";
+const stateClass = initialPressed ? 'apg-toggle-button--pressed' : 'apg-toggle-button--not-pressed';
 
 const indicatorClass = initialPressed
-  ? "apg-toggle-indicator--pressed"
-  : "apg-toggle-indicator--not-pressed";
+  ? 'apg-toggle-indicator--pressed'
+  : 'apg-toggle-indicator--not-pressed';
 
 // Check if custom indicator slots are provided
-const hasPressedIndicator = Astro.slots.has("pressed-indicator");
-const hasUnpressedIndicator = Astro.slots.has("unpressed-indicator");
+const hasPressedIndicator = Astro.slots.has('pressed-indicator');
+const hasUnpressedIndicator = Astro.slots.has('unpressed-indicator');
 const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
 ---
 
@@ -47,19 +41,27 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
     <span class="apg-toggle-button-content">
       <slot />
     </span>
-    <span class={`apg-toggle-indicator ${indicatorClass}`} aria-hidden="true" data-custom-indicators={hasCustomIndicators ? "true" : undefined}>
-      {hasCustomIndicators ? (
-        <>
-          <span class="apg-indicator-pressed" hidden={!initialPressed}>
-            <slot name="pressed-indicator">●</slot>
-          </span>
-          <span class="apg-indicator-unpressed" hidden={initialPressed}>
-            <slot name="unpressed-indicator">○</slot>
-          </span>
-        </>
-      ) : (
-        initialPressed ? "●" : "○"
-      )}
+    <span
+      class={`apg-toggle-indicator ${indicatorClass}`}
+      aria-hidden="true"
+      data-custom-indicators={hasCustomIndicators ? 'true' : undefined}
+    >
+      {
+        hasCustomIndicators ? (
+          <>
+            <span class="apg-indicator-pressed" hidden={!initialPressed}>
+              <slot name="pressed-indicator">●</slot>
+            </span>
+            <span class="apg-indicator-unpressed" hidden={initialPressed}>
+              <slot name="unpressed-indicator">○</slot>
+            </span>
+          </>
+        ) : initialPressed ? (
+          '●'
+        ) : (
+          '○'
+        )
+      }
     </span>
   </button>
 </apg-toggle-button>
@@ -76,13 +78,13 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
 
     private initialize() {
       this.rafId = null;
-      this.button = this.querySelector("button");
+      this.button = this.querySelector('button');
       if (!this.button) {
-        console.warn("apg-toggle-button: button element not found");
+        console.warn('apg-toggle-button: button element not found');
         return;
       }
 
-      this.button.addEventListener("click", this.handleClick);
+      this.button.addEventListener('click', this.handleClick);
     }
 
     disconnectedCallback() {
@@ -92,36 +94,32 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
         this.rafId = null;
       }
       // Remove event listeners
-      this.button?.removeEventListener("click", this.handleClick);
+      this.button?.removeEventListener('click', this.handleClick);
       this.button = null;
     }
 
     private handleClick = () => {
       if (!this.button || this.button.disabled) return;
 
-      const currentPressed =
-        this.button.getAttribute("aria-pressed") === "true";
+      const currentPressed = this.button.getAttribute('aria-pressed') === 'true';
       const newPressed = !currentPressed;
 
       // Update aria-pressed
-      this.button.setAttribute("aria-pressed", String(newPressed));
+      this.button.setAttribute('aria-pressed', String(newPressed));
 
       // Update CSS classes
-      this.button.classList.toggle("apg-toggle-button--pressed", newPressed);
-      this.button.classList.toggle(
-        "apg-toggle-button--not-pressed",
-        !newPressed
-      );
+      this.button.classList.toggle('apg-toggle-button--pressed', newPressed);
+      this.button.classList.toggle('apg-toggle-button--not-pressed', !newPressed);
 
       // Update indicator
-      const indicator = this.button.querySelector(".apg-toggle-indicator");
+      const indicator = this.button.querySelector('.apg-toggle-indicator');
       if (indicator) {
-        const hasCustomIndicators = indicator.getAttribute("data-custom-indicators") === "true";
+        const hasCustomIndicators = indicator.getAttribute('data-custom-indicators') === 'true';
 
         if (hasCustomIndicators) {
           // Toggle visibility of custom indicator slots
-          const pressedIndicator = indicator.querySelector(".apg-indicator-pressed");
-          const unpressedIndicator = indicator.querySelector(".apg-indicator-unpressed");
+          const pressedIndicator = indicator.querySelector('.apg-indicator-pressed');
+          const unpressedIndicator = indicator.querySelector('.apg-indicator-unpressed');
           if (pressedIndicator instanceof HTMLElement) {
             pressedIndicator.hidden = !newPressed;
           }
@@ -130,19 +128,16 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
           }
         } else {
           // Use default text indicators
-          indicator.textContent = newPressed ? "●" : "○";
+          indicator.textContent = newPressed ? '●' : '○';
         }
 
-        indicator.classList.toggle("apg-toggle-indicator--pressed", newPressed);
-        indicator.classList.toggle(
-          "apg-toggle-indicator--not-pressed",
-          !newPressed
-        );
+        indicator.classList.toggle('apg-toggle-indicator--pressed', newPressed);
+        indicator.classList.toggle('apg-toggle-indicator--not-pressed', !newPressed);
       }
 
       // Dispatch custom event for external listeners
       this.dispatchEvent(
-        new CustomEvent("toggle", {
+        new CustomEvent('toggle', {
           detail: { pressed: newPressed },
           bubbles: true,
         })
@@ -151,7 +146,7 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
   }
 
   // Register the custom element
-  if (!customElements.get("apg-toggle-button")) {
-    customElements.define("apg-toggle-button", ApgToggleButton);
+  if (!customElements.get('apg-toggle-button')) {
+    customElements.define('apg-toggle-button', ApgToggleButton);
   }
 </script>

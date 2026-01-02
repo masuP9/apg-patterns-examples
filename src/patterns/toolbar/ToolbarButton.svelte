@@ -25,13 +25,7 @@
   }
 </script>
 
-<button
-  type="button"
-  class="apg-toolbar-button {className}"
-  {disabled}
-  {onclick}
-  {...restProps}
->
+<button type="button" class="apg-toolbar-button {className}" {disabled} {onclick} {...restProps}>
   {#if children}
     {@render children()}
   {/if}

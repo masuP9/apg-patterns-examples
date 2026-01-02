@@ -1,15 +1,11 @@
 ---
-import MenuIcon from "lucide-static/icons/menu.svg"
+import MenuIcon from 'lucide-static/icons/menu.svg';
 
-import { Button } from "@/components/ui/button"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Header, HeaderActions } from "@/components/ui/header"
-import { Icon } from "@/components/ui/icon"
-import { Logo, LogoImage, LogoText } from "@/components/ui/logo"
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Header, HeaderActions } from '@/components/ui/header';
+import { Icon } from '@/components/ui/icon';
+import { Logo, LogoImage, LogoText } from '@/components/ui/logo';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,8 +16,8 @@ import {
   NavigationMenuSubItem,
   NavigationMenuSubLink,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+} from '@/components/ui/navigation-menu';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -29,38 +25,38 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+} from '@/components/ui/sidebar';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface Props {
   logo?: {
-    src?: string
-    alt?: string
-    text?: string
-    href?: string
-  }
+    src?: string;
+    alt?: string;
+    text?: string;
+    href?: string;
+  };
   links?: {
-    icon?: string
-    text?: string
-    href?: string
-    target?: string
-  }[]
-  socials?: string[]
+    icon?: string;
+    text?: string;
+    href?: string;
+    target?: string;
+  }[];
+  socials?: string[];
   menus?: {
-    text?: string
-    href?: string
+    text?: string;
+    href?: string;
     links?: {
-      text?: string
-      href?: string
-    }[]
-  }[]
+      text?: string;
+      href?: string;
+    }[];
+  }[];
 }
 
-const { logo, menus, links, socials } = Astro.props
+const { logo, menus, links, socials } = Astro.props;
 ---
 
 <Header>
-  <Logo href={logo?.href || "/"}>
+  <Logo href={logo?.href || '/'}>
     <LogoImage src={logo?.src} alt={logo?.alt} />
     <LogoText>{logo?.text}</LogoText>
   </Logo>
@@ -81,9 +77,7 @@ const { logo, menus, links, socials } = Astro.props
                   <NavigationMenuSub>
                     {menu.links?.map((link) => (
                       <NavigationMenuSubItem>
-                        <NavigationMenuSubLink href={link.href}>
-                          {link.text}
-                        </NavigationMenuSubLink>
+                        <NavigationMenuSubLink href={link.href}>{link.text}</NavigationMenuSubLink>
                       </NavigationMenuSubItem>
                     ))}
                   </NavigationMenuSub>
@@ -116,11 +110,7 @@ const { logo, menus, links, socials } = Astro.props
     <ThemeToggle />
     {
       links?.map(({ icon, text, ...link }, i) => (
-        <Button
-          variant={i === links.length - 1 ? "default" : "outline"}
-          size="sm"
-          {...link}
-        >
+        <Button variant={i === links.length - 1 ? 'default' : 'outline'} size="sm" {...link}>
           {icon && <Icon name={icon} />}
           {text}
         </Button>
@@ -128,12 +118,7 @@ const { logo, menus, links, socials } = Astro.props
     }
   </HeaderActions>
   <Sheet class="first:ml-auto">
-    <SheetTrigger
-      class="@5xl:hidden"
-      variant="ghost"
-      size="icon"
-      name="open-menu-button"
-    >
+    <SheetTrigger class="@5xl:hidden" variant="ghost" size="icon" name="open-menu-button">
       <MenuIcon class="size-5" />
     </SheetTrigger>
     <SheetContent class="overflow-y-auto px-4 py-12">
@@ -152,9 +137,7 @@ const { logo, menus, links, socials } = Astro.props
                     <SidebarMenuSub>
                       {menu.links?.map((link) => (
                         <SidebarMenuSubItem>
-                          <SidebarMenuSubButton href={link.href}>
-                            {link.text}
-                          </SidebarMenuSubButton>
+                          <SidebarMenuSubButton href={link.href}>{link.text}</SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
@@ -176,7 +159,7 @@ const { logo, menus, links, socials } = Astro.props
         {
           links?.map(({ icon, text, ...link }, i) => (
             <Button
-              variant={i === links.length - 1 ? "default" : "secondary"}
+              variant={i === links.length - 1 ? 'default' : 'secondary'}
               class="w-full"
               {...link}
             >

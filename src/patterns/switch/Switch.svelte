@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
-  import { untrack } from "svelte";
+  import type { Snippet } from 'svelte';
+  import { untrack } from 'svelte';
 
   interface SwitchProps {
     children?: string | Snippet<[]>;
@@ -31,7 +31,7 @@
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === " " || event.key === "Enter") {
+    if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       toggle();
     }
@@ -62,7 +62,7 @@
   </span>
   {#if children}
     <span class="apg-switch-label">
-      {#if typeof children === "string"}
+      {#if typeof children === 'string'}
         {children}
       {:else}
         {@render children?.()}

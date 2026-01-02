@@ -23,9 +23,10 @@ const tocItems = [
 
 <PatternLayout title="Alert - Astro" pattern="alert" framework="astro" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="text-3xl font-bold mb-4">Alert</h1>
-    <p class="text-lg text-muted-foreground">
-      An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.
+    <h1 class="mb-4 text-3xl font-bold">Alert</h1>
+    <p class="text-muted-foreground text-lg">
+      An element that displays a brief, important message in a way that attracts the user's
+      attention without interrupting the user's task.
     </p>
   </header>
 
@@ -34,39 +35,40 @@ const tocItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
     <p class="text-muted-foreground mb-4">
-      The Astro implementation uses a Web Component that provides a <code>setMessage()</code> method for updating alert content.
-      The live region container exists in the DOM from page load - only the content changes.
+      The Astro implementation uses a Web Component that provides a <code>setMessage()</code> method for
+      updating alert content. The live region container exists in the DOM from page load - only the content
+      changes.
     </p>
-    <div class="p-6 rounded-lg border border-border bg-background">
+    <div class="border-border bg-background rounded-lg border p-6">
       <div class="space-y-4">
         <Alert id="demo-alert" variant="info" dismissible />
         <div class="flex flex-wrap gap-2">
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="rounded-md bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             onclick="document.querySelector('apg-alert').setMessage('This is an informational message.', 'info')"
           >
             Info
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            class="rounded-md bg-green-100 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
             onclick="document.querySelector('apg-alert').setMessage('Operation completed successfully!', 'success')"
           >
             Success
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-100 rounded-md hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+            class="rounded-md bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-200 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:outline-none"
             onclick="document.querySelector('apg-alert').setMessage('Please review your input before proceeding.', 'warning')"
           >
             Warning
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            class="rounded-md bg-red-100 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
             onclick="document.querySelector('apg-alert').setMessage('An error occurred. Please try again.', 'error')"
           >
             Error
@@ -78,23 +80,19 @@ const tocItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-    <CodeBlock
-      code={sourceCode}
-      lang="astro"
-      title="Alert.astro"
-    />
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock code={sourceCode} lang="astro" title="Alert.astro" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
       code={`---
 import Alert from './Alert.astro';
@@ -124,82 +122,85 @@ import Alert from './Alert.astro';
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
-    <h3 class="text-lg font-medium mb-3">Props</h3>
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>message</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">''</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
             <td class="py-2">Initial alert message</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>variant</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'info' | 'success' | 'warning' | 'error'</td>
-            <td class="py-2 pr-4 text-muted-foreground">'info'</td>
+            <td class="text-muted-foreground py-2 pr-4">'info' | 'success' | 'warning' | 'error'</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">'info'</td>
             <td class="py-2">Visual style variant</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>dismissible</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
             <td class="py-2">Show dismiss button</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>id</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">auto-generated</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">auto-generated</td>
             <td class="py-2">Custom ID</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>class</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Additional CSS classes</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
 
-    <h3 class="text-lg font-medium mb-3 mt-6">Methods</h3>
+    <h3 class="mt-6 mb-3 text-lg font-medium">Methods</h3>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Method</th>
-            <th class="text-left py-2">Description</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Method</th>
+            <th class="py-2 text-left">Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>setMessage(message, variant?)</code></td>
-            <td class="py-2">Update alert message programmatically. The container remains in DOM.</td>
+            <td class="py-2"
+              >Update alert message programmatically. The container remains in DOM.</td
+            >
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
 
-    <h3 class="text-lg font-medium mb-3 mt-6">Events</h3>
+    <h3 class="mt-6 mb-3 text-lg font-medium">Events</h3>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Event</th>
-            <th class="text-left py-2">Description</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 text-left">Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>dismiss</code></td>
             <td class="py-2">Fired when dismiss button is clicked</td>
           </tr>
@@ -210,14 +211,14 @@ import Alert from './Alert.astro';
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
   </section>
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-    <ul class="list-disc pl-6 space-y-2">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
           href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"

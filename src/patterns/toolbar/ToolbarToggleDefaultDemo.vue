@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Toolbar from './Toolbar.vue'
-import ToolbarToggleButton from './ToolbarToggleButton.vue'
-import ToolbarSeparator from './ToolbarSeparator.vue'
+import Toolbar from './Toolbar.vue';
+import ToolbarToggleButton from './ToolbarToggleButton.vue';
+import ToolbarSeparator from './ToolbarSeparator.vue';
 </script>
 
 <template>
@@ -9,11 +9,7 @@ import ToolbarSeparator from './ToolbarSeparator.vue'
     <ToolbarToggleButton :default-pressed="true">Bold (default on)</ToolbarToggleButton>
     <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
     <ToolbarSeparator />
-    <ToolbarToggleButton :default-pressed="true" disabled>
-      Disabled (pressed)
-    </ToolbarToggleButton>
-    <ToolbarToggleButton disabled>
-      Disabled (not pressed)
-    </ToolbarToggleButton>
+    <ToolbarToggleButton :default-pressed="true" disabled> Disabled (pressed) </ToolbarToggleButton>
+    <ToolbarToggleButton disabled> Disabled (not pressed) </ToolbarToggleButton>
   </Toolbar>
 </template>

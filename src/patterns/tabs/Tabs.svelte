@@ -40,14 +40,14 @@
   $effect(() => {
     if (tabs.length > 0 && !selectedId) {
       const initialTab = defaultSelectedId
-        ? tabs.find(tab => tab.id === defaultSelectedId && !tab.disabled)
-        : tabs.find(tab => !tab.disabled);
+        ? tabs.find((tab) => tab.id === defaultSelectedId && !tab.disabled)
+        : tabs.find((tab) => !tab.disabled);
       selectedId = initialTab?.id || tabs[0]?.id;
     }
   });
 
   // Derived values
-  let availableTabs = $derived(tabs.filter(tab => !tab.disabled));
+  let availableTabs = $derived(tabs.filter((tab) => !tab.disabled));
 
   let containerClass = $derived(
     `apg-tabs ${orientation === 'vertical' ? 'apg-tabs--vertical' : 'apg-tabs--horizontal'}`
@@ -144,7 +144,7 @@
 
   // Update focused index when selected tab changes
   $effect(() => {
-    const selectedIndex = availableTabs.findIndex(tab => tab.id === selectedId);
+    const selectedIndex = availableTabs.findIndex((tab) => tab.id === selectedId);
     if (selectedIndex >= 0) {
       focusedIndex = selectedIndex;
     }
@@ -161,7 +161,7 @@
   >
     {#each tabs as tab}
       {@const isSelected = tab.id === selectedId}
-      {@const tabIndex = tab.disabled ? -1 : (isSelected ? 0 : -1)}
+      {@const tabIndex = tab.disabled ? -1 : isSelected ? 0 : -1}
 
       <button
         bind:this={tabRefs[tab.id]}

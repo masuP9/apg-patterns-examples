@@ -10,7 +10,14 @@ import {
 } from '@/components/ui/navigation-menu';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { ThemeToggle, ThemeProvider } from '@/components/ui/theme-toggle';
-import { Footer, FooterDescription, FooterGroup, FooterMenu, FooterMenuItem, FooterMenuLink } from '@/components/ui/footer';
+import {
+  Footer,
+  FooterDescription,
+  FooterGroup,
+  FooterMenu,
+  FooterMenuItem,
+  FooterMenuLink,
+} from '@/components/ui/footer';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import MenuIcon from 'lucide-static/icons/menu.svg';
@@ -21,7 +28,10 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'APG Patterns Examples - Accessible component patterns for React, Vue, Svelte, and Astro' } = Astro.props;
+const {
+  title,
+  description = 'APG Patterns Examples - Accessible component patterns for React, Vue, Svelte, and Astro',
+} = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
@@ -41,7 +51,7 @@ const navLinks = [
     <title>{title} | APG Patterns Examples</title>
     <ThemeProvider />
   </head>
-  <body class="min-h-screen bg-background text-foreground">
+  <body class="bg-background text-foreground min-h-screen">
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <Header>
@@ -50,16 +60,18 @@ const navLinks = [
       </Logo>
       <NavigationMenu class="mr-auto @max-lg:hidden">
         <NavigationMenuList>
-          {navLinks.map((link) => (
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                aria-current={currentPath.startsWith(link.href) ? 'page' : undefined}
-                href={link.href}
-              >
-                {link.text}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ))}
+          {
+            navLinks.map((link) => (
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  aria-current={currentPath.startsWith(link.href) ? 'page' : undefined}
+                  href={link.href}
+                >
+                  {link.text}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))
+          }
         </NavigationMenuList>
       </NavigationMenu>
       <HeaderActions class="@max-lg:hidden">
@@ -72,29 +84,26 @@ const navLinks = [
         <ThemeToggle />
       </HeaderActions>
       <Sheet class="first:ml-auto">
-        <SheetTrigger
-          class="@lg:hidden"
-          variant="ghost"
-          size="icon"
-          aria-label="Open menu"
-        >
+        <SheetTrigger class="@lg:hidden" variant="ghost" size="icon" aria-label="Open menu">
           <MenuIcon class="size-5" />
         </SheetTrigger>
         <SheetContent class="overflow-y-auto px-4 py-12">
           <SidebarMenu>
-            {navLinks.map((link) => (
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  class:list={[
-                    "h-10 w-full rounded-md px-4 text-xl has-[>svg]:px-4",
-                    currentPath.startsWith(link.href) && "font-medium text-primary"
-                  ]}
-                  href={link.href}
-                >
-                  {link.text}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            {
+              navLinks.map((link) => (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    class:list={[
+                      'h-10 w-full rounded-md px-4 text-xl has-[>svg]:px-4',
+                      currentPath.startsWith(link.href) && 'text-primary font-medium',
+                    ]}
+                    href={link.href}
+                  >
+                    {link.text}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))
+            }
           </SidebarMenu>
           <HeaderActions class="mt-6 flex flex-col gap-2">
             <NativeSelect id="framework-selector-mobile" aria-label="Select framework">
@@ -135,7 +144,9 @@ const navLinks = [
 
     <script>
       // Framework selector - sync both selectors
-      const frameworkSelectors = document.querySelectorAll<HTMLSelectElement>('[id^="framework-selector"]');
+      const frameworkSelectors = document.querySelectorAll<HTMLSelectElement>(
+        '[id^="framework-selector"]'
+      );
       const savedFramework = localStorage.getItem('apg-selected-framework') || 'react';
 
       frameworkSelectors.forEach((selector) => {

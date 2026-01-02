@@ -19,6 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { Volume2, VolumeOff, Sun, Moon, Bell, BellOff } from 'lucide-vue-next'
-import ToggleButton from './ToggleButton.vue'
+import { Volume2, VolumeOff, Sun, Moon, Bell, BellOff } from 'lucide-vue-next';
+import ToggleButton from './ToggleButton.vue';
 </script>

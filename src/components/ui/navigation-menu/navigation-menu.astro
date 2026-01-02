@@ -1,13 +1,13 @@
 ---
-import type { HTMLAttributes } from "astro/types"
+import type { HTMLAttributes } from 'astro/types';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface Props extends HTMLAttributes<"nav"> {}
+interface Props extends HTMLAttributes<'nav'> {}
 
-const { class: className, ...props } = Astro.props
+const { class: className, ...props } = Astro.props;
 
-const slot = await Astro.slots.render("default")
+const slot = await Astro.slots.render('default');
 ---
 
 {
@@ -15,7 +15,7 @@ const slot = await Astro.slots.render("default")
     <nav
       data-slot="navigation-menu"
       class={cn(
-        "group/navigation-menu relative flex max-w-max flex-1 items-center justify-center",
+        'group/navigation-menu relative flex max-w-max flex-1 items-center justify-center',
         className
       )}
       {...props}

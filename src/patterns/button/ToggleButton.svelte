@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
-  import { untrack } from "svelte";
+  import type { Snippet } from 'svelte';
+  import { untrack } from 'svelte';
 
   // properties
   interface ToggleButtonProps {
@@ -20,16 +20,14 @@
     initialPressed = false,
     disabled = false,
     onToggle = (_) => {},
-    pressedIndicator = "●",
-    unpressedIndicator = "○",
+    pressedIndicator = '●',
+    unpressedIndicator = '○',
     ...restProps
   }: ToggleButtonProps = $props();
 
   // state - use untrack to explicitly indicate we only want the initial value
   let pressed = $state(untrack(() => initialPressed));
-  let currentIndicator = $derived(
-    pressed ? pressedIndicator : unpressedIndicator
-  );
+  let currentIndicator = $derived(pressed ? pressedIndicator : unpressedIndicator);
 
   // Event handlers
   function handleClick() {
@@ -47,14 +45,14 @@
   {...restProps}
 >
   <span class="apg-toggle-button-content">
-    {#if typeof children === "string"}
+    {#if typeof children === 'string'}
       {children}
     {:else}
       {@render children?.()}
     {/if}
   </span>
   <span class="apg-toggle-indicator" aria-hidden="true">
-    {#if typeof currentIndicator === "string"}
+    {#if typeof currentIndicator === 'string'}
       {currentIndicator}
     {:else if currentIndicator}
       {@render currentIndicator()}

@@ -1,10 +1,10 @@
 ---
-import InfoIcon from "lucide-static/icons/info.svg";
-import CircleCheckIcon from "lucide-static/icons/circle-check.svg";
-import AlertTriangleIcon from "lucide-static/icons/triangle-alert.svg";
-import OctagonAlertIcon from "lucide-static/icons/octagon-alert.svg";
-import XIcon from "lucide-static/icons/x.svg";
-import { type AlertVariant, variantStyles as sharedVariantStyles } from "./alert-config";
+import InfoIcon from 'lucide-static/icons/info.svg';
+import CircleCheckIcon from 'lucide-static/icons/circle-check.svg';
+import AlertTriangleIcon from 'lucide-static/icons/triangle-alert.svg';
+import OctagonAlertIcon from 'lucide-static/icons/octagon-alert.svg';
+import XIcon from 'lucide-static/icons/x.svg';
+import { type AlertVariant, variantStyles as sharedVariantStyles } from './alert-config';
 
 export type { AlertVariant };
 
@@ -36,11 +36,11 @@ export interface Props {
 }
 
 const {
-  message = "",
-  variant = "info",
+  message = '',
+  variant = 'info',
   id,
   dismissible = false,
-  class: className = "",
+  class: className = '',
 } = Astro.props;
 
 const alertId = id ?? `alert-${crypto.randomUUID().slice(0, 8)}`;
@@ -58,28 +58,29 @@ const hasContent = Boolean(message);
 
 <apg-alert
   class:list={[
-    "apg-alert",
+    'apg-alert',
     hasContent && [
-      "relative flex items-start gap-3 px-4 py-3 rounded-lg border",
-      "transition-colors duration-150",
+      'relative flex items-start gap-3 rounded-lg border px-4 py-3',
+      'transition-colors duration-150',
       sharedVariantStyles[variant],
     ],
-    !hasContent && "contents",
+    !hasContent && 'contents',
     className,
   ]}
   data-alert-id={alertId}
-  data-dismissible={dismissible ? "true" : undefined}
+  data-dismissible={dismissible ? 'true' : undefined}
   data-variant={variant}
 >
   {/* Live region - contains only content for screen reader announcement */}
-  <div id={alertId} role="alert" class:list={[
-    hasContent && "flex-1 flex items-start gap-3",
-    !hasContent && "contents"
-  ]}>
+  <div
+    id={alertId}
+    role="alert"
+    class:list={[hasContent && 'flex flex-1 items-start gap-3', !hasContent && 'contents']}
+  >
     {
       hasContent && (
         <>
-          <span class="apg-alert-icon flex-shrink-0 mt-0.5" aria-hidden="true">
+          <span class="apg-alert-icon mt-0.5 flex-shrink-0" aria-hidden="true">
             <IconComponent class="size-5" />
           </span>
           <span class="apg-alert-content flex-1">{message}</span>
@@ -93,11 +94,11 @@ const hasContent = Boolean(message);
       <button
         type="button"
         class:list={[
-          "apg-alert-dismiss",
-          "flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded",
-          "flex items-center justify-center",
-          "hover:bg-black/10 dark:hover:bg-white/10",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current",
+          'apg-alert-dismiss',
+          '-m-2 min-h-11 min-w-11 flex-shrink-0 rounded p-2',
+          'flex items-center justify-center',
+          'hover:bg-black/10 dark:hover:bg-white/10',
+          'focus:ring-2 focus:ring-current focus:ring-offset-2 focus:outline-none',
         ]}
         aria-label="Dismiss alert"
       >
@@ -108,28 +109,24 @@ const hasContent = Boolean(message);
 </apg-alert>
 
 <script>
-  import {
-    variantStyles,
-    variantIconSvgs,
-    dismissIconSvg,
-  } from "./alert-config";
+  import { variantStyles, variantIconSvgs, dismissIconSvg } from './alert-config';
 
   class ApgAlert extends HTMLElement {
-    private alertId: string = "";
+    private alertId: string = '';
 
     connectedCallback() {
-      this.alertId = this.dataset.alertId ?? "";
-      const dismissBtn = this.querySelector(".apg-alert-dismiss");
+      this.alertId = this.dataset.alertId ?? '';
+      const dismissBtn = this.querySelector('.apg-alert-dismiss');
 
       if (dismissBtn) {
-        dismissBtn.addEventListener("click", this.handleDismiss);
+        dismissBtn.addEventListener('click', this.handleDismiss);
       }
     }
 
     disconnectedCallback() {
-      const dismissBtn = this.querySelector(".apg-alert-dismiss");
+      const dismissBtn = this.querySelector('.apg-alert-dismiss');
       if (dismissBtn) {
-        dismissBtn.removeEventListener("click", this.handleDismiss);
+        dismissBtn.removeEventListener('click', this.handleDismiss);
       }
     }
 
@@ -139,19 +136,19 @@ const hasContent = Boolean(message);
       if (alertEl) {
         alertEl.replaceChildren();
         // Update live region classes
-        alertEl.classList.remove("flex-1", "flex", "items-start", "gap-3");
-        alertEl.classList.add("contents");
+        alertEl.classList.remove('flex-1', 'flex', 'items-start', 'gap-3');
+        alertEl.classList.add('contents');
       }
       // Update custom element display
-      this.className = "apg-alert contents";
+      this.className = 'apg-alert contents';
       // Remove dismiss button
-      const existingDismissBtn = this.querySelector(".apg-alert-dismiss");
+      const existingDismissBtn = this.querySelector('.apg-alert-dismiss');
       if (existingDismissBtn) {
         existingDismissBtn.remove();
       }
 
       // Dispatch custom event
-      this.dispatchEvent(new CustomEvent("dismiss", { bubbles: true }));
+      this.dispatchEvent(new CustomEvent('dismiss', { bubbles: true }));
     };
 
     /**
@@ -162,54 +159,57 @@ const hasContent = Boolean(message);
       const alertEl = this.querySelector(`#${this.alertId}`);
       if (!alertEl) return;
 
-      const currentVariant = (variant ?? this.dataset.variant ?? "info") as keyof typeof variantStyles;
+      const currentVariant = (variant ??
+        this.dataset.variant ??
+        'info') as keyof typeof variantStyles;
 
       if (message) {
         // Update live region classes
-        alertEl.classList.remove("contents");
-        alertEl.classList.add("flex-1", "flex", "items-start", "gap-3");
+        alertEl.classList.remove('contents');
+        alertEl.classList.add('flex-1', 'flex', 'items-start', 'gap-3');
         // Update custom element styles
-        this.classList.remove("contents");
+        this.classList.remove('contents');
         this.className = `apg-alert relative flex items-start gap-3 px-4 py-3 rounded-lg border transition-colors duration-150 ${variantStyles[currentVariant]}`;
 
         // Build DOM nodes safely (avoid innerHTML for user content)
-        const iconSpan = document.createElement("span");
-        iconSpan.className = "apg-alert-icon flex-shrink-0 mt-0.5";
-        iconSpan.setAttribute("aria-hidden", "true");
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'apg-alert-icon flex-shrink-0 mt-0.5';
+        iconSpan.setAttribute('aria-hidden', 'true');
         iconSpan.innerHTML = variantIconSvgs[currentVariant]; // Safe: hardcoded SVG
 
-        const contentSpan = document.createElement("span");
-        contentSpan.className = "apg-alert-content flex-1";
+        const contentSpan = document.createElement('span');
+        contentSpan.className = 'apg-alert-content flex-1';
         contentSpan.textContent = message; // Safe: uses textContent
 
         // Update live region content (icon + message only)
         alertEl.replaceChildren(iconSpan, contentSpan);
 
         // Remove existing dismiss button if any
-        const existingDismissBtn = this.querySelector(".apg-alert-dismiss");
+        const existingDismissBtn = this.querySelector('.apg-alert-dismiss');
         if (existingDismissBtn) {
           existingDismissBtn.remove();
         }
 
         // Add dismiss button outside live region
-        if (this.dataset.dismissible === "true") {
-          const dismissBtn = document.createElement("button");
-          dismissBtn.type = "button";
-          dismissBtn.className = "apg-alert-dismiss flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current";
-          dismissBtn.setAttribute("aria-label", "Dismiss alert");
+        if (this.dataset.dismissible === 'true') {
+          const dismissBtn = document.createElement('button');
+          dismissBtn.type = 'button';
+          dismissBtn.className =
+            'apg-alert-dismiss flex-shrink-0 min-w-11 min-h-11 p-2 -m-2 rounded flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current';
+          dismissBtn.setAttribute('aria-label', 'Dismiss alert');
           dismissBtn.innerHTML = dismissIconSvg; // Safe: hardcoded SVG
-          dismissBtn.addEventListener("click", this.handleDismiss);
+          dismissBtn.addEventListener('click', this.handleDismiss);
           this.appendChild(dismissBtn);
         }
       } else {
         alertEl.replaceChildren();
         // Update live region classes
-        alertEl.classList.remove("flex-1", "flex", "items-start", "gap-3");
-        alertEl.classList.add("contents");
+        alertEl.classList.remove('flex-1', 'flex', 'items-start', 'gap-3');
+        alertEl.classList.add('contents');
         // Update custom element display
-        this.className = "apg-alert contents";
+        this.className = 'apg-alert contents';
         // Remove dismiss button
-        const existingDismissBtn = this.querySelector(".apg-alert-dismiss");
+        const existingDismissBtn = this.querySelector('.apg-alert-dismiss');
         if (existingDismissBtn) {
           existingDismissBtn.remove();
         }
@@ -217,5 +217,5 @@ const hasContent = Boolean(message);
     }
   }
 
-  customElements.define("apg-alert", ApgAlert);
+  customElements.define('apg-alert', ApgAlert);
 </script>

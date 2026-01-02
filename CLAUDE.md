@@ -16,17 +16,17 @@
 
 ## 技術スタック（Astro リビルド版）
 
-| レイヤー | 技術 |
-|---------|------|
+| レイヤー       | 技術                           |
+| -------------- | ------------------------------ |
 | フレームワーク | Astro (Islands アーキテクチャ) |
-| コンテンツ | MDX |
-| デモ | React / Vue / Svelte / Astro |
-| スタイリング | Tailwind CSS + shadcn/ui |
-| コード表示 | Shiki |
-| テスト | Vitest + Playwright |
-| 検索 | Pagefind |
-| 多言語 | Astro i18n |
-| デプロイ | GitHub Pages |
+| コンテンツ     | MDX                            |
+| デモ           | React / Vue / Svelte / Astro   |
+| スタイリング   | Tailwind CSS + shadcn/ui       |
+| コード表示     | Shiki                          |
+| テスト         | Vitest + Playwright            |
+| 検索           | Pagefind                       |
+| 多言語         | Astro i18n                     |
+| デプロイ       | GitHub Pages                   |
 
 ---
 
@@ -68,6 +68,7 @@ src/
 ```
 
 **パスエイリアス**（tsconfig.json）:
+
 - `@/*` → `./src/*`
 - `@patterns/*` → `./src/patterns/*`
 
@@ -75,11 +76,11 @@ src/
 
 ## 内部ドキュメント
 
-| ファイル | 内容 | 参照タイミング |
-|---------|------|---------------|
-| [.internal/site-specification.md](.internal/site-specification.md) | サイト仕様書（技術選定、URL設計、実装方針） | 実装時 |
-| [.internal/testing-strategy.md](.internal/testing-strategy.md) | テスト設計方針（DAMP原則、APG準拠テストの観点） | テスト実装時 |
-| [.internal/architecture-review.md](.internal/architecture-review.md) | アーキテクチャレビュー（現状課題、改善選択肢） | 参考資料 |
+| ファイル                                                             | 内容                                            | 参照タイミング |
+| -------------------------------------------------------------------- | ----------------------------------------------- | -------------- |
+| [.internal/site-specification.md](.internal/site-specification.md)   | サイト仕様書（技術選定、URL設計、実装方針）     | 実装時         |
+| [.internal/testing-strategy.md](.internal/testing-strategy.md)       | テスト設計方針（DAMP原則、APG準拠テストの観点） | テスト実装時   |
+| [.internal/architecture-review.md](.internal/architecture-review.md) | アーキテクチャレビュー（現状課題、改善選択肢）  | 参考資料       |
 
 ---
 
@@ -90,15 +91,19 @@ src/
 #### 1. HTML属性継承パターン
 
 **React**:
+
 ```typescript
-export interface ToggleButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type' | 'aria-pressed'> {
+export interface ToggleButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick' | 'type' | 'aria-pressed'
+> {
   initialPressed?: boolean;
   onToggle?: (pressed: boolean) => void;
 }
 ```
 
 **Vue**:
+
 ```vue
 <script setup>
 defineOptions({ inheritAttrs: false })
@@ -109,11 +114,13 @@ defineOptions({ inheritAttrs: false })
 ```
 
 **Svelte**:
+
 ```svelte
 <button {...$$restProps}>
 ```
 
 **Astro** (Web Components):
+
 ```astro
 <apg-toggle-button>
   <button type="button" aria-pressed={initialPressed}>
@@ -122,12 +129,12 @@ defineOptions({ inheritAttrs: false })
 </apg-toggle-button>
 
 <script>
-class ApgToggleButton extends HTMLElement {
-  connectedCallback() {
-    // イベントリスナー設定
+  class ApgToggleButton extends HTMLElement {
+    connectedCallback() {
+      // イベントリスナー設定
+    }
   }
-}
-customElements.define('apg-toggle-button', ApgToggleButton);
+  customElements.define('apg-toggle-button', ApgToggleButton);
 </script>
 ```
 
@@ -160,6 +167,7 @@ customElements.define('apg-toggle-button', ApgToggleButton);
    - 各キーのアクション説明
 
 **ネイティブ HTML セクションが必要なパターン例:**
+
 - Link → `<a href>`
 - Table → `<table>`
 - Checkbox → `<input type="checkbox">`
@@ -169,10 +177,10 @@ customElements.define('apg-toggle-button', ApgToggleButton);
 
 #### 4. shadcn/ui の使い分け
 
-| 用途 | 使用 |
-|------|------|
-| サイト UI（Header, Footer 等） | shadcn/ui |
-| APG パターンデモ | 純粋実装（依存なし） |
+| 用途                           | 使用                 |
+| ------------------------------ | -------------------- |
+| サイト UI（Header, Footer 等） | shadcn/ui            |
+| APG パターンデモ               | 純粋実装（依存なし） |
 
 #### 4. Astro でのフレームワークコンポーネント制約
 
@@ -189,11 +197,13 @@ Astro テンプレート内で React/Vue/Svelte の子コンポーネントを�
 ```
 
 **ラッパーコンポーネントが必要なケース:**
+
 - 子コンポーネントが自身の状態を持つ（例: toggle の pressed 状態）
 - Compound Components パターン（例: Toolbar + ToolbarButton）
 - 親から Context を受け取る子コンポーネント
 
 **不要なケース:**
+
 - データ駆動型: `<Tabs tabs={[...]} />` のように props でデータを渡す
 - 静的な子要素のみ
 - 単一コンポーネント
@@ -215,6 +225,7 @@ Astro テンプレート内で React/Vue/Svelte の子コンポーネントを�
 ```
 
 **多言語**:
+
 ```
 /patterns/button/react/      # 英語（デフォルト）
 /ja/patterns/button/react/   # 日本語

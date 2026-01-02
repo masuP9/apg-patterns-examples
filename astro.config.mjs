@@ -19,20 +19,19 @@ const siteConfig = {
     site: process.env.CF_PAGES_URL || 'https://apg-patterns-examples.pages.dev',
     base: '/',
   },
-  'local': {
+  local: {
     site: 'http://localhost:4321',
     base: '/',
   },
 };
 
 // Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
-const deployTargetEnv = process.env.DEPLOY_TARGET ||
-  (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
+const deployTargetEnv =
+  process.env.DEPLOY_TARGET || (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
 
 /** @type {DeployTarget} */
-const deployTarget = deployTargetEnv in siteConfig
-  ? /** @type {DeployTarget} */ (deployTargetEnv)
-  : 'local';
+const deployTarget =
+  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'local';
 
 const { site, base } = siteConfig[deployTarget];
 

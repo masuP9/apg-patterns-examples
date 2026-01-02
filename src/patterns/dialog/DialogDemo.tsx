@@ -6,8 +6,8 @@
  * that works seamlessly with Astro's islands architecture.
  */
 
-import React from "react";
-import { DialogRoot, DialogTrigger, Dialog } from "./Dialog";
+import React from 'react';
+import { DialogRoot, DialogTrigger, Dialog } from './Dialog';
 
 export interface DialogDemoProps {
   /** Dialog title (required for accessibility) */
@@ -34,11 +34,11 @@ export function DialogDemo({
   title,
   description,
   triggerText,
-  triggerClass = "",
+  triggerClass = '',
   children,
   defaultOpen = false,
   closeOnOverlayClick = true,
-  className = "",
+  className = '',
   onOpenChange,
 }: DialogDemoProps): React.ReactElement {
   return (

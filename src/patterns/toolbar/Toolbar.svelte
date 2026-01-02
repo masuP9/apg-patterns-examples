@@ -24,9 +24,7 @@
 
   function getButtons(): HTMLButtonElement[] {
     if (!toolbarRef) return [];
-    return Array.from(
-      toolbarRef.querySelectorAll<HTMLButtonElement>('button:not([disabled])')
-    );
+    return Array.from(toolbarRef.querySelectorAll<HTMLButtonElement>('button:not([disabled])'));
   }
 
   // Track DOM mutations to detect slot content changes
@@ -65,7 +63,7 @@
 
   function handleFocus(event: FocusEvent) {
     const buttons = getButtons();
-    const targetIndex = buttons.findIndex(btn => btn === event.target);
+    const targetIndex = buttons.findIndex((btn) => btn === event.target);
     if (targetIndex !== -1) {
       focusedIndex = targetIndex;
     }
@@ -75,14 +73,13 @@
     const buttons = getButtons();
     if (buttons.length === 0) return;
 
-    const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
+    const currentIndex = buttons.findIndex((btn) => btn === document.activeElement);
     if (currentIndex === -1) return;
 
     const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
     const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
-    const invalidKeys = orientation === 'vertical'
-      ? ['ArrowLeft', 'ArrowRight']
-      : ['ArrowUp', 'ArrowDown'];
+    const invalidKeys =
+      orientation === 'vertical' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
 
     // Ignore invalid direction keys
     if (invalidKeys.includes(event.key)) {

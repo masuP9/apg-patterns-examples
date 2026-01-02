@@ -21,9 +21,9 @@ export interface Props {
   /** Initially selected tab ID */
   defaultSelectedId?: string;
   /** Orientation of the tabs */
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   /** Activation mode: 'automatic' selects on arrow key, 'manual' requires Enter/Space */
-  activation?: "automatic" | "manual";
+  activation?: 'automatic' | 'manual';
   /** Additional CSS class */
   class?: string;
 }
@@ -31,9 +31,9 @@ export interface Props {
 const {
   tabs,
   defaultSelectedId,
-  orientation = "horizontal",
-  activation = "automatic",
-  class: className = "",
+  orientation = 'horizontal',
+  activation = 'automatic',
+  class: className = '',
 } = Astro.props;
 
 // Determine initial selected tab
@@ -46,27 +46,23 @@ const selectedId = initialTab?.id || tabs[0]?.id;
 const instanceId = `tabs-${Math.random().toString(36).substring(2, 11)}`;
 
 const containerClass = `apg-tabs ${
-  orientation === "vertical" ? "apg-tabs--vertical" : "apg-tabs--horizontal"
+  orientation === 'vertical' ? 'apg-tabs--vertical' : 'apg-tabs--horizontal'
 } ${className}`.trim();
 
 const tablistClass = `apg-tablist ${
-  orientation === "vertical" ? "apg-tablist--vertical" : "apg-tablist--horizontal"
+  orientation === 'vertical' ? 'apg-tablist--vertical' : 'apg-tablist--horizontal'
 }`;
 ---
 
-<apg-tabs
-  class={containerClass}
-  data-activation={activation}
-  data-orientation={orientation}
->
+<apg-tabs class={containerClass} data-activation={activation} data-orientation={orientation}>
   <div role="tablist" aria-orientation={orientation} class={tablistClass}>
     {
       tabs.map((tab) => {
         const isSelected = tab.id === selectedId;
         const tabClass = `apg-tab ${
-          orientation === "vertical" ? "apg-tab--vertical" : "apg-tab--horizontal"
-        } ${isSelected ? "apg-tab--selected" : ""} ${
-          tab.disabled ? "apg-tab--disabled" : ""
+          orientation === 'vertical' ? 'apg-tab--vertical' : 'apg-tab--horizontal'
+        } ${isSelected ? 'apg-tab--selected' : ''} ${
+          tab.disabled ? 'apg-tab--disabled' : ''
         }`.trim();
 
         return (
@@ -99,9 +95,7 @@ const tablistClass = `apg-tablist ${
             id={`${instanceId}-panel-${tab.id}`}
             aria-labelledby={`${instanceId}-tab-${tab.id}`}
             hidden={!isSelected}
-            class={`apg-tabpanel ${
-              isSelected ? "apg-tabpanel--active" : "apg-tabpanel--inactive"
-            }`}
+            class={`apg-tabpanel ${isSelected ? 'apg-tabpanel--active' : 'apg-tabpanel--inactive'}`}
             tabindex={isSelected ? 0 : -1}
             data-panel-id={tab.id}
           >
@@ -120,8 +114,8 @@ const tablistClass = `apg-tablist ${
     private panels: HTMLElement[] = [];
     private availableTabs: HTMLButtonElement[] = [];
     private focusedIndex = 0;
-    private activation: "automatic" | "manual" = "automatic";
-    private orientation: "horizontal" | "vertical" = "horizontal";
+    private activation: 'automatic' | 'manual' = 'automatic';
+    private orientation: 'horizontal' | 'vertical' = 'horizontal';
     private rafId: number | null = null;
 
     connectedCallback() {
@@ -133,7 +127,7 @@ const tablistClass = `apg-tablist ${
       this.rafId = null;
       this.tablist = this.querySelector('[role="tablist"]');
       if (!this.tablist) {
-        console.warn("apg-tabs: tablist element not found");
+        console.warn('apg-tabs: tablist element not found');
         return;
       }
 
@@ -141,25 +135,23 @@ const tablistClass = `apg-tablist ${
       this.panels = Array.from(this.querySelectorAll('[role="tabpanel"]'));
 
       if (this.tabs.length === 0 || this.panels.length === 0) {
-        console.warn("apg-tabs: tabs or panels not found");
+        console.warn('apg-tabs: tabs or panels not found');
         return;
       }
 
       this.availableTabs = this.tabs.filter((tab) => !tab.disabled);
-      this.activation =
-        (this.dataset.activation as "automatic" | "manual") || "automatic";
-      this.orientation =
-        (this.dataset.orientation as "horizontal" | "vertical") || "horizontal";
+      this.activation = (this.dataset.activation as 'automatic' | 'manual') || 'automatic';
+      this.orientation = (this.dataset.orientation as 'horizontal' | 'vertical') || 'horizontal';
 
       // Find initial focused index
       this.focusedIndex = this.availableTabs.findIndex(
-        (tab) => tab.getAttribute("aria-selected") === "true"
+        (tab) => tab.getAttribute('aria-selected') === 'true'
       );
       if (this.focusedIndex === -1) this.focusedIndex = 0;
 
       // Attach event listeners
-      this.tablist.addEventListener("click", this.handleClick);
-      this.tablist.addEventListener("keydown", this.handleKeyDown);
+      this.tablist.addEventListener('click', this.handleClick);
+      this.tablist.addEventListener('keydown', this.handleKeyDown);
     }
 
     disconnectedCallback() {
@@ -169,8 +161,8 @@ const tablistClass = `apg-tablist ${
         this.rafId = null;
       }
       // Remove event listeners
-      this.tablist?.removeEventListener("click", this.handleClick);
-      this.tablist?.removeEventListener("keydown", this.handleKeyDown);
+      this.tablist?.removeEventListener('click', this.handleClick);
+      this.tablist?.removeEventListener('keydown', this.handleKeyDown);
       // Clean up references
       this.tablist = null;
       this.tabs = [];
@@ -181,16 +173,16 @@ const tablistClass = `apg-tablist ${
     private selectTab(tabId: string) {
       this.tabs.forEach((tab) => {
         const isSelected = tab.dataset.tabId === tabId;
-        tab.setAttribute("aria-selected", String(isSelected));
+        tab.setAttribute('aria-selected', String(isSelected));
         tab.tabIndex = isSelected ? 0 : -1;
-        tab.classList.toggle("apg-tab--selected", isSelected);
+        tab.classList.toggle('apg-tab--selected', isSelected);
 
         // Update aria-controls
-        const panelId = tab.id.replace("-tab-", "-panel-");
+        const panelId = tab.id.replace('-tab-', '-panel-');
         if (isSelected) {
-          tab.setAttribute("aria-controls", panelId);
+          tab.setAttribute('aria-controls', panelId);
         } else {
-          tab.removeAttribute("aria-controls");
+          tab.removeAttribute('aria-controls');
         }
       });
 
@@ -198,13 +190,13 @@ const tablistClass = `apg-tablist ${
         const isSelected = panel.dataset.panelId === tabId;
         panel.hidden = !isSelected;
         panel.tabIndex = isSelected ? 0 : -1;
-        panel.classList.toggle("apg-tabpanel--active", isSelected);
-        panel.classList.toggle("apg-tabpanel--inactive", !isSelected);
+        panel.classList.toggle('apg-tabpanel--active', isSelected);
+        panel.classList.toggle('apg-tabpanel--inactive', !isSelected);
       });
 
       // Dispatch custom event
       this.dispatchEvent(
-        new CustomEvent("tabchange", {
+        new CustomEvent('tabchange', {
           detail: { selectedId: tabId },
           bubbles: true,
         })
@@ -217,9 +209,7 @@ const tablistClass = `apg-tablist ${
     }
 
     private handleClick = (e: Event) => {
-      const target = (e.target as HTMLElement).closest<HTMLButtonElement>(
-        '[role="tab"]'
-      );
+      const target = (e.target as HTMLElement).closest<HTMLButtonElement>('[role="tab"]');
       if (target && !target.disabled) {
         this.selectTab(target.dataset.tabId!);
         // Update focused index
@@ -229,47 +219,44 @@ const tablistClass = `apg-tablist ${
 
     private handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
-      if (target.getAttribute("role") !== "tab") return;
+      if (target.getAttribute('role') !== 'tab') return;
 
       let newIndex = this.focusedIndex;
       let shouldPreventDefault = false;
 
       // Determine navigation keys based on orientation
-      const nextKey =
-        this.orientation === "vertical" ? "ArrowDown" : "ArrowRight";
-      const prevKey =
-        this.orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
+      const nextKey = this.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+      const prevKey = this.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
 
       switch (e.key) {
         case nextKey:
-        case "ArrowRight":
-        case "ArrowDown":
+        case 'ArrowRight':
+        case 'ArrowDown':
           newIndex = (this.focusedIndex + 1) % this.availableTabs.length;
           shouldPreventDefault = true;
           break;
 
         case prevKey:
-        case "ArrowLeft":
-        case "ArrowUp":
+        case 'ArrowLeft':
+        case 'ArrowUp':
           newIndex =
-            (this.focusedIndex - 1 + this.availableTabs.length) %
-            this.availableTabs.length;
+            (this.focusedIndex - 1 + this.availableTabs.length) % this.availableTabs.length;
           shouldPreventDefault = true;
           break;
 
-        case "Home":
+        case 'Home':
           newIndex = 0;
           shouldPreventDefault = true;
           break;
 
-        case "End":
+        case 'End':
           newIndex = this.availableTabs.length - 1;
           shouldPreventDefault = true;
           break;
 
-        case "Enter":
-        case " ":
-          if (this.activation === "manual") {
+        case 'Enter':
+        case ' ':
+          if (this.activation === 'manual') {
             const focusedTab = this.availableTabs[this.focusedIndex];
             if (focusedTab) {
               this.selectTab(focusedTab.dataset.tabId!);
@@ -285,7 +272,7 @@ const tablistClass = `apg-tablist ${
         if (newIndex !== this.focusedIndex) {
           this.focusTab(newIndex);
 
-          if (this.activation === "automatic") {
+          if (this.activation === 'automatic') {
             const newTab = this.availableTabs[newIndex];
             if (newTab) {
               this.selectTab(newTab.dataset.tabId!);
@@ -297,7 +284,7 @@ const tablistClass = `apg-tablist ${
   }
 
   // Register the custom element
-  if (!customElements.get("apg-tabs")) {
-    customElements.define("apg-tabs", ApgTabs);
+  if (!customElements.get('apg-tabs')) {
+    customElements.define('apg-tabs', ApgTabs);
   }
 </script>
