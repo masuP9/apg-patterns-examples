@@ -1,0 +1,239 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Alert from '@patterns/alert/Alert.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/alert/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/alert/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/alert/Alert.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Alert - Astro" pattern="alert" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold mb-4">Alert</h1>
+    <p class="text-lg text-muted-foreground">
+      An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="alert" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
+    <p class="text-muted-foreground mb-4">
+      The Astro implementation uses a Web Component that provides a <code>setMessage()</code> method for updating alert content.
+      The live region container exists in the DOM from page load - only the content changes.
+    </p>
+    <div class="p-6 rounded-lg border border-border bg-background">
+      <div class="space-y-4">
+        <Alert id="demo-alert" variant="info" dismissible />
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onclick="document.querySelector('apg-alert').setMessage('This is an informational message.', 'info')"
+          >
+            Info
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            onclick="document.querySelector('apg-alert').setMessage('Operation completed successfully!', 'success')"
+          >
+            Success
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-100 rounded-md hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+            onclick="document.querySelector('apg-alert').setMessage('Please review your input before proceeding.', 'warning')"
+          >
+            Warning
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            onclick="document.querySelector('apg-alert').setMessage('An error occurred. Please try again.', 'error')"
+          >
+            Error
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
+    <CodeBlock
+      code={sourceCode}
+      lang="astro"
+      title="Alert.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
+    <CodeBlock
+      code={`---
+import Alert from './Alert.astro';
+---
+
+<!-- IMPORTANT: Alert container is always in DOM -->
+<Alert
+  id="my-alert"
+  variant="info"
+  dismissible
+/>
+
+<button onclick="document.querySelector('apg-alert').setMessage('Hello!')">
+  Show Alert
+</button>
+
+<script>
+  // Listen for dismiss events
+  document.querySelector('apg-alert')?.addEventListener('dismiss', () => {
+    console.log('Alert dismissed');
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+    <h3 class="text-lg font-medium mb-3">Props</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Prop</th>
+            <th class="text-left py-2 pr-4">Type</th>
+            <th class="text-left py-2 pr-4">Default</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>message</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">''</td>
+            <td class="py-2">Initial alert message</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>variant</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">'info' | 'success' | 'warning' | 'error'</td>
+            <td class="py-2 pr-4 text-muted-foreground">'info'</td>
+            <td class="py-2">Visual style variant</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>dismissible</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="py-2">Show dismiss button</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>id</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">auto-generated</td>
+            <td class="py-2">Custom ID</td>
+          </tr>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4 text-muted-foreground">string</td>
+            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="py-2">Additional CSS classes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mb-3 mt-6">Methods</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Method</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>setMessage(message, variant?)</code></td>
+            <td class="py-2">Update alert message programmatically. The container remains in DOM.</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="text-lg font-medium mb-3 mt-6">Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 pr-4">Event</th>
+            <th class="text-left py-2">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border">
+            <td class="py-2 pr-4"><code>dismiss</code></td>
+            <td class="py-2">Fired when dismiss button is clicked</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="text-xl font-semibold mb-4">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
+    <ul class="list-disc pl-6 space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Alert Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Alert Dialog Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
