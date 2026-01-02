@@ -84,7 +84,15 @@ export const PATTERNS: Pattern[] = [
     complexity: "Medium",
     status: "available",
   },
-
+  {
+    id: "tooltip",
+    name: "Tooltip",
+    description:
+      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    icon: "💡",
+    complexity: "Medium",
+    status: "available",
+  },
   // ============================================
   // Planned patterns (not yet implemented)
   // ============================================
@@ -139,6 +147,14 @@ export const PATTERNS: Pattern[] = [
     description:
       "An input widget with an associated popup that enables users to select a value from a collection.",
     icon: "🔽",
+    complexity: "Low",
+    status: "available",
+  },
+  {
+    id: "menu-button",
+    name: "Menu Button",
+    description: "A button that opens a menu of actions or options.",
+    icon: "☰",
     complexity: "High",
     status: "planned",
   },
@@ -247,15 +263,6 @@ export const PATTERNS: Pattern[] = [
     description:
       "A static tabular structure containing one or more rows that each contain one or more cells.",
     icon: "📋",
-    complexity: "Medium",
-    status: "planned",
-  },
-  {
-    id: "tooltip",
-    name: "Tooltip",
-    description:
-      "A popup that displays information related to an element when it receives keyboard focus or the mouse hovers over it.",
-    icon: "💭",
     complexity: "Medium",
     status: "planned",
   },
