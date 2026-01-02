@@ -81,6 +81,15 @@ export const PATTERNS: Pattern[] = [
     status: "available",
   },
   {
+    id: "tooltip",
+    name: "Tooltip",
+    description:
+      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    icon: "💡",
+    complexity: "Low",
+    status: "available",
+  },
+  {
     id: "menu-button",
     name: "Menu Button",
     description: "A button that opens a menu of actions or options.",
