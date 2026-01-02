@@ -2,45 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
+import { getAvailablePatterns } from '@/lib/patterns';
 
-const patterns = [
-  {
-    name: 'Toggle Button',
-    description: 'Button with pressed state',
-    href: withBase('/patterns/button/react/'),
-    icon: '🔘',
-  },
-  {
-    name: 'Tabs',
-    description: 'Tabbed interface with keyboard navigation',
-    href: withBase('/patterns/tabs/react/'),
-    icon: '📑',
-  },
-  {
-    name: 'Accordion',
-    description: 'Collapsible content sections',
-    href: withBase('/patterns/accordion/react/'),
-    icon: '📋',
-  },
-  {
-    name: 'Dialog',
-    description: 'Modal dialog with focus management',
-    href: withBase('/patterns/dialog/react/'),
-    icon: '💬',
-  },
-  {
-    name: 'Toolbar',
-    description: 'Grouped controls with keyboard navigation',
-    href: withBase('/patterns/toolbar/react/'),
-    icon: '🛠️',
-  },
-  {
-    name: 'Switch',
-    description: 'Toggle between on and off states',
-    href: withBase('/patterns/switch/react/'),
-    icon: '🔛',
-  },
-];
+const availablePatterns = getAvailablePatterns();
 ---
 
 <BaseLayout title="Home">
@@ -82,8 +46,8 @@ const patterns = [
     <section class="mt-16">
       <h2 class="mb-6 text-2xl font-bold">Available Patterns</h2>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {patterns.map((pattern) => (
-          <Tile variant="floating" href={pattern.href}>
+        {availablePatterns.map((pattern) => (
+          <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/react/`)}>
             <TileContent class="flex flex-row items-center gap-4 text-left">
               <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
                 {pattern.icon}

@@ -27,7 +27,7 @@ const hasToc = tocItems.length > 0;
     ]}>
       <!-- Sidebar (desktop only) -->
       <aside class="hidden lg:block">
-        <div class="sticky top-20">
+        <div class="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
           <PatternSidebar currentPattern={pattern} currentFramework={framework} />
         </div>
       </aside>
