@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef, useState } from "react";
+import { useCallback, useId, useRef, useState } from 'react';
 
 /**
  * Accordion item configuration
@@ -76,16 +76,14 @@ export function Accordion({
   headingLevel = 3,
   enableArrowKeys = true,
   onExpandedChange,
-  className = "",
+  className = '',
 }: AccordionProps): React.ReactElement {
   const instanceId = useId();
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // Initialize with defaultExpanded items
   const [expandedIds, setExpandedIds] = useState<string[]>(() =>
-    items
-      .filter((item) => item.defaultExpanded && !item.disabled)
-      .map((item) => item.id)
+    items.filter((item) => item.defaultExpanded && !item.disabled).map((item) => item.id)
   );
 
   const availableItems = items.filter((item) => !item.disabled);
@@ -118,16 +116,14 @@ export function Accordion({
     (event: React.KeyboardEvent, currentItemId: string) => {
       if (!enableArrowKeys) return;
 
-      const currentIndex = availableItems.findIndex(
-        (item) => item.id === currentItemId
-      );
+      const currentIndex = availableItems.findIndex((item) => item.id === currentItemId);
       if (currentIndex === -1) return;
 
       let newIndex = currentIndex;
       let shouldPreventDefault = false;
 
       switch (event.key) {
-        case "ArrowDown":
+        case 'ArrowDown':
           // Move to next, but don't wrap (APG compliant)
           if (currentIndex < availableItems.length - 1) {
             newIndex = currentIndex + 1;
@@ -135,7 +131,7 @@ export function Accordion({
           shouldPreventDefault = true;
           break;
 
-        case "ArrowUp":
+        case 'ArrowUp':
           // Move to previous, but don't wrap (APG compliant)
           if (currentIndex > 0) {
             newIndex = currentIndex - 1;
@@ -143,12 +139,12 @@ export function Accordion({
           shouldPreventDefault = true;
           break;
 
-        case "Home":
+        case 'Home':
           newIndex = 0;
           shouldPreventDefault = true;
           break;
 
-        case "End":
+        case 'End':
           newIndex = availableItems.length - 1;
           shouldPreventDefault = true;
           break;
@@ -171,7 +167,7 @@ export function Accordion({
   const useRegion = items.length <= 6;
 
   // Dynamic heading component with proper typing
-  const HeadingTag = `h${headingLevel}` as "h2" | "h3" | "h4" | "h5" | "h6";
+  const HeadingTag = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
   return (
     <div className={`apg-accordion ${className}`.trim()}>
@@ -181,21 +177,19 @@ export function Accordion({
         const isExpanded = expandedIds.includes(item.id);
 
         const itemClass = `apg-accordion-item ${
-          isExpanded ? "apg-accordion-item--expanded" : ""
-        } ${item.disabled ? "apg-accordion-item--disabled" : ""}`.trim();
+          isExpanded ? 'apg-accordion-item--expanded' : ''
+        } ${item.disabled ? 'apg-accordion-item--disabled' : ''}`.trim();
 
         const triggerClass = `apg-accordion-trigger ${
-          isExpanded ? "apg-accordion-trigger--expanded" : ""
+          isExpanded ? 'apg-accordion-trigger--expanded' : ''
         }`.trim();
 
         const iconClass = `apg-accordion-icon ${
-          isExpanded ? "apg-accordion-icon--expanded" : ""
+          isExpanded ? 'apg-accordion-icon--expanded' : ''
         }`.trim();
 
         const panelClass = `apg-accordion-panel ${
-          isExpanded
-            ? "apg-accordion-panel--expanded"
-            : "apg-accordion-panel--collapsed"
+          isExpanded ? 'apg-accordion-panel--expanded' : 'apg-accordion-panel--collapsed'
         }`.trim();
 
         return (
@@ -215,23 +209,16 @@ export function Accordion({
                 onClick={() => handleToggle(item.id)}
                 onKeyDown={(e) => handleKeyDown(e, item.id)}
               >
-                <span className="apg-accordion-trigger-content">
-                  {item.header}
-                </span>
+                <span className="apg-accordion-trigger-content">{item.header}</span>
                 <span className={iconClass} aria-hidden="true">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </span>
               </button>
             </HeadingTag>
             <div
-              role={useRegion ? "region" : undefined}
+              role={useRegion ? 'region' : undefined}
               id={panelId}
               aria-labelledby={useRegion ? headerId : undefined}
               className={panelClass}

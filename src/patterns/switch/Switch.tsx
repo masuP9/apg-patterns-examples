@@ -1,11 +1,10 @@
-import { cn } from "@/lib/utils";
-import { useCallback, useState } from "react";
+import { cn } from '@/lib/utils';
+import { useCallback, useState } from 'react';
 
-export interface SwitchProps
-  extends Omit<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    "onClick" | "type" | "role" | "aria-checked"
-  > {
+export interface SwitchProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick' | 'type' | 'role' | 'aria-checked'
+> {
   /** Initial checked state */
   initialChecked?: boolean;
   /** Switch label text */
@@ -18,7 +17,7 @@ export const Switch: React.FC<SwitchProps> = ({
   initialChecked = false,
   children,
   onCheckedChange,
-  className = "",
+  className = '',
   disabled,
   ...buttonProps
 }) => {
@@ -34,7 +33,7 @@ export const Switch: React.FC<SwitchProps> = ({
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
-      if (event.key === " " || event.key === "Enter") {
+      if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
         const newChecked = !checked;
         setChecked(newChecked);
@@ -49,7 +48,7 @@ export const Switch: React.FC<SwitchProps> = ({
       type="button"
       role="switch"
       {...buttonProps}
-      className={cn("apg-switch", className)}
+      className={cn('apg-switch', className)}
       aria-checked={checked}
       aria-disabled={disabled || undefined}
       disabled={disabled}

@@ -1,14 +1,7 @@
-import { cn } from "@/lib/utils";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { cn } from '@/lib/utils';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 
-export type TooltipPlacement = "top" | "bottom" | "left" | "right";
+export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export interface TooltipProps {
   /** Tooltip content */
@@ -42,7 +35,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   defaultOpen = false,
   onOpenChange,
   delay = 300,
-  placement = "top",
+  placement = 'top',
   id: providedId,
   disabled = false,
   className,
@@ -92,14 +85,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
     if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         hideTooltip();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, hideTooltip]);
 
@@ -113,16 +106,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, []);
 
   const placementClasses: Record<TooltipPlacement, string> = {
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    left: "right-full top-1/2 -translate-y-1/2 mr-2",
-    right: "left-full top-1/2 -translate-y-1/2 ml-2",
+    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 -translate-y-1/2 ml-2',
   };
 
   return (
     <span
       ref={triggerRef}
-      className={cn("apg-tooltip-trigger", "relative inline-block", className)}
+      className={cn('apg-tooltip-trigger', 'relative inline-block', className)}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
       onFocus={showTooltip}
@@ -136,14 +129,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
         role="tooltip"
         aria-hidden={!isOpen}
         className={cn(
-          "apg-tooltip",
-          "absolute z-50 px-3 py-1.5 text-sm",
-          "bg-gray-900 text-white rounded-md shadow-lg",
-          "dark:bg-gray-100 dark:text-gray-900",
-          "pointer-events-none whitespace-nowrap",
-          "transition-opacity duration-150",
+          'apg-tooltip',
+          'absolute z-50 px-3 py-1.5 text-sm',
+          'rounded-md bg-gray-900 text-white shadow-lg',
+          'dark:bg-gray-100 dark:text-gray-900',
+          'pointer-events-none whitespace-nowrap',
+          'transition-opacity duration-150',
           placementClasses[placement],
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible",
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0',
           tooltipClassName
         )}
       >

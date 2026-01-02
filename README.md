@@ -52,13 +52,13 @@ npm run preview
 
 ## Component Status
 
-| Pattern | React | Svelte | Vue | Status |
-|---------|-------|--------|-----|--------|
-| Toggle Button | ✅ | ✅ | ✅ | Complete |
-| Tabs | ✅ | ✅ | ✅ | Complete |
-| Accordion | 📋 | 📋 | 📋 | Planned |
-| Dialog | 📋 | 📋 | 📋 | Planned |
-| Menu | 📋 | 📋 | 📋 | Planned |
+| Pattern       | React | Svelte | Vue | Status   |
+| ------------- | ----- | ------ | --- | -------- |
+| Toggle Button | ✅    | ✅     | ✅  | Complete |
+| Tabs          | ✅    | ✅     | ✅  | Complete |
+| Accordion     | 📋    | 📋     | 📋  | Planned  |
+| Dialog        | 📋    | 📋     | 📋  | Planned  |
+| Menu          | 📋    | 📋     | 📋  | Planned  |
 
 ## Architecture
 
@@ -89,32 +89,21 @@ All components follow the same props pattern across frameworks:
 
 ```tsx
 // React
-<ToggleButton
-  initialPressed={false}
-  onToggle={(pressed) => console.log(pressed)}
->
+<ToggleButton initialPressed={false} onToggle={(pressed) => console.log(pressed)}>
   Mute
 </ToggleButton>
 ```
 
 ```vue
 <!-- Vue -->
-<ToggleButton
-  :initial-pressed="false"
-  @toggle="(pressed) => console.log(pressed)"
->
+<ToggleButton :initial-pressed="false" @toggle="(pressed) => console.log(pressed)">
   Mute
 </ToggleButton>
 ```
 
 ```svelte
 <!-- Svelte -->
-<ToggleButton
-  initialPressed={false}
-  ontoggle={(e) => console.log(e.detail)}
->
-  Mute
-</ToggleButton>
+<ToggleButton initialPressed={false} ontoggle={(e) => console.log(e.detail)}>Mute</ToggleButton>
 ```
 
 ### Key Features

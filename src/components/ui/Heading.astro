@@ -12,7 +12,12 @@ const Tag = `h${level}` as 'h2' | 'h3' | 'h4';
 const slotContent = await Astro.slots.render('default');
 // Strip HTML tags to get plain text
 const text = slotContent.replace(/<[^>]*>/g, '').trim();
-const slug = id ?? text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+const slug =
+  id ??
+  text
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '');
 ---
 
 <Tag id={slug} class={className}>

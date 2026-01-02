@@ -29,7 +29,7 @@ const {
 } = Astro.props;
 ---
 
-<apg-toolbar {...(id ? { id } : {})} class={className} data-orientation={orientation}>
+<apg-toolbar {...id ? { id } : {}} class={className} data-orientation={orientation}>
   <div
     role="toolbar"
     aria-orientation={orientation}
@@ -85,9 +85,7 @@ const {
 
     private getButtons(): HTMLButtonElement[] {
       if (!this.toolbar) return [];
-      return Array.from(
-        this.toolbar.querySelectorAll<HTMLButtonElement>('button:not([disabled])')
-      );
+      return Array.from(this.toolbar.querySelectorAll<HTMLButtonElement>('button:not([disabled])'));
     }
 
     private updateTabIndices() {
@@ -106,7 +104,7 @@ const {
 
     private handleFocus = (event: FocusEvent) => {
       const buttons = this.getButtons();
-      const targetIndex = buttons.findIndex(btn => btn === event.target);
+      const targetIndex = buttons.findIndex((btn) => btn === event.target);
       if (targetIndex !== -1 && targetIndex !== this.focusedIndex) {
         this.focusedIndex = targetIndex;
         this.updateTabIndices();
@@ -117,15 +115,14 @@ const {
       const buttons = this.getButtons();
       if (buttons.length === 0) return;
 
-      const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
+      const currentIndex = buttons.findIndex((btn) => btn === document.activeElement);
       if (currentIndex === -1) return;
 
       const orientation = this.dataset.orientation || 'horizontal';
       const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
       const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
-      const invalidKeys = orientation === 'vertical'
-        ? ['ArrowLeft', 'ArrowRight']
-        : ['ArrowUp', 'ArrowDown'];
+      const invalidKeys =
+        orientation === 'vertical' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
 
       // Ignore invalid direction keys
       if (invalidKeys.includes(event.key)) {

@@ -23,9 +23,10 @@ const tocItems = [
 
 <PatternLayout title="Alert - Svelte" pattern="alert" framework="svelte" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="text-3xl font-bold mb-4">Alert</h1>
-    <p class="text-lg text-muted-foreground">
-      An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.
+    <h1 class="mb-4 text-3xl font-bold">Alert</h1>
+    <p class="text-muted-foreground text-lg">
+      An element that displays a brief, important message in a way that attracts the user's
+      attention without interrupting the user's task.
     </p>
   </header>
 
@@ -34,35 +35,31 @@ const tocItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
     <p class="text-muted-foreground mb-4">
-      Click the buttons below to show alerts with different variants.
-      The live region container exists in the DOM from page load - only the content changes.
+      Click the buttons below to show alerts with different variants. The live region container
+      exists in the DOM from page load - only the content changes.
     </p>
-    <div class="p-6 rounded-lg border border-border bg-background">
+    <div class="border-border bg-background rounded-lg border p-6">
       <AlertDemo client:load />
     </div>
   </section>
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-    <CodeBlock
-      code={sourceCode}
-      lang="svelte"
-      title="Alert.svelte"
-    />
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock code={sourceCode} lang="svelte" title="Alert.svelte" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
     <CodeBlock
       code={`<script lang="ts">
   import Alert from './Alert.svelte';
@@ -97,59 +94,60 @@ const tocItems = [
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
-    <h3 class="text-lg font-medium mb-3">Props</h3>
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-border">
-            <th class="text-left py-2 pr-4">Prop</th>
-            <th class="text-left py-2 pr-4">Type</th>
-            <th class="text-left py-2 pr-4">Default</th>
-            <th class="text-left py-2">Description</th>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>id</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Required ID for SSR consistency</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>message</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Alert message content</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>children</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">Snippet</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">Snippet</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Complex content (alternative to message)</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>variant</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">'info' | 'success' | 'warning' | 'error'</td>
-            <td class="py-2 pr-4 text-muted-foreground">'info'</td>
+            <td class="text-muted-foreground py-2 pr-4">'info' | 'success' | 'warning' | 'error'</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">'info'</td>
             <td class="py-2">Visual style variant</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>dismissible</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-            <td class="py-2 pr-4 text-muted-foreground">false</td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
             <td class="py-2">Show dismiss button</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>onDismiss</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">() =&gt; void</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">() =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Callback when dismissed</td>
           </tr>
-          <tr class="border-b border-border">
+          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>class</code></td>
-            <td class="py-2 pr-4 text-muted-foreground">string</td>
-            <td class="py-2 pr-4 text-muted-foreground">-</td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2">Additional CSS classes</td>
           </tr>
         </tbody>
@@ -159,14 +157,14 @@ const tocItems = [
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="text-xl font-semibold mb-4">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
   </section>
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-    <ul class="list-disc pl-6 space-y-2">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
           href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"

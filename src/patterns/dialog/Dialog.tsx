@@ -6,8 +6,8 @@ import React, {
   useId,
   useRef,
   useState,
-} from "react";
-import { createPortal } from "react-dom";
+} from 'react';
+import { createPortal } from 'react-dom';
 
 // ============================================================================
 // Context
@@ -26,7 +26,7 @@ const DialogContext = createContext<DialogContextValue | null>(null);
 function useDialogContext() {
   const context = useContext(DialogContext);
   if (!context) {
-    throw new Error("Dialog components must be used within a DialogRoot");
+    throw new Error('Dialog components must be used within a DialogRoot');
   }
   return context;
 }
@@ -86,8 +86,8 @@ export function DialogRoot({
       triggerRef.current?.focus();
     };
 
-    dialog.addEventListener("close", handleClose);
-    return () => dialog.removeEventListener("close", handleClose);
+    dialog.addEventListener('close', handleClose);
+    return () => dialog.removeEventListener('close', handleClose);
   }, [onOpenChange, mounted]);
 
   const contextValue: DialogContextValue = {
@@ -98,25 +98,23 @@ export function DialogRoot({
     descriptionId: `${instanceId}-description`,
   };
 
-  return (
-    <DialogContext.Provider value={contextValue}>
-      {children}
-    </DialogContext.Provider>
-  );
+  return <DialogContext.Provider value={contextValue}>{children}</DialogContext.Provider>;
 }
 
 // ============================================================================
 // DialogTrigger
 // ============================================================================
 
-export interface DialogTriggerProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
+export interface DialogTriggerProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onClick'
+> {
   children: React.ReactNode;
 }
 
 export function DialogTrigger({
   children,
-  className = "",
+  className = '',
   ...buttonProps
 }: DialogTriggerProps): React.ReactElement {
   const { open } = useDialogContext();
@@ -155,7 +153,7 @@ export function Dialog({
   description,
   children,
   closeOnOverlayClick = true,
-  className = "",
+  className = '',
 }: DialogProps): React.ReactElement | null {
   const { dialogRef, close, titleId, descriptionId } = useDialogContext();
   const [mounted, setMounted] = useState(false);
@@ -175,7 +173,7 @@ export function Dialog({
   );
 
   // SSR safety
-  if (typeof document === "undefined") return null;
+  if (typeof document === 'undefined') return null;
   if (!mounted) return null;
 
   return createPortal(

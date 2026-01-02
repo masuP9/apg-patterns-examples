@@ -1,17 +1,17 @@
 ---
-import type { HTMLAttributes } from "astro/types"
-import ChevronDownIcon from "lucide-static/icons/chevron-down.svg"
+import type { HTMLAttributes } from 'astro/types';
+import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface Props extends Omit<HTMLAttributes<"summary">, "class"> {
-  class?: string
-  showChevron?: boolean
+interface Props extends Omit<HTMLAttributes<'summary'>, 'class'> {
+  class?: string;
+  showChevron?: boolean;
 }
 
-const { class: className, showChevron = true, ...props } = Astro.props
+const { class: className, showChevron = true, ...props } = Astro.props;
 
-const slot = await Astro.slots.render("default")
+const slot = await Astro.slots.render('default');
 ---
 
 {
@@ -19,7 +19,7 @@ const slot = await Astro.slots.render("default")
     <summary
       data-slot="collapsible-trigger"
       class={cn(
-        "flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden",
+        'flex cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden',
         className
       )}
       {...props}

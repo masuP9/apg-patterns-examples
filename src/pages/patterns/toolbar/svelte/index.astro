@@ -30,98 +30,98 @@ const tocItems = [
 ---
 
 <PatternLayout title="Toolbar - Svelte" pattern="toolbar" framework="svelte" tocItems={tocItems}>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">Toolbar</h1>
-      <p class="text-lg text-muted-foreground">
-        A container for grouping a set of controls, such as buttons, toggle buttons, or other input elements.
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Toolbar</h1>
+    <p class="text-muted-foreground text-lg">
+      A container for grouping a set of controls, such as buttons, toggle buttons, or other input
+      elements.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="toolbar" currentFramework="svelte" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Text Formatting Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A horizontal toolbar with toggle buttons and regular buttons.
       </p>
-    </header>
-
-    <!-- Framework Selector -->
-    <FrameworkTabs pattern="toolbar" currentFramework="svelte" />
-
-    <!-- Demo Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
-
-      <!-- Text Formatting Toolbar -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Text Formatting Toolbar</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          A horizontal toolbar with toggle buttons and regular buttons.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <TextFormattingToolbarDemo client:load />
-        </div>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TextFormattingToolbarDemo client:load />
       </div>
+    </div>
 
-      <!-- Vertical Toolbar -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Vertical Toolbar</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Use arrow up/down keys to navigate.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <VerticalToolbarDemo client:load />
-        </div>
+    <!-- Vertical Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+      <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <VerticalToolbarDemo client:load />
       </div>
+    </div>
 
-      <!-- With Disabled Items -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">With Disabled Items</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Disabled items are skipped during keyboard navigation.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <DisabledItemsToolbarDemo client:load />
-        </div>
+    <!-- With Disabled Items -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled items are skipped during keyboard navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <DisabledItemsToolbarDemo client:load />
       </div>
+    </div>
 
-      <!-- Controlled Toggle Buttons -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Controlled Toggle Buttons</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Toggle buttons with controlled state. The current state is displayed and applied to the sample text.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <ToolbarToggleDemo client:load />
-        </div>
+    <!-- Controlled Toggle Buttons -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Toggle buttons with controlled state. The current state is displayed and applied to the
+        sample text.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <ToolbarToggleDemo client:load />
       </div>
+    </div>
 
-      <!-- Default Pressed States -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Default Pressed States</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled states.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <ToolbarToggleDefaultDemo client:load />
-        </div>
+    <!-- Default Pressed States -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Toggle buttons with <code>defaultPressed</code> for initial state, including disabled states.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <ToolbarToggleDefaultDemo client:load />
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Accessibility Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility</Heading>
-      <AccessibilityDocs />
-    </section>
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility</Heading>
+    <AccessibilityDocs />
+  </section>
 
-    <!-- Source Code Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-      <div class="space-y-4">
-        <CodeBlock code={toolbarSource} lang="svelte" title="Toolbar.svelte" />
-        <CodeBlock code={buttonSource} lang="svelte" title="ToolbarButton.svelte" />
-        <CodeBlock code={toggleSource} lang="svelte" title="ToolbarToggleButton.svelte" />
-        <CodeBlock code={separatorSource} lang="svelte" title="ToolbarSeparator.svelte" />
-      </div>
-    </section>
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <div class="space-y-4">
+      <CodeBlock code={toolbarSource} lang="svelte" title="Toolbar.svelte" />
+      <CodeBlock code={buttonSource} lang="svelte" title="ToolbarButton.svelte" />
+      <CodeBlock code={toggleSource} lang="svelte" title="ToolbarToggleButton.svelte" />
+      <CodeBlock code={separatorSource} lang="svelte" title="ToolbarSeparator.svelte" />
+    </div>
+  </section>
 
-    <!-- Usage Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
-      <CodeBlock
-        code={`<script>
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`<script>
   import Toolbar from '@patterns/toolbar/Toolbar.svelte';
   import ToolbarButton from '@patterns/toolbar/ToolbarButton.svelte';
   import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.svelte';
@@ -135,93 +135,92 @@ const tocItems = [
   <ToolbarButton>Copy</ToolbarButton>
   <ToolbarButton>Paste</ToolbarButton>
 </Toolbar>`}
-        lang="svelte"
-      />
-    </section>
+      lang="svelte"
+    />
+  </section>
 
-    <!-- API Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-      <h3 class="text-lg font-medium mb-3">Toolbar Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>orientation</code></td>
-              <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
-              <td class="py-2 pr-4"><code>'horizontal'</code></td>
-              <td class="py-2">Direction of the toolbar</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">Toolbar Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
+            <td class="py-2 pr-4"><code>'horizontal'</code></td>
+            <td class="py-2">Direction of the toolbar</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">ToolbarToggleButton Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>pressed</code></td>
-              <td class="py-2 pr-4"><code>boolean</code></td>
-              <td class="py-2 pr-4">-</td>
-              <td class="py-2">Controlled pressed state</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>defaultPressed</code></td>
-              <td class="py-2 pr-4"><code>boolean</code></td>
-              <td class="py-2 pr-4"><code>false</code></td>
-              <td class="py-2">Initial pressed state</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>onPressedChange</code></td>
-              <td class="py-2 pr-4"><code>(pressed: boolean) =&gt; void</code></td>
-              <td class="py-2 pr-4">-</td>
-              <td class="py-2">Callback when pressed state changes</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
-    </section>
+    <h3 class="mb-3 text-lg font-medium">ToolbarToggleButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pressed</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">Controlled pressed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultPressed</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">Initial pressed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onPressedChange</code></td>
+            <td class="py-2 pr-4"><code>(pressed: boolean) =&gt; void</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">Callback when pressed state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
 
-    <!-- Testing Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Testing</Heading>
-      <TestingDocs />
-      <div class="mt-6">
-        <CodeBlock
-          code={testCode}
-          lang="typescript"
-          title="Toolbar.test.svelte.ts"
-        />
-      </div>
-    </section>
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock code={testCode} lang="typescript" title="Toolbar.test.svelte.ts" />
+    </div>
+  </section>
 
-    <!-- Resources Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-      <ul class="list-disc list-inside space-y-2">
-        <li>
-          <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" class="text-primary hover:underline">
-            WAI-ARIA APG: Toolbar Pattern
-          </ExternalLink>
-        </li>
-      </ul>
-    </section>
+  <!-- Resources Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-inside list-disc space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Toolbar Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
 </PatternLayout>

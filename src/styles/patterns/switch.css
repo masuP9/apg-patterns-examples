@@ -40,10 +40,12 @@ apg-switch {
   border-radius: 9999px;
   background: var(--input);
   border: 2px solid var(--input);
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 }
 
-.apg-switch[aria-checked="true"] .apg-switch-track {
+.apg-switch[aria-checked='true'] .apg-switch-track {
   background: var(--primary);
   border-color: var(--primary);
 }
@@ -52,7 +54,7 @@ apg-switch {
   border-color: var(--foreground);
 }
 
-.apg-switch[aria-checked="true"]:hover:not(:disabled) .apg-switch-track {
+.apg-switch[aria-checked='true']:hover:not(:disabled) .apg-switch-track {
   background: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
   border-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
 }
@@ -80,7 +82,7 @@ apg-switch {
   fill: currentColor;
 }
 
-.apg-switch[aria-checked="true"] .apg-switch-icon {
+.apg-switch[aria-checked='true'] .apg-switch-icon {
   opacity: 1;
 }
 
@@ -96,7 +98,7 @@ apg-switch {
   transition: transform 0.2s;
 }
 
-.apg-switch[aria-checked="true"] .apg-switch-thumb {
+.apg-switch[aria-checked='true'] .apg-switch-thumb {
   transform: translateX(1.5rem);
 }
 
@@ -115,12 +117,12 @@ apg-switch {
     border-width: 3px;
   }
 
-  .apg-switch[aria-checked="true"] .apg-switch-track {
+  .apg-switch[aria-checked='true'] .apg-switch-track {
     background-color: black;
     border-color: black;
   }
 
-  .apg-switch[aria-checked="false"] .apg-switch-track {
+  .apg-switch[aria-checked='false'] .apg-switch-track {
     background-color: white;
     border-color: black;
   }
@@ -129,7 +131,7 @@ apg-switch {
     background-color: black;
   }
 
-  .apg-switch[aria-checked="true"] .apg-switch-thumb {
+  .apg-switch[aria-checked='true'] .apg-switch-thumb {
     background-color: white;
   }
 
@@ -140,7 +142,6 @@ apg-switch {
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
-
   .apg-switch-track,
   .apg-switch-thumb,
   .apg-switch-icon {
@@ -156,7 +157,7 @@ apg-switch {
     forced-color-adjust: none;
   }
 
-  .apg-switch[aria-checked="true"] .apg-switch-track {
+  .apg-switch[aria-checked='true'] .apg-switch-track {
     background: Highlight;
     border-color: Highlight;
   }
@@ -166,7 +167,7 @@ apg-switch {
     forced-color-adjust: none;
   }
 
-  .apg-switch[aria-checked="true"] .apg-switch-thumb {
+  .apg-switch[aria-checked='true'] .apg-switch-thumb {
     background: HighlightText;
   }
 

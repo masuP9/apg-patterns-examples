@@ -17,11 +17,7 @@ export interface Props {
   class?: string;
 }
 
-const {
-  initialChecked = false,
-  disabled = false,
-  class: className = "",
-} = Astro.props;
+const { initialChecked = false, disabled = false, class: className = '' } = Astro.props;
 ---
 
 <apg-switch class={className}>
@@ -38,17 +34,18 @@ const {
         <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M10.28 2.28a.75.75 0 00-1.06-1.06L4.5 5.94 2.78 4.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.06 0l5.25-5.25z"
-            fill="currentColor"
-          />
+            fill="currentColor"></path>
         </svg>
       </span>
       <span class="apg-switch-thumb"></span>
     </span>
-    {Astro.slots.has('default') && (
-      <span class="apg-switch-label">
-        <slot />
-      </span>
-    )}
+    {
+      Astro.slots.has('default') && (
+        <span class="apg-switch-label">
+          <slot />
+        </span>
+      )
+    }
   </button>
 </apg-switch>
 
@@ -65,12 +62,12 @@ const {
       this.rafId = null;
       this.button = this.querySelector('button[role="switch"]');
       if (!this.button) {
-        console.warn("apg-switch: button element not found");
+        console.warn('apg-switch: button element not found');
         return;
       }
 
-      this.button.addEventListener("click", this.handleClick);
-      this.button.addEventListener("keydown", this.handleKeyDown);
+      this.button.addEventListener('click', this.handleClick);
+      this.button.addEventListener('keydown', this.handleKeyDown);
     }
 
     disconnectedCallback() {
@@ -78,22 +75,21 @@ const {
         cancelAnimationFrame(this.rafId);
         this.rafId = null;
       }
-      this.button?.removeEventListener("click", this.handleClick);
-      this.button?.removeEventListener("keydown", this.handleKeyDown);
+      this.button?.removeEventListener('click', this.handleClick);
+      this.button?.removeEventListener('keydown', this.handleKeyDown);
       this.button = null;
     }
 
     private toggle() {
       if (!this.button || this.button.disabled) return;
 
-      const currentChecked =
-        this.button.getAttribute("aria-checked") === "true";
+      const currentChecked = this.button.getAttribute('aria-checked') === 'true';
       const newChecked = !currentChecked;
 
-      this.button.setAttribute("aria-checked", String(newChecked));
+      this.button.setAttribute('aria-checked', String(newChecked));
 
       this.dispatchEvent(
-        new CustomEvent("change", {
+        new CustomEvent('change', {
           detail: { checked: newChecked },
           bubbles: true,
         })
@@ -105,14 +101,14 @@ const {
     };
 
     private handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === " " || event.key === "Enter") {
+      if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
         this.toggle();
       }
     };
   }
 
-  if (!customElements.get("apg-switch")) {
-    customElements.define("apg-switch", ApgSwitch);
+  if (!customElements.get('apg-switch')) {
+    customElements.define('apg-switch', ApgSwitch);
   }
 </script>

@@ -29,11 +29,7 @@ export interface Props {
   class?: string;
 }
 
-const {
-  defaultPressed = false,
-  disabled = false,
-  class: className = '',
-} = Astro.props;
+const { defaultPressed = false, disabled = false, class: className = '' } = Astro.props;
 ---
 
 <apg-toolbar-toggle-button>

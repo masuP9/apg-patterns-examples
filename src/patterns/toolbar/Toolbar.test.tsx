@@ -1,24 +1,19 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { axe } from "jest-axe";
-import { describe, expect, it, vi } from "vitest";
-import {
-  Toolbar,
-  ToolbarButton,
-  ToolbarToggleButton,
-  ToolbarSeparator,
-} from "./Toolbar";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
+import { describe, expect, it, vi } from 'vitest';
+import { Toolbar, ToolbarButton, ToolbarToggleButton, ToolbarSeparator } from './Toolbar';
 
-describe("Toolbar", () => {
+describe('Toolbar', () => {
   // 🔴 High Priority: APG 準拠の核心
-  describe("APG: ARIA 属性", () => {
+  describe('APG: ARIA 属性', () => {
     it('role="toolbar" が設定される', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarButton>Button</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("toolbar")).toBeInTheDocument();
+      expect(screen.getByRole('toolbar')).toBeInTheDocument();
     });
 
     it('aria-orientation がデフォルトで "horizontal"', () => {
@@ -27,10 +22,7 @@ describe("Toolbar", () => {
           <ToolbarButton>Button</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("toolbar")).toHaveAttribute(
-        "aria-orientation",
-        "horizontal"
-      );
+      expect(screen.getByRole('toolbar')).toHaveAttribute('aria-orientation', 'horizontal');
     });
 
     it('aria-orientation が orientation prop を反映する', () => {
@@ -39,35 +31,26 @@ describe("Toolbar", () => {
           <ToolbarButton>Button</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("toolbar")).toHaveAttribute(
-        "aria-orientation",
-        "vertical"
-      );
+      expect(screen.getByRole('toolbar')).toHaveAttribute('aria-orientation', 'vertical');
 
       rerender(
         <Toolbar aria-label="Test toolbar" orientation="horizontal">
           <ToolbarButton>Button</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("toolbar")).toHaveAttribute(
-        "aria-orientation",
-        "horizontal"
-      );
+      expect(screen.getByRole('toolbar')).toHaveAttribute('aria-orientation', 'horizontal');
     });
 
-    it("aria-label が透過される", () => {
+    it('aria-label が透過される', () => {
       render(
         <Toolbar aria-label="Text formatting">
           <ToolbarButton>Button</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("toolbar")).toHaveAttribute(
-        "aria-label",
-        "Text formatting"
-      );
+      expect(screen.getByRole('toolbar')).toHaveAttribute('aria-label', 'Text formatting');
     });
 
-    it("aria-labelledby が透過される", () => {
+    it('aria-labelledby が透過される', () => {
       render(
         <>
           <h2 id="toolbar-label">Toolbar Label</h2>
@@ -76,15 +59,12 @@ describe("Toolbar", () => {
           </Toolbar>
         </>
       );
-      expect(screen.getByRole("toolbar")).toHaveAttribute(
-        "aria-labelledby",
-        "toolbar-label"
-      );
+      expect(screen.getByRole('toolbar')).toHaveAttribute('aria-labelledby', 'toolbar-label');
     });
   });
 
-  describe("APG: キーボード操作 (Horizontal)", () => {
-    it("ArrowRight で次のボタンにフォーカス移動", async () => {
+  describe('APG: キーボード操作 (Horizontal)', () => {
+    it('ArrowRight で次のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -94,15 +74,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowRight}");
+      await user.keyboard('{ArrowRight}');
 
-      expect(screen.getByRole("button", { name: "Second" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Second' })).toHaveFocus();
     });
 
-    it("ArrowLeft で前のボタンにフォーカス移動", async () => {
+    it('ArrowLeft で前のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -112,15 +92,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const secondButton = screen.getByRole("button", { name: "Second" });
+      const secondButton = screen.getByRole('button', { name: 'Second' });
       secondButton.focus();
 
-      await user.keyboard("{ArrowLeft}");
+      await user.keyboard('{ArrowLeft}');
 
-      expect(screen.getByRole("button", { name: "First" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'First' })).toHaveFocus();
     });
 
-    it("ArrowRight で最後から先頭にラップしない（端で止まる）", async () => {
+    it('ArrowRight で最後から先頭にラップしない（端で止まる）', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -130,15 +110,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const thirdButton = screen.getByRole("button", { name: "Third" });
+      const thirdButton = screen.getByRole('button', { name: 'Third' });
       thirdButton.focus();
 
-      await user.keyboard("{ArrowRight}");
+      await user.keyboard('{ArrowRight}');
 
       expect(thirdButton).toHaveFocus();
     });
 
-    it("ArrowLeft で先頭から最後にラップしない（端で止まる）", async () => {
+    it('ArrowLeft で先頭から最後にラップしない（端で止まる）', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -148,15 +128,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowLeft}");
+      await user.keyboard('{ArrowLeft}');
 
       expect(firstButton).toHaveFocus();
     });
 
-    it("ArrowUp/Down は水平ツールバーでは無効", async () => {
+    it('ArrowUp/Down は水平ツールバーでは無効', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -165,17 +145,17 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowDown}");
+      await user.keyboard('{ArrowDown}');
       expect(firstButton).toHaveFocus();
 
-      await user.keyboard("{ArrowUp}");
+      await user.keyboard('{ArrowUp}');
       expect(firstButton).toHaveFocus();
     });
 
-    it("Home で最初のボタンにフォーカス移動", async () => {
+    it('Home で最初のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -185,15 +165,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const thirdButton = screen.getByRole("button", { name: "Third" });
+      const thirdButton = screen.getByRole('button', { name: 'Third' });
       thirdButton.focus();
 
-      await user.keyboard("{Home}");
+      await user.keyboard('{Home}');
 
-      expect(screen.getByRole("button", { name: "First" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'First' })).toHaveFocus();
     });
 
-    it("End で最後のボタンにフォーカス移動", async () => {
+    it('End で最後のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -203,15 +183,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{End}");
+      await user.keyboard('{End}');
 
-      expect(screen.getByRole("button", { name: "Third" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Third' })).toHaveFocus();
     });
 
-    it("disabled アイテムをスキップして移動", async () => {
+    it('disabled アイテムをスキップして移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -221,17 +201,17 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowRight}");
+      await user.keyboard('{ArrowRight}');
 
-      expect(screen.getByRole("button", { name: "Third" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Third' })).toHaveFocus();
     });
   });
 
-  describe("APG: キーボード操作 (Vertical)", () => {
-    it("ArrowDown で次のボタンにフォーカス移動", async () => {
+  describe('APG: キーボード操作 (Vertical)', () => {
+    it('ArrowDown で次のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar" orientation="vertical">
@@ -241,15 +221,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowDown}");
+      await user.keyboard('{ArrowDown}');
 
-      expect(screen.getByRole("button", { name: "Second" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Second' })).toHaveFocus();
     });
 
-    it("ArrowUp で前のボタンにフォーカス移動", async () => {
+    it('ArrowUp で前のボタンにフォーカス移動', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar" orientation="vertical">
@@ -259,15 +239,15 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const secondButton = screen.getByRole("button", { name: "Second" });
+      const secondButton = screen.getByRole('button', { name: 'Second' });
       secondButton.focus();
 
-      await user.keyboard("{ArrowUp}");
+      await user.keyboard('{ArrowUp}');
 
-      expect(screen.getByRole("button", { name: "First" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'First' })).toHaveFocus();
     });
 
-    it("ArrowLeft/Right は垂直ツールバーでは無効", async () => {
+    it('ArrowLeft/Right は垂直ツールバーでは無効', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar" orientation="vertical">
@@ -276,17 +256,17 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const firstButton = screen.getByRole("button", { name: "First" });
+      const firstButton = screen.getByRole('button', { name: 'First' });
       firstButton.focus();
 
-      await user.keyboard("{ArrowRight}");
+      await user.keyboard('{ArrowRight}');
       expect(firstButton).toHaveFocus();
 
-      await user.keyboard("{ArrowLeft}");
+      await user.keyboard('{ArrowLeft}');
       expect(firstButton).toHaveFocus();
     });
 
-    it("ArrowDown で端で止まる（ラップしない）", async () => {
+    it('ArrowDown で端で止まる（ラップしない）', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar" orientation="vertical">
@@ -295,17 +275,17 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const secondButton = screen.getByRole("button", { name: "Second" });
+      const secondButton = screen.getByRole('button', { name: 'Second' });
       secondButton.focus();
 
-      await user.keyboard("{ArrowDown}");
+      await user.keyboard('{ArrowDown}');
 
       expect(secondButton).toHaveFocus();
     });
   });
 
-  describe("APG: フォーカス管理", () => {
-    it("最初の有効なアイテムが tabIndex=0、他は tabIndex=-1 (Roving Tabindex)", () => {
+  describe('APG: フォーカス管理', () => {
+    it('最初の有効なアイテムが tabIndex=0、他は tabIndex=-1 (Roving Tabindex)', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarButton>First</ToolbarButton>
@@ -313,12 +293,12 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      const buttons = screen.getAllByRole("button");
-      expect(buttons[0]).toHaveAttribute("tabIndex", "0");
-      expect(buttons[1]).toHaveAttribute("tabIndex", "-1");
+      const buttons = screen.getAllByRole('button');
+      expect(buttons[0]).toHaveAttribute('tabIndex', '0');
+      expect(buttons[1]).toHaveAttribute('tabIndex', '-1');
     });
 
-    it("クリックでフォーカス位置が更新される", async () => {
+    it('クリックでフォーカス位置が更新される', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -328,23 +308,23 @@ describe("Toolbar", () => {
         </Toolbar>
       );
 
-      await user.click(screen.getByRole("button", { name: "Second" }));
-      await user.keyboard("{ArrowRight}");
+      await user.click(screen.getByRole('button', { name: 'Second' }));
+      await user.keyboard('{ArrowRight}');
 
-      expect(screen.getByRole("button", { name: "Third" })).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Third' })).toHaveFocus();
     });
   });
 });
 
-describe("ToolbarButton", () => {
-  describe("ARIA 属性", () => {
+describe('ToolbarButton', () => {
+  describe('ARIA 属性', () => {
     it('role="button" が暗黙的に設定される', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarButton>Click me</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button", { name: "Click me" })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
     });
 
     it('type="button" が設定される', () => {
@@ -353,12 +333,12 @@ describe("ToolbarButton", () => {
           <ToolbarButton>Click me</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+      expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
     });
   });
 
-  describe("機能", () => {
-    it("クリックで onClick が発火", async () => {
+  describe('機能', () => {
+    it('クリックで onClick が発火', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(
@@ -367,12 +347,12 @@ describe("ToolbarButton", () => {
         </Toolbar>
       );
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole('button'));
 
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
-    it("Enter で onClick が発火", async () => {
+    it('Enter で onClick が発火', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(
@@ -381,14 +361,14 @@ describe("ToolbarButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole('button');
       button.focus();
-      await user.keyboard("{Enter}");
+      await user.keyboard('{Enter}');
 
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
-    it("Space で onClick が発火", async () => {
+    it('Space で onClick が発火', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(
@@ -397,14 +377,14 @@ describe("ToolbarButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole('button');
       button.focus();
-      await user.keyboard(" ");
+      await user.keyboard(' ');
 
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
-    it("disabled 時は onClick が発火しない", async () => {
+    it('disabled 時は onClick が発火しない', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(
@@ -415,31 +395,31 @@ describe("ToolbarButton", () => {
         </Toolbar>
       );
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole('button'));
 
       expect(handleClick).not.toHaveBeenCalled();
     });
 
-    it("disabled 時はフォーカス対象外（disabled属性で非フォーカス）", () => {
+    it('disabled 時はフォーカス対象外（disabled属性で非フォーカス）', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarButton disabled>Click me</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toBeDisabled();
+      expect(screen.getByRole('button')).toBeDisabled();
     });
   });
 });
 
-describe("ToolbarToggleButton", () => {
-  describe("ARIA 属性", () => {
+describe('ToolbarToggleButton', () => {
+  describe('ARIA 属性', () => {
     it('role="button" が暗黙的に設定される', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarToggleButton>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button", { name: "Toggle" })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Toggle' })).toBeInTheDocument();
     });
 
     it('type="button" が設定される', () => {
@@ -448,7 +428,7 @@ describe("ToolbarToggleButton", () => {
           <ToolbarToggleButton>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+      expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
     });
 
     it('aria-pressed="false" が初期状態で設定される', () => {
@@ -457,7 +437,7 @@ describe("ToolbarToggleButton", () => {
           <ToolbarToggleButton>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toHaveAttribute("aria-pressed", "false");
+      expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'false');
     });
 
     it('aria-pressed="true" が押下状態で設定される', () => {
@@ -466,12 +446,12 @@ describe("ToolbarToggleButton", () => {
           <ToolbarToggleButton defaultPressed>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
     });
   });
 
-  describe("機能", () => {
-    it("クリックで aria-pressed がトグル", async () => {
+  describe('機能', () => {
+    it('クリックで aria-pressed がトグル', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -479,17 +459,17 @@ describe("ToolbarToggleButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('aria-pressed', 'false');
 
       await user.click(button);
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      expect(button).toHaveAttribute('aria-pressed', 'true');
 
       await user.click(button);
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveAttribute('aria-pressed', 'false');
     });
 
-    it("Enter で aria-pressed がトグル", async () => {
+    it('Enter で aria-pressed がトグル', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -497,15 +477,15 @@ describe("ToolbarToggleButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole('button');
       button.focus();
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveAttribute('aria-pressed', 'false');
 
-      await user.keyboard("{Enter}");
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      await user.keyboard('{Enter}');
+      expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it("Space で aria-pressed がトグル", async () => {
+    it('Space で aria-pressed がトグル', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -513,44 +493,42 @@ describe("ToolbarToggleButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole('button');
       button.focus();
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveAttribute('aria-pressed', 'false');
 
-      await user.keyboard(" ");
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      await user.keyboard(' ');
+      expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it("onPressedChange が発火", async () => {
+    it('onPressedChange が発火', async () => {
       const handlePressedChange = vi.fn();
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
-          <ToolbarToggleButton onPressedChange={handlePressedChange}>
-            Toggle
-          </ToolbarToggleButton>
+          <ToolbarToggleButton onPressedChange={handlePressedChange}>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole('button'));
 
       expect(handlePressedChange).toHaveBeenCalledWith(true);
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole('button'));
 
       expect(handlePressedChange).toHaveBeenCalledWith(false);
     });
 
-    it("defaultPressed で初期状態を設定", () => {
+    it('defaultPressed で初期状態を設定', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarToggleButton defaultPressed>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it("pressed で制御された状態", async () => {
+    it('pressed で制御された状態', async () => {
       const user = userEvent.setup();
       const Controlled = () => {
         const [pressed, setPressed] = React.useState(false);
@@ -565,14 +543,14 @@ describe("ToolbarToggleButton", () => {
 
       render(<Controlled />);
 
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('aria-pressed', 'false');
 
       await user.click(button);
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it("disabled 時はトグルしない", async () => {
+    it('disabled 時はトグルしない', async () => {
       const user = userEvent.setup();
       render(
         <Toolbar aria-label="Test toolbar">
@@ -580,15 +558,15 @@ describe("ToolbarToggleButton", () => {
         </Toolbar>
       );
 
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('aria-pressed', 'false');
 
       await user.click(button);
 
-      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveAttribute('aria-pressed', 'false');
     });
 
-    it("disabled 時は onPressedChange が発火しない", async () => {
+    it('disabled 時は onPressedChange が発火しない', async () => {
       const handlePressedChange = vi.fn();
       const user = userEvent.setup();
       render(
@@ -599,24 +577,24 @@ describe("ToolbarToggleButton", () => {
         </Toolbar>
       );
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole('button'));
 
       expect(handlePressedChange).not.toHaveBeenCalled();
     });
 
-    it("disabled 時はフォーカス対象外（disabled属性で非フォーカス）", () => {
+    it('disabled 時はフォーカス対象外（disabled属性で非フォーカス）', () => {
       render(
         <Toolbar aria-label="Test toolbar">
           <ToolbarToggleButton disabled>Toggle</ToolbarToggleButton>
         </Toolbar>
       );
-      expect(screen.getByRole("button")).toBeDisabled();
+      expect(screen.getByRole('button')).toBeDisabled();
     });
   });
 });
 
-describe("ToolbarSeparator", () => {
-  describe("ARIA 属性", () => {
+describe('ToolbarSeparator', () => {
+  describe('ARIA 属性', () => {
     it('role="separator" が設定される', () => {
       render(
         <Toolbar aria-label="Test toolbar">
@@ -625,7 +603,7 @@ describe("ToolbarSeparator", () => {
           <ToolbarButton>After</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("separator")).toBeInTheDocument();
+      expect(screen.getByRole('separator')).toBeInTheDocument();
     });
 
     it('horizontal toolbar 時に aria-orientation="vertical"', () => {
@@ -636,10 +614,7 @@ describe("ToolbarSeparator", () => {
           <ToolbarButton>After</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("separator")).toHaveAttribute(
-        "aria-orientation",
-        "vertical"
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-orientation', 'vertical');
     });
 
     it('vertical toolbar 時に aria-orientation="horizontal"', () => {
@@ -650,16 +625,13 @@ describe("ToolbarSeparator", () => {
           <ToolbarButton>After</ToolbarButton>
         </Toolbar>
       );
-      expect(screen.getByRole("separator")).toHaveAttribute(
-        "aria-orientation",
-        "horizontal"
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-orientation', 'horizontal');
     });
   });
 });
 
-describe("アクセシビリティ", () => {
-  it("axe による WCAG 2.1 AA 違反がない", async () => {
+describe('アクセシビリティ', () => {
+  it('axe による WCAG 2.1 AA 違反がない', async () => {
     const { container } = render(
       <Toolbar aria-label="Text formatting">
         <ToolbarToggleButton>Bold</ToolbarToggleButton>
@@ -673,7 +645,7 @@ describe("アクセシビリティ", () => {
     expect(results).toHaveNoViolations();
   });
 
-  it("vertical toolbar でも WCAG 2.1 AA 違反がない", async () => {
+  it('vertical toolbar でも WCAG 2.1 AA 違反がない', async () => {
     const { container } = render(
       <Toolbar aria-label="Actions" orientation="vertical">
         <ToolbarButton>New</ToolbarButton>
@@ -687,35 +659,35 @@ describe("アクセシビリティ", () => {
   });
 });
 
-describe("HTML 属性継承", () => {
-  it("className がコンテナに適用される", () => {
+describe('HTML 属性継承', () => {
+  it('className がコンテナに適用される', () => {
     render(
       <Toolbar aria-label="Test toolbar" className="custom-toolbar">
         <ToolbarButton>Button</ToolbarButton>
       </Toolbar>
     );
-    expect(screen.getByRole("toolbar")).toHaveClass("custom-toolbar");
+    expect(screen.getByRole('toolbar')).toHaveClass('custom-toolbar');
   });
 
-  it("ToolbarButton の className が適用される", () => {
+  it('ToolbarButton の className が適用される', () => {
     render(
       <Toolbar aria-label="Test toolbar">
         <ToolbarButton className="custom-button">Button</ToolbarButton>
       </Toolbar>
     );
-    expect(screen.getByRole("button")).toHaveClass("custom-button");
+    expect(screen.getByRole('button')).toHaveClass('custom-button');
   });
 
-  it("ToolbarToggleButton の className が適用される", () => {
+  it('ToolbarToggleButton の className が適用される', () => {
     render(
       <Toolbar aria-label="Test toolbar">
         <ToolbarToggleButton className="custom-toggle">Toggle</ToolbarToggleButton>
       </Toolbar>
     );
-    expect(screen.getByRole("button")).toHaveClass("custom-toggle");
+    expect(screen.getByRole('button')).toHaveClass('custom-toggle');
   });
 
-  it("ToolbarSeparator の className が適用される", () => {
+  it('ToolbarSeparator の className が適用される', () => {
     render(
       <Toolbar aria-label="Test toolbar">
         <ToolbarButton>Before</ToolbarButton>
@@ -723,9 +695,9 @@ describe("HTML 属性継承", () => {
         <ToolbarButton>After</ToolbarButton>
       </Toolbar>
     );
-    expect(screen.getByRole("separator")).toHaveClass("custom-separator");
+    expect(screen.getByRole('separator')).toHaveClass('custom-separator');
   });
 });
 
 // Import React for the controlled component test
-import React from "react";
+import React from 'react';

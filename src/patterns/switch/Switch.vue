@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineOptions({
-  inheritAttrs: false
-})
+  inheritAttrs: false,
+});
 
 export interface SwitchProps {
   /** Initial checked state */
@@ -46,35 +46,35 @@ export interface SwitchProps {
 const props = withDefaults(defineProps<SwitchProps>(), {
   initialChecked: false,
   disabled: false,
-  onCheckedChange: undefined
-})
+  onCheckedChange: undefined,
+});
 
 const emit = defineEmits<{
-  change: [checked: boolean]
-}>()
+  change: [checked: boolean];
+}>();
 
 defineSlots<{
-  default(): unknown
-}>()
+  default(): unknown;
+}>();
 
-const checked = ref(props.initialChecked)
+const checked = ref(props.initialChecked);
 
 const toggle = () => {
-  if (props.disabled) return
-  const newChecked = !checked.value
-  checked.value = newChecked
-  props.onCheckedChange?.(newChecked)
-  emit('change', newChecked)
-}
+  if (props.disabled) return;
+  const newChecked = !checked.value;
+  checked.value = newChecked;
+  props.onCheckedChange?.(newChecked);
+  emit('change', newChecked);
+};
 
 const handleClick = () => {
-  toggle()
-}
+  toggle();
+};
 
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === ' ' || event.key === 'Enter') {
-    event.preventDefault()
-    toggle()
+    event.preventDefault();
+    toggle();
   }
-}
+};
 </script>

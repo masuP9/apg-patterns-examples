@@ -1,36 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Toolbar from './Toolbar.vue'
-import ToolbarToggleButton from './ToolbarToggleButton.vue'
+import { ref } from 'vue';
+import Toolbar from './Toolbar.vue';
+import ToolbarToggleButton from './ToolbarToggleButton.vue';
 
-const isBold = ref(false)
-const isItalic = ref(false)
-const isUnderline = ref(false)
+const isBold = ref(false);
+const isItalic = ref(false);
+const isUnderline = ref(false);
 </script>
 
 <template>
   <div class="space-y-4">
     <Toolbar aria-label="Text formatting with state">
-      <ToolbarToggleButton
-        :pressed="isBold"
-        @update:pressed="isBold = $event"
-      >
+      <ToolbarToggleButton :pressed="isBold" @update:pressed="isBold = $event">
         Bold
       </ToolbarToggleButton>
-      <ToolbarToggleButton
-        :pressed="isItalic"
-        @update:pressed="isItalic = $event"
-      >
+      <ToolbarToggleButton :pressed="isItalic" @update:pressed="isItalic = $event">
         Italic
       </ToolbarToggleButton>
-      <ToolbarToggleButton
-        :pressed="isUnderline"
-        @update:pressed="isUnderline = $event"
-      >
+      <ToolbarToggleButton :pressed="isUnderline" @update:pressed="isUnderline = $event">
         Underline
       </ToolbarToggleButton>
     </Toolbar>
-    <div class="text-sm text-muted-foreground">
+    <div class="text-muted-foreground text-sm">
       <p>
         Current state:
         <span class="font-mono">
@@ -39,7 +30,7 @@ const isUnderline = ref(false)
       </p>
     </div>
     <div
-      class="p-4 border border-border rounded-lg"
+      class="border-border rounded-lg border p-4"
       :style="{
         fontWeight: isBold ? 'bold' : 'normal',
         fontStyle: isItalic ? 'italic' : 'normal',

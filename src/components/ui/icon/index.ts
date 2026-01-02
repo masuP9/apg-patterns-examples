@@ -1,1 +1,1 @@
-export { default as Icon } from "./icon.astro"
+export { default as Icon } from './icon.astro';

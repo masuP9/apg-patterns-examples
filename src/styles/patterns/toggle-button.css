@@ -30,13 +30,13 @@
 }
 
 /* Pressed State */
-.apg-toggle-button[aria-pressed="true"] {
+.apg-toggle-button[aria-pressed='true'] {
   background-color: var(--primary);
   color: var(--primary-foreground);
   border-color: var(--primary);
 }
 
-.apg-toggle-button[aria-pressed="true"]:hover:not(:disabled) {
+.apg-toggle-button[aria-pressed='true']:hover:not(:disabled) {
   background-image: linear-gradient(
     to bottom right,
     var(--primary) 0%,
@@ -45,22 +45,18 @@
 }
 
 /* Not Pressed State */
-.apg-toggle-button[aria-pressed="false"] {
+.apg-toggle-button[aria-pressed='false'] {
   background-color: var(--background);
   color: var(--foreground);
   border-color: var(--border);
 }
 
-.apg-toggle-button[aria-pressed="false"]:hover:not(:disabled) {
-  background-color: color-mix(
-    in srgb,
-    var(--background) 95%,
-    var(--foreground)
-  );
+.apg-toggle-button[aria-pressed='false']:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--background) 95%, var(--foreground));
   border-color: var(--foreground);
 }
 
-.apg-toggle-button[aria-pressed="false"]:active:not(:disabled) {
+.apg-toggle-button[aria-pressed='false']:active:not(:disabled) {
   transform: scale(0.98);
 }
 
@@ -95,13 +91,13 @@
   object-fit: contain;
 }
 
-.apg-toggle-button[aria-pressed="true"] .apg-toggle-indicator {
+.apg-toggle-button[aria-pressed='true'] .apg-toggle-indicator {
   color: #fde047;
   transform: scale(1.1);
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1));
 }
 
-.apg-toggle-button[aria-pressed="false"] .apg-toggle-indicator {
+.apg-toggle-button[aria-pressed='false'] .apg-toggle-indicator {
   color: var(--muted-foreground);
 }
 
@@ -115,7 +111,7 @@
     border-width: 4px;
   }
 
-  .apg-toggle-button[aria-pressed="true"] {
+  .apg-toggle-button[aria-pressed='true'] {
     background-color: black;
     color: white;
     border-color: black;
@@ -158,7 +154,7 @@
     color: ButtonText;
   }
 
-  .apg-toggle-button[aria-pressed="true"] {
+  .apg-toggle-button[aria-pressed='true'] {
     background: Highlight;
     color: HighlightText;
     border-color: Highlight;

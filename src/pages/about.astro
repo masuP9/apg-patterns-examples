@@ -4,37 +4,44 @@ import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/t
 ---
 
 <BaseLayout title="About">
-  <div class="max-w-3xl mx-auto">
+  <div class="mx-auto max-w-3xl">
     <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">About APG Patterns Examples</h1>
-      <p class="text-lg text-muted-foreground">
-        A collection of accessible component implementations based on WAI-ARIA Authoring Practices Guide.
+      <h1 class="mb-4 text-3xl font-bold">About APG Patterns Examples</h1>
+      <p class="text-muted-foreground text-lg">
+        A collection of accessible component implementations based on WAI-ARIA Authoring Practices
+        Guide.
       </p>
     </header>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-4">What is this project?</h2>
+      <h2 class="mb-4 text-2xl font-semibold">What is this project?</h2>
       <p class="text-muted-foreground mb-4">
         APG Patterns Examples provides production-ready implementations of WAI-ARIA design patterns
         in React, Vue, Svelte, and Astro. Each pattern follows the official
-        <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
           WAI-ARIA Authoring Practices Guide (APG)
         </a> specifications.
       </p>
       <p class="text-muted-foreground">
-        The goal is to help developers build accessible web applications by providing
-        clear, working examples that can be studied, tested, and adapted for their own projects.
+        The goal is to help developers build accessible web applications by providing clear, working
+        examples that can be studied, tested, and adapted for their own projects.
       </p>
     </section>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-4">Features</h2>
+      <h2 class="mb-4 text-2xl font-semibold">Features</h2>
       <div class="grid gap-4 md:grid-cols-2">
         <Tile variant="floating">
           <TileContent>
             <TileTitle>Multi-Framework</TileTitle>
             <TileDescription>
-              Each pattern is implemented in React, Vue, Svelte, and Astro with framework-specific best practices.
+              Each pattern is implemented in React, Vue, Svelte, and Astro with framework-specific
+              best practices.
             </TileDescription>
           </TileContent>
         </Tile>
@@ -69,20 +76,35 @@ import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/t
     </section>
 
     <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-4">Resources</h2>
-      <ul class="space-y-2 text-muted-foreground">
+      <h2 class="mb-4 text-2xl font-semibold">Resources</h2>
+      <ul class="text-muted-foreground space-y-2">
         <li>
-          <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+          <a
+            href="https://www.w3.org/WAI/ARIA/apg/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
             WAI-ARIA Authoring Practices Guide
           </a>
         </li>
         <li>
-          <a href="https://github.com/masuP9/apg-patterns-examples" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+          <a
+            href="https://github.com/masuP9/apg-patterns-examples"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
             GitHub Repository
           </a>
         </li>
         <li>
-          <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+          <a
+            href="https://www.w3.org/WAI/WCAG21/quickref/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
             WCAG 2.1 Quick Reference
           </a>
         </li>
@@ -90,10 +112,15 @@ import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/t
     </section>
 
     <section>
-      <h2 class="text-2xl font-semibold mb-4">Contributing</h2>
+      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
       <p class="text-muted-foreground">
         Contributions are welcome! Please visit our
-        <a href="https://github.com/masuP9/apg-patterns-examples" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
           GitHub repository
         </a> to report issues, suggest improvements, or submit pull requests.
       </p>

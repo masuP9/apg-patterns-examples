@@ -6,54 +6,63 @@ import { DEFAULT_FRAMEWORK } from '@/lib/frameworks';
 ---
 
 <BaseLayout title="Patterns">
-  <div class="max-w-4xl mx-auto">
+  <div class="mx-auto max-w-4xl">
     <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">APG Patterns</h1>
-      <p class="text-lg text-muted-foreground">
-        Accessible component patterns based on WAI-ARIA Authoring Practices Guide.
-        Each pattern is implemented in React, Vue, Svelte, and Astro.
+      <h1 class="mb-4 text-3xl font-bold">APG Patterns</h1>
+      <p class="text-muted-foreground text-lg">
+        Accessible component patterns based on WAI-ARIA Authoring Practices Guide. Each pattern is
+        implemented in React, Vue, Svelte, and Astro.
       </p>
     </header>
 
     <div class="grid gap-4 md:grid-cols-2">
-      {PATTERNS.map((pattern) => (
-        <Tile
-          variant="floating"
-          href={pattern.status === 'available' ? `/patterns/${pattern.id}/${DEFAULT_FRAMEWORK}/` : undefined}
-          class:list={[
-            pattern.status !== 'available' && 'opacity-60 cursor-not-allowed'
-          ]}
-        >
-          <TileContent class="flex flex-row items-start gap-4">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
-              {pattern.icon}
-            </div>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <TileTitle>{pattern.name}</TileTitle>
-                {pattern.status !== 'available' && (
-                  <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                    Planned
-                  </span>
-                )}
+      {
+        PATTERNS.map((pattern) => (
+          <Tile
+            variant="floating"
+            href={
+              pattern.status === 'available'
+                ? `/patterns/${pattern.id}/${DEFAULT_FRAMEWORK}/`
+                : undefined
+            }
+            class:list={[pattern.status !== 'available' && 'cursor-not-allowed opacity-60']}
+          >
+            <TileContent class="flex flex-row items-start gap-4">
+              <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                {pattern.icon}
               </div>
-              <TileDescription>{pattern.description}</TileDescription>
-              <div class="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-                <span>Complexity: {pattern.complexity}</span>
+              <div class="flex-1">
+                <div class="mb-1 flex items-center gap-2">
+                  <TileTitle>{pattern.name}</TileTitle>
+                  {pattern.status !== 'available' && (
+                    <span class="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs">
+                      Planned
+                    </span>
+                  )}
+                </div>
+                <TileDescription>{pattern.description}</TileDescription>
+                <div class="text-muted-foreground mt-2 flex items-center gap-4 text-xs">
+                  <span>Complexity: {pattern.complexity}</span>
+                </div>
               </div>
-            </div>
-          </TileContent>
-        </Tile>
-      ))}
+            </TileContent>
+          </Tile>
+        ))
+      }
     </div>
 
-    <Tile variant="floating" class="mt-12 bg-muted/50">
+    <Tile variant="floating" class="bg-muted/50 mt-12">
       <TileContent>
         <TileTitle class="text-xl">About These Patterns</TileTitle>
         <TileDescription class="mb-4">
-          Each pattern follows the <a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a> specifications to ensure proper accessibility support.
+          Each pattern follows the <a
+            href="https://www.w3.org/WAI/ARIA/apg/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a
+          > specifications to ensure proper accessibility support.
         </TileDescription>
-        <ul class="list-disc pl-6 space-y-2 text-muted-foreground">
+        <ul class="text-muted-foreground list-disc space-y-2 pl-6">
           <li>Proper ARIA roles and attributes</li>
           <li>Full keyboard navigation support</li>
           <li>Screen reader compatibility</li>

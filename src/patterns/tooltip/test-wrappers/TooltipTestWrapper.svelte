@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Tooltip from "../Tooltip.svelte";
-  import type { TooltipPlacement } from "../Tooltip.svelte";
+  import Tooltip from '../Tooltip.svelte';
+  import type { TooltipPlacement } from '../Tooltip.svelte';
 
   interface Props {
     content?: string;
@@ -11,11 +11,11 @@
   }
 
   let {
-    content = "Tooltip",
+    content = 'Tooltip',
     delay = 300,
-    placement = "top",
+    placement = 'top',
     disabled = false,
-    id = "test-tooltip",
+    id = 'test-tooltip',
   }: Props = $props();
 </script>
 

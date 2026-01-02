@@ -1,63 +1,58 @@
 ---
-import type { HTMLAttributes } from "astro/types"
+import type { HTMLAttributes } from 'astro/types';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface Props extends HTMLAttributes<"div"> {}
+interface Props extends HTMLAttributes<'div'> {}
 
-const { class: className, ...props } = Astro.props
+const { class: className, ...props } = Astro.props;
 
-const slot = await Astro.slots.render("default")
+const slot = await Astro.slots.render('default');
 ---
 
 {
   slot?.trim().length > 0 && (
-    <div
-      class="contents!"
-      data-slot="sheet"
-      class={cn("relative", className)}
-      {...props}
-    >
+    <div class="contents!" data-slot="sheet" class={cn('relative', className)} {...props}>
       <Fragment set:html={slot} />
     </div>
   )
 }
 
 <script>
-  const sheets = document.querySelectorAll("[data-slot='sheet']")
+  const sheets = document.querySelectorAll("[data-slot='sheet']");
   sheets.forEach((sheet) => {
-    const dialog = sheet.querySelector("[data-slot='sheet-dialog']")
-    if (!(dialog instanceof HTMLDialogElement)) return
+    const dialog = sheet.querySelector("[data-slot='sheet-dialog']");
+    if (!(dialog instanceof HTMLDialogElement)) return;
 
     const openSheet = () => {
-      dialog.showModal()
-      dialog.dataset.state = "open"
-    }
+      dialog.showModal();
+      dialog.dataset.state = 'open';
+    };
 
     const closeSheet = () => {
-      delete dialog.dataset.state
-      dialog.close()
-    }
+      delete dialog.dataset.state;
+      dialog.close();
+    };
 
     // Close on backdrop click
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) closeSheet()
-    })
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) closeSheet();
+    });
 
     // Close on Escape key
-    dialog.addEventListener("cancel", (event) => {
-      event.preventDefault()
-      closeSheet()
-    })
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeSheet();
+    });
 
-    const triggers = sheet.querySelectorAll("[data-slot='sheet-trigger']")
+    const triggers = sheet.querySelectorAll("[data-slot='sheet-trigger']");
     triggers.forEach((trigger) => {
-      trigger.addEventListener("click", openSheet)
-    })
+      trigger.addEventListener('click', openSheet);
+    });
 
-    const closes = sheet.querySelectorAll("[data-slot='sheet-close']")
+    const closes = sheet.querySelectorAll("[data-slot='sheet-close']");
     closes.forEach((close) => {
-      close.addEventListener("click", closeSheet)
-    })
-  })
+      close.addEventListener('click', closeSheet);
+    });
+  });
 </script>

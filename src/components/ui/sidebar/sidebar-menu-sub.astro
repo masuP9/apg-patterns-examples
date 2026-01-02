@@ -1,13 +1,13 @@
 ---
-import type { HTMLAttributes } from "astro/types"
+import type { HTMLAttributes } from 'astro/types';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface Props extends HTMLAttributes<"ul"> {}
+interface Props extends HTMLAttributes<'ul'> {}
 
-const { class: className, ...props } = Astro.props
+const { class: className, ...props } = Astro.props;
 
-const slot = await Astro.slots.render("default")
+const slot = await Astro.slots.render('default');
 ---
 
 {
@@ -15,7 +15,7 @@ const slot = await Astro.slots.render("default")
     <ul
       data-slot="sidebar-menu-sub"
       class={cn(
-        "border-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
+        'border-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
         className
       )}
       {...props}

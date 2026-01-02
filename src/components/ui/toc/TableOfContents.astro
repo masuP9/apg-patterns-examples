@@ -12,19 +12,21 @@ const { items } = Astro.props;
 ---
 
 <nav aria-label="Table of contents" class="toc">
-  <h2 class="text-sm font-semibold mb-3 text-foreground">On this page</h2>
+  <h2 class="text-foreground mb-3 text-sm font-semibold">On this page</h2>
   <ul class="space-y-1 text-sm">
-    {items.map((item) => (
-      <li>
-        <a
-          href={`#${item.id}`}
-          class="toc-link block py-1 text-muted-foreground hover:text-foreground transition-colors"
-          data-toc-id={item.id}
-        >
-          {item.text}
-        </a>
-      </li>
-    ))}
+    {
+      items.map((item) => (
+        <li>
+          <a
+            href={`#${item.id}`}
+            class="toc-link text-muted-foreground hover:text-foreground block py-1 transition-colors"
+            data-toc-id={item.id}
+          >
+            {item.text}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </nav>
 

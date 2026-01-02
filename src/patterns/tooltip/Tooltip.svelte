@@ -1,7 +1,7 @@
 <script lang="ts" module>
-  import type { Snippet } from "svelte";
+  import type { Snippet } from 'svelte';
 
-  export type TooltipPlacement = "top" | "bottom" | "left" | "right";
+  export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
   export interface TooltipProps {
     /** Tooltip content - can be string or Snippet for rich content */
@@ -31,8 +31,8 @@
 </script>
 
 <script lang="ts">
-  import { cn } from "@/lib/utils";
-  import { onDestroy } from "svelte";
+  import { cn } from '@/lib/utils';
+  import { onDestroy } from 'svelte';
 
   let {
     content,
@@ -40,11 +40,11 @@
     open: controlledOpen = undefined,
     defaultOpen = false,
     delay = 300,
-    placement = "top",
+    placement = 'top',
     id,
     disabled = false,
-    class: className = "",
-    tooltipClass = "",
+    class: className = '',
+    tooltipClass = '',
     onOpenChange,
   }: TooltipProps & { onOpenChange?: (open: boolean) => void } = $props();
 
@@ -69,7 +69,7 @@
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       hideTooltip();
     }
   }
@@ -96,9 +96,9 @@
   // This handles both controlled and uncontrolled modes
   $effect(() => {
     if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     }
   });
 
@@ -108,20 +108,20 @@
       clearTimeout(timeout);
       timeout = null;
     }
-    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener('keydown', handleKeyDown);
   });
 
   const placementClasses: Record<TooltipPlacement, string> = {
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    left: "right-full top-1/2 -translate-y-1/2 mr-2",
-    right: "left-full top-1/2 -translate-y-1/2 ml-2",
+    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 -translate-y-1/2 ml-2',
   };
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <span
-  class={cn("apg-tooltip-trigger", "relative inline-block", className)}
+  class={cn('apg-tooltip-trigger', 'relative inline-block', className)}
   onmouseenter={showTooltip}
   onmouseleave={hideTooltip}
   onfocusin={showTooltip}
@@ -135,18 +135,18 @@
     role="tooltip"
     aria-hidden={!isOpen}
     class={cn(
-      "apg-tooltip",
-      "absolute z-50 px-3 py-1.5 text-sm",
-      "bg-gray-900 text-white rounded-md shadow-lg",
-      "dark:bg-gray-100 dark:text-gray-900",
-      "pointer-events-none whitespace-nowrap",
-      "transition-opacity duration-150",
+      'apg-tooltip',
+      'absolute z-50 px-3 py-1.5 text-sm',
+      'rounded-md bg-gray-900 text-white shadow-lg',
+      'dark:bg-gray-100 dark:text-gray-900',
+      'pointer-events-none whitespace-nowrap',
+      'transition-opacity duration-150',
       placementClasses[placement],
-      isOpen ? "opacity-100 visible" : "opacity-0 invisible",
+      isOpen ? 'visible opacity-100' : 'invisible opacity-0',
       tooltipClass
     )}
   >
-    {#if typeof content === "string"}
+    {#if typeof content === 'string'}
       {content}
     {:else}
       {@render content()}

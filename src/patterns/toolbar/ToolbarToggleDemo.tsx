@@ -1,10 +1,5 @@
-import { useState } from "react";
-import {
-  Toolbar,
-  ToolbarButton,
-  ToolbarToggleButton,
-  ToolbarSeparator,
-} from "./Toolbar";
+import { useState } from 'react';
+import { Toolbar, ToolbarButton, ToolbarToggleButton, ToolbarSeparator } from './Toolbar';
 
 /**
  * Demo component showing controlled ToolbarToggleButton usage
@@ -17,39 +12,30 @@ export function ToolbarToggleDemo() {
   return (
     <div className="space-y-4">
       <Toolbar aria-label="Text formatting with state">
-        <ToolbarToggleButton
-          pressed={isBold}
-          onPressedChange={setIsBold}
-        >
+        <ToolbarToggleButton pressed={isBold} onPressedChange={setIsBold}>
           Bold
         </ToolbarToggleButton>
-        <ToolbarToggleButton
-          pressed={isItalic}
-          onPressedChange={setIsItalic}
-        >
+        <ToolbarToggleButton pressed={isItalic} onPressedChange={setIsItalic}>
           Italic
         </ToolbarToggleButton>
-        <ToolbarToggleButton
-          pressed={isUnderline}
-          onPressedChange={setIsUnderline}
-        >
+        <ToolbarToggleButton pressed={isUnderline} onPressedChange={setIsUnderline}>
           Underline
         </ToolbarToggleButton>
       </Toolbar>
-      <div className="text-sm text-muted-foreground">
+      <div className="text-muted-foreground text-sm">
         <p>
-          Current state:{" "}
+          Current state:{' '}
           <span className="font-mono">
             {JSON.stringify({ bold: isBold, italic: isItalic, underline: isUnderline })}
           </span>
         </p>
       </div>
       <div
-        className="p-4 border border-border rounded-lg"
+        className="border-border rounded-lg border p-4"
         style={{
-          fontWeight: isBold ? "bold" : "normal",
-          fontStyle: isItalic ? "italic" : "normal",
-          textDecoration: isUnderline ? "underline" : "none",
+          fontWeight: isBold ? 'bold' : 'normal',
+          fontStyle: isItalic ? 'italic' : 'normal',
+          textDecoration: isUnderline ? 'underline' : 'none',
         }}
       >
         Sample text with applied formatting
@@ -70,9 +56,7 @@ export function ToolbarToggleDefaultDemo() {
       <ToolbarToggleButton defaultPressed disabled>
         Disabled (pressed)
       </ToolbarToggleButton>
-      <ToolbarToggleButton disabled>
-        Disabled (not pressed)
-      </ToolbarToggleButton>
+      <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
     </Toolbar>
   );
 }

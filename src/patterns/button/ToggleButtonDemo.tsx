@@ -1,5 +1,5 @@
-import { Volume2, VolumeOff, Sun, Moon, Bell, BellOff } from "lucide-react";
-import { ToggleButton } from "./ToggleButton";
+import { Volume2, VolumeOff, Sun, Moon, Bell, BellOff } from 'lucide-react';
+import { ToggleButton } from './ToggleButton';
 
 export function MuteDemo() {
   return (

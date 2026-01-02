@@ -1,6 +1,6 @@
-import "@testing-library/jest-dom/vitest";
-import { toHaveNoViolations } from "jest-axe";
-import { expect } from "vitest";
+import '@testing-library/jest-dom/vitest';
+import { toHaveNoViolations } from 'jest-axe';
+import { expect } from 'vitest';
 
 // jest-axe マッチャーを追加
 expect.extend(toHaveNoViolations);
@@ -11,8 +11,8 @@ expect.extend(toHaveNoViolations);
 
 // Global Escape key handler (native <dialog> handles this at document level)
 // This must be added regardless of HTMLDialogElement support
-document.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.key === "Escape") {
+document.addEventListener('keydown', (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
     // Find all open modal dialogs
     const openDialogs = document.querySelectorAll("dialog[open][aria-modal='true']");
     const topModal = openDialogs[openDialogs.length - 1] as HTMLDialogElement | undefined;
@@ -23,7 +23,7 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
   }
 });
 
-if (typeof HTMLDialogElement !== "undefined") {
+if (typeof HTMLDialogElement !== 'undefined') {
   // showModal のポリフィル
   const originalShowModal = HTMLDialogElement.prototype.showModal;
   HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
@@ -34,13 +34,13 @@ if (typeof HTMLDialogElement !== "undefined") {
         // jsdom doesn't fully support showModal
       }
     }
-    this.setAttribute("open", "");
-    this.setAttribute("aria-modal", "true");
+    this.setAttribute('open', '');
+    this.setAttribute('aria-modal', 'true');
 
     // 初期フォーカス管理（ネイティブ <dialog> の動作をエミュレート）
     // 優先順位: autofocus 属性 → 最初のフォーカス可能要素 → dialog 自体
     requestAnimationFrame(() => {
-      const autofocusEl = this.querySelector<HTMLElement>("[autofocus]");
+      const autofocusEl = this.querySelector<HTMLElement>('[autofocus]');
       if (autofocusEl) {
         autofocusEl.focus();
         return;
@@ -55,7 +55,7 @@ if (typeof HTMLDialogElement !== "undefined") {
       }
 
       // フォーカス可能要素がない場合は dialog 自体にフォーカス
-      this.setAttribute("tabindex", "-1");
+      this.setAttribute('tabindex', '-1');
       this.focus();
     });
   };
@@ -70,8 +70,8 @@ if (typeof HTMLDialogElement !== "undefined") {
         // jsdom doesn't fully support close
       }
     }
-    this.removeAttribute("open");
-    this.removeAttribute("aria-modal");
-    this.dispatchEvent(new Event("close"));
+    this.removeAttribute('open');
+    this.removeAttribute('aria-modal');
+    this.dispatchEvent(new Event('close'));
   };
 }

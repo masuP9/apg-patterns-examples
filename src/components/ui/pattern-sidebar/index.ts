@@ -1,1 +1,1 @@
-export { default as PatternSidebar } from "./PatternSidebar.astro";
+export { default as PatternSidebar } from './PatternSidebar.astro';

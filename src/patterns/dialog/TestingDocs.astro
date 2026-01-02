@@ -5,25 +5,26 @@ import { ResponsiveTable } from '@/components/ui/table';
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements.
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
+    requirements.
   </p>
 
-  <h3 class="text-lg font-medium mb-3">Test Categories</h3>
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
-  <h4 class="font-medium mb-2 flex items-center gap-2">
-    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
     High Priority: APG Keyboard Interaction
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Test</th>
-          <th class="text-left py-2">Description</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Escape key</code></td>
           <td class="py-2">Closes the dialog</td>
         </tr>
@@ -31,32 +32,32 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
-  <h4 class="font-medium mb-2 flex items-center gap-2">
-    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
     High Priority: APG ARIA Attributes
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Test</th>
-          <th class="text-left py-2">Description</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="dialog"</code></td>
           <td class="py-2">Dialog element has dialog role</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-modal="true"</code></td>
           <td class="py-2">Indicates modal behavior</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-labelledby</code></td>
           <td class="py-2">References the dialog title</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-describedby</code></td>
           <td class="py-2">References description (when provided)</td>
         </tr>
@@ -64,28 +65,28 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
-  <h4 class="font-medium mb-2 flex items-center gap-2">
-    <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
     High Priority: Focus Management
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Test</th>
-          <th class="text-left py-2">Description</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Initial focus</code></td>
           <td class="py-2">Focus moves to first focusable element on open</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Focus restore</code></td>
           <td class="py-2">Focus returns to trigger on close</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Focus trap</code></td>
           <td class="py-2">Tab cycling stays within dialog (via native dialog)</td>
         </tr>
@@ -93,20 +94,20 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
-  <h4 class="font-medium mb-2 flex items-center gap-2">
-    <span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
     Medium Priority: Accessibility
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Test</th>
-          <th class="text-left py-2">Description</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>axe violations</code></td>
           <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
         </tr>
@@ -114,32 +115,32 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
-  <h4 class="font-medium mb-2 flex items-center gap-2">
-    <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
     Low Priority: Props & Behavior
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
-        <tr class="border-b border-border">
-          <th class="text-left py-2 pr-4">Test</th>
-          <th class="text-left py-2">Description</th>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>closeOnOverlayClick</code></td>
           <td class="py-2">Controls overlay click behavior</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>defaultOpen</code></td>
           <td class="py-2">Initial open state</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>onOpenChange</code></td>
           <td class="py-2">Callback fires on open/close</td>
         </tr>
-        <tr class="border-b border-border">
+        <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>className</code></td>
           <td class="py-2">Custom classes are applied</td>
         </tr>
@@ -147,23 +148,33 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
-  <h3 class="text-lg font-medium mb-3">Testing Tools</h3>
-  <ul class="list-disc pl-6 mb-6 space-y-2">
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">Vitest</ExternalLink>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
       - Test runner
     </li>
     <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">Testing Library</ExternalLink>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
       - Framework-specific testing utilities
     </li>
     <li>
-      <ExternalLink href="https://github.com/nickcolley/jest-axe" class="text-primary hover:underline">jest-axe</ExternalLink>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
       - Automated accessibility testing
     </li>
   </ul>
 
-  <p class="text-sm text-muted-foreground">
-    See <ExternalLink href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md" class="text-primary hover:underline">testing-strategy.md</ExternalLink> for full documentation.
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
   </p>
 </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Toolbar from './Toolbar.vue'
-import ToolbarButton from './ToolbarButton.vue'
-import ToolbarToggleButton from './ToolbarToggleButton.vue'
-import ToolbarSeparator from './ToolbarSeparator.vue'
+import Toolbar from './Toolbar.vue';
+import ToolbarButton from './ToolbarButton.vue';
+import ToolbarToggleButton from './ToolbarToggleButton.vue';
+import ToolbarSeparator from './ToolbarSeparator.vue';
 </script>
 
 <template>

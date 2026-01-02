@@ -10,7 +10,7 @@ const availablePatterns = getAvailablePatterns();
 <BaseLayout title="Home">
   <div class="text-center">
     <h1 class="mb-4 text-4xl font-bold">APG Patterns Examples</h1>
-    <p class="mb-8 text-lg text-muted-foreground">
+    <p class="text-muted-foreground mb-8 text-lg">
       Accessible component patterns for React, Vue, Svelte, and Astro
     </p>
 
@@ -18,27 +18,21 @@ const availablePatterns = getAvailablePatterns();
       <Tile variant="floating" href={withBase('/patterns/')}>
         <TileContent>
           <TileTitle>Patterns</TileTitle>
-          <TileDescription>
-            Browse WAI-ARIA APG pattern implementations
-          </TileDescription>
+          <TileDescription> Browse WAI-ARIA APG pattern implementations </TileDescription>
         </TileContent>
       </Tile>
 
       <Tile variant="floating" href={withBase('/guide/')}>
         <TileContent>
           <TileTitle>Guide</TileTitle>
-          <TileDescription>
-            Learn how to use these patterns in your projects
-          </TileDescription>
+          <TileDescription> Learn how to use these patterns in your projects </TileDescription>
         </TileContent>
       </Tile>
 
       <Tile variant="floating" href={withBase('/about/')}>
         <TileContent>
           <TileTitle>About</TileTitle>
-          <TileDescription>
-            About this project and its goals
-          </TileDescription>
+          <TileDescription> About this project and its goals </TileDescription>
         </TileContent>
       </Tile>
     </div>
@@ -46,19 +40,21 @@ const availablePatterns = getAvailablePatterns();
     <section class="mt-16">
       <h2 class="mb-6 text-2xl font-bold">Available Patterns</h2>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {availablePatterns.map((pattern) => (
-          <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/react/`)}>
-            <TileContent class="flex flex-row items-center gap-4 text-left">
-              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-2xl shrink-0">
-                {pattern.icon}
-              </div>
-              <div>
-                <TileTitle class="mb-2">{pattern.name}</TileTitle>
-                <TileDescription>{pattern.description}</TileDescription>
-              </div>
-            </TileContent>
-          </Tile>
-        ))}
+        {
+          availablePatterns.map((pattern) => (
+            <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/react/`)}>
+              <TileContent class="flex flex-row items-center gap-4 text-left">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div>
+                  <TileTitle class="mb-2">{pattern.name}</TileTitle>
+                  <TileDescription>{pattern.description}</TileDescription>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
       </div>
     </section>
   </div>

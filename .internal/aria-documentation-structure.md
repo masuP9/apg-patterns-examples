@@ -33,15 +33,15 @@ Accessibility Features
 
 ## 各項目に含める情報
 
-| 項目 | 説明 |
-|------|------|
-| **属性名** | `aria-pressed`, `role="tablist"` など |
-| **対象要素** | どの要素に設定するか（複数要素あるパターンの場合） |
-| **値** | `true \| false`, `"horizontal" \| "vertical"` など |
-| **必須/任意** | Required（Yes） / Optional（No） |
-| **設定方法** | どの Props で制御するか、自動生成か |
-| **変化タイミング** | どのユーザー操作で値が変わるか（States の場合） |
-| **参照リンク** | W3C WAI-ARIA 仕様への参照 |
+| 項目               | 説明                                               |
+| ------------------ | -------------------------------------------------- |
+| **属性名**         | `aria-pressed`, `role="tablist"` など              |
+| **対象要素**       | どの要素に設定するか（複数要素あるパターンの場合） |
+| **値**             | `true \| false`, `"horizontal" \| "vertical"` など |
+| **必須/任意**      | Required（Yes） / Optional（No）                   |
+| **設定方法**       | どの Props で制御するか、自動生成か                |
+| **変化タイミング** | どのユーザー操作で値が変わるか（States の場合）    |
+| **参照リンク**     | W3C WAI-ARIA 仕様への参照                          |
 
 ---
 
@@ -65,11 +65,11 @@ Accessibility Features
 ```markdown
 ## WAI-ARIA Roles
 
-| Role | 対象要素 | 説明 |
-|------|---------|------|
-| tablist | コンテナ | タブ群のコンテナ |
-| tab | 各タブ | 個々のタブ要素 |
-| tabpanel | パネル | コンテンツ領域 |
+| Role     | 対象要素 | 説明             |
+| -------- | -------- | ---------------- |
+| tablist  | コンテナ | タブ群のコンテナ |
+| tab      | 各タブ   | 個々のタブ要素   |
+| tabpanel | パネル   | コンテンツ領域   |
 ```
 
 ### Properties
@@ -79,11 +79,11 @@ Accessibility Features
 ```markdown
 ## WAI-ARIA Properties
 
-| 属性 | 対象 | 値 | 必須 | 設定方法 |
-|------|------|-----|------|---------|
-| aria-orientation | tablist | "horizontal" \| "vertical" | No | `orientation` prop |
-| aria-controls | tab | パネルID | Yes | 自動生成 |
-| aria-labelledby | tabpanel | タブID | Yes | 自動生成 |
+| 属性             | 対象     | 値                         | 必須 | 設定方法           |
+| ---------------- | -------- | -------------------------- | ---- | ------------------ |
+| aria-orientation | tablist  | "horizontal" \| "vertical" | No   | `orientation` prop |
+| aria-controls    | tab      | パネルID                   | Yes  | 自動生成           |
+| aria-labelledby  | tabpanel | タブID                     | Yes  | 自動生成           |
 ```
 
 ### States
@@ -97,14 +97,14 @@ Accessibility Features
 
 トグルボタンの現在の押下状態を示す。
 
-| 項目 | 内容 |
-|------|------|
-| 対象 | button 要素 |
-| 値 | `true` \| `false` |
-| 必須 | Yes |
-| 初期値 | `initialPressed` prop（デフォルト: false）|
-| 変化タイミング | クリック、Enter、Space |
-| 参照 | [aria-pressed](https://w3c.github.io/aria/#aria-pressed) |
+| 項目           | 内容                                                     |
+| -------------- | -------------------------------------------------------- |
+| 対象           | button 要素                                              |
+| 値             | `true` \| `false`                                        |
+| 必須           | Yes                                                      |
+| 初期値         | `initialPressed` prop（デフォルト: false）               |
+| 変化タイミング | クリック、Enter、Space                                   |
+| 参照           | [aria-pressed](https://w3c.github.io/aria/#aria-pressed) |
 ```
 
 ---
@@ -127,13 +127,13 @@ Roles と States のみ（Properties なし）。
 
 トグルボタンの現在の押下状態を示す。
 
-| 項目 | 内容 |
-|------|------|
-| 値 | `true` \| `false` |
-| 必須 | Yes |
-| 初期値 | `initialPressed` prop（デフォルト: false）|
-| 変化タイミング | クリック、Enter、Space |
-| 参照 | [aria-pressed](https://w3c.github.io/aria/#aria-pressed) |
+| 項目           | 内容                                                     |
+| -------------- | -------------------------------------------------------- |
+| 値             | `true` \| `false`                                        |
+| 必須           | Yes                                                      |
+| 初期値         | `initialPressed` prop（デフォルト: false）               |
+| 変化タイミング | クリック、Enter、Space                                   |
+| 参照           | [aria-pressed](https://w3c.github.io/aria/#aria-pressed) |
 ```
 
 ### Tabs
@@ -143,19 +143,19 @@ Roles / Properties / States の3セクション全て使用。
 ```markdown
 ## WAI-ARIA Roles
 
-| Role | 対象要素 | 説明 |
-|------|---------|------|
-| tablist | コンテナ | タブ群のコンテナ |
-| tab | 各タブ | 個々のタブ要素 |
-| tabpanel | パネル | コンテンツ領域 |
+| Role     | 対象要素 | 説明             |
+| -------- | -------- | ---------------- |
+| tablist  | コンテナ | タブ群のコンテナ |
+| tab      | 各タブ   | 個々のタブ要素   |
+| tabpanel | パネル   | コンテンツ領域   |
 
 ## WAI-ARIA Properties
 
-| 属性 | 対象 | 値 | 必須 | 設定方法 |
-|------|------|-----|------|---------|
-| aria-orientation | tablist | "horizontal" \| "vertical" | No | `orientation` prop |
-| aria-controls | tab | パネルID | Yes | 自動生成 |
-| aria-labelledby | tabpanel | タブID | Yes | 自動生成 |
+| 属性             | 対象     | 値                         | 必須 | 設定方法           |
+| ---------------- | -------- | -------------------------- | ---- | ------------------ |
+| aria-orientation | tablist  | "horizontal" \| "vertical" | No   | `orientation` prop |
+| aria-controls    | tab      | パネルID                   | Yes  | 自動生成           |
+| aria-labelledby  | tabpanel | タブID                     | Yes  | 自動生成           |
 
 ## WAI-ARIA States
 
@@ -163,28 +163,28 @@ Roles / Properties / States の3セクション全て使用。
 
 現在アクティブなタブを示す。
 
-| 項目 | 内容 |
-|------|------|
-| 対象 | tab 要素 |
-| 値 | `true` \| `false` |
-| 必須 | Yes |
-| 変化タイミング | タブクリック、矢印キー（automatic）、Enter/Space（manual）|
-| 参照 | [aria-selected](https://w3c.github.io/aria/#aria-selected) |
+| 項目           | 内容                                                       |
+| -------------- | ---------------------------------------------------------- |
+| 対象           | tab 要素                                                   |
+| 値             | `true` \| `false`                                          |
+| 必須           | Yes                                                        |
+| 変化タイミング | タブクリック、矢印キー（automatic）、Enter/Space（manual） |
+| 参照           | [aria-selected](https://w3c.github.io/aria/#aria-selected) |
 ```
 
 ---
 
 ## 日英バイリンガル対応
 
-| 英語 | 日本語 |
-|------|--------|
-| Required | 必須 |
-| Optional | 任意 |
-| Target Element | 対象要素 |
-| Values | 値 |
+| 英語           | 日本語         |
+| -------------- | -------------- |
+| Required       | 必須           |
+| Optional       | 任意           |
+| Target Element | 対象要素       |
+| Values         | 値             |
 | Change Trigger | 変化タイミング |
-| Default | 初期値 |
-| Reference | 参照 |
+| Default        | 初期値         |
+| Reference      | 参照           |
 
 ---
 

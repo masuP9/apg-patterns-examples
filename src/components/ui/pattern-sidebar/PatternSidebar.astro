@@ -1,13 +1,9 @@
 ---
-import { FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
-import { getAvailablePatterns, getPlannedPatterns } from "@/lib/patterns";
-import {
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
-import { withBase } from "@/lib/utils";
-import FrameworkIcon from "@/components/ui/FrameworkIcon.astro";
+import { FRAMEWORK_INFO, type Framework } from '@/lib/frameworks';
+import { getAvailablePatterns, getPlannedPatterns } from '@/lib/patterns';
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { withBase } from '@/lib/utils';
+import FrameworkIcon from '@/components/ui/FrameworkIcon.astro';
 
 interface Props {
   currentPattern: string;
@@ -23,12 +19,12 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
 
 <nav aria-label="Pattern navigation" class="w-full">
   <div class="mb-4 flex items-center justify-between">
-    <h2 class="px-2 text-sm font-semibold text-foreground">Patterns</h2>
+    <h2 class="text-foreground px-2 text-sm font-semibold">Patterns</h2>
     <span
-      class="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full"
+      class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
       style={`background-color: ${frameworkInfo.colorLight}; color: ${frameworkInfo.colorForeground};`}
     >
-      <FrameworkIcon framework={currentFramework} class="w-3.5 h-3.5" />
+      <FrameworkIcon framework={currentFramework} class="h-3.5 w-3.5" />
       {frameworkInfo.label}
     </span>
   </div>
@@ -40,7 +36,7 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
           <SidebarMenuButton
             href={withBase(`/patterns/${pattern.id}/${currentFramework}/`)}
             active={currentPattern === pattern.id}
-            aria-current={currentPattern === pattern.id ? "page" : undefined}
+            aria-current={currentPattern === pattern.id ? 'page' : undefined}
             size="sm"
             class="text-sm"
           >
@@ -57,17 +53,15 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
   {
     plannedPatterns.length > 0 && (
       <>
-        <div class="mb-2 mt-6">
-          <h3 class="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <div class="mt-6 mb-2">
+          <h3 class="text-muted-foreground px-2 text-xs font-medium tracking-wider uppercase">
             Planned
           </h3>
         </div>
         <ul class="flex w-full min-w-0 flex-col gap-1 pb-8">
           {plannedPatterns.map((pattern) => (
             <li class="group/menu-item relative">
-              <span
-                class="flex h-7 w-full items-center gap-2 overflow-hidden rounded-md px-2 text-left text-sm text-muted-foreground opacity-60 cursor-default"
-              >
+              <span class="text-muted-foreground flex h-7 w-full cursor-default items-center gap-2 overflow-hidden rounded-md px-2 text-left text-sm opacity-60">
                 <span class="text-xs" aria-hidden="true">
                   {pattern.icon}
                 </span>

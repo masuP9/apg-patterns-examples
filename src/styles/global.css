@@ -1,11 +1,11 @@
-@import "tailwindcss";
-@import "./patterns/toggle-button.css";
-@import "./patterns/tabs.css";
-@import "./patterns/accordion.css";
-@import "./patterns/dialog.css";
-@import "./patterns/toolbar.css";
-@import "./patterns/switch.css";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import './patterns/toggle-button.css';
+@import './patterns/tabs.css';
+@import './patterns/accordion.css';
+@import './patterns/dialog.css';
+@import './patterns/toolbar.css';
+@import './patterns/switch.css';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -133,7 +133,10 @@
   }
 
   body {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
     @apply bg-background text-foreground;
   }
 

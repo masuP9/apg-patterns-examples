@@ -26,165 +26,167 @@ const tocItems = [
 ---
 
 <PatternLayout title="Toolbar - Astro" pattern="toolbar" framework="astro" tocItems={tocItems}>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">Toolbar</h1>
-      <p class="text-lg text-muted-foreground">
-        A container for grouping a set of controls, such as buttons, toggle buttons, or other input elements.
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Toolbar</h1>
+    <p class="text-muted-foreground text-lg">
+      A container for grouping a set of controls, such as buttons, toggle buttons, or other input
+      elements.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="toolbar" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Text Formatting Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A horizontal toolbar with toggle buttons and regular buttons.
       </p>
-    </header>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Text formatting">
+          <ToolbarToggleButton>Bold</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic</ToolbarToggleButton>
+          <ToolbarToggleButton>Underline</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Align Left</ToolbarButton>
+          <ToolbarButton>Center</ToolbarButton>
+          <ToolbarButton>Align Right</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
 
-    <!-- Framework Selector -->
-    <FrameworkTabs pattern="toolbar" currentFramework="astro" />
+    <!-- Vertical Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+      <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar orientation="vertical" aria-label="Actions">
+          <ToolbarButton>New</ToolbarButton>
+          <ToolbarButton>Open</ToolbarButton>
+          <ToolbarButton>Save</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Print</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
 
-    <!-- Demo Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
+    <!-- With Disabled Items -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled items are skipped during keyboard navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Edit actions">
+          <ToolbarButton>Undo</ToolbarButton>
+          <ToolbarButton disabled>Redo</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton disabled>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
 
-      <!-- Text Formatting Toolbar -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Text Formatting Toolbar</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          A horizontal toolbar with toggle buttons and regular buttons.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Toolbar aria-label="Text formatting">
-            <ToolbarToggleButton>Bold</ToolbarToggleButton>
-            <ToolbarToggleButton>Italic</ToolbarToggleButton>
-            <ToolbarToggleButton>Underline</ToolbarToggleButton>
-            <ToolbarSeparator />
-            <ToolbarButton>Align Left</ToolbarButton>
-            <ToolbarButton>Center</ToolbarButton>
-            <ToolbarButton>Align Right</ToolbarButton>
-            <ToolbarSeparator />
-            <ToolbarButton>Copy</ToolbarButton>
-            <ToolbarButton>Cut</ToolbarButton>
-            <ToolbarButton>Paste</ToolbarButton>
-          </Toolbar>
+    <!-- Toggle Buttons with Event Handling -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Toggle Buttons with Event Handling</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Toggle buttons that emit <code>pressed-change</code> events. The current state is logged and displayed.
+      </p>
+      <div class="border-border bg-background space-y-4 rounded-lg border p-6">
+        <Toolbar aria-label="Text formatting with events" id="toggle-demo-toolbar">
+          <ToolbarToggleButton>Bold</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic</ToolbarToggleButton>
+          <ToolbarToggleButton>Underline</ToolbarToggleButton>
+        </Toolbar>
+        <div class="text-muted-foreground text-sm">
+          <p>
+            Current state: <span id="toggle-state" class="font-mono"
+              >{'{ bold: false, italic: false, underline: false }'}</span>
+          </p>
+        </div>
+        <div id="toggle-sample-text" class="border-border rounded-lg border p-4">
+          Sample text with applied formatting
         </div>
       </div>
+    </div>
 
-      <!-- Vertical Toolbar -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Vertical Toolbar</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Use arrow up/down keys to navigate.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Toolbar orientation="vertical" aria-label="Actions">
-            <ToolbarButton>New</ToolbarButton>
-            <ToolbarButton>Open</ToolbarButton>
-            <ToolbarButton>Save</ToolbarButton>
-            <ToolbarSeparator />
-            <ToolbarButton>Print</ToolbarButton>
-          </Toolbar>
-        </div>
+    <!-- Default Pressed States -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Toggle buttons with <code>defaultPressed</code> for initial state, including disabled states.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Default pressed states">
+          <ToolbarToggleButton defaultPressed>Bold (default on)</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarToggleButton defaultPressed disabled>Disabled (pressed)</ToolbarToggleButton>
+          <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
+        </Toolbar>
       </div>
+    </div>
+  </section>
 
-      <!-- With Disabled Items -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">With Disabled Items</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Disabled items are skipped during keyboard navigation.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Toolbar aria-label="Edit actions">
-            <ToolbarButton>Undo</ToolbarButton>
-            <ToolbarButton disabled>Redo</ToolbarButton>
-            <ToolbarSeparator />
-            <ToolbarButton>Cut</ToolbarButton>
-            <ToolbarButton>Copy</ToolbarButton>
-            <ToolbarButton disabled>Paste</ToolbarButton>
-          </Toolbar>
-        </div>
-      </div>
+  <script>
+    // Handle toggle button state changes for the demo
+    const toolbar = document.getElementById('toggle-demo-toolbar');
+    const stateDisplay = document.getElementById('toggle-state');
+    const sampleText = document.getElementById('toggle-sample-text');
 
-      <!-- Toggle Buttons with Event Handling -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Toggle Buttons with Event Handling</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Toggle buttons that emit <code>pressed-change</code> events. The current state is logged and displayed.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background space-y-4">
-          <Toolbar aria-label="Text formatting with events" id="toggle-demo-toolbar">
-            <ToolbarToggleButton>Bold</ToolbarToggleButton>
-            <ToolbarToggleButton>Italic</ToolbarToggleButton>
-            <ToolbarToggleButton>Underline</ToolbarToggleButton>
-          </Toolbar>
-          <div class="text-sm text-muted-foreground">
-            <p>Current state: <span id="toggle-state" class="font-mono">{"{ bold: false, italic: false, underline: false }"}</span></p>
-          </div>
-          <div id="toggle-sample-text" class="p-4 border border-border rounded-lg">
-            Sample text with applied formatting
-          </div>
-        </div>
-      </div>
+    if (toolbar && stateDisplay && sampleText) {
+      const state = { bold: false, italic: false, underline: false };
+      const buttons = toolbar.querySelectorAll('apg-toolbar-toggle-button');
 
-      <!-- Default Pressed States -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Default Pressed States</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled states.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Toolbar aria-label="Default pressed states">
-            <ToolbarToggleButton defaultPressed>Bold (default on)</ToolbarToggleButton>
-            <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
-            <ToolbarSeparator />
-            <ToolbarToggleButton defaultPressed disabled>Disabled (pressed)</ToolbarToggleButton>
-            <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
-          </Toolbar>
-        </div>
-      </div>
-    </section>
+      buttons.forEach((btn, index) => {
+        btn.addEventListener('pressed-change', (e) => {
+          if (!(e instanceof CustomEvent)) return;
 
-    <script>
-      // Handle toggle button state changes for the demo
-      const toolbar = document.getElementById('toggle-demo-toolbar');
-      const stateDisplay = document.getElementById('toggle-state');
-      const sampleText = document.getElementById('toggle-sample-text');
+          const key = ['bold', 'italic', 'underline'][index] as keyof typeof state;
+          state[key] = e.detail.pressed;
 
-      if (toolbar && stateDisplay && sampleText) {
-        const state = { bold: false, italic: false, underline: false };
-        const buttons = toolbar.querySelectorAll('apg-toolbar-toggle-button');
-
-        buttons.forEach((btn, index) => {
-          btn.addEventListener('pressed-change', (e) => {
-            if (!(e instanceof CustomEvent)) return;
-
-            const key = ['bold', 'italic', 'underline'][index] as keyof typeof state;
-            state[key] = e.detail.pressed;
-
-            stateDisplay.textContent = JSON.stringify(state);
-            sampleText.style.fontWeight = state.bold ? 'bold' : 'normal';
-            sampleText.style.fontStyle = state.italic ? 'italic' : 'normal';
-            sampleText.style.textDecoration = state.underline ? 'underline' : 'none';
-          });
+          stateDisplay.textContent = JSON.stringify(state);
+          sampleText.style.fontWeight = state.bold ? 'bold' : 'normal';
+          sampleText.style.fontStyle = state.italic ? 'italic' : 'normal';
+          sampleText.style.textDecoration = state.underline ? 'underline' : 'none';
         });
-      }
-    </script>
+      });
+    }
+  </script>
 
-    <!-- Accessibility Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility</Heading>
-      <AccessibilityDocs />
-    </section>
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility</Heading>
+    <AccessibilityDocs />
+  </section>
 
-    <!-- Source Code Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-      <div class="space-y-4">
-        <CodeBlock code={toolbarSource} lang="astro" title="Toolbar.astro" />
-        <CodeBlock code={buttonSource} lang="astro" title="ToolbarButton.astro" />
-        <CodeBlock code={toggleSource} lang="astro" title="ToolbarToggleButton.astro" />
-        <CodeBlock code={separatorSource} lang="astro" title="ToolbarSeparator.astro" />
-      </div>
-    </section>
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <div class="space-y-4">
+      <CodeBlock code={toolbarSource} lang="astro" title="Toolbar.astro" />
+      <CodeBlock code={buttonSource} lang="astro" title="ToolbarButton.astro" />
+      <CodeBlock code={toggleSource} lang="astro" title="ToolbarToggleButton.astro" />
+      <CodeBlock code={separatorSource} lang="astro" title="ToolbarSeparator.astro" />
+    </div>
+  </section>
 
-    <!-- Usage Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
-      <CodeBlock
-        code={`---
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`---
 import Toolbar from '@patterns/toolbar/Toolbar.astro';
 import ToolbarButton from '@patterns/toolbar/ToolbarButton.astro';
 import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
@@ -207,156 +209,165 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
     });
   });
 </script>`}
-        lang="astro"
-      />
-    </section>
+      lang="astro"
+    />
+  </section>
 
-    <!-- API Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-      <h3 class="text-lg font-medium mb-3">Toolbar Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>orientation</code></td>
-              <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
-              <td class="py-2 pr-4"><code>'horizontal'</code></td>
-              <td class="py-2">Direction of the toolbar</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>aria-label</code></td>
-              <td class="py-2 pr-4"><code>string</code></td>
-              <td class="py-2 pr-4">-</td>
-              <td class="py-2">Accessible label for the toolbar</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-              <td class="py-2 pr-4"><code>string</code></td>
-              <td class="py-2 pr-4">-</td>
-              <td class="py-2">ID of element that labels the toolbar</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>class</code></td>
-              <td class="py-2 pr-4"><code>string</code></td>
-              <td class="py-2 pr-4"><code>''</code></td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">Toolbar Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
+            <td class="py-2 pr-4"><code>'horizontal'</code></td>
+            <td class="py-2">Direction of the toolbar</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">Accessible label for the toolbar</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">ID of element that labels the toolbar</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">ToolbarButton Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>disabled</code></td>
-              <td class="py-2 pr-4"><code>boolean</code></td>
-              <td class="py-2 pr-4"><code>false</code></td>
-              <td class="py-2">Whether the button is disabled</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>class</code></td>
-              <td class="py-2 pr-4"><code>string</code></td>
-              <td class="py-2 pr-4"><code>''</code></td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">ToolbarButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">Whether the button is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">ToolbarToggleButton Props</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>defaultPressed</code></td>
-              <td class="py-2 pr-4"><code>boolean</code></td>
-              <td class="py-2 pr-4"><code>false</code></td>
-              <td class="py-2">Initial pressed state</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>disabled</code></td>
-              <td class="py-2 pr-4"><code>boolean</code></td>
-              <td class="py-2 pr-4"><code>false</code></td>
-              <td class="py-2">Whether the button is disabled</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>class</code></td>
-              <td class="py-2 pr-4"><code>string</code></td>
-              <td class="py-2 pr-4"><code>''</code></td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">ToolbarToggleButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultPressed</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">Initial pressed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">Whether the button is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
 
-      <h3 class="text-lg font-medium mb-3">Custom Events</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Event</th>
-              <th class="text-left py-2 pr-4">Element</th>
-              <th class="text-left py-2 pr-4">Detail</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>pressed-change</code></td>
-              <td class="py-2 pr-4"><code>apg-toolbar-toggle-button</code></td>
-              <td class="py-2 pr-4"><code>{"{ pressed: boolean }"}</code></td>
-              <td class="py-2">Fired when toggle button state changes</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
-      <p class="mt-4 text-sm text-muted-foreground">
-        This component uses Web Components (<code>&lt;apg-toolbar&gt;</code>, <code>&lt;apg-toolbar-toggle-button&gt;</code>, <code>&lt;apg-toolbar-separator&gt;</code>) for client-side keyboard navigation and state management.
-      </p>
-    </section>
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Element</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pressed-change</code></td>
+            <td class="py-2 pr-4"><code>apg-toolbar-toggle-button</code></td>
+            <td class="py-2 pr-4"><code>{'{ pressed: boolean }'}</code></td>
+            <td class="py-2">Fired when toggle button state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      This component uses Web Components (<code>&lt;apg-toolbar&gt;</code>, <code
+        >&lt;apg-toolbar-toggle-button&gt;</code
+      >, <code>&lt;apg-toolbar-separator&gt;</code>) for client-side keyboard navigation and state
+      management.
+    </p>
+  </section>
 
-    <!-- Resources Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-      <ul class="list-disc list-inside space-y-2">
-        <li>
-          <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" class="text-primary hover:underline">
-            WAI-ARIA APG: Toolbar Pattern
-          </ExternalLink>
-        </li>
-        <li>
-          <ExternalLink href="https://w3c.github.io/aria/#toolbar" class="text-primary hover:underline">
-            WAI-ARIA: toolbar role
-          </ExternalLink>
-        </li>
-      </ul>
-    </section>
+  <!-- Resources Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-inside list-disc space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Toolbar Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://w3c.github.io/aria/#toolbar"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA: toolbar role
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
 </PatternLayout>

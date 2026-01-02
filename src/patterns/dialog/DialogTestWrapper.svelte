@@ -24,14 +24,7 @@
   } = $props();
 </script>
 
-<Dialog
-  {title}
-  {description}
-  {closeOnOverlayClick}
-  {defaultOpen}
-  {className}
-  {onOpenChange}
->
+<Dialog {title} {description} {closeOnOverlayClick} {defaultOpen} {className} {onOpenChange}>
   {#snippet trigger({ open })}
     <button type="button" onclick={open}>Open Dialog</button>
   {/snippet}

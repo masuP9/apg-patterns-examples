@@ -13,7 +13,7 @@
   background-color: var(--background);
 }
 
-.apg-toolbar[aria-orientation="vertical"] {
+.apg-toolbar[aria-orientation='vertical'] {
   flex-direction: column;
   align-items: stretch;
   width: fit-content;
@@ -35,7 +35,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
 }
 
 .apg-toolbar-button:hover:not(:disabled) {
@@ -53,12 +55,12 @@
 }
 
 /* Toggle Button Pressed State */
-.apg-toolbar-button[aria-pressed="true"] {
+.apg-toolbar-button[aria-pressed='true'] {
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
 
-.apg-toolbar-button[aria-pressed="true"]:hover:not(:disabled) {
+.apg-toolbar-button[aria-pressed='true']:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
 }
 
@@ -68,8 +70,8 @@
 }
 
 /* Separator in horizontal toolbar (separator is vertical) */
-.apg-toolbar-separator[aria-orientation="vertical"],
-.apg-toolbar[aria-orientation="horizontal"] .apg-toolbar-separator,
+.apg-toolbar-separator[aria-orientation='vertical'],
+.apg-toolbar[aria-orientation='horizontal'] .apg-toolbar-separator,
 .apg-toolbar:not([aria-orientation]) .apg-toolbar-separator {
   width: 1px;
   height: 1.5rem;
@@ -77,8 +79,8 @@
 }
 
 /* Separator in vertical toolbar (separator is horizontal) */
-.apg-toolbar-separator[aria-orientation="horizontal"],
-.apg-toolbar[aria-orientation="vertical"] .apg-toolbar-separator {
+.apg-toolbar-separator[aria-orientation='horizontal'],
+.apg-toolbar[aria-orientation='vertical'] .apg-toolbar-separator {
   width: 100%;
   height: 1px;
   margin: 0.25rem 0;
@@ -98,7 +100,7 @@
     border-width: 2px;
   }
 
-  .apg-toolbar-button[aria-pressed="true"] {
+  .apg-toolbar-button[aria-pressed='true'] {
     background-color: black;
     color: white;
     border-color: black;
@@ -124,7 +126,7 @@
     color: ButtonText;
   }
 
-  .apg-toolbar-button[aria-pressed="true"] {
+  .apg-toolbar-button[aria-pressed='true'] {
     background: Highlight;
     color: HighlightText;
     border-color: Highlight;
