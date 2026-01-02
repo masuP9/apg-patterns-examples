@@ -7,6 +7,7 @@
  */
 import { FRAMEWORKS, FRAMEWORK_INFO, type Framework } from "@/lib/frameworks";
 import { withBase } from "@/lib/utils";
+import FrameworkIcon from "@/components/ui/FrameworkIcon.astro";
 
 interface Props {
   /** The pattern name (e.g., 'button', 'tabs') */
@@ -18,7 +19,7 @@ interface Props {
 const { pattern, currentFramework } = Astro.props;
 ---
 
-<div class="flex gap-2 mb-8 border-b border-border">
+<div class="flex gap-2 mb-8 border-b border-border" role="tablist">
   {
     FRAMEWORKS.map((fw) => {
       const info = FRAMEWORK_INFO[fw];
@@ -29,13 +30,15 @@ const { pattern, currentFramework } = Astro.props;
         <a
           href={href}
           class:list={[
-            "px-4 py-2 border-b-2 transition-colors",
-            isActive
-              ? "border-primary text-primary font-medium"
-              : "border-transparent text-muted-foreground hover:text-foreground",
+            "inline-flex items-center gap-2 px-4 py-2 border-b-2 transition-colors",
+            isActive ? "font-medium" : "border-transparent text-muted-foreground hover:text-foreground",
           ]}
+          style={isActive ? `border-color: ${info.color}; color: ${info.colorForeground};` : undefined}
           aria-current={isActive ? "page" : undefined}
+          role="tab"
+          aria-selected={isActive ? "true" : "false"}
         >
+          <FrameworkIcon framework={fw} class="w-4 h-4" />
           {info.label}
         </a>
       );

@@ -7,6 +7,7 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { withBase } from "@/lib/utils";
+import FrameworkIcon from "@/components/ui/FrameworkIcon.astro";
 
 interface Props {
   currentPattern: string;
@@ -17,14 +18,18 @@ const { currentPattern, currentFramework } = Astro.props;
 
 const availablePatterns = getAvailablePatterns();
 const plannedPatterns = getPlannedPatterns();
-const frameworkLabel = FRAMEWORK_INFO[currentFramework].label;
+const frameworkInfo = FRAMEWORK_INFO[currentFramework];
 ---
 
 <nav aria-label="Pattern navigation" class="w-full">
   <div class="mb-4 flex items-center justify-between">
     <h2 class="px-2 text-sm font-semibold text-foreground">Patterns</h2>
-    <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
-      {frameworkLabel}
+    <span
+      class="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full"
+      style={`background-color: ${frameworkInfo.colorLight}; color: ${frameworkInfo.colorForeground};`}
+    >
+      <FrameworkIcon framework={currentFramework} class="w-3.5 h-3.5" />
+      {frameworkInfo.label}
     </span>
   </div>
 
