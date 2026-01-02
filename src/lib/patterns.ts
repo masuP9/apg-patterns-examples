@@ -93,9 +93,6 @@ export const PATTERNS: Pattern[] = [
     complexity: "Medium",
     status: "available",
   },
-  // ============================================
-  // Planned patterns (not yet implemented)
-  // ============================================
   {
     id: "alert",
     name: "Alert",
@@ -103,8 +100,11 @@ export const PATTERNS: Pattern[] = [
       "An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.",
     icon: "⚠️",
     complexity: "Low",
-    status: "planned",
+    status: "available",
   },
+  // ============================================
+  // Planned patterns (not yet implemented)
+  // ============================================
   {
     id: "alert-dialog",
     name: "Alert Dialog",
