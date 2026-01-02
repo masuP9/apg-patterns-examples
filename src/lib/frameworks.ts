@@ -40,8 +40,8 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
   react: {
     label: "React",
     ext: "tsx",
-    color: "#087EA4",
-    colorLight: "rgba(8, 126, 164, 0.12)",
+    color: "#61DAFB",
+    colorLight: "rgba(97, 218, 251, 0.12)",
     colorForeground: "#087EA4",
   },
   vue: {
@@ -49,21 +49,21 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
     ext: "vue",
     color: "#42B883",
     colorLight: "rgba(66, 184, 131, 0.12)",
-    colorForeground: "#3AA876",
+    colorForeground: "#34855B",
   },
   svelte: {
     label: "Svelte",
     ext: "svelte",
     color: "#FF3E00",
     colorLight: "rgba(255, 62, 0, 0.12)",
-    colorForeground: "#E63600",
+    colorForeground: "#D83300",
   },
   astro: {
     label: "Astro",
     ext: "astro",
-    color: "#7C3AED",
-    colorLight: "rgba(124, 58, 237, 0.12)",
-    colorForeground: "#7C3AED",
+    color: "#BC52EE",
+    colorLight: "rgba(188, 82, 238, 0.12)",
+    colorForeground: "#9333EA",
   },
 };
 
