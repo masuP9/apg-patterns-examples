@@ -27,9 +27,6 @@ export interface Pattern {
  * Based on WAI-ARIA APG: https://www.w3.org/WAI/ARIA/apg/patterns/
  */
 export const PATTERNS: Pattern[] = [
-  // ============================================
-  // Available patterns (implemented)
-  // ============================================
   {
     id: 'accordion',
     name: 'Accordion',
@@ -40,75 +37,19 @@ export const PATTERNS: Pattern[] = [
     status: 'available',
   },
   {
-    id: 'button',
-    name: 'Button',
-    description:
-      'A widget that enables users to trigger an action or event, such as submitting a form or toggling a state.',
-    icon: '🔘',
-    complexity: 'Low',
-    status: 'available',
-  },
-  {
-    id: 'dialog',
-    name: 'Dialog (Modal)',
-    description: 'A window overlaid on the primary window, rendering the content underneath inert.',
-    icon: '💬',
-    complexity: 'High',
-    status: 'available',
-  },
-  {
-    id: 'switch',
-    name: 'Switch',
-    description:
-      'A type of checkbox that represents on/off values, as opposed to checked/unchecked.',
-    icon: '🎚️',
-    complexity: 'Low',
-    status: 'available',
-  },
-  {
-    id: 'tabs',
-    name: 'Tabs',
-    description:
-      'A set of layered sections of content, known as tab panels, that display one panel at a time.',
-    icon: '📑',
-    complexity: 'Medium',
-    status: 'available',
-  },
-  {
-    id: 'toolbar',
-    name: 'Toolbar',
-    description:
-      'A container for grouping a set of controls, such as buttons, toggle buttons, or checkboxes.',
-    icon: '🔧',
-    complexity: 'Medium',
-    status: 'available',
-  },
-  {
-    id: 'tooltip',
-    name: 'Tooltip',
-    description:
-      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
-    icon: '💡',
-    complexity: 'Medium',
-    status: 'available',
-  },
-  {
     id: 'alert',
     name: 'Alert',
     description:
-      "An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.",
+      'An element that displays a brief, important message in a way that attracts the user\'s attention without interrupting the user\'s task.',
     icon: '⚠️',
     complexity: 'Low',
     status: 'available',
   },
-  // ============================================
-  // Planned patterns (not yet implemented)
-  // ============================================
   {
     id: 'alert-dialog',
     name: 'Alert Dialog',
     description:
-      "A modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.",
+      'A modal dialog that interrupts the user\'s workflow to communicate an important message and acquire a response.',
     icon: '🚨',
     complexity: 'High',
     status: 'planned',
@@ -116,10 +57,20 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'breadcrumb',
     name: 'Breadcrumb',
-    description: 'A list of links to the parent pages of the current page in hierarchical order.',
+    description:
+      'A list of links to the parent pages of the current page in hierarchical order.',
     icon: '🔗',
     complexity: 'Low',
     status: 'planned',
+  },
+  {
+    id: 'button',
+    name: 'Button',
+    description:
+      'A widget that enables users to trigger an action or event, such as submitting a form or toggling a state.',
+    icon: '🔘',
+    complexity: 'Low',
+    status: 'available',
   },
   {
     id: 'carousel',
@@ -149,20 +100,22 @@ export const PATTERNS: Pattern[] = [
     status: 'planned',
   },
   {
-    id: 'menu-button',
-    name: 'Menu Button',
-    description: 'A button that opens a menu of actions or options.',
-    icon: '☰',
+    id: 'dialog',
+    name: 'Dialog (Modal)',
+    description:
+      'A window overlaid on the primary window, rendering the content underneath inert.',
+    icon: '💬',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'disclosure',
     name: 'Disclosure',
-    description: 'A button that controls the visibility of a section of content.',
+    description:
+      'A button that controls the visibility of a section of content.',
     icon: '▼',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'feed',
@@ -185,7 +138,8 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'landmarks',
     name: 'Landmarks',
-    description: 'A set of eight roles that identify the major sections of a page.',
+    description:
+      'A set of eight roles that identify the major sections of a page.',
     icon: '🗺️',
     complexity: 'Low',
     status: 'planned',
@@ -193,7 +147,8 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'link',
     name: 'Link',
-    description: 'A widget that provides an interactive reference to a resource.',
+    description:
+      'A widget that provides an interactive reference to a resource.',
     icon: '↗️',
     complexity: 'Low',
     status: 'planned',
@@ -217,9 +172,19 @@ export const PATTERNS: Pattern[] = [
     status: 'planned',
   },
   {
+    id: 'menu-button',
+    name: 'Menu Button',
+    description:
+      'A button that opens a menu of actions or options.',
+    icon: '☰',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
     id: 'meter',
     name: 'Meter',
-    description: 'A graphical display of a numeric value that varies within a defined range.',
+    description:
+      'A graphical display of a numeric value that varies within a defined range.',
     icon: '📶',
     complexity: 'Low',
     status: 'planned',
@@ -236,7 +201,8 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'slider',
     name: 'Slider',
-    description: 'An input where the user selects a value from within a given range.',
+    description:
+      'An input where the user selects a value from within a given range.',
     icon: '🎚️',
     complexity: 'Medium',
     status: 'planned',
@@ -251,6 +217,15 @@ export const PATTERNS: Pattern[] = [
     status: 'planned',
   },
   {
+    id: 'switch',
+    name: 'Switch',
+    description:
+      'A type of checkbox that represents on/off values, as opposed to checked/unchecked.',
+    icon: '🎚️',
+    complexity: 'Low',
+    status: 'available',
+  },
+  {
     id: 'table',
     name: 'Table',
     description:
@@ -258,6 +233,33 @@ export const PATTERNS: Pattern[] = [
     icon: '📋',
     complexity: 'Medium',
     status: 'planned',
+  },
+  {
+    id: 'tabs',
+    name: 'Tabs',
+    description:
+      'A set of layered sections of content, known as tab panels, that display one panel at a time.',
+    icon: '📑',
+    complexity: 'Medium',
+    status: 'available',
+  },
+  {
+    id: 'toolbar',
+    name: 'Toolbar',
+    description:
+      'A container for grouping a set of controls, such as buttons, toggle buttons, or checkboxes.',
+    icon: '🔧',
+    complexity: 'Medium',
+    status: 'available',
+  },
+  {
+    id: 'tooltip',
+    name: 'Tooltip',
+    description:
+      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    icon: '💡',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
     id: 'tree-view',

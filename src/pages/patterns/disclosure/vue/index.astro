@@ -1,0 +1,239 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Disclosure from '@patterns/disclosure/Disclosure.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/disclosure/AccessibilityDocs.astro';
+import NativeHtmlNotice from '@patterns/disclosure/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/disclosure/Disclosure.vue?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Disclosure - Vue" pattern="disclosure" framework="vue" tocItems={tocItems}>
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">Disclosure</h1>
+      <p class="text-lg text-muted-foreground">
+        A button that controls the visibility of a section of content.
+      </p>
+    </header>
+
+    <!-- Framework Selector -->
+    <FrameworkTabs pattern="disclosure" currentFramework="vue" />
+
+    <!-- Demo Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
+
+      <!-- Basic Disclosure -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Basic Disclosure</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          A simple disclosure that toggles the visibility of content when clicked.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Disclosure client:load trigger="What is a Disclosure?">
+            <p>
+              A disclosure is a button that controls the visibility of a section of content.
+              It is commonly used for FAQ sections, additional details, or expandable navigation.
+            </p>
+          </Disclosure>
+        </div>
+      </div>
+
+      <!-- Initially Expanded -->
+      <div class="mb-8">
+        <h3 class="text-lg font-medium mb-3">Initially Expanded</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Use the <code>defaultExpanded</code> prop to show the content on initial render.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Disclosure client:load trigger="This section is open by default" defaultExpanded={true}>
+            <p>
+              This content is visible when the page loads because <code>defaultExpanded</code> is set to <code>true</code>.
+            </p>
+          </Disclosure>
+        </div>
+      </div>
+
+      <!-- Disabled -->
+      <div>
+        <h3 class="text-lg font-medium mb-3">Disabled State</h3>
+        <p class="text-sm text-muted-foreground mb-4">
+          Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+        </p>
+        <div class="p-6 rounded-lg border border-border bg-background">
+          <Disclosure client:load trigger="This disclosure is disabled" disabled={true}>
+            <p>This content cannot be revealed because the disclosure is disabled.</p>
+          </Disclosure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Native HTML Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Native HTML</Heading>
+      <NativeHtmlNotice />
+    </section>
+
+    <!-- Accessibility Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
+      <AccessibilityDocs />
+    </section>
+
+    <!-- Source Code Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={sourceCode}
+        lang="vue"
+        title="Disclosure.vue"
+      />
+    </section>
+
+    <!-- Usage Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
+      <CodeBlock
+        code={`<script setup>
+import Disclosure from './Disclosure.vue';
+</script>
+
+<template>
+  <Disclosure
+    trigger="Show details"
+    :default-expanded="false"
+    @expanded-change="(expanded) => console.log('Expanded:', expanded)"
+  >
+    <p>Hidden content that can be revealed</p>
+  </Disclosure>
+</template>`}
+        lang="vue"
+        title="Example"
+      />
+    </section>
+
+    <!-- API Section -->
+    <section class="mb-12">
+      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+
+      <h3 class="text-lg font-medium mb-3">Props</h3>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Prop</th>
+              <th class="text-left py-2 pr-4">Type</th>
+              <th class="text-left py-2 pr-4">Default</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>trigger</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">""</td>
+              <td class="py-2">Content displayed in the trigger button (or use #trigger slot)</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>defaultExpanded</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Initially expanded state</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>disabled</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2 pr-4 text-muted-foreground">false</td>
+              <td class="py-2">Disable the disclosure</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>className</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">string</td>
+              <td class="py-2 pr-4 text-muted-foreground">""</td>
+              <td class="py-2">Additional CSS class</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+
+      <h3 class="text-lg font-medium mb-3">Events</h3>
+      <ResponsiveTable class="mb-6">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Event</th>
+              <th class="text-left py-2 pr-4">Payload</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>expandedChange</code></td>
+              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
+              <td class="py-2">Emitted when expanded state changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+
+      <h3 class="text-lg font-medium mb-3">Slots</h3>
+      <ResponsiveTable>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left py-2 pr-4">Slot</th>
+              <th class="text-left py-2">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>default</code></td>
+              <td class="py-2">Content displayed in the panel</td>
+            </tr>
+            <tr class="border-b border-border">
+              <td class="py-2 pr-4"><code>#trigger</code></td>
+              <td class="py-2">Custom trigger content (alternative to trigger prop)</td>
+            </tr>
+          </tbody>
+        </table>
+      </ResponsiveTable>
+    </section>
+
+    <!-- Resources -->
+    <section>
+      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
+      <ul class="list-disc pl-6 space-y-2">
+        <li>
+          <ExternalLink
+            href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+            class="text-primary hover:underline"
+          >
+            WAI-ARIA APG: Disclosure Pattern
+          </ExternalLink>
+        </li>
+        <li>
+          <ExternalLink
+            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"
+            class="text-primary hover:underline"
+          >
+            MDN: &lt;details&gt; element
+          </ExternalLink>
+        </li>
+      </ul>
+    </section>
+</PatternLayout>

@@ -5,6 +5,7 @@
 @import './patterns/dialog.css';
 @import './patterns/toolbar.css';
 @import './patterns/switch.css';
+@import './patterns/disclosure.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
