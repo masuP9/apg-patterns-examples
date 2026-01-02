@@ -19,22 +19,14 @@ export interface Props {
   class?: string;
 }
 
-const {
-  trigger,
-  defaultExpanded = false,
-  disabled = false,
-  class: className = "",
-} = Astro.props;
+const { trigger, defaultExpanded = false, disabled = false, class: className = '' } = Astro.props;
 
 // Generate unique ID for this instance
 const instanceId = crypto.randomUUID();
 const panelId = `${instanceId}-panel`;
 ---
 
-<apg-disclosure
-  class:list={["apg-disclosure", className]}
-  data-expanded={defaultExpanded}
->
+<apg-disclosure class:list={['apg-disclosure', className]} data-expanded={defaultExpanded}>
   <button
     type="button"
     aria-expanded={defaultExpanded}
@@ -43,12 +35,7 @@ const panelId = `${instanceId}-panel`;
     class="apg-disclosure-trigger"
   >
     <span class="apg-disclosure-icon" aria-hidden="true">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="9 6 15 12 9 18"></polyline>
       </svg>
     </span>
@@ -80,18 +67,18 @@ const panelId = `${instanceId}-panel`;
 
     private initialize() {
       this.rafId = null;
-      this.button = this.querySelector(".apg-disclosure-trigger");
-      this.panel = this.querySelector(".apg-disclosure-panel");
+      this.button = this.querySelector('.apg-disclosure-trigger');
+      this.panel = this.querySelector('.apg-disclosure-panel');
 
       if (!this.button || !this.panel) {
-        console.warn("apg-disclosure: button or panel not found");
+        console.warn('apg-disclosure: button or panel not found');
         return;
       }
 
-      this.expanded = this.dataset.expanded === "true";
+      this.expanded = this.dataset.expanded === 'true';
 
       // Attach event listener
-      this.button.addEventListener("click", this.handleClick);
+      this.button.addEventListener('click', this.handleClick);
     }
 
     disconnectedCallback() {
@@ -101,7 +88,7 @@ const panelId = `${instanceId}-panel`;
         this.rafId = null;
       }
       // Remove event listener
-      this.button?.removeEventListener("click", this.handleClick);
+      this.button?.removeEventListener('click', this.handleClick);
       // Clean up references
       this.button = null;
       this.panel = null;
@@ -113,10 +100,10 @@ const panelId = `${instanceId}-panel`;
 
       // Dispatch custom event
       this.dispatchEvent(
-        new CustomEvent("expandedchange", {
+        new CustomEvent('expandedchange', {
           detail: { expanded: this.expanded },
           bubbles: true,
-        }),
+        })
       );
     }
 
@@ -124,16 +111,16 @@ const panelId = `${instanceId}-panel`;
       if (!this.button || !this.panel) return;
 
       // Update button aria-expanded
-      this.button.setAttribute("aria-expanded", String(this.expanded));
+      this.button.setAttribute('aria-expanded', String(this.expanded));
 
       // Update panel aria-hidden
-      this.panel.setAttribute("aria-hidden", String(!this.expanded));
+      this.panel.setAttribute('aria-hidden', String(!this.expanded));
 
       // Toggle inert attribute
       if (this.expanded) {
-        this.panel.removeAttribute("inert");
+        this.panel.removeAttribute('inert');
       } else {
-        this.panel.setAttribute("inert", "");
+        this.panel.setAttribute('inert', '');
       }
     }
 
@@ -144,7 +131,7 @@ const panelId = `${instanceId}-panel`;
   }
 
   // Register the custom element
-  if (!customElements.get("apg-disclosure")) {
-    customElements.define("apg-disclosure", ApgDisclosure);
+  if (!customElements.get('apg-disclosure')) {
+    customElements.define('apg-disclosure', ApgDisclosure);
   }
 </script>

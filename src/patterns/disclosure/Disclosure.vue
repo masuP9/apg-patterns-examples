@@ -38,7 +38,7 @@
  *
  * @see https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
  */
-import { ref, useId } from 'vue'
+import { ref, useId } from 'vue';
 
 /**
  * Props for the Disclosure component
@@ -52,36 +52,36 @@ import { ref, useId } from 'vue'
  */
 export interface DisclosureProps {
   /** Content displayed in the disclosure trigger button (can also use #trigger slot) */
-  trigger?: string
+  trigger?: string;
   /** When true, the panel is expanded on initial render @default false */
-  defaultExpanded?: boolean
+  defaultExpanded?: boolean;
   /** When true, the disclosure cannot be expanded/collapsed @default false */
-  disabled?: boolean
+  disabled?: boolean;
   /** Additional CSS class @default "" */
-  className?: string
+  className?: string;
 }
 
 const props = withDefaults(defineProps<DisclosureProps>(), {
   trigger: '',
   defaultExpanded: false,
   disabled: false,
-  className: ''
-})
+  className: '',
+});
 
 const emit = defineEmits<{
-  expandedChange: [expanded: boolean]
-}>()
+  expandedChange: [expanded: boolean];
+}>();
 
-const instanceId = useId()
-const panelId = `${instanceId}-panel`
+const instanceId = useId();
+const panelId = `${instanceId}-panel`;
 
-const expanded = ref(props.defaultExpanded)
-const { className } = props
+const expanded = ref(props.defaultExpanded);
+const { className } = props;
 
 const handleToggle = () => {
-  if (props.disabled) return
+  if (props.disabled) return;
 
-  expanded.value = !expanded.value
-  emit('expandedChange', expanded.value)
-}
+  expanded.value = !expanded.value;
+  emit('expandedChange', expanded.value);
+};
 </script>

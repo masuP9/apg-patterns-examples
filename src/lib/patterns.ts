@@ -40,7 +40,7 @@ export const PATTERNS: Pattern[] = [
     id: 'alert',
     name: 'Alert',
     description:
-      'An element that displays a brief, important message in a way that attracts the user\'s attention without interrupting the user\'s task.',
+      "An element that displays a brief, important message in a way that attracts the user's attention without interrupting the user's task.",
     icon: '⚠️',
     complexity: 'Low',
     status: 'available',
@@ -49,7 +49,7 @@ export const PATTERNS: Pattern[] = [
     id: 'alert-dialog',
     name: 'Alert Dialog',
     description:
-      'A modal dialog that interrupts the user\'s workflow to communicate an important message and acquire a response.',
+      "A modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.",
     icon: '🚨',
     complexity: 'High',
     status: 'planned',
@@ -57,8 +57,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'breadcrumb',
     name: 'Breadcrumb',
-    description:
-      'A list of links to the parent pages of the current page in hierarchical order.',
+    description: 'A list of links to the parent pages of the current page in hierarchical order.',
     icon: '🔗',
     complexity: 'Low',
     status: 'planned',
@@ -102,8 +101,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'dialog',
     name: 'Dialog (Modal)',
-    description:
-      'A window overlaid on the primary window, rendering the content underneath inert.',
+    description: 'A window overlaid on the primary window, rendering the content underneath inert.',
     icon: '💬',
     complexity: 'High',
     status: 'available',
@@ -111,8 +109,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'disclosure',
     name: 'Disclosure',
-    description:
-      'A button that controls the visibility of a section of content.',
+    description: 'A button that controls the visibility of a section of content.',
     icon: '▼',
     complexity: 'Low',
     status: 'available',
@@ -138,8 +135,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'landmarks',
     name: 'Landmarks',
-    description:
-      'A set of eight roles that identify the major sections of a page.',
+    description: 'A set of eight roles that identify the major sections of a page.',
     icon: '🗺️',
     complexity: 'Low',
     status: 'planned',
@@ -147,8 +143,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'link',
     name: 'Link',
-    description:
-      'A widget that provides an interactive reference to a resource.',
+    description: 'A widget that provides an interactive reference to a resource.',
     icon: '↗️',
     complexity: 'Low',
     status: 'planned',
@@ -174,8 +169,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'menu-button',
     name: 'Menu Button',
-    description:
-      'A button that opens a menu of actions or options.',
+    description: 'A button that opens a menu of actions or options.',
     icon: '☰',
     complexity: 'High',
     status: 'planned',
@@ -183,8 +177,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'meter',
     name: 'Meter',
-    description:
-      'A graphical display of a numeric value that varies within a defined range.',
+    description: 'A graphical display of a numeric value that varies within a defined range.',
     icon: '📶',
     complexity: 'Low',
     status: 'planned',
@@ -201,8 +194,7 @@ export const PATTERNS: Pattern[] = [
   {
     id: 'slider',
     name: 'Slider',
-    description:
-      'An input where the user selects a value from within a given range.',
+    description: 'An input where the user selects a value from within a given range.',
     icon: '🎚️',
     complexity: 'Medium',
     status: 'planned',

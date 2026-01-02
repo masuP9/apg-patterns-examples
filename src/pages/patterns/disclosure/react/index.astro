@@ -21,95 +21,95 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Disclosure - React" pattern="disclosure" framework="react" tocItems={tocItems}>
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">Disclosure</h1>
-      <p class="text-lg text-muted-foreground">
-        A button that controls the visibility of a section of content.
+<PatternLayout
+  title="Disclosure - React"
+  pattern="disclosure"
+  framework="react"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Disclosure</h1>
+    <p class="text-muted-foreground text-lg">
+      A button that controls the visibility of a section of content.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="disclosure" currentFramework="react" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic Disclosure -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Disclosure</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A simple disclosure that toggles the visibility of content when clicked.
       </p>
-    </header>
-
-    <!-- Framework Selector -->
-    <FrameworkTabs pattern="disclosure" currentFramework="react" />
-
-    <!-- Demo Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Demo</Heading>
-
-      <!-- Basic Disclosure -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Basic Disclosure</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          A simple disclosure that toggles the visibility of content when clicked.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Disclosure client:load trigger="What is a Disclosure?">
-            <p>
-              A disclosure is a button that controls the visibility of a section of content.
-              It is commonly used for FAQ sections, additional details, or expandable navigation.
-            </p>
-          </Disclosure>
-        </div>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="What is a Disclosure?">
+          <p>
+            A disclosure is a button that controls the visibility of a section of content. It is
+            commonly used for FAQ sections, additional details, or expandable navigation.
+          </p>
+        </Disclosure>
       </div>
+    </div>
 
-      <!-- Initially Expanded -->
-      <div class="mb-8">
-        <h3 class="text-lg font-medium mb-3">Initially Expanded</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Use the <code>defaultExpanded</code> prop to show the content on initial render.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Disclosure client:load trigger="This section is open by default" defaultExpanded={true}>
-            <p>
-              This content is visible when the page loads because <code>defaultExpanded</code> is set to <code>true</code>.
-            </p>
-          </Disclosure>
-        </div>
+    <!-- Initially Expanded -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Initially Expanded</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Use the <code>defaultExpanded</code> prop to show the content on initial render.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="This section is open by default" defaultExpanded={true}>
+          <p>
+            This content is visible when the page loads because <code>defaultExpanded</code> is set to
+            <code>true</code>.
+          </p>
+        </Disclosure>
       </div>
+    </div>
 
-      <!-- Disabled -->
-      <div>
-        <h3 class="text-lg font-medium mb-3">Disabled State</h3>
-        <p class="text-sm text-muted-foreground mb-4">
-          Use the <code>disabled</code> prop to prevent interaction with the disclosure.
-        </p>
-        <div class="p-6 rounded-lg border border-border bg-background">
-          <Disclosure client:load trigger="This disclosure is disabled" disabled={true}>
-            <p>This content cannot be revealed because the disclosure is disabled.</p>
-          </Disclosure>
-        </div>
+    <!-- Disabled -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Disabled State</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="This disclosure is disabled" disabled={true}>
+          <p>This content cannot be revealed because the disclosure is disabled.</p>
+        </Disclosure>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Native HTML Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Native HTML</Heading>
-      <NativeHtmlNotice />
-    </section>
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
 
-    <!-- Accessibility Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Accessibility Features</Heading>
-      <AccessibilityDocs />
-    </section>
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
 
-    <!-- Source Code Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Source Code</Heading>
-      <CodeBlock
-        collapsible
-        collapsedLines={5}
-        code={sourceCode}
-        lang="tsx"
-        title="Disclosure.tsx"
-      />
-    </section>
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Disclosure.tsx" />
+  </section>
 
-    <!-- Usage Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">Usage</Heading>
-      <CodeBlock
-        code={`import { Disclosure } from './Disclosure';
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`import { Disclosure } from './Disclosure';
 
 function App() {
   return (
@@ -122,88 +122,88 @@ function App() {
     </Disclosure>
   );
 }`}
-        lang="tsx"
-        title="Example"
-      />
-    </section>
+      lang="tsx"
+      title="Example"
+    />
+  </section>
 
-    <!-- API Section -->
-    <section class="mb-12">
-      <Heading level={2} class="text-xl font-semibold mb-4">API</Heading>
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-      <h3 class="text-lg font-medium mb-3">DisclosureProps</h3>
-      <ResponsiveTable class="mb-6">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="border-b border-border">
-              <th class="text-left py-2 pr-4">Prop</th>
-              <th class="text-left py-2 pr-4">Type</th>
-              <th class="text-left py-2 pr-4">Default</th>
-              <th class="text-left py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>trigger</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">ReactNode</td>
-              <td class="py-2 pr-4 text-muted-foreground">required</td>
-              <td class="py-2">Content displayed in the trigger button</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>children</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">ReactNode</td>
-              <td class="py-2 pr-4 text-muted-foreground">required</td>
-              <td class="py-2">Content displayed in the panel</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>defaultExpanded</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-              <td class="py-2 pr-4 text-muted-foreground">false</td>
-              <td class="py-2">Initially expanded state</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>onExpandedChange</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">(expanded: boolean) =&gt; void</td>
-              <td class="py-2 pr-4 text-muted-foreground">-</td>
-              <td class="py-2">Callback when expanded state changes</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>disabled</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">boolean</td>
-              <td class="py-2 pr-4 text-muted-foreground">false</td>
-              <td class="py-2">Disable the disclosure</td>
-            </tr>
-            <tr class="border-b border-border">
-              <td class="py-2 pr-4"><code>className</code></td>
-              <td class="py-2 pr-4 text-muted-foreground">string</td>
-              <td class="py-2 pr-4 text-muted-foreground">""</td>
-              <td class="py-2">Additional CSS class</td>
-            </tr>
-          </tbody>
-        </table>
-      </ResponsiveTable>
-    </section>
+    <h3 class="mb-3 text-lg font-medium">DisclosureProps</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>trigger</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Content displayed in the trigger button</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Content displayed in the panel</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultExpanded</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Initially expanded state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onExpandedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(expanded: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when expanded state changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Disable the disclosure</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>className</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
 
-    <!-- Resources -->
-    <section>
-      <Heading level={2} class="text-xl font-semibold mb-4">Resources</Heading>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>
-          <ExternalLink
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA APG: Disclosure Pattern
-          </ExternalLink>
-        </li>
-        <li>
-          <ExternalLink
-            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"
-            class="text-primary hover:underline"
-          >
-            MDN: &lt;details&gt; element
-          </ExternalLink>
-        </li>
-      </ul>
-    </section>
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Disclosure Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;details&gt; element
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
 </PatternLayout>

@@ -110,10 +110,34 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
     <div class="space-y-4">
-      <CodeBlock collapsible collapsedLines={5} code={toolbarSource} lang="svelte" title="Toolbar.svelte" />
-      <CodeBlock collapsible collapsedLines={5} code={buttonSource} lang="svelte" title="ToolbarButton.svelte" />
-      <CodeBlock collapsible collapsedLines={5} code={toggleSource} lang="svelte" title="ToolbarToggleButton.svelte" />
-      <CodeBlock collapsible collapsedLines={5} code={separatorSource} lang="svelte" title="ToolbarSeparator.svelte" />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toolbarSource}
+        lang="svelte"
+        title="Toolbar.svelte"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={buttonSource}
+        lang="svelte"
+        title="ToolbarButton.svelte"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toggleSource}
+        lang="svelte"
+        title="ToolbarToggleButton.svelte"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={separatorSource}
+        lang="svelte"
+        title="ToolbarSeparator.svelte"
+      />
     </div>
   </section>
 
@@ -207,7 +231,13 @@ const tocItems = [
     <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
     <div class="mt-6">
-      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="typescript" title="Toolbar.test.svelte.ts" />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Toolbar.test.svelte.ts"
+      />
     </div>
   </section>
 
