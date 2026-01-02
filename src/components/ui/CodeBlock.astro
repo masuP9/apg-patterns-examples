@@ -129,6 +129,28 @@ const blockId = `code-block-${Math.random().toString(36).substring(2, 9)}`;
 
   .code-block-content {
     overflow-x: auto;
+
+    /* Dark scrollbar for code blocks */
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 #1f2937;
+  }
+
+  .code-block-content::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .code-block-content::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+
+  .code-block-content::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+  }
+
+  .code-block-content::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
   }
 
   .code-block-content :global(pre) {
