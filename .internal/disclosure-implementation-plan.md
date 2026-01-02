@@ -8,26 +8,26 @@ WAI-ARIA APG の Disclosure パターンを React、Vue、Svelte、Astro の4フ
 
 ## Disclosure vs Accordion の違い
 
-| 項目 | Disclosure | Accordion |
-|------|-----------|-----------|
-| 単位 | 単独コンポーネント | グループ管理 |
-| 複数展開 | N/A（単独なので常に独立） | allowMultiple で制御 |
-| キーボード | Enter/Space のみ（buttonネイティブ） | Enter/Space + 矢印キー |
-| ユースケース | FAQ回答、詳細表示、ナビ展開 | セクション切り替え |
+| 項目         | Disclosure                           | Accordion              |
+| ------------ | ------------------------------------ | ---------------------- |
+| 単位         | 単独コンポーネント                   | グループ管理           |
+| 複数展開     | N/A（単独なので常に独立）            | allowMultiple で制御   |
+| キーボード   | Enter/Space のみ（buttonネイティブ） | Enter/Space + 矢印キー |
+| ユースケース | FAQ回答、詳細表示、ナビ展開          | セクション切り替え     |
 
 ## APG 仕様要件
 
 ### ARIA 属性
 
-| 属性 | 要素 | 値 | 必須 |
-|------|------|-----|------|
-| `aria-expanded` | button | `"true"` / `"false"` | ✅ |
-| `aria-controls` | button | パネルのID | ✅ |
+| 属性            | 要素   | 値                   | 必須 |
+| --------------- | ------ | -------------------- | ---- |
+| `aria-expanded` | button | `"true"` / `"false"` | ✅   |
+| `aria-controls` | button | パネルのID           | ✅   |
 
 ### キーボード操作
 
-| キー | アクション |
-|------|----------|
+| キー  | アクション                           |
+| ----- | ------------------------------------ |
 | Enter | 開閉をトグル（buttonネイティブ動作） |
 | Space | 開閉をトグル（buttonネイティブ動作） |
 
@@ -36,49 +36,36 @@ WAI-ARIA APG の Disclosure パターンを React、Vue、Svelte、Astro の4フ
 ### HTML 構造
 
 **閉じた状態:**
+
 ```html
 <div class="apg-disclosure">
-  <button
-    type="button"
-    aria-expanded="false"
-    aria-controls="panel-id"
-  >
-    開閉ボタン
-  </button>
+  <button type="button" aria-expanded="false" aria-controls="panel-id">開閉ボタン</button>
   <div id="panel-id" class="apg-disclosure-panel" aria-hidden="true" inert>
-    <div class="apg-disclosure-panel-content">
-      パネルコンテンツ
-    </div>
+    <div class="apg-disclosure-panel-content">パネルコンテンツ</div>
   </div>
 </div>
 ```
 
 **開いた状態:**
+
 ```html
 <div class="apg-disclosure">
-  <button
-    type="button"
-    aria-expanded="true"
-    aria-controls="panel-id"
-  >
-    開閉ボタン
-  </button>
+  <button type="button" aria-expanded="true" aria-controls="panel-id">開閉ボタン</button>
   <div id="panel-id" class="apg-disclosure-panel apg-disclosure-panel--expanded">
-    <div class="apg-disclosure-panel-content">
-      パネルコンテンツ
-    </div>
+    <div class="apg-disclosure-panel-content">パネルコンテンツ</div>
   </div>
 </div>
 ```
 
 **状態切り替え時の属性変更:**
 
-| 状態 | `aria-expanded` | パネルの `aria-hidden` | パネルの `inert` | パネルの class |
-|------|-----------------|----------------------|-----------------|---------------|
-| 閉じ | `"false"` | `"true"` | あり | `apg-disclosure-panel` |
-| 開き | `"true"` | なし（削除） | なし（削除） | `apg-disclosure-panel--expanded` |
+| 状態 | `aria-expanded` | パネルの `aria-hidden` | パネルの `inert` | パネルの class                   |
+| ---- | --------------- | ---------------------- | ---------------- | -------------------------------- |
+| 閉じ | `"false"`       | `"true"`               | あり             | `apg-disclosure-panel`           |
+| 開き | `"true"`        | なし（削除）           | なし（削除）     | `apg-disclosure-panel--expanded` |
 
 **トリガーボタンの動作:**
+
 - `aria-expanded`: パネルの開閉状態に応じて `"true"` / `"false"` を切り替え
 - `aria-controls`: パネルの `id` を参照（常に設定）
 - クリック/Enter/Space で開閉をトグル（button のネイティブ動作）
@@ -96,11 +83,13 @@ WAI-ARIA APG の Disclosure パターンを React、Vue、Svelte、Astro の4フ
 ```
 
 **ネイティブを使うべきケース:**
+
 - シンプルな開閉コンテンツ
 - JavaScript 無効環境での動作が必要
 - アニメーションが不要
 
 **カスタム実装が必要なケース:**
+
 - スムーズな開閉アニメーション
 - 外部からの状態制御
 - 複数 Disclosure の連携
@@ -128,6 +117,7 @@ interface DisclosureProps {
 ```
 
 **設計判断:**
+
 - **Uncontrolled のみ**: `open` prop は削除。Switch/Accordion と同様に uncontrolled パターンに統一
 - **命名統一**: `defaultExpanded` で Accordion と整合性を取る
 - **trigger の制約**: ボタン内にフォーカス可能な要素を置かないことを推奨（ドキュメント化）
@@ -136,19 +126,21 @@ interface DisclosureProps {
 
 各フレームワークでSSR-safe なID生成を行う:
 
-| Framework | 方法 | 備考 |
-|-----------|------|------|
-| React | `useId()` フック | SSR対応済み |
-| Vue | `useId()` (Vue 3.5+) | SSR対応済み |
-| Svelte | `id` prop を受け取り、Astro側で生成 | Svelte 5 には `useId()` がない |
-| Astro | サーバーサイドで `crypto.randomUUID()` | SSRのみ（ハイドレーションなし）なのでOK |
+| Framework | 方法                                   | 備考                                    |
+| --------- | -------------------------------------- | --------------------------------------- |
+| React     | `useId()` フック                       | SSR対応済み                             |
+| Vue       | `useId()` (Vue 3.5+)                   | SSR対応済み                             |
+| Svelte    | `id` prop を受け取り、Astro側で生成    | Svelte 5 には `useId()` がない          |
+| Astro     | サーバーサイドで `crypto.randomUUID()` | SSRのみ（ハイドレーションなし）なのでOK |
 
 **注意事項:**
+
 - Vue: `useId()` は Vue 3.5+ でのみ利用可能。このプロジェクトは Vue 3.5+ を前提とする
 - Svelte: Svelte 5 には `useId()` がないため、`id` prop を必須とし、Astro ページ側で `crypto.randomUUID()` を使ってIDを生成して渡す
 - Astro: Web Components として実装するため、`client:*` ディレクティブを使わない限りハイドレーションは発生しない
 
 **Svelte での実装例:**
+
 ```svelte
 <script lang="ts">
   interface DisclosureProps {
@@ -164,7 +156,7 @@ interface DisclosureProps {
 
 ```astro
 <!-- Astro ページ側 -->
-<Disclosure id={crypto.randomUUID()} client:load>
+<Disclosure id={crypto.randomUUID()} client:load />
 ```
 
 ### disabled 挙動
@@ -188,25 +180,13 @@ interface DisclosureProps {
 
 ```html
 <!-- 閉じた状態 -->
-<div
-  id="panel-id"
-  class="apg-disclosure-panel"
-  aria-hidden="true"
-  inert
->
-  <div class="apg-disclosure-panel-content">
-    パネルコンテンツ
-  </div>
+<div id="panel-id" class="apg-disclosure-panel" aria-hidden="true" inert>
+  <div class="apg-disclosure-panel-content">パネルコンテンツ</div>
 </div>
 
 <!-- 開いた状態 -->
-<div
-  id="panel-id"
-  class="apg-disclosure-panel apg-disclosure-panel--expanded"
->
-  <div class="apg-disclosure-panel-content">
-    パネルコンテンツ
-  </div>
+<div id="panel-id" class="apg-disclosure-panel apg-disclosure-panel--expanded">
+  <div class="apg-disclosure-panel-content">パネルコンテンツ</div>
 </div>
 ```
 
@@ -215,10 +195,12 @@ interface DisclosureProps {
 - 展開時は両属性を削除（`aria-hidden` と `inert` を設定しない）
 
 **視覚的な非表示:**
+
 - `grid-template-rows: 0fr` + `overflow: hidden` により視覚的にも非表示
 - `aria-hidden` + `inert` はアクセシビリティツリーとフォーカス管理用
 
 **`inert` のフォールバック:**
+
 - `inert` 属性は IE/古いブラウザでサポートされない
 - フォールバックとして、閉じた状態で `tabindex="-1"` をフォーカス可能要素に設定
 - または inert polyfill (https://github.com/WICG/inert) を使用
@@ -250,6 +232,7 @@ interface DisclosureProps {
 ```
 
 **メリット:**
+
 - `aria-hidden` + `inert` でAPG準拠
 - Safari/Firefox でも動作
 - スムーズな高さアニメーション

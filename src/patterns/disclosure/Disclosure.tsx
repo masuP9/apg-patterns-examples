@@ -1,5 +1,5 @@
-import { useId, useState, useCallback } from "react";
-import { cn } from "@/lib/utils";
+import { useId, useState, useCallback } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * Props for the Disclosure component
@@ -50,7 +50,7 @@ export function Disclosure({
   defaultExpanded = false,
   onExpandedChange,
   disabled = false,
-  className = "",
+  className = '',
 }: DisclosureProps): React.ReactElement {
   const instanceId = useId();
   const panelId = `${instanceId}-panel`;
@@ -66,7 +66,7 @@ export function Disclosure({
   }, [expanded, disabled, onExpandedChange]);
 
   return (
-    <div className={cn("apg-disclosure", className)}>
+    <div className={cn('apg-disclosure', className)}>
       <button
         type="button"
         aria-expanded={expanded}
@@ -76,12 +76,7 @@ export function Disclosure({
         onClick={handleToggle}
       >
         <span className="apg-disclosure-icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="9 6 15 12 9 18" />
           </svg>
         </span>

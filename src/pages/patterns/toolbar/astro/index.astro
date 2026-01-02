@@ -112,7 +112,8 @@ const tocItems = [
         <div class="text-muted-foreground text-sm">
           <p>
             Current state: <span id="toggle-state" class="font-mono"
-              >{'{ bold: false, italic: false, underline: false }'}</span>
+              >{'{ bold: false, italic: false, underline: false }'}</span
+            >
           </p>
         </div>
         <div id="toggle-sample-text" class="border-border rounded-lg border p-4">
@@ -175,10 +176,34 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
     <div class="space-y-4">
-      <CodeBlock collapsible collapsedLines={5} code={toolbarSource} lang="astro" title="Toolbar.astro" />
-      <CodeBlock collapsible collapsedLines={5} code={buttonSource} lang="astro" title="ToolbarButton.astro" />
-      <CodeBlock collapsible collapsedLines={5} code={toggleSource} lang="astro" title="ToolbarToggleButton.astro" />
-      <CodeBlock collapsible collapsedLines={5} code={separatorSource} lang="astro" title="ToolbarSeparator.astro" />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toolbarSource}
+        lang="astro"
+        title="Toolbar.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={buttonSource}
+        lang="astro"
+        title="ToolbarButton.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toggleSource}
+        lang="astro"
+        title="ToolbarToggleButton.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={separatorSource}
+        lang="astro"
+        title="ToolbarSeparator.astro"
+      />
     </div>
   </section>
 
