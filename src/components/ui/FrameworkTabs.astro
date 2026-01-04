@@ -19,7 +19,7 @@ interface Props {
 const { pattern, currentFramework } = Astro.props;
 ---
 
-<div class="border-border mb-8 flex gap-2 border-b" role="tablist">
+<div class="border-border mb-8 flex gap-1 border-b sm:gap-2" role="tablist">
   {
     FRAMEWORKS.map((fw) => {
       const info = FRAMEWORK_INFO[fw];
@@ -30,7 +30,7 @@ const { pattern, currentFramework } = Astro.props;
         <a
           href={href}
           class:list={[
-            'inline-flex items-center gap-2 border-b-2 px-4 py-2 transition-colors',
+            'framework-tab inline-flex items-center justify-center gap-2 border-b-2 px-3 py-2 transition-colors sm:px-4',
             isActive
               ? 'framework-tab-active font-medium'
               : 'text-muted-foreground hover:text-foreground border-transparent',
@@ -43,9 +43,10 @@ const { pattern, currentFramework } = Astro.props;
           aria-current={isActive ? 'page' : undefined}
           role="tab"
           aria-selected={isActive ? 'true' : 'false'}
+          title={info.label}
         >
           <FrameworkIcon framework={fw} class="h-4 w-4" />
-          {info.label}
+          <span class="hidden sm:inline">{info.label}</span>
         </a>
       );
     })
