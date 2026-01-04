@@ -10,45 +10,45 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
-| `tablist` | Container | Container for tab elements |
-| `tab` | Tab button | Individual tab element |
+| Role       | Element      | Description                |
+| ---------- | ------------ | -------------------------- |
+| `tablist`  | Container    | Container for tab elements |
+| `tab`      | Tab button   | Individual tab element     |
 | `tabpanel` | Content area | Content panel for each tab |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-orientation` | tablist | `"horizontal"` \| `"vertical"` | No | Defaults to horizontal |
-| `aria-controls` | tab | ID of associated panel | Yes | Auto-generated |
-| `aria-labelledby` | tabpanel | ID of associated tab | Yes | Auto-generated |
+| Attribute          | Element  | Values                         | Required | Notes                  |
+| ------------------ | -------- | ------------------------------ | -------- | ---------------------- |
+| `aria-orientation` | tablist  | `"horizontal"` \| `"vertical"` | No       | Defaults to horizontal |
+| `aria-controls`    | tab      | ID of associated panel         | Yes      | Auto-generated         |
+| `aria-labelledby`  | tabpanel | ID of associated tab           | Yes      | Auto-generated         |
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `aria-selected` | tab | `true` \| `false` | Yes | Tab click, Arrow keys (automatic), Enter/Space (manual) |
+| Attribute       | Element | Values            | Required | Change Trigger                                          |
+| --------------- | ------- | ----------------- | -------- | ------------------------------------------------------- |
+| `aria-selected` | tab     | `true` \| `false` | Yes      | Tab click, Arrow keys (automatic), Enter/Space (manual) |
 
 ## Keyboard Support
 
 ### Horizontal Orientation
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move focus into/out of the tablist |
-| `ArrowRight` | Move to next tab (loops at end) |
-| `ArrowLeft` | Move to previous tab (loops at start) |
-| `Home` | Move to first tab |
-| `End` | Move to last tab |
-| `Enter` / `Space` | Activate tab (manual mode only) |
+| Key               | Action                                |
+| ----------------- | ------------------------------------- |
+| `Tab`             | Move focus into/out of the tablist    |
+| `ArrowRight`      | Move to next tab (loops at end)       |
+| `ArrowLeft`       | Move to previous tab (loops at start) |
+| `Home`            | Move to first tab                     |
+| `End`             | Move to last tab                      |
+| `Enter` / `Space` | Activate tab (manual mode only)       |
 
 ### Vertical Orientation
 
-| Key | Action |
-|-----|--------|
-| `ArrowDown` | Move to next tab (loops at end) |
-| `ArrowUp` | Move to previous tab (loops at start) |
+| Key         | Action                                |
+| ----------- | ------------------------------------- |
+| `ArrowDown` | Move to next tab (loops at end)       |
+| `ArrowUp`   | Move to previous tab (loops at start) |
 
 ## Focus Management (Roving Tabindex)
 
@@ -60,10 +60,12 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 ## Activation Modes
 
 ### Automatic (default)
+
 - Arrow keys move focus AND select tab
 - Panel content changes immediately
 
 ### Manual
+
 - Arrow keys move focus only
 - Enter/Space required to select tab
 - Panel content changes on explicit activation

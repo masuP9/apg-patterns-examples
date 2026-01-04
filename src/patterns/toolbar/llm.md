@@ -10,38 +10,38 @@ A toolbar is a container for grouping a set of controls, such as buttons, toggle
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
-| `toolbar` | Container | Container for grouping controls |
-| `button` | Button elements | Implicit role for `<button>` |
-| `separator` | Separator | Visual/semantic separator between groups |
+| Role        | Element         | Description                              |
+| ----------- | --------------- | ---------------------------------------- |
+| `toolbar`   | Container       | Container for grouping controls          |
+| `button`    | Button elements | Implicit role for `<button>`             |
+| `separator` | Separator       | Visual/semantic separator between groups |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-label` | toolbar | String | Yes* | Accessible name |
-| `aria-labelledby` | toolbar | ID reference | Yes* | Alternative to aria-label |
-| `aria-orientation` | toolbar | `"horizontal"` \| `"vertical"` | No | Default: horizontal |
+| Attribute          | Element | Values                         | Required | Notes                     |
+| ------------------ | ------- | ------------------------------ | -------- | ------------------------- |
+| `aria-label`       | toolbar | String                         | Yes\*    | Accessible name           |
+| `aria-labelledby`  | toolbar | ID reference                   | Yes\*    | Alternative to aria-label |
+| `aria-orientation` | toolbar | `"horizontal"` \| `"vertical"` | No       | Default: horizontal       |
 
-> *Either `aria-label` or `aria-labelledby` is required
+> \*Either `aria-label` or `aria-labelledby` is required
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
+| Attribute      | Element       | Values            | Required          | Change Trigger      |
+| -------------- | ------------- | ----------------- | ----------------- | ------------------- |
 | `aria-pressed` | toggle button | `true` \| `false` | Yes (for toggles) | Click, Enter, Space |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move focus into/out of toolbar (single tab stop) |
-| `ArrowRight` / `ArrowLeft` | Navigate between controls (horizontal) |
-| `ArrowDown` / `ArrowUp` | Navigate between controls (vertical) |
-| `Home` | Move focus to first control |
-| `End` | Move focus to last control |
-| `Enter` / `Space` | Activate button / toggle pressed state |
+| Key                        | Action                                           |
+| -------------------------- | ------------------------------------------------ |
+| `Tab`                      | Move focus into/out of toolbar (single tab stop) |
+| `ArrowRight` / `ArrowLeft` | Navigate between controls (horizontal)           |
+| `ArrowDown` / `ArrowUp`    | Navigate between controls (vertical)             |
+| `Home`                     | Move focus to first control                      |
+| `End`                      | Move focus to last control                       |
+| `Enter` / `Space`          | Activate button / toggle pressed state           |
 
 ## Focus Management (Roving Tabindex)
 
@@ -54,6 +54,7 @@ A toolbar is a container for grouping a set of controls, such as buttons, toggle
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] ArrowRight moves to next control (horizontal)
 - [ ] ArrowLeft moves to previous control (horizontal)
 - [ ] ArrowDown moves to next control (vertical)
@@ -67,18 +68,21 @@ A toolbar is a container for grouping a set of controls, such as buttons, toggle
 - [ ] Focus does not wrap at edges
 
 ### High Priority: ARIA
+
 - [ ] Container has `role="toolbar"`
 - [ ] Toolbar has `aria-label` or `aria-labelledby`
 - [ ] Toggle buttons have `aria-pressed`
 - [ ] `aria-orientation` reflects orientation
 
 ### High Priority: Focus Management
+
 - [ ] Only focused control has `tabIndex="0"`
 - [ ] Other controls have `tabIndex="-1"`
 - [ ] Tab enters toolbar at last focused control
 - [ ] Tab exits toolbar (single tab stop)
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 
 ## Implementation Notes

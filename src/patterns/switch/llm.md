@@ -10,27 +10,28 @@ A switch is a type of checkbox that represents on/off values, as opposed to chec
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role     | Element        | Description          |
+| -------- | -------------- | -------------------- |
 | `switch` | Switch element | On/off toggle widget |
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `aria-checked` | switch | `true` \| `false` | Yes | Click, Enter, Space |
-| `aria-disabled` | switch | `true` | No | Only when disabled |
+| Attribute       | Element | Values            | Required | Change Trigger      |
+| --------------- | ------- | ----------------- | -------- | ------------------- |
+| `aria-checked`  | switch  | `true` \| `false` | Yes      | Click, Enter, Space |
+| `aria-disabled` | switch  | `true`            | No       | Only when disabled  |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
+| Key     | Action                       |
+| ------- | ---------------------------- |
 | `Space` | Toggle switch state (on/off) |
 | `Enter` | Toggle switch state (on/off) |
 
 ## Accessible Naming
 
 One of these is required:
+
 - **Visible label** (recommended) - Child content as accessible name
 - `aria-label` - Invisible label
 - `aria-labelledby` - Reference to external label element
@@ -38,6 +39,7 @@ One of these is required:
 ## Visual Design (WCAG 1.4.1)
 
 Do not rely solely on color to indicate state:
+
 - **Thumb position** - Left = off, Right = on
 - **Checkmark icon** - Visible only when on
 - **Forced colors mode** - Use system colors for Windows High Contrast
@@ -45,12 +47,14 @@ Do not rely solely on color to indicate state:
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Space toggles state
 - [ ] Enter toggles state
 - [ ] Tab navigates to switch
 - [ ] Disabled switch behavior correct
 
 ### High Priority: ARIA
+
 - [ ] Has `role="switch"`
 - [ ] Has `aria-checked` attribute
 - [ ] `aria-checked` toggles between `true` and `false`
@@ -58,6 +62,7 @@ Do not rely solely on color to indicate state:
 - [ ] Has accessible name
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 - [ ] State distinguishable without color alone
 

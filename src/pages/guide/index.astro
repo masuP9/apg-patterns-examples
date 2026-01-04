@@ -16,12 +16,13 @@ import { withBase } from '@/lib/utils';
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-semibold">Using with AI Code Assistants</h2>
       <p class="text-muted-foreground mb-4">
-        Each pattern includes an AI-friendly definition file (<code class="bg-muted px-1.5 py-0.5 rounded text-sm">llm.md</code>)
-        that can be used as context when implementing similar components with AI coding assistants
-        like Claude, Cursor, or GitHub Copilot.
+        Each pattern includes an AI-friendly definition file (<code
+          class="bg-muted rounded px-1.5 py-0.5 text-sm">llm.md</code
+        >) that can be used as context when implementing similar components with AI coding
+        assistants like Claude, Cursor, or GitHub Copilot.
       </p>
 
-      <h3 class="mb-3 mt-6 text-xl font-medium">What's included in llm.md</h3>
+      <h3 class="mt-6 mb-3 text-xl font-medium">What's included in llm.md</h3>
       <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
         <li>ARIA roles, properties, and states requirements</li>
         <li>Keyboard interaction specifications</li>
@@ -30,16 +31,17 @@ import { withBase } from '@/lib/utils';
         <li>Example test code snippets</li>
       </ul>
 
-      <h3 class="mb-3 mt-6 text-xl font-medium">How to use</h3>
+      <h3 class="mt-6 mb-3 text-xl font-medium">How to use</h3>
 
       <div class="space-y-6">
         <div class="border-border rounded-lg border p-4">
           <h4 class="mb-2 font-medium">1. Copy & paste into prompt</h4>
-          <p class="text-muted-foreground text-sm mb-3">
+          <p class="text-muted-foreground mb-3 text-sm">
             Copy the content and include it in your prompt when asking AI to implement a component.
           </p>
           <div class="bg-muted rounded-md p-3">
-            <pre class="text-sm overflow-x-auto"><code>Implement a Tabs component in Angular following this specification:
+            <pre
+              class="overflow-x-auto text-sm"><code>Implement a Tabs component in Angular following this specification:
 
 [paste llm.md content here]</code></pre>
           </div>
@@ -47,11 +49,12 @@ import { withBase } from '@/lib/utils';
 
         <div class="border-border rounded-lg border p-4">
           <h4 class="mb-2 font-medium">2. Add to project context</h4>
-          <p class="text-muted-foreground text-sm mb-3">
+          <p class="text-muted-foreground mb-3 text-sm">
             For Claude Code or Cursor, place definition files in your project for automatic context.
           </p>
           <div class="bg-muted rounded-md p-3">
-            <pre class="text-sm overflow-x-auto"><code>my-project/
+            <pre
+              class="overflow-x-auto text-sm"><code>my-project/
 ├── .ai/
 │   └── apg-patterns/
 │       ├── tabs.md
@@ -63,11 +66,12 @@ import { withBase } from '@/lib/utils';
 
         <div class="border-border rounded-lg border p-4">
           <h4 class="mb-2 font-medium">3. Use for test generation</h4>
-          <p class="text-muted-foreground text-sm mb-3">
+          <p class="text-muted-foreground mb-3 text-sm">
             The test checklist helps AI generate comprehensive accessibility tests.
           </p>
           <div class="bg-muted rounded-md p-3">
-            <pre class="text-sm overflow-x-auto"><code>Generate Jest tests for my Tabs component based on this checklist:
+            <pre
+              class="overflow-x-auto text-sm"><code>Generate Jest tests for my Tabs component based on this checklist:
 
 ## Test Checklist
 - [ ] ArrowRight moves to next tab
@@ -95,9 +99,7 @@ import { withBase } from '@/lib/utils';
         <Tile variant="floating" href={withBase('/patterns/alert/react/')}>
           <TileContent>
             <TileTitle>Alert</TileTitle>
-            <TileDescription>
-              Live region for important, time-sensitive messages.
-            </TileDescription>
+            <TileDescription> Live region for important, time-sensitive messages. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/breadcrumb/react/')}>
@@ -119,17 +121,13 @@ import { withBase } from '@/lib/utils';
         <Tile variant="floating" href={withBase('/patterns/dialog/react/')}>
           <TileContent>
             <TileTitle>Dialog</TileTitle>
-            <TileDescription>
-              Modal window with focus trap and keyboard support.
-            </TileDescription>
+            <TileDescription> Modal window with focus trap and keyboard support. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/disclosure/react/')}>
           <TileContent>
             <TileTitle>Disclosure</TileTitle>
-            <TileDescription>
-              Simple show/hide toggle for content visibility.
-            </TileDescription>
+            <TileDescription> Simple show/hide toggle for content visibility. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/listbox/react/')}>
@@ -143,17 +141,13 @@ import { withBase } from '@/lib/utils';
         <Tile variant="floating" href={withBase('/patterns/switch/react/')}>
           <TileContent>
             <TileTitle>Switch</TileTitle>
-            <TileDescription>
-              On/off toggle with aria-checked state.
-            </TileDescription>
+            <TileDescription> On/off toggle with aria-checked state. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/tabs/react/')}>
           <TileContent>
             <TileTitle>Tabs</TileTitle>
-            <TileDescription>
-              Layered content sections with roving tabindex.
-            </TileDescription>
+            <TileDescription> Layered content sections with roving tabindex. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/toolbar/react/')}>
@@ -167,9 +161,7 @@ import { withBase } from '@/lib/utils';
         <Tile variant="floating" href={withBase('/patterns/tooltip/react/')}>
           <TileContent>
             <TileTitle>Tooltip</TileTitle>
-            <TileDescription>
-              Contextual popup for element descriptions.
-            </TileDescription>
+            <TileDescription> Contextual popup for element descriptions. </TileDescription>
           </TileContent>
         </Tile>
       </div>
@@ -181,7 +173,8 @@ import { withBase } from '@/lib/utils';
         AI definition files are located alongside each pattern's implementation:
       </p>
       <div class="bg-muted rounded-md p-4">
-        <pre class="text-sm overflow-x-auto"><code>src/patterns/
+        <pre
+          class="overflow-x-auto text-sm"><code>src/patterns/
 ├── tabs/
 │   ├── llm.md          ← AI-friendly definition
 │   ├── Tabs.tsx

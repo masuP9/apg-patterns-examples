@@ -10,38 +10,39 @@ A dialog is a window overlaid on the primary content, requiring user interaction
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role     | Element          | Description                              |
+| -------- | ---------------- | ---------------------------------------- |
 | `dialog` | Dialog container | Indicates the element is a dialog window |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-modal` | dialog | `true` | Yes | Indicates this is a modal dialog |
-| `aria-labelledby` | dialog | ID reference to title | Yes | References the dialog title |
-| `aria-describedby` | dialog | ID reference to description | No | References optional description |
+| Attribute          | Element | Values                      | Required | Notes                            |
+| ------------------ | ------- | --------------------------- | -------- | -------------------------------- |
+| `aria-modal`       | dialog  | `true`                      | Yes      | Indicates this is a modal dialog |
+| `aria-labelledby`  | dialog  | ID reference to title       | Yes      | References the dialog title      |
+| `aria-describedby` | dialog  | ID reference to description | No       | References optional description  |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move to next focusable element (loops within dialog) |
+| Key           | Action                                                   |
+| ------------- | -------------------------------------------------------- |
+| `Tab`         | Move to next focusable element (loops within dialog)     |
 | `Shift + Tab` | Move to previous focusable element (loops within dialog) |
-| `Escape` | Close the dialog |
+| `Escape`      | Close the dialog                                         |
 
 ## Focus Management
 
-| Event | Behavior |
-|-------|----------|
-| Dialog opens | Focus moves to first focusable element inside dialog |
+| Event         | Behavior                                               |
+| ------------- | ------------------------------------------------------ |
+| Dialog opens  | Focus moves to first focusable element inside dialog   |
 | Dialog closes | Focus returns to the element that triggered the dialog |
-| Focus trap | Tab/Shift+Tab cycles only within dialog |
-| Background | Content outside dialog is inert (not focusable) |
+| Focus trap    | Tab/Shift+Tab cycles only within dialog                |
+| Background    | Content outside dialog is inert (not focusable)        |
 
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Escape closes the dialog
 - [ ] Tab moves to next focusable element
 - [ ] Shift+Tab moves to previous focusable element
@@ -49,18 +50,21 @@ A dialog is a window overlaid on the primary content, requiring user interaction
 - [ ] Shift+Tab wraps from first to last element
 
 ### High Priority: ARIA
+
 - [ ] Container has `role="dialog"`
 - [ ] Dialog has `aria-modal="true"`
 - [ ] Dialog has `aria-labelledby` referencing title
 - [ ] Title element id matches `aria-labelledby` value
 
 ### High Priority: Focus Management
+
 - [ ] Focus moves into dialog on open
 - [ ] Focus returns to trigger on close
 - [ ] Focus is trapped within dialog
 - [ ] Background content is inert
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 - [ ] Page scrolling is disabled while open
 - [ ] Close button has accessible label

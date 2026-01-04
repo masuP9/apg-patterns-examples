@@ -11,32 +11,32 @@ A tooltip is a popup that displays information related to an element when the el
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role      | Element       | Description                             |
+| --------- | ------------- | --------------------------------------- |
 | `tooltip` | Tooltip popup | Contextual popup displaying description |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-describedby` | Trigger | ID of tooltip | Conditional | Only when tooltip is visible |
-| `aria-hidden` | Tooltip | `true` \| `false` | No | Hides from AT when closed |
+| Attribute          | Element | Values            | Required    | Notes                        |
+| ------------------ | ------- | ----------------- | ----------- | ---------------------------- |
+| `aria-describedby` | Trigger | ID of tooltip     | Conditional | Only when tooltip is visible |
+| `aria-hidden`      | Tooltip | `true` \| `false` | No          | Hides from AT when closed    |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
-| `Escape` | Close the tooltip |
-| `Tab` | Focus navigation; tooltip shows on focus |
+| Key      | Action                                   |
+| -------- | ---------------------------------------- |
+| `Escape` | Close the tooltip                        |
+| `Tab`    | Focus navigation; tooltip shows on focus |
 
 ## Focus/Hover Behavior
 
-| Event | Behavior |
-|-------|----------|
+| Event         | Behavior                      |
+| ------------- | ----------------------------- |
 | Focus trigger | Tooltip appears (after delay) |
-| Blur trigger | Tooltip hides |
+| Blur trigger  | Tooltip hides                 |
 | Hover trigger | Tooltip appears (after delay) |
-| Leave trigger | Tooltip hides |
+| Leave trigger | Tooltip hides                 |
 
 ## Important Constraints
 
@@ -47,22 +47,26 @@ A tooltip is a popup that displays information related to an element when the el
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Escape closes tooltip
 - [ ] Tooltip appears on trigger focus
 - [ ] Tooltip hides on trigger blur
 
 ### High Priority: ARIA
+
 - [ ] Tooltip has `role="tooltip"`
 - [ ] Trigger has `aria-describedby` when tooltip visible
 - [ ] `aria-describedby` removed when tooltip hidden
 - [ ] Tooltip has correct `aria-hidden` state
 
 ### High Priority: Focus Management
+
 - [ ] Tooltip is NOT focusable
 - [ ] Focus stays on trigger when tooltip shows
 - [ ] Tab moves to next element (not into tooltip)
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 
 ## Implementation Notes

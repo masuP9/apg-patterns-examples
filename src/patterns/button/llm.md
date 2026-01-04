@@ -10,32 +10,34 @@ A toggle button is a two-state button that can be either pressed or not pressed.
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role     | Element        | Description                  |
+| -------- | -------------- | ---------------------------- |
 | `button` | Button element | Implicit role for `<button>` |
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `aria-pressed` | button | `true` \| `false` \| `"mixed"` | Yes | Click, Enter, Space |
+| Attribute      | Element | Values                         | Required | Change Trigger      |
+| -------------- | ------- | ------------------------------ | -------- | ------------------- |
+| `aria-pressed` | button  | `true` \| `false` \| `"mixed"` | Yes      | Click, Enter, Space |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
+| Key     | Action                  |
+| ------- | ----------------------- |
 | `Space` | Toggle the button state |
 | `Enter` | Toggle the button state |
 
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Space toggles state
 - [ ] Enter toggles state
 - [ ] Tab navigates to button
 - [ ] Disabled button is skipped by Tab
 
 ### High Priority: ARIA
+
 - [ ] Has `role="button"` (implicit for `<button>`)
 - [ ] Has `aria-pressed` attribute
 - [ ] `aria-pressed` toggles between `true` and `false`
@@ -43,6 +45,7 @@ A toggle button is a two-state button that can be either pressed or not pressed.
 - [ ] Disabled state uses `disabled` attribute
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 - [ ] Has accessible name (visible text or `aria-label`)
 

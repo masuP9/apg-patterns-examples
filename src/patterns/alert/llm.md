@@ -12,12 +12,12 @@ An alert displays a brief, important message that attracts the user's attention 
 
 ```jsx
 // ❌ WRONG: Dynamically adding live region
-{showAlert && <div role="alert">Message</div>}
+{
+  showAlert && <div role="alert">Message</div>;
+}
 
 // ✅ CORRECT: Live region always exists, content changes
-<div role="alert">
-  {message && <span>{message}</span>}
-</div>
+<div role="alert">{message && <span>{message}</span>}</div>;
 ```
 
 Screen readers detect changes by observing DOM mutations inside live regions. If the container is added dynamically, announcements may fail.
@@ -26,16 +26,16 @@ Screen readers detect changes by observing DOM mutations inside live regions. If
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role    | Element         | Description             |
+| ------- | --------------- | ----------------------- |
 | `alert` | Alert container | Brief important message |
 
 ### Implicit Properties (DO NOT add manually)
 
-| Attribute | Implicit Value | Effect |
-|-----------|----------------|--------|
-| `aria-live` | `assertive` | Interrupts screen reader immediately |
-| `aria-atomic` | `true` | Announces entire content, not just changes |
+| Attribute     | Implicit Value | Effect                                     |
+| ------------- | -------------- | ------------------------------------------ |
+| `aria-live`   | `assertive`    | Interrupts screen reader immediately       |
+| `aria-atomic` | `true`         | Announces entire content, not just changes |
 
 ## Keyboard Support
 
@@ -56,40 +56,46 @@ If dismiss button is present:
 ## Important Guidelines
 
 ### No Auto-Dismissal (WCAG 2.2.3)
+
 - Alerts should NOT disappear automatically
 - Users need sufficient time to read
 - If auto-dismiss required: provide user control to pause/extend
 
 ### Alert Frequency (WCAG 2.2.4)
+
 - Excessive alerts inhibit usability
 - Use sparingly for truly important messages
 
 ### Alert vs Alert Dialog
 
-| Use Alert | Use Alert Dialog |
-|-----------|------------------|
-| Informational, no action required | Requires immediate response |
-| Should NOT interrupt workflow | Must acknowledge before continuing |
-| Focus stays on current task | Focus moves to dialog |
+| Use Alert                         | Use Alert Dialog                   |
+| --------------------------------- | ---------------------------------- |
+| Informational, no action required | Requires immediate response        |
+| Should NOT interrupt workflow     | Must acknowledge before continuing |
+| Focus stays on current task       | Focus moves to dialog              |
 
 ## Test Checklist
 
 ### High Priority: ARIA
+
 - [ ] Container has `role="alert"`
 - [ ] Live region exists in DOM before content
 - [ ] Content changes are announced
 
 ### High Priority: Focus Management
+
 - [ ] Alert does NOT steal focus
 - [ ] Alert container is NOT focusable
 - [ ] Dismiss button (if present) is focusable
 
 ### High Priority: Behavior
+
 - [ ] Initial page load content is NOT announced
 - [ ] Dynamic content changes ARE announced
 - [ ] No auto-dismissal (or user control provided)
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 
 ## Implementation Notes

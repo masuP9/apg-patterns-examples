@@ -4,7 +4,7 @@
 
 ## ファイル構造
 
-```markdown
+````markdown
 # {Pattern Name} Pattern - AI Implementation Guide
 
 > APG Reference: {APG URL}
@@ -17,26 +17,26 @@
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
+| Role     | Element          | Description   |
+| -------- | ---------------- | ------------- |
 | `{role}` | {target element} | {description} |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `{aria-*}` | {target} | {values} | Yes/No | {notes} |
+| Attribute  | Element  | Values   | Required | Notes   |
+| ---------- | -------- | -------- | -------- | ------- |
+| `{aria-*}` | {target} | {values} | Yes/No   | {notes} |
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `{aria-*}` | {target} | {values} | Yes/No | {triggers} |
+| Attribute  | Element  | Values   | Required | Change Trigger |
+| ---------- | -------- | -------- | -------- | -------------- |
+| `{aria-*}` | {target} | {values} | Yes/No   | {triggers}     |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
+| Key     | Action               |
+| ------- | -------------------- |
 | `{Key}` | {action description} |
 
 ## Focus Management
@@ -47,15 +47,19 @@
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] {keyboard test case}
 
 ### High Priority: ARIA
+
 - [ ] {ARIA test case}
 
 ### High Priority: Focus Management
+
 - [ ] {focus test case}
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 
 ## Implementation Notes
@@ -67,6 +71,8 @@
 ```typescript
 // Example test snippets
 ```
+````
+
 ```
 
 ## ガイドライン
@@ -81,3 +87,4 @@
 
 - ファイル名: `llm.md`
 - 配置場所: `src/patterns/{pattern}/llm.md`
+```

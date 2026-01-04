@@ -10,58 +10,58 @@ A listbox widget presents a list of options and allows selection of one or more 
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
-| `listbox` | Container (`<ul>`) | Selection widget |
-| `option` | Each item (`<li>`) | Selectable option |
+| Role      | Element            | Description       |
+| --------- | ------------------ | ----------------- |
+| `listbox` | Container (`<ul>`) | Selection widget  |
+| `option`  | Each item (`<li>`) | Selectable option |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-label` | listbox | String | Yes* | Accessible name |
-| `aria-labelledby` | listbox | ID reference | Yes* | Alternative |
-| `aria-multiselectable` | listbox | `true` | No | For multi-select |
-| `aria-orientation` | listbox | `"vertical"` \| `"horizontal"` | No | Default: vertical |
+| Attribute              | Element | Values                         | Required | Notes             |
+| ---------------------- | ------- | ------------------------------ | -------- | ----------------- |
+| `aria-label`           | listbox | String                         | Yes\*    | Accessible name   |
+| `aria-labelledby`      | listbox | ID reference                   | Yes\*    | Alternative       |
+| `aria-multiselectable` | listbox | `true`                         | No       | For multi-select  |
+| `aria-orientation`     | listbox | `"vertical"` \| `"horizontal"` | No       | Default: vertical |
 
-> *Either `aria-label` or `aria-labelledby` is required
+> \*Either `aria-label` or `aria-labelledby` is required
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `aria-selected` | option | `true` \| `false` | Yes | Click, Arrow keys (single), Space (multi) |
-| `aria-disabled` | option | `true` | No | When disabled |
+| Attribute       | Element | Values            | Required | Change Trigger                            |
+| --------------- | ------- | ----------------- | -------- | ----------------------------------------- |
+| `aria-selected` | option  | `true` \| `false` | Yes      | Click, Arrow keys (single), Space (multi) |
+| `aria-disabled` | option  | `true`            | No       | When disabled                             |
 
 ## Keyboard Support
 
 ### Common Navigation
 
-| Key | Action |
-|-----|--------|
-| `ArrowDown` / `ArrowUp` | Move focus (vertical) |
-| `ArrowRight` / `ArrowLeft` | Move focus (horizontal) |
-| `Home` | Move focus to first option |
-| `End` | Move focus to last option |
-| Type character | Type-ahead focus |
+| Key                        | Action                     |
+| -------------------------- | -------------------------- |
+| `ArrowDown` / `ArrowUp`    | Move focus (vertical)      |
+| `ArrowRight` / `ArrowLeft` | Move focus (horizontal)    |
+| `Home`                     | Move focus to first option |
+| `End`                      | Move focus to last option  |
+| Type character             | Type-ahead focus           |
 
 ### Single-Select (Selection Follows Focus)
 
-| Key | Action |
-|-----|--------|
-| Arrow keys | Move focus AND selection |
-| `Space` / `Enter` | Confirm selection |
+| Key               | Action                   |
+| ----------------- | ------------------------ |
+| Arrow keys        | Move focus AND selection |
+| `Space` / `Enter` | Confirm selection        |
 
 ### Multi-Select
 
-| Key | Action |
-|-----|--------|
-| Arrow keys | Move focus only |
-| `Space` | Toggle selection of focused option |
-| `Shift + Arrow` | Extend selection range |
-| `Shift + Home` | Select from anchor to first |
-| `Shift + End` | Select from anchor to last |
-| `Ctrl + A` | Select all |
+| Key             | Action                             |
+| --------------- | ---------------------------------- |
+| Arrow keys      | Move focus only                    |
+| `Space`         | Toggle selection of focused option |
+| `Shift + Arrow` | Extend selection range             |
+| `Shift + Home`  | Select from anchor to first        |
+| `Shift + End`   | Select from anchor to last         |
+| `Ctrl + A`      | Select all                         |
 
 ## Focus Management (Roving Tabindex)
 
@@ -72,15 +72,16 @@ A listbox widget presents a list of options and allows selection of one or more 
 
 ## Selection Models
 
-| Single-Select | Multi-Select |
-|---------------|--------------|
+| Single-Select           | Multi-Select                    |
+| ----------------------- | ------------------------------- |
 | Selection follows focus | Focus and selection independent |
-| Arrow changes selection | Space toggles selection |
-| Only one selected | Multiple selected |
+| Arrow changes selection | Space toggles selection         |
+| Only one selected       | Multiple selected               |
 
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Arrow keys navigate options
 - [ ] Home moves to first option
 - [ ] End moves to last option
@@ -89,16 +90,19 @@ A listbox widget presents a list of options and allows selection of one or more 
 - [ ] Focus does not wrap
 
 ### High Priority: Keyboard (Single-Select)
+
 - [ ] Arrow keys move focus and selection
 - [ ] Space/Enter confirms selection
 
 ### High Priority: Keyboard (Multi-Select)
+
 - [ ] Arrow keys move focus only
 - [ ] Space toggles selection
 - [ ] Shift+Arrow extends selection
 - [ ] Ctrl+A selects all
 
 ### High Priority: ARIA
+
 - [ ] Container has `role="listbox"`
 - [ ] Items have `role="option"`
 - [ ] Listbox has accessible name
@@ -106,10 +110,12 @@ A listbox widget presents a list of options and allows selection of one or more 
 - [ ] Multi-select has `aria-multiselectable="true"`
 
 ### High Priority: Focus Management
+
 - [ ] Only focused option has `tabIndex="0"`
 - [ ] Other options have `tabIndex="-1"`
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 
 ## Implementation Notes
@@ -129,10 +135,8 @@ Multi-Select:
   <li role="option" aria-selected="false" tabindex="-1">Blue</li>
 </ul>
 
-Type-Ahead:
-- Single character: jump to next option starting with that char
-- Multiple chars (typed quickly): match prefix
-- Example: typing "gr" focuses "Green"
+Type-Ahead: - Single character: jump to next option starting with that char - Multiple chars (typed
+quickly): match prefix - Example: typing "gr" focuses "Green"
 ```
 
 ## Example Test Code (React + Testing Library)

@@ -10,37 +10,37 @@ An accordion is a vertically stacked set of interactive headings that each revea
 
 ### Roles
 
-| Role | Element | Description |
-|------|---------|-------------|
-| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button |
-| `button` | Header trigger | Interactive element that toggles panel |
-| `region` | Panel (optional) | Content area (omit for 6+ panels) |
+| Role      | Element                | Description                            |
+| --------- | ---------------------- | -------------------------------------- |
+| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button  |
+| `button`  | Header trigger         | Interactive element that toggles panel |
+| `region`  | Panel (optional)       | Content area (omit for 6+ panels)      |
 
 ### Properties
 
-| Attribute | Element | Values | Required | Notes |
-|-----------|---------|--------|----------|-------|
-| `aria-level` | heading | `2` - `6` | Yes | Set via `headingLevel` prop |
-| `aria-controls` | button | ID of panel | Yes | Auto-generated |
-| `aria-labelledby` | region | ID of button | Yes (if region) | Auto-generated |
+| Attribute         | Element | Values       | Required        | Notes                       |
+| ----------------- | ------- | ------------ | --------------- | --------------------------- |
+| `aria-level`      | heading | `2` - `6`    | Yes             | Set via `headingLevel` prop |
+| `aria-controls`   | button  | ID of panel  | Yes             | Auto-generated              |
+| `aria-labelledby` | region  | ID of button | Yes (if region) | Auto-generated              |
 
 ### States
 
-| Attribute | Element | Values | Required | Change Trigger |
-|-----------|---------|--------|----------|----------------|
-| `aria-expanded` | button | `true` \| `false` | Yes | Click, Enter, Space |
-| `aria-disabled` | button | `true` | No | Only when disabled |
+| Attribute       | Element | Values            | Required | Change Trigger      |
+| --------------- | ------- | ----------------- | -------- | ------------------- |
+| `aria-expanded` | button  | `true` \| `false` | Yes      | Click, Enter, Space |
+| `aria-disabled` | button  | `true`            | No       | Only when disabled  |
 
 ## Keyboard Support
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move focus to next focusable element |
-| `Enter` / `Space` | Toggle panel expansion |
-| `ArrowDown` | Move focus to next header (optional) |
-| `ArrowUp` | Move focus to previous header (optional) |
-| `Home` | Move focus to first header (optional) |
-| `End` | Move focus to last header (optional) |
+| Key               | Action                                   |
+| ----------------- | ---------------------------------------- |
+| `Tab`             | Move focus to next focusable element     |
+| `Enter` / `Space` | Toggle panel expansion                   |
+| `ArrowDown`       | Move focus to next header (optional)     |
+| `ArrowUp`         | Move focus to previous header (optional) |
+| `Home`            | Move focus to first header (optional)    |
+| `End`             | Move focus to last header (optional)     |
 
 > Note: Arrow key navigation is optional but recommended. Focus does not wrap.
 
@@ -53,6 +53,7 @@ An accordion is a vertically stacked set of interactive headings that each revea
 ## Test Checklist
 
 ### High Priority: Keyboard
+
 - [ ] Enter/Space toggles panel expansion
 - [ ] ArrowDown moves to next header
 - [ ] ArrowUp moves to previous header
@@ -61,6 +62,7 @@ An accordion is a vertically stacked set of interactive headings that each revea
 - [ ] Disabled headers are skipped
 
 ### High Priority: ARIA
+
 - [ ] Button has `aria-expanded` matching panel state
 - [ ] Button has `aria-controls` referencing panel id
 - [ ] Panel (if region) has `aria-labelledby` referencing button
@@ -69,10 +71,12 @@ An accordion is a vertically stacked set of interactive headings that each revea
 - [ ] Disabled items have `aria-disabled="true"`
 
 ### High Priority: Focus Management
+
 - [ ] Focus stays on header after toggle
 - [ ] Arrow keys skip disabled headers
 
 ### Medium Priority: Accessibility
+
 - [ ] No axe-core violations (WCAG 2.1 AA)
 - [ ] Proper heading level hierarchy
 
