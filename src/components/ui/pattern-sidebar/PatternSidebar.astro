@@ -21,8 +21,8 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
   <div class="mb-4 flex items-center justify-between">
     <h2 class="text-foreground px-2 text-sm font-semibold">Patterns</h2>
     <span
-      class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
-      style={`background-color: ${frameworkInfo.colorLight}; color: ${frameworkInfo.colorForeground};`}
+      class="framework-badge inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium"
+      style={`background-color: ${frameworkInfo.colorLight}; --fw-color: ${frameworkInfo.colorForeground}; --fw-color-dark: ${frameworkInfo.colorForegroundDark};`}
     >
       <FrameworkIcon framework={currentFramework} class="h-3.5 w-3.5" />
       {frameworkInfo.label}
@@ -75,3 +75,13 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
     )
   }
 </nav>
+
+<style>
+  .framework-badge {
+    color: var(--fw-color);
+  }
+
+  :global(.dark) .framework-badge {
+    color: var(--fw-color-dark);
+  }
+</style>
