@@ -32,8 +32,10 @@ export interface FrameworkInfo {
   color: string;
   /** Light variant for backgrounds (hex with alpha) */
   colorLight: string;
-  /** Foreground color for text on brand background */
+  /** Foreground color for text on brand background (light mode) */
   colorForeground: string;
+  /** Foreground color for text on brand background (dark mode) */
+  colorForegroundDark: string;
 }
 
 export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
@@ -43,6 +45,7 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
     color: '#61DAFB',
     colorLight: 'rgba(97, 218, 251, 0.12)',
     colorForeground: '#087EA4',
+    colorForegroundDark: '#7DD3FC',
   },
   vue: {
     label: 'Vue',
@@ -50,6 +53,7 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
     color: '#42B883',
     colorLight: 'rgba(66, 184, 131, 0.12)',
     colorForeground: '#34855B',
+    colorForegroundDark: '#6EE7B7',
   },
   svelte: {
     label: 'Svelte',
@@ -57,6 +61,7 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
     color: '#FF3E00',
     colorLight: 'rgba(255, 62, 0, 0.12)',
     colorForeground: '#D83300',
+    colorForegroundDark: '#FB923C',
   },
   astro: {
     label: 'Astro',
@@ -64,6 +69,7 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
     color: '#BC52EE',
     colorLight: 'rgba(188, 82, 238, 0.12)',
     colorForeground: '#9333EA',
+    colorForegroundDark: '#C084FC',
   },
 };
 

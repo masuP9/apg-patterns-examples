@@ -39,6 +39,11 @@ const { class: className } = Astro.props;
   :global(html.no-transitions *) {
     @apply !transition-none !duration-0;
   }
+
+  /* Active theme icon color - yellow/gold for visibility */
+  .theme-toggle-button[aria-selected='true'] :global(svg) {
+    color: oklch(0.8 0.18 90);
+  }
 </style>
 
 <script is:inline>

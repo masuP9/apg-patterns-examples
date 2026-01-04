@@ -32,11 +32,13 @@ const { pattern, currentFramework } = Astro.props;
           class:list={[
             'inline-flex items-center gap-2 border-b-2 px-4 py-2 transition-colors',
             isActive
-              ? 'font-medium'
+              ? 'framework-tab-active font-medium'
               : 'text-muted-foreground hover:text-foreground border-transparent',
           ]}
           style={
-            isActive ? `border-color: ${info.color}; color: ${info.colorForeground};` : undefined
+            isActive
+              ? `border-color: ${info.color}; --fw-color: ${info.colorForeground}; --fw-color-dark: ${info.colorForegroundDark};`
+              : undefined
           }
           aria-current={isActive ? 'page' : undefined}
           role="tab"
@@ -49,6 +51,16 @@ const { pattern, currentFramework } = Astro.props;
     })
   }
 </div>
+
+<style>
+  .framework-tab-active {
+    color: var(--fw-color);
+  }
+
+  :global(.dark) .framework-tab-active {
+    color: var(--fw-color-dark);
+  }
+</style>
 
 <script>
   document.querySelectorAll<HTMLAnchorElement>('[role="tablist"] a[role="tab"]').forEach((tab) => {
