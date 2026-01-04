@@ -275,6 +275,56 @@ npm run build
 
 # テスト
 npm run test
+
+# フォーマット
+npm run format
+
+# リント
+npm run lint
+```
+
+### コードフォーマット規則
+
+Prettier を使用。コード生成時は以下のルールに従うこと:
+
+| ルール           | 設定値    | 例                                  |
+| ---------------- | --------- | ----------------------------------- |
+| セミコロン       | あり      | `const x = 1;`                      |
+| クォート         | シングル  | `'string'`（JSX内は `"string"`）    |
+| インデント       | 2スペース | -                                   |
+| 末尾カンマ       | ES5       | `{ a: 1, b: 2, }` / `[1, 2, 3,]`    |
+| 行幅             | 100文字   | 超える場合は改行                    |
+| Tailwind CSS順序 | 自動整列  | `prettier-plugin-tailwindcss` 使用  |
+
+**JSX/TSX での注意点**:
+
+```tsx
+// ✅ 正しい
+import { useState } from 'react';
+
+const Component = ({ label }: Props) => {
+  const [open, setOpen] = useState(false);
+  return <button className="px-4 py-2">{label}</button>;
+};
+
+// ❌ 間違い（ダブルクォート、セミコロンなし）
+import { useState } from "react"
+```
+
+**オブジェクト/配列**:
+
+```typescript
+// ✅ 末尾カンマあり
+const items = [
+  { id: 'a', label: 'A' },
+  { id: 'b', label: 'B' },
+];
+
+// ❌ 末尾カンマなし
+const items = [
+  { id: 'a', label: 'A' },
+  { id: 'b', label: 'B' }
+];
 ```
 
 ---

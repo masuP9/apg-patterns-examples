@@ -8,6 +8,7 @@
 @import './patterns/disclosure.css';
 @import './patterns/listbox.css';
 @import './patterns/breadcrumb.css';
+@import './patterns/menu-button.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

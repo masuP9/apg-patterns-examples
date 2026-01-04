@@ -13,10 +13,10 @@ import sourceCode from '@patterns/listbox/Listbox.vue?raw';
 const tocItems = [
   { id: 'demo', text: 'Demo' },
   { id: 'accessibility-features', text: 'Accessibility Features' },
-  { id: 'testing', text: 'Testing' },
   { id: 'source-code', text: 'Source Code' },
   { id: 'usage', text: 'Usage' },
   { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
   { id: 'resources', text: 'Resources' },
 ];
 
@@ -108,12 +108,6 @@ const colorOptions = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
     <AccessibilityDocs />
-  </section>
-
-  <!-- Testing Section -->
-  <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
-    <TestingDocs />
   </section>
 
   <!-- Source Code Section -->
@@ -226,6 +220,12 @@ const handleSelectionChange = (ids) => {
         </tbody>
       </table>
     </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
   </section>
 
   <!-- Resources -->

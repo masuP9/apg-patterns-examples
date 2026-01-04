@@ -1,18 +1,14 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import {
-  SingleSelectListboxDemo,
-  MultiSelectListboxDemo,
-  HorizontalListboxDemo,
-} from '@patterns/listbox/ListboxDemo';
-import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
-import TestingDocs from '@patterns/listbox/TestingDocs.astro';
+import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.svelte';
+import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/menu-button/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
-import sourceCode from '@patterns/listbox/Listbox.tsx?raw';
+import sourceCode from '@patterns/menu-button/MenuButton.svelte?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -25,14 +21,17 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Listbox - React" pattern="listbox" framework="react" tocItems={tocItems}>
+<PatternLayout
+  title="Menu Button - Svelte"
+  pattern="menu-button"
+  framework="svelte"
+  tocItems={tocItems}
+>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Listbox</h1>
-    <p class="text-muted-foreground text-lg">
-      A widget that allows the user to select one or more items from a list of choices.
-    </p>
+    <h1 class="mb-4 text-3xl font-bold">Menu Button</h1>
+    <p class="text-muted-foreground text-lg">A button that opens a menu of actions or options.</p>
     <a
-      href="/patterns/listbox/llm.md"
+      href="/patterns/menu-button/llm.md"
       target="_blank"
       rel="noopener noreferrer"
       class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
@@ -47,40 +46,31 @@ const tocItems = [
   </header>
 
   <!-- Framework Selector -->
-  <FrameworkTabs pattern="listbox" currentFramework="react" />
+  <FrameworkTabs pattern="menu-button" currentFramework="svelte" />
 
   <!-- Demo Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
 
-    <!-- Single-Select -->
+    <!-- Basic -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Single-Select (Default)</h3>
+      <h3 class="mb-3 text-lg font-medium">Basic Menu Button</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Selection follows focus. Use arrow keys to navigate and select.
+        Click the button or use keyboard to open the menu.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <SingleSelectListboxDemo client:load />
+        <MenuButtonDemo variant="basic" client:load />
       </div>
     </div>
 
-    <!-- Multi-Select -->
-    <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Multi-Select</h3>
-      <p class="text-muted-foreground mb-4 text-sm">
-        Focus and selection are independent. Use Space to toggle, Shift+Arrow to extend selection.
-      </p>
-      <div class="border-border bg-background rounded-lg border p-6">
-        <MultiSelectListboxDemo client:load />
-      </div>
-    </div>
-
-    <!-- Horizontal Orientation -->
+    <!-- With Disabled Items -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
-      <p class="text-muted-foreground mb-4 text-sm">Use Left/Right arrow keys for navigation.</p>
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled items are skipped during keyboard navigation.
+      </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <HorizontalListboxDemo client:load />
+        <MenuButtonDemo variant="disabled-items" client:load />
       </div>
     </div>
   </section>
@@ -94,7 +84,13 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Listbox.tsx" />
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="MenuButton.svelte"
+    />
   </section>
 
   <!-- Usage Section -->
@@ -103,37 +99,27 @@ const tocItems = [
     <CodeBlock
       collapsible
       collapsedLines={5}
-      code={`import { Listbox } from './Listbox';
+      code={`<script lang="ts">
+  import MenuButton from './MenuButton.svelte';
 
-const options = [
-  { id: 'apple', label: 'Apple' },
-  { id: 'banana', label: 'Banana' },
-  { id: 'cherry', label: 'Cherry' },
-  { id: 'date', label: 'Date', disabled: true },
-];
+  const items = [
+    { id: 'cut', label: 'Cut' },
+    { id: 'copy', label: 'Copy' },
+    { id: 'paste', label: 'Paste' },
+    { id: 'delete', label: 'Delete', disabled: true },
+  ];
 
-// Single-select (selection follows focus)
-<Listbox
-  options={options}
-  aria-label="Choose a fruit"
-  onSelectionChange={(ids) => console.log('Selected:', ids)}
-/>
+  function handleItemSelect(itemId: string) {
+    console.log('Selected:', itemId);
+  }
+</script>
 
-// Multi-select
-<Listbox
-  options={options}
-  multiselectable
-  aria-label="Choose fruits"
-  onSelectionChange={(ids) => console.log('Selected:', ids)}
-/>
+<!-- Basic usage -->
+<MenuButton {items} label="Actions" onItemSelect={handleItemSelect} />
 
-// Horizontal orientation
-<Listbox
-  options={options}
-  orientation="horizontal"
-  aria-label="Choose a fruit"
-/>`}
-      lang="tsx"
+<!-- With default open state -->
+<MenuButton {items} label="Actions" defaultOpen onItemSelect={handleItemSelect} />`}
+      lang="svelte"
       title="Example"
     />
   </section>
@@ -142,7 +128,7 @@ const options = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
 
-    <h3 class="mb-3 text-lg font-medium">Listbox Props</h3>
+    <h3 class="mb-3 text-lg font-medium">MenuButton Props</h3>
     <ResponsiveTable class="mb-6">
       <table class="w-full border-collapse">
         <thead>
@@ -155,48 +141,42 @@ const options = [
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>options</code></td>
-            <td class="text-muted-foreground py-2 pr-4">ListboxOption[]</td>
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenuItem[]</td>
             <td class="text-muted-foreground py-2 pr-4">required</td>
-            <td class="py-2">Array of options</td>
+            <td class="py-2">Array of menu items</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Button label text</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Enable multi-select mode</td>
+            <td class="py-2">Whether menu is initially open</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>orientation</code></td>
-            <td class="text-muted-foreground py-2 pr-4">'vertical' | 'horizontal'</td>
-            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
-            <td class="py-2">Listbox orientation</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
-            <td class="text-muted-foreground py-2 pr-4">string[]</td>
-            <td class="text-muted-foreground py-2 pr-4">[]</td>
-            <td class="py-2">Initially selected option IDs</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>onSelectionChange</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="py-2 pr-4"><code>onItemSelect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(id: string) =&gt; void</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when selection changes</td>
+            <td class="py-2">Callback when an item is selected</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>typeAheadTimeout</code></td>
-            <td class="text-muted-foreground py-2 pr-4">number</td>
-            <td class="text-muted-foreground py-2 pr-4">500</td>
-            <td class="py-2">Type-ahead timeout in milliseconds</td>
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">Additional CSS class for the container</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
 
-    <h3 class="mb-3 text-lg font-medium">ListboxOption Interface</h3>
+    <h3 class="mb-3 text-lg font-medium">MenuItem Interface</h3>
     <CodeBlock
-      code={`interface ListboxOption {
+      code={`interface MenuItem {
   id: string;
   label: string;
   disabled?: boolean;
@@ -218,14 +198,14 @@ const options = [
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
-          href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/"
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/"
           class="text-primary hover:underline"
         >
-          WAI-ARIA APG: Listbox Pattern
+          WAI-ARIA APG: Menu Button Pattern
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="/patterns/listbox/llm.md" class="text-primary hover:underline">
+        <ExternalLink href="/patterns/menu-button/llm.md" class="text-primary hover:underline">
           AI Implementation Guide (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">

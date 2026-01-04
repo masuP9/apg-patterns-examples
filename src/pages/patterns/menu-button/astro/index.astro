@@ -1,0 +1,273 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import MenuButton from '@patterns/menu-button/MenuButton.astro';
+import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/menu-button/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/menu-button/MenuButton.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+
+const actionItems = [
+  { id: 'cut', label: 'Cut' },
+  { id: 'copy', label: 'Copy' },
+  { id: 'paste', label: 'Paste' },
+  { id: 'delete', label: 'Delete' },
+];
+
+const fileItems = [
+  { id: 'new', label: 'New File' },
+  { id: 'open', label: 'Open...' },
+  { id: 'save', label: 'Save' },
+  { id: 'save-as', label: 'Save As...' },
+  { id: 'export', label: 'Export', disabled: true },
+  { id: 'print', label: 'Print' },
+];
+---
+
+<PatternLayout
+  title="Menu Button - Astro"
+  pattern="menu-button"
+  framework="astro"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Menu Button</h1>
+    <p class="text-muted-foreground text-lg">A button that opens a menu of actions or options.</p>
+    <a
+      href="/patterns/menu-button/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
+        <path d="M12 12v8"></path>
+        <path d="M8 16h8"></path>
+      </svg>
+      AI Implementation Guide
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="menu-button" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Menu Button</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Click the button or use keyboard to open the menu.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <div class="space-y-4">
+          <MenuButton items={actionItems} label="Actions" />
+          <p id="basic-output" class="text-muted-foreground text-sm">Last action: None</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- With Disabled Items -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled items are skipped during keyboard navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <div class="space-y-4">
+          <MenuButton items={fileItems} label="File" />
+          <p id="disabled-output" class="text-muted-foreground text-sm">Last action: None</p>
+          <p class="text-muted-foreground text-xs">
+            Note: "Export" is disabled and will be skipped during keyboard navigation
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Handle itemselect events from Web Components
+    document.querySelectorAll('apg-menu-button').forEach((menuButton, index) => {
+      const outputId = index === 0 ? 'basic-output' : 'disabled-output';
+      const output = document.getElementById(outputId);
+      menuButton.addEventListener('itemselect', (e) => {
+        const event = e as CustomEvent<{ itemId: string }>;
+        if (output) {
+          output.textContent = `Last action: ${event.detail.itemId}`;
+        }
+      });
+    });
+  </script>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="MenuButton.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import MenuButton from './MenuButton.astro';
+
+const items = [
+  { id: 'cut', label: 'Cut' },
+  { id: 'copy', label: 'Copy' },
+  { id: 'paste', label: 'Paste' },
+  { id: 'delete', label: 'Delete', disabled: true },
+];
+---
+
+<!-- Basic usage -->
+<MenuButton items={items} label="Actions" />
+
+<script>
+  // Handle selection via custom event
+  document.querySelectorAll('apg-menu-button').forEach((menuButton) => {
+    menuButton.addEventListener('itemselect', (e) => {
+      const event = e as CustomEvent<{ itemId: string }>;
+      console.log('Selected:', event.detail.itemId);
+    });
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">MenuButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenuItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of menu items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Button label text</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether menu is initially open</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">Additional CSS class for the container</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>itemselect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ itemId: string }'}</td>
+            <td class="py-2">Dispatched when a menu item is selected</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">MenuItem Interface</h3>
+    <CodeBlock
+      code={`interface MenuItem {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Menu Button Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/menu-button/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
