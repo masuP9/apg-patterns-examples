@@ -1,0 +1,44 @@
+---
+/**
+ * Breadcrumb component following WAI-ARIA APG pattern
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/
+ */
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+export interface Props {
+  items: BreadcrumbItem[];
+  ariaLabel?: string;
+  class?: string;
+}
+
+const { items, ariaLabel = 'Breadcrumb', class: className } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav aria-label={ariaLabel} class:list={['apg-breadcrumb', className]}>
+      <ol class="apg-breadcrumb-list">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+          return (
+            <li class="apg-breadcrumb-item">
+              {item.href && !isLast ? (
+                <a href={item.href} class="apg-breadcrumb-link">
+                  {item.label}
+                </a>
+              ) : (
+                <span aria-current={isLast ? 'page' : undefined} class="apg-breadcrumb-current">
+                  {item.label}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  )
+}

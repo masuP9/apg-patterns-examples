@@ -1,0 +1,200 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Breadcrumb from '@patterns/breadcrumb/Breadcrumb.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/breadcrumb/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/breadcrumb/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/breadcrumb/Breadcrumb.vue?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+
+const basicItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Patterns', href: '/patterns/' },
+  { label: 'Breadcrumb' },
+];
+
+const longPathItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'Electronics', href: '/products/electronics/' },
+  { label: 'Computers', href: '/products/electronics/computers/' },
+  { label: 'Laptops', href: '/products/electronics/computers/laptops/' },
+  { label: 'MacBook Pro' },
+];
+---
+
+<PatternLayout title="Breadcrumb - Vue" pattern="breadcrumb" framework="vue" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Breadcrumb</h1>
+    <p class="text-muted-foreground text-lg">
+      A navigation pattern that shows the user's current location within a site hierarchy.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="breadcrumb" currentFramework="vue" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic Breadcrumb -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Breadcrumb</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A simple breadcrumb trail showing the path to the current page.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Breadcrumb items={basicItems} />
+      </div>
+    </div>
+
+    <!-- Long Path -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Long Path</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A deeper navigation path with multiple levels of hierarchy.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Breadcrumb items={longPathItems} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="Breadcrumb.vue" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      code={`<script setup>
+import Breadcrumb from './Breadcrumb.vue';
+
+const items = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products' },
+  { label: 'Current Product' }
+];
+</script>
+
+<template>
+  <Breadcrumb :items="items" />
+</template>`}
+      lang="vue"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">BreadcrumbItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of breadcrumb items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">"Breadcrumb"</td>
+            <td class="py-2">Accessible label for the navigation</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">BreadcrumbItem</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Property</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Required</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">Yes</td>
+            <td class="py-2">Display text for the item</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>href</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">No</td>
+            <td class="py-2">URL for the link (omit for current page)</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Breadcrumb Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/CSS/Layout_cookbook/Breadcrumb_Navigation"
+          class="text-primary hover:underline"
+        >
+          MDN: Breadcrumb Navigation
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
