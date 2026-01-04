@@ -4,17 +4,19 @@
 
 [![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml)
 
+[日本語](./README.ja.md) | English
+
 ## Overview
 
-This project provides production-ready, accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) specifications. Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components).
+This project provides accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) patterns. Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components).
 
 ## Features
 
 - **Multi-framework**: React, Vue, Svelte, and Astro (Web Components) implementations
-- **Accessibility-first**: Full WAI-ARIA APG compliance
+- **Accessibility-first**: WAI-ARIA APG compliance
 - **Astro Islands**: Fast, optimized static site with interactive components
 - **Interactive Docs**: Live examples with syntax highlighting (Shiki)
-- **Testing**: Comprehensive tests with Vitest and Testing Library
+- **Testing**: Tests with Vitest and Testing Library
 - **Developer Experience**: TypeScript, Tailwind CSS, hot reload
 - **Responsive**: Mobile-first design approach
 

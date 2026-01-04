@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": false,
-  "description": "Production-ready accessible UI components following WAI-ARIA APG patterns. Multi-framework implementations in React, Vue, Svelte, and Astro with comprehensive documentation and tests.",
+  "description": "Accessible UI components following WAI-ARIA APG patterns. Multi-framework implementations in React, Vue, Svelte, and Astro with documentation and tests.",
   "author": "masuP9",
   "license": "MIT",
   "homepage": "https://masup9.github.io/apg-patterns-examples/",
