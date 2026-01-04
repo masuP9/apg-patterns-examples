@@ -8,7 +8,7 @@
 
 ## 概要
 
-このプロジェクトは、[WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) 仕様に準拠したアクセシブルな UI コンポーネントを提供します。各コンポーネントは、**React**、**Vue**、**Svelte**、**Astro**（Web Components）の 4 つの主要フロントエンドフレームワークで実装されています。
+このプロジェクトは、[WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) のパターンに従ったアクセシブルな UI コンポーネントを提供します。各コンポーネントは、**React**、**Vue**、**Svelte**、**Astro**（Web Components）の 4 つの主要フロントエンドフレームワークで実装されています。
 
 ## 機能
 
