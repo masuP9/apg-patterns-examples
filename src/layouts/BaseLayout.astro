@@ -10,7 +10,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
-import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { ThemeToggle, ThemeProvider } from '@/components/ui/theme-toggle';
 
 const GITHUB_URL = 'https://github.com/masuP9/apg-patterns-examples';
@@ -79,12 +78,6 @@ const navLinks = [
         </NavigationMenuList>
       </NavigationMenu>
       <HeaderActions class="@max-lg:hidden">
-        <NativeSelect id="framework-selector" aria-label="Select framework">
-          <NativeSelectOption value="react">React</NativeSelectOption>
-          <NativeSelectOption value="vue">Vue</NativeSelectOption>
-          <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
-          <NativeSelectOption value="astro">Astro</NativeSelectOption>
-        </NativeSelect>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -118,15 +111,7 @@ const navLinks = [
               ))
             }
           </SidebarMenu>
-          <HeaderActions class="mt-6 flex flex-col gap-2">
-            <NativeSelect id="framework-selector-mobile" aria-label="Select framework">
-              <NativeSelectOption value="react">React</NativeSelectOption>
-              <NativeSelectOption value="vue">Vue</NativeSelectOption>
-              <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
-              <NativeSelectOption value="astro">Astro</NativeSelectOption>
-            </NativeSelect>
-          </HeaderActions>
-          <HeaderActions>
+          <HeaderActions class="mt-6">
             <Button
               variant="ghost"
               size="icon"
@@ -165,25 +150,5 @@ const navLinks = [
         </FooterMenu>
       </FooterGroup>
     </Footer>
-
-    <script>
-      // Framework selector - sync both selectors
-      const frameworkSelectors = document.querySelectorAll<HTMLSelectElement>(
-        '[id^="framework-selector"]'
-      );
-      const savedFramework = localStorage.getItem('apg-selected-framework') || 'react';
-
-      frameworkSelectors.forEach((selector) => {
-        selector.value = savedFramework;
-        selector.addEventListener('change', (e) => {
-          const target = e.target as HTMLSelectElement;
-          localStorage.setItem('apg-selected-framework', target.value);
-          // Sync all selectors
-          frameworkSelectors.forEach((s) => {
-            if (s !== target) s.value = target.value;
-          });
-        });
-      });
-    </script>
   </body>
 </html>

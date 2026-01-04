@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
-import { PATTERNS } from '@/lib/patterns';
-import { DEFAULT_FRAMEWORK } from '@/lib/frameworks';
+import { getAvailablePatterns, getPlannedPatterns } from '@/lib/patterns';
+import { withBase } from '@/lib/utils';
+
+const availablePatterns = getAvailablePatterns();
+const plannedPatterns = getPlannedPatterns();
 ---
 
 <BaseLayout title="Patterns">
@@ -15,43 +18,55 @@ import { DEFAULT_FRAMEWORK } from '@/lib/frameworks';
       </p>
     </header>
 
-    <div class="grid gap-4 md:grid-cols-2">
-      {
-        PATTERNS.map((pattern) => (
-          <Tile
-            variant="floating"
-            href={
-              pattern.status === 'available'
-                ? `/patterns/${pattern.id}/${DEFAULT_FRAMEWORK}/`
-                : undefined
-            }
-            class:list={[pattern.status !== 'available' && 'cursor-not-allowed opacity-60']}
-          >
-            <TileContent class="flex flex-row items-start gap-4">
-              <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
-                {pattern.icon}
-              </div>
-              <div class="flex-1">
-                <div class="mb-1 flex items-center gap-2">
+    <section class="mb-12">
+      <h2 class="mb-4 text-xl font-semibold">Available</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          availablePatterns.map((pattern) => (
+            <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/`)}>
+              <TileContent class="flex flex-row items-start gap-4">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div class="flex-1">
                   <TileTitle>{pattern.name}</TileTitle>
-                  {pattern.status !== 'available' && (
-                    <span class="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs">
-                      Planned
-                    </span>
-                  )}
+                  <TileDescription>{pattern.description}</TileDescription>
+                  <div class="text-muted-foreground mt-2 text-xs">
+                    Complexity: {pattern.complexity}
+                  </div>
                 </div>
-                <TileDescription>{pattern.description}</TileDescription>
-                <div class="text-muted-foreground mt-2 flex items-center gap-4 text-xs">
-                  <span>Complexity: {pattern.complexity}</span>
-                </div>
-              </div>
-            </TileContent>
-          </Tile>
-        ))
-      }
-    </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
 
-    <Tile variant="floating" class="bg-muted/50 mt-12">
+    <section class="mb-12">
+      <h2 class="text-muted-foreground mb-4 text-xl font-semibold">Planned</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          plannedPatterns.map((pattern) => (
+            <Tile variant="floating" class="cursor-default opacity-60">
+              <TileContent class="flex flex-row items-start gap-4">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div class="flex-1">
+                  <TileTitle>{pattern.name}</TileTitle>
+                  <TileDescription>{pattern.description}</TileDescription>
+                  <div class="text-muted-foreground mt-2 text-xs">
+                    Complexity: {pattern.complexity}
+                  </div>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <Tile variant="floating" class="bg-muted/50">
       <TileContent>
         <TileTitle class="text-xl">About These Patterns</TileTitle>
         <TileDescription class="mb-4">
