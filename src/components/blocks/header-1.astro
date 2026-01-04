@@ -122,62 +122,74 @@ const { logo, menus, links, socials } = Astro.props;
       <MenuIcon class="size-5" />
     </SheetTrigger>
     <SheetContent class="overflow-y-auto px-4 py-12">
-      <SidebarMenu>
-        {
-          menus?.map((menu) => (
-            <SidebarMenuItem>
-              {menu.links && menu.links.length > 0 ? (
-                <Collapsible>
-                  <CollapsibleTrigger>
-                    <SidebarMenuButton class="h-10 rounded-md px-4 text-xl">
-                      {menu.text}
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {menu.links?.map((link) => (
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton href={link.href}>{link.text}</SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </Collapsible>
-              ) : (
-                <SidebarMenuButton
-                  class="h-10 w-full rounded-md px-4 text-xl has-[>svg]:px-4"
-                  href={menu.href}
-                >
-                  {menu.text}
-                </SidebarMenuButton>
-              )}
-            </SidebarMenuItem>
-          ))
-        }
-      </SidebarMenu>
-      <HeaderActions class="flex flex-col gap-2">
-        {
-          links?.map(({ icon, text, ...link }, i) => (
-            <Button
-              variant={i === links.length - 1 ? 'default' : 'secondary'}
-              class="w-full"
-              {...link}
-            >
-              {icon && <Icon name={icon} />}
-              {text}
-            </Button>
-          ))
-        }
-      </HeaderActions>
-      <HeaderActions>
-        {
-          socials?.map((social) => (
-            <Button variant="ghost" size="icon" href={social}>
-              <Icon href={social} />
-            </Button>
-          ))
-        }
-      </HeaderActions>
+      <div class="flex flex-1 flex-col">
+        <SidebarMenu>
+          {
+            menus?.map((menu) => (
+              <SidebarMenuItem>
+                {menu.links && menu.links.length > 0 ? (
+                  <Collapsible>
+                    <CollapsibleTrigger>
+                      <SidebarMenuButton class="h-10 rounded-md px-4 text-xl">
+                        {menu.text}
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {menu.links?.map((link) => (
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton href={link.href}>
+                              {link.text}
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuButton
+                    class="h-10 w-full rounded-md px-4 text-xl has-[>svg]:px-4"
+                    href={menu.href}
+                  >
+                    {menu.text}
+                  </SidebarMenuButton>
+                )}
+              </SidebarMenuItem>
+            ))
+          }
+        </SidebarMenu>
+        <HeaderActions class="flex flex-col gap-2">
+          {
+            links?.map(({ icon, text, ...link }, i) => (
+              <Button
+                variant={i === links.length - 1 ? 'default' : 'secondary'}
+                class="w-full"
+                {...link}
+              >
+                {icon && <Icon name={icon} />}
+                {text}
+              </Button>
+            ))
+          }
+        </HeaderActions>
+        <div class="border-border mt-auto border-t pt-4">
+          <div class="mb-3 flex items-center justify-between px-1">
+            <span class="text-muted-foreground text-sm font-medium">Theme</span>
+            <ThemeToggle />
+          </div>
+          {
+            socials && socials.length > 0 && (
+              <div class="flex items-center gap-2 px-1">
+                {socials.map((social) => (
+                  <Button variant="ghost" size="icon" href={social} target="_blank">
+                    <Icon href={social} />
+                  </Button>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </div>
     </SheetContent>
   </Sheet>
 </Header>
