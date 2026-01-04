@@ -4,6 +4,8 @@
 
 [![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml)
 
+[日本語](./README.ja.md) | English
+
 ## Overview
 
 This project provides accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) specifications. Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components).
