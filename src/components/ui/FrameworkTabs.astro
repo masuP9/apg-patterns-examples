@@ -3,7 +3,7 @@
  * FrameworkTabs - Framework selector tabs for pattern pages
  *
  * A shared component for switching between framework implementations.
- * Uses static links (no JavaScript required).
+ * Saves the selected framework to localStorage for next visit.
  */
 import { FRAMEWORKS, FRAMEWORK_INFO, type Framework } from '@/lib/frameworks';
 import { withBase } from '@/lib/utils';
@@ -49,3 +49,15 @@ const { pattern, currentFramework } = Astro.props;
     })
   }
 </div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[role="tablist"] a[role="tab"]').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const pathSegments = new URL(tab.href).pathname.split('/').filter(Boolean);
+      const framework = pathSegments[pathSegments.length - 1];
+      if (framework) {
+        localStorage.setItem('apg-selected-framework', framework);
+      }
+    });
+  });
+</script>
