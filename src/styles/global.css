@@ -6,6 +6,7 @@
 @import './patterns/toolbar.css';
 @import './patterns/switch.css';
 @import './patterns/disclosure.css';
+@import './patterns/listbox.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

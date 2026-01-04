@@ -1,0 +1,306 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>listbox</code></td>
+          <td class="py-2 pr-4">Container (<code>&lt;ul&gt;</code>)</td>
+          <td class="py-2">Widget for selecting one or more items from a list</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>option</code></td>
+          <td class="py-2 pr-4">Each item (<code>&lt;li&gt;</code>)</td>
+          <td class="py-2">Selectable option within the listbox</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#listbox" class="text-primary hover:underline">
+      WAI-ARIA listbox role
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Target</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">listbox</td>
+          <td class="py-2 pr-4">String</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Accessible name for the listbox</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">listbox</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">References the labeling element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2 pr-4">listbox</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Enables multi-select mode</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2 pr-4">listbox</td>
+          <td class="py-2 pr-4"><code>"vertical"</code> | <code>"horizontal"</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Navigation direction (default: vertical)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-selected</code></h4>
+    <p class="text-muted-foreground mb-3">Indicates whether an option is selected.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Target</td>
+            <td class="py-2">option</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code> | <code>false</code></td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Click, Arrow keys (single-select), Space (multi-select)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-selected"
+                class="text-primary hover:underline"
+              >
+                aria-selected
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
+    <p class="text-muted-foreground mb-3">Indicates that an option is not selectable.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Target</td>
+            <td class="py-2">option</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code></td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-disabled"
+                class="text-primary hover:underline"
+              >
+                aria-disabled
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h4 class="mb-2 font-medium">Common Navigation</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd> / <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd
+            ></td
+          >
+          <td class="py-2">Move focus (vertical orientation)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Right Arrow</kbd> / <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Left Arrow</kbd
+            ></td
+          >
+          <td class="py-2">Move focus (horizontal orientation)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move focus to first option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move focus to last option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Type character</td>
+          <td class="py-2">Type-ahead: focus option starting with typed character(s)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Single-Select (Selection Follows Focus)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Arrow keys</td>
+          <td class="py-2">Move focus and selection simultaneously</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd> / <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd
+            ></td
+          >
+          <td class="py-2">Confirm current selection</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Multi-Select</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Arrow keys</td>
+          <td class="py-2">Move focus only (selection unchanged)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Toggle selection of focused option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + Arrow</td
+          >
+          <td class="py-2">Move focus and extend selection range</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">Select from anchor to first option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">Select from anchor to last option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
+            ></td
+          >
+          <td class="py-2">Select all options</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <p class="text-muted-foreground mb-4">
+    This component uses the <strong>Roving Tabindex</strong> pattern for focus management:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Only one option has <code>tabindex="0"</code> at a time</li>
+    <li>Other options have <code>tabindex="-1"</code></li>
+    <li>Arrow keys move focus between options</li>
+    <li>Disabled options are skipped during navigation</li>
+    <li>Focus does not wrap (stops at edges)</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Selection Model</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>
+      <strong>Single-select:</strong> Selection follows focus (arrow keys change selection)
+    </li>
+    <li>
+      <strong>Multi-select:</strong> Focus and selection are independent (Space toggles selection)
+    </li>
+  </ul>
+</div>
