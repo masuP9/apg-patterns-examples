@@ -60,7 +60,7 @@ export const PATTERNS: Pattern[] = [
     description: 'A list of links to the parent pages of the current page in hierarchical order.',
     icon: '🔗',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'button',
