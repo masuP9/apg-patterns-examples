@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { PATTERNS } from '@/lib/patterns';
+import { withBase } from '@/lib/utils';
 ---
 
 <BaseLayout title="Patterns">
@@ -19,7 +20,7 @@ import { PATTERNS } from '@/lib/patterns';
         PATTERNS.map((pattern) => (
           <Tile
             variant="floating"
-            href={pattern.status === 'available' ? `/patterns/${pattern.id}/` : undefined}
+            href={pattern.status === 'available' ? withBase(`/patterns/${pattern.id}/`) : undefined}
             class:list={[pattern.status !== 'available' && 'cursor-not-allowed opacity-60']}
           >
             <TileContent class="flex flex-row items-start gap-4">
