@@ -11,10 +11,10 @@ This project provides accessible UI components that follow the [WAI-ARIA Authori
 ## Features
 
 - **Multi-framework**: React, Vue, Svelte, and Astro (Web Components) implementations
-- **Accessibility-first**: Full WAI-ARIA APG compliance
+- **Accessibility-first**: WAI-ARIA APG compliance
 - **Astro Islands**: Fast, optimized static site with interactive components
 - **Interactive Docs**: Live examples with syntax highlighting (Shiki)
-- **Testing**: Comprehensive tests with Vitest and Testing Library
+- **Testing**: Tests with Vitest and Testing Library
 - **Developer Experience**: TypeScript, Tailwind CSS, hot reload
 - **Responsive**: Mobile-first design approach
 
