@@ -1,21 +1,34 @@
 # APG Patterns Examples
 
-> Accessible UI component implementations across React, Svelte, and Vue following WAI-ARIA APG patterns
+> Accessible UI component implementations across React, Vue, Svelte, and Astro following WAI-ARIA APG patterns
 
 [![Deploy to GitHub Pages](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/masuP9/apg-patterns-examples/actions/workflows/ci.yml)
 
 ## Overview
 
-This project provides production-ready, accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) specifications. Each component is implemented across three major frontend frameworks: **React**, **Svelte**, and **Vue**.
+This project provides production-ready, accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) specifications. Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components).
 
 ## Features
 
-- **Multi-framework**: React, Svelte, and Vue implementations
+- **Multi-framework**: React, Vue, Svelte, and Astro (Web Components) implementations
 - **Accessibility-first**: Full WAI-ARIA APG compliance
 - **Astro Islands**: Fast, optimized static site with interactive components
 - **Interactive Docs**: Live examples with syntax highlighting (Shiki)
-- **Developer Experience**: TypeScript, hot reload, unified development
+- **Testing**: Comprehensive tests with Vitest and Testing Library
+- **Developer Experience**: TypeScript, Tailwind CSS, hot reload
 - **Responsive**: Mobile-first design approach
+
+## Tech Stack
+
+| Layer     | Technology                   |
+| --------- | ---------------------------- |
+| Framework | Astro (Islands Architecture) |
+| Content   | MDX                          |
+| Demo      | React / Vue / Svelte / Astro |
+| Styling   | Tailwind CSS + shadcn/ui     |
+| Code      | Shiki                        |
+| Testing   | Vitest + Testing Library     |
+| Deploy    | GitHub Pages                 |
 
 ## Quick Start
 
@@ -33,7 +46,6 @@ cd apg-patterns-examples
 
 # Install dependencies
 npm install
-cd site && npm install && cd ..
 ```
 
 ### Development
@@ -48,36 +60,59 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Run tests
+npm run test
+
+# Lint
+npm run lint
+
+# Format
+npm run format
 ```
 
 ## Component Status
 
-| Pattern       | React | Svelte | Vue | Status   |
-| ------------- | ----- | ------ | --- | -------- |
-| Toggle Button | ✅    | ✅     | ✅  | Complete |
-| Tabs          | ✅    | ✅     | ✅  | Complete |
-| Accordion     | 📋    | 📋     | 📋  | Planned  |
-| Dialog        | 📋    | 📋     | 📋  | Planned  |
-| Menu          | 📋    | 📋     | 📋  | Planned  |
+| Pattern       | React | Vue | Svelte | Astro | Status   |
+| ------------- | ----- | --- | ------ | ----- | -------- |
+| Accordion     | ✅    | ✅  | ✅     | ✅    | Complete |
+| Alert         | ✅    | ✅  | ✅     | ✅    | Complete |
+| Dialog        | ✅    | ✅  | ✅     | ✅    | Complete |
+| Disclosure    | ✅    | ✅  | ✅     | ✅    | Complete |
+| Listbox       | ✅    | ✅  | ✅     | ✅    | Complete |
+| Switch        | ✅    | ✅  | ✅     | ✅    | Complete |
+| Tabs          | ✅    | ✅  | ✅     | ✅    | Complete |
+| Toggle Button | ✅    | ✅  | ✅     | ✅    | Complete |
+| Toolbar       | ✅    | ✅  | ✅     | ✅    | Complete |
+| Tooltip       | ✅    | ✅  | ✅     | ✅    | Complete |
 
 ## Architecture
 
 ```
 apg-patterns-examples/
-├── site/                         # Astro site
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── patterns/         # APG pattern components
-│   │   │   │   ├── button/       # ToggleButton (React/Vue/Svelte)
-│   │   │   │   └── tabs/         # Tabs (React/Vue/Svelte)
-│   │   │   └── ui/               # Site UI components
-│   │   ├── layouts/              # Page layouts
-│   │   ├── pages/                # Route pages
-│   │   └── styles/               # Global & pattern styles
-│   └── astro.config.mjs
-├── .internal/                    # Internal documentation
-├── CLAUDE.md                     # Development guide
-├── TODO.md                       # Task tracking
+├── src/
+│   ├── components/           # Site UI (shadcn/ui)
+│   │   └── ui/
+│   ├── lib/                  # Utilities
+│   ├── patterns/             # APG pattern implementations
+│   │   ├── accordion/        # Accordion (React/Vue/Svelte/Astro)
+│   │   ├── alert/            # Alert
+│   │   ├── button/           # Toggle Button
+│   │   ├── dialog/           # Dialog
+│   │   ├── disclosure/       # Disclosure
+│   │   ├── listbox/          # Listbox
+│   │   ├── switch/           # Switch
+│   │   ├── tabs/             # Tabs
+│   │   ├── toolbar/          # Toolbar
+│   │   └── tooltip/          # Tooltip
+│   ├── layouts/              # Page layouts
+│   ├── pages/                # Route pages
+│   ├── styles/               # Global styles
+│   └── test/                 # Test utilities
+├── .internal/                # Internal documentation
+├── public/                   # Static assets
+├── astro.config.mjs
+├── CLAUDE.md                 # Development guide
 └── package.json
 ```
 
@@ -108,28 +143,19 @@ All components follow the same props pattern across frameworks:
 
 ### Key Features
 
-- **HTML Attribute Inheritance**: Pass any standard button attributes
-- **Accessibility**: Complete ARIA support with `aria-pressed`, keyboard navigation
-- **Framework Agnostic**: Consistent API across React, Svelte, and Vue
+- **HTML Attribute Inheritance**: Pass any standard HTML attributes
+- **Accessibility**: Complete ARIA support with keyboard navigation
+- **Framework Agnostic**: Consistent API across React, Vue, Svelte, and Astro
 - **TypeScript**: Full type safety and IntelliSense support
 
 ## Styling
 
-Components use CSS with accessibility enhancements:
+Components use Tailwind CSS with accessibility enhancements:
 
 - High contrast mode support
 - Reduced motion preferences
 - Forced colors mode support
 - CSS custom properties for theming
-
-```css
-/* Customize theme */
-:root {
-  --apg-toggle-bg: #e5e7eb;
-  --apg-toggle-bg-pressed: #2563eb;
-  --apg-toggle-text: #1f2937;
-}
-```
 
 ## Contributing
 
@@ -153,7 +179,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 - [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/)
-- Framework communities: React, Svelte, Vue
+- Framework communities: React, Vue, Svelte
 - Astro team for the Islands architecture
 
 ## Links
