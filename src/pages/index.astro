@@ -10,82 +10,20 @@ const availablePatterns = getAvailablePatterns();
 <BaseLayout title="Home">
   <div class="text-center">
     <h1 class="mb-4 text-4xl font-bold">APG Patterns Examples</h1>
-    <p class="text-muted-foreground mb-8 text-lg">
-      Accessible component patterns for React, Vue, Svelte, and Astro
-    </p>
-
-    <div class="grid gap-6 md:grid-cols-3">
-      <Tile variant="floating" href={withBase('/patterns/')}>
-        <TileContent>
-          <div class="mb-3 flex items-center gap-2">
-            <span class="text-3xl">📚</span>
-            <TileTitle>Patterns</TileTitle>
-          </div>
-
-          <TileDescription class="mb-4">
-            {availablePatterns.length} production-ready accessible components
-          </TileDescription>
-
-          <div class="bg-muted/50 space-y-2 rounded-md p-3 text-sm">
-            <div class="font-medium">Available now:</div>
-            <div class="text-muted-foreground">
-              Button, Tabs, Dialog, Accordion, Alert, Breadcrumb, and more...
-            </div>
-          </div>
-
-          <div class="text-muted-foreground mt-3 text-xs">
-            React • Vue • Svelte • Astro
-          </div>
-        </TileContent>
-      </Tile>
-
-      <Tile variant="floating" href={withBase('/guide/')}>
-        <TileContent>
-          <div class="mb-3 flex items-center gap-2">
-            <span class="text-3xl">📖</span>
-            <TileTitle>Guide</TileTitle>
-          </div>
-
-          <TileDescription class="mb-4">
-            Implementation guides and best practices
-          </TileDescription>
-
-          <div class="space-y-2 text-sm">
-            <div class="flex items-start gap-2">
-              <span class="text-primary">→</span>
-              <span>Getting Started</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="text-primary">→</span>
-              <span>Accessibility Testing</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="text-primary">→</span>
-              <span>Framework Integration</span>
-            </div>
-          </div>
-        </TileContent>
-      </Tile>
-
-      <Tile variant="floating" href={withBase('/about/')}>
-        <TileContent>
-          <div class="mb-3 flex items-center gap-2">
-            <span class="text-3xl">ℹ️</span>
-            <TileTitle>About</TileTitle>
-          </div>
-
-          <TileDescription class="mb-4">
-            Open-source project for accessible web components
-          </TileDescription>
-
-          <ul class="text-muted-foreground space-y-2 text-sm">
-            <li>✓ WAI-ARIA APG compliant</li>
-            <li>✓ Production-ready code</li>
-            <li>✓ Bilingual (EN/JA)</li>
-            <li>✓ MIT Licensed</li>
-          </ul>
-        </TileContent>
-      </Tile>
+    <div class="text-muted-foreground mx-auto mb-8 max-w-3xl space-y-4 text-lg">
+      <p>
+        This project provides learning resources for WAI-ARIA APG patterns with implementation
+        examples designed for AI-assisted development.
+      </p>
+      <p>
+        Compare accessible component implementations across four frameworks: React, Vue, Svelte,
+        and Astro.
+      </p>
+      <p>
+        <a href={withBase('/guide/')} class="text-primary hover:underline">
+          Read the Implementation Guide →
+        </a>
+      </p>
     </div>
 
     <section class="mt-16">
