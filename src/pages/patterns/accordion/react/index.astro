@@ -89,6 +89,19 @@ const disabledItems = [
     <p class="text-muted-foreground text-lg">
       A vertically stacked set of interactive headings that each reveal a section of content.
     </p>
+    <a
+      href="/patterns/accordion/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
+        <path d="M12 12v8"></path>
+        <path d="M8 16h8"></path>
+      </svg>
+      AI Implementation Guide
+    </a>
   </header>
 
   <!-- Framework Selector -->
@@ -312,6 +325,14 @@ function App() {
         >
           WAI-ARIA APG: Accordion Pattern
         </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/accordion/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
       </li>
     </ul>
   </section>
