@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
+import { Button } from '@/components/ui/button';
 import { Header, HeaderActions } from '@/components/ui/header';
+import { Icon } from '@/components/ui/icon';
 import { Logo, LogoText } from '@/components/ui/logo';
 import {
   NavigationMenu,
@@ -10,6 +12,8 @@ import {
 } from '@/components/ui/navigation-menu';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { ThemeToggle, ThemeProvider } from '@/components/ui/theme-toggle';
+
+const GITHUB_URL = 'https://github.com/masuP9/apg-patterns-examples';
 import {
   Footer,
   FooterDescription,
@@ -81,6 +85,15 @@ const navLinks = [
           <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
           <NativeSelectOption value="astro">Astro</NativeSelectOption>
         </NativeSelect>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          href={GITHUB_URL}
+          target="_blank"
+          aria-label="GitHub"
+        >
+          <Icon href={GITHUB_URL} />
+        </Button>
         <ThemeToggle />
       </HeaderActions>
       <Sheet class="first:ml-auto">
@@ -112,6 +125,17 @@ const navLinks = [
               <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
               <NativeSelectOption value="astro">Astro</NativeSelectOption>
             </NativeSelect>
+          </HeaderActions>
+          <HeaderActions>
+            <Button
+              variant="ghost"
+              size="icon"
+              href={GITHUB_URL}
+              target="_blank"
+              aria-label="GitHub"
+            >
+              <Icon href={GITHUB_URL} />
+            </Button>
             <ThemeToggle />
           </HeaderActions>
         </SheetContent>
