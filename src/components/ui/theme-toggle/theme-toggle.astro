@@ -1,6 +1,5 @@
 ---
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 
 interface Props {
@@ -10,16 +9,31 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<Button
+<div
   data-slot="theme-toggle"
-  variant="ghost"
-  size="icon-sm"
-  aria-label="Toggle theme"
-  class={cn('relative', className)}
+  role="group"
+  aria-label="Theme"
+  class={cn('inline-flex items-center rounded-md border border-input bg-muted p-0.5', className)}
 >
-  <Icon name="sun" class="dark:hidden [&:is([data-theme=dark]_&)]:hidden" />
-  <Icon name="moon" class="hidden dark:block [&:is([data-theme=dark]_&)]:block" />
-</Button>
+  <button
+    type="button"
+    data-theme-value="light"
+    aria-selected="true"
+    class="theme-toggle-button aria-selected:bg-background aria-selected:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-selected:shadow-sm"
+  >
+    <Icon name="sun" class="size-4" />
+    <span>Light</span>
+  </button>
+  <button
+    type="button"
+    data-theme-value="dark"
+    aria-selected="false"
+    class="theme-toggle-button aria-selected:bg-background aria-selected:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-selected:shadow-sm"
+  >
+    <Icon name="moon" class="size-4" />
+    <span>Dark</span>
+  </button>
+</div>
 
 <style>
   :global(html.no-transitions *) {
@@ -30,16 +44,34 @@ const { class: className } = Astro.props;
 <script is:inline>
   if (!window.__themeHandlersInitialized) {
     window.__themeHandlersInitialized = true;
-    document.querySelectorAll("[data-slot='theme-toggle']").forEach((toggle) => {
-      toggle.addEventListener('click', () => {
-        const element = document.documentElement;
-        element.classList.add('no-transitions');
-        element.classList.toggle('dark');
 
-        const isDark = element.classList.contains('dark');
-        const newTheme = isDark ? 'dark' : 'light';
+    function updateThemeButtons(theme) {
+      document.querySelectorAll('.theme-toggle-button').forEach((btn) => {
+        const isSelected = btn.getAttribute('data-theme-value') === theme;
+        btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      });
+    }
+
+    // Initialize button states based on current theme
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    updateThemeButtons(currentTheme);
+
+    document.querySelectorAll('.theme-toggle-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const newTheme = button.getAttribute('data-theme-value');
+        const element = document.documentElement;
+
+        element.classList.add('no-transitions');
+
+        if (newTheme === 'dark') {
+          element.classList.add('dark');
+        } else {
+          element.classList.remove('dark');
+        }
+
         localStorage.setItem('theme', newTheme);
         element.setAttribute('data-theme', newTheme);
+        updateThemeButtons(newTheme);
 
         requestAnimationFrame(() => {
           element.classList.remove('no-transitions');
