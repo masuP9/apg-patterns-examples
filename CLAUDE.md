@@ -81,6 +81,7 @@ src/
 | [.internal/site-specification.md](.internal/site-specification.md)   | サイト仕様書（技術選定、URL設計、実装方針）     | 実装時         |
 | [.internal/testing-strategy.md](.internal/testing-strategy.md)       | テスト設計方針（DAMP原則、APG準拠テストの観点） | テスト実装時   |
 | [.internal/architecture-review.md](.internal/architecture-review.md) | アーキテクチャレビュー（現状課題、改善選択肢）  | 参考資料       |
+| [.internal/llm-md-template.md](.internal/llm-md-template.md)         | AI向け定義ファイル（llm.md）のテンプレート      | パターン追加時 |
 
 ---
 
@@ -175,14 +176,37 @@ defineOptions({ inheritAttrs: false })
 - Meter → `<meter>`
 - Spinbutton → `<input type="number">`
 
-#### 4. shadcn/ui の使い分け
+#### 4. AI 向け定義ファイル（llm.md）
+
+各パターンには AI コーディングアシスタント向けの定義ファイル `llm.md` を作成する。これにより、Claude Code や Cursor などで類似コンポーネントを実装する際に参照できる。
+
+**配置場所**: `src/patterns/{pattern}/llm.md`
+
+**必須セクション**:
+
+1. **Overview** - パターンの概要（1-2文）
+2. **ARIA Requirements** - Roles, Properties, States を表形式で
+3. **Keyboard Support** - キーボード操作一覧
+4. **Focus Management** - フォーカス管理ルール
+5. **Test Checklist** - 優先度別テスト項目（High/Medium）
+6. **Implementation Notes** - 実装上の注意点、構造図
+7. **Example Test Code** - テストコードのサンプル
+
+**作成時の注意**:
+
+- トークン効率を考慮し、簡潔に記述
+- 表形式を活用して情報を整理
+- APG 公式リファレンスへのリンクを含める
+- テンプレートは [.internal/llm-md-template.md](.internal/llm-md-template.md) を参照
+
+#### 5. shadcn/ui の使い分け
 
 | 用途                           | 使用                 |
 | ------------------------------ | -------------------- |
 | サイト UI（Header, Footer 等） | shadcn/ui            |
 | APG パターンデモ               | 純粋実装（依存なし） |
 
-#### 4. Astro でのフレームワークコンポーネント制約
+#### 6. Astro でのフレームワークコンポーネント制約
 
 Astro テンプレート内で React/Vue/Svelte の子コンポーネントを使う場合、**子は静的にシリアライズされる**ため、状態管理が機能しない。
 
