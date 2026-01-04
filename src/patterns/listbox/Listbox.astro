@@ -1,0 +1,498 @@
+---
+/**
+ * APG Listbox Pattern - Astro Implementation
+ *
+ * A widget that allows the user to select one or more items from a list of choices.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/listbox/
+ */
+
+export interface ListboxOption {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
+
+export interface Props {
+  /** Array of options */
+  options: ListboxOption[];
+  /** Enable multi-select mode */
+  multiselectable?: boolean;
+  /** Direction of the listbox */
+  orientation?: 'vertical' | 'horizontal';
+  /** Initially selected option IDs */
+  defaultSelectedIds?: string[];
+  /** Accessible label for the listbox */
+  'aria-label'?: string;
+  /** ID of element that labels the listbox */
+  'aria-labelledby'?: string;
+  /** Type-ahead timeout in ms */
+  typeAheadTimeout?: number;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  options = [],
+  multiselectable = false,
+  orientation = 'vertical',
+  defaultSelectedIds = [],
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  typeAheadTimeout = 500,
+  class: className = '',
+} = Astro.props;
+
+const instanceId = `listbox-${Math.random().toString(36).slice(2, 11)}`;
+const initialSelectedSet = new Set(defaultSelectedIds);
+
+// For single-select, if no default selection, select first available option
+const availableOptions = options.filter((opt) => !opt.disabled);
+if (!multiselectable && initialSelectedSet.size === 0 && availableOptions.length > 0) {
+  initialSelectedSet.add(availableOptions[0].id);
+}
+
+const containerClass =
+  `apg-listbox ${orientation === 'horizontal' ? 'apg-listbox--horizontal' : ''} ${className}`.trim();
+
+function getOptionClass(option: ListboxOption): string {
+  const classes = ['apg-listbox-option'];
+  if (initialSelectedSet.has(option.id)) {
+    classes.push('apg-listbox-option--selected');
+  }
+  if (option.disabled) {
+    classes.push('apg-listbox-option--disabled');
+  }
+  return classes.join(' ');
+}
+
+// Find initial focus index
+const initialFocusId = [...initialSelectedSet][0];
+const initialFocusIndex = initialFocusId
+  ? availableOptions.findIndex((opt) => opt.id === initialFocusId)
+  : 0;
+
+// If no available options, listbox itself needs tabIndex for keyboard access
+const listboxTabIndex = availableOptions.length === 0 ? 0 : undefined;
+---
+
+<apg-listbox
+  data-multiselectable={multiselectable ? 'true' : undefined}
+  data-orientation={orientation}
+  data-type-ahead-timeout={typeAheadTimeout}
+  data-initial-selected={JSON.stringify([...initialSelectedSet])}
+  data-initial-focus-index={initialFocusIndex}
+>
+  <ul
+    role="listbox"
+    aria-multiselectable={multiselectable || undefined}
+    aria-orientation={orientation}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    tabindex={listboxTabIndex}
+    class={containerClass}
+  >
+    {
+      options.map((option) => {
+        const availableIndex = availableOptions.findIndex((opt) => opt.id === option.id);
+        const isFocusTarget = availableIndex === initialFocusIndex;
+        const tabIndex = option.disabled ? -1 : isFocusTarget ? 0 : -1;
+
+        return (
+          <li
+            role="option"
+            id={`${instanceId}-option-${option.id}`}
+            data-option-id={option.id}
+            aria-selected={initialSelectedSet.has(option.id)}
+            aria-disabled={option.disabled || undefined}
+            tabindex={tabIndex}
+            class={getOptionClass(option)}
+          >
+            <span class="apg-listbox-option-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M10.28 2.28a.75.75 0 00-1.06-1.06L4.5 5.94 2.78 4.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.06 0l5.25-5.25z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            {option.label}
+          </li>
+        );
+      })
+    }
+  </ul>
+</apg-listbox>
+
+<script>
+  class ApgListbox extends HTMLElement {
+    private listbox: HTMLElement | null = null;
+    private rafId: number | null = null;
+    private focusedIndex = 0;
+    private selectionAnchor = 0;
+    private selectedIds: Set<string> = new Set();
+    private typeAheadBuffer = '';
+    private typeAheadTimeoutId: number | null = null;
+    private observer: MutationObserver | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.listbox = this.querySelector('[role="listbox"]');
+      if (!this.listbox) {
+        console.warn('apg-listbox: listbox element not found');
+        return;
+      }
+
+      // Initialize selected IDs from data attribute
+      const initialSelected = this.dataset.initialSelected;
+      if (initialSelected) {
+        try {
+          const ids = JSON.parse(initialSelected);
+          this.selectedIds = new Set(ids);
+        } catch {
+          this.selectedIds = new Set();
+        }
+      }
+
+      // Initialize focus index and anchor from data attribute
+      const initialFocusIndex = parseInt(this.dataset.initialFocusIndex || '0', 10);
+      this.focusedIndex = initialFocusIndex;
+      this.selectionAnchor = initialFocusIndex;
+
+      this.listbox.addEventListener('keydown', this.handleKeyDown);
+      this.listbox.addEventListener('click', this.handleClick);
+      this.listbox.addEventListener('focusin', this.handleFocus);
+
+      // Observe DOM changes
+      this.observer = new MutationObserver(() => this.updateTabIndices());
+      this.observer.observe(this.listbox, { childList: true, subtree: true });
+
+      this.updateTabIndices();
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+        this.typeAheadTimeoutId = null;
+      }
+      this.observer?.disconnect();
+      this.observer = null;
+      this.listbox?.removeEventListener('keydown', this.handleKeyDown);
+      this.listbox?.removeEventListener('click', this.handleClick);
+      this.listbox?.removeEventListener('focusin', this.handleFocus);
+      this.listbox = null;
+    }
+
+    private get isMultiselectable(): boolean {
+      return this.dataset.multiselectable === 'true';
+    }
+
+    private get orientation(): string {
+      return this.dataset.orientation || 'vertical';
+    }
+
+    private get typeAheadTimeout(): number {
+      return parseInt(this.dataset.typeAheadTimeout || '500', 10);
+    }
+
+    private getOptions(): HTMLLIElement[] {
+      if (!this.listbox) return [];
+      return Array.from(this.listbox.querySelectorAll<HTMLLIElement>('[role="option"]'));
+    }
+
+    private getAvailableOptions(): HTMLLIElement[] {
+      return this.getOptions().filter((opt) => opt.getAttribute('aria-disabled') !== 'true');
+    }
+
+    private updateTabIndices() {
+      const options = this.getAvailableOptions();
+      if (options.length === 0) return;
+
+      if (this.focusedIndex >= options.length) {
+        this.focusedIndex = options.length - 1;
+      }
+
+      options.forEach((opt, index) => {
+        opt.tabIndex = index === this.focusedIndex ? 0 : -1;
+      });
+    }
+
+    private updateSelection(optionId: string | null, action: 'toggle' | 'set' | 'range' | 'all') {
+      const options = this.getOptions();
+
+      if (action === 'all') {
+        const availableOptions = this.getAvailableOptions();
+        this.selectedIds = new Set(
+          availableOptions.map((opt) => opt.dataset.optionId).filter(Boolean) as string[]
+        );
+      } else if (action === 'range' && optionId) {
+        const availableOptions = this.getAvailableOptions();
+        const start = Math.min(this.selectionAnchor, this.focusedIndex);
+        const end = Math.max(this.selectionAnchor, this.focusedIndex);
+
+        for (let i = start; i <= end; i++) {
+          const opt = availableOptions[i];
+          if (opt?.dataset.optionId) {
+            this.selectedIds.add(opt.dataset.optionId);
+          }
+        }
+      } else if (optionId) {
+        if (this.isMultiselectable) {
+          if (this.selectedIds.has(optionId)) {
+            this.selectedIds.delete(optionId);
+          } else {
+            this.selectedIds.add(optionId);
+          }
+        } else {
+          this.selectedIds = new Set([optionId]);
+        }
+      }
+
+      // Update aria-selected and classes
+      options.forEach((opt) => {
+        const id = opt.dataset.optionId;
+        const isSelected = id ? this.selectedIds.has(id) : false;
+        opt.setAttribute('aria-selected', String(isSelected));
+        opt.classList.toggle('apg-listbox-option--selected', isSelected);
+      });
+
+      // Dispatch custom event
+      this.dispatchEvent(
+        new CustomEvent('selectionchange', {
+          detail: { selectedIds: [...this.selectedIds] },
+          bubbles: true,
+        })
+      );
+    }
+
+    private focusOption(index: number) {
+      const options = this.getAvailableOptions();
+      if (index >= 0 && index < options.length) {
+        this.focusedIndex = index;
+        this.updateTabIndices();
+        options[index].focus();
+      }
+    }
+
+    private handleTypeAhead(char: string) {
+      const options = this.getAvailableOptions();
+      // Guard: no options to search
+      if (options.length === 0) return;
+
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+      }
+
+      this.typeAheadBuffer += char.toLowerCase();
+
+      const buffer = this.typeAheadBuffer;
+      const isSameChar = buffer.length > 1 && buffer.split('').every((c) => c === buffer[0]);
+
+      let startIndex = this.focusedIndex;
+
+      if (isSameChar) {
+        this.typeAheadBuffer = buffer[0];
+        startIndex = (this.focusedIndex + 1) % options.length;
+      }
+
+      for (let i = 0; i < options.length; i++) {
+        const index = (startIndex + i) % options.length;
+        const option = options[index];
+        const label = option.textContent?.toLowerCase() || '';
+        const searchStr = isSameChar ? buffer[0] : this.typeAheadBuffer;
+
+        if (label.startsWith(searchStr)) {
+          this.focusOption(index);
+          // Update anchor for shift-selection
+          this.selectionAnchor = index;
+          if (!this.isMultiselectable) {
+            const optionId = option.dataset.optionId;
+            if (optionId) {
+              this.updateSelection(optionId, 'set');
+            }
+          }
+          break;
+        }
+      }
+
+      this.typeAheadTimeoutId = window.setTimeout(() => {
+        this.typeAheadBuffer = '';
+        this.typeAheadTimeoutId = null;
+      }, this.typeAheadTimeout);
+    }
+
+    private handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const option = target.closest('[role="option"]') as HTMLLIElement | null;
+      if (!option || option.getAttribute('aria-disabled') === 'true') return;
+
+      const options = this.getAvailableOptions();
+      const index = options.indexOf(option);
+      if (index === -1) return;
+
+      this.focusOption(index);
+      const optionId = option.dataset.optionId;
+      if (optionId) {
+        this.updateSelection(optionId, 'toggle');
+        this.selectionAnchor = index;
+      }
+    };
+
+    private handleFocus = (event: FocusEvent) => {
+      const options = this.getAvailableOptions();
+      const target = event.target as HTMLElement;
+      const targetIndex = options.findIndex((opt) => opt === target);
+      if (targetIndex !== -1 && targetIndex !== this.focusedIndex) {
+        this.focusedIndex = targetIndex;
+        this.updateTabIndices();
+      }
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      const options = this.getAvailableOptions();
+      if (options.length === 0) return;
+
+      const { key, shiftKey, ctrlKey, metaKey } = event;
+      const nextKey = this.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+      const prevKey = this.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+      const invalidKeys =
+        this.orientation === 'vertical' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
+
+      if (invalidKeys.includes(key)) {
+        return;
+      }
+
+      let newIndex = this.focusedIndex;
+      let shouldPreventDefault = false;
+
+      switch (key) {
+        case nextKey:
+          if (this.focusedIndex < options.length - 1) {
+            newIndex = this.focusedIndex + 1;
+          }
+          shouldPreventDefault = true;
+
+          if (this.isMultiselectable && shiftKey) {
+            this.focusOption(newIndex);
+            const option = options[newIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'range');
+            }
+            event.preventDefault();
+            return;
+          }
+          break;
+
+        case prevKey:
+          if (this.focusedIndex > 0) {
+            newIndex = this.focusedIndex - 1;
+          }
+          shouldPreventDefault = true;
+
+          if (this.isMultiselectable && shiftKey) {
+            this.focusOption(newIndex);
+            const option = options[newIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'range');
+            }
+            event.preventDefault();
+            return;
+          }
+          break;
+
+        case 'Home':
+          newIndex = 0;
+          shouldPreventDefault = true;
+
+          if (this.isMultiselectable && shiftKey) {
+            this.focusOption(newIndex);
+            const option = options[newIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'range');
+            }
+            event.preventDefault();
+            return;
+          }
+          break;
+
+        case 'End':
+          newIndex = options.length - 1;
+          shouldPreventDefault = true;
+
+          if (this.isMultiselectable && shiftKey) {
+            this.focusOption(newIndex);
+            const option = options[newIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'range');
+            }
+            event.preventDefault();
+            return;
+          }
+          break;
+
+        case ' ':
+          shouldPreventDefault = true;
+          if (this.isMultiselectable) {
+            const option = options[this.focusedIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'toggle');
+              this.selectionAnchor = this.focusedIndex;
+            }
+          }
+          event.preventDefault();
+          return;
+
+        case 'Enter':
+          shouldPreventDefault = true;
+          event.preventDefault();
+          return;
+
+        case 'a':
+        case 'A':
+          if ((ctrlKey || metaKey) && this.isMultiselectable) {
+            shouldPreventDefault = true;
+            this.updateSelection(null, 'all');
+            event.preventDefault();
+            return;
+          }
+          break;
+      }
+
+      if (shouldPreventDefault) {
+        event.preventDefault();
+
+        if (newIndex !== this.focusedIndex) {
+          this.focusOption(newIndex);
+
+          if (!this.isMultiselectable) {
+            const option = options[newIndex];
+            if (option?.dataset.optionId) {
+              this.updateSelection(option.dataset.optionId, 'set');
+            }
+          } else {
+            this.selectionAnchor = newIndex;
+          }
+        }
+        return;
+      }
+
+      // Type-ahead
+      if (key.length === 1 && !ctrlKey && !metaKey) {
+        event.preventDefault();
+        this.handleTypeAhead(key);
+      }
+    };
+  }
+
+  if (!customElements.get('apg-listbox')) {
+    customElements.define('apg-listbox', ApgListbox);
+  }
+</script>

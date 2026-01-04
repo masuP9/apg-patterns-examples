@@ -1,0 +1,255 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Listbox from '@patterns/listbox/Listbox.astro';
+import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/listbox/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/listbox/Listbox.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'resources', text: 'Resources' },
+];
+
+const fruitOptions = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+  { id: 'date', label: 'Date' },
+  { id: 'elderberry', label: 'Elderberry' },
+  { id: 'fig', label: 'Fig' },
+  { id: 'grape', label: 'Grape' },
+];
+
+const colorOptions = [
+  { id: 'red', label: 'Red' },
+  { id: 'orange', label: 'Orange' },
+  { id: 'yellow', label: 'Yellow' },
+  { id: 'green', label: 'Green', disabled: true },
+  { id: 'blue', label: 'Blue' },
+  { id: 'indigo', label: 'Indigo' },
+  { id: 'purple', label: 'Purple' },
+];
+---
+
+<PatternLayout title="Listbox - Astro" pattern="listbox" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Listbox</h1>
+    <p class="text-muted-foreground text-lg">
+      A widget that allows the user to select one or more items from a list of choices.
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="listbox" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Single-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Single-Select (Default)</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Selection follows focus. Use arrow keys to navigate and select.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <label id="fruit-label-astro" class="mb-2 block text-sm font-medium">Choose a fruit:</label>
+        <Listbox
+          options={fruitOptions}
+          defaultSelectedIds={['apple']}
+          aria-labelledby="fruit-label-astro"
+        />
+      </div>
+    </div>
+
+    <!-- Multi-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Multi-Select</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Focus and selection are independent. Use Space to toggle, Shift+Arrow to extend selection.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <label id="color-label-astro" class="mb-2 block text-sm font-medium"
+          >Choose colors (multiple):</label
+        >
+        <Listbox options={colorOptions} multiselectable aria-labelledby="color-label-astro" />
+        <p class="text-muted-foreground mt-2 text-xs">
+          Tip: Use Space to toggle, Shift+Arrow to extend selection, Ctrl+A to select all
+        </p>
+      </div>
+    </div>
+
+    <!-- Horizontal Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+      <p class="text-muted-foreground mb-4 text-sm">Use Left/Right arrow keys for navigation.</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <label id="horizontal-label-astro" class="mb-2 block text-sm font-medium"
+          >Choose a fruit (horizontal):</label
+        >
+        <Listbox
+          options={fruitOptions.slice(0, 5)}
+          orientation="horizontal"
+          defaultSelectedIds={['apple']}
+          aria-labelledby="horizontal-label-astro"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="Listbox.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Listbox from '@patterns/listbox/Listbox.astro';
+
+const options = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+];
+---
+
+<!-- Single-select -->
+<Listbox
+  options={options}
+  aria-label="Choose a fruit"
+/>
+
+<!-- Multi-select -->
+<Listbox
+  options={options}
+  multiselectable
+  aria-label="Choose fruits"
+/>
+
+<!-- Listen for selection changes -->
+<script>
+  document.querySelector('apg-listbox')?.addEventListener('selectionchange', (e) => {
+    console.log('Selected:', e.detail.selectedIds);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ListboxOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of options</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable multi-select mode</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical' | 'horizontal'</td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
+            <td class="py-2">Listbox orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">Initially selected option IDs</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectionchange</code></td>
+            <td class="text-muted-foreground py-2 pr-4"
+              ><code>{'{ selectedIds: string[] }'}</code></td
+            >
+            <td class="py-2">Fired when selection changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Listbox Pattern
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

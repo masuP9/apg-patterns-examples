@@ -1,6 +1,6 @@
 # TODO - APG Patterns Examples
 
-> 最終更新: 2025-12-25
+> 最終更新: 2026-01-04
 
 ## 現状
 
@@ -34,11 +34,11 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | -------------- | --------- | ------ |
 | Toggle Button  | ✅ 完了   | 低     |
 | Tabs           | ✅ 完了   | 中     |
-| Accordion      | 📋 未実装 | 中     |
-| Dialog (Modal) | 📋 未実装 | 高     |
+| Accordion      | ✅ 完了   | 中     |
+| Dialog (Modal) | ✅ 完了   | 高     |
 | Menu Button    | 📋 未実装 | 高     |
-| Disclosure     | 📋 未実装 | 低     |
-| Alert          | 📋 未実装 | 低     |
+| Disclosure     | ✅ 完了   | 低     |
+| Alert          | ✅ 完了   | 低     |
 
 ### Tier 2 (中頻度使用)
 
@@ -46,16 +46,31 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | ----------- | --------- | ------ |
 | Checkbox    | 📋 未実装 | 低     |
 | Radio Group | 📋 未実装 | 中     |
-| Switch      | 📋 未実装 | 低     |
-| Listbox     | 📋 未実装 | 高     |
+| Switch      | ✅ 完了   | 低     |
+| Listbox     | ✅ 完了   | 高     |
 | Combobox    | 📋 未実装 | 高     |
-| Tooltip     | 📋 未実装 | 中     |
+| Tooltip     | ✅ 完了   | 中     |
 | Breadcrumb  | 📋 未実装 | 低     |
 | Link        | 📋 未実装 | 低     |
 
 ### Tier 3-4 (特定用途・高度)
 
-Slider, Spinbutton, Meter, Toolbar, Menu Bar, Alert Dialog, Carousel, Grid, Table, Tree View, Treegrid, Feed, Window Splitter, Landmarks
+| パターン        | 状況      | 複雑度 |
+| --------------- | --------- | ------ |
+| Toolbar         | ✅ 完了   | 中     |
+| Slider          | 📋 未実装 | 中     |
+| Spinbutton      | 📋 未実装 | 中     |
+| Meter           | 📋 未実装 | 低     |
+| Menu Bar        | 📋 未実装 | 高     |
+| Alert Dialog    | 📋 未実装 | 中     |
+| Carousel        | 📋 未実装 | 高     |
+| Grid            | 📋 未実装 | 高     |
+| Table           | 📋 未実装 | 中     |
+| Tree View       | 📋 未実装 | 高     |
+| Treegrid        | 📋 未実装 | 高     |
+| Feed            | 📋 未実装 | 中     |
+| Window Splitter | 📋 未実装 | 中     |
+| Landmarks       | 📋 未実装 | 低     |
 
 ---
 

@@ -155,7 +155,7 @@ export const PATTERNS: Pattern[] = [
       'A widget that allows the user to select one or more items from a list of choices.',
     icon: '📝',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'menu',

@@ -1,0 +1,178 @@
+/* =============================================================================
+   LISTBOX COMPONENT STYLES
+   ============================================================================= */
+
+/* Listbox Container */
+.apg-listbox {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  border: 1px solid var(--border);
+  background: var(--background);
+  max-height: 12rlh;
+  overflow-y: auto;
+  min-width: 200px;
+}
+
+.apg-listbox--horizontal {
+  flex-direction: row;
+  max-height: none;
+  overflow-x: scroll;
+  overflow-y: visible;
+}
+
+/* Individual Option */
+.apg-listbox-option {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  min-height: 44px;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  user-select: none;
+}
+
+.apg-listbox-option:last-child {
+  border-bottom: none;
+}
+
+/* Checkmark icon */
+.apg-listbox-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--primary);
+  opacity: 0;
+  transform: translateY(2px);
+}
+
+.apg-listbox-option-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.apg-listbox-option[aria-selected='true'] .apg-listbox-option-icon {
+  opacity: 1;
+}
+
+.apg-listbox--horizontal .apg-listbox-option {
+  flex-shrink: 0;
+}
+
+.apg-listbox--horizontal .apg-listbox-option-icon {
+  display: none;
+}
+
+.apg-listbox--horizontal .apg-listbox-option[aria-selected='true'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.apg-listbox--horizontal
+  .apg-listbox-option[aria-selected='true']:hover:not(.apg-listbox-option[aria-disabled='true']) {
+  background: color-mix(in srgb, var(--primary) 90%, black);
+  color: var(--primary-foreground);
+}
+
+/* Option States */
+.apg-listbox-option:hover:not(.apg-listbox-option[aria-disabled='true']) {
+  background: color-mix(in srgb, var(--background) 90%, var(--foreground));
+}
+
+.apg-listbox-option:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.apg-listbox-option[aria-selected='true'] {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.apg-listbox-option[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--muted-foreground);
+}
+
+.apg-listbox-option[aria-disabled='true']:hover {
+  background: transparent;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-listbox {
+    border-width: 2px;
+  }
+
+  .apg-listbox-option-icon {
+    color: black;
+  }
+
+  .apg-listbox-option:focus {
+    outline: 3px solid #facc15;
+    outline-offset: -3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-listbox-option {
+    transition: none;
+  }
+}
+
+/* Focus Enhancement for Keyboard Users */
+.apg-listbox-option:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-listbox {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+  }
+
+  .apg-listbox-option {
+    color: ButtonText;
+  }
+
+  .apg-listbox-option-icon {
+    color: ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .apg-listbox-option:focus {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-listbox-option[aria-disabled='true'] {
+    color: GrayText;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  .apg-listbox {
+    min-width: 100%;
+  }
+
+  .apg-listbox-option {
+    padding: 0.75rem 1rem;
+  }
+}
