@@ -4,6 +4,9 @@
  *
  * A shared component for switching between framework implementations.
  * Saves the selected framework to localStorage for next visit.
+ *
+ * Mobile: Dropdown menu
+ * Desktop: Tab list
  */
 import { FRAMEWORKS, FRAMEWORK_INFO, type Framework } from '@/lib/frameworks';
 import { withBase } from '@/lib/utils';
@@ -17,9 +20,65 @@ interface Props {
 }
 
 const { pattern, currentFramework } = Astro.props;
+const currentInfo = FRAMEWORK_INFO[currentFramework];
 ---
 
-<div class="border-border mb-8 flex gap-1 border-b sm:gap-2" role="tablist">
+<!-- Mobile: Dropdown -->
+<div class="mb-8 sm:hidden">
+  <details class="framework-dropdown relative">
+    <summary
+      class="border-border flex cursor-pointer items-center gap-2 rounded-md border px-4 py-2 select-none"
+      style={`--fw-color: ${currentInfo.colorForeground}; --fw-color-dark: ${currentInfo.colorForegroundDark};`}
+    >
+      <FrameworkIcon framework={currentFramework} class="h-4 w-4" />
+      <span class="framework-tab-active font-medium">{currentInfo.label}</span>
+      <svg
+        class="chevron ml-auto h-4 w-4 transition-transform"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    </summary>
+    <ul
+      class="bg-background border-border absolute top-full left-0 z-10 mt-1 w-full rounded-md border shadow-md"
+    >
+      {
+        FRAMEWORKS.map((fw) => {
+          const info = FRAMEWORK_INFO[fw];
+          const isActive = fw === currentFramework;
+          const href = withBase(`/patterns/${pattern}/${fw}/`);
+
+          return (
+            <li>
+              <a
+                href={href}
+                class:list={[
+                  'flex items-center gap-2 px-4 py-2 transition-colors',
+                  isActive ? 'bg-muted font-medium' : 'hover:bg-muted',
+                ]}
+                style={`--fw-color: ${info.colorForeground}; --fw-color-dark: ${info.colorForegroundDark};`}
+                aria-current={isActive ? 'page' : undefined}
+                data-framework={fw}
+              >
+                <FrameworkIcon framework={fw} class="h-4 w-4" />
+                <span class:list={[isActive && 'framework-tab-active']}>{info.label}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </details>
+</div>
+
+<!-- Desktop: Tab list -->
+<div class="border-border mb-8 hidden gap-2 border-b sm:flex" role="tablist">
   {
     FRAMEWORKS.map((fw) => {
       const info = FRAMEWORK_INFO[fw];
@@ -30,7 +89,7 @@ const { pattern, currentFramework } = Astro.props;
         <a
           href={href}
           class:list={[
-            'framework-tab inline-flex items-center justify-center gap-2 border-b-2 px-3 py-2 transition-colors sm:px-4',
+            'inline-flex items-center gap-2 border-b-2 px-4 py-2 transition-colors',
             isActive
               ? 'framework-tab-active font-medium'
               : 'text-muted-foreground hover:text-foreground border-transparent',
@@ -43,10 +102,10 @@ const { pattern, currentFramework } = Astro.props;
           aria-current={isActive ? 'page' : undefined}
           role="tab"
           aria-selected={isActive ? 'true' : 'false'}
-          title={info.label}
+          data-framework={fw}
         >
           <FrameworkIcon framework={fw} class="h-4 w-4" />
-          <span class="hidden sm:inline">{info.label}</span>
+          {info.label}
         </a>
       );
     })
@@ -61,16 +120,28 @@ const { pattern, currentFramework } = Astro.props;
   :global(.dark) .framework-tab-active {
     color: var(--fw-color-dark);
   }
+
+  .framework-dropdown[open] .chevron {
+    transform: rotate(180deg);
+  }
 </style>
 
 <script>
-  document.querySelectorAll<HTMLAnchorElement>('[role="tablist"] a[role="tab"]').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const pathSegments = new URL(tab.href).pathname.split('/').filter(Boolean);
-      const framework = pathSegments[pathSegments.length - 1];
+  // Save selected framework to localStorage
+  document.querySelectorAll<HTMLAnchorElement>('[data-framework]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const framework = link.dataset.framework;
       if (framework) {
         localStorage.setItem('apg-selected-framework', framework);
       }
     });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    const dropdown = document.querySelector('.framework-dropdown');
+    if (dropdown && !dropdown.contains(e.target as Node)) {
+      dropdown.removeAttribute('open');
+    }
   });
 </script>
