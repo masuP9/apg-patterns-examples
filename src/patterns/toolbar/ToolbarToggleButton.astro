@@ -1,24 +1,22 @@
 ---
-/**
- * APG Toolbar Toggle Button - Astro Implementation
- *
- * A toggle button component for use within a Toolbar.
- * Uses Web Components for client-side interactivity.
- *
- * Note: This component is uncontrolled-only (no `pressed` prop for controlled state).
- * This is a limitation of the Astro/Web Components architecture where props are
- * only available at build time. For controlled state management, use the
- * `pressed-change` custom event to sync with external state.
- *
- * @example
- * <ToolbarToggleButton id="bold-btn" defaultPressed={false}>Bold</ToolbarToggleButton>
- *
- * <script>
- *   document.getElementById('bold-btn')?.addEventListener('pressed-change', (e) => {
- *     console.log('Pressed:', e.detail.pressed);
- *   });
- * </script>
- */
+// APG Toolbar Toggle Button - Astro Implementation
+//
+// A toggle button component for use within a Toolbar.
+// Uses Web Components for client-side interactivity.
+//
+// Note: This component is uncontrolled-only (no `pressed` prop for controlled state).
+// This is a limitation of the Astro/Web Components architecture where props are
+// only available at build time. For controlled state management, use the
+// `pressed-change` custom event to sync with external state.
+//
+// @example
+// <ToolbarToggleButton id="bold-btn" defaultPressed={false}>Bold</ToolbarToggleButton>
+//
+// <script>
+//   document.getElementById('bold-btn')?.addEventListener('pressed-change', (e) => {
+//     console.log('Pressed:', e.detail.pressed);
+//   });
+// </script>
 
 export interface Props {
   /** Initial pressed state (uncontrolled) */
