@@ -163,17 +163,33 @@ Components use Tailwind CSS with accessibility enhancements:
 
 ## Contributing
 
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details on:
+
+- Development setup and workflow
+- Coding standards and guidelines
+- Component implementation requirements
+- Testing requirements
+- Pull request process
+
+### Quick Contributing Steps
+
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-component`
 3. Follow our [coding standards](./CODING_RULES.md)
-4. Submit a pull request
+4. Ensure all tests pass and code is formatted
+5. Submit a pull request
 
 ### Development Guidelines
 
 - Follow APG patterns precisely
-- Maintain framework parity
-- Document accessibility features
+- Maintain framework parity across all 4 frameworks
+- Write comprehensive tests with accessibility checks
+- Document accessibility features thoroughly
 - Use semantic commit messages
+
+## Security
+
+For security concerns or to report vulnerabilities, please see our [Security Policy](./SECURITY.md).
 
 ## License
 
