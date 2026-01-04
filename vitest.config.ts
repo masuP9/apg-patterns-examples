@@ -10,7 +10,12 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.test.vue.ts', 'src/**/*.test.svelte.ts'],
+    include: [
+      'src/**/*.test.{ts,tsx}',
+      'src/**/*.test.vue.ts',
+      'src/**/*.test.svelte.ts',
+      'src/**/*.test.astro.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

@@ -77,9 +77,11 @@ npm run format
 | ------------- | ----- | --- | ------ | ----- | -------- |
 | Accordion     | ✅    | ✅  | ✅     | ✅    | Complete |
 | Alert         | ✅    | ✅  | ✅     | ✅    | Complete |
+| Breadcrumb    | ✅    | ✅  | ✅     | ✅    | Complete |
 | Dialog        | ✅    | ✅  | ✅     | ✅    | Complete |
 | Disclosure    | ✅    | ✅  | ✅     | ✅    | Complete |
 | Listbox       | ✅    | ✅  | ✅     | ✅    | Complete |
+| Menu Button   | ✅    | ✅  | ✅     | ✅    | Complete |
 | Switch        | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tabs          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Toggle Button | ✅    | ✅  | ✅     | ✅    | Complete |
@@ -97,10 +99,12 @@ apg-patterns-examples/
 │   ├── patterns/             # APG pattern implementations
 │   │   ├── accordion/        # Accordion (React/Vue/Svelte/Astro)
 │   │   ├── alert/            # Alert
+│   │   ├── breadcrumb/       # Breadcrumb
 │   │   ├── button/           # Toggle Button
 │   │   ├── dialog/           # Dialog
 │   │   ├── disclosure/       # Disclosure
 │   │   ├── listbox/          # Listbox
+│   │   ├── menu-button/      # Menu Button
 │   │   ├── switch/           # Switch
 │   │   ├── tabs/             # Tabs
 │   │   ├── toolbar/          # Toolbar

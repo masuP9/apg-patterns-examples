@@ -171,8 +171,8 @@ export const PATTERNS: Pattern[] = [
     name: 'Menu Button',
     description: 'A button that opens a menu of actions or options.',
     icon: '☰',
-    complexity: 'High',
-    status: 'planned',
+    complexity: 'Medium',
+    status: 'available',
   },
   {
     id: 'meter',

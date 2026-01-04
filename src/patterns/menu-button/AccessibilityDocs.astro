@@ -1,0 +1,237 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>button</code></td>
+          <td class="py-2 pr-4">Trigger (<code>&lt;button&gt;</code>)</td>
+          <td class="py-2"
+            >The trigger that opens the menu (implicit via <code>&lt;button&gt;</code> element)</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>menu</code></td>
+          <td class="py-2 pr-4">Container (<code>&lt;ul&gt;</code>)</td>
+          <td class="py-2">A widget offering a list of choices to the user</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>menuitem</code></td>
+          <td class="py-2 pr-4">Each item (<code>&lt;li&gt;</code>)</td>
+          <td class="py-2">An option in a menu</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#menu" class="text-primary hover:underline">
+      WAI-ARIA menu role
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Button)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-haspopup</code></td>
+          <td class="py-2 pr-4"><code>"menu"</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Indicates the button opens a menu</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Indicates whether the menu is open</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">References the menu element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Menu)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Target</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">menu</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">References the button that opens the menu</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">menu</td>
+          <td class="py-2 pr-4">String</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Provides an accessible name for the menu</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4">menuitem</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Indicates the menu item is disabled</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Either <code>aria-labelledby</code> or <code>aria-label</code> is required for an accessible name
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h4 class="mb-2 font-medium">Button (Closed Menu)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> / <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
+            ></td
+          >
+          <td class="py-2">Open menu and focus first item</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
+          >
+          <td class="py-2">Open menu and focus first item</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
+          >
+          <td class="py-2">Open menu and focus last item</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Menu (Open)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
+          >
+          <td class="py-2">Move focus to next item (wraps to first)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
+          >
+          <td class="py-2">Move focus to previous item (wraps to last)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move focus to first item</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move focus to last item</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
+          <td class="py-2">Close menu and return focus to button</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Close menu and move focus to next focusable element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> / <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
+            ></td
+          >
+          <td class="py-2">Activate focused item and close menu</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Type character</td>
+          <td class="py-2">Type-ahead: focus item starting with typed character(s)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <p class="text-muted-foreground mb-4">
+    This component uses the <strong>Roving Tabindex</strong> pattern for focus management:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Only one menu item has <code>tabindex="0"</code> at a time</li>
+    <li>Other menu items have <code>tabindex="-1"</code></li>
+    <li>Arrow keys move focus between items with wrapping</li>
+    <li>Disabled items are skipped during navigation</li>
+    <li>Focus returns to button when menu closes</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Hidden State</h3>
+  <p class="text-muted-foreground mb-4">
+    When closed, the menu uses both <code>hidden</code> and <code>inert</code> attributes to:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Hide the menu from visual display</li>
+    <li>Remove the menu from the accessibility tree</li>
+    <li>Prevent keyboard and mouse interaction with hidden items</li>
+  </ul>
+</div>
