@@ -61,27 +61,36 @@ const { class: className } = Astro.props;
     const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     updateThemeButtons(currentTheme);
 
-    document.querySelectorAll('.theme-toggle-button').forEach((button) => {
-      button.addEventListener('click', () => {
-        const newTheme = button.getAttribute('data-theme-value');
-        const element = document.documentElement;
+    // Use event delegation for dynamically added buttons (e.g., in mobile menu)
+    document.addEventListener('click', (e) => {
+      const button = e.target.closest('.theme-toggle-button');
+      if (!button) return;
 
-        element.classList.add('no-transitions');
+      const newTheme = button.getAttribute('data-theme-value');
+      const element = document.documentElement;
 
-        if (newTheme === 'dark') {
-          element.classList.add('dark');
-        } else {
-          element.classList.remove('dark');
-        }
+      element.classList.add('no-transitions');
 
-        localStorage.setItem('theme', newTheme);
-        element.setAttribute('data-theme', newTheme);
-        updateThemeButtons(newTheme);
+      if (newTheme === 'dark') {
+        element.classList.add('dark');
+      } else {
+        element.classList.remove('dark');
+      }
 
-        requestAnimationFrame(() => {
-          element.classList.remove('no-transitions');
-        });
+      localStorage.setItem('theme', newTheme);
+      element.setAttribute('data-theme', newTheme);
+      updateThemeButtons(newTheme);
+
+      requestAnimationFrame(() => {
+        element.classList.remove('no-transitions');
       });
     });
+
+    // Update button states when sheet opens (MutationObserver for dynamic content)
+    const observer = new MutationObserver(() => {
+      const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      updateThemeButtons(currentTheme);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 </script>
