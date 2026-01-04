@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { withBase } from '@/lib/utils';
+---
+
+<BaseLayout title="Guide">
+  <div class="mx-auto max-w-3xl">
+    <header class="mb-8">
+      <h1 class="mb-4 text-3xl font-bold">Guide</h1>
+      <p class="text-muted-foreground text-lg">
+        How to use APG Patterns Examples for building accessible components.
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">Using with AI Code Assistants</h2>
+      <p class="text-muted-foreground mb-4">
+        Each pattern includes an AI-friendly definition file (<code class="bg-muted px-1.5 py-0.5 rounded text-sm">llm.md</code>)
+        that can be used as context when implementing similar components with AI coding assistants
+        like Claude, Cursor, or GitHub Copilot.
+      </p>
+
+      <h3 class="mb-3 mt-6 text-xl font-medium">What's included in llm.md</h3>
+      <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+        <li>ARIA roles, properties, and states requirements</li>
+        <li>Keyboard interaction specifications</li>
+        <li>Focus management rules</li>
+        <li>Test checklist for verification</li>
+        <li>Example test code snippets</li>
+      </ul>
+
+      <h3 class="mb-3 mt-6 text-xl font-medium">How to use</h3>
+
+      <div class="space-y-6">
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">1. Copy & paste into prompt</h4>
+          <p class="text-muted-foreground text-sm mb-3">
+            Copy the content and include it in your prompt when asking AI to implement a component.
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre class="text-sm overflow-x-auto"><code>Implement a Tabs component in Angular following this specification:
+
+[paste llm.md content here]</code></pre>
+          </div>
+        </div>
+
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">2. Add to project context</h4>
+          <p class="text-muted-foreground text-sm mb-3">
+            For Claude Code or Cursor, place definition files in your project for automatic context.
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre class="text-sm overflow-x-auto"><code>my-project/
+├── .ai/
+│   └── apg-patterns/
+│       ├── tabs.md
+│       ├── dialog.md
+│       └── accordion.md
+└── src/</code></pre>
+          </div>
+        </div>
+
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">3. Use for test generation</h4>
+          <p class="text-muted-foreground text-sm mb-3">
+            The test checklist helps AI generate comprehensive accessibility tests.
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre class="text-sm overflow-x-auto"><code>Generate Jest tests for my Tabs component based on this checklist:
+
+## Test Checklist
+- [ ] ArrowRight moves to next tab
+- [ ] Selected tab has aria-selected="true"
+- [ ] Only selected tab has tabIndex="0"</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">Available Patterns</h2>
+      <p class="text-muted-foreground mb-4">
+        The following patterns have AI-friendly definition files:
+      </p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <Tile variant="floating" href={withBase('/patterns/tabs/react/')}>
+          <TileContent>
+            <TileTitle>Tabs</TileTitle>
+            <TileDescription>
+              Layered content sections with keyboard navigation and roving tabindex.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <!-- More patterns will be added here -->
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">File Locations</h2>
+      <p class="text-muted-foreground mb-4">
+        AI definition files are located alongside each pattern's implementation:
+      </p>
+      <div class="bg-muted rounded-md p-4">
+        <pre class="text-sm overflow-x-auto"><code>src/patterns/
+├── tabs/
+│   ├── llm.md          ← AI-friendly definition
+│   ├── Tabs.tsx
+│   ├── Tabs.test.tsx
+│   └── AccessibilityDocs.astro
+├── dialog/
+│   ├── llm.md
+│   └── ...</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
+      <p class="text-muted-foreground">
+        Help us add more AI-friendly definitions! Visit our
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          GitHub repository
+        </a> to contribute.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
