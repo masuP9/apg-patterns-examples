@@ -17,22 +17,73 @@ const availablePatterns = getAvailablePatterns();
     <div class="grid gap-6 md:grid-cols-3">
       <Tile variant="floating" href={withBase('/patterns/')}>
         <TileContent>
-          <TileTitle>Patterns</TileTitle>
-          <TileDescription> Browse WAI-ARIA APG pattern implementations </TileDescription>
+          <div class="mb-3 flex items-center gap-2">
+            <span class="text-3xl">📚</span>
+            <TileTitle>Patterns</TileTitle>
+          </div>
+
+          <TileDescription class="mb-4">
+            {availablePatterns.length} production-ready accessible components
+          </TileDescription>
+
+          <div class="bg-muted/50 space-y-2 rounded-md p-3 text-sm">
+            <div class="font-medium">Available now:</div>
+            <div class="text-muted-foreground">
+              Button, Tabs, Dialog, Accordion, Alert, Breadcrumb, and more...
+            </div>
+          </div>
+
+          <div class="text-muted-foreground mt-3 text-xs">
+            React • Vue • Svelte • Astro
+          </div>
         </TileContent>
       </Tile>
 
       <Tile variant="floating" href={withBase('/guide/')}>
         <TileContent>
-          <TileTitle>Guide</TileTitle>
-          <TileDescription> Learn how to use these patterns in your projects </TileDescription>
+          <div class="mb-3 flex items-center gap-2">
+            <span class="text-3xl">📖</span>
+            <TileTitle>Guide</TileTitle>
+          </div>
+
+          <TileDescription class="mb-4">
+            Implementation guides and best practices
+          </TileDescription>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-start gap-2">
+              <span class="text-primary">→</span>
+              <span>Getting Started</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-primary">→</span>
+              <span>Accessibility Testing</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-primary">→</span>
+              <span>Framework Integration</span>
+            </div>
+          </div>
         </TileContent>
       </Tile>
 
       <Tile variant="floating" href={withBase('/about/')}>
         <TileContent>
-          <TileTitle>About</TileTitle>
-          <TileDescription> About this project and its goals </TileDescription>
+          <div class="mb-3 flex items-center gap-2">
+            <span class="text-3xl">ℹ️</span>
+            <TileTitle>About</TileTitle>
+          </div>
+
+          <TileDescription class="mb-4">
+            Open-source project for accessible web components
+          </TileDescription>
+
+          <ul class="text-muted-foreground space-y-2 text-sm">
+            <li>✓ WAI-ARIA APG compliant</li>
+            <li>✓ Production-ready code</li>
+            <li>✓ Bilingual (EN/JA)</li>
+            <li>✓ MIT Licensed</li>
+          </ul>
         </TileContent>
       </Tile>
     </div>
