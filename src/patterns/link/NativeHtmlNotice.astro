@@ -1,0 +1,86 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="border-primary mb-8 rounded-lg border-2 p-4">
+  <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
+    <span aria-hidden="true">⚠️</span> Use Native HTML First
+  </h2>
+  <p class="mb-4">
+    <strong class="text-red-700 dark:text-red-400"
+      >Before using this custom component, consider using native <code>&lt;a href&gt;</code> elements.</strong
+    >
+    They provide built-in accessibility, full browser functionality, SEO benefits, and work without JavaScript.
+  </p>
+  <div class="bg-muted mb-4 rounded-md p-3">
+    <pre
+      class="m-0 overflow-x-auto text-sm"><code>&lt;a href="https://example.com"&gt;Visit Example&lt;/a&gt;
+
+&lt;!-- For new tab --&gt;
+&lt;a href="https://example.com" target="_blank" rel="noopener noreferrer"&gt;
+  External Link
+&lt;/a&gt;</code></pre>
+  </div>
+  <p class="mb-4 text-sm">
+    Use custom <code>role="link"</code> implementations only for educational purposes or when you need
+    complex JavaScript-driven navigation with SPA routing.
+  </p>
+
+  <ResponsiveTable>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Feature</th>
+          <th class="py-2 pr-4 text-left">Native <code>&lt;a href&gt;</code></th>
+          <th class="py-2 text-left">Custom <code>role="link"</code></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Ctrl/Cmd + Click (new tab)</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Right-click context menu</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Full menu</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Limited</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Copy link address</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Drag to bookmarks</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">SEO recognition</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Crawled</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">May be ignored</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Works without JavaScript</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Yes</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">No</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Screen reader announcement</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
+          <td class="py-2">Requires ARIA</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Focus management</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
+          <td class="py-2">Requires tabindex</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-3 text-xs">
+    This custom implementation is provided for educational purposes to demonstrate APG patterns. In
+    production, always prefer native <code>&lt;a href&gt;</code> elements.
+  </p>
+</div>

@@ -1,0 +1,135 @@
+---
+/**
+ * APG Link Pattern - Astro Implementation
+ *
+ * An interactive element that navigates to a resource when activated.
+ * Uses role="link" with Web Components for enhanced interactivity.
+ *
+ * Note: This is a custom implementation for educational purposes.
+ * For production use, prefer native <a href> elements.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/link/
+ */
+
+export interface Props {
+  /** Link destination URL */
+  href?: string;
+  /** Link target */
+  target?: '_self' | '_blank';
+  /** Whether the link is disabled */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const { href, target, disabled = false, class: className = '' } = Astro.props;
+---
+
+<apg-link data-href={href} data-target={target}>
+  <span
+    role="link"
+    tabindex={disabled ? -1 : 0}
+    aria-disabled={disabled ? 'true' : undefined}
+    class={`apg-link ${className}`.trim()}
+  >
+    <slot />
+  </span>
+</apg-link>
+
+<script>
+  class ApgLink extends HTMLElement {
+    private spanElement: HTMLSpanElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.spanElement = this.querySelector('span[role="link"]');
+
+      if (!this.spanElement) {
+        console.warn('apg-link: span element not found');
+        return;
+      }
+
+      this.spanElement.addEventListener('click', this.handleClick);
+      this.spanElement.addEventListener('keydown', this.handleKeyDown);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.spanElement?.removeEventListener('click', this.handleClick);
+      this.spanElement?.removeEventListener('keydown', this.handleKeyDown);
+      this.spanElement = null;
+    }
+
+    private isDisabled(): boolean {
+      return this.spanElement?.getAttribute('aria-disabled') === 'true';
+    }
+
+    private navigate() {
+      const href = this.dataset.href;
+      const target = this.dataset.target;
+
+      if (!href) {
+        return;
+      }
+
+      if (target === '_blank') {
+        window.open(href, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = href;
+      }
+    }
+
+    private handleClick = (event: MouseEvent) => {
+      if (this.isDisabled()) {
+        event.preventDefault();
+        return;
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('link-activate', {
+          detail: { href: this.dataset.href, target: this.dataset.target },
+          bubbles: true,
+        })
+      );
+
+      this.navigate();
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      // Ignore if composing (IME input) or already handled
+      if (event.isComposing || event.defaultPrevented) {
+        return;
+      }
+
+      if (this.isDisabled()) {
+        return;
+      }
+
+      // Only Enter key activates link (NOT Space)
+      if (event.key === 'Enter') {
+        event.preventDefault();
+
+        this.dispatchEvent(
+          new CustomEvent('link-activate', {
+            detail: { href: this.dataset.href, target: this.dataset.target },
+            bubbles: true,
+          })
+        );
+
+        this.navigate();
+      }
+    };
+  }
+
+  if (!customElements.get('apg-link')) {
+    customElements.define('apg-link', ApgLink);
+  }
+</script>

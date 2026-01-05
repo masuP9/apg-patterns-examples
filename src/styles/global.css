@@ -11,6 +11,7 @@
 @import './patterns/menu-button.css';
 @import './patterns/checkbox.css';
 @import './patterns/radio-group.css';
+@import './patterns/link.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

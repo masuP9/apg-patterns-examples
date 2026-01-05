@@ -1,0 +1,75 @@
+/* =============================================================================
+   LINK COMPONENT STYLES
+   ============================================================================= */
+
+/* Link Base */
+.apg-link {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+}
+
+.apg-link:hover {
+  color: color-mix(in srgb, var(--primary) 80%, var(--foreground));
+}
+
+.apg-link:focus {
+  outline: none;
+}
+
+.apg-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Disabled State */
+.apg-link[aria-disabled='true'] {
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.apg-link[aria-disabled='true']:hover {
+  color: var(--muted-foreground);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-link {
+    text-decoration-thickness: 2px;
+  }
+
+  .apg-link[aria-disabled='true'] {
+    text-decoration: line-through;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-link {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-link {
+    color: LinkText;
+  }
+
+  .apg-link:focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-link[aria-disabled='true'] {
+    color: GrayText;
+  }
+}
