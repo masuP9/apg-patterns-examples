@@ -1,0 +1,302 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Spinbutton from '@patterns/spinbutton/Spinbutton.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/spinbutton/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/spinbutton/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/spinbutton/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/spinbutton/Spinbutton.svelte?raw';
+import testCode from '@patterns/spinbutton/Spinbutton.test.svelte.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Spinbutton - Svelte"
+  pattern="spinbutton"
+  framework="svelte"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Spinbutton</h1>
+    <p class="text-muted-foreground text-lg">
+      An input widget that allows users to select a value from a discrete set or range by using
+      increment/decrement buttons, arrow keys, or typing directly.
+    </p>
+    <AiGuideBadge pattern="spinbutton" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="spinbutton" currentFramework="svelte" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Spinbutton client:load defaultValue={5} min={0} max={100} label="Quantity" />
+        </div>
+        <div>
+          <Spinbutton
+            client:load
+            defaultValue={3}
+            min={1}
+            max={10}
+            label="Rating"
+            format="{value} of {max}"
+          />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={0.5} min={0} max={1} step={0.1} label="Opacity" />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={0} label="Unbounded" showButtons={true} />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={50} min={0} max={100} label="Read-only" readOnly />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={50} min={0} max={100} label="Disabled" disabled />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Spinbutton.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import Spinbutton from './Spinbutton.svelte';
+
+  function handleChange(value) {
+    console.log(value);
+  }
+</script>
+
+<!-- Basic usage with aria-label -->
+<Spinbutton aria-label="Quantity" />
+
+<!-- With visible label and min/max -->
+<Spinbutton
+  defaultValue={5}
+  min={0}
+  max={100}
+  label="Quantity"
+/>
+
+<!-- With format for display and aria-valuetext -->
+<Spinbutton
+  defaultValue={3}
+  min={1}
+  max={10}
+  label="Rating"
+  format="{value} of {max}"
+/>
+
+<!-- Decimal step values -->
+<Spinbutton
+  defaultValue={0.5}
+  min={0}
+  max={1}
+  step={0.1}
+  label="Opacity"
+/>
+
+<!-- Unbounded (no min/max limits) -->
+<Spinbutton
+  defaultValue={0}
+  label="Counter"
+/>
+
+<!-- With callback -->
+<Spinbutton
+  defaultValue={5}
+  min={0}
+  max={100}
+  label="Value"
+  onvaluechange={handleChange}
+/>`}
+      lang="svelte"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">Initial value of the spinbutton</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">undefined</td>
+            <td class="py-2">Minimum value (undefined = no limit)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">undefined</td>
+            <td class="py-2">Maximum value (undefined = no limit)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">Step increment for keyboard/button</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step * 10</td>
+            <td class="py-2">Large step for PageUp/PageDown</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the spinbutton is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>readOnly</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the spinbutton is read-only</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showButtons</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Whether to show increment/decrement buttons</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Visible label (also used as aria-labelledby)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Human-readable value for aria-valuetext</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >Format pattern for aria-valuetext (e.g., "{'{value}'} of {'{max}'}")</td
+            >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onvaluechange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: number) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when value changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      One of <code>label</code>, <code>aria-label</code>, or <code>aria-labelledby</code> is required
+      for accessibility.
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Spinbutton.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Spinbutton Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="number"&gt; element
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="spinbutton" />
+    </ul>
+  </section>
+</PatternLayout>

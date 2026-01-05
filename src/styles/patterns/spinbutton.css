@@ -1,0 +1,210 @@
+/* =============================================================================
+   SPINBUTTON COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-spinbutton {
+  display: contents;
+}
+
+/* Spinbutton Base */
+.apg-spinbutton {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Spinbutton Label */
+.apg-spinbutton-label {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Controls Container */
+.apg-spinbutton-controls {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* Focus ring on controls container when input is focused */
+.apg-spinbutton-controls:has(.apg-spinbutton-input:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Spinbutton Input */
+.apg-spinbutton-input {
+  width: 4rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--foreground);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* Focus style is handled by parent .apg-spinbutton-controls:has(:focus-visible) */
+
+.apg-spinbutton-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* Spinbutton Buttons */
+.apg-spinbutton-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+  background: var(--muted);
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-out,
+    color 0.15s ease-out;
+}
+
+.apg-spinbutton-button:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.apg-spinbutton-button:active:not(:disabled) {
+  background: color-mix(in oklch, var(--accent) 80%, var(--foreground));
+}
+
+/* Button Borders */
+.apg-spinbutton-decrement {
+  border-right: 1px solid var(--border);
+}
+
+.apg-spinbutton-increment {
+  border-left: 1px solid var(--border);
+}
+
+/* =============================================================================
+   DISABLED STATE
+   ============================================================================= */
+
+.apg-spinbutton--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.apg-spinbutton--disabled .apg-spinbutton-input {
+  cursor: not-allowed;
+}
+
+.apg-spinbutton--disabled .apg-spinbutton-button {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   READ-ONLY STATE
+   ============================================================================= */
+
+.apg-spinbutton-input[readonly] {
+  background: var(--muted);
+}
+
+/* =============================================================================
+   DARK MODE
+   ============================================================================= */
+
+/* Dark mode - adjust muted background for better visibility */
+.dark .apg-spinbutton-button {
+  background: color-mix(in oklch, var(--muted) 80%, var(--background));
+}
+
+.dark .apg-spinbutton-input[readonly] {
+  background: color-mix(in oklch, var(--muted) 80%, var(--background));
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-spinbutton-controls {
+    border-width: 2px;
+    border-color: var(--foreground);
+  }
+
+  .apg-spinbutton-input {
+    font-weight: 700;
+  }
+
+  .apg-spinbutton-button {
+    border-width: 2px;
+    font-weight: 700;
+  }
+
+  .apg-spinbutton-label {
+    font-weight: 700;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-spinbutton-button {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-spinbutton-controls {
+    border: 2px solid ButtonBorder;
+    forced-color-adjust: none;
+  }
+
+  .apg-spinbutton-input {
+    color: ButtonText;
+    background: Field;
+    forced-color-adjust: none;
+  }
+
+  .apg-spinbutton-controls:has(.apg-spinbutton-input:focus-visible) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-spinbutton-button {
+    color: ButtonText;
+    background: ButtonFace;
+    border-color: ButtonBorder;
+    forced-color-adjust: none;
+  }
+
+  .apg-spinbutton-button:hover:not(:disabled) {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .apg-spinbutton-label {
+    color: ButtonText;
+  }
+
+  .apg-spinbutton--disabled .apg-spinbutton-controls {
+    border-color: GrayText;
+  }
+
+  .apg-spinbutton--disabled .apg-spinbutton-input {
+    color: GrayText;
+  }
+
+  .apg-spinbutton--disabled .apg-spinbutton-button {
+    color: GrayText;
+  }
+}

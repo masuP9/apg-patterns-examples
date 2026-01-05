@@ -206,7 +206,7 @@ export const PATTERNS: Pattern[] = [
       'An input widget for selecting from a range of discrete values, typically with increment/decrement buttons.',
     icon: '🔢',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'switch',
