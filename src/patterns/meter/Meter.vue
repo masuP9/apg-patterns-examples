@@ -47,8 +47,8 @@ export interface MeterProps {
   label?: string;
   /** Human-readable value text for aria-valuetext */
   valueText?: string;
-  /** Function to format the value for display and aria-valuetext */
-  formatValue?: (value: number, min: number, max: number) => string;
+  /** Format pattern for dynamic value display (e.g., "{value}%", "{value} of {max}") */
+  format?: string;
 }
 
 const props = withDefaults(defineProps<MeterProps>(), {
@@ -58,7 +58,7 @@ const props = withDefaults(defineProps<MeterProps>(), {
   showValue: true,
   label: undefined,
   valueText: undefined,
-  formatValue: undefined,
+  format: undefined,
 });
 
 const clampNumber = (value: number, min: number, max: number, shouldClamp: boolean): number => {
@@ -66,6 +66,20 @@ const clampNumber = (value: number, min: number, max: number, shouldClamp: boole
     return value;
   }
   return shouldClamp ? Math.min(max, Math.max(min, value)) : value;
+};
+
+// Format value helper
+const formatValueText = (
+  val: number,
+  formatStr: string | undefined,
+  minVal: number,
+  maxVal: number
+): string => {
+  if (!formatStr) return String(val);
+  return formatStr
+    .replace('{value}', String(val))
+    .replace('{min}', String(minVal))
+    .replace('{max}', String(maxVal));
 };
 
 const normalizedValue = computed(() => clampNumber(props.value, props.min, props.max, props.clamp));
@@ -78,15 +92,13 @@ const percentage = computed(() => {
 
 const ariaValueText = computed(() => {
   if (props.valueText) return props.valueText;
-  if (props.formatValue) return props.formatValue(normalizedValue.value, props.min, props.max);
+  if (props.format)
+    return formatValueText(normalizedValue.value, props.format, props.min, props.max);
   return undefined;
 });
 
 const displayText = computed(() => {
   if (props.valueText) return props.valueText;
-  if (props.formatValue) {
-    return props.formatValue(normalizedValue.value, props.min, props.max);
-  }
-  return String(normalizedValue.value);
+  return formatValueText(normalizedValue.value, props.format, props.min, props.max);
 });
 </script>

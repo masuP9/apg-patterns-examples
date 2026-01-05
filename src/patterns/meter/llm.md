@@ -59,7 +59,7 @@ No dynamic states. `aria-valuenow` updates when value changes.
 - [ ] `aria-valuemin` always set (even with default)
 - [ ] `aria-valuemax` always set (even with default)
 - [ ] Accessible name required (label/aria-label/aria-labelledby)
-- [ ] `aria-valuetext` set when `valueText` or `formatValue` provided
+- [ ] `aria-valuetext` set when `valueText` or `format` provided
 - [ ] Value clamped to min/max range when `clamp=true`
 
 ### High Priority: Accessibility
@@ -72,7 +72,7 @@ No dynamic states. `aria-valuenow` updates when value changes.
 - [ ] Decimal values handled correctly
 - [ ] Negative min/max range works
 - [ ] Large values don't break display
-- [ ] `valueText` overrides `formatValue`
+- [ ] `valueText` overrides `format`
 - [ ] `tabIndex` opt-in makes it focusable
 
 ### Low Priority: Negative Tests
@@ -92,11 +92,11 @@ type LabelProps =
   | { label?: never; 'aria-label': string; 'aria-labelledby'?: never }
   | { label?: never; 'aria-label'?: never; 'aria-labelledby': string };
 
-// ValueText: exclusive with formatValue
+// ValueText: exclusive with format
 type ValueTextProps =
-  | { valueText: string; formatValue?: never }
-  | { valueText?: never; formatValue?: (value: number, min: number, max: number) => string }
-  | { valueText?: never; formatValue?: never };
+  | { valueText: string; format?: never }
+  | { valueText?: never; format?: string }
+  | { valueText?: never; format?: never };
 
 export type MeterProps = {
   value: number;
@@ -143,6 +143,21 @@ const clampNumber = (value: number, min: number, max: number, clamp: boolean) =>
 };
 ```
 
+### Format Prop
+
+The `format` prop accepts a string pattern for displaying values. Available placeholders:
+- `{value}` - Current value
+- `{min}` - Minimum value
+- `{max}` - Maximum value
+
+```typescript
+// Examples
+<Meter value={75} format="{value}%" />           // "75%"
+<Meter value={3} max={5} format="{value} of {max}" />   // "3 of 5"
+```
+
+This is used for both the visual display and `aria-valuetext`. Using a string pattern instead of a function ensures compatibility with Astro Islands (functions cannot be serialized).
+
 ### Common Pitfalls
 
 1. **Missing accessible name**: Always require label, aria-label, or aria-labelledby
@@ -185,17 +200,9 @@ it('sets aria-valuetext when valueText provided', () => {
   expect(screen.getByRole('meter')).toHaveAttribute('aria-valuetext', '75 percent');
 });
 
-// formatValue test
-it('uses formatValue for aria-valuetext', () => {
-  render(
-    <Meter
-      value={0.75}
-      min={0}
-      max={1}
-      formatValue={(v) => `${Math.round(v * 100)}%`}
-      aria-label="Progress"
-    />
-  );
+// format test
+it('uses format for aria-valuetext', () => {
+  render(<Meter value={75} min={0} max={100} format="{value}%" aria-label="Progress" />);
   expect(screen.getByRole('meter')).toHaveAttribute('aria-valuetext', '75%');
 });
 

@@ -1,0 +1,236 @@
+/* =============================================================================
+   SLIDER COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-slider {
+  display: contents;
+}
+
+/* Slider Base */
+.apg-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Vertical Slider */
+.apg-slider--vertical {
+  flex-direction: column;
+  width: auto;
+  height: 12rem;
+  gap: 0.5rem;
+}
+
+/* Slider Label */
+.apg-slider-label {
+  flex-shrink: 0;
+  min-width: 6rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.apg-slider--vertical .apg-slider-label {
+  min-width: auto;
+}
+
+/* Slider Track (background) */
+.apg-slider-track {
+  --slider-position: 0%;
+  position: relative;
+  flex: 1;
+  height: 0.5rem;
+  min-width: 8rem;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--primary) 25%, var(--background));
+  cursor: pointer;
+  touch-action: none;
+}
+
+.apg-slider--vertical .apg-slider-track {
+  width: 0.5rem;
+  height: 100%;
+  min-width: auto;
+  min-height: 8rem;
+}
+
+/* Slider Fill (progress indicator) - tracks thumb position via CSS variable */
+.apg-slider-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--slider-position);
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+  pointer-events: none;
+}
+
+.apg-slider--vertical .apg-slider-fill {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--slider-position);
+}
+
+/* Slider Thumb (draggable handle) - tracks position via CSS variable */
+.apg-slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--slider-position);
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  background: var(--background);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+  transition:
+    box-shadow 0.15s ease-out,
+    border-color 0.15s ease-out;
+}
+
+.apg-slider--vertical .apg-slider-thumb {
+  top: auto;
+  left: 50%;
+  bottom: var(--slider-position);
+  transform: translate(-50%, 50%);
+}
+
+/* Thumb Hover State */
+.apg-slider-thumb:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--primary) 20%, transparent);
+}
+
+/* Thumb Focus State */
+.apg-slider-thumb:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Thumb Active State (dragging) */
+.apg-slider-thumb:active {
+  cursor: grabbing;
+}
+
+/* Slider Value Display */
+.apg-slider-value {
+  flex-shrink: 0;
+  min-width: 2.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+
+.apg-slider--vertical .apg-slider-value {
+  min-width: auto;
+  text-align: center;
+}
+
+/* =============================================================================
+   DISABLED STATE
+   ============================================================================= */
+
+.apg-slider--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.apg-slider--disabled .apg-slider-track {
+  cursor: not-allowed;
+}
+
+.apg-slider--disabled .apg-slider-thumb {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   DARK MODE
+   ============================================================================= */
+
+/* Dark mode - lighter track for better visibility */
+.dark .apg-slider-track {
+  background: color-mix(in oklch, var(--primary) 40%, var(--background));
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-slider-track {
+    border: 2px solid var(--foreground);
+  }
+
+  .apg-slider-fill {
+    background: var(--foreground);
+  }
+
+  .apg-slider-thumb {
+    border-width: 3px;
+    border-color: var(--foreground);
+  }
+
+  .apg-slider-label,
+  .apg-slider-value {
+    font-weight: 700;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-slider-thumb {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-slider-track {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-thumb {
+    border-color: ButtonText;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-thumb:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-slider-label {
+    color: ButtonText;
+  }
+
+  .apg-slider-value {
+    color: ButtonText;
+  }
+
+  .apg-slider--disabled .apg-slider-track {
+    border-color: GrayText;
+  }
+
+  .apg-slider--disabled .apg-slider-fill {
+    background: GrayText;
+  }
+
+  .apg-slider--disabled .apg-slider-thumb {
+    border-color: GrayText;
+  }
+}

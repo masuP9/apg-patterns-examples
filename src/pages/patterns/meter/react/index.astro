@@ -110,11 +110,11 @@ function App() {
         valueText="3.5 out of 5"
       />
 
-      {/* With formatValue function */}
+      {/* With format pattern */}
       <Meter
         value={75}
         label="Download Progress"
-        formatValue={(v) => v + '%'}
+        format="{value}%"
       />
     </div>
   );
@@ -181,10 +181,14 @@ function App() {
             <td class="py-2">Human-readable value for aria-valuetext</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>formatValue</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(value, min, max) =&gt; string</td>
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Function to format value for display and aria-valuetext</td>
+            <td class="py-2"
+              >Format pattern for display and aria-valuetext (e.g., "{'{value}'}%", "{'{value}'} of {
+                '{max}'
+              }")</td
+            >
           </tr>
         </tbody>
       </table>

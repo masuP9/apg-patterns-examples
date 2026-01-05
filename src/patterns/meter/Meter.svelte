@@ -7,7 +7,8 @@
     showValue?: boolean;
     label?: string;
     valueText?: string;
-    formatValue?: (value: number, min: number, max: number) => string;
+    /** Format pattern for dynamic value display (e.g., "{value}%", "{value} of {max}") */
+    format?: string;
     [key: string]: unknown;
   }
 
@@ -19,7 +20,7 @@
     showValue = true,
     label,
     valueText,
-    formatValue,
+    format,
     ...restProps
   }: MeterProps = $props();
 
@@ -28,6 +29,20 @@
       return val;
     }
     return shouldClamp ? Math.min(maxVal, Math.max(minVal, val)) : val;
+  }
+
+  // Format value helper
+  function formatValueText(
+    val: number,
+    formatStr: string | undefined,
+    minVal: number,
+    maxVal: number
+  ): string {
+    if (!formatStr) return String(val);
+    return formatStr
+      .replace('{value}', String(val))
+      .replace('{min}', String(minVal))
+      .replace('{max}', String(maxVal));
   }
 
   const normalizedValue = $derived(clampNumber(value, min, max, clamp));
@@ -39,15 +54,11 @@
   });
 
   const ariaValueText = $derived(
-    valueText ?? (formatValue ? formatValue(normalizedValue, min, max) : undefined)
+    valueText ?? (format ? formatValueText(normalizedValue, format, min, max) : undefined)
   );
 
   const displayText = $derived(
-    valueText
-      ? valueText
-      : formatValue
-        ? formatValue(normalizedValue, min, max)
-        : String(normalizedValue)
+    valueText ? valueText : formatValueText(normalizedValue, format, min, max)
   );
 </script>
 

@@ -1,18 +1,18 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import Meter from '@patterns/meter/Meter.svelte';
+import { Slider } from '@patterns/slider/Slider';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/meter/AccessibilityDocs.astro';
-import TestingDocs from '@patterns/meter/TestingDocs.astro';
-import NativeHtmlNotice from '@patterns/meter/NativeHtmlNotice.astro';
+import AccessibilityDocs from '@patterns/slider/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/slider/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/slider/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
-import sourceCode from '@patterns/meter/Meter.svelte?raw';
-import testCode from '@patterns/meter/Meter.test.svelte.ts?raw';
+import sourceCode from '@patterns/slider/Slider.tsx?raw';
+import testCode from '@patterns/slider/Slider.test.tsx?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -26,17 +26,17 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Meter - Svelte" pattern="meter" framework="svelte" tocItems={tocItems}>
+<PatternLayout title="Slider - React" pattern="slider" framework="react" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Meter</h1>
+    <h1 class="mb-4 text-3xl font-bold">Slider</h1>
     <p class="text-muted-foreground text-lg">
-      A graphical display of a numeric value within a defined range.
+      An interactive control that allows users to select a value from within a range.
     </p>
-    <AiGuideBadge pattern="meter" />
+    <AiGuideBadge pattern="slider" />
   </header>
 
   <!-- Framework Selector -->
-  <FrameworkTabs pattern="meter" currentFramework="svelte" />
+  <FrameworkTabs pattern="slider" currentFramework="react" />
 
   <!-- Demo Section -->
   <section class="mb-12">
@@ -44,16 +44,33 @@ const tocItems = [
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-col gap-6">
         <div>
-          <Meter value={75} label="CPU Usage" format="{value}%" />
+          <Slider client:load defaultValue={50} label="Volume" format="{value}%" />
         </div>
         <div>
-          <Meter value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" />
+          <Slider client:load defaultValue={75} label="Progress" format="{value}%" />
         </div>
         <div>
-          <Meter value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+          <Slider
+            client:load
+            defaultValue={3}
+            min={1}
+            max={5}
+            step={1}
+            label="Rating"
+            format="{value} of {max}"
+          />
         </div>
         <div>
-          <Meter value={65} min={0} max={100} label="Progress" format="{value}%" />
+          <Slider
+            client:load
+            defaultValue={50}
+            label="Vertical"
+            orientation="vertical"
+            format="{value}%"
+          />
+        </div>
+        <div>
+          <Slider client:load defaultValue={50} label="Disabled" disabled format="{value}%" />
         </div>
       </div>
     </div>
@@ -74,13 +91,7 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock
-      collapsible
-      collapsedLines={5}
-      code={sourceCode}
-      lang="svelte"
-      title="Meter.svelte"
-    />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Slider.tsx" />
   </section>
 
   <!-- Usage Section -->
@@ -89,39 +100,51 @@ const tocItems = [
     <CodeBlock
       collapsible
       collapsedLines={5}
-      code={`<script>
-  import Meter from './Meter.svelte';
-</script>
+      code={`import { Slider } from './Slider';
 
-<!-- Basic usage with aria-label -->
-<Meter value={75} aria-label="CPU Usage" />
+function App() {
+  return (
+    <div>
+      {/* Basic usage with aria-label */}
+      <Slider defaultValue={50} aria-label="Volume" />
 
-<!-- With visible label -->
-<Meter value={75} label="CPU Usage" />
+      {/* With visible label */}
+      <Slider defaultValue={50} label="Volume" />
 
-<!-- With format pattern -->
-<Meter
-  value={75}
-  label="Progress"
-  format="{value}%"
-/>
+      {/* With format for display and aria-valuetext */}
+      <Slider
+        defaultValue={75}
+        label="Progress"
+        format="{value}%"
+      />
 
-<!-- Custom range -->
-<Meter
-  value={3.5}
-  min={0}
-  max={5}
-  label="Rating"
-  format="{value} / {max}"
-/>
+      {/* Custom range with step */}
+      <Slider
+        defaultValue={3}
+        min={1}
+        max={5}
+        step={1}
+        label="Rating"
+        format="{value} of {max}"
+      />
 
-<!-- With valueText for screen readers -->
-<Meter
-  value={75}
-  label="Download Progress"
-  valueText="75 percent complete"
-/>`}
-      lang="svelte"
+      {/* Vertical slider */}
+      <Slider
+        defaultValue={50}
+        label="Volume"
+        orientation="vertical"
+      />
+
+      {/* With callback */}
+      <Slider
+        defaultValue={50}
+        label="Value"
+        onValueChange={(value) => console.log(value)}
+      />
+    </div>
+  );
+}`}
+      lang="tsx"
       title="Example"
     />
   </section>
@@ -141,10 +164,10 @@ const tocItems = [
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>value</code></td>
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
-            <td class="text-muted-foreground py-2 pr-4">required</td>
-            <td class="py-2">Current value of the meter</td>
+            <td class="text-muted-foreground py-2 pr-4">min</td>
+            <td class="py-2">Initial value of the slider</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>min</code></td>
@@ -159,10 +182,28 @@ const tocItems = [
             <td class="py-2">Maximum value</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>clamp</code></td>
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">Step increment for keyboard navigation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step * 10</td>
+            <td class="py-2">Large step for PageUp/PageDown</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">Slider orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
-            <td class="text-muted-foreground py-2 pr-4">true</td>
-            <td class="py-2">Whether to clamp value to min/max range</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the slider is disabled</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>showValue</code></td>
@@ -174,7 +215,7 @@ const tocItems = [
             <td class="py-2 pr-4"><code>label</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Visible label (also used as aria-label)</td>
+            <td class="py-2">Visible label (also used as aria-labelledby)</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>valueText</code></td>
@@ -191,6 +232,12 @@ const tocItems = [
                 '{max}'
               }")</td
             >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onValueChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: number) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when value changes</td>
           </tr>
         </tbody>
       </table>
@@ -211,7 +258,7 @@ const tocItems = [
         collapsedLines={5}
         code={testCode}
         lang="tsx"
-        title="Meter.test.svelte.ts"
+        title="Slider.test.tsx"
       />
     </div>
   </section>
@@ -222,21 +269,21 @@ const tocItems = [
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
-          href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/"
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
           class="text-primary hover:underline"
         >
-          WAI-ARIA APG: Meter Pattern
+          WAI-ARIA APG: Slider Pattern
         </ExternalLink>
       </li>
       <li>
         <ExternalLink
-          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter"
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range"
           class="text-primary hover:underline"
         >
-          MDN: &lt;meter&gt; element
+          MDN: &lt;input type="range"&gt; element
         </ExternalLink>
       </li>
-      <AiGuideResourceItem pattern="meter" />
+      <AiGuideResourceItem pattern="slider" />
     </ul>
   </section>
 </PatternLayout>
