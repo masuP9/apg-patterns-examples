@@ -1,0 +1,315 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Slider from '@patterns/slider/Slider.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/slider/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/slider/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/slider/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/slider/Slider.astro?raw';
+import testCode from '@patterns/slider/Slider.test.astro.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Slider - Astro" pattern="slider" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Slider</h1>
+    <p class="text-muted-foreground text-lg">
+      An interactive control that allows users to select a value from within a range.
+    </p>
+    <AiGuideBadge pattern="slider" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="slider" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Slider defaultValue={50} label="Volume" format="{value}%" />
+        </div>
+        <div>
+          <Slider defaultValue={75} label="Progress" format="{value}%" />
+        </div>
+        <div>
+          <Slider
+            defaultValue={3}
+            min={1}
+            max={5}
+            step={1}
+            label="Rating"
+            format="{value} of {max}"
+          />
+        </div>
+        <div>
+          <Slider defaultValue={50} label="Vertical" orientation="vertical" format="{value}%" />
+        </div>
+        <div>
+          <Slider defaultValue={50} label="Disabled" disabled format="{value}%" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="Slider.astro" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Slider from './Slider.astro';
+---
+
+<!-- Basic usage with aria-label -->
+<Slider defaultValue={50} aria-label="Volume" />
+
+<!-- With visible label -->
+<Slider defaultValue={50} label="Volume" />
+
+<!-- With format for display and aria-valuetext -->
+<Slider
+  defaultValue={75}
+  label="Progress"
+  format="{value}%"
+/>
+
+<!-- Custom range with step -->
+<Slider
+  defaultValue={3}
+  min={1}
+  max={5}
+  step={1}
+  label="Rating"
+  format="{value} of {max}"
+/>
+
+<!-- Vertical slider -->
+<Slider
+  defaultValue={50}
+  label="Volume"
+  orientation="vertical"
+/>
+
+<!-- Dynamic updates via Web Component API -->
+<Slider defaultValue={50} id="my-slider" label="Volume" />
+<script>
+  const slider = document.querySelector('#my-slider').closest('apg-slider');
+  slider.setValue(75);
+
+  slider.addEventListener('valuechange', (e) => {
+    console.log('Value changed:', e.detail.value);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">min</td>
+            <td class="py-2">Initial value of the slider</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">Minimum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">100</td>
+            <td class="py-2">Maximum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">Step increment for keyboard navigation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step * 10</td>
+            <td class="py-2">Large step for PageUp/PageDown</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">Slider orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the slider is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Whether to display the value text</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Visible label (also used as aria-labelledby)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Human-readable value for aria-valuetext (static)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >Format pattern for display and aria-valuetext (e.g., "{'{value}'}%", "{'{value}'} of {
+                '{max}'
+              }")</td
+            >
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      One of <code>label</code>, <code>aria-label</code>, or <code>aria-labelledby</code> is required
+      for accessibility.
+    </p>
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">Web Component Methods</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Method</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>setValue(value: number)</code></td>
+            <td class="py-2">Programmatically update the slider value</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 text-left">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valuechange</code></td>
+            <td class="py-2">
+              <code>{`{ value: number }`}</code> - Fired when value changes via keyboard, pointer, or
+              <code>setValue()</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="Slider.test.astro.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="range"&gt; element
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="slider" />
+    </ul>
+  </section>
+</PatternLayout>

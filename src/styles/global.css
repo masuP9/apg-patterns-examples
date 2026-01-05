@@ -13,6 +13,7 @@
 @import './patterns/radio-group.css';
 @import './patterns/link.css';
 @import './patterns/meter.css';
+@import './patterns/slider.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

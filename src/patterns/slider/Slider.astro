@@ -1,0 +1,393 @@
+---
+/**
+ * APG Slider Pattern - Astro Implementation
+ *
+ * A control that allows users to select a value from within a range.
+ * Uses Web Components for interactive behavior.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/slider/
+ */
+
+export interface Props {
+  /** Default value */
+  defaultValue?: number;
+  /** Minimum value (default: 0) */
+  min?: number;
+  /** Maximum value (default: 100) */
+  max?: number;
+  /** Step increment (default: 1) */
+  step?: number;
+  /** Large step for PageUp/PageDown */
+  largeStep?: number;
+  /** Slider orientation */
+  orientation?: 'horizontal' | 'vertical';
+  /** Whether slider is disabled */
+  disabled?: boolean;
+  /** Show value text (default: true) */
+  showValue?: boolean;
+  /** Visible label text */
+  label?: string;
+  /** Human-readable value text for aria-valuetext */
+  valueText?: string;
+  /** Format pattern for dynamic value display (e.g., "{value}%", "{value} of {max}") */
+  format?: string;
+  /** Slider id */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+  /** Accessible label when no visible label */
+  'aria-label'?: string;
+  /** Reference to external label element */
+  'aria-labelledby'?: string;
+  /** Reference to description element */
+  'aria-describedby'?: string;
+}
+
+const {
+  defaultValue,
+  min = 0,
+  max = 100,
+  step = 1,
+  largeStep,
+  orientation = 'horizontal',
+  disabled = false,
+  showValue = true,
+  label,
+  valueText,
+  format,
+  id,
+  class: className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+} = Astro.props;
+
+// Utility functions
+const clamp = (val: number, minVal: number, maxVal: number): number => {
+  return Math.min(maxVal, Math.max(minVal, val));
+};
+
+const roundToStep = (val: number, stepVal: number, minVal: number): number => {
+  const steps = Math.round((val - minVal) / stepVal);
+  const result = minVal + steps * stepVal;
+  const decimalPlaces = (stepVal.toString().split('.')[1] || '').length;
+  return Number(result.toFixed(decimalPlaces));
+};
+
+// Calculate initial value
+const initialValue = clamp(roundToStep(defaultValue ?? min, step, min), min, max);
+
+// Calculate percentage for visual display
+const percentage = max === min ? 0 : ((initialValue - min) / (max - min)) * 100;
+
+// Format value helper
+const formatValueText = (value: number, formatStr?: string): string => {
+  if (!formatStr) return String(value);
+  return formatStr
+    .replace('{value}', String(value))
+    .replace('{min}', String(min))
+    .replace('{max}', String(max));
+};
+
+// Display text
+const displayText = valueText ?? formatValueText(initialValue, format);
+
+// Initial aria-valuetext
+const initialAriaValueText =
+  valueText ?? (format ? formatValueText(initialValue, format) : undefined);
+
+// Generate unique label ID
+const labelId = label ? `slider-label-${Math.random().toString(36).slice(2, 9)}` : undefined;
+
+const isVertical = orientation === 'vertical';
+const effectiveLargeStep = largeStep ?? step * 10;
+---
+
+<apg-slider
+  data-min={min}
+  data-max={max}
+  data-step={step}
+  data-large-step={effectiveLargeStep}
+  data-orientation={orientation}
+  data-disabled={disabled}
+  data-format={format}
+>
+  <div
+    class={`apg-slider ${isVertical ? 'apg-slider--vertical' : ''} ${disabled ? 'apg-slider--disabled' : ''} ${className}`.trim()}
+  >
+    {
+      label && (
+        <span id={labelId} class="apg-slider-label">
+          {label}
+        </span>
+      )
+    }
+    <div class="apg-slider-track" style={`--slider-position: ${percentage}%`}>
+      <div class="apg-slider-fill" aria-hidden="true"></div>
+      <div
+        role="slider"
+        id={id}
+        tabindex={disabled ? -1 : 0}
+        aria-valuenow={initialValue}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuetext={initialAriaValueText}
+        aria-label={label ? undefined : ariaLabel}
+        aria-labelledby={ariaLabelledby ?? labelId}
+        aria-orientation={isVertical ? 'vertical' : undefined}
+        aria-disabled={disabled ? true : undefined}
+        aria-describedby={ariaDescribedby}
+        class="apg-slider-thumb"
+      >
+      </div>
+    </div>
+    {
+      showValue && (
+        <span class="apg-slider-value" aria-hidden="true">
+          {displayText}
+        </span>
+      )
+    }
+  </div>
+</apg-slider>
+
+<script>
+  class ApgSlider extends HTMLElement {
+    private thumb: HTMLElement | null = null;
+    private track: HTMLElement | null = null;
+    private valueDisplay: HTMLElement | null = null;
+    private isDragging = false;
+
+    connectedCallback() {
+      this.thumb = this.querySelector('[role="slider"]');
+      this.track = this.querySelector('.apg-slider-track');
+      this.valueDisplay = this.querySelector('.apg-slider-value');
+
+      if (this.thumb) {
+        this.thumb.addEventListener('keydown', this.handleKeyDown.bind(this));
+        this.thumb.addEventListener('pointerdown', this.handlePointerDown.bind(this));
+        this.thumb.addEventListener('pointermove', this.handlePointerMove.bind(this));
+        this.thumb.addEventListener('pointerup', this.handlePointerUp.bind(this));
+      }
+
+      if (this.track) {
+        this.track.addEventListener('click', this.handleTrackClick.bind(this));
+      }
+    }
+
+    disconnectedCallback() {
+      if (this.thumb) {
+        this.thumb.removeEventListener('keydown', this.handleKeyDown.bind(this));
+        this.thumb.removeEventListener('pointerdown', this.handlePointerDown.bind(this));
+        this.thumb.removeEventListener('pointermove', this.handlePointerMove.bind(this));
+        this.thumb.removeEventListener('pointerup', this.handlePointerUp.bind(this));
+      }
+
+      if (this.track) {
+        this.track.removeEventListener('click', this.handleTrackClick.bind(this));
+      }
+    }
+
+    private get min(): number {
+      return Number(this.dataset.min) || 0;
+    }
+
+    private get max(): number {
+      return Number(this.dataset.max) || 100;
+    }
+
+    private get step(): number {
+      return Number(this.dataset.step) || 1;
+    }
+
+    private get largeStep(): number {
+      return Number(this.dataset.largeStep) || this.step * 10;
+    }
+
+    private get isVertical(): boolean {
+      return this.dataset.orientation === 'vertical';
+    }
+
+    private get isDisabled(): boolean {
+      return this.dataset.disabled === 'true';
+    }
+
+    private get format(): string | undefined {
+      return this.dataset.format;
+    }
+
+    private formatValue(value: number): string {
+      const fmt = this.format;
+      if (!fmt) return String(value);
+      return fmt
+        .replace('{value}', String(value))
+        .replace('{min}', String(this.min))
+        .replace('{max}', String(this.max));
+    }
+
+    private get currentValue(): number {
+      return Number(this.thumb?.getAttribute('aria-valuenow')) || this.min;
+    }
+
+    private clamp(val: number): number {
+      return Math.min(this.max, Math.max(this.min, val));
+    }
+
+    private roundToStep(val: number): number {
+      const steps = Math.round((val - this.min) / this.step);
+      const result = this.min + steps * this.step;
+      const decimalPlaces = (this.step.toString().split('.')[1] || '').length;
+      return Number(result.toFixed(decimalPlaces));
+    }
+
+    private updateValue(newValue: number) {
+      if (!this.thumb || this.isDisabled) return;
+
+      const clampedValue = this.clamp(this.roundToStep(newValue));
+      const currentValue = this.currentValue;
+
+      if (clampedValue === currentValue) return;
+
+      // Update ARIA
+      this.thumb.setAttribute('aria-valuenow', String(clampedValue));
+
+      // Update aria-valuetext if format is provided
+      const formattedValue = this.formatValue(clampedValue);
+      if (this.format) {
+        this.thumb.setAttribute('aria-valuetext', formattedValue);
+      }
+
+      // Update visual via CSS custom property
+      const percentage = ((clampedValue - this.min) / (this.max - this.min)) * 100;
+
+      if (this.track) {
+        this.track.style.setProperty('--slider-position', `${percentage}%`);
+      }
+
+      if (this.valueDisplay) {
+        this.valueDisplay.textContent = formattedValue;
+      }
+
+      // Dispatch event
+      this.dispatchEvent(
+        new CustomEvent('valuechange', {
+          detail: { value: clampedValue },
+          bubbles: true,
+        })
+      );
+    }
+
+    private getValueFromPointer(clientX: number, clientY: number): number {
+      if (!this.track) return this.currentValue;
+
+      const rect = this.track.getBoundingClientRect();
+
+      if (rect.width === 0 && rect.height === 0) {
+        return this.currentValue;
+      }
+
+      let percent: number;
+
+      if (this.isVertical) {
+        if (rect.height === 0) return this.currentValue;
+        percent = 1 - (clientY - rect.top) / rect.height;
+      } else {
+        if (rect.width === 0) return this.currentValue;
+        percent = (clientX - rect.left) / rect.width;
+      }
+
+      return this.min + percent * (this.max - this.min);
+    }
+
+    private handleKeyDown(event: KeyboardEvent) {
+      if (this.isDisabled) return;
+
+      let newValue = this.currentValue;
+
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowUp':
+          newValue = this.currentValue + this.step;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          newValue = this.currentValue - this.step;
+          break;
+        case 'Home':
+          newValue = this.min;
+          break;
+        case 'End':
+          newValue = this.max;
+          break;
+        case 'PageUp':
+          newValue = this.currentValue + this.largeStep;
+          break;
+        case 'PageDown':
+          newValue = this.currentValue - this.largeStep;
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      this.updateValue(newValue);
+    }
+
+    private handlePointerDown(event: PointerEvent) {
+      if (this.isDisabled || !this.thumb) return;
+
+      event.preventDefault();
+
+      if (typeof this.thumb.setPointerCapture === 'function') {
+        this.thumb.setPointerCapture(event.pointerId);
+      }
+      this.isDragging = true;
+      this.thumb.focus();
+
+      const newValue = this.getValueFromPointer(event.clientX, event.clientY);
+      this.updateValue(newValue);
+    }
+
+    private handlePointerMove(event: PointerEvent) {
+      if (!this.thumb) return;
+
+      const hasCapture =
+        typeof this.thumb.hasPointerCapture === 'function'
+          ? this.thumb.hasPointerCapture(event.pointerId)
+          : this.isDragging;
+
+      if (!hasCapture) return;
+
+      const newValue = this.getValueFromPointer(event.clientX, event.clientY);
+      this.updateValue(newValue);
+    }
+
+    private handlePointerUp(event: PointerEvent) {
+      if (this.thumb && typeof this.thumb.releasePointerCapture === 'function') {
+        try {
+          this.thumb.releasePointerCapture(event.pointerId);
+        } catch {
+          // Ignore
+        }
+      }
+      this.isDragging = false;
+    }
+
+    private handleTrackClick(event: MouseEvent) {
+      if (this.isDisabled || event.target === this.thumb) return;
+
+      const newValue = this.getValueFromPointer(event.clientX, event.clientY);
+      this.updateValue(newValue);
+      this.thumb?.focus();
+    }
+
+    // Public method to update value programmatically
+    setValue(newValue: number) {
+      this.updateValue(newValue);
+    }
+  }
+
+  if (!customElements.get('apg-slider')) {
+    customElements.define('apg-slider', ApgSlider);
+  }
+</script>

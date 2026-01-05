@@ -197,7 +197,7 @@ export const PATTERNS: Pattern[] = [
     description: 'An input where the user selects a value from within a given range.',
     icon: '🎚️',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'spinbutton',
@@ -213,7 +213,7 @@ export const PATTERNS: Pattern[] = [
     name: 'Switch',
     description:
       'A type of checkbox that represents on/off values, as opposed to checked/unchecked.',
-    icon: '🎚️',
+    icon: '🌓',
     complexity: 'Low',
     status: 'available',
   },

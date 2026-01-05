@@ -39,7 +39,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Meter                | ✅    | ✅  | ✅     | ✅    | Complete |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | Complete |
-| Slider               | -     | -   | -      | -     | Planned  |
+| Slider               | ✅    | ✅  | ✅     | ✅    | Complete |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |
 | Spinbutton           | -     | -   | -      | -     | Planned  |
 | Switch               | ✅    | ✅  | ✅     | ✅    | Complete |
