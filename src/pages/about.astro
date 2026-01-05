@@ -1,83 +1,313 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 ---
 
 <BaseLayout title="About">
-  <div class="mx-auto max-w-3xl">
+  <div class="mx-auto max-w-4xl">
     <header class="mb-8">
       <h1 class="mb-4 text-3xl font-bold">About APG Patterns Examples</h1>
       <p class="text-muted-foreground text-lg">
-        A collection of accessible component implementations based on WAI-ARIA Authoring Practices
-        Guide.
+        Accessible UI component implementations across React, Vue, Svelte, and Astro following
+        WAI-ARIA APG patterns
       </p>
     </header>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">What is this project?</h2>
-      <p class="text-muted-foreground mb-4">
-        APG Patterns Examples provides implementations of WAI-ARIA design patterns in React, Vue,
-        Svelte, and Astro. Each pattern follows the official
-        <a
-          href="https://www.w3.org/WAI/ARIA/apg/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary hover:underline"
-        >
-          WAI-ARIA Authoring Practices Guide (APG)
-        </a> specifications.
-      </p>
-      <p class="text-muted-foreground">
-        The goal is to help developers build accessible web applications by providing clear, working
-        examples that can be studied, tested, and adapted for their own projects.
-      </p>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Features</h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        <Tile variant="floating">
-          <TileContent>
-            <TileTitle>Multi-Framework</TileTitle>
-            <TileDescription>
-              Each pattern is implemented in React, Vue, Svelte, and Astro with framework-specific
-              best practices.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-
-        <Tile variant="floating">
-          <TileContent>
-            <TileTitle>APG Compliant</TileTitle>
-            <TileDescription>
-              All implementations follow WAI-ARIA APG specifications for accessibility.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-
-        <Tile variant="floating">
-          <TileContent>
-            <TileTitle>Keyboard Navigation</TileTitle>
-            <TileDescription>
-              Full keyboard support with proper focus management and navigation patterns.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-
-        <Tile variant="floating">
-          <TileContent>
-            <TileTitle>Screen Reader Ready</TileTitle>
-            <TileDescription>
-              Tested with screen readers to ensure proper announcements and interaction.
-            </TileDescription>
-          </TileContent>
-        </Tile>
+      <h2 class="mb-4 text-2xl font-semibold">Overview</h2>
+      <div class="text-muted-foreground space-y-4">
+        <p>
+          This project provides accessible UI components and test cases that follow the
+          <a
+            href="https://www.w3.org/WAI/ARIA/apg/patterns/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
+            WAI-ARIA Authoring Practices Guide (APG)
+          </a>
+          patterns.
+        </p>
+        <p>
+          Each component is implemented across four major frontend frameworks: <strong>React</strong
+          >, <strong>Vue</strong>, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components),
+          providing familiar implementation examples to help you learn about accessibility and WAI-ARIA.
+        </p>
+        <p>
+          Each component includes tests to verify APG pattern compliance, which you can use directly
+          to ensure accessibility of your own components. The test documentation is also designed in
+          an AI-friendly format, making it easy to generate test cases.
+        </p>
+        <p>
+          Additionally, we provide styling that supports dark mode, high contrast mode, and forced
+          colors mode to further assist in developing accessible components.
+        </p>
       </div>
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Resources</h2>
-      <ul class="text-muted-foreground space-y-2">
+      <h2 class="mb-4 text-2xl font-semibold">Component Status</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b">
+              <th class="px-4 py-2 text-left font-semibold">Pattern</th>
+              <th class="px-4 py-2 text-center font-semibold">React</th>
+              <th class="px-4 py-2 text-center font-semibold">Vue</th>
+              <th class="px-4 py-2 text-center font-semibold">Svelte</th>
+              <th class="px-4 py-2 text-center font-semibold">Astro</th>
+              <th class="px-4 py-2 text-left font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody class="text-muted-foreground">
+            <tr class="border-b"
+              ><td class="px-4 py-2">Accordion</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Alert</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Alert Dialog</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Breadcrumb</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Button</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Carousel</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Checkbox</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Combobox</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Dialog</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Disclosure</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Feed</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Grid</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Landmarks</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Link</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Listbox</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Menu and Menubar</td><td class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2">Planned</td></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Menu Button</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Meter</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Radio Group</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Slider</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Slider (Multi-Thumb)</td><td class="px-4 py-2 text-center"
+                >-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2">Planned</td></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Spinbutton</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Switch</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Table</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Tabs</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Toggle Button</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Toolbar</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Tooltip</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2 text-center">✅</td
+              ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
+                class="px-4 py-2">Complete</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Tree View</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr class="border-b"
+              ><td class="px-4 py-2">Treegrid</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+            <tr
+              ><td class="px-4 py-2">Window Splitter</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2 text-center">-</td
+              ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
+                class="px-4 py-2">Planned</td
+              ></tr
+            >
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">Styling</h2>
+      <ul class="text-muted-foreground list-inside list-disc space-y-2">
+        <li>High contrast mode support</li>
+        <li>Reduced motion preferences support</li>
+        <li>Forced colors mode support</li>
+      </ul>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
+      <p class="text-muted-foreground mb-4">
+        We welcome contributions! Please see our
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          Contributing Guide
+        </a>
+        for details.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-2xl font-semibold">Links</h2>
+      <ul class="text-muted-foreground list-inside list-disc space-y-2">
         <li>
           <a
             href="https://www.w3.org/WAI/ARIA/apg/"
@@ -100,30 +330,25 @@ import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/t
         </li>
         <li>
           <a
-            href="https://www.w3.org/WAI/WCAG21/quickref/"
+            href="https://github.com/masuP9/apg-patterns-examples/issues"
             target="_blank"
             rel="noopener noreferrer"
             class="text-primary hover:underline"
           >
-            WCAG 2.1 Quick Reference
+            Issue Tracker
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/masuP9/apg-patterns-examples/discussions"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
+            Discussions
           </a>
         </li>
       </ul>
-    </section>
-
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
-      <p class="text-muted-foreground">
-        Contributions are welcome! Please visit our
-        <a
-          href="https://github.com/masuP9/apg-patterns-examples"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary hover:underline"
-        >
-          GitHub repository
-        </a> to report issues, suggest improvements, or submit pull requests.
-      </p>
     </section>
   </div>
 </BaseLayout>
