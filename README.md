@@ -8,160 +8,55 @@
 
 ## Overview
 
-This project provides accessible UI components that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) patterns. Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components).
+This project provides accessible UI components and test cases that follow the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) patterns.
 
-## Features
+Each component is implemented across four major frontend frameworks: **React**, **Vue**, **Svelte**, and **Astro** (Web Components), providing familiar implementation examples to help you learn about accessibility and WAI-ARIA.
 
-- **Multi-framework**: React, Vue, Svelte, and Astro (Web Components) implementations
-- **Accessibility-first**: WAI-ARIA APG compliance
-- **Astro Islands**: Fast, optimized static site with interactive components
-- **Interactive Docs**: Live examples with syntax highlighting (Shiki)
-- **Testing**: Tests with Vitest and Testing Library
-- **Developer Experience**: TypeScript, Tailwind CSS, hot reload
-- **Responsive**: Mobile-first design approach
+Each component includes tests to verify APG pattern compliance, which you can use directly to ensure accessibility of your own components. The test documentation is also designed in an AI-friendly format, making it easy to generate test cases.
 
-## Tech Stack
-
-| Layer     | Technology                   |
-| --------- | ---------------------------- |
-| Framework | Astro (Islands Architecture) |
-| Content   | MDX                          |
-| Demo      | React / Vue / Svelte / Astro |
-| Styling   | Tailwind CSS + shadcn/ui     |
-| Code      | Shiki                        |
-| Testing   | Vitest + Testing Library     |
-| Deploy    | GitHub Pages                 |
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 20+
-- npm
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/masuP9/apg-patterns-examples.git
-cd apg-patterns-examples
-
-# Install dependencies
-npm install
-```
-
-### Development
-
-```bash
-# Start development server
-npm run dev
-# Opens at http://localhost:4321
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Run tests
-npm run test
-
-# Lint
-npm run lint
-
-# Format
-npm run format
-```
+Additionally, we provide styling that supports dark mode, high contrast mode, and forced colors mode to further assist in developing accessible components.
 
 ## Component Status
 
-| Pattern       | React | Vue | Svelte | Astro | Status   |
-| ------------- | ----- | --- | ------ | ----- | -------- |
-| Accordion     | ✅    | ✅  | ✅     | ✅    | Complete |
-| Alert         | ✅    | ✅  | ✅     | ✅    | Complete |
-| Breadcrumb    | ✅    | ✅  | ✅     | ✅    | Complete |
-| Dialog        | ✅    | ✅  | ✅     | ✅    | Complete |
-| Disclosure    | ✅    | ✅  | ✅     | ✅    | Complete |
-| Listbox       | ✅    | ✅  | ✅     | ✅    | Complete |
-| Menu Button   | ✅    | ✅  | ✅     | ✅    | Complete |
-| Switch        | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tabs          | ✅    | ✅  | ✅     | ✅    | Complete |
-| Toggle Button | ✅    | ✅  | ✅     | ✅    | Complete |
-| Toolbar       | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tooltip       | ✅    | ✅  | ✅     | ✅    | Complete |
-
-## Architecture
-
-```
-apg-patterns-examples/
-├── src/
-│   ├── components/           # Site UI (shadcn/ui)
-│   │   └── ui/
-│   ├── lib/                  # Utilities
-│   ├── patterns/             # APG pattern implementations
-│   │   ├── accordion/        # Accordion (React/Vue/Svelte/Astro)
-│   │   ├── alert/            # Alert
-│   │   ├── breadcrumb/       # Breadcrumb
-│   │   ├── button/           # Toggle Button
-│   │   ├── dialog/           # Dialog
-│   │   ├── disclosure/       # Disclosure
-│   │   ├── listbox/          # Listbox
-│   │   ├── menu-button/      # Menu Button
-│   │   ├── switch/           # Switch
-│   │   ├── tabs/             # Tabs
-│   │   ├── toolbar/          # Toolbar
-│   │   └── tooltip/          # Tooltip
-│   ├── layouts/              # Page layouts
-│   ├── pages/                # Route pages
-│   ├── styles/               # Global styles
-│   └── test/                 # Test utilities
-├── .internal/                # Internal documentation
-├── public/                   # Static assets
-├── astro.config.mjs
-├── CLAUDE.md                 # Development guide
-└── package.json
-```
-
-## Component API
-
-### Toggle Button
-
-All components follow the same props pattern across frameworks:
-
-```tsx
-// React
-<ToggleButton initialPressed={false} onToggle={(pressed) => console.log(pressed)}>
-  Mute
-</ToggleButton>
-```
-
-```vue
-<!-- Vue -->
-<ToggleButton :initial-pressed="false" @toggle="(pressed) => console.log(pressed)">
-  Mute
-</ToggleButton>
-```
-
-```svelte
-<!-- Svelte -->
-<ToggleButton initialPressed={false} ontoggle={(e) => console.log(e.detail)}>Mute</ToggleButton>
-```
-
-### Key Features
-
-- **HTML Attribute Inheritance**: Pass any standard HTML attributes
-- **Accessibility**: Complete ARIA support with keyboard navigation
-- **Framework Agnostic**: Consistent API across React, Vue, Svelte, and Astro
-- **TypeScript**: Full type safety and IntelliSense support
+| Pattern              | React | Vue | Svelte | Astro | Status   |
+| -------------------- | ----- | --- | ------ | ----- | -------- |
+| Accordion            | ✅    | ✅  | ✅     | ✅    | Complete |
+| Alert                | ✅    | ✅  | ✅     | ✅    | Complete |
+| Alert Dialog         | -     | -   | -      | -     | Planned  |
+| Breadcrumb           | ✅    | ✅  | ✅     | ✅    | Complete |
+| Button               | -     | -   | -      | -     | Planned  |
+| Carousel             | -     | -   | -      | -     | Planned  |
+| Checkbox             | -     | -   | -      | -     | Planned  |
+| Combobox             | -     | -   | -      | -     | Planned  |
+| Dialog               | ✅    | ✅  | ✅     | ✅    | Complete |
+| Disclosure           | ✅    | ✅  | ✅     | ✅    | Complete |
+| Feed                 | -     | -   | -      | -     | Planned  |
+| Grid                 | -     | -   | -      | -     | Planned  |
+| Landmarks            | -     | -   | -      | -     | Planned  |
+| Link                 | -     | -   | -      | -     | Planned  |
+| Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |
+| Menu and Menubar     | -     | -   | -      | -     | Planned  |
+| Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
+| Meter                | -     | -   | -      | -     | Planned  |
+| Radio Group          | -     | -   | -      | -     | Planned  |
+| Slider               | -     | -   | -      | -     | Planned  |
+| Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |
+| Spinbutton           | -     | -   | -      | -     | Planned  |
+| Switch               | ✅    | ✅  | ✅     | ✅    | Complete |
+| Table                | -     | -   | -      | -     | Planned  |
+| Tabs                 | ✅    | ✅  | ✅     | ✅    | Complete |
+| Toggle Button        | ✅    | ✅  | ✅     | ✅    | Complete |
+| Toolbar              | ✅    | ✅  | ✅     | ✅    | Complete |
+| Tooltip              | ✅    | ✅  | ✅     | ✅    | Complete |
+| Tree View            | -     | -   | -      | -     | Planned  |
+| Treegrid             | -     | -   | -      | -     | Planned  |
+| Window Splitter      | -     | -   | -      | -     | Planned  |
 
 ## Styling
 
-Components use Tailwind CSS with accessibility enhancements:
-
 - High contrast mode support
-- Reduced motion preferences
+- Reduced motion preferences support
 - Forced colors mode support
-- CSS custom properties for theming
 
 ## Contributing
 
@@ -184,8 +79,7 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 ### Development Guidelines
 
 - Follow APG patterns precisely
-- Maintain framework parity across all 4 frameworks
-- Write comprehensive tests with accessibility checks
+- Write tests including accessibility checks
 - Document accessibility features thoroughly
 - Use semantic commit messages
 
@@ -197,15 +91,9 @@ For security concerns or to report vulnerabilities, please see our [Security Pol
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## Acknowledgments
-
-- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
-- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/)
-- Framework communities: React, Vue, Svelte
-- Astro team for the Islands architecture
-
 ## Links
 
+- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [Live Demo](https://masup9.github.io/apg-patterns-examples/)
 - [Issue Tracker](https://github.com/masuP9/apg-patterns-examples/issues)
 - [Discussions](https://github.com/masuP9/apg-patterns-examples/discussions)
