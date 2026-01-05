@@ -8,28 +8,28 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-// テスト用のデフォルトアイテム
+// Default test items
 const defaultItems: MenuItem[] = [
   { id: 'cut', label: 'Cut' },
   { id: 'copy', label: 'Copy' },
   { id: 'paste', label: 'Paste' },
 ];
 
-// disabled アイテムを含むテスト用アイテム
+// Test items with disabled item
 const itemsWithDisabled: MenuItem[] = [
   { id: 'cut', label: 'Cut', disabled: true },
   { id: 'copy', label: 'Copy' },
   { id: 'paste', label: 'Paste' },
 ];
 
-// 全て disabled のテスト用アイテム
+// Test items with all disabled
 const allDisabledItems: MenuItem[] = [
   { id: 'cut', label: 'Cut', disabled: true },
   { id: 'copy', label: 'Copy', disabled: true },
   { id: 'paste', label: 'Paste', disabled: true },
 ];
 
-// タイプアヘッド用のテストアイテム
+// Test items for type-ahead
 const typeAheadItems: MenuItem[] = [
   { id: 'cut', label: 'Cut' },
   { id: 'copy', label: 'Copy' },
@@ -38,9 +38,9 @@ const typeAheadItems: MenuItem[] = [
 ];
 
 describe('MenuButton', () => {
-  // 🔴 High Priority: APG マウス操作
-  describe('APG: マウス操作', () => {
-    it('ボタンクリックでメニューが開く', async () => {
+  // 🔴 High Priority: APG Mouse Operations
+  describe('APG: Mouse Operations', () => {
+    it('opens menu on button click', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -51,7 +51,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menu')).not.toHaveAttribute('hidden');
     });
 
-    it('開いた状態でボタンクリックでメニューが閉じる (トグル)', async () => {
+    it('closes menu on button click when open (toggle)', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -63,7 +63,7 @@ describe('MenuButton', () => {
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('メニューアイテムクリックで実行、メニューが閉じる', async () => {
+    it('executes and closes menu on menu item click', async () => {
       const user = userEvent.setup();
       const onItemSelect = vi.fn();
       render(<MenuButton items={defaultItems} label="Actions" onItemSelect={onItemSelect} />);
@@ -78,7 +78,7 @@ describe('MenuButton', () => {
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('disabled アイテムクリックでは何も起こらない', async () => {
+    it('does nothing on disabled item click', async () => {
       const user = userEvent.setup();
       const onItemSelect = vi.fn();
       render(<MenuButton items={itemsWithDisabled} label="Actions" onItemSelect={onItemSelect} />);
@@ -93,7 +93,7 @@ describe('MenuButton', () => {
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('メニュー外クリックでメニューが閉じる', async () => {
+    it('closes menu on click outside', async () => {
       const user = userEvent.setup();
       render(
         <div>
@@ -111,9 +111,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: APG キーボード操作 (ボタン)
-  describe('APG: キーボード操作 (ボタン)', () => {
-    it('Enter でメニューが開き、最初の有効アイテムにフォーカス', async () => {
+  // 🔴 High Priority: APG Keyboard Interaction (Button)
+  describe('APG: Keyboard Interaction (Button)', () => {
+    it('opens menu and focuses first enabled item with Enter', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -125,7 +125,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('Space でメニューが開き、最初の有効アイテムにフォーカス', async () => {
+    it('opens menu and focuses first enabled item with Space', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -137,7 +137,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('ArrowDown でメニューが開き、最初の有効アイテムにフォーカス', async () => {
+    it('opens menu and focuses first enabled item with ArrowDown', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -149,7 +149,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('ArrowUp でメニューが開き、最後の有効アイテムにフォーカス', async () => {
+    it('opens menu and focuses last enabled item with ArrowUp', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -162,9 +162,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: APG キーボード操作 (メニュー)
-  describe('APG: キーボード操作 (メニュー)', () => {
-    it('ArrowDown で次の有効アイテムに移動', async () => {
+  // 🔴 High Priority: APG Keyboard Interaction (Menu)
+  describe('APG: Keyboard Interaction (Menu)', () => {
+    it('moves to next enabled item with ArrowDown', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
 
@@ -175,7 +175,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
     });
 
-    it('ArrowDown で最後から最初にループ', async () => {
+    it('loops from last to first with ArrowDown', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
 
@@ -186,7 +186,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('ArrowUp で前の有効アイテムに移動', async () => {
+    it('moves to previous enabled item with ArrowUp', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
 
@@ -197,7 +197,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('ArrowUp で最初から最後にループ', async () => {
+    it('loops from first to last with ArrowUp', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
 
@@ -208,7 +208,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Paste' })).toHaveFocus();
     });
 
-    it('Home で最初の有効アイテムに移動 (disabled スキップ)', async () => {
+    it('moves to first enabled item with Home (skips disabled)', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={itemsWithDisabled} label="Actions" defaultOpen />);
 
@@ -220,7 +220,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
     });
 
-    it('End で最後の有効アイテムに移動 (disabled スキップ)', async () => {
+    it('moves to last enabled item with End (skips disabled)', async () => {
       const user = userEvent.setup();
       const itemsWithLastDisabled: MenuItem[] = [
         { id: 'cut', label: 'Cut' },
@@ -237,7 +237,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
     });
 
-    it('ArrowDown/Up で disabled アイテムをスキップ', async () => {
+    it('skips disabled items with ArrowDown/Up', async () => {
       const user = userEvent.setup();
       const itemsWithMiddleDisabled: MenuItem[] = [
         { id: 'cut', label: 'Cut' },
@@ -254,7 +254,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Paste' })).toHaveFocus();
     });
 
-    it('Escape でメニューを閉じ、ボタンにフォーカス', async () => {
+    it('closes menu and focuses button with Escape', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -267,7 +267,7 @@ describe('MenuButton', () => {
       expect(button).toHaveFocus();
     });
 
-    it('Tab でメニューを閉じ、フォーカス移動', async () => {
+    it('closes menu and moves focus with Tab', async () => {
       const user = userEvent.setup();
       render(
         <div>
@@ -284,7 +284,7 @@ describe('MenuButton', () => {
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('Enter でアイテムを実行、メニューを閉じる', async () => {
+    it('executes item and closes menu with Enter', async () => {
       const user = userEvent.setup();
       const onItemSelect = vi.fn();
       render(
@@ -302,7 +302,7 @@ describe('MenuButton', () => {
       );
     });
 
-    it('Space でアイテムを実行、メニューを閉じる (スクロール防止)', async () => {
+    it('executes item and closes menu with Space (prevents scroll)', async () => {
       const user = userEvent.setup();
       const onItemSelect = vi.fn();
       render(
@@ -321,9 +321,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: タイプアヘッド
-  describe('APG: タイプアヘッド', () => {
-    it('文字キーでマッチするアイテムにフォーカス', async () => {
+  // 🔴 High Priority: Type-ahead
+  describe('APG: Type-ahead', () => {
+    it('focuses matching item with character key', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={typeAheadItems} label="Actions" defaultOpen />);
 
@@ -334,7 +334,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus();
     });
 
-    it('複数文字入力でマッチ (例: "cl" → "Clear")', async () => {
+    it('matches with multiple characters (e.g., "cl" → "Clear")', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={typeAheadItems} label="Actions" defaultOpen />);
 
@@ -345,7 +345,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Clear' })).toHaveFocus();
     });
 
-    it('同じ文字連打でマッチをサイクル', async () => {
+    it('cycles through matches with repeated same character', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={typeAheadItems} label="Actions" defaultOpen />);
 
@@ -365,7 +365,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('タイプアヘッドで disabled アイテムをスキップ', async () => {
+    it('skips disabled items in type-ahead', async () => {
       const user = userEvent.setup();
       const itemsWithDisabledMatch: MenuItem[] = [
         { id: 'cut', label: 'Cut' },
@@ -382,7 +382,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Clear' })).toHaveFocus();
     });
 
-    it('マッチなしの場合フォーカス変更なし', async () => {
+    it('does not change focus when no match', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
 
@@ -393,7 +393,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menuitem', { name: 'Cut' })).toHaveFocus();
     });
 
-    it('500ms 後にバッファリセット', () => {
+    it('resets buffer after 500ms', () => {
       vi.useFakeTimers();
       render(<MenuButton items={typeAheadItems} label="Actions" defaultOpen />);
 
@@ -422,9 +422,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: APG ARIA 属性
-  describe('APG: ARIA 属性', () => {
-    it('ボタンが aria-haspopup="menu" を持つ', () => {
+  // 🔴 High Priority: APG ARIA Attributes
+  describe('APG: ARIA Attributes', () => {
+    it('button has aria-haspopup="menu"', () => {
       render(<MenuButton items={defaultItems} label="Actions" />);
       expect(screen.getByRole('button', { name: 'Actions' })).toHaveAttribute(
         'aria-haspopup',
@@ -432,7 +432,7 @@ describe('MenuButton', () => {
       );
     });
 
-    it('閉じた状態で aria-expanded="false"', () => {
+    it('has aria-expanded="false" when closed', () => {
       render(<MenuButton items={defaultItems} label="Actions" />);
       expect(screen.getByRole('button', { name: 'Actions' })).toHaveAttribute(
         'aria-expanded',
@@ -440,7 +440,7 @@ describe('MenuButton', () => {
       );
     });
 
-    it('開いた状態で aria-expanded="true"', () => {
+    it('has aria-expanded="true" when open', () => {
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       expect(screen.getByRole('button', { name: 'Actions' })).toHaveAttribute(
         'aria-expanded',
@@ -448,7 +448,7 @@ describe('MenuButton', () => {
       );
     });
 
-    it('ボタンが aria-controls でメニューを常に参照', () => {
+    it('button always references menu with aria-controls', () => {
       render(<MenuButton items={defaultItems} label="Actions" />);
       const button = screen.getByRole('button', { name: 'Actions' });
       const menuId = button.getAttribute('aria-controls');
@@ -457,12 +457,12 @@ describe('MenuButton', () => {
       expect(document.getElementById(menuId!)).toHaveAttribute('role', 'menu');
     });
 
-    it('メニューが role="menu" を持つ', () => {
+    it('menu has role="menu"', () => {
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it('メニューが aria-labelledby でボタンを参照', () => {
+    it('menu references button with aria-labelledby', () => {
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       const menu = screen.getByRole('menu');
       const labelledbyId = menu.getAttribute('aria-labelledby');
@@ -471,14 +471,14 @@ describe('MenuButton', () => {
       expect(document.getElementById(labelledbyId!)).toHaveAttribute('aria-haspopup', 'menu');
     });
 
-    it('アイテムが role="menuitem" を持つ', () => {
+    it('items have role="menuitem"', () => {
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       const menuItems = screen.getAllByRole('menuitem');
 
       expect(menuItems).toHaveLength(3);
     });
 
-    it('disabled アイテムが aria-disabled="true"', () => {
+    it('disabled item has aria-disabled="true"', () => {
       render(<MenuButton items={itemsWithDisabled} label="Actions" defaultOpen />);
       const disabledItem = screen.getByRole('menuitem', { name: 'Cut' });
 
@@ -486,9 +486,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: フォーカス管理
-  describe('APG: フォーカス管理', () => {
-    it('フォーカスアイテムが tabindex="0"', async () => {
+  // 🔴 High Priority: Focus Management
+  describe('APG: Focus Management', () => {
+    it('focused item has tabindex="0"', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -499,7 +499,7 @@ describe('MenuButton', () => {
       expect(focusedItem).toHaveAttribute('tabindex', '0');
     });
 
-    it('他アイテムが tabindex="-1"', async () => {
+    it('other items have tabindex="-1"', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -514,14 +514,14 @@ describe('MenuButton', () => {
       });
     });
 
-    it('disabled アイテムが tabindex="-1"', () => {
+    it('disabled item has tabindex="-1"', () => {
       render(<MenuButton items={itemsWithDisabled} label="Actions" defaultOpen />);
       const disabledItem = screen.getByRole('menuitem', { name: 'Cut' });
 
       expect(disabledItem).toHaveAttribute('tabindex', '-1');
     });
 
-    it('メニュー閉じでフォーカスがボタンに戻る', async () => {
+    it('returns focus to button when menu closes', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={defaultItems} label="Actions" />);
 
@@ -534,7 +534,7 @@ describe('MenuButton', () => {
       expect(button).toHaveFocus();
     });
 
-    it('閉じた状態でメニューが inert + hidden', () => {
+    it('menu has inert and hidden when closed', () => {
       render(<MenuButton items={defaultItems} label="Actions" />);
       const menu = screen.getByRole('menu', { hidden: true });
 
@@ -543,9 +543,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🔴 High Priority: エッジケース
-  describe('エッジケース', () => {
-    it('全アイテム disabled の場合、メニューは開くがフォーカスはボタンに留まる', async () => {
+  // 🔴 High Priority: Edge Cases
+  describe('Edge Cases', () => {
+    it('when all items are disabled, menu opens but focus stays on button', async () => {
       const user = userEvent.setup();
       render(<MenuButton items={allDisabledItems} label="Actions" />);
 
@@ -556,7 +556,7 @@ describe('MenuButton', () => {
       expect(button).toHaveFocus();
     });
 
-    it('空の items 配列でもクラッシュしない', () => {
+    it('does not crash with empty items array', () => {
       expect(() => {
         render(<MenuButton items={[]} label="Actions" />);
       }).not.toThrow();
@@ -564,7 +564,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('button', { name: 'Actions' })).toBeInTheDocument();
     });
 
-    it('複数インスタンスで ID が衝突しない', () => {
+    it('IDs do not conflict with multiple instances', () => {
       render(
         <>
           <MenuButton items={defaultItems} label="Actions 1" />
@@ -582,16 +582,16 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🟡 Medium Priority: アクセシビリティ検証
-  describe('アクセシビリティ', () => {
-    it('閉じた状態で axe 違反なし', async () => {
+  // 🟡 Medium Priority: Accessibility Validation
+  describe('Accessibility', () => {
+    it('no axe violations when closed', async () => {
       const { container } = render(<MenuButton items={defaultItems} label="Actions" />);
       const results = await axe(container);
 
       expect(results).toHaveNoViolations();
     });
 
-    it('開いた状態で axe 違反なし', async () => {
+    it('no axe violations when open', async () => {
       const { container } = render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       const results = await axe(container);
 
@@ -599,9 +599,9 @@ describe('MenuButton', () => {
     });
   });
 
-  // 🟢 Low Priority: Props / 動作
+  // 🟢 Low Priority: Props
   describe('Props', () => {
-    it('defaultOpen=true で初期表示', () => {
+    it('initially displayed when defaultOpen=true', () => {
       render(<MenuButton items={defaultItems} label="Actions" defaultOpen />);
       const button = screen.getByRole('button', { name: 'Actions' });
 
@@ -609,7 +609,7 @@ describe('MenuButton', () => {
       expect(screen.getByRole('menu')).not.toHaveAttribute('hidden');
     });
 
-    it('className がコンテナに適用', () => {
+    it('applies className to container', () => {
       const { container } = render(
         <MenuButton items={defaultItems} label="Actions" className="custom-class" />
       );
@@ -617,7 +617,7 @@ describe('MenuButton', () => {
       expect(container.querySelector('.apg-menu-button')).toHaveClass('custom-class');
     });
 
-    it('onItemSelect が正しい id で呼ばれる', async () => {
+    it('calls onItemSelect with correct id', async () => {
       const user = userEvent.setup();
       const onItemSelect = vi.fn();
       render(<MenuButton items={defaultItems} label="Actions" onItemSelect={onItemSelect} />);

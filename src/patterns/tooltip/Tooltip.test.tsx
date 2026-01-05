@@ -5,9 +5,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { Tooltip } from './Tooltip';
 
 describe('Tooltip', () => {
-  // 🔴 High Priority: APG 準拠の核心
-  describe('APG: ARIA 属性', () => {
-    it('role="tooltip" を持つ', () => {
+  // 🔴 High Priority: APG Core Compliance
+  describe('APG: ARIA Attributes', () => {
+    it('has role="tooltip"', () => {
       render(
         <Tooltip content="This is a tooltip">
           <button>Hover me</button>
@@ -16,7 +16,7 @@ describe('Tooltip', () => {
       expect(screen.getByRole('tooltip', { hidden: true })).toBeInTheDocument();
     });
 
-    it('非表示時は aria-hidden が true', () => {
+    it('has aria-hidden="true" when hidden', () => {
       render(
         <Tooltip content="This is a tooltip">
           <button>Hover me</button>
@@ -26,7 +26,7 @@ describe('Tooltip', () => {
       expect(tooltip).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('表示時は aria-hidden が false', async () => {
+    it('has aria-hidden="false" when visible', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -42,7 +42,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('表示時のみ aria-describedby が設定される', async () => {
+    it('sets aria-describedby only when visible', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -52,7 +52,7 @@ describe('Tooltip', () => {
       const trigger = screen.getByRole('button');
       const wrapper = trigger.parentElement;
 
-      // 非表示時は aria-describedby がない
+      // No aria-describedby when hidden
       expect(wrapper).not.toHaveAttribute('aria-describedby');
 
       await user.hover(trigger);
@@ -66,8 +66,8 @@ describe('Tooltip', () => {
     });
   });
 
-  describe('APG: キーボード操作', () => {
-    it('Escape キーで閉じる', async () => {
+  describe('APG: Keyboard Interaction', () => {
+    it('closes with Escape key', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -90,7 +90,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('フォーカスで表示される', async () => {
+    it('shows on focus', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -106,7 +106,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('フォーカスアウトで閉じる', async () => {
+    it('closes on focus out', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -132,12 +132,12 @@ describe('Tooltip', () => {
     });
   });
 
-  describe('ホバー操作', () => {
+  describe('Hover Interaction', () => {
     afterEach(() => {
       vi.useRealTimers();
     });
 
-    it('ホバーで表示される', async () => {
+    it('shows on hover', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -152,7 +152,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('ホバー解除で閉じる', async () => {
+    it('closes on hover out', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -175,7 +175,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('delay 後に表示される', async () => {
+    it('shows after delay', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="This is a tooltip" delay={100}>
@@ -186,10 +186,10 @@ describe('Tooltip', () => {
 
       await user.hover(trigger);
 
-      // delay 前は非表示（直後）
+      // Hidden immediately before delay
       expect(screen.getByRole('tooltip', { hidden: true })).toHaveAttribute('aria-hidden', 'true');
 
-      // delay 後は表示
+      // Visible after delay
       await waitFor(
         () => {
           expect(screen.getByRole('tooltip')).toHaveAttribute('aria-hidden', 'false');
@@ -199,9 +199,9 @@ describe('Tooltip', () => {
     });
   });
 
-  // 🟡 Medium Priority: アクセシビリティ検証
-  describe('アクセシビリティ', () => {
-    it('axe による WCAG 2.1 AA 違反がない（非表示状態）', async () => {
+  // 🟡 Medium Priority: Accessibility Validation
+  describe('Accessibility', () => {
+    it('has no WCAG 2.1 AA violations (hidden state)', async () => {
       const { container } = render(
         <Tooltip content="This is a tooltip">
           <button>Hover me</button>
@@ -211,7 +211,7 @@ describe('Tooltip', () => {
       expect(results).toHaveNoViolations();
     });
 
-    it('axe による WCAG 2.1 AA 違反がない（表示状態）', async () => {
+    it('has no WCAG 2.1 AA violations (visible state)', async () => {
       const user = userEvent.setup();
       const { container } = render(
         <Tooltip content="This is a tooltip" delay={0}>
@@ -228,7 +228,7 @@ describe('Tooltip', () => {
       expect(results).toHaveNoViolations();
     });
 
-    it('tooltip がフォーカスを受け取らない', () => {
+    it('tooltip does not receive focus', () => {
       render(
         <Tooltip content="This is a tooltip">
           <button>Hover me</button>
@@ -240,7 +240,7 @@ describe('Tooltip', () => {
   });
 
   describe('Props', () => {
-    it('placement prop で位置を変更できる', () => {
+    it('can change position with placement prop', () => {
       render(
         <Tooltip content="Tooltip" placement="bottom">
           <button>Hover me</button>
@@ -250,7 +250,7 @@ describe('Tooltip', () => {
       expect(tooltip).toHaveClass('top-full');
     });
 
-    it('disabled の場合、tooltip が表示されない', async () => {
+    it('does not show tooltip when disabled', async () => {
       const user = userEvent.setup();
       render(
         <Tooltip content="Tooltip" delay={0} disabled>
@@ -260,11 +260,11 @@ describe('Tooltip', () => {
       const trigger = screen.getByRole('button');
 
       await user.hover(trigger);
-      // disabled なので表示されない (delay=0 なので即時)
+      // Does not show because disabled (delay=0 so immediate)
       expect(screen.getByRole('tooltip', { hidden: true })).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('id prop でカスタム ID を設定できる', () => {
+    it('can set custom ID with id prop', () => {
       render(
         <Tooltip content="Tooltip" id="custom-tooltip-id">
           <button>Hover me</button>
@@ -274,7 +274,7 @@ describe('Tooltip', () => {
       expect(tooltip).toHaveAttribute('id', 'custom-tooltip-id');
     });
 
-    it('onOpenChange が状態変化時に呼び出される', async () => {
+    it('calls onOpenChange when state changes', async () => {
       const handleOpenChange = vi.fn();
       const user = userEvent.setup();
       render(
@@ -295,7 +295,7 @@ describe('Tooltip', () => {
       });
     });
 
-    it('controlled open prop で制御できる', () => {
+    it('can be controlled with open prop', () => {
       const { rerender } = render(
         <Tooltip content="Tooltip" open={false}>
           <button>Hover me</button>
@@ -314,9 +314,9 @@ describe('Tooltip', () => {
     });
   });
 
-  // 🟢 Low Priority: 拡張性
-  describe('HTML 属性継承', () => {
-    it('className が正しくマージされる', () => {
+  // 🟢 Low Priority: Extensibility
+  describe('HTML Attribute Inheritance', () => {
+    it('merges className correctly', () => {
       render(
         <Tooltip content="Tooltip" className="custom-class">
           <button>Hover me</button>
@@ -327,7 +327,7 @@ describe('Tooltip', () => {
       expect(wrapper).toHaveClass('apg-tooltip-trigger');
     });
 
-    it('tooltipClassName が適用される', () => {
+    it('applies tooltipClassName', () => {
       render(
         <Tooltip content="Tooltip" tooltipClassName="custom-tooltip">
           <button>Hover me</button>
