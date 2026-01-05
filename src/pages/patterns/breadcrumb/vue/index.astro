@@ -3,6 +3,8 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Breadcrumb from '@patterns/breadcrumb/Breadcrumb.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/breadcrumb/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/breadcrumb/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -42,6 +44,7 @@ const longPathItems = [
     <p class="text-muted-foreground text-lg">
       A navigation pattern that shows the user's current location within a site hierarchy.
     </p>
+    <AiGuideBadge pattern="breadcrumb" />
   </header>
 
   <!-- Framework Selector -->
@@ -195,6 +198,7 @@ const items = [
           MDN: Breadcrumb Navigation
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="breadcrumb" />
     </ul>
   </section>
 </PatternLayout>

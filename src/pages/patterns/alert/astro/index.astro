@@ -3,6 +3,8 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Alert from '@patterns/alert/Alert.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/alert/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/alert/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -28,6 +30,7 @@ const tocItems = [
       An element that displays a brief, important message in a way that attracts the user's
       attention without interrupting the user's task.
     </p>
+    <AiGuideBadge pattern="alert" />
   </header>
 
   <!-- Framework Selector -->
@@ -237,6 +240,7 @@ import Alert from './Alert.astro';
           WAI-ARIA APG: Alert Dialog Pattern
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="alert" />
     </ul>
   </section>
 </PatternLayout>

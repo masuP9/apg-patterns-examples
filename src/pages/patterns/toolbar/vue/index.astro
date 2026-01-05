@@ -7,6 +7,8 @@ import ToolbarToggleDemo from '@patterns/toolbar/ToolbarToggleDemo.vue';
 import ToolbarToggleDefaultDemo from '@patterns/toolbar/ToolbarToggleDefaultDemo.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -36,6 +38,7 @@ const tocItems = [
       A container for grouping a set of controls, such as buttons, toggle buttons, or other input
       elements.
     </p>
+    <AiGuideBadge pattern="toolbar" />
   </header>
 
   <!-- Framework Selector -->
@@ -246,6 +249,7 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.vue'
           WAI-ARIA APG: Toolbar Pattern
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="toolbar" />
     </ul>
   </section>
 </PatternLayout>
