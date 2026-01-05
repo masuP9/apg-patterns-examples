@@ -26,7 +26,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Breadcrumb           | ✅    | ✅  | ✅     | ✅    | Complete |
 | Button               | -     | -   | -      | -     | Planned  |
 | Carousel             | -     | -   | -      | -     | Planned  |
-| Checkbox             | -     | -   | -      | -     | Planned  |
+| Checkbox             | ✅    | ✅  | ✅     | ✅    | Complete |
 | Combobox             | -     | -   | -      | -     | Planned  |
 | Dialog               | ✅    | ✅  | ✅     | ✅    | Complete |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | Complete |

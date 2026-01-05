@@ -26,7 +26,7 @@
 | Breadcrumb          | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Button              | -     | -   | -      | -     | 予定       |
 | Carousel            | -     | -   | -      | -     | 予定       |
-| Checkbox            | -     | -   | -      | -     | 予定       |
+| Checkbox            | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Combobox            | -     | -   | -      | -     | 予定       |
 | Dialog              | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Disclosure          | ✅    | ✅  | ✅     | ✅    | 完了       |
