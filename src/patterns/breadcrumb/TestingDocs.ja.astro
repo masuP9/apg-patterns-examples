@@ -1,0 +1,162 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストはARIA属性、セマンティック構造、アクセシビリティ要件全体にわたってAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>nav element</code></td>
+          <td class="py-2">セマンティックな<code>&lt;nav&gt;</code>要素を使用します</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">ナビゲーションにアクセシブルなラベルがあります（デフォルト: "Breadcrumb"）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-current="page"</code></td>
+          <td class="py-2">最後のアイテムに<code>aria-current="page"</code>があります</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ol/li structure</code></td>
+          <td class="py-2">適切なセマンティック構造のために順序付きリストを使用します</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: キーボードインタラクション
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab navigation</code></td>
+          <td class="py-2">Tabキーでパンくずリストのリンク間をフォーカス移動します</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter activation</code></td>
+          <td class="py-2">Enterキーでフォーカスされたリンクをアクティブ化します</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Current page not focusable</code></td>
+          <td class="py-2">最後のアイテム（span）はタブ順序に含まれません</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AAの違反がありません（jest-axe使用）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Custom aria-label</code></td>
+          <td class="py-2">ariaLabel propsでデフォルトラベルをオーバーライドできます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Separator hidden</code></td>
+          <td class="py-2">視覚的な区切り文字は支援技術から隠されています</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: コンポーネントの動作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Renders all items</code></td>
+          <td class="py-2">提供されたすべてのアイテムが順番にレンダリングされます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Links have href</code></td>
+          <td class="py-2">現在でないアイテムは正しいhrefを持つリンクとしてレンダリングされます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className merge</code></td>
+          <td class="py-2">カスタムクラスがコンポーネントクラスとマージされます</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    完全なドキュメントについては<ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    >を参照してください。
+  </p>
+</div>

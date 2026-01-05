@@ -1,0 +1,175 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">テスト概要</h3>
+  <p class="text-muted-foreground mb-4">
+    Alert コンポーネントのテストは、正しいライブリージョンの動作と APG 準拠の検証に焦点を当てています。最も重要なテストは、コンテンツが変更されたときにアラートコンテナが DOM に残ることを確認することです。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+      高優先度: APG コア準拠
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">APG 要件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">role="alert" の存在</td>
+            <td class="py-2">アラートコンテナは alert ロールを持つ必要がある</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">コンテナが常に DOM に存在</td>
+            <td class="py-2">ライブリージョンは動的に追加・削除してはならない</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">メッセージ変更時も同じコンテナ</td>
+            <td class="py-2">更新時にコンテナ要素の同一性が保持される</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">アラート後もフォーカスは変わらない</td>
+            <td class="py-2">アラートはキーボードフォーカスを移動してはならない</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">アラートはフォーカス不可</td>
+            <td class="py-2">アラートコンテナは tabindex を持ってはならない</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+      中優先度: アクセシビリティ検証
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">WCAG 要件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">axe 違反なし（メッセージあり）</td>
+            <td class="py-2">WCAG 2.1 AA 準拠</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">axe 違反なし（空）</td>
+            <td class="py-2">WCAG 2.1 AA 準拠</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">axe 違反なし（閉じるボタンあり）</td>
+            <td class="py-2">WCAG 2.1 AA 準拠</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">閉じるボタンにアクセシブルな名前</td>
+            <td class="py-2">ボタンは aria-label を持つ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">閉じるボタンは type="button"</td>
+            <td class="py-2">フォーム送信を防ぐ</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+      低優先度: Props と拡張性
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">機能</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">variant prop でスタイルを変更</td>
+            <td class="py-2">ビジュアルのカスタマイズ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">id prop でカスタム ID を設定</td>
+            <td class="py-2">SSR サポート</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">className の継承</td>
+            <td class="py-2">スタイルのカスタマイズ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">複雑なコンテンツの children</td>
+            <td class="py-2">コンテンツの柔軟性</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">onDismiss コールバックが発火</td>
+            <td class="py-2">イベント処理</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">スクリーンリーダーテスト</h3>
+  <p class="text-muted-foreground mb-4">
+    自動テストは DOM 構造を検証しますが、実際のアナウンス動作を検証するにはスクリーンリーダーによる手動テストが不可欠です：
+  </p>
+  <ResponsiveTable>
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">スクリーンリーダー</th>
+          <th class="py-2 text-left">プラットフォーム</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">VoiceOver</td>
+          <td class="py-2">macOS / iOS</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">NVDA</td>
+          <td class="py-2">Windows</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">JAWS</td>
+          <td class="py-2">Windows</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">TalkBack</td>
+          <td class="py-2">Android</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-2 text-sm">
+    メッセージの変更が即座のアナウンスをトリガーすること、およびページ読み込み時に存在するコンテンツはアナウンスされないことを確認してください。
+  </p>
+
+  <h3 class="mt-6 mb-3 text-lg font-medium">テストの実行</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># すべての Alert テストを実行
+npm run test -- alert
+
+# 特定のフレームワークのテストを実行
+npm run test -- Alert.test.tsx    # React
+npm run test -- Alert.test.vue    # Vue
+npm run test -- Alert.test.svelte # Svelte</code></pre>
+</div>

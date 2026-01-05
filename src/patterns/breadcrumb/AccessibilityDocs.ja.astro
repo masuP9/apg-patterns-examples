@@ -1,0 +1,134 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">対象要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>navigation</code></td>
+          <td class="py-2 pr-4"><code>&lt;nav&gt;</code> 要素</td>
+          <td class="py-2"
+            >支援技術にナビゲーションランドマークを提供します（<code>&lt;nav&gt;</code
+            >の暗黙のロール）</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink
+      href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/"
+      class="text-primary hover:underline"
+    >
+      WAI-ARIA Breadcrumb Pattern
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">対象</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4"><code>&lt;nav&gt;</code></td>
+          <td class="py-2 pr-4">"Breadcrumb"（またはローカライズされた値）</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">スクリーンリーダー向けにナビゲーションランドマークにラベルを付けます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-current</code></td>
+          <td class="py-2 pr-4">現在のページ要素</td>
+          <td class="py-2 pr-4"><code>"page"</code></td>
+          <td class="py-2 pr-4">はい（最後のアイテム）</td>
+          <td class="py-2">パンくずリスト内の現在のページを識別します</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート</h3>
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-current="page"</code></h4>
+    <p class="text-muted-foreground mb-3">
+      パンくずリストナビゲーション内の現在のページ位置を示します。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">対象</td>
+            <td class="py-2">パンくずリストの最後のアイテム（現在のページ）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">値</td>
+            <td class="py-2"><code>"page"</code></td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">参照</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-current"
+                class="text-primary hover:underline"
+              >
+                aria-current
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">パンくずリストのリンク間でフォーカスを移動します</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">フォーカスされたリンクをアクティブ化します</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground text-sm">
+    Breadcrumbはネイティブの<code>&lt;a&gt;</code>要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは不要です。
+  </p>
+</div>

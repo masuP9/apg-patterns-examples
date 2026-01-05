@@ -1,0 +1,203 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件におけるAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter キー</code></td>
+          <td class="py-2">フォーカスされたパネルを展開/折り畳み</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space キー</code></td>
+          <td class="py-2">フォーカスされたパネルを展開/折り畳み</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowDown</code></td>
+          <td class="py-2">次のヘッダーにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowUp</code></td>
+          <td class="py-2">前のヘッダーにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">最初のヘッダーにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">最後のヘッダーにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ループなし</code></td>
+          <td class="py-2">フォーカスは端で停止 (ループしない)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>無効化スキップ</code></td>
+          <td class="py-2">ナビゲーション中に無効化されたヘッダーをスキップ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA 属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2">ヘッダーボタンが展開/折り畳み状態を反映</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2">ヘッダーが aria-controls でパネルを参照</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">パネルが aria-labelledby でヘッダーを参照</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="region"</code></td>
+          <td class="py-2">パネルに region ロール (6個以下のパネル)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>region なし (7個以上)</code></td>
+          <td class="py-2">7個以上のパネルの場合、region ロールを省略</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">無効化された項目に aria-disabled="true"</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: 見出し構造
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>headingLevel プロパティ</code></td>
+          <td class="py-2">正しい見出し要素を使用 (h2, h3, など)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe 違反</code></td>
+          <td class="py-2">WCAG 2.1 AA 違反なし (jest-axe 経由)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: プロパティと振る舞い
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>allowMultiple</code></td>
+          <td class="py-2">単一または複数の展開を制御</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>defaultExpanded</code></td>
+          <td class="py-2">初期展開状態を設定</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスが適用される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細なドキュメントは <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

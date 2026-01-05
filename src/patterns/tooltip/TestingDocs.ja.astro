@@ -1,0 +1,143 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">テスト概要</h3>
+  <p class="text-muted-foreground mb-4">
+    ToolチップコンポーネントのテストはAPG準拠要件に基づいて優先度レベルに分類されています。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+      高優先度: APGコア準拠
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">APG要件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">role="tooltip" が存在する</td>
+            <td class="py-2">ツールチップコンテナはtooltipロールを持つ必要がある</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">閉じている時はaria-hidden</td>
+            <td class="py-2">非表示のツールチップは支援技術から読み取られてはならない</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">表示時はaria-describedby</td>
+            <td class="py-2">トリガーは表示時のみツールチップを参照する必要がある</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Escapeキーでツールチップを閉じる</td>
+            <td class="py-2">キーボードによる解除サポート</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">フォーカスでツールチップを表示</td>
+            <td class="py-2">キーボードアクセシビリティ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">ぼかしでツールチップを非表示</td>
+            <td class="py-2">フォーカス管理</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+      中優先度: アクセシビリティ検証
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">WCAG要件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">axe違反なし（非表示状態）</td>
+            <td class="py-2">WCAG 2.1 AA準拠</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">axe違反なし（表示状態）</td>
+            <td class="py-2">WCAG 2.1 AA準拠</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">ツールチップはフォーカス可能ではない</td>
+            <td class="py-2">APG: ツールチップはフォーカスを受け取ってはならない</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+      低優先度: Props &amp; 拡張性
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">機能</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">placement propで位置を変更</td>
+            <td class="py-2">配置のカスタマイズ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">disabled propで表示を防ぐ</td>
+            <td class="py-2">無効化機能</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">delay propでタイミングを制御</td>
+            <td class="py-2">遅延のカスタマイズ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">id propでカスタムIDを設定</td>
+            <td class="py-2">SSR/カスタムIDサポート</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">制御されたopen状態</td>
+            <td class="py-2">外部状態制御</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">onOpenChangeコールバック</td>
+            <td class="py-2">状態変更通知</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">className継承</td>
+            <td class="py-2">スタイルのカスタマイズ</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストの実行</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># すべてのToolチップテストを実行
+npm run test -- tooltip
+
+# 特定のフレームワークのテストを実行
+npm run test -- Tooltip.test.tsx    # React
+npm run test -- Tooltip.test.vue    # Vue
+npm run test -- Tooltip.test.svelte # Svelte</code></pre>
+</div>

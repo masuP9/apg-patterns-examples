@@ -1,0 +1,162 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件の観点からAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space キーでトグル</code></td>
+          <td class="py-2">Spaceキーを押すとボタンの状態が切り替わる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter キーでトグル</code></td>
+          <td class="py-2">Enterキーを押すとボタンの状態が切り替わる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab ナビゲーション</code></td>
+          <td class="py-2">Tabキーでボタン間のフォーカスを移動する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>無効時の Tab スキップ</code></td>
+          <td class="py-2">無効化されたボタンはTabの順序でスキップされる</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA 属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="button"</code></td>
+          <td class="py-2">暗黙的なbuttonロールを持つ（<code>&lt;button&gt;</code> 要素経由）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-pressed 初期値</code></td>
+          <td class="py-2">初期状態は <code>aria-pressed="false"</code></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-pressed トグル</code></td>
+          <td class="py-2">クリックで <code>aria-pressed</code> が <code>true</code> に変わる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>type="button"</code></td>
+          <td class="py-2">明示的なbutton typeがフォーム送信を防ぐ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>無効状態</code></td>
+          <td class="py-2">無効化されたボタンはクリックで状態が変わらない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe 違反</code></td>
+          <td class="py-2">WCAG 2.1 AA違反がない（jest-axe経由）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>アクセシブル名</code></td>
+          <td class="py-2">ボタンがコンテンツからアクセシブルな名前を持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: HTML属性の継承
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className マージ</code></td>
+          <td class="py-2">カスタムクラスがコンポーネントのクラスとマージされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-* 属性</code></td>
+          <td class="py-2">カスタムdata属性が渡される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク別テストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細は <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

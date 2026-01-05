@@ -1,0 +1,198 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>meter</code></td>
+          <td class="py-2 pr-4">コンテナ要素</td>
+          <td class="py-2">
+            既知の範囲内のスカラー値を表示するメーターとして要素を識別します。
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <code>meter</code> ロールは、定義された範囲内の数値のグラフィカル表示に使用されます。
+    インタラクティブではないため、デフォルトではフォーカスを受け取るべきではありません。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuenow</code></h4>
+    <p class="text-muted-foreground mb-3">
+      メーターの現在の数値を示します。すべてのメーター実装で必須です。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">数値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">範囲</td>
+            <td class="py-2">
+              <code>aria-valuemin</code> と <code>aria-valuemax</code> の間である必要があります
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuemin</code></h4>
+    <p class="text-muted-foreground mb-3">メーターの最小許容値を指定します。</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">数値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">デフォルト</td>
+            <td class="py-2">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuemax</code></h4>
+    <p class="text-muted-foreground mb-3">メーターの最大許容値を指定します。</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">数値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">デフォルト</td>
+            <td class="py-2">100</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
+    <p class="text-muted-foreground mb-3">
+      現在の値に対する人間が読みやすいテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">文字列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">いいえ（値が文脈を必要とする場合は推奨）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">例</td>
+            <td class="py-2">"75% complete", "3 out of 4 GB used"</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <p class="text-muted-foreground mb-6">
+    <strong>該当なし。</strong> メーターパターンは表示専用の要素であり、インタラクティブではありません。
+    特定のユースケースのために明示的にフォーカス可能にされない限り、キーボードフォーカスを受け取るべきではありません。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">アクセシブルな名前</h3>
+  <p class="text-muted-foreground mb-3">
+    メーターはアクセシブルな名前を持つ必要があります。これは以下の方法で提供できます:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>表示されるラベル</strong> - <code>label</code> プロパティを使用して表示されるラベルを提供
+    </li>
+    <li>
+      <code>aria-label</code> - メーターに見えないラベルを提供
+    </li>
+    <li>
+      <code>aria-labelledby</code> - 外部要素をラベルとして参照
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">ビジュアルデザイン</h3>
+  <p class="text-muted-foreground mb-3">
+    この実装は、アクセシブルなビジュアルデザインのためのWCAGガイドラインに従っています:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>視覚的な塗りつぶしバー</strong> - 現在の値を比例的に表現
+    </li>
+    <li>
+      <strong>数値表示</strong> - 現在の値を示すオプションのテキスト
+    </li>
+    <li>
+      <strong>表示されるラベル</strong> - メーターの目的を識別するオプションのラベル
+    </li>
+    <li>
+      <strong>強制カラーモード</strong> - Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">参考資料</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Meter Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter"
+        class="text-primary hover:underline"
+      >
+        MDN: &lt;meter&gt; element
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#meter" class="text-primary hover:underline">
+        W3C ARIA: meter role
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

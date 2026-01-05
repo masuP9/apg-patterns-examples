@@ -1,0 +1,226 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件全般にわたってAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space key</code></td>
+          <td class="py-2">チェックボックスの状態を切り替える</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab navigation</code></td>
+          <td class="py-2">Tabでチェックボックス間のフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
+          <td class="py-2">無効なチェックボックスはTab順序でスキップされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled key ignore</code></td>
+          <td class="py-2">無効なチェックボックスはキー入力を無視する</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>注意:</strong> Switchパターンとは異なり、Enterキーではチェックボックスが切り替わりません。
+  </p>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: DOM ステート & ARIA
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="checkbox"</code></td>
+          <td class="py-2">要素がcheckboxロールを持つ（ネイティブまたは明示的）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked initial</code></td>
+          <td class="py-2">初期状態が未チェック</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked toggle</code></td>
+          <td class="py-2">クリックでチェック状態を切り替える</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate</code></td>
+          <td class="py-2">JavaScriptで不確定状態を設定できる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate clear</code></td>
+          <td class="py-2">ユーザー操作で不確定状態がクリアされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled</code></td>
+          <td class="py-2">無効なチェックボックスは操作を防ぐ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: ラベル & フォーム
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">aria-labelによるアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>External label</code></td>
+          <td class="py-2">for/idを使った外部 &lt;label&gt; によるアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Label click</code></td>
+          <td class="py-2">外部ラベルをクリックするとチェックボックスが切り替わる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">外部要素参照によるアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>name attribute</code></td>
+          <td class="py-2">フォーム送信にチェックボックスデータが含まれる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>value attribute</code></td>
+          <td class="py-2">フォームの値が正しく設定される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AAの違反なし（jest-axe使用）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked axe</code></td>
+          <td class="py-2">チェック状態での違反なし</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate axe</code></td>
+          <td class="py-2">不確定状態での違反なし</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled axe</code></td>
+          <td class="py-2">無効状態での違反なし</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: HTML 属性の継承
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className merge</code></td>
+          <td class="py-2">カスタムクラスがコンポーネントクラスとマージされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-* attributes</code></td>
+          <td class="py-2">カスタムdata属性が渡される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id attribute</code></td>
+          <td class="py-2">ラベル関連付けのためにID属性が正しく設定される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>required attribute</code></td>
+          <td class="py-2">required属性が渡される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    完全なドキュメントについては、<ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

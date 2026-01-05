@@ -1,0 +1,264 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、フォーカス管理、アクセシビリティ要件全般にわたるAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA 属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="radiogroup"</code></td>
+          <td class="py-2">コンテナがradiogroupロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="radio"</code></td>
+          <td class="py-2">各オプションがradioロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-checked</code></td>
+          <td class="py-2">選択されたラジオが <code>aria-checked="true"</code> を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">無効なラジオが <code>aria-disabled="true"</code> を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2">水平方向時のみ設定される（垂直がデフォルト）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>accessible name</code></td>
+          <td class="py-2">グループとラジオがアクセシブルな名前を持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab focus</code></td>
+          <td class="py-2">Tabで選択されたラジオ（または何もなければ最初）にフォーカス</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab exit</code></td>
+          <td class="py-2">Tab/Shift+Tabでグループから退出</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space select</code></td>
+          <td class="py-2">Spaceでフォーカスされたラジオを選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space no unselect</code></td>
+          <td class="py-2">Spaceは既に選択されたラジオの選択を解除しない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowDown/Right</code></td>
+          <td class="py-2">次へ移動して選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowUp/Left</code></td>
+          <td class="py-2">前へ移動して選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">最初へ移動して選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">最後へ移動して選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Arrow wrap</code></td>
+          <td class="py-2">最後から最初へ、またはその逆にラップ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled skip</code></td>
+          <td class="py-2">ナビゲーション中に無効なラジオをスキップ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理（ローヴィングタブインデックス）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">選択されたラジオがtabindex="0"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">非選択のラジオがtabindex="-1"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled tabindex</code></td>
+          <td class="py-2">無効なラジオがtabindex="-1"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>First tabbable</code></td>
+          <td class="py-2">何も選択されていない場合、最初の有効なラジオがタブ可能</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Single tabbable</code></td>
+          <td class="py-2">グループ内で常に1つのみがtabindex="0"</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: フォーム統合
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>hidden input</code></td>
+          <td class="py-2">フォーム送信用の非表示inputが存在する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>name attribute</code></td>
+          <td class="py-2">非表示inputが正しいnameを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>value sync</code></td>
+          <td class="py-2">非表示inputの値が選択を反映する</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AA違反がない（jest-axeによる）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>selected axe</code></td>
+          <td class="py-2">選択された値での違反がない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled axe</code></td>
+          <td class="py-2">無効なオプションでの違反がない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: Props と動作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onValueChange</code></td>
+          <td class="py-2">選択変更時にコールバックが発火する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>defaultValue</code></td>
+          <td class="py-2">defaultValueからの初期選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスがコンテナに適用される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - Automated accessibility testing
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細は <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

@@ -1,0 +1,226 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <div
+    class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20"
+  >
+    <h3 class="mt-0 mb-2 text-lg font-semibold text-red-800 dark:text-red-200">
+      重要な実装上の注意
+    </h3>
+    <p class="mb-2 text-sm text-red-800 dark:text-red-200">
+      <strong
+        >ライブリージョンのコンテナ（<code>role="alert"</code>）は、ページ読み込み時から DOM に存在している必要があります。</strong
+      >
+      コンテナ自体を動的に追加・削除しないでください。コンテナ内のコンテンツのみを動的に変更するようにしてください。
+    </p>
+    <div class="text-sm text-red-700 dark:text-red-300">
+      <pre
+        class="mb-2 overflow-x-auto rounded-md bg-red-100 p-3 dark:bg-red-900/40"><code>{`// 誤り: ライブリージョンを動的に追加
+{showAlert && <div role="alert">Message</div>}
+
+// 正しい: ライブリージョンは常に存在し、コンテンツを変更
+<div role="alert">
+  {message && <span>{message}</span>}
+</div>`}</code></pre>
+      <p class="mt-2">
+        スクリーンリーダーは、ライブリージョン内の DOM の変更を検知してアナウンスします。ライブリージョン自体が動的に追加される場合、一部のスクリーンリーダーではコンテンツが確実にアナウンスされない可能性があります。
+      </p>
+    </div>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <code>alert</code> - ユーザーのタスクを中断することなく、ユーザーの注意を引く簡潔で重要なメッセージを表示する要素<br
+      />
+      <ExternalLink
+        href="https://w3c.github.io/aria/#alert"
+        class="text-primary text-sm hover:underline"
+      >
+        WAI-ARIA alert role
+      </ExternalLink>
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">暗黙的な ARIA プロパティ</h3>
+  <p class="text-muted-foreground mb-4">
+    <code>role="alert"</code> は以下の ARIA プロパティを暗黙的に設定します。これらを手動で追加する必要はありません：
+  </p>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">プロパティ</th>
+          <th class="py-2 pr-4 text-left">暗黙的な値</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-live</code></td>
+          <td class="py-2 pr-4"><code>assertive</code></td>
+          <td class="py-2">スクリーンリーダーを中断して即座にアナウンス</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-atomic</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2">変更された部分だけでなく、アラート全体のコンテンツをアナウンス</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <div
+    class="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20"
+  >
+    <p class="text-sm text-blue-800 dark:text-blue-200">
+      <strong>アラートはキーボード操作を必要としません。</strong>ユーザーのワークフローを中断することなく情報を伝えることを目的としています。アラートのコンテンツは、変更されると自動的にスクリーンリーダーによってアナウンスされます。
+    </p>
+  </div>
+
+  <p class="text-muted-foreground mb-4">
+    アラートに閉じるボタンが含まれる場合、ボタンは標準的なボタンのキーボード操作に従います：
+  </p>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">閉じるボタンをアクティブ化</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">閉じるボタンをアクティブ化</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">フォーカス管理</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>アラートはフォーカスを移動してはいけません</strong> - アラートは非モーダルであり、フォーカスを奪うことでユーザーのワークフローを中断してはいけません。
+    </li>
+    <li>
+      <strong>アラートコンテナはフォーカス不可</strong> - アラート要素は <code>tabindex</code> を持たず、キーボードフォーカスを受け取ってはいけません。
+    </li>
+    <li>
+      <strong>閉じるボタンはフォーカス可能</strong> - 存在する場合、閉じるボタンは Tab ナビゲーションで到達可能です。
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">重要なガイドライン</h3>
+
+  <div class="mb-4">
+    <h4 class="mb-2 font-medium">自動非表示の禁止</h4>
+    <p class="text-muted-foreground mb-2">
+      アラートは自動的に消えてはいけません。<ExternalLink
+        href="https://www.w3.org/WAI/WCAG21/Understanding/no-timing.html"
+        class="text-primary hover:underline"
+      >
+        WCAG 2.2.3 制限時間なし
+      </ExternalLink>に従い、ユーザーがコンテンツを読むのに十分な時間が必要です。自動非表示が必要な場合：
+    </p>
+    <ul class="text-muted-foreground list-disc pl-6">
+      <li>表示時間を一時停止・延長するためのユーザーコントロールを提供する</li>
+      <li>十分な表示時間を確保する（最低5秒 + 読む時間）</li>
+      <li>コンテンツが本当に必須でないかを検討する</li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h4 class="mb-2 font-medium">アラートの頻度</h4>
+    <p class="text-muted-foreground mb-2">
+      過度なアラートは、特に視覚障がいや認知障がいを持つユーザーにとって使いやすさを損なう可能性があります（<ExternalLink
+        href="https://www.w3.org/WAI/WCAG21/Understanding/interruptions.html"
+        class="text-primary hover:underline"
+      >
+        WCAG 2.2.4 割り込み
+      </ExternalLink>）。本当に重要なメッセージのためだけにアラートを使用してください。
+    </p>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium">Alert vs Alert Dialog</h4>
+    <p class="text-muted-foreground mb-2">
+      <strong>Alert</strong> を使用する場合：
+    </p>
+    <ul class="text-muted-foreground mb-2 list-disc pl-6">
+      <li>メッセージが情報提供のみでユーザーアクションを必要としない</li>
+      <li>ユーザーのワークフローを中断すべきでない</li>
+      <li>フォーカスは現在のタスクに留まるべき</li>
+    </ul>
+    <p class="text-muted-foreground mb-2">
+      <strong>Alert Dialog</strong> (<code>role="alertdialog"</code>) を使用する場合：
+    </p>
+    <ul class="text-muted-foreground list-disc pl-6">
+      <li>メッセージが即座のユーザー応答を必要とする</li>
+      <li>ユーザーが続行する前に確認またはアクションをとる必要がある</li>
+      <li>フォーカスをダイアログに移動すべき（モーダル動作）</li>
+    </ul>
+    <div
+      class="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20"
+    >
+      <p class="text-sm text-amber-800 dark:text-amber-200">
+        <strong>注意：</strong>
+        <code>role="alertdialog"</code> にはフォーカス管理とキーボード処理（Escapeで閉じる、フォーカストラップ）が必要です。モーダルな中断が適切な場合にのみ使用してください。
+      </p>
+    </div>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">スクリーンリーダーの動作</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>即座のアナウンス</strong> - アラートのコンテンツが変更されると、スクリーンリーダーは現在の読み上げを中断してアラートをアナウンスします（<code
+        >aria-live="assertive"</code
+      >）。
+    </li>
+    <li>
+      <strong>完全なコンテンツのアナウンス</strong> - 変更された部分だけでなく、アラート全体のコンテンツが読み上げられます（<code
+        >aria-atomic="true"</code
+      >）。
+    </li>
+    <li>
+      <strong>初期コンテンツはアナウンスされない</strong> - ページ読み込み時に存在するアラートは自動的にアナウンスされません。動的な変更のみがアナウンスをトリガーします。
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">参考資料</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Alert Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#alert" class="text-primary hover:underline">
+        WAI-ARIA: alert role
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Alert Dialog Pattern
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

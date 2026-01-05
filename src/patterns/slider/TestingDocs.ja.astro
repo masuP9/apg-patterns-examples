@@ -1,0 +1,324 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、ARIA属性、キーボード操作、ポインター操作、アクセシビリティ要件に関するAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: ARIA属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="slider"</code></td>
+          <td class="py-2">要素がsliderロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
+          <td class="py-2">現在の値が正しく設定され更新される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemin</code></td>
+          <td class="py-2">最小値が設定されている（デフォルト: 0）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemax</code></td>
+          <td class="py-2">最大値が設定されている（デフォルト: 100）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuetext</code></td>
+          <td class="py-2">提供された場合に人間が読めるテキストが設定されている</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">設定された場合に無効化状態が反映されている</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: アクセシブルな名前
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">aria-label属性によるアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">外部要素参照によるアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>visible label</code></td>
+          <td class="py-2">可視ラベルがアクセシブルな名前を提供する</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Arrow Right/Up</code></td>
+          <td class="py-2">値を1ステップ増加させる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Arrow Left/Down</code></td>
+          <td class="py-2">値を1ステップ減少させる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">値を最小値に設定する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">値を最大値に設定する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Page Up/Down</code></td>
+          <td class="py-2">値を大きなステップで増加/減少させる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Boundary clamping</code></td>
+          <td class="py-2">値が最小/最大の制限を超えない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled state</code></td>
+          <td class="py-2">無効化時にキーボードが効果を持たない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">つまみがフォーカス可能である</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">無効化時につまみがフォーカス可能でない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: 向き
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>horizontal</code></td>
+          <td class="py-2">水平スライダーにはaria-orientationがない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>vertical</code></td>
+          <td class="py-2">aria-orientation="vertical"が設定されている</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">axe-coreによってアクセシビリティ違反が検出されない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: エッジケース
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>decimal values</code></td>
+          <td class="py-2">小数のステップ値を正しく処理する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>negative range</code></td>
+          <td class="py-2">負の最小/最大範囲を処理する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>clamp to min</code></td>
+          <td class="py-2">最小値未満のdefaultValueが最小値にクランプされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>clamp to max</code></td>
+          <td class="py-2">最大値超過のdefaultValueが最大値にクランプされる</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: コールバック
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onValueChange</code></td>
+          <td class="py-2">変更時に新しい値とともにコールバックが呼ばれる</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: HTML属性の継承
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスがコンテナに適用される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id</code></td>
+          <td class="py-2">ID属性が正しく設定される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-*</code></td>
+          <td class="py-2">データ属性が渡される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>React:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/react-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        React Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Vue:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/vue-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Vue Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Svelte:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/svelte-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Svelte Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Astro:</strong> Web Componentユニットテスト用のVitest with JSDOM
+    </li>
+    <li>
+      <strong>Accessibility:</strong>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core"
+        class="text-primary hover:underline"
+      >
+        axe-core
+      </ExternalLink>
+    </li>
+  </ul>
+</div>
