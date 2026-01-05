@@ -189,7 +189,7 @@ export const PATTERNS: Pattern[] = [
       'A set of checkable buttons, known as radio buttons, where only one can be checked at a time.',
     icon: '🔘',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'slider',

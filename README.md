@@ -38,7 +38,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Menu and Menubar     | -     | -   | -      | -     | Planned  |
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Meter                | -     | -   | -      | -     | Planned  |
-| Radio Group          | -     | -   | -      | -     | Planned  |
+| Radio Group          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Slider               | -     | -   | -      | -     | Planned  |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |
 | Spinbutton           | -     | -   | -      | -     | Planned  |

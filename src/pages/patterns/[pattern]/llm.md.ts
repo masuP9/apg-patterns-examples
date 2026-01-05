@@ -12,6 +12,7 @@ const patterns = [
   'disclosure',
   'listbox',
   'menu-button',
+  'radio-group',
   'switch',
   'tabs',
   'toolbar',
