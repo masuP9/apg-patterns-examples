@@ -57,13 +57,13 @@ const tocItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
 
     <!-- Single-Select -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Single-Select (Default)</h3>
+      <h3 class="mb-3 text-lg font-medium">シングル選択（デフォルト）</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Selection follows focus. Use arrow keys to navigate and select.
+        選択はフォーカスに追従します。矢印キーでナビゲートして選択します。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <SingleSelectListboxDemo client:load />
@@ -72,9 +72,9 @@ const tocItems = [
 
     <!-- Multi-Select -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Multi-Select</h3>
+      <h3 class="mb-3 text-lg font-medium">マルチ選択</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Focus and selection are independent. Use Space to toggle, Shift+Arrow to extend selection.
+        フォーカスと選択は独立しています。Spaceで選択を切り替え、Shift+矢印で選択範囲を拡張します。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <MultiSelectListboxDemo client:load />
@@ -83,8 +83,8 @@ const tocItems = [
 
     <!-- Horizontal Orientation -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
-      <p class="text-muted-foreground mb-4 text-sm">Use Left/Right arrow keys for navigation.</p>
+      <h3 class="mb-3 text-lg font-medium">水平方向</h3>
+      <p class="text-muted-foreground mb-4 text-sm">左右の矢印キーでナビゲートします。</p>
       <div class="border-border bg-background rounded-lg border p-6">
         <HorizontalListboxDemo client:load />
       </div>
@@ -93,19 +93,19 @@ const tocItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Listbox.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -146,7 +146,7 @@ const options = [
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
 
     <h3 class="mb-3 text-lg font-medium">Listbox Props</h3>
     <ResponsiveTable class="mb-6">
@@ -214,13 +214,13 @@ const options = [
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <TestingDocs />
   </section>
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink

@@ -54,7 +54,7 @@ const tocItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-wrap items-center gap-8">
         <Tooltip content="Save your changes" client:load>
@@ -92,19 +92,19 @@ const tocItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Tooltip.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -128,15 +128,15 @@ function App() {
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Prop</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Default</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
@@ -144,55 +144,55 @@ function App() {
             <td class="py-2 pr-4"><code>content</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Tooltip content (required)</td>
+            <td class="py-2">ツールチップの内容（必須）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>children</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Trigger element (required)</td>
+            <td class="py-2">トリガー要素（必須）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>open</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Controlled open state</td>
+            <td class="py-2">制御された開閉状態</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>defaultOpen</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Default open state (uncontrolled)</td>
+            <td class="py-2">デフォルトの開閉状態（非制御）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>onOpenChange</code></td>
             <td class="text-muted-foreground py-2 pr-4">(open: boolean) =&gt; void</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when open state changes</td>
+            <td class="py-2">開閉状態が変更されたときのコールバック</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>delay</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">300</td>
-            <td class="py-2">Delay before showing (ms)</td>
+            <td class="py-2">表示までの遅延時間（ミリ秒）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>placement</code></td>
             <td class="text-muted-foreground py-2 pr-4">'top' | 'bottom' | 'left' | 'right'</td>
             <td class="text-muted-foreground py-2 pr-4">'top'</td>
-            <td class="py-2">Tooltip position relative to trigger</td>
+            <td class="py-2">トリガーに対するツールチップの位置</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>id</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">auto-generated</td>
-            <td class="py-2">Custom ID for SSR</td>
+            <td class="py-2">SSR用のカスタムID</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Disable the tooltip</td>
+            <td class="py-2">ツールチップを無効化</td>
           </tr>
         </tbody>
       </table>
@@ -201,7 +201,7 @@ function App() {
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <TestingDocs />
     <div class="mt-6">
       <CodeBlock
@@ -216,7 +216,7 @@ function App() {
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink

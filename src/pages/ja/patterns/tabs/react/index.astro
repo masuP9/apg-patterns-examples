@@ -85,13 +85,13 @@ const verticalTabs = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
 
     <!-- Default (Automatic Activation) -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Automatic Activation (Default)</h3>
+      <h3 class="mb-3 text-lg font-medium">自動アクティベーション（デフォルト）</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Tabs are activated automatically when focused with arrow keys.
+        矢印キーでフォーカスすると、タブが自動的にアクティブになります。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Tabs client:load tabs={demoTabs} defaultSelectedId="tab1" />
@@ -100,9 +100,9 @@ const verticalTabs = [
 
     <!-- Manual Activation -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Manual Activation</h3>
+      <h3 class="mb-3 text-lg font-medium">手動アクティベーション</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Tabs require Enter or Space to activate after focusing.
+        フォーカス後、Enter または Space キーでタブをアクティブにします。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Tabs client:load tabs={manualTabs} defaultSelectedId="manual1" activation="manual" />
@@ -111,10 +111,8 @@ const verticalTabs = [
 
     <!-- Vertical Orientation -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Vertical Orientation</h3>
-      <p class="text-muted-foreground mb-4 text-sm">
-        Tabs arranged vertically with Up/Down arrow navigation.
-      </p>
+      <h3 class="mb-3 text-lg font-medium">垂直方向</h3>
+      <p class="text-muted-foreground mb-4 text-sm">上下矢印キーで操作する垂直配置のタブ。</p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Tabs client:load tabs={verticalTabs} defaultSelectedId="vert1" orientation="vertical" />
       </div>
@@ -123,19 +121,19 @@ const verticalTabs = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Tabs.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -163,7 +161,7 @@ function App() {
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
 
     <h3 class="mb-3 text-lg font-medium">Tabs Props</h3>
     <ResponsiveTable class="mb-6">
@@ -226,7 +224,7 @@ function App() {
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <TestingDocs />
     <div class="mt-6">
       <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Tabs.test.tsx" />
@@ -235,7 +233,7 @@ function App() {
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink

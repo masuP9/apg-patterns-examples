@@ -68,13 +68,13 @@ const longPathItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
 
     <!-- Basic Breadcrumb -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Basic Breadcrumb</h3>
+      <h3 class="mb-3 text-lg font-medium">基本的なパンくずリスト</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        A simple breadcrumb trail showing the path to the current page.
+        現在のページへのパスを示すシンプルなパンくずリスト。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Breadcrumb items={basicItems} />
@@ -83,10 +83,8 @@ const longPathItems = [
 
     <!-- Long Path -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Long Path</h3>
-      <p class="text-muted-foreground mb-4 text-sm">
-        A deeper navigation path with multiple levels of hierarchy.
-      </p>
+      <h3 class="mb-3 text-lg font-medium">長いパス</h3>
+      <p class="text-muted-foreground mb-4 text-sm">複数階層の深いナビゲーションパス。</p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Breadcrumb items={longPathItems} />
       </div>
@@ -95,19 +93,19 @@ const longPathItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Breadcrumb.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       code={`import { Breadcrumb } from './Breadcrumb';
 
@@ -129,7 +127,7 @@ function App() {
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
 
     <h3 class="mb-3 text-lg font-medium">BreadcrumbProps</h3>
     <ResponsiveTable class="mb-6">
@@ -196,13 +194,13 @@ function App() {
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <TestingDocs />
   </section>
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink

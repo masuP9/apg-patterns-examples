@@ -119,10 +119,9 @@ const disabledItems = [
 
     <!-- Default (Single Expansion) -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Single Expansion (Default)</h3>
+      <h3 class="mb-3 text-lg font-medium">単一展開（デフォルト）</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Only one panel can be expanded at a time. Opening a new panel closes the previously open
-        one.
+        一度に1つのパネルのみ展開可能です。新しいパネルを開くと、前に開いていたパネルは閉じます。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Accordion client:load items={defaultItems} headingLevel={3} />
@@ -131,9 +130,9 @@ const disabledItems = [
 
     <!-- Multiple Expansion -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Multiple Expansion</h3>
+      <h3 class="mb-3 text-lg font-medium">複数展開</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Multiple panels can be expanded simultaneously using the <code>allowMultiple</code> prop.
+        <code>allowMultiple</code> プロパティを使用すると、複数のパネルを同時に展開できます。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Accordion client:load items={multipleItems} allowMultiple={true} headingLevel={3} />
@@ -142,10 +141,9 @@ const disabledItems = [
 
     <!-- Disabled Items -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <h3 class="mb-3 text-lg font-medium">無効なアイテム付き</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Individual accordion items can be disabled. Keyboard navigation automatically skips disabled
-        items.
+        個々のアコーディオンアイテムを無効化できます。キーボードナビゲーションは無効なアイテムを自動的にスキップします。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Accordion client:load items={disabledItems} headingLevel={3} />

@@ -55,9 +55,9 @@ const tocItems = [
 
     <!-- Basic Disclosure -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Basic Disclosure</h3>
+      <h3 class="mb-3 text-lg font-medium">基本的なディスクロージャー</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        A simple disclosure that toggles the visibility of content when clicked.
+        クリックでコンテンツの表示/非表示を切り替えるシンプルなディスクロージャー。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Disclosure client:load trigger="What is a Disclosure?">
@@ -71,9 +71,9 @@ const tocItems = [
 
     <!-- Initially Expanded -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Initially Expanded</h3>
+      <h3 class="mb-3 text-lg font-medium">初期状態で展開</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Use the <code>defaultExpanded</code> prop to show the content on initial render.
+        <code>defaultExpanded</code> プロパティを使用すると、初期レンダリング時にコンテンツを表示できます。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Disclosure client:load trigger="This section is open by default" defaultExpanded={true}>
@@ -87,9 +87,9 @@ const tocItems = [
 
     <!-- Disabled -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Disabled State</h3>
+      <h3 class="mb-3 text-lg font-medium">無効化状態</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+        <code>disabled</code> プロパティを使用すると、ディスクロージャーの操作を無効化できます。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <Disclosure client:load trigger="This disclosure is disabled" disabled={true}>

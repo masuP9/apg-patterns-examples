@@ -53,7 +53,7 @@ const tocItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-col items-start gap-4">
         <Switch client:load>Wi-Fi</Switch>
@@ -65,19 +65,19 @@ const tocItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Switch.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -100,15 +100,15 @@ function App() {
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Prop</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Default</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
@@ -116,40 +116,39 @@ function App() {
             <td class="py-2 pr-4"><code>initialChecked</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Initial checked state</td>
+            <td class="py-2">初期チェック状態</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>onCheckedChange</code></td>
             <td class="text-muted-foreground py-2 pr-4">(checked: boolean) =&gt; void</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when state changes</td>
+            <td class="py-2">状態変更時のコールバック</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Whether the switch is disabled</td>
+            <td class="py-2">スイッチが無効かどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>children</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Switch label</td>
+            <td class="py-2">スイッチのラベル</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      All other props are passed to the underlying <code>&lt;button&gt;</code> element.
+      その他のプロパティはすべて、基になる<code>&lt;button&gt;</code>要素に渡されます。
     </p>
   </section>
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <p class="text-muted-foreground mb-4">
-      Tests cover APG compliance including keyboard interactions, ARIA attributes, and accessibility
-      validation.
+      APG準拠に関するテストには、キーボード操作、ARIA属性、アクセシビリティ検証が含まれます。
     </p>
     <div class="mt-6">
       <CodeBlock
@@ -164,7 +163,7 @@ function App() {
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
@@ -179,7 +178,7 @@ function App() {
           AI Implementation Guide (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">
-          - ARIA specs, keyboard support, test checklist</span
+          - ARIA仕様、キーボードサポート、テストチェックリスト</span
         >
       </li>
     </ul>

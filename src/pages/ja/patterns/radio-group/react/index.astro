@@ -82,13 +82,13 @@ const ratingOptions = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
 
     <!-- Basic -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">Basic Radio Group</h3>
+      <h3 class="mb-3 text-lg font-medium">基本的なラジオグループ</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Use arrow keys to navigate and select. Tab moves focus in/out of the group.
+        矢印キーでナビゲートして選択します。Tabキーでグループへのフォーカスの出入りを移動します。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <RadioGroup client:load options={colorOptions} name="color" aria-label="Favorite color" />
@@ -97,9 +97,9 @@ const ratingOptions = [
 
     <!-- With Default Value -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">With Default Value</h3>
+      <h3 class="mb-3 text-lg font-medium">デフォルト値の設定</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Pre-selected option using the <code>defaultValue</code> prop.
+        <code>defaultValue</code> プロップを使用して事前に選択されたオプション。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <RadioGroup
@@ -114,9 +114,9 @@ const ratingOptions = [
 
     <!-- With Disabled Option -->
     <div class="mb-8">
-      <h3 class="mb-3 text-lg font-medium">With Disabled Option</h3>
+      <h3 class="mb-3 text-lg font-medium">無効化されたオプション</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Disabled options are skipped during keyboard navigation.
+        無効化されたオプションはキーボードナビゲーション中にスキップされます。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <RadioGroup client:load options={planOptions} name="plan" aria-label="Subscription plan" />
@@ -125,9 +125,9 @@ const ratingOptions = [
 
     <!-- Horizontal Orientation -->
     <div>
-      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+      <h3 class="mb-3 text-lg font-medium">水平方向の配置</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Horizontal layout with <code>orientation="horizontal"</code>.
+        <code>orientation="horizontal"</code> を使用した水平レイアウト。
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
         <RadioGroup
@@ -149,19 +149,19 @@ const ratingOptions = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
     <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="RadioGroup.tsx" />
   </section>
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -191,7 +191,7 @@ function App() {
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
 
     <h3 class="mb-3 text-lg font-medium">RadioGroupProps</h3>
     <ResponsiveTable class="mb-6">
@@ -272,7 +272,7 @@ function App() {
 
   <!-- Testing Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
     <TestingDocs />
     <div class="mt-6">
       <CodeBlock
@@ -287,7 +287,7 @@ function App() {
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink

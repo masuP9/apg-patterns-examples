@@ -170,10 +170,10 @@ function App() {
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Prop</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Default</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
@@ -181,84 +181,85 @@ function App() {
             <td class="py-2 pr-4"><code>defaultValue</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">min</td>
-            <td class="py-2">Initial value of the slider</td>
+            <td class="py-2">スライダーの初期値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>min</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">0</td>
-            <td class="py-2">Minimum value</td>
+            <td class="py-2">最小値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>max</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">100</td>
-            <td class="py-2">Maximum value</td>
+            <td class="py-2">最大値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>step</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">1</td>
-            <td class="py-2">Step increment for keyboard navigation</td>
+            <td class="py-2">キーボードナビゲーションのステップ増分</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>largeStep</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">step * 10</td>
-            <td class="py-2">Large step for PageUp/PageDown</td>
+            <td class="py-2">PageUp/PageDownの大きなステップ</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>orientation</code></td>
             <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
             <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
-            <td class="py-2">Slider orientation</td>
+            <td class="py-2">スライダーの向き</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Whether the slider is disabled</td>
+            <td class="py-2">スライダーが無効化されているかどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>showValue</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">true</td>
-            <td class="py-2">Whether to display the value text</td>
+            <td class="py-2">値のテキストを表示するかどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>label</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Visible label (also used as aria-labelledby)</td>
+            <td class="py-2">表示されるラベル（aria-labelledbyとしても使用）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>valueText</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Human-readable value for aria-valuetext</td>
+            <td class="py-2">aria-valuetextの人間が読める値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>format</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2"
-              >Format pattern for display and aria-valuetext (e.g., "{'{value}'}%", "{'{value}'} of {
+              >表示とaria-valuetextのフォーマットパターン（例："{'{value}'}%"、"{'{value}'} of {
                 '{max}'
-              }")</td
+              }"）</td
             >
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>onValueChange</code></td>
             <td class="text-muted-foreground py-2 pr-4">(value: number) =&gt; void</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when value changes</td>
+            <td class="py-2">値が変更されたときのコールバック</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      One of <code>label</code>, <code>aria-label</code>, or <code>aria-labelledby</code> is required
-      for accessibility.
+      アクセシビリティのため、<code>label</code>、<code>aria-label</code>、または<code
+        >aria-labelledby</code
+      >のいずれかが必要です。
     </p>
   </section>
 

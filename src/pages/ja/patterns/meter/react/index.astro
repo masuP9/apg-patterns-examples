@@ -139,10 +139,10 @@ function App() {
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Prop</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Default</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
@@ -150,60 +150,61 @@ function App() {
             <td class="py-2 pr-4"><code>value</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">required</td>
-            <td class="py-2">Current value of the meter</td>
+            <td class="py-2">メーターの現在値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>min</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">0</td>
-            <td class="py-2">Minimum value</td>
+            <td class="py-2">最小値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>max</code></td>
             <td class="text-muted-foreground py-2 pr-4">number</td>
             <td class="text-muted-foreground py-2 pr-4">100</td>
-            <td class="py-2">Maximum value</td>
+            <td class="py-2">最大値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>clamp</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">true</td>
-            <td class="py-2">Whether to clamp value to min/max range</td>
+            <td class="py-2">値を min/max の範囲内に制限するかどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>showValue</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">true</td>
-            <td class="py-2">Whether to display the value text</td>
+            <td class="py-2">値のテキストを表示するかどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>label</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Visible label (also used as aria-label)</td>
+            <td class="py-2">表示ラベル（aria-label としても使用される）</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>valueText</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Human-readable value for aria-valuetext</td>
+            <td class="py-2">aria-valuetext 用の人間が読める値</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>format</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
             <td class="py-2"
-              >Format pattern for display and aria-valuetext (e.g., "{'{value}'}%", "{'{value}'} of {
+              >表示と aria-valuetext のフォーマットパターン（例: "{'{value}'}%", "{'{value}'} of {
                 '{max}'
-              }")</td
+              }"）</td
             >
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      One of <code>label</code>, <code>aria-label</code>, or <code>aria-labelledby</code> is required
-      for accessibility.
+      アクセシビリティのため、<code>label</code>、<code>aria-label</code>、または <code
+        >aria-labelledby</code
+      > のいずれかが必須です。
     </p>
   </section>
 
