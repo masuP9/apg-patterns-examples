@@ -1,0 +1,105 @@
+/* =============================================================================
+   METER COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-meter {
+  display: contents;
+}
+
+/* Meter Base */
+.apg-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Meter Label */
+.apg-meter-label {
+  flex-shrink: 0;
+  min-width: 6rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Meter Track (background) */
+.apg-meter-track {
+  flex: 1;
+  height: 0.75rem;
+  min-width: 8rem;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--primary) 25%, var(--background));
+  overflow: hidden;
+}
+
+/* Meter Fill (progress indicator) */
+.apg-meter-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+  transition: width 0.3s ease-out;
+}
+
+/* Meter Value Display */
+.apg-meter-value {
+  flex-shrink: 0;
+  min-width: 3rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+
+/* Dark mode - lighter track for better visibility */
+.dark .apg-meter-track {
+  background: color-mix(in oklch, var(--primary) 40%, var(--background));
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-meter-track {
+    border: 2px solid var(--foreground);
+  }
+
+  .apg-meter-fill {
+    background: var(--foreground);
+  }
+
+  .apg-meter-label,
+  .apg-meter-value {
+    font-weight: 700;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-meter-fill {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-meter-track {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-meter-fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .apg-meter-label {
+    color: ButtonText;
+  }
+
+  .apg-meter-value {
+    color: ButtonText;
+  }
+}

@@ -1,0 +1,157 @@
+---
+/**
+ * APG Meter Pattern - Astro Implementation
+ *
+ * A graphical display of a numeric value within a defined range.
+ * Uses Web Components for dynamic value updates.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/meter/
+ */
+
+export interface Props {
+  /** Current value */
+  value: number;
+  /** Minimum value (default: 0) */
+  min?: number;
+  /** Maximum value (default: 100) */
+  max?: number;
+  /** Clamp value to min/max range (default: true) */
+  clamp?: boolean;
+  /** Show value text (default: true) */
+  showValue?: boolean;
+  /** Visible label text */
+  label?: string;
+  /** Human-readable value text for aria-valuetext */
+  valueText?: string;
+  /** Meter id */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+  /** Accessible label when no visible label */
+  'aria-label'?: string;
+  /** Reference to external label element */
+  'aria-labelledby'?: string;
+  /** Reference to description element */
+  'aria-describedby'?: string;
+}
+
+const {
+  value,
+  min = 0,
+  max = 100,
+  clamp = true,
+  showValue = true,
+  label,
+  valueText,
+  id,
+  class: className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+} = Astro.props;
+
+// Clamp value to min/max range
+const clampNumber = (val: number, minVal: number, maxVal: number, shouldClamp: boolean): number => {
+  if (!Number.isFinite(val) || !Number.isFinite(minVal) || !Number.isFinite(maxVal)) {
+    return val;
+  }
+  return shouldClamp ? Math.min(maxVal, Math.max(minVal, val)) : val;
+};
+
+const normalizedValue = clampNumber(value, min, max, clamp);
+
+// Calculate percentage for visual display
+const percentage =
+  max === min ? 0 : Math.max(0, Math.min(100, ((normalizedValue - min) / (max - min)) * 100));
+
+// Display text (valueText takes priority, otherwise show raw value)
+const displayText = valueText ?? String(normalizedValue);
+---
+
+<apg-meter data-value={value} data-min={min} data-max={max} data-clamp={clamp}>
+  <div
+    role="meter"
+    aria-valuenow={normalizedValue}
+    aria-valuemin={min}
+    aria-valuemax={max}
+    aria-valuetext={valueText}
+    aria-label={label || ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-describedby={ariaDescribedby}
+    id={id}
+    class={`apg-meter ${className}`.trim()}
+  >
+    {
+      label && (
+        <span class="apg-meter-label" aria-hidden="true">
+          {label}
+        </span>
+      )
+    }
+    <div class="apg-meter-track" aria-hidden="true">
+      <div class="apg-meter-fill" style={`width: ${percentage}%`}></div>
+    </div>
+    {
+      showValue && (
+        <span class="apg-meter-value" aria-hidden="true">
+          {displayText}
+        </span>
+      )
+    }
+  </div>
+</apg-meter>
+
+<script>
+  class ApgMeter extends HTMLElement {
+    private meter: HTMLElement | null = null;
+    private fill: HTMLElement | null = null;
+    private valueDisplay: HTMLElement | null = null;
+
+    connectedCallback() {
+      this.meter = this.querySelector('[role="meter"]');
+      this.fill = this.querySelector('.apg-meter-fill');
+      this.valueDisplay = this.querySelector('.apg-meter-value');
+    }
+
+    // Method to update value dynamically
+    updateValue(newValue: number) {
+      if (!this.meter) return;
+
+      const min = Number(this.dataset.min) || 0;
+      const max = Number(this.dataset.max) || 100;
+      const clamp = this.dataset.clamp !== 'false';
+
+      // Clamp if needed
+      let normalizedValue = newValue;
+      if (clamp && Number.isFinite(newValue)) {
+        normalizedValue = Math.min(max, Math.max(min, newValue));
+      }
+
+      // Update ARIA attributes
+      this.meter.setAttribute('aria-valuenow', String(normalizedValue));
+
+      // Update visual fill
+      if (this.fill) {
+        const percentage = max === min ? 0 : ((normalizedValue - min) / (max - min)) * 100;
+        this.fill.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
+      }
+
+      // Update value display
+      if (this.valueDisplay) {
+        this.valueDisplay.textContent = String(normalizedValue);
+      }
+
+      // Dispatch event
+      this.dispatchEvent(
+        new CustomEvent('valuechange', {
+          detail: { value: normalizedValue },
+          bubbles: true,
+        })
+      );
+    }
+  }
+
+  if (!customElements.get('apg-meter')) {
+    customElements.define('apg-meter', ApgMeter);
+  }
+</script>

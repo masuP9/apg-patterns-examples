@@ -33,11 +33,11 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Feed                 | -     | -   | -      | -     | Planned  |
 | Grid                 | -     | -   | -      | -     | Planned  |
 | Landmarks            | -     | -   | -      | -     | Planned  |
-| Link                 | -     | -   | -      | -     | Planned  |
+| Link                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Menu and Menubar     | -     | -   | -      | -     | Planned  |
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
-| Meter                | -     | -   | -      | -     | Planned  |
+| Meter                | ✅    | ✅  | ✅     | ✅    | Complete |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Slider               | -     | -   | -      | -     | Planned  |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |

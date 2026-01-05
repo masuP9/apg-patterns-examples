@@ -1,0 +1,266 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Meter from '@patterns/meter/Meter.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/meter/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/meter/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/meter/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/meter/Meter.astro?raw';
+import testCode from '@patterns/meter/Meter.test.astro.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Meter - Astro" pattern="meter" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Meter</h1>
+    <p class="text-muted-foreground text-lg">
+      A graphical display of a numeric value within a defined range.
+    </p>
+    <AiGuideBadge pattern="meter" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="meter" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Meter value={75} label="CPU Usage" valueText="75%" />
+        </div>
+        <div>
+          <Meter value={3.5} min={0} max={5} label="Rating" valueText="3.5 / 5" />
+        </div>
+        <div>
+          <Meter value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+        </div>
+        <div>
+          <Meter value={65} min={0} max={100} label="Progress" valueText="65%" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="Meter.astro" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Meter from './Meter.astro';
+---
+
+<!-- Basic usage with aria-label -->
+<Meter value={75} aria-label="CPU Usage" />
+
+<!-- With visible label -->
+<Meter value={75} label="CPU Usage" />
+
+<!-- With valueText for screen readers -->
+<Meter
+  value={75}
+  label="Progress"
+  valueText="75%"
+/>
+
+<!-- Custom range -->
+<Meter
+  value={3.5}
+  min={0}
+  max={5}
+  label="Rating"
+  valueText="3.5 out of 5"
+/>
+
+<!-- Dynamic updates via Web Component API -->
+<Meter value={50} id="my-meter" label="Download" />
+<script>
+  const meter = document.querySelector('#my-meter').closest('apg-meter');
+  meter.updateValue(75);
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>value</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Current value of the meter</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">Minimum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">100</td>
+            <td class="py-2">Maximum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>clamp</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Whether to clamp value to min/max range</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Whether to display the value text</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Visible label (also used as aria-label)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Human-readable value for aria-valuetext</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      One of <code>label</code>, <code>aria-label</code>, or <code>aria-labelledby</code> is required
+      for accessibility. Note: The Astro implementation does not support
+      <code>formatValue</code> prop; use <code>valueText</code> instead.
+    </p>
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">Web Component Methods</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Method</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>updateValue(value: number)</code></td>
+            <td class="py-2">Dynamically update the meter value</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 text-left">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valuechange</code></td>
+            <td class="py-2">
+              <code>{`{ value: number }`}</code> - Fired when value is updated via
+              <code>updateValue()</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="Meter.test.astro.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Meter Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;meter&gt; element
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="meter" />
+    </ul>
+  </section>
+</PatternLayout>

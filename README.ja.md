@@ -33,11 +33,11 @@
 | Feed                | -     | -   | -      | -     | 予定       |
 | Grid                | -     | -   | -      | -     | 予定       |
 | Landmarks           | -     | -   | -      | -     | 予定       |
-| Link                | -     | -   | -      | -     | 予定       |
+| Link                | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Listbox             | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Menu and Menubar    | -     | -   | -      | -     | 予定       |
 | Menu Button         | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Meter               | -     | -   | -      | -     | 予定       |
+| Meter               | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Radio Group         | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Slider              | -     | -   | -      | -     | 予定       |
 | Slider (Multi-Thumb)| -     | -   | -      | -     | 予定       |
