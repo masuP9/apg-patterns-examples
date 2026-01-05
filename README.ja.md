@@ -8,160 +8,55 @@
 
 ## 概要
 
-このプロジェクトは、[WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) のパターンに従ったアクセシブルな UI コンポーネントを提供します。各コンポーネントは、**React**、**Vue**、**Svelte**、**Astro**（Web Components）の 4 つの主要フロントエンドフレームワークで実装されています。
+このプロジェクトは、[WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/patterns/) のパターンに従ったアクセシブルな UI コンポーネントとテストケースを提供します。
 
-## 機能
+各コンポーネントは、**React**、**Vue**、**Svelte**、**Astro**（Web Components）の4つの主要フロントエンドフレームワークで実装されていて、より身近な実装例を下にアクセシビリティやWAI-ARIAの学習に役立てることができます。
 
-- **マルチフレームワーク**: React、Vue、Svelte、Astro（Web Components）での実装
-- **アクセシビリティファースト**: WAI-ARIA APG 準拠
-- **Astro Islands**: インタラクティブコンポーネントを含む高速で最適化された静的サイト
-- **インタラクティブドキュメント**: シンタックスハイライト（Shiki）付きのライブサンプル
-- **テスト**: Vitest と Testing Library によるテスト
-- **開発者体験**: TypeScript、Tailwind CSS、ホットリロード
-- **レスポンシブ**: モバイルファーストデザイン
+また各コンポーネントには、APGパターンに従っているかどうかのテストが書かれており、テストをそのまま利用し自身が開発したコンポーネントのアクセシビリティを担保することも可能です。またテストについてはAIが理解しやすい形のドキュメントを整備しており、テストケースを生成することもしやすいドキュメントになっています。
 
-## 技術スタック
+その他、ダークモード、ハイコントラストモード、強制カラーモードに対応したスタイリングも提供しさらにアクセシブルなコンポーネントの開発を支援します。
 
-| レイヤー       | 技術                           |
-| -------------- | ------------------------------ |
-| フレームワーク | Astro (Islands アーキテクチャ) |
-| コンテンツ     | MDX                            |
-| デモ           | React / Vue / Svelte / Astro   |
-| スタイリング   | Tailwind CSS + shadcn/ui       |
-| コード表示     | Shiki                          |
-| テスト         | Vitest + Testing Library       |
-| デプロイ       | GitHub Pages                   |
+## パターン実装例の提供状況
 
-## クイックスタート
-
-### 必要環境
-
-- Node.js 20+
-- npm
-
-### インストール
-
-```bash
-# リポジトリをクローン
-git clone https://github.com/masuP9/apg-patterns-examples.git
-cd apg-patterns-examples
-
-# 依存関係をインストール
-npm install
-```
-
-### 開発
-
-```bash
-# 開発サーバーを起動
-npm run dev
-# http://localhost:4321 で開きます
-
-# プロダクションビルド
-npm run build
-
-# プロダクションビルドをプレビュー
-npm run preview
-
-# テストを実行
-npm run test
-
-# リント
-npm run lint
-
-# フォーマット
-npm run format
-```
-
-## コンポーネント実装状況
-
-| パターン      | React | Vue | Svelte | Astro | ステータス |
-| ------------- | ----- | --- | ------ | ----- | ---------- |
-| Accordion     | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Alert         | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Breadcrumb    | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Dialog        | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Disclosure    | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Listbox       | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Menu Button   | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Switch        | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Tabs          | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Toggle Button | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Toolbar       | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Tooltip       | ✅    | ✅  | ✅     | ✅    | 完了       |
-
-## アーキテクチャ
-
-```
-apg-patterns-examples/
-├── src/
-│   ├── components/           # サイト UI (shadcn/ui)
-│   │   └── ui/
-│   ├── lib/                  # ユーティリティ
-│   ├── patterns/             # APG パターン実装
-│   │   ├── accordion/        # Accordion (React/Vue/Svelte/Astro)
-│   │   ├── alert/            # Alert
-│   │   ├── breadcrumb/       # Breadcrumb
-│   │   ├── button/           # Toggle Button
-│   │   ├── dialog/           # Dialog
-│   │   ├── disclosure/       # Disclosure
-│   │   ├── listbox/          # Listbox
-│   │   ├── menu-button/      # Menu Button
-│   │   ├── switch/           # Switch
-│   │   ├── tabs/             # Tabs
-│   │   ├── toolbar/          # Toolbar
-│   │   └── tooltip/          # Tooltip
-│   ├── layouts/              # ページレイアウト
-│   ├── pages/                # ルーティングページ
-│   ├── styles/               # グローバルスタイル
-│   └── test/                 # テストユーティリティ
-├── .internal/                # 内部ドキュメント
-├── public/                   # 静的アセット
-├── astro.config.mjs
-├── CLAUDE.md                 # 開発ガイド
-└── package.json
-```
-
-## コンポーネント API
-
-### Toggle Button
-
-すべてのコンポーネントは、フレームワーク間で同じ props パターンに従います：
-
-```tsx
-// React
-<ToggleButton initialPressed={false} onToggle={(pressed) => console.log(pressed)}>
-  Mute
-</ToggleButton>
-```
-
-```vue
-<!-- Vue -->
-<ToggleButton :initial-pressed="false" @toggle="(pressed) => console.log(pressed)">
-  Mute
-</ToggleButton>
-```
-
-```svelte
-<!-- Svelte -->
-<ToggleButton initialPressed={false} ontoggle={(e) => console.log(e.detail)}>Mute</ToggleButton>
-```
-
-### 主な機能
-
-- **HTML 属性の継承**: 標準の HTML 属性を渡すことができます
-- **アクセシビリティ**: キーボードナビゲーションを含む完全な ARIA サポート
-- **フレームワーク非依存**: React、Vue、Svelte、Astro 間で一貫した API
-- **TypeScript**: 完全な型安全性と IntelliSense サポート
+| パターン            | React | Vue | Svelte | Astro | ステータス |
+| ------------------- | ----- | --- | ------ | ----- | ---------- |
+| Accordion           | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Alert               | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Alert Dialog        | -     | -   | -      | -     | 予定       |
+| Breadcrumb          | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Button              | -     | -   | -      | -     | 予定       |
+| Carousel            | -     | -   | -      | -     | 予定       |
+| Checkbox            | -     | -   | -      | -     | 予定       |
+| Combobox            | -     | -   | -      | -     | 予定       |
+| Dialog              | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Disclosure          | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Feed                | -     | -   | -      | -     | 予定       |
+| Grid                | -     | -   | -      | -     | 予定       |
+| Landmarks           | -     | -   | -      | -     | 予定       |
+| Link                | -     | -   | -      | -     | 予定       |
+| Listbox             | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Menu and Menubar    | -     | -   | -      | -     | 予定       |
+| Menu Button         | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Meter               | -     | -   | -      | -     | 予定       |
+| Radio Group         | -     | -   | -      | -     | 予定       |
+| Slider              | -     | -   | -      | -     | 予定       |
+| Slider (Multi-Thumb)| -     | -   | -      | -     | 予定       |
+| Spinbutton          | -     | -   | -      | -     | 予定       |
+| Switch              | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Table               | -     | -   | -      | -     | 予定       |
+| Tabs                | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Toggle Button       | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Toolbar             | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Tooltip             | ✅    | ✅  | ✅     | ✅    | 完了       |
+| Tree View           | -     | -   | -      | -     | 予定       |
+| Treegrid            | -     | -   | -      | -     | 予定       |
+| Window Splitter     | -     | -   | -      | -     | 予定       |
 
 ## スタイリング
-
-コンポーネントは、アクセシビリティ強化を備えた Tailwind CSS を使用しています：
 
 - ハイコントラストモードのサポート
 - モーション削減の設定への対応
 - 強制カラーモードのサポート
-- テーマ設定用の CSS カスタムプロパティ
 
 ## コントリビューション
 
@@ -184,7 +79,6 @@ apg-patterns-examples/
 ### 開発ガイドライン
 
 - APG パターンに正確に従う
-- 4 つすべてのフレームワーク間でパリティを維持する
 - アクセシビリティチェックを含むテストを書く
 - アクセシビリティ機能を徹底的にドキュメント化する
 - セマンティックなコミットメッセージを使用する
@@ -197,15 +91,10 @@ apg-patterns-examples/
 
 このプロジェクトは MIT ライセンスの下でライセンスされています。詳細については [LICENSE](./LICENSE) ファイルをご覧ください。
 
-## 謝辞
-
-- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
-- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/)
-- フレームワークコミュニティ: React、Vue、Svelte
-- Islands アーキテクチャの Astro チーム
 
 ## リンク
 
+- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [ライブデモ](https://masup9.github.io/apg-patterns-examples/)
 - [Issue Tracker](https://github.com/masuP9/apg-patterns-examples/issues)
 - [Discussions](https://github.com/masuP9/apg-patterns-examples/discussions)
