@@ -77,11 +77,11 @@ export const ui = {
     'nav.openMenu': 'メニューを開く',
 
     // Site
-    'site.title': 'APG パターン実装例',
+    'site.title': 'APG Patterns Examples',
     'site.description':
-      'APG パターン実装例 - React、Vue、Svelte、Astro で実装したアクセシブルなコンポーネントパターン',
+      'APG Patterns Examples - React、Vue、Svelte、Astro で実装したアクセシブルなコンポーネントパターン',
     'site.logo': 'APG Patterns',
-    'site.footerDescription': 'APG パターン実装例 - アクセシブルなコンポーネント実装',
+    'site.footerDescription': 'APG Patterns Examples - Accessible component implementations',
 
     // Pattern page sections
     'pattern.demo': 'デモ',

@@ -172,11 +172,11 @@ export function getPatternTranslation(
 }
 
 /**
- * Get pattern name with translation
+ * Get pattern name (always returns English name for consistency)
  */
-export function getPatternName(patternId: string, defaultName: string, locale: Locale): string {
-  const translation = getPatternTranslation(patternId, locale);
-  return translation?.name || defaultName;
+export function getPatternName(patternId: string, defaultName: string, _locale: Locale): string {
+  // Pattern names are kept in English for consistency across languages
+  return defaultName;
 }
 
 /**
