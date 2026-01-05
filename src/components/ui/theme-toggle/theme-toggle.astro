@@ -44,6 +44,14 @@ const { class: className } = Astro.props;
   .theme-toggle-button[aria-selected='true'] :global(svg) {
     color: oklch(0.8 0.18 90);
   }
+
+  /* Forced colors mode support - use outline for selected state visibility */
+  @media (forced-colors: active) {
+    .theme-toggle-button[aria-selected='true'] {
+      outline: 2px solid SelectedItem;
+      outline-offset: -2px;
+    }
+  }
 </style>
 
 <script is:inline>
