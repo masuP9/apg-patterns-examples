@@ -1,0 +1,185 @@
+/* =============================================================================
+   CHECKBOX COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-checkbox {
+  display: contents;
+}
+
+/* Checkbox Base (Wrapper) */
+.apg-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* Hidden Native Input (visually hidden but focusable) */
+.apg-checkbox-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Checkbox Control Box */
+.apg-checkbox-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  background: var(--background);
+  border: 2px solid var(--input);
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Focus state */
+.apg-checkbox-input:focus-visible + .apg-checkbox-control {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Hover state */
+.apg-checkbox:hover .apg-checkbox-control {
+  border-color: var(--foreground);
+}
+
+/* Checked state */
+.apg-checkbox-input:checked + .apg-checkbox-control {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.apg-checkbox-input:checked:hover + .apg-checkbox-control {
+  background: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+  border-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+}
+
+/* Indeterminate state */
+.apg-checkbox-input:indeterminate + .apg-checkbox-control {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Disabled state */
+.apg-checkbox:has(.apg-checkbox-input:disabled) {
+  opacity: 0.5;
+}
+
+.apg-checkbox-input:disabled + .apg-checkbox-control {
+  cursor: not-allowed;
+}
+
+/* Checkbox Icons */
+.apg-checkbox-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--primary-foreground);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.apg-checkbox-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Show check icon when checked */
+.apg-checkbox-input:checked + .apg-checkbox-control .apg-checkbox-icon--check {
+  opacity: 1;
+}
+
+/* Show indeterminate icon when indeterminate */
+.apg-checkbox-input:indeterminate + .apg-checkbox-control .apg-checkbox-icon--indeterminate {
+  opacity: 1;
+}
+
+/* Hide check icon when indeterminate */
+.apg-checkbox-input:indeterminate + .apg-checkbox-control .apg-checkbox-icon--check {
+  opacity: 0;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-checkbox-control {
+    border-width: 3px;
+  }
+
+  .apg-checkbox-input:checked + .apg-checkbox-control,
+  .apg-checkbox-input:indeterminate + .apg-checkbox-control {
+    background-color: black;
+    border-color: black;
+  }
+
+  .apg-checkbox-icon {
+    color: white;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-checkbox-control,
+  .apg-checkbox-icon {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-checkbox-control {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-checkbox-input:checked + .apg-checkbox-control,
+  .apg-checkbox-input:indeterminate + .apg-checkbox-control {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .apg-checkbox-icon {
+    color: HighlightText;
+  }
+
+  .apg-checkbox-input:focus-visible + .apg-checkbox-control {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-checkbox:has(.apg-checkbox-input:disabled) {
+    opacity: 1;
+  }
+
+  .apg-checkbox-input:disabled + .apg-checkbox-control {
+    border-color: GrayText;
+    background: ButtonFace;
+  }
+
+  .apg-checkbox-input:disabled:checked + .apg-checkbox-control,
+  .apg-checkbox-input:disabled:indeterminate + .apg-checkbox-control {
+    background: GrayText;
+    border-color: GrayText;
+  }
+}

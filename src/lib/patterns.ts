@@ -87,7 +87,7 @@ export const PATTERNS: Pattern[] = [
       'Supports dual-state (checked/unchecked) and tri-state (checked/unchecked/partially checked) checkboxes.',
     icon: '☑️',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'combobox',

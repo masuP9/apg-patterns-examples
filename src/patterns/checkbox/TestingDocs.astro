@@ -1,0 +1,227 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
+    requirements.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG Keyboard Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space key</code></td>
+          <td class="py-2">Toggles the checkbox state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab navigation</code></td>
+          <td class="py-2">Tab moves focus between checkboxes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
+          <td class="py-2">Disabled checkboxes are skipped in Tab order</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled key ignore</code></td>
+          <td class="py-2">Disabled checkboxes ignore key presses</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>Note:</strong> Unlike the Switch pattern, the Enter key does not toggle the checkbox.
+  </p>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: DOM State & ARIA
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="checkbox"</code></td>
+          <td class="py-2">Element has checkbox role (native or explicit)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked initial</code></td>
+          <td class="py-2">Initial state is unchecked</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked toggle</code></td>
+          <td class="py-2">Click toggles checked state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate</code></td>
+          <td class="py-2">Indeterminate state can be set via JavaScript</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate clear</code></td>
+          <td class="py-2">User interaction clears indeterminate state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled</code></td>
+          <td class="py-2">Disabled checkboxes prevent interaction</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Label & Form
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">Accessible name via aria-label</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>External label</code></td>
+          <td class="py-2">Accessible name via external &lt;label&gt; with for/id</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Label click</code></td>
+          <td class="py-2">Clicking external label toggles checkbox</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">Accessible name via external element reference</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>name attribute</code></td>
+          <td class="py-2">Form submission includes checkbox data</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>value attribute</code></td>
+          <td class="py-2">Form value is correctly set</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked axe</code></td>
+          <td class="py-2">No violations in checked state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>indeterminate axe</code></td>
+          <td class="py-2">No violations in indeterminate state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled axe</code></td>
+          <td class="py-2">No violations in disabled state</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attribute Inheritance
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className merge</code></td>
+          <td class="py-2">Custom classes are merged with component classes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-* attributes</code></td>
+          <td class="py-2">Custom data attributes are passed through</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id attribute</code></td>
+          <td class="py-2">ID attribute is correctly set for label association</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>required attribute</code></td>
+          <td class="py-2">Required attribute is passed through</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - Automated accessibility testing
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
+</div>

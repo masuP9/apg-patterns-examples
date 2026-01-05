@@ -1,0 +1,238 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checkbox</code></td>
+          <td class="py-2 pr-4">
+            <code>&lt;input type="checkbox"&gt;</code> or element with <code>role="checkbox"</code>
+          </td>
+          <td class="py-2">
+            Identifies the element as a checkbox. Native <code>&lt;input type="checkbox"&gt;</code> has
+            this role implicitly.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    This implementation uses native <code>&lt;input type="checkbox"&gt;</code> which provides the
+    <code>checkbox</code> role implicitly. For custom implementations using <code>&lt;div&gt;</code> or
+    <code>&lt;button&gt;</code>, explicit <code>role="checkbox"</code> is required.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium">
+      <code>aria-checked</code> / <code>checked</code>
+    </h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the current checked state of the checkbox. Required for all checkbox implementations.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code> | <code>mixed</code> (for indeterminate)
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Native HTML</td>
+            <td class="py-2">
+              <code>checked</code> property (implicit <code>aria-checked</code>)
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Custom ARIA</td>
+            <td class="py-2">
+              <code>aria-checked="true|false|mixed"</code>
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Click, Space</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>indeterminate</code> (Native Property)</h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates a mixed state, typically used for "select all" checkboxes when some but not all
+      items are selected.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code>
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only for mixed state)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Note</td>
+            <td class="py-2">JavaScript property only, not an HTML attribute</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Behavior</td>
+            <td class="py-2">Automatically cleared on user interaction</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>disabled</code> (Native Attribute)</h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the checkbox is not interactive and cannot be changed.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">Present | Absent</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Effect</td>
+            <td class="py-2">Removed from tab order, ignores input</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Toggle the checkbox state (checked/unchecked)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Move focus to the next focusable element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift + Tab</kbd></td
+          >
+          <td class="py-2">Move focus to the previous focusable element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>Note:</strong> Unlike the Switch pattern, the Enter key does not toggle the checkbox.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <p class="text-muted-foreground mb-3">
+    Checkboxes must have an accessible name. This can be provided through:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Label element (recommended)</strong> - Using <code>&lt;label&gt;</code> with <code
+        >for</code
+      > attribute or wrapping the input
+    </li>
+    <li>
+      <code>aria-label</code> - Provides an invisible label for the checkbox
+    </li>
+    <li>
+      <code>aria-labelledby</code> - References an external element as the label
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <p class="text-muted-foreground mb-3">
+    This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate
+    state:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Checkmark icon</strong> - Visible when checked
+    </li>
+    <li>
+      <strong>Dash/minus icon</strong> - Visible when indeterminate
+    </li>
+    <li>
+      <strong>Empty box</strong> - Visible when unchecked
+    </li>
+    <li>
+      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
+      Mode
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Checkbox Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox"
+        class="text-primary hover:underline"
+      >
+        MDN: &lt;input type="checkbox"&gt;
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://w3c.github.io/aria/#checkbox"
+        class="text-primary hover:underline"
+      >
+        W3C ARIA: checkbox role
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

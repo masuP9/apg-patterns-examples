@@ -1,0 +1,126 @@
+---
+/**
+ * APG Checkbox Pattern - Astro Implementation
+ *
+ * A control that allows users to select one or more options.
+ * Uses native input[type="checkbox"] with Web Components for enhanced interactivity.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/
+ */
+
+export interface Props {
+  /** Initial checked state */
+  initialChecked?: boolean;
+  /** Indeterminate (mixed) state */
+  indeterminate?: boolean;
+  /** Whether the checkbox is disabled */
+  disabled?: boolean;
+  /** Form field name */
+  name?: string;
+  /** Form field value */
+  value?: string;
+  /** Checkbox id for label association */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  initialChecked = false,
+  indeterminate = false,
+  disabled = false,
+  name,
+  value,
+  id,
+  class: className = '',
+} = Astro.props;
+---
+
+<apg-checkbox
+  class={`apg-checkbox ${className}`.trim()}
+  data-indeterminate={indeterminate ? 'true' : undefined}
+>
+  <input
+    type="checkbox"
+    id={id}
+    class="apg-checkbox-input"
+    checked={initialChecked}
+    disabled={disabled}
+    name={name}
+    value={value}
+  />
+  <span class="apg-checkbox-control" aria-hidden="true">
+    <span class="apg-checkbox-icon apg-checkbox-icon--check">
+      <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M10 3L4.5 8.5L2 6"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </span>
+    <span class="apg-checkbox-icon apg-checkbox-icon--indeterminate">
+      <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.5 6H9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </span>
+  </span>
+</apg-checkbox>
+
+<script>
+  class ApgCheckbox extends HTMLElement {
+    private input: HTMLInputElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.input = this.querySelector('input[type="checkbox"]');
+
+      if (!this.input) {
+        console.warn('apg-checkbox: input element not found');
+        return;
+      }
+
+      // Set initial indeterminate state if specified
+      if (this.dataset.indeterminate === 'true') {
+        this.input.indeterminate = true;
+      }
+
+      this.input.addEventListener('change', this.handleChange);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.input?.removeEventListener('change', this.handleChange);
+      this.input = null;
+    }
+
+    private handleChange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+
+      // Clear indeterminate on user interaction
+      if (target.indeterminate) {
+        target.indeterminate = false;
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('checkedchange', {
+          detail: { checked: target.checked },
+          bubbles: true,
+        })
+      );
+    };
+  }
+
+  if (!customElements.get('apg-checkbox')) {
+    customElements.define('apg-checkbox', ApgCheckbox);
+  }
+</script>
