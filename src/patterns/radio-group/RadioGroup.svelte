@@ -189,7 +189,9 @@
       aria-disabled={option.disabled || undefined}
       aria-labelledby={`${instanceId}-label-${option.id}`}
       tabindex={getTabIndex(option)}
-      class="apg-radio {selectedValue === option.value ? 'apg-radio--selected' : ''} {option.disabled ? 'apg-radio--disabled' : ''}"
+      class="apg-radio {selectedValue === option.value
+        ? 'apg-radio--selected'
+        : ''} {option.disabled ? 'apg-radio--disabled' : ''}"
       onclick={() => handleClick(option)}
       onkeydown={(e) => handleKeyDown(e, option.value)}
     >

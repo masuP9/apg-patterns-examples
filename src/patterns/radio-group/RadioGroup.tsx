@@ -100,10 +100,7 @@ export function RadioGroup({
 
       switch (direction) {
         case 'next':
-          targetIndex =
-            currentIndex >= 0
-              ? (currentIndex + 1) % enabledOptions.length
-              : 0;
+          targetIndex = currentIndex >= 0 ? (currentIndex + 1) % enabledOptions.length : 0;
           break;
         case 'prev':
           targetIndex =

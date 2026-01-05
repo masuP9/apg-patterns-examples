@@ -75,9 +75,7 @@ describe('RadioGroup', () => {
     });
 
     it('sets aria-disabled="true" on disabled radio', () => {
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
       expect(screen.getByRole('radio', { name: 'Blue' })).toHaveAttribute('aria-disabled', 'true');
     });
 
@@ -102,9 +100,7 @@ describe('RadioGroup', () => {
       );
       expect(screen.getByRole('radiogroup')).not.toHaveAttribute('aria-orientation');
 
-      rerender(
-        <RadioGroup options={defaultOptions} name="color" aria-label="Favorite color" />
-      );
+      rerender(<RadioGroup options={defaultOptions} name="color" aria-label="Favorite color" />);
       expect(screen.getByRole('radiogroup')).not.toHaveAttribute('aria-orientation');
     });
   });
@@ -314,9 +310,7 @@ describe('RadioGroup', () => {
 
     it('skips disabled radio on ArrowDown', async () => {
       const user = userEvent.setup();
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
 
       await user.tab();
       await user.keyboard('{ArrowDown}');
@@ -363,9 +357,7 @@ describe('RadioGroup', () => {
 
     it('skips disabled radio on ArrowRight', async () => {
       const user = userEvent.setup();
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
 
       await user.tab();
       await user.keyboard('{ArrowRight}');
@@ -376,9 +368,7 @@ describe('RadioGroup', () => {
 
     it('does not select disabled radio on Space', async () => {
       const user = userEvent.setup();
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
 
       const blueRadio = screen.getByRole('radio', { name: 'Blue' });
       blueRadio.focus();
@@ -388,9 +378,7 @@ describe('RadioGroup', () => {
 
     it('does not select disabled radio on click', async () => {
       const user = userEvent.setup();
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
 
       const blueRadio = screen.getByRole('radio', { name: 'Blue' });
       await user.click(blueRadio);
@@ -426,9 +414,7 @@ describe('RadioGroup', () => {
     });
 
     it('sets tabindex="-1" on disabled radios', () => {
-      render(
-        <RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />
-      );
+      render(<RadioGroup options={optionsWithDisabled} name="color" aria-label="Favorite color" />);
       expect(screen.getByRole('radio', { name: 'Blue' })).toHaveAttribute('tabIndex', '-1');
     });
 

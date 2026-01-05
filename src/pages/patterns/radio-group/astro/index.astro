@@ -51,7 +51,12 @@ const ratingOptions = [
 ];
 ---
 
-<PatternLayout title="Radio Group - Astro" pattern="radio-group" framework="astro" tocItems={tocItems}>
+<PatternLayout
+  title="Radio Group - Astro"
+  pattern="radio-group"
+  framework="astro"
+  tocItems={tocItems}
+>
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">Radio Group</h1>
     <p class="text-muted-foreground text-lg">
@@ -74,11 +79,7 @@ const ratingOptions = [
         Use arrow keys to navigate and select. Tab moves focus in/out of the group.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          options={colorOptions}
-          name="color"
-          aria-label="Favorite color"
-        />
+        <RadioGroup options={colorOptions} name="color" aria-label="Favorite color" />
       </div>
     </div>
 
@@ -105,11 +106,7 @@ const ratingOptions = [
         Disabled options are skipped during keyboard navigation.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          options={planOptions}
-          name="plan"
-          aria-label="Subscription plan"
-        />
+        <RadioGroup options={planOptions} name="plan" aria-label="Subscription plan" />
       </div>
     </div>
 
@@ -145,7 +142,13 @@ const ratingOptions = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="RadioGroup.astro" />
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="RadioGroup.astro"
+    />
   </section>
 
   <!-- Usage Section -->
@@ -257,7 +260,7 @@ const options = [
         <tbody>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>valuechange</code></td>
-            <td class="text-muted-foreground py-2 pr-4">{"{ value: string }"}</td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ value: string }'}</td>
             <td class="py-2">Dispatched when selection changes</td>
           </tr>
         </tbody>

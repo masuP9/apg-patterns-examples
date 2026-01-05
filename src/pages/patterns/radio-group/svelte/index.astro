@@ -51,7 +51,12 @@ const ratingOptions = [
 ];
 ---
 
-<PatternLayout title="Radio Group - Svelte" pattern="radio-group" framework="svelte" tocItems={tocItems}>
+<PatternLayout
+  title="Radio Group - Svelte"
+  pattern="radio-group"
+  framework="svelte"
+  tocItems={tocItems}
+>
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">Radio Group</h1>
     <p class="text-muted-foreground text-lg">
@@ -74,12 +79,7 @@ const ratingOptions = [
         Use arrow keys to navigate and select. Tab moves focus in/out of the group.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          client:load
-          options={colorOptions}
-          name="color"
-          aria-label="Favorite color"
-        />
+        <RadioGroup client:load options={colorOptions} name="color" aria-label="Favorite color" />
       </div>
     </div>
 
@@ -107,12 +107,7 @@ const ratingOptions = [
         Disabled options are skipped during keyboard navigation.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          client:load
-          options={planOptions}
-          name="plan"
-          aria-label="Subscription plan"
-        />
+        <RadioGroup client:load options={planOptions} name="plan" aria-label="Subscription plan" />
       </div>
     </div>
 
@@ -149,7 +144,13 @@ const ratingOptions = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="svelte" title="RadioGroup.svelte" />
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="RadioGroup.svelte"
+    />
   </section>
 
   <!-- Usage Section -->

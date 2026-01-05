@@ -74,12 +74,7 @@ const ratingOptions = [
         Use arrow keys to navigate and select. Tab moves focus in/out of the group.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          client:load
-          options={colorOptions}
-          name="color"
-          ariaLabel="Favorite color"
-        />
+        <RadioGroup client:load options={colorOptions} name="color" ariaLabel="Favorite color" />
       </div>
     </div>
 
@@ -107,12 +102,7 @@ const ratingOptions = [
         Disabled options are skipped during keyboard navigation.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <RadioGroup
-          client:load
-          options={planOptions}
-          name="plan"
-          ariaLabel="Subscription plan"
-        />
+        <RadioGroup client:load options={planOptions} name="plan" ariaLabel="Subscription plan" />
       </div>
     </div>
 

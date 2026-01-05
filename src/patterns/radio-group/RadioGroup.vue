@@ -140,7 +140,10 @@ const setRadioRef = (value: string, el: HTMLDivElement | null) => {
 
 // Get the tabbable radio value
 const getTabbableValue = () => {
-  if (selectedValue.value && enabledOptions.value.some((opt) => opt.value === selectedValue.value)) {
+  if (
+    selectedValue.value &&
+    enabledOptions.value.some((opt) => opt.value === selectedValue.value)
+  ) {
     return selectedValue.value;
   }
   return enabledOptions.value[0]?.value || '';
