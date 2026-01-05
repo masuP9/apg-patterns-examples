@@ -180,7 +180,7 @@ export const PATTERNS: Pattern[] = [
     description: 'A graphical display of a numeric value that varies within a defined range.',
     icon: '📶',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'radio-group',

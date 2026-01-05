@@ -1,0 +1,200 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>meter</code></td>
+          <td class="py-2 pr-4">Container element</td>
+          <td class="py-2">
+            Identifies the element as a meter displaying a scalar value within a known range.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    The <code>meter</code> role is used for graphical displays of numeric values within a defined range.
+    It is not interactive and should not receive focus by default.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuenow</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the current numeric value of the meter. Required for all meter implementations.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Type</td>
+            <td class="py-2">Number</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Range</td>
+            <td class="py-2">
+              Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuemin</code></h4>
+    <p class="text-muted-foreground mb-3">Specifies the minimum allowed value for the meter.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Type</td>
+            <td class="py-2">Number</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Default</td>
+            <td class="py-2">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuemax</code></h4>
+    <p class="text-muted-foreground mb-3">Specifies the maximum allowed value for the meter.</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Type</td>
+            <td class="py-2">Number</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Default</td>
+            <td class="py-2">100</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Provides a human-readable text alternative for the current value. Use when the numeric value
+      alone doesn't convey sufficient meaning.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Type</td>
+            <td class="py-2">String</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (recommended when value needs context)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Example</td>
+            <td class="py-2">"75% complete", "3 out of 4 GB used"</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <p class="text-muted-foreground mb-6">
+    <strong>Not applicable.</strong> The meter pattern is a display-only element and is not interactive.
+    It should not receive keyboard focus unless explicitly made focusable for specific use cases.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <p class="text-muted-foreground mb-3">
+    Meters must have an accessible name. This can be provided through:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Visible label</strong> - Using the <code>label</code> prop to display a visible label
+    </li>
+    <li>
+      <code>aria-label</code> - Provides an invisible label for the meter
+    </li>
+    <li>
+      <code>aria-labelledby</code> - References an external element as the label
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <p class="text-muted-foreground mb-3">
+    This implementation follows WCAG guidelines for accessible visual design:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Visual fill bar</strong> - Proportionally represents the current value
+    </li>
+    <li>
+      <strong>Numeric display</strong> - Optional text showing the current value
+    </li>
+    <li>
+      <strong>Visible label</strong> - Optional label identifying the meter's purpose
+    </li>
+    <li>
+      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
+      Mode
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Meter Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter"
+        class="text-primary hover:underline"
+      >
+        MDN: &lt;meter&gt; element
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#meter" class="text-primary hover:underline">
+        W3C ARIA: meter role
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

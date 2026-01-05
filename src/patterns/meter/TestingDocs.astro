@@ -1,0 +1,234 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance for ARIA attributes, value handling, and accessibility requirements.
+    Since Meter is a display-only element, keyboard interaction tests are not applicable.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Attributes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="meter"</code></td>
+          <td class="py-2">Element has the meter role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
+          <td class="py-2">Current value is correctly set</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemin</code></td>
+          <td class="py-2">Minimum value is set (default: 0)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemax</code></td>
+          <td class="py-2">Maximum value is set (default: 100)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuetext</code></td>
+          <td class="py-2">Human-readable text is set when provided</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Accessible Name
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">Accessible name via aria-label attribute</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">Accessible name via external element reference</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>visible label</code></td>
+          <td class="py-2">Visible label provides accessible name</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Value Clamping
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>clamp above max</code></td>
+          <td class="py-2">Values above max are clamped to max</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>clamp below min</code></td>
+          <td class="py-2">Values below min are clamped to min</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>no clamp</code></td>
+          <td class="py-2">Clamping can be disabled with clamp=false</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No accessibility violations detected by axe-core</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>focus behavior</code></td>
+          <td class="py-2">Not focusable by default</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Edge Cases
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>decimal values</code></td>
+          <td class="py-2">Handles decimal values correctly</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>negative range</code></td>
+          <td class="py-2">Handles negative min/max ranges</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>large values</code></td>
+          <td class="py-2">Handles large numeric values</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attribute Inheritance
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">Custom class is applied to container</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id</code></td>
+          <td class="py-2">ID attribute is set correctly</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-*</code></td>
+          <td class="py-2">Data attributes are passed through</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>React:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/react-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        React Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Vue:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/vue-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Vue Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Svelte:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/svelte-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Svelte Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
+    </li>
+    <li>
+      <strong>Accessibility:</strong>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core"
+        class="text-primary hover:underline"
+      >
+        axe-core
+      </ExternalLink>
+    </li>
+  </ul>
+</div>
