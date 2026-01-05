@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { withBase } from '@/lib/utils';
+import { getAvailablePatterns } from '@/lib/patterns';
+import { getLocalizedPath, useTranslation, getPatternName, getPatternDescription } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+const availablePatterns = getAvailablePatterns();
+---
+
+<BaseLayout title={t('nav.patterns')} locale={locale}>
+  <div class="text-center">
+    <h1 class="mt-16 mb-8 text-6xl font-bold lg:mt-32">APG パターン実装例</h1>
+    <div class="mx-auto mb-8 max-w-3xl space-y-4 text-left text-lg">
+      <p>
+        WAI-ARIA APG パターンを React、Vue、Svelte、Astro
+        で実装したアクセシブルな UI コンポーネントとテストを提供します。
+        簡潔な実装例と検証可能なテストで、アクセシブルなインターフェース構築を支援します。
+        ダークモード、ハイコントラスト、強制カラーモードにも対応しています。✨
+      </p>
+      <p class="text-center">
+        <a href={withBase(getLocalizedPath('/guide/', locale))} class="text-blue underline">
+          ガイドを読む →
+        </a>
+      </p>
+    </div>
+
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-bold">{t('patterns.available')}</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {
+          availablePatterns.map((pattern) => (
+            <Tile
+              variant="floating"
+              href={withBase(getLocalizedPath(`/patterns/${pattern.id}/`, locale))}
+            >
+              <TileContent class="flex flex-row items-center gap-4 text-left">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div>
+                  <TileTitle class="mb-2">
+                    {getPatternName(pattern.id, pattern.name, locale)}
+                  </TileTitle>
+                  <TileDescription>
+                    {getPatternDescription(pattern.id, pattern.description, locale)}
+                  </TileDescription>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

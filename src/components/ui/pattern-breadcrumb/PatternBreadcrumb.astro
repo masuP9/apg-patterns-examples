@@ -4,13 +4,24 @@ import { type Framework } from '@/lib/frameworks';
 import { getAvailablePatterns, getPatternById } from '@/lib/patterns';
 import { withBase } from '@/lib/utils';
 import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
+import {
+  type Locale,
+  getLocaleFromUrl,
+  getLocalizedPath,
+  useTranslation,
+  getPatternName,
+} from '@/i18n';
 
 interface Props {
   pattern: string;
   framework: Framework;
+  locale?: Locale;
 }
 
 const { pattern, framework } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslation(locale);
+
 const availablePatterns = getAvailablePatterns();
 const currentPattern = getPatternById(pattern);
 ---
@@ -23,7 +34,7 @@ const currentPattern = getPatternById(pattern);
           class="text-primary focus-visible:ring-ring inline-flex items-center gap-1 rounded-sm hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           showChevron={false}
         >
-          <span>Patterns</span>
+          <span>{t('patterns.title')}</span>
           <ChevronDownIcon
             class="size-4 translate-y-px transition-transform duration-200 group-open/collapsible:rotate-180"
           />
@@ -32,11 +43,11 @@ const currentPattern = getPatternById(pattern);
           class="border-border bg-background absolute left-0 z-10 mt-2 max-h-80 w-56 overflow-y-auto rounded-lg border shadow-lg"
         >
           <a
-            href={withBase('/patterns/')}
+            href={withBase(getLocalizedPath('/patterns/', locale))}
             class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
           >
             <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">📚</span>
-            <span>All patterns</span>
+            <span>{t('patterns.available')}</span>
           </a>
           <hr class="border-border" />
           <ul class="py-1">
@@ -44,7 +55,7 @@ const currentPattern = getPatternById(pattern);
               availablePatterns.map((p) => (
                 <li>
                   <a
-                    href={withBase(`/patterns/${p.id}/${framework}/`)}
+                    href={withBase(getLocalizedPath(`/patterns/${p.id}/${framework}/`, locale))}
                     class:list={[
                       'hover:bg-muted/50 focus:bg-muted focus:ring-primary flex items-center gap-2 px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset',
                       pattern === p.id && 'bg-muted font-medium',
@@ -54,7 +65,7 @@ const currentPattern = getPatternById(pattern);
                     <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">
                       {p.icon}
                     </span>
-                    <span>{p.name}</span>
+                    <span>{getPatternName(p.id, p.name, locale)}</span>
                   </a>
                 </li>
               ))
@@ -64,7 +75,7 @@ const currentPattern = getPatternById(pattern);
       </Collapsible>
     </li>
     <li aria-hidden="true" class="text-muted-foreground mx-2">/</li>
-    <li aria-current="page">{currentPattern?.name}</li>
+    <li aria-current="page">{currentPattern ? getPatternName(currentPattern.id, currentPattern.name, locale) : ''}</li>
   </ol>
 </nav>
 
