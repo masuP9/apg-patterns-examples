@@ -209,48 +209,48 @@ function App() {
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Prop</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Default</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>items</code></td>
             <td class="text-muted-foreground py-2 pr-4">AccordionItem[]</td>
-            <td class="text-muted-foreground py-2 pr-4">required</td>
-            <td class="py-2">Array of accordion items</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">アコーディオンアイテムの配列</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>allowMultiple</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Allow multiple panels to be expanded</td>
+            <td class="py-2">複数のパネルの同時展開を許可</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>headingLevel</code></td>
             <td class="text-muted-foreground py-2 pr-4">2 | 3 | 4 | 5 | 6</td>
             <td class="text-muted-foreground py-2 pr-4">3</td>
-            <td class="py-2">Heading level for accessibility</td>
+            <td class="py-2">アクセシビリティ用の見出しレベル</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">true</td>
-            <td class="py-2">Enable arrow key navigation</td>
+            <td class="py-2">矢印キーナビゲーションを有効化</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>onExpandedChange</code></td>
             <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when expansion changes</td>
+            <td class="py-2">展開状態が変更されたときのコールバック</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>className</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">""</td>
-            <td class="py-2">Additional CSS class</td>
+            <td class="py-2">追加のCSSクラス</td>
           </tr>
         </tbody>
       </table>
@@ -261,42 +261,42 @@ function App() {
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Property</th>
-            <th class="py-2 pr-4 text-left">Type</th>
-            <th class="py-2 pr-4 text-left">Required</th>
-            <th class="py-2 text-left">Description</th>
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">必須</th>
+            <th class="py-2 text-left">説明</th>
           </tr>
         </thead>
         <tbody>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>id</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
-            <td class="text-muted-foreground py-2 pr-4">Yes</td>
-            <td class="py-2">Unique identifier for the item</td>
+            <td class="text-muted-foreground py-2 pr-4">はい</td>
+            <td class="py-2">アイテムの一意の識別子</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>header</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">Yes</td>
-            <td class="py-2">Content for the accordion header</td>
+            <td class="text-muted-foreground py-2 pr-4">はい</td>
+            <td class="py-2">アコーディオンヘッダーのコンテンツ</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>content</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">Yes</td>
-            <td class="py-2">Content for the accordion panel</td>
+            <td class="text-muted-foreground py-2 pr-4">はい</td>
+            <td class="py-2">アコーディオンパネルのコンテンツ</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
-            <td class="text-muted-foreground py-2 pr-4">No</td>
-            <td class="py-2">Disable the accordion item</td>
+            <td class="text-muted-foreground py-2 pr-4">いいえ</td>
+            <td class="py-2">アコーディオンアイテムを無効化</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>defaultExpanded</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
-            <td class="text-muted-foreground py-2 pr-4">No</td>
-            <td class="py-2">Initially expanded state</td>
+            <td class="text-muted-foreground py-2 pr-4">いいえ</td>
+            <td class="py-2">初期の展開状態</td>
           </tr>
         </tbody>
       </table>

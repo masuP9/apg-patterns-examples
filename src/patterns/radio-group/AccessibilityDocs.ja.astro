@@ -34,7 +34,11 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    この実装では、クロスブラウザでの一貫したキーボード動作のため、カスタムの <code>role="radiogroup"</code> と <code>role="radio"</code> を使用しています。ネイティブの <code>&lt;input type="radio"&gt;</code> はこれらのロールを暗黙的に提供します。
+    この実装では、クロスブラウザでの一貫したキーボード動作のため、カスタムの <code
+      >role="radiogroup"</code
+    > と <code>role="radio"</code> を使用しています。ネイティブの <code
+      >&lt;input type="radio"&gt;</code
+    > はこれらのロールを暗黙的に提供します。
   </p>
 
   <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート</h3>
@@ -96,9 +100,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <div class="mb-6">
     <h4 class="mb-2 font-medium"><code>aria-orientation</code></h4>
-    <p class="text-muted-foreground mb-3">
-      ラジオグループの方向を示します。垂直がデフォルトです。
-    </p>
+    <p class="text-muted-foreground mb-3">ラジオグループの方向を示します。垂直がデフォルトです。</p>
     <ResponsiveTable class="mb-2">
       <table class="w-full border-collapse">
         <tbody>
@@ -112,9 +114,7 @@ import { ResponsiveTable } from '@/components/ui/table';
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">注記</td>
-            <td class="py-2">
-              この実装では、方向に関わらずすべての矢印キーをサポートします
-            </td>
+            <td class="py-2"> この実装では、方向に関わらずすべての矢印キーをサポートします </td>
           </tr>
         </tbody>
       </table>
@@ -206,7 +206,9 @@ import { ResponsiveTable } from '@/components/ui/table';
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>ラジオグループ</strong> - コンテナに <code>aria-label</code> または <code>aria-labelledby</code> を使用します
+      <strong>ラジオグループ</strong> - コンテナに <code>aria-label</code> または <code
+        >aria-labelledby</code
+      > を使用します
     </li>
     <li>
       <strong>個々のラジオ</strong> - 各ラジオは <code>aria-labelledby</code> を介して可視テキストコンテンツでラベル付けされます
