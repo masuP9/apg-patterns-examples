@@ -23,10 +23,22 @@
 /ja/patterns/button/react/   # 日本語
 ```
 
+### ページ生成戦略
+**静的ページ生成を採用**
+- `src/pages/ja/` ディレクトリに日本語ページを作成
+- シンプルで明確な構造
+- 各言語のページを明示的に管理
+
 ### 翻訳管理
 - UI テキスト → JSON ファイル（`src/i18n/ui.ts`）
 - パターンメタデータ → 翻訳関数で管理
-- 長文コンテンツ → 将来的に MDX 分離を検討
+- AccessibilityDocs → 言語別コンポーネント（`AccessibilityDocs.ja.astro`）
+
+### 翻訳優先順位
+**AccessibilityDocs を優先**（サイトの主要コンテンツ）
+1. AccessibilityDocs の翻訳
+2. UI テキストの翻訳
+3. 静的ページの翻訳
 
 ---
 
@@ -165,18 +177,26 @@
 
 **目的**: 実際の日本語コンテンツを作成
 
+**AccessibilityDocs を最優先**（サイトの主要価値）
+
 1. **優先度 High（初期リリース）**
-   - ナビゲーション・共通 UI テキスト
-   - パターン名と簡易説明
-   - トップページ、About ページ
+   - AccessibilityDocs 全文（各パターン）
+   - パターン名と説明
 
 2. **優先度 Medium**
-   - AccessibilityDocs の主要セクション
-   - Guide ページ
+   - ナビゲーション・共通 UI テキスト
+   - トップページ、About ページ
 
 3. **優先度 Low（将来）**
-   - AccessibilityDocs 全文
+   - Guide ページ
    - 詳細な説明・ノート
+
+**AccessibilityDocs 翻訳の進め方**:
+1. 各パターンに `AccessibilityDocs.ja.astro` を作成
+2. ページで `locale` に応じて読み込むコンポーネントを切り替え
+3. 利用頻度の高いパターンから順に翻訳
+   - Button, Tabs, Dialog, Accordion（よく使われる）
+   - その他のパターン
 
 ---
 
@@ -212,19 +232,44 @@ src/
 
 ### 1. ページ生成戦略
 
-**選択肢 A: 静的ページ複製**
+**静的ページ生成を採用**
 - `src/pages/ja/` に日本語ページを作成
-- 利点: シンプル、明確
-- 欠点: ページ数が倍増、メンテナンスコスト
+- 利点: シンプル、明確、デバッグしやすい
+- 各ページを明示的に管理
 
-**選択肢 B: 動的生成**
-- `[...locale]/patterns/...` で動的生成
-- 利点: DRY、一元管理
-- 欠点: 複雑、ビルド時間増加
+**ファイル構成**:
+```
+src/pages/
+├── patterns/
+│   └── button/
+│       └── react/index.astro    # 英語
+└── ja/
+    └── patterns/
+        └── button/
+            └── react/index.astro  # 日本語
+```
 
-**推奨**: Phase 3 で選択肢 A から開始し、必要に応じて B に移行
+### 2. AccessibilityDocs の多言語対応
 
-### 2. Content Collections（将来検討）
+**言語別コンポーネント方式**:
+```
+src/patterns/button/
+├── AccessibilityDocs.astro      # 英語（デフォルト）
+└── AccessibilityDocs.ja.astro   # 日本語
+```
+
+ページ側で locale に応じて動的インポート:
+```astro
+---
+import AccessibilityDocsEn from '@patterns/button/AccessibilityDocs.astro';
+import AccessibilityDocsJa from '@patterns/button/AccessibilityDocs.ja.astro';
+
+const AccessibilityDocs = locale === 'ja' ? AccessibilityDocsJa : AccessibilityDocsEn;
+---
+<AccessibilityDocs />
+```
+
+### 3. Content Collections（将来検討）
 
 - パターンコンテンツを MDX に移行
 - 言語別ディレクトリで管理
