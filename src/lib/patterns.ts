@@ -146,7 +146,7 @@ export const PATTERNS: Pattern[] = [
     description: 'A widget that provides an interactive reference to a resource.',
     icon: '↗️',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'listbox',
