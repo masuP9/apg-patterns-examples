@@ -1,17 +1,22 @@
 /**
  * i18n module - main export
+ *
+ * Based on Astro i18n recipe:
+ * https://docs.astro.build/en/recipes/i18n/
  */
+
+// Configuration (from ui.ts)
+export { languages, defaultLang, showDefaultLang, type Locale } from './ui';
 
 // Utils
 export {
-  type Locale,
-  defaultLocale,
   locales,
-  getLocaleFromUrl,
+  getLangFromUrl,
+  getLocaleFromUrl, // alias
   getLocalizedPath,
+  useTranslatedPath,
   getAlternatePath,
   isValidLocale,
-  getLanguageName,
 } from './utils';
 
 // UI translations

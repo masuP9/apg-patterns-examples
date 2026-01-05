@@ -2,7 +2,7 @@
  * Pattern metadata translations
  */
 
-import type { Locale } from './utils';
+import type { Locale } from './ui';
 
 interface PatternTranslation {
   name: string;

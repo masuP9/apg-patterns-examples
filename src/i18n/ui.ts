@@ -1,8 +1,19 @@
 /**
  * UI text translations
+ *
+ * Based on Astro i18n recipe:
+ * https://docs.astro.build/en/recipes/i18n/
  */
 
-import type { Locale } from './utils';
+// Language configuration
+export const languages = {
+  en: 'English',
+  ja: '日本語',
+} as const;
+
+export type Locale = keyof typeof languages;
+export const defaultLang: Locale = 'en';
+export const showDefaultLang = false;
 
 export const ui = {
   en: {
@@ -133,20 +144,20 @@ export const ui = {
   },
 } as const;
 
-export type UIKey = keyof (typeof ui)['en'];
+export type UIKey = keyof (typeof ui)[typeof defaultLang];
 
 /**
  * Get translation function for a specific locale
  */
-export function useTranslation(locale: Locale) {
+export function useTranslation(lang: Locale) {
   return function t(key: UIKey): string {
-    return ui[locale][key] || ui.en[key] || key;
+    return ui[lang][key] || ui[defaultLang][key] || key;
   };
 }
 
 /**
  * Get a single translation
  */
-export function t(locale: Locale, key: UIKey): string {
-  return ui[locale][key] || ui.en[key] || key;
+export function t(lang: Locale, key: UIKey): string {
+  return ui[lang][key] || ui[defaultLang][key] || key;
 }

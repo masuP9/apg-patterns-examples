@@ -8,9 +8,9 @@
 import { withBase } from '@/lib/utils';
 import {
   type Locale,
-  getLocaleFromUrl,
+  languages,
+  getLangFromUrl,
   getAlternatePath,
-  getLanguageName,
 } from '@/i18n';
 import GlobeIcon from 'lucide-static/icons/globe.svg';
 
@@ -19,13 +19,13 @@ interface Props {
   class?: string;
 }
 
-const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const locale = Astro.props.locale ?? getLangFromUrl(Astro.url);
 const currentPath = Astro.url.pathname;
 // Remove base path for alternate path calculation
 const pathWithoutBase = currentPath.replace(/^\/apg-patterns-examples/, '');
 const alternatePath = getAlternatePath(pathWithoutBase, locale);
-const alternateLocale = locale === 'en' ? 'ja' : 'en';
-const alternateLanguageName = getLanguageName(alternateLocale);
+const alternateLocale: Locale = locale === 'en' ? 'ja' : 'en';
+const alternateLanguageName = languages[alternateLocale];
 ---
 
 <a
