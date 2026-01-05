@@ -23,8 +23,7 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     },
     alert: {
       name: 'アラート',
-      description:
-        'ユーザーのタスクを中断せずに、重要なメッセージを目立つ形で表示する要素。',
+      description: 'ユーザーのタスクを中断せずに、重要なメッセージを目立つ形で表示する要素。',
     },
     'alert-dialog': {
       name: 'アラートダイアログ',
@@ -52,8 +51,7 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     },
     combobox: {
       name: 'コンボボックス',
-      description:
-        'ユーザーがコレクションから値を選択できるポップアップを持つ入力ウィジェット。',
+      description: 'ユーザーがコレクションから値を選択できるポップアップを持つ入力ウィジェット。',
     },
     dialog: {
       name: 'ダイアログ（モーダル）',
@@ -84,13 +82,11 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     },
     listbox: {
       name: 'リストボックス',
-      description:
-        'ユーザーが選択肢のリストから1つまたは複数のアイテムを選択できるウィジェット。',
+      description: 'ユーザーが選択肢のリストから1つまたは複数のアイテムを選択できるウィジェット。',
     },
     menu: {
       name: 'メニュー / メニューバー',
-      description:
-        'アクションや機能のセットなど、ユーザーに選択肢のリストを提供するウィジェット。',
+      description: 'アクションや機能のセットなど、ユーザーに選択肢のリストを提供するウィジェット。',
     },
     'menu-button': {
       name: 'メニューボタン',
@@ -111,18 +107,15 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     },
     spinbutton: {
       name: 'スピンボタン',
-      description:
-        '離散値の範囲から選択するための入力ウィジェット。通常、増減ボタンを持ちます。',
+      description: '離散値の範囲から選択するための入力ウィジェット。通常、増減ボタンを持ちます。',
     },
     switch: {
       name: 'スイッチ',
-      description:
-        'チェック済み/未チェックではなく、オン/オフの値を表すチェックボックスの一種。',
+      description: 'チェック済み/未チェックではなく、オン/オフの値を表すチェックボックスの一種。',
     },
     table: {
       name: 'テーブル',
-      description:
-        '1つ以上の行を含む静的な表形式の構造で、各行は1つ以上のセルを含みます。',
+      description: '1つ以上の行を含む静的な表形式の構造で、各行は1つ以上のセルを含みます。',
     },
     tabs: {
       name: 'タブ',

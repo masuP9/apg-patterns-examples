@@ -37,10 +37,7 @@ interface Props {
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-const {
-  title,
-  description = t('site.description'),
-} = Astro.props;
+const { title, description = t('site.description') } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [

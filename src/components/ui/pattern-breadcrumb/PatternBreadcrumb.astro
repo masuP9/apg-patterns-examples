@@ -75,7 +75,9 @@ const currentPattern = getPatternById(pattern);
       </Collapsible>
     </li>
     <li aria-hidden="true" class="text-muted-foreground mx-2">/</li>
-    <li aria-current="page">{currentPattern ? getPatternName(currentPattern.id, currentPattern.name, locale) : ''}</li>
+    <li aria-current="page">
+      {currentPattern ? getPatternName(currentPattern.id, currentPattern.name, locale) : ''}
+    </li>
   </ol>
 </nav>
 

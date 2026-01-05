@@ -1,0 +1,211 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { Link } from '@patterns/link/Link';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/link/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/link/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/link/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/link/Link.tsx?raw';
+import testCode from '@patterns/link/Link.test.tsx?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="リンク - React"
+  pattern="link"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">リンク</h1>
+    <p class="text-muted-foreground text-lg">
+      リソースへのインタラクティブな参照を提供するウィジェット。
+    </p>
+    <AiGuideBadge pattern="link" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="link" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col items-start gap-4">
+        <Link client:load href="https://www.w3.org/WAI/ARIA/apg/">
+          WAI-ARIA APG Documentation
+        </Link>
+        <Link client:load href="https://example.com" target="_blank">
+          External Link (opens in new tab)
+        </Link>
+        <Link client:load onClick={() => alert('Link clicked!')}> Link with onClick handler </Link>
+        <Link client:load href="#" disabled> Disabled Link </Link>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Link.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Link } from './Link';
+
+function App() {
+  return (
+    <div>
+      {/* Basic link */}
+      <Link href="https://example.com">Visit Example</Link>
+
+      {/* Open in new tab */}
+      <Link href="https://example.com" target="_blank">
+        External Link
+      </Link>
+
+      {/* With onClick handler */}
+      <Link onClick={(e) => console.log('Clicked', e)}>
+        Interactive Link
+      </Link>
+
+      {/* Disabled link */}
+      <Link href="#" disabled>
+        Unavailable Link
+      </Link>
+
+      {/* With aria-label for icon links */}
+      <Link href="/" aria-label="Home">
+        <HomeIcon />
+      </Link>
+    </div>
+  );
+}`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>href</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Link destination URL</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>target</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'_self' | '_blank'</td>
+            <td class="text-muted-foreground py-2 pr-4">'_self'</td>
+            <td class="py-2">Where to open the link</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(event) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Click/Enter event handler</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the link is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Link content</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      All other props are passed to the underlying <code>&lt;span&gt;</code> element.
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Link.test.tsx" />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/link/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Link パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;a&gt; element
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="link" />
+    </ul>
+  </section>
+</PatternLayout>

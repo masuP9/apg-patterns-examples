@@ -17,7 +17,9 @@ const { pattern } = Astro.params;
 const defaultFramework = DEFAULT_FRAMEWORK;
 const validFrameworks = FRAMEWORKS;
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
-const defaultRedirectUrl = withBase(getLocalizedPath(`/patterns/${pattern}/${defaultFramework}/`, locale));
+const defaultRedirectUrl = withBase(
+  getLocalizedPath(`/patterns/${pattern}/${defaultFramework}/`, locale)
+);
 ---
 
 <!doctype html>

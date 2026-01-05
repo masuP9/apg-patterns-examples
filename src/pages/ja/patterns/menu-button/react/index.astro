@@ -1,0 +1,218 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import {
+  BasicMenuButtonDemo,
+  DisabledItemsMenuButtonDemo,
+} from '@patterns/menu-button/MenuButtonDemo';
+import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/menu-button/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/menu-button/MenuButton.tsx?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="メニューボタン - React"
+  pattern="menu-button"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">メニューボタン</h1>
+    <p class="text-muted-foreground text-lg">アクションやオプションのメニューを開くボタン。</p>
+    <a
+      href="/patterns/menu-button/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="menu-button" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Menu Button</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Click the button or use keyboard to open the menu.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <BasicMenuButtonDemo client:load />
+      </div>
+    </div>
+
+    <!-- With Disabled Items -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled items are skipped during keyboard navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <DisabledItemsMenuButtonDemo client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="MenuButton.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { MenuButton } from './MenuButton';
+
+const items = [
+  { id: 'cut', label: 'Cut' },
+  { id: 'copy', label: 'Copy' },
+  { id: 'paste', label: 'Paste' },
+  { id: 'delete', label: 'Delete', disabled: true },
+];
+
+// Basic usage
+<MenuButton
+  items={items}
+  label="Actions"
+  onItemSelect={(id) => console.log('Selected:', id)}
+/>
+
+// With default open state
+<MenuButton
+  items={items}
+  label="Actions"
+  defaultOpen
+  onItemSelect={(id) => console.log('Selected:', id)}
+/>`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">MenuButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenuItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of menu items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Button label text</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether menu is initially open</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onItemSelect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(id: string) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when an item is selected</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>className</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">Additional CSS class for the container</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">MenuItem Interface</h3>
+    <CodeBlock
+      code={`interface MenuItem {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Menu Button パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/menu-button/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

@@ -1,0 +1,243 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import {
+  SingleSelectListboxDemo,
+  MultiSelectListboxDemo,
+  HorizontalListboxDemo,
+} from '@patterns/listbox/ListboxDemo';
+import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/listbox/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/listbox/Listbox.tsx?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="リストボックス - React"
+  pattern="listbox"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">リストボックス</h1>
+    <p class="text-muted-foreground text-lg">
+      ユーザーが選択肢のリストから1つまたは複数のアイテムを選択できるウィジェット。
+    </p>
+    <a
+      href="/patterns/listbox/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="listbox" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Single-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Single-Select (Default)</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Selection follows focus. Use arrow keys to navigate and select.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <SingleSelectListboxDemo client:load />
+      </div>
+    </div>
+
+    <!-- Multi-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Multi-Select</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Focus and selection are independent. Use Space to toggle, Shift+Arrow to extend selection.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <MultiSelectListboxDemo client:load />
+      </div>
+    </div>
+
+    <!-- Horizontal Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+      <p class="text-muted-foreground mb-4 text-sm">Use Left/Right arrow keys for navigation.</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <HorizontalListboxDemo client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Listbox.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Listbox } from './Listbox';
+
+const options = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+  { id: 'date', label: 'Date', disabled: true },
+];
+
+// Single-select (selection follows focus)
+<Listbox
+  options={options}
+  aria-label="Choose a fruit"
+  onSelectionChange={(ids) => console.log('Selected:', ids)}
+/>
+
+// Multi-select
+<Listbox
+  options={options}
+  multiselectable
+  aria-label="Choose fruits"
+  onSelectionChange={(ids) => console.log('Selected:', ids)}
+/>
+
+// Horizontal orientation
+<Listbox
+  options={options}
+  orientation="horizontal"
+  aria-label="Choose a fruit"
+/>`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Listbox Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ListboxOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of options</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable multi-select mode</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical' | 'horizontal'</td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
+            <td class="py-2">Listbox orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">Initially selected option IDs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when selection changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>typeAheadTimeout</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">500</td>
+            <td class="py-2">Type-ahead timeout in milliseconds</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">ListboxOption Interface</h3>
+    <CodeBlock
+      code={`interface ListboxOption {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Listbox パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/listbox/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

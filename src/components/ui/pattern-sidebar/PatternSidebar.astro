@@ -44,7 +44,9 @@ const frameworkInfo = FRAMEWORK_INFO[currentFramework];
       availablePatterns.map((pattern) => (
         <SidebarMenuItem>
           <SidebarMenuButton
-            href={withBase(getLocalizedPath(`/patterns/${pattern.id}/${currentFramework}/`, locale))}
+            href={withBase(
+              getLocalizedPath(`/patterns/${pattern.id}/${currentFramework}/`, locale)
+            )}
             active={currentPattern === pattern.id}
             aria-current={currentPattern === pattern.id ? 'page' : undefined}
             size="sm"

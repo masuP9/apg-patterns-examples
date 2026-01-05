@@ -3,12 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { getAvailablePatterns, getPlannedPatterns } from '@/lib/patterns';
 import { withBase } from '@/lib/utils';
-import {
-  getLocalizedPath,
-  useTranslation,
-  getPatternName,
-  getPatternDescription,
-} from '@/i18n';
+import { getLocalizedPath, useTranslation, getPatternName, getPatternDescription } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
