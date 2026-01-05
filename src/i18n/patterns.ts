@@ -167,7 +167,7 @@ export function getPatternTranslation(
 /**
  * Get pattern name (always returns English name for consistency)
  */
-export function getPatternName(patternId: string, defaultName: string, _locale: Locale): string {
+export function getPatternName(_patternId: string, defaultName: string, _locale: Locale): string {
   // Pattern names are kept in English for consistency across languages
   return defaultName;
 }

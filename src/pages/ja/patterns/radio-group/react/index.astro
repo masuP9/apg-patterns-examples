@@ -3,8 +3,6 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { RadioGroup } from '@patterns/radio-group/RadioGroup';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
-import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/radio-group/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/radio-group/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/radio-group/NativeHtmlNotice.astro';
@@ -20,7 +18,7 @@ const t = useTranslation(locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
-  { id: 'native-html', text: t('pattern.nativeHtml') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
   { id: 'accessibility-features', text: t('pattern.accessibility') },
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
@@ -68,7 +66,15 @@ const ratingOptions = [
     <p class="text-muted-foreground text-lg">
       ラジオボタンと呼ばれるチェック可能なボタンのセットで、一度に1つだけチェックできます。
     </p>
-    <AiGuideBadge pattern="radio-group" label="AI 実装ガイド" />
+    <a
+      href="/patterns/radio-group/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
   </header>
 
   <!-- Framework Selector -->
@@ -299,7 +305,14 @@ function App() {
           MDN: &lt;input type="radio"&gt;
         </ExternalLink>
       </li>
-      <AiGuideResourceItem pattern="radio-group" />
+      <li>
+        <ExternalLink href="/patterns/radio-group/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボード操作、テストチェックリスト</span
+        >
+      </li>
     </ul>
   </section>
 </PatternLayout>

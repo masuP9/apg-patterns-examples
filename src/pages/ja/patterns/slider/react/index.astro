@@ -3,8 +3,6 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { Slider } from '@patterns/slider/Slider';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
-import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/slider/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/slider/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/slider/NativeHtmlNotice.astro';
@@ -40,7 +38,15 @@ const tocItems = [
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">スライダー</h1>
     <p class="text-muted-foreground text-lg">指定された範囲内から値を選択する入力。</p>
-    <AiGuideBadge pattern="slider" locale={locale} />
+    <a
+      href="/patterns/slider/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
   </header>
 
   <!-- Framework Selector -->
@@ -291,7 +297,14 @@ function App() {
           MDN: &lt;input type="range"&gt; element
         </ExternalLink>
       </li>
-      <AiGuideResourceItem pattern="slider" locale={locale} />
+      <li>
+        <ExternalLink href="/patterns/slider/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボード操作、テストチェックリスト</span
+        >
+      </li>
     </ul>
   </section>
 </PatternLayout>
