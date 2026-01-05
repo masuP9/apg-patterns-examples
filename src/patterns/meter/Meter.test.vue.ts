@@ -77,13 +77,13 @@ describe('Meter (Vue)', () => {
       expect(meter).not.toHaveAttribute('aria-valuetext');
     });
 
-    it('uses formatValue for aria-valuetext', () => {
+    it('uses format for aria-valuetext', () => {
       render(Meter, {
         props: {
-          value: 0.75,
+          value: 75,
           min: 0,
-          max: 1,
-          formatValue: (v: number) => `${Math.round(v * 100)}%`,
+          max: 100,
+          format: '{value}%',
         },
         attrs: { 'aria-label': 'Progress' },
       });
@@ -244,11 +244,11 @@ describe('Meter (Vue)', () => {
       expect(screen.queryByText('75')).not.toBeInTheDocument();
     });
 
-    it('displays formatted value when formatValue provided', () => {
+    it('displays formatted value when format provided', () => {
       render(Meter, {
         props: {
           value: 75,
-          formatValue: (v: number) => `${v}%`,
+          format: '{value}%',
         },
         attrs: { 'aria-label': 'Progress' },
       });

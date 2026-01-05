@@ -53,16 +53,8 @@ describe('Meter', () => {
       expect(meter).not.toHaveAttribute('aria-valuetext');
     });
 
-    it('uses formatValue for aria-valuetext', () => {
-      render(
-        <Meter
-          value={0.75}
-          min={0}
-          max={1}
-          formatValue={(v) => `${Math.round(v * 100)}%`}
-          aria-label="Progress"
-        />
-      );
+    it('uses format for aria-valuetext', () => {
+      render(<Meter value={75} min={0} max={100} format="{value}%" aria-label="Progress" />);
       const meter = screen.getByRole('meter');
       expect(meter).toHaveAttribute('aria-valuetext', '75%');
     });
@@ -209,8 +201,8 @@ describe('Meter', () => {
       expect(screen.queryByText('75')).not.toBeInTheDocument();
     });
 
-    it('displays formatted value when formatValue provided', () => {
-      render(<Meter value={75} formatValue={(v) => `${v}%`} aria-label="Progress" />);
+    it('displays formatted value when format provided', () => {
+      render(<Meter value={75} format="{value}%" aria-label="Progress" />);
       expect(screen.getByText('75%')).toBeInTheDocument();
     });
 

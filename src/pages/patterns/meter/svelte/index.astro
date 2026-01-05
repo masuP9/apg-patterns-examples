@@ -44,34 +44,16 @@ const tocItems = [
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-col gap-6">
         <div>
-          <Meter value={75} label="CPU Usage" formatValue={(v: number) => `${v}%`} />
+          <Meter value={75} label="CPU Usage" format="{value}%" />
         </div>
         <div>
-          <Meter
-            value={3.5}
-            min={0}
-            max={5}
-            label="Rating"
-            formatValue={(v: number) => `${v} / 5`}
-          />
+          <Meter value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" />
         </div>
         <div>
-          <Meter
-            value={-10}
-            min={-50}
-            max={50}
-            label="Temperature"
-            formatValue={(v: number) => `${v}°C`}
-          />
+          <Meter value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
         </div>
         <div>
-          <Meter
-            value={0.65}
-            min={0}
-            max={1}
-            label="Progress"
-            formatValue={(v: number) => `${Math.round(v * 100)}%`}
-          />
+          <Meter value={65} min={0} max={100} label="Progress" format="{value}%" />
         </div>
       </div>
     </div>
@@ -109,9 +91,6 @@ const tocItems = [
       collapsedLines={5}
       code={`<script>
   import Meter from './Meter.svelte';
-
-  const formatPercent = (v) => \`\${v}%\`;
-  const formatRating = (v) => \`\${v} / 5\`;
 </script>
 
 <!-- Basic usage with aria-label -->
@@ -120,11 +99,11 @@ const tocItems = [
 <!-- With visible label -->
 <Meter value={75} label="CPU Usage" />
 
-<!-- With custom format -->
+<!-- With format pattern -->
 <Meter
   value={75}
   label="Progress"
-  formatValue={formatPercent}
+  format="{value}%"
 />
 
 <!-- Custom range -->
@@ -133,7 +112,7 @@ const tocItems = [
   min={0}
   max={5}
   label="Rating"
-  formatValue={formatRating}
+  format="{value} / {max}"
 />
 
 <!-- With valueText for screen readers -->
@@ -204,10 +183,14 @@ const tocItems = [
             <td class="py-2">Human-readable value for aria-valuetext</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>formatValue</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(value, min, max) =&gt; string</td>
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Function to format value for display and aria-valuetext</td>
+            <td class="py-2"
+              >Format pattern for display and aria-valuetext (e.g., "{'{value}'}%", "{'{value}'} of {
+                '{max}'
+              }")</td
+            >
           </tr>
         </tbody>
       </table>

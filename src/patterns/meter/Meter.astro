@@ -23,6 +23,8 @@ export interface Props {
   label?: string;
   /** Human-readable value text for aria-valuetext */
   valueText?: string;
+  /** Format pattern for dynamic value display (e.g., "{value}%", "{value} of {max}") */
+  format?: string;
   /** Meter id */
   id?: string;
   /** Additional CSS class */
@@ -43,6 +45,7 @@ const {
   showValue = true,
   label,
   valueText,
+  format,
   id,
   class: className = '',
   'aria-label': ariaLabel,
@@ -64,17 +67,29 @@ const normalizedValue = clampNumber(value, min, max, clamp);
 const percentage =
   max === min ? 0 : Math.max(0, Math.min(100, ((normalizedValue - min) / (max - min)) * 100));
 
-// Display text (valueText takes priority, otherwise show raw value)
-const displayText = valueText ?? String(normalizedValue);
+// Format value helper
+const formatValueText = (val: number, formatStr?: string): string => {
+  if (!formatStr) return String(val);
+  return formatStr
+    .replace('{value}', String(val))
+    .replace('{min}', String(min))
+    .replace('{max}', String(max));
+};
+
+// Display text (valueText takes priority, then format, then raw value)
+const displayText = valueText ?? formatValueText(normalizedValue, format);
+
+// aria-valuetext (valueText or format, not raw value)
+const ariaValueText = valueText ?? (format ? formatValueText(normalizedValue, format) : undefined);
 ---
 
-<apg-meter data-value={value} data-min={min} data-max={max} data-clamp={clamp}>
+<apg-meter data-value={value} data-min={min} data-max={max} data-clamp={clamp} data-format={format}>
   <div
     role="meter"
     aria-valuenow={normalizedValue}
     aria-valuemin={min}
     aria-valuemax={max}
-    aria-valuetext={valueText}
+    aria-valuetext={ariaValueText}
     aria-label={label || ariaLabel}
     aria-labelledby={ariaLabelledby}
     aria-describedby={ariaDescribedby}
@@ -113,6 +128,19 @@ const displayText = valueText ?? String(normalizedValue);
       this.valueDisplay = this.querySelector('.apg-meter-value');
     }
 
+    private get format(): string | undefined {
+      return this.dataset.format;
+    }
+
+    private formatValue(value: number, min: number, max: number): string {
+      const fmt = this.format;
+      if (!fmt) return String(value);
+      return fmt
+        .replace('{value}', String(value))
+        .replace('{min}', String(min))
+        .replace('{max}', String(max));
+    }
+
     // Method to update value dynamically
     updateValue(newValue: number) {
       if (!this.meter) return;
@@ -130,6 +158,12 @@ const displayText = valueText ?? String(normalizedValue);
       // Update ARIA attributes
       this.meter.setAttribute('aria-valuenow', String(normalizedValue));
 
+      // Update aria-valuetext if format is provided
+      const formattedValue = this.formatValue(normalizedValue, min, max);
+      if (this.format) {
+        this.meter.setAttribute('aria-valuetext', formattedValue);
+      }
+
       // Update visual fill
       if (this.fill) {
         const percentage = max === min ? 0 : ((normalizedValue - min) / (max - min)) * 100;
@@ -138,7 +172,7 @@ const displayText = valueText ?? String(normalizedValue);
 
       // Update value display
       if (this.valueDisplay) {
-        this.valueDisplay.textContent = String(normalizedValue);
+        this.valueDisplay.textContent = formattedValue;
       }
 
       // Dispatch event

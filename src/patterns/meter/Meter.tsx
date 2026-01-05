@@ -6,11 +6,11 @@ type LabelProps =
   | { label?: never; 'aria-label': string; 'aria-labelledby'?: never }
   | { label?: never; 'aria-label'?: never; 'aria-labelledby': string };
 
-// ValueText: exclusive with formatValue
+// ValueText: exclusive with format
 type ValueTextProps =
-  | { valueText: string; formatValue?: never }
-  | { valueText?: never; formatValue?: (value: number, min: number, max: number) => string }
-  | { valueText?: never; formatValue?: never };
+  | { valueText: string; format?: never }
+  | { valueText?: never; format?: string }
+  | { valueText?: never; format?: never };
 
 type MeterBaseProps = {
   value: number;
@@ -38,6 +38,20 @@ const calculatePercentage = (value: number, min: number, max: number): number =>
   return ((value - min) / (max - min)) * 100;
 };
 
+// Format value helper
+const formatValueText = (
+  value: number,
+  formatStr: string | undefined,
+  min: number,
+  max: number
+): string => {
+  if (!formatStr) return String(value);
+  return formatStr
+    .replace('{value}', String(value))
+    .replace('{min}', String(min))
+    .replace('{max}', String(max));
+};
+
 export const Meter: React.FC<MeterProps> = ({
   value,
   min = 0,
@@ -46,7 +60,7 @@ export const Meter: React.FC<MeterProps> = ({
   showValue = true,
   label,
   valueText,
-  formatValue,
+  format,
   className,
   ...rest
 }) => {
@@ -55,14 +69,10 @@ export const Meter: React.FC<MeterProps> = ({
 
   // Determine aria-valuetext
   const ariaValueText =
-    valueText ?? (formatValue ? formatValue(normalizedValue, min, max) : undefined);
+    valueText ?? (format ? formatValueText(normalizedValue, format, min, max) : undefined);
 
-  // Determine display text (valueText takes priority, then formatValue, then raw value)
-  const displayText = valueText
-    ? valueText
-    : formatValue
-      ? formatValue(normalizedValue, min, max)
-      : String(normalizedValue);
+  // Determine display text (valueText takes priority, then format, then raw value)
+  const displayText = valueText ? valueText : formatValueText(normalizedValue, format, min, max);
 
   return (
     <div
