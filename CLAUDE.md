@@ -327,6 +327,30 @@ const items = [
 ];
 ```
 
+**三項演算子のネスト禁止**:
+
+三項演算子のネストは可読性が低下するため、if 文や早期リターンを使用すること。
+
+```typescript
+// ❌ ネストした三項演算子（読みにくい）
+const value = a ? a : b ? c : undefined;
+
+// ✅ 早期リターンを使った関数（読みやすい）
+const getValue = () => {
+  if (a) return a;
+  if (b) return c;
+  return undefined;
+};
+const value = getValue();
+
+// ✅ Vue computed / Svelte $derived.by でも同様
+const value = computed(() => {
+  if (a) return a;
+  if (b) return c;
+  return undefined;
+});
+```
+
 ---
 
 ## 参考リンク

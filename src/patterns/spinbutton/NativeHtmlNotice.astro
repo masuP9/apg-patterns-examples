@@ -1,0 +1,87 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="border-primary mb-8 rounded-lg border-2 p-4">
+  <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
+    <span aria-hidden="true">⚠️</span> Use Native HTML First
+  </h2>
+  <p class="mb-4">
+    <strong class="text-red-700 dark:text-red-400"
+      >Before using this custom component, consider using native <code
+        >&lt;input type="number"&gt;</code
+      > elements.</strong
+    >
+    They provide built-in semantics, work without JavaScript, and have native browser validation.
+  </p>
+  <div class="bg-muted mb-4 rounded-md p-3">
+    <pre
+      class="m-0 overflow-x-auto text-sm"><code>&lt;label for="quantity"&gt;Quantity&lt;/label&gt;
+&lt;input type="number" id="quantity" value="1" min="0" max="100" step="1"&gt;</code></pre>
+  </div>
+  <p class="mb-4 text-sm">
+    Use custom implementations only when you need custom styling that native elements cannot
+    provide, or when you need specific interaction patterns not available with native inputs.
+  </p>
+
+  <ResponsiveTable>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Use Case</th>
+          <th class="py-2 pr-4 text-left">Native HTML</th>
+          <th class="py-2 text-left">Custom Implementation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Basic numeric input</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
+          <td class="py-2">Not needed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">JavaScript disabled support</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
+          >
+          <td class="py-2">Requires fallback</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Built-in validation</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Native support</b></td
+          >
+          <td class="py-2">Manual implementation</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Custom button styling</td>
+          <td class="py-2 pr-4">Limited (browser-dependent)</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Consistent cross-browser appearance</td>
+          <td class="py-2 pr-4">Varies by browser</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Consistent</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Custom step/large step behavior</td>
+          <td class="py-2 pr-4">Basic step only</td>
+          <td class="py-2"
+            ><b class="text-green-700 dark:text-green-400">PageUp/PageDown support</b></td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">No min/max limits</td>
+          <td class="py-2 pr-4">Requires omitting attributes</td>
+          <td class="py-2"
+            ><b class="text-green-700 dark:text-green-400">Explicit undefined support</b></td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-3 text-xs">
+    The native <code>&lt;input type="number"&gt;</code> element provides built-in browser validation,
+    form submission support, and accessible semantics. However, its appearance and spinner button styling
+    varies significantly across browsers, making custom implementations preferable when visual consistency
+    is required.
+  </p>
+</div>

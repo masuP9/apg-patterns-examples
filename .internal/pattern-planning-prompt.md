@@ -7,7 +7,8 @@
 1. `{変数}` を実際の値に置き換える
 2. プロンプト本文を Claude Code にコピー＆ペースト
 3. 計画を確認し、必要に応じて調整を依頼
-4. 承認後、TDD ワークフローに沿って実装を進める
+4. **Codex に計画書のレビューを依頼**（「Codex レビュー依頼テンプレート > 計画書レビュー依頼」を使用）
+5. レビュー結果を反映し、承認後 TDD ワークフローに沿って実装を進める
 
 ---
 
@@ -400,9 +401,10 @@ export interface {ComponentName}Props extends Omit<
    - 各フレームワーク用のページを作成
    - index.astro でのリダイレクト設定
 
-2. **patterns.ts** / **README.md** / **README.ja.md**
+2. **patterns.ts** / **README.md** / **README.ja.md** / **llm.md**
    - 実装したコンポーネントの status を available に
    - README.md / README.ja.md のコンポーネント実装状況を更新
+   - 計画と実装で乖離した点を整理して、llm.mdに反映
 
 3. **最終確認**
    ```bash
