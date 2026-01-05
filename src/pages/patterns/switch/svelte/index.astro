@@ -3,6 +3,8 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Switch from '@patterns/switch/Switch.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/switch/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -27,6 +29,7 @@ const tocItems = [
     <p class="text-muted-foreground text-lg">
       A control that allows users to toggle between two states: on and off.
     </p>
+    <AiGuideBadge pattern="switch" />
   </header>
 
   <!-- Framework Selector -->
@@ -163,6 +166,7 @@ const tocItems = [
           WAI-ARIA APG: Switch Pattern
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="switch" />
     </ul>
   </section>
 </PatternLayout>

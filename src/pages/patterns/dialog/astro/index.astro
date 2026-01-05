@@ -3,6 +3,8 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Dialog from '@patterns/dialog/Dialog.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/dialog/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -25,6 +27,7 @@ const tocItems = [
     <p class="text-muted-foreground text-lg">
       A window overlaid on the primary window, rendering the content underneath inert.
     </p>
+    <AiGuideBadge pattern="dialog" />
   </header>
 
   <!-- Framework Selector -->
@@ -218,6 +221,7 @@ import Dialog from './Dialog.astro';
           WAI-ARIA APG: Dialog (Modal) Pattern
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="dialog" />
     </ul>
   </section>
 </PatternLayout>

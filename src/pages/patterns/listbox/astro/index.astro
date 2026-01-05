@@ -5,6 +5,8 @@ import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -47,6 +49,7 @@ const colorOptions = [
     <p class="text-muted-foreground text-lg">
       A widget that allows the user to select one or more items from a list of choices.
     </p>
+    <AiGuideBadge pattern="listbox" />
   </header>
 
   <!-- Framework Selector -->
@@ -250,6 +253,7 @@ const options = [
           WAI-ARIA APG: Listbox Pattern
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="listbox" />
     </ul>
   </section>
 </PatternLayout>

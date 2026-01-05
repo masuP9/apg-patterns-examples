@@ -3,6 +3,8 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Disclosure from '@patterns/disclosure/Disclosure.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/disclosure/AccessibilityDocs.astro';
 import NativeHtmlNotice from '@patterns/disclosure/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -32,6 +34,7 @@ const tocItems = [
     <p class="text-muted-foreground text-lg">
       A button that controls the visibility of a section of content.
     </p>
+    <AiGuideBadge pattern="disclosure" />
   </header>
 
   <!-- Framework Selector -->
@@ -218,6 +221,7 @@ import Disclosure from './Disclosure.astro';
           MDN: &lt;details&gt; element
         </ExternalLink>
       </li>
+      <AiGuideResourceItem pattern="disclosure" />
     </ul>
   </section>
 </PatternLayout>
