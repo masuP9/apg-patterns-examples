@@ -1,0 +1,309 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import RadioGroup from '@patterns/radio-group/RadioGroup.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/radio-group/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/radio-group/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/radio-group/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/radio-group/RadioGroup.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+
+const colorOptions = [
+  { id: 'red', label: 'Red', value: 'red' },
+  { id: 'blue', label: 'Blue', value: 'blue' },
+  { id: 'green', label: 'Green', value: 'green' },
+];
+
+const sizeOptions = [
+  { id: 'small', label: 'Small', value: 'small' },
+  { id: 'medium', label: 'Medium', value: 'medium' },
+  { id: 'large', label: 'Large', value: 'large' },
+];
+
+const planOptions = [
+  { id: 'free', label: 'Free', value: 'free' },
+  { id: 'pro', label: 'Pro', value: 'pro' },
+  { id: 'enterprise', label: 'Enterprise (Coming Soon)', value: 'enterprise', disabled: true },
+];
+
+const ratingOptions = [
+  { id: 'r1', label: '1', value: '1' },
+  { id: 'r2', label: '2', value: '2' },
+  { id: 'r3', label: '3', value: '3' },
+  { id: 'r4', label: '4', value: '4' },
+  { id: 'r5', label: '5', value: '5' },
+];
+---
+
+<PatternLayout title="Radio Group - Astro" pattern="radio-group" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Radio Group</h1>
+    <p class="text-muted-foreground text-lg">
+      A set of checkable buttons where only one can be checked at a time.
+    </p>
+    <AiGuideBadge pattern="radio-group" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="radio-group" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Radio Group</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Use arrow keys to navigate and select. Tab moves focus in/out of the group.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          options={colorOptions}
+          name="color"
+          aria-label="Favorite color"
+        />
+      </div>
+    </div>
+
+    <!-- With Default Value -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">With Default Value</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Pre-selected option using the <code>defaultValue</code> prop.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      </div>
+    </div>
+
+    <!-- With Disabled Option -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">With Disabled Option</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Disabled options are skipped during keyboard navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          options={planOptions}
+          name="plan"
+          aria-label="Subscription plan"
+        />
+      </div>
+    </div>
+
+    <!-- Horizontal Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Horizontal layout with <code>orientation="horizontal"</code>.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="RadioGroup.astro" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import RadioGroup from './RadioGroup.astro';
+
+const options = [
+  { id: 'red', label: 'Red', value: 'red' },
+  { id: 'blue', label: 'Blue', value: 'blue' },
+  { id: 'green', label: 'Green', value: 'green' },
+];
+---
+
+<RadioGroup
+  options={options}
+  name="color"
+  aria-label="Favorite color"
+  defaultValue="blue"
+/>
+
+<script>
+  // Listen for value changes
+  document.querySelector('apg-radio-group')?.addEventListener('valuechange', (e) => {
+    console.log('Selected:', e.detail.value);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">RadioOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of radio options</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>name</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Group name for form submission</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Accessible label for the group</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID of labeling element</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">Initially selected value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
+            <td class="py-2">Layout orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valuechange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{"{ value: string }"}</td>
+            <td class="py-2">Dispatched when selection changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">RadioOption</h3>
+    <CodeBlock
+      code={`interface RadioOption {
+  id: string;
+  label: string;
+  value: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Radio Group Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="radio"&gt;
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="radio-group" />
+    </ul>
+  </section>
+</PatternLayout>

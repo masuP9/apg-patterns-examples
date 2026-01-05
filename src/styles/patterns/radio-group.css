@@ -1,0 +1,167 @@
+/* =============================================================================
+   RADIO GROUP COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-radio-group {
+  display: contents;
+}
+
+/* Radio Group Container */
+.apg-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.apg-radio-group[aria-orientation='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Radio Item */
+.apg-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+/* Radio Control (Circle) */
+.apg-radio-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--background);
+  border: 2px solid var(--input);
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+  flex-shrink: 0;
+}
+
+/* Radio Indicator (Inner Circle) */
+.apg-radio-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--primary-foreground);
+  transform: scale(0);
+  transition: transform 0.15s;
+}
+
+/* Focus state */
+.apg-radio:focus-visible .apg-radio-control {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Hover state */
+.apg-radio:not(.apg-radio--disabled):hover .apg-radio-control {
+  border-color: var(--foreground);
+}
+
+/* Selected state */
+.apg-radio--selected .apg-radio-control {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.apg-radio--selected .apg-radio-indicator {
+  transform: scale(1);
+}
+
+.apg-radio--selected:not(.apg-radio--disabled):hover .apg-radio-control {
+  background: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+  border-color: color-mix(in srgb, var(--primary) 90%, var(--primary-foreground));
+}
+
+/* Disabled state */
+.apg-radio--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.apg-radio--disabled .apg-radio-control {
+  cursor: not-allowed;
+}
+
+/* Radio Label */
+.apg-radio-label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--foreground);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-radio-control {
+    border-width: 3px;
+  }
+
+  .apg-radio--selected .apg-radio-control {
+    background-color: black;
+    border-color: black;
+  }
+
+  .apg-radio-indicator {
+    background: white;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-radio-control,
+  .apg-radio-indicator {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-radio-control {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-radio--selected .apg-radio-control {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .apg-radio-indicator {
+    background: HighlightText;
+  }
+
+  .apg-radio:focus-visible .apg-radio-control {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-radio--disabled {
+    opacity: 1;
+  }
+
+  .apg-radio--disabled .apg-radio-control {
+    border-color: GrayText;
+    background: ButtonFace;
+  }
+
+  .apg-radio--disabled.apg-radio--selected .apg-radio-control {
+    background: GrayText;
+    border-color: GrayText;
+  }
+}

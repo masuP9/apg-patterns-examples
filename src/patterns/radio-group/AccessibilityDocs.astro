@@ -1,0 +1,276 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>radiogroup</code></td>
+          <td class="py-2 pr-4">Container element</td>
+          <td class="py-2">
+            Groups radio buttons together. Must have an accessible name via <code>aria-label</code> or
+            <code>aria-labelledby</code>.
+          </td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>radio</code></td>
+          <td class="py-2 pr-4">Each option element</td>
+          <td class="py-2">
+            Identifies the element as a radio button. Only one radio in a group can be checked at a
+            time.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    This implementation uses custom <code>role="radiogroup"</code> and <code>role="radio"</code> for
+    consistent cross-browser keyboard behavior. Native <code>&lt;input type="radio"&gt;</code> provides
+    these roles implicitly.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-checked</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the current checked state of the radio button. Only one radio in a group should have
+      <code>aria-checked="true"</code>.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code>
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Yes (on each radio)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Click, Space, Arrow keys</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates that the radio button is not interactive and cannot be selected.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code> (only when disabled)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Effect</td>
+            <td class="py-2">Skipped during arrow key navigation, cannot be selected</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-orientation</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the orientation of the radio group. Vertical is the default.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>horizontal</code> | <code>vertical</code> (default)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only set when horizontal)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Note</td>
+            <td class="py-2">
+              This implementation supports all arrow keys regardless of orientation
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Move focus into the group (to selected or first radio)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift + Tab</kbd></td
+          >
+          <td class="py-2">Move focus out of the group</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Select the focused radio (does not unselect)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Down / Right</kbd></td
+          >
+          <td class="py-2">Move to next radio and select (wraps to first)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Up / Left</kbd></td
+          >
+          <td class="py-2">Move to previous radio and select (wraps to last)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move to first radio and select</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move to last radio and select</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>Note:</strong> Unlike Checkbox, arrow keys both move focus AND change selection. Disabled
+    radios are skipped during navigation.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management (Roving Tabindex)</h3>
+  <p class="text-muted-foreground mb-3">
+    Radio groups use roving tabindex to manage focus. Only one radio in the group is tabbable at any
+    time:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Selected radio</strong> has <code>tabindex="0"</code>
+    </li>
+    <li>
+      <strong>If none selected</strong>, first enabled radio has <code>tabindex="0"</code>
+    </li>
+    <li>
+      <strong>All other radios</strong> have <code>tabindex="-1"</code>
+    </li>
+    <li>
+      <strong>Disabled radios</strong> always have <code>tabindex="-1"</code>
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <p class="text-muted-foreground mb-3">
+    Both the radio group and individual radios must have accessible names:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Radio group</strong> - Use <code>aria-label</code> or <code>aria-labelledby</code> on
+      the container
+    </li>
+    <li>
+      <strong>Individual radios</strong> - Each radio is labeled by its visible text content via
+      <code>aria-labelledby</code>
+    </li>
+    <li>
+      <strong>Native alternative</strong> - Use <code>&lt;fieldset&gt;</code> with
+      <code>&lt;legend&gt;</code> for group labeling
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <p class="text-muted-foreground mb-3">
+    This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate
+    state:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Filled circle</strong> - Indicates selected state
+    </li>
+    <li>
+      <strong>Empty circle</strong> - Indicates unselected state
+    </li>
+    <li>
+      <strong>Reduced opacity</strong> - Indicates disabled state
+    </li>
+    <li>
+      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High
+      Contrast Mode
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Radio Group Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio"
+        class="text-primary hover:underline"
+      >
+        MDN: &lt;input type="radio"&gt;
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#radiogroup" class="text-primary hover:underline">
+        W3C ARIA: radiogroup role
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#radio" class="text-primary hover:underline">
+        W3C ARIA: radio role
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

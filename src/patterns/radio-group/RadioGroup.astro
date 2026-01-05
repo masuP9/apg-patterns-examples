@@ -1,0 +1,265 @@
+---
+/**
+ * APG Radio Group Pattern - Astro Implementation
+ *
+ * A set of checkable buttons where only one can be checked at a time.
+ * Uses Web Components for keyboard navigation and focus management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/radio/
+ */
+
+export interface RadioOption {
+  id: string;
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+export interface Props {
+  /** Radio options */
+  options: RadioOption[];
+  /** Group name for form submission */
+  name: string;
+  /** Accessible label for the group */
+  'aria-label'?: string;
+  /** Reference to external label */
+  'aria-labelledby'?: string;
+  /** Initially selected value */
+  defaultValue?: string;
+  /** Orientation of the group */
+  orientation?: 'horizontal' | 'vertical';
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  options,
+  name,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  defaultValue = '',
+  orientation = 'vertical',
+  class: className = '',
+} = Astro.props;
+
+// Generate unique ID
+const instanceId = `radio-group-${Math.random().toString(36).slice(2, 9)}`;
+
+// Find initial selected value
+const getInitialValue = () => {
+  if (defaultValue) {
+    const option = options.find((opt) => opt.value === defaultValue);
+    if (option && !option.disabled) {
+      return defaultValue;
+    }
+  }
+  return '';
+};
+
+const initialValue = getInitialValue();
+
+// Get tabbable value
+const getTabbableValue = () => {
+  if (initialValue) {
+    return initialValue;
+  }
+  const firstEnabled = options.find((opt) => !opt.disabled);
+  return firstEnabled?.value || '';
+};
+
+const tabbableValue = getTabbableValue();
+---
+
+<apg-radio-group
+  class={`apg-radio-group ${className}`.trim()}
+  role="radiogroup"
+  aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledby}
+  aria-orientation={orientation === 'horizontal' ? 'horizontal' : undefined}
+  data-name={name}
+  data-value={initialValue}
+>
+  <!-- Hidden input for form submission -->
+  <input type="hidden" name={name} value={initialValue} />
+
+  {
+    options.map((option) => {
+      const isSelected = initialValue === option.value;
+      const isTabbable = option.value === tabbableValue && !option.disabled;
+      const tabIndex = option.disabled ? -1 : isTabbable ? 0 : -1;
+
+      return (
+        <div
+          role="radio"
+          aria-checked={isSelected ? 'true' : 'false'}
+          aria-disabled={option.disabled ? 'true' : undefined}
+          aria-labelledby={`${instanceId}-label-${option.id}`}
+          tabindex={tabIndex}
+          data-value={option.value}
+          data-disabled={option.disabled ? 'true' : undefined}
+          class={`apg-radio ${isSelected ? 'apg-radio--selected' : ''} ${option.disabled ? 'apg-radio--disabled' : ''}`}
+        >
+          <span class="apg-radio-control" aria-hidden="true">
+            <span class="apg-radio-indicator" />
+          </span>
+          <span id={`${instanceId}-label-${option.id}`} class="apg-radio-label">
+            {option.label}
+          </span>
+        </div>
+      );
+    })
+  }
+</apg-radio-group>
+
+<script>
+  class ApgRadioGroup extends HTMLElement {
+    private radios: HTMLElement[] = [];
+    private hiddenInput: HTMLInputElement | null = null;
+    private rafId: number | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.radios = Array.from(this.querySelectorAll('[role="radio"]'));
+      this.hiddenInput = this.querySelector('input[type="hidden"]');
+
+      this.radios.forEach((radio) => {
+        radio.addEventListener('click', this.handleClick);
+        radio.addEventListener('keydown', this.handleKeyDown);
+      });
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.radios.forEach((radio) => {
+        radio.removeEventListener('click', this.handleClick);
+        radio.removeEventListener('keydown', this.handleKeyDown);
+      });
+      this.radios = [];
+      this.hiddenInput = null;
+    }
+
+    private getEnabledRadios(): HTMLElement[] {
+      return this.radios.filter((radio) => radio.dataset.disabled !== 'true');
+    }
+
+    private selectRadio(radio: HTMLElement) {
+      if (radio.dataset.disabled === 'true') return;
+
+      const value = radio.dataset.value || '';
+
+      // Update all radios
+      this.radios.forEach((r) => {
+        const isSelected = r === radio;
+        r.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        r.classList.toggle('apg-radio--selected', isSelected);
+
+        // Update tabindex (roving)
+        if (r.dataset.disabled !== 'true') {
+          r.setAttribute('tabindex', isSelected ? '0' : '-1');
+        }
+      });
+
+      // Update hidden input
+      if (this.hiddenInput) {
+        this.hiddenInput.value = value;
+      }
+
+      // Dispatch event
+      this.dispatchEvent(
+        new CustomEvent('valuechange', {
+          detail: { value },
+          bubbles: true,
+        })
+      );
+    }
+
+    private focusRadio(radio: HTMLElement) {
+      radio.focus();
+    }
+
+    private navigateAndSelect(direction: 'next' | 'prev' | 'first' | 'last') {
+      const enabledRadios = this.getEnabledRadios();
+      if (enabledRadios.length === 0) return;
+
+      const currentIndex = enabledRadios.findIndex((r) => r === document.activeElement);
+
+      let targetIndex: number;
+      switch (direction) {
+        case 'next':
+          targetIndex = currentIndex >= 0 ? (currentIndex + 1) % enabledRadios.length : 0;
+          break;
+        case 'prev':
+          targetIndex =
+            currentIndex >= 0
+              ? (currentIndex - 1 + enabledRadios.length) % enabledRadios.length
+              : enabledRadios.length - 1;
+          break;
+        case 'first':
+          targetIndex = 0;
+          break;
+        case 'last':
+          targetIndex = enabledRadios.length - 1;
+          break;
+      }
+
+      const targetRadio = enabledRadios[targetIndex];
+      if (targetRadio) {
+        this.focusRadio(targetRadio);
+        this.selectRadio(targetRadio);
+      }
+    }
+
+    private handleClick = (event: Event) => {
+      const radio = event.currentTarget as HTMLElement;
+      if (radio.dataset.disabled !== 'true') {
+        this.focusRadio(radio);
+        this.selectRadio(radio);
+      }
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      const radio = event.currentTarget as HTMLElement;
+      const { key } = event;
+
+      switch (key) {
+        case 'ArrowDown':
+        case 'ArrowRight':
+          event.preventDefault();
+          this.navigateAndSelect('next');
+          break;
+
+        case 'ArrowUp':
+        case 'ArrowLeft':
+          event.preventDefault();
+          this.navigateAndSelect('prev');
+          break;
+
+        case 'Home':
+          event.preventDefault();
+          this.navigateAndSelect('first');
+          break;
+
+        case 'End':
+          event.preventDefault();
+          this.navigateAndSelect('last');
+          break;
+
+        case ' ':
+          event.preventDefault();
+          this.selectRadio(radio);
+          break;
+      }
+    };
+  }
+
+  if (!customElements.get('apg-radio-group')) {
+    customElements.define('apg-radio-group', ApgRadioGroup);
+  }
+</script>

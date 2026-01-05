@@ -38,7 +38,7 @@
 | Menu and Menubar    | -     | -   | -      | -     | 予定       |
 | Menu Button         | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Meter               | -     | -   | -      | -     | 予定       |
-| Radio Group         | -     | -   | -      | -     | 予定       |
+| Radio Group         | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Slider              | -     | -   | -      | -     | 予定       |
 | Slider (Multi-Thumb)| -     | -   | -      | -     | 予定       |
 | Spinbutton          | -     | -   | -      | -     | 予定       |
