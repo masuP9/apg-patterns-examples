@@ -67,6 +67,8 @@ Phase 1 で llm.md とテストを先に作成し、その後実装に進みま�
 - [ ] `{Component}.vue` - Vue 実装
 - [ ] `{Component}.svelte` - Svelte 実装
 - [ ] `{Component}.astro` - Astro 実装（Web Components）
+- [ ] `src/styles/patterns/{pattern}.css` - CSS スタイル
+- [ ] `src/styles/global.css` に CSS をインポート追加
 
 ### Phase 3: ドキュメント
 - [ ] `AccessibilityDocs.astro` - ARIA 仕様解説
@@ -354,6 +356,18 @@ export interface {ComponentName}Props extends Omit<
    - Svelte → テスト実行 → レビュー
    - Astro → テスト実行 → レビュー
 
+4. **CSS 作成とインポート**
+   ```bash
+   # CSS ファイル作成
+   touch src/styles/patterns/{pattern}.css
+   ```
+   - 既存パターン（meter.css 等）を参考にスタイルを作成
+   - **重要**: `src/styles/global.css` にインポートを追加
+   ```css
+   @import './patterns/{pattern}.css';
+   ```
+   - インポート漏れがあるとスタイルが適用されないため必ず確認
+
 ### Phase 3: リファクタリング（REFACTOR フェーズ）
 
 1. **コード整理**
@@ -462,6 +476,7 @@ export interface {ComponentName}Props extends Omit<
 
 ### 実装上の注意点
 
+- **CSS インポート漏れ**: `src/styles/patterns/{pattern}.css` を作成したら、必ず `src/styles/global.css` にインポートを追加すること。漏れるとスタイルが適用されない
 - **Astro Islands 制約**: 子コンポーネントの状態管理が必要な場合はラッパーコンポーネントを作成
 - **フォーカス管理**: `useEffect` / `onMounted` / `onMount` のタイミングに注意
 - **キーボードイベント**: `event.preventDefault()` の適切な使用
