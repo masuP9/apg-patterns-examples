@@ -5,20 +5,20 @@ import { describe, expect, it, vi } from 'vitest';
 import { Switch } from './Switch';
 
 describe('Switch', () => {
-  // 🔴 High Priority: APG 準拠の核心
-  describe('APG: ARIA 属性', () => {
-    it('role="switch" を持つ', () => {
+  // 🔴 High Priority: APG Core Compliance
+  describe('APG: ARIA Attributes', () => {
+    it('has role="switch"', () => {
       render(<Switch>Wi-Fi</Switch>);
       expect(screen.getByRole('switch')).toBeInTheDocument();
     });
 
-    it('初期状態で aria-checked="false"', () => {
+    it('has aria-checked="false" in initial state', () => {
       render(<Switch>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
       expect(switchEl).toHaveAttribute('aria-checked', 'false');
     });
 
-    it('クリック後に aria-checked="true" に変わる', async () => {
+    it('changes to aria-checked="true" after click', async () => {
       const user = userEvent.setup();
       render(<Switch>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
@@ -28,19 +28,19 @@ describe('Switch', () => {
       expect(switchEl).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('type="button" が設定されている', () => {
+    it('has type="button"', () => {
       render(<Switch>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
       expect(switchEl).toHaveAttribute('type', 'button');
     });
 
-    it('disabled 時に aria-disabled が設定される', () => {
+    it('has aria-disabled when disabled', () => {
       render(<Switch disabled>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
       expect(switchEl).toHaveAttribute('aria-disabled', 'true');
     });
 
-    it('disabled 状態で aria-checked 変更不可', async () => {
+    it('cannot change aria-checked when disabled', async () => {
       const user = userEvent.setup();
       render(<Switch disabled>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
@@ -51,8 +51,8 @@ describe('Switch', () => {
     });
   });
 
-  describe('APG: キーボード操作', () => {
-    it('Space キーでトグルする', async () => {
+  describe('APG: Keyboard Interaction', () => {
+    it('toggles with Space key', async () => {
       const user = userEvent.setup();
       render(<Switch>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
@@ -63,7 +63,7 @@ describe('Switch', () => {
       expect(switchEl).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('Enter キーでトグルする', async () => {
+    it('toggles with Enter key', async () => {
       const user = userEvent.setup();
       render(<Switch>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
@@ -74,7 +74,7 @@ describe('Switch', () => {
       expect(switchEl).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('Tab キーでフォーカス移動可能', async () => {
+    it('can move focus with Tab key', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -89,7 +89,7 @@ describe('Switch', () => {
       expect(screen.getByRole('switch', { name: 'Switch 2' })).toHaveFocus();
     });
 
-    it('disabled 時は Tab キースキップ', async () => {
+    it('skips with Tab key when disabled', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -105,7 +105,7 @@ describe('Switch', () => {
       expect(screen.getByRole('switch', { name: 'Switch 3' })).toHaveFocus();
     });
 
-    it('disabled 時はキー操作無効', async () => {
+    it('keyboard operation disabled when disabled', async () => {
       const user = userEvent.setup();
       render(<Switch disabled>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
@@ -116,25 +116,25 @@ describe('Switch', () => {
     });
   });
 
-  // 🟡 Medium Priority: アクセシビリティ検証
-  describe('アクセシビリティ', () => {
-    it('axe による WCAG 2.1 AA 違反がない', async () => {
+  // 🟡 Medium Priority: Accessibility Validation
+  describe('Accessibility', () => {
+    it('has no WCAG 2.1 AA violations', async () => {
       const { container } = render(<Switch>Wi-Fi</Switch>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
-    it('ラベル（children）でアクセシブルネームを持つ', () => {
+    it('has accessible name via label (children)', () => {
       render(<Switch>Wi-Fi</Switch>);
       expect(screen.getByRole('switch', { name: 'Wi-Fi' })).toBeInTheDocument();
     });
 
-    it('aria-label でアクセシブルネームを設定できる', () => {
+    it('can set accessible name via aria-label', () => {
       render(<Switch aria-label="Enable notifications" />);
       expect(screen.getByRole('switch', { name: 'Enable notifications' })).toBeInTheDocument();
     });
 
-    it('aria-labelledby で外部ラベルを参照できる', () => {
+    it('can reference external label via aria-labelledby', () => {
       render(
         <>
           <span id="switch-label">Bluetooth</span>
@@ -146,13 +146,13 @@ describe('Switch', () => {
   });
 
   describe('Props', () => {
-    it('initialChecked=true で ON 状態でレンダリングされる', () => {
+    it('renders in ON state with initialChecked=true', () => {
       render(<Switch initialChecked>Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
       expect(switchEl).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('onCheckedChange が状態変化時に呼び出される', async () => {
+    it('calls onCheckedChange when state changes', async () => {
       const handleCheckedChange = vi.fn();
       const user = userEvent.setup();
       render(<Switch onCheckedChange={handleCheckedChange}>Wi-Fi</Switch>);
@@ -165,16 +165,16 @@ describe('Switch', () => {
     });
   });
 
-  // 🟢 Low Priority: 拡張性
-  describe('HTML 属性継承', () => {
-    it('className が正しくマージされる', () => {
+  // 🟢 Low Priority: Extensibility
+  describe('HTML Attribute Inheritance', () => {
+    it('merges className correctly', () => {
       render(<Switch className="custom-class">Wi-Fi</Switch>);
       const switchEl = screen.getByRole('switch');
       expect(switchEl).toHaveClass('custom-class');
       expect(switchEl).toHaveClass('apg-switch');
     });
 
-    it('data-* 属性が継承される', () => {
+    it('inherits data-* attributes', () => {
       render(<Switch data-testid="custom-switch">Wi-Fi</Switch>);
       expect(screen.getByTestId('custom-switch')).toBeInTheDocument();
     });

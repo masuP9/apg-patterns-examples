@@ -5,9 +5,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { ToggleButton } from './ToggleButton';
 
 describe('ToggleButton', () => {
-  // 🔴 High Priority: APG 準拠の核心
-  describe('APG: キーボード操作', () => {
-    it('Space キーでトグルする', async () => {
+  // 🔴 High Priority: APG Core Compliance
+  describe('APG: Keyboard Interaction', () => {
+    it('toggles with Space key', async () => {
       const user = userEvent.setup();
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
@@ -18,7 +18,7 @@ describe('ToggleButton', () => {
       expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('Enter キーでトグルする', async () => {
+    it('toggles with Enter key', async () => {
       const user = userEvent.setup();
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
@@ -29,7 +29,7 @@ describe('ToggleButton', () => {
       expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('Tab キーでフォーカス移動可能', async () => {
+    it('can move focus with Tab key', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -44,7 +44,7 @@ describe('ToggleButton', () => {
       expect(screen.getByRole('button', { name: 'Button 2' })).toHaveFocus();
     });
 
-    it('disabled 時は Tab キースキップ', async () => {
+    it('skips with Tab key when disabled', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -61,19 +61,19 @@ describe('ToggleButton', () => {
     });
   });
 
-  describe('APG: ARIA 属性', () => {
-    it('role="button" を持つ（暗黙的）', () => {
+  describe('APG: ARIA Attributes', () => {
+    it('has implicit role="button"', () => {
       render(<ToggleButton>Mute</ToggleButton>);
       expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
-    it('初期状態で aria-pressed="false"', () => {
+    it('has aria-pressed="false" in initial state', () => {
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-pressed', 'false');
     });
 
-    it('クリック後に aria-pressed="true" に変わる', async () => {
+    it('changes to aria-pressed="true" after click', async () => {
       const user = userEvent.setup();
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
@@ -83,13 +83,13 @@ describe('ToggleButton', () => {
       expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('type="button" が設定されている', () => {
+    it('has type="button"', () => {
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('type', 'button');
     });
 
-    it('disabled 状態で aria-pressed 変更不可', async () => {
+    it('cannot change aria-pressed when disabled', async () => {
       const user = userEvent.setup();
       render(<ToggleButton disabled>Mute</ToggleButton>);
       const button = screen.getByRole('button');
@@ -100,28 +100,28 @@ describe('ToggleButton', () => {
     });
   });
 
-  // 🟡 Medium Priority: アクセシビリティ検証
-  describe('アクセシビリティ', () => {
-    it('axe による WCAG 2.1 AA 違反がない', async () => {
+  // 🟡 Medium Priority: Accessibility Validation
+  describe('Accessibility', () => {
+    it('has no WCAG 2.1 AA violations', async () => {
       const { container } = render(<ToggleButton>Mute</ToggleButton>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
-    it('アクセシブルネームが設定されている', () => {
+    it('has accessible name', () => {
       render(<ToggleButton>Mute Audio</ToggleButton>);
       expect(screen.getByRole('button', { name: /Mute Audio/i })).toBeInTheDocument();
     });
   });
 
   describe('Props', () => {
-    it('initialPressed=true で押下状態でレンダリングされる', () => {
+    it('renders in pressed state with initialPressed=true', () => {
       render(<ToggleButton initialPressed>Mute</ToggleButton>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('onPressedChange が状態変化時に呼び出される', async () => {
+    it('calls onPressedChange when state changes', async () => {
       const handlePressedChange = vi.fn();
       const user = userEvent.setup();
       render(<ToggleButton onPressedChange={handlePressedChange}>Mute</ToggleButton>);
@@ -134,15 +134,15 @@ describe('ToggleButton', () => {
     });
   });
 
-  describe('カスタムインジケーター', () => {
-    it('デフォルトで●/○インジケーターが表示される', () => {
+  describe('Custom Indicators', () => {
+    it('displays default ●/○ indicator', () => {
       render(<ToggleButton>Mute</ToggleButton>);
       const button = screen.getByRole('button');
       const indicator = button.querySelector('.apg-toggle-indicator');
       expect(indicator).toHaveTextContent('○');
     });
 
-    it('pressedIndicator でカスタムインジケーターを設定できる', () => {
+    it('can set custom indicator with pressedIndicator', () => {
       render(
         <ToggleButton initialPressed pressedIndicator="🔇">
           Mute
@@ -153,14 +153,14 @@ describe('ToggleButton', () => {
       expect(indicator).toHaveTextContent('🔇');
     });
 
-    it('unpressedIndicator でカスタムインジケーターを設定できる', () => {
+    it('can set custom indicator with unpressedIndicator', () => {
       render(<ToggleButton unpressedIndicator="🔊">Mute</ToggleButton>);
       const button = screen.getByRole('button');
       const indicator = button.querySelector('.apg-toggle-indicator');
       expect(indicator).toHaveTextContent('🔊');
     });
 
-    it('トグル時にカスタムインジケーターが切り替わる', async () => {
+    it('switches custom indicator on toggle', async () => {
       const user = userEvent.setup();
       render(
         <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
@@ -177,7 +177,7 @@ describe('ToggleButton', () => {
       expect(indicator).toHaveTextContent('🔊');
     });
 
-    it('ReactNode としてカスタムインジケーターを渡せる', () => {
+    it('can pass ReactNode as custom indicator', () => {
       render(
         <ToggleButton initialPressed pressedIndicator={<span data-testid="custom-icon">X</span>}>
           Mute
@@ -186,7 +186,7 @@ describe('ToggleButton', () => {
       expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
     });
 
-    it('カスタムインジケーターでも aria-hidden が維持される', () => {
+    it('maintains aria-hidden with custom indicator', () => {
       render(
         <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
           Mute
@@ -197,7 +197,7 @@ describe('ToggleButton', () => {
       expect(indicator).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('カスタムインジケーターでも axe 違反がない', async () => {
+    it('has no axe violations with custom indicator', async () => {
       const { container } = render(
         <ToggleButton pressedIndicator="🔇" unpressedIndicator="🔊">
           Mute
@@ -208,21 +208,21 @@ describe('ToggleButton', () => {
     });
   });
 
-  // 🟢 Low Priority: 拡張性
-  describe('HTML 属性継承', () => {
-    it('className が正しくマージされる', () => {
+  // 🟢 Low Priority: Extensibility
+  describe('HTML Attribute Inheritance', () => {
+    it('merges className correctly', () => {
       render(<ToggleButton className="custom-class">Mute</ToggleButton>);
       const button = screen.getByRole('button');
       expect(button).toHaveClass('custom-class');
       expect(button).toHaveClass('apg-toggle-button');
     });
 
-    it('data-* 属性が継承される', () => {
+    it('inherits data-* attributes', () => {
       render(<ToggleButton data-testid="custom-toggle">Mute</ToggleButton>);
       expect(screen.getByTestId('custom-toggle')).toBeInTheDocument();
     });
 
-    it('子要素が React ノードでも正常動作', () => {
+    it('works correctly with React node children', () => {
       render(
         <ToggleButton>
           <span>Icon</span> Text

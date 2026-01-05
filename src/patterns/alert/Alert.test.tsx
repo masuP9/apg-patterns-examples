@@ -6,18 +6,18 @@ import { Alert } from './Alert';
 
 describe('Alert', () => {
   // High Priority: APG Core Compliance
-  describe('APG: ARIA 属性', () => {
-    it('role="alert" を持つ', () => {
+  describe('APG: ARIA Attributes', () => {
+    it('has role="alert"', () => {
       render(<Alert message="Test message" />);
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 
-    it('メッセージがなくても role=alert コンテナは DOM に存在する', () => {
+    it('role=alert container exists in DOM even without message', () => {
       render(<Alert />);
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 
-    it('メッセージ変更時もコンテナは同じ要素のまま', () => {
+    it('container remains the same element when message changes', () => {
       const { rerender } = render(<Alert message="First message" />);
       const alertElement = screen.getByRole('alert');
       const alertId = alertElement.id;
@@ -27,7 +27,7 @@ describe('Alert', () => {
       expect(screen.getByRole('alert')).toHaveTextContent('Second message');
     });
 
-    it('メッセージがクリアされてもコンテナは残る', () => {
+    it('container remains when message is cleared', () => {
       const { rerender } = render(<Alert message="Test message" />);
       expect(screen.getByRole('alert')).toHaveTextContent('Test message');
 
@@ -37,8 +37,8 @@ describe('Alert', () => {
     });
   });
 
-  describe('APG: フォーカス管理', () => {
-    it('アラート表示時にフォーカスを移動しない', async () => {
+  describe('APG: Focus Management', () => {
+    it('does not move focus when alert is displayed', async () => {
       const user = userEvent.setup();
       render(
         <>
@@ -51,28 +51,28 @@ describe('Alert', () => {
       await user.click(button);
       expect(button).toHaveFocus();
 
-      // アラートが表示されてもフォーカスは移動しない
+      // Focus should not move when alert is displayed
       expect(button).toHaveFocus();
     });
 
-    it('アラート自体はフォーカスを受け取らない（tabindex なし）', () => {
+    it('alert itself does not receive focus (no tabindex)', () => {
       render(<Alert message="Test message" />);
       expect(screen.getByRole('alert')).not.toHaveAttribute('tabindex');
     });
   });
 
-  describe('Dismiss 機能', () => {
-    it('dismissible=true で閉じるボタンが表示される', () => {
+  describe('Dismiss Feature', () => {
+    it('shows dismiss button when dismissible=true', () => {
       render(<Alert message="Test message" dismissible />);
       expect(screen.getByRole('button', { name: 'Dismiss alert' })).toBeInTheDocument();
     });
 
-    it('dismissible=false（デフォルト）で閉じるボタンが表示されない', () => {
+    it('does not show dismiss button when dismissible=false (default)', () => {
       render(<Alert message="Test message" />);
       expect(screen.queryByRole('button', { name: 'Dismiss alert' })).not.toBeInTheDocument();
     });
 
-    it('閉じるボタンクリックで onDismiss が呼び出される', async () => {
+    it('calls onDismiss when dismiss button is clicked', async () => {
       const handleDismiss = vi.fn();
       const user = userEvent.setup();
       render(<Alert message="Test message" dismissible onDismiss={handleDismiss} />);
@@ -81,7 +81,7 @@ describe('Alert', () => {
       expect(handleDismiss).toHaveBeenCalledTimes(1);
     });
 
-    it('閉じるボタンは type=button を持つ', () => {
+    it('dismiss button has type=button', () => {
       render(<Alert message="Test message" dismissible />);
       expect(screen.getByRole('button', { name: 'Dismiss alert' })).toHaveAttribute(
         'type',
@@ -89,7 +89,7 @@ describe('Alert', () => {
       );
     });
 
-    it('閉じるボタンに aria-label がある', () => {
+    it('dismiss button has aria-label', () => {
       render(<Alert message="Test message" dismissible />);
       expect(screen.getByRole('button', { name: 'Dismiss alert' })).toHaveAccessibleName(
         'Dismiss alert'
@@ -98,20 +98,20 @@ describe('Alert', () => {
   });
 
   // Medium Priority: Accessibility Validation
-  describe('アクセシビリティ', () => {
-    it('axe による WCAG 2.1 AA 違反がない（メッセージあり）', async () => {
+  describe('Accessibility', () => {
+    it('has no WCAG 2.1 AA violations (with message)', async () => {
       const { container } = render(<Alert message="Test message" />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
-    it('axe による WCAG 2.1 AA 違反がない（メッセージなし）', async () => {
+    it('has no WCAG 2.1 AA violations (without message)', async () => {
       const { container } = render(<Alert />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
-    it('axe による WCAG 2.1 AA 違反がない（dismissible）', async () => {
+    it('has no WCAG 2.1 AA violations (dismissible)', async () => {
       const { container } = render(
         <Alert message="Test message" dismissible onDismiss={() => {}} />
       );
@@ -120,9 +120,9 @@ describe('Alert', () => {
     });
   });
 
-  describe('Variant スタイル', () => {
+  describe('Variant Styles', () => {
     it.each(['info', 'success', 'warning', 'error'] as const)(
-      'variant=%s で適切なスタイルクラスが適用される',
+      'applies appropriate style class for variant=%s',
       (variant) => {
         render(<Alert message="Test message" variant={variant} />);
         const alert = screen.getByRole('alert');
@@ -132,10 +132,10 @@ describe('Alert', () => {
       }
     );
 
-    it('デフォルトの variant は info', () => {
+    it('default variant is info', () => {
       render(<Alert message="Test message" />);
       const alert = screen.getByRole('alert');
-      // info variant のスタイルが親ラッパーに適用されている
+      // info variant style is applied to the parent wrapper
       const wrapper = alert.parentElement;
       expect(wrapper).toHaveClass('bg-blue-50');
     });
@@ -143,21 +143,21 @@ describe('Alert', () => {
 
   // Low Priority: Props & Extensibility
   describe('Props', () => {
-    it('id prop でカスタム ID を設定できる', () => {
+    it('can set custom ID with id prop', () => {
       render(<Alert message="Test message" id="custom-alert-id" />);
       expect(screen.getByRole('alert')).toHaveAttribute('id', 'custom-alert-id');
     });
 
-    it('className が正しくマージされる', () => {
+    it('merges className correctly', () => {
       render(<Alert message="Test message" className="custom-class" />);
       const alert = screen.getByRole('alert');
-      // className は親ラッパーに適用される
+      // className is applied to the parent wrapper
       const wrapper = alert.parentElement;
       expect(wrapper).toHaveClass('apg-alert');
       expect(wrapper).toHaveClass('custom-class');
     });
 
-    it('children で複雑なコンテンツを渡せる', () => {
+    it('can pass complex content via children', () => {
       render(
         <Alert>
           <strong>Important:</strong> This is a message
@@ -166,7 +166,7 @@ describe('Alert', () => {
       expect(screen.getByRole('alert')).toHaveTextContent('Important: This is a message');
     });
 
-    it('message と children 両方ある場合は message が優先される', () => {
+    it('message takes priority when both message and children are provided', () => {
       render(
         <Alert message="Message prop">
           <span>Children content</span>
@@ -177,8 +177,8 @@ describe('Alert', () => {
     });
   });
 
-  describe('HTML 属性継承', () => {
-    it('追加の HTML 属性が渡せる', () => {
+  describe('HTML Attribute Inheritance', () => {
+    it('can pass additional HTML attributes', () => {
       render(<Alert message="Test" data-testid="custom-alert" />);
       expect(screen.getByTestId('custom-alert')).toBeInTheDocument();
     });

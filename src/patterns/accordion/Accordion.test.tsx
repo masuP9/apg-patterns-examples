@@ -4,7 +4,7 @@ import { axe } from 'jest-axe';
 import { describe, expect, it, vi } from 'vitest';
 import { Accordion, type AccordionItem } from './Accordion';
 
-// テスト用のアコーディオンデータ
+// Test accordion data
 const defaultItems: AccordionItem[] = [
   { id: 'section1', header: 'Section 1', content: 'Content 1' },
   { id: 'section2', header: 'Section 2', content: 'Content 2' },
@@ -23,7 +23,7 @@ const itemsWithDefaultExpanded: AccordionItem[] = [
   { id: 'section3', header: 'Section 3', content: 'Content 3' },
 ];
 
-// 7個以上のアイテム（region role テスト用）
+// 7+ items (for region role test)
 const manyItems: AccordionItem[] = Array.from({ length: 7 }, (_, i) => ({
   id: `section${i + 1}`,
   header: `Section ${i + 1}`,
@@ -31,9 +31,9 @@ const manyItems: AccordionItem[] = Array.from({ length: 7 }, (_, i) => ({
 }));
 
 describe('Accordion', () => {
-  // 🔴 High Priority: APG 準拠の核心
-  describe('APG: キーボード操作', () => {
-    it('Enter でパネルを開閉する', async () => {
+  // 🔴 High Priority: APG Core Compliance
+  describe('APG: Keyboard Interaction', () => {
+    it('toggles panel with Enter', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -47,7 +47,7 @@ describe('Accordion', () => {
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('Space でパネルを開閉する', async () => {
+    it('toggles panel with Space', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -59,7 +59,7 @@ describe('Accordion', () => {
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('ArrowDown で次のヘッダーにフォーカス移動', async () => {
+    it('moves focus to next header with ArrowDown', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -72,7 +72,7 @@ describe('Accordion', () => {
       expect(button2).toHaveFocus();
     });
 
-    it('ArrowUp で前のヘッダーにフォーカス移動', async () => {
+    it('moves focus to previous header with ArrowUp', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -85,7 +85,7 @@ describe('Accordion', () => {
       expect(button1).toHaveFocus();
     });
 
-    it('ArrowDown で最後のヘッダーにいる場合、移動しない（ループなし）', async () => {
+    it('does not move focus when at last header with ArrowDown (no loop)', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -94,11 +94,11 @@ describe('Accordion', () => {
 
       await user.keyboard('{ArrowDown}');
 
-      // フォーカスは移動しない
+      // Focus does not move
       expect(button3).toHaveFocus();
     });
 
-    it('ArrowUp で最初のヘッダーにいる場合、移動しない（ループなし）', async () => {
+    it('does not move focus when at first header with ArrowUp (no loop)', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -107,11 +107,11 @@ describe('Accordion', () => {
 
       await user.keyboard('{ArrowUp}');
 
-      // フォーカスは移動しない
+      // Focus does not move
       expect(button1).toHaveFocus();
     });
 
-    it('Home で最初のヘッダーに移動', async () => {
+    it('moves focus to first header with Home', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -124,7 +124,7 @@ describe('Accordion', () => {
       expect(button1).toHaveFocus();
     });
 
-    it('End で最後のヘッダーに移動', async () => {
+    it('moves focus to last header with End', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -137,7 +137,7 @@ describe('Accordion', () => {
       expect(button3).toHaveFocus();
     });
 
-    it('disabled ヘッダーをスキップして移動', async () => {
+    it('skips disabled headers when navigating', async () => {
       const user = userEvent.setup();
       render(<Accordion items={itemsWithDisabled} />);
 
@@ -146,12 +146,12 @@ describe('Accordion', () => {
 
       await user.keyboard('{ArrowDown}');
 
-      // Section 2 はスキップされ、Section 3 に移動
+      // Section 2 is skipped, moves to Section 3
       const button3 = screen.getByRole('button', { name: 'Section 3' });
       expect(button3).toHaveFocus();
     });
 
-    it('enableArrowKeys=false で矢印キーナビゲーション無効', async () => {
+    it('disables arrow key navigation when enableArrowKeys=false', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} enableArrowKeys={false} />);
 
@@ -160,13 +160,13 @@ describe('Accordion', () => {
 
       await user.keyboard('{ArrowDown}');
 
-      // フォーカスは移動しない
+      // Focus does not move
       expect(button1).toHaveFocus();
     });
   });
 
-  describe('APG: ARIA 属性', () => {
-    it('ヘッダーボタンが aria-expanded を持つ', () => {
+  describe('APG: ARIA Attributes', () => {
+    it('header buttons have aria-expanded', () => {
       render(<Accordion items={defaultItems} />);
       const buttons = screen.getAllByRole('button');
 
@@ -175,7 +175,7 @@ describe('Accordion', () => {
       });
     });
 
-    it('開いたパネルで aria-expanded="true"', async () => {
+    it('has aria-expanded="true" on open panel', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -185,14 +185,14 @@ describe('Accordion', () => {
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('閉じたパネルで aria-expanded="false"', () => {
+    it('has aria-expanded="false" on closed panel', () => {
       render(<Accordion items={defaultItems} />);
       const button = screen.getByRole('button', { name: 'Section 1' });
 
       expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('ヘッダーの aria-controls がパネル id と一致', () => {
+    it('header aria-controls matches panel id', () => {
       render(<Accordion items={defaultItems} />);
       const button = screen.getByRole('button', { name: 'Section 1' });
       const ariaControls = button.getAttribute('aria-controls');
@@ -201,21 +201,21 @@ describe('Accordion', () => {
       expect(document.getElementById(ariaControls!)).toBeInTheDocument();
     });
 
-    it('6個以下のパネルで role="region" を持つ', () => {
+    it('panels have role="region" when 6 or fewer', () => {
       render(<Accordion items={defaultItems} />);
       const regions = screen.getAllByRole('region');
 
       expect(regions).toHaveLength(3);
     });
 
-    it('7個以上のパネルで role="region" を持たない', () => {
+    it('panels do not have role="region" when 7 or more', () => {
       render(<Accordion items={manyItems} />);
       const regions = screen.queryAllByRole('region');
 
       expect(regions).toHaveLength(0);
     });
 
-    it('パネルの aria-labelledby がヘッダー id と一致', () => {
+    it('panel aria-labelledby matches header id', () => {
       render(<Accordion items={defaultItems} />);
       const button = screen.getByRole('button', { name: 'Section 1' });
       const regions = screen.getAllByRole('region');
@@ -223,7 +223,7 @@ describe('Accordion', () => {
       expect(regions[0]).toHaveAttribute('aria-labelledby', button.id);
     });
 
-    it('disabled 項目が aria-disabled="true" を持つ', () => {
+    it('disabled item has aria-disabled="true"', () => {
       render(<Accordion items={itemsWithDisabled} />);
       const disabledButton = screen.getByRole('button', { name: 'Section 2' });
 
@@ -231,15 +231,15 @@ describe('Accordion', () => {
     });
   });
 
-  describe('APG: 見出し構造', () => {
-    it('headingLevel=3 で h3 要素を使用', () => {
+  describe('APG: Heading Structure', () => {
+    it('uses h3 element when headingLevel=3', () => {
       render(<Accordion items={defaultItems} headingLevel={3} />);
       const headings = document.querySelectorAll('h3');
 
       expect(headings).toHaveLength(3);
     });
 
-    it('headingLevel=2 で h2 要素を使用', () => {
+    it('uses h2 element when headingLevel=2', () => {
       render(<Accordion items={defaultItems} headingLevel={2} />);
       const headings = document.querySelectorAll('h2');
 
@@ -247,9 +247,9 @@ describe('Accordion', () => {
     });
   });
 
-  // 🟡 Medium Priority: アクセシビリティ検証
-  describe('アクセシビリティ', () => {
-    it('axe による WCAG 2.1 AA 違反がない', async () => {
+  // 🟡 Medium Priority: Accessibility Validation
+  describe('Accessibility', () => {
+    it('has no WCAG 2.1 AA violations', async () => {
       const { container } = render(<Accordion items={defaultItems} />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
@@ -257,14 +257,14 @@ describe('Accordion', () => {
   });
 
   describe('Props', () => {
-    it('defaultExpanded で初期展開状態を指定できる', () => {
+    it('can specify initial expanded state with defaultExpanded', () => {
       render(<Accordion items={itemsWithDefaultExpanded} />);
       const button = screen.getByRole('button', { name: 'Section 1' });
 
       expect(button).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('allowMultiple=false で1つのみ展開（デフォルト）', async () => {
+    it('only one panel expanded when allowMultiple=false (default)', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} />);
 
@@ -279,7 +279,7 @@ describe('Accordion', () => {
       expect(button2).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('allowMultiple=true で複数展開可能', async () => {
+    it('multiple panels can be expanded when allowMultiple=true', async () => {
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} allowMultiple />);
 
@@ -293,7 +293,7 @@ describe('Accordion', () => {
       expect(button2).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('onExpandedChange が展開状態変化時に呼び出される', async () => {
+    it('calls onExpandedChange when expanded state changes', async () => {
       const handleExpandedChange = vi.fn();
       const user = userEvent.setup();
       render(<Accordion items={defaultItems} onExpandedChange={handleExpandedChange} />);
@@ -304,8 +304,8 @@ describe('Accordion', () => {
     });
   });
 
-  describe('異常系', () => {
-    it('disabled 項目はクリックで開閉しない', async () => {
+  describe('Edge Cases', () => {
+    it('disabled item does not toggle on click', async () => {
       const user = userEvent.setup();
       render(<Accordion items={itemsWithDisabled} />);
 
@@ -316,7 +316,7 @@ describe('Accordion', () => {
       expect(disabledButton).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('disabled かつ defaultExpanded の項目は展開されない', () => {
+    it('disabled item with defaultExpanded is not expanded', () => {
       const items: AccordionItem[] = [
         {
           id: 'section1',
@@ -333,9 +333,9 @@ describe('Accordion', () => {
     });
   });
 
-  // 🟢 Low Priority: 拡張性
-  describe('HTML 属性継承', () => {
-    it('className がコンテナに適用される', () => {
+  // 🟢 Low Priority: Extensibility
+  describe('HTML Attribute Inheritance', () => {
+    it('applies className to container', () => {
       const { container } = render(<Accordion items={defaultItems} className="custom-accordion" />);
       const accordionContainer = container.firstChild as HTMLElement;
       expect(accordionContainer).toHaveClass('custom-accordion');
