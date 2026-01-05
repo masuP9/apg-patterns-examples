@@ -9,6 +9,7 @@
 @import './patterns/listbox.css';
 @import './patterns/breadcrumb.css';
 @import './patterns/menu-button.css';
+@import './patterns/checkbox.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
