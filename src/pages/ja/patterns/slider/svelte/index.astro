@@ -1,0 +1,306 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Slider from '@patterns/slider/Slider.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/slider/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/slider/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/slider/NativeHtmlNotice.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/slider/Slider.svelte?raw';
+import testCode from '@patterns/slider/Slider.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Slider - Svelte"
+  pattern="slider"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Slider</h1>
+    <p class="text-muted-foreground text-lg">
+      ユーザーが範囲内から値を選択できるインタラクティブなコントロール。
+    </p>
+    <AiGuideBadge pattern="slider" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="slider" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Slider client:load defaultValue={50} label="Volume" format="{value}%" />
+        </div>
+        <div>
+          <Slider client:load defaultValue={75} label="Progress" format="{value}%" />
+        </div>
+        <div>
+          <Slider
+            client:load
+            defaultValue={3}
+            min={1}
+            max={5}
+            step={1}
+            label="Rating"
+            format="{value} of {max}"
+          />
+        </div>
+        <div>
+          <Slider
+            client:load
+            defaultValue={50}
+            label="Vertical"
+            orientation="vertical"
+            format="{value}%"
+          />
+        </div>
+        <div>
+          <Slider client:load defaultValue={50} label="Disabled" disabled format="{value}%" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Slider.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import Slider from './Slider.svelte';
+
+  function handleChange(value) {
+    console.log('Value changed:', value);
+  }
+</script>
+
+<!-- Basic usage with aria-label -->
+<Slider defaultValue={50} aria-label="Volume" />
+
+<!-- With visible label -->
+<Slider defaultValue={50} label="Volume" />
+
+<!-- With format for display and aria-valuetext -->
+<Slider
+  defaultValue={75}
+  label="Progress"
+  format="{value}%"
+/>
+
+<!-- Custom range with step -->
+<Slider
+  defaultValue={3}
+  min={1}
+  max={5}
+  step={1}
+  label="Rating"
+  format="{value} of {max}"
+/>
+
+<!-- Vertical slider -->
+<Slider
+  defaultValue={50}
+  label="Volume"
+  orientation="vertical"
+/>
+
+<!-- With callback -->
+<Slider
+  defaultValue={50}
+  label="Value"
+  onvaluechange={handleChange}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">min</td>
+            <td class="py-2">スライダーの初期値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">最小値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">100</td>
+            <td class="py-2">最大値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">キーボードナビゲーションのステップ増分</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step * 10</td>
+            <td class="py-2">PageUp/PageDown用の大きなステップ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">スライダーの方向</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">スライダーを無効にするかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">値のテキストを表示するかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">表示されるラベル（aria-labelledbyとしても使用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">aria-valuetextの人間が読める値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >表示およびaria-valuetextのフォーマットパターン（例: "{'{value}'}%", "{'{value}'} of {
+                '{max}'
+              }"）</td
+            >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onvaluechange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: number) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">値が変更されたときのコールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      アクセシビリティのために、<code>label</code>、<code>aria-label</code>、または <code
+        >aria-labelledby</code
+      > のいずれかが必要です。
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="Slider.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="range"&gt; 要素
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="slider" />
+    </ul>
+  </section>
+</PatternLayout>

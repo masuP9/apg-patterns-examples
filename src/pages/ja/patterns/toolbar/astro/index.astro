@@ -1,0 +1,413 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import Toolbar from '@patterns/toolbar/Toolbar.astro';
+import ToolbarButton from '@patterns/toolbar/ToolbarButton.astro';
+import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
+import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import toolbarSource from '@patterns/toolbar/Toolbar.astro?raw';
+import buttonSource from '@patterns/toolbar/ToolbarButton.astro?raw';
+import toggleSource from '@patterns/toolbar/ToolbarToggleButton.astro?raw';
+import separatorSource from '@patterns/toolbar/ToolbarSeparator.astro?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="ツールバー - Astro"
+  pattern="toolbar"
+  framework="astro"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Toolbar</h1>
+    <p class="text-muted-foreground text-lg">
+      ボタン、トグルボタン、その他の入力要素などのコントロールセットをグループ化するためのコンテナ。
+    </p>
+    <AiGuideBadge pattern="toolbar" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="toolbar" currentFramework="astro" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Text Formatting Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">テキストフォーマットツールバー</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        トグルボタンと通常のボタンを含む水平ツールバー。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Text formatting">
+          <ToolbarToggleButton>Bold</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic</ToolbarToggleButton>
+          <ToolbarToggleButton>Underline</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Align Left</ToolbarButton>
+          <ToolbarButton>Center</ToolbarButton>
+          <ToolbarButton>Align Right</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
+
+    <!-- Vertical Toolbar -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">垂直ツールバー</h3>
+      <p class="text-muted-foreground mb-4 text-sm">矢印の上下キーを使用してナビゲートします。</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar orientation="vertical" aria-label="Actions">
+          <ToolbarButton>New</ToolbarButton>
+          <ToolbarButton>Open</ToolbarButton>
+          <ToolbarButton>Save</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Print</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
+
+    <!-- With Disabled Items -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">無効な項目あり</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        無効な項目はキーボードナビゲーション中にスキップされます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Edit actions">
+          <ToolbarButton>Undo</ToolbarButton>
+          <ToolbarButton disabled>Redo</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton disabled>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+    </div>
+
+    <!-- Toggle Buttons with Event Handling -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">イベントハンドリング付きトグルボタン</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>pressed-change</code>
+        イベントを発行するトグルボタン。現在の状態がログに記録され表示されます。
+      </p>
+      <div class="border-border bg-background space-y-4 rounded-lg border p-6">
+        <Toolbar aria-label="Text formatting with events" id="toggle-demo-toolbar">
+          <ToolbarToggleButton>Bold</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic</ToolbarToggleButton>
+          <ToolbarToggleButton>Underline</ToolbarToggleButton>
+        </Toolbar>
+        <div class="text-muted-foreground text-sm">
+          <p>
+            現在の状態: <span id="toggle-state" class="font-mono"
+              >{'{ bold: false, italic: false, underline: false }'}</span
+            >
+          </p>
+        </div>
+        <div id="toggle-sample-text" class="border-border rounded-lg border p-4">
+          適用されたフォーマットのサンプルテキスト
+        </div>
+      </div>
+    </div>
+
+    <!-- Default Pressed States -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">デフォルトの押下状態</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        初期状態に <code>defaultPressed</code> を指定したトグルボタン。無効状態も含みます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Toolbar aria-label="Default pressed states">
+          <ToolbarToggleButton defaultPressed>Bold (default on)</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarToggleButton defaultPressed disabled>Disabled (pressed)</ToolbarToggleButton>
+          <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
+        </Toolbar>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Handle toggle button state changes for the demo
+    const toolbar = document.getElementById('toggle-demo-toolbar');
+    const stateDisplay = document.getElementById('toggle-state');
+    const sampleText = document.getElementById('toggle-sample-text');
+
+    if (toolbar && stateDisplay && sampleText) {
+      const state = { bold: false, italic: false, underline: false };
+      const buttons = toolbar.querySelectorAll('apg-toolbar-toggle-button');
+
+      buttons.forEach((btn, index) => {
+        btn.addEventListener('pressed-change', (e) => {
+          if (!(e instanceof CustomEvent)) return;
+
+          const key = ['bold', 'italic', 'underline'][index] as keyof typeof state;
+          state[key] = e.detail.pressed;
+
+          stateDisplay.textContent = JSON.stringify(state);
+          sampleText.style.fontWeight = state.bold ? 'bold' : 'normal';
+          sampleText.style.fontStyle = state.italic ? 'italic' : 'normal';
+          sampleText.style.textDecoration = state.underline ? 'underline' : 'none';
+        });
+      });
+    }
+  </script>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <div class="space-y-4">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toolbarSource}
+        lang="astro"
+        title="Toolbar.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={buttonSource}
+        lang="astro"
+        title="ToolbarButton.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={toggleSource}
+        lang="astro"
+        title="ToolbarToggleButton.astro"
+      />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={separatorSource}
+        lang="astro"
+        title="ToolbarSeparator.astro"
+      />
+    </div>
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Toolbar from '@patterns/toolbar/Toolbar.astro';
+import ToolbarButton from '@patterns/toolbar/ToolbarButton.astro';
+import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
+import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
+---
+
+<Toolbar aria-label="Text formatting">
+  <ToolbarToggleButton>Bold</ToolbarToggleButton>
+  <ToolbarToggleButton>Italic</ToolbarToggleButton>
+  <ToolbarSeparator />
+  <ToolbarButton>Copy</ToolbarButton>
+  <ToolbarButton>Paste</ToolbarButton>
+</Toolbar>
+
+<script>
+  // Listen for toggle button state changes
+  document.querySelectorAll('apg-toolbar-toggle-button').forEach(btn => {
+    btn.addEventListener('pressed-change', (e) => {
+      console.log('Toggle changed:', e.detail.pressed);
+    });
+  });
+</script>`}
+      lang="astro"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Toolbar Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="py-2 pr-4"><code>'horizontal' | 'vertical'</code></td>
+            <td class="py-2 pr-4"><code>'horizontal'</code></td>
+            <td class="py-2">ツールバーの方向</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">ツールバーのアクセシブルラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4">-</td>
+            <td class="py-2">ツールバーをラベル付けする要素の ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">追加の CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">ToolbarButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">ボタンが無効かどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">追加の CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">ToolbarToggleButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultPressed</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">初期の押下状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="py-2 pr-4"><code>boolean</code></td>
+            <td class="py-2 pr-4"><code>false</code></td>
+            <td class="py-2">ボタンが無効かどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="py-2 pr-4"><code>string</code></td>
+            <td class="py-2 pr-4"><code>''</code></td>
+            <td class="py-2">追加の CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">カスタムイベント</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">要素</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pressed-change</code></td>
+            <td class="py-2 pr-4"><code>apg-toolbar-toggle-button</code></td>
+            <td class="py-2 pr-4"><code>{'{ pressed: boolean }'}</code></td>
+            <td class="py-2">トグルボタンの状態が変更されたときに発行される</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      このコンポーネントは、クライアント側のキーボードナビゲーションと状態管理のために Web
+      Components（<code>&lt;apg-toolbar&gt;</code>、<code>&lt;apg-toolbar-toggle-button&gt;</code
+      >、<code>&lt;apg-toolbar-separator&gt;</code>）を使用しています。
+    </p>
+  </section>
+
+  <!-- Resources Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-inside list-disc space-y-2">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Toolbar パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://w3c.github.io/aria/#toolbar"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA: toolbar role
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="toolbar" />
+    </ul>
+  </section>
+</PatternLayout>

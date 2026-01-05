@@ -1,0 +1,259 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import DialogDemo from '@patterns/dialog/DialogDemo.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/dialog/AccessibilityDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/dialog/Dialog.vue?raw';
+import TestingDocs from '@patterns/dialog/TestingDocs.ja.astro';
+import testCode from '@patterns/dialog/Dialog.test.vue.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="ダイアログ - Vue"
+  pattern="dialog"
+  framework="vue"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Dialog (Modal)</h1>
+    <p class="text-muted-foreground text-lg">
+      プライマリウィンドウの上に重ねて表示され、その下のコンテンツを非アクティブにするウィンドウです。
+    </p>
+    <AiGuideBadge pattern="dialog" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="dialog" currentFramework="vue" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic Dialog -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的なダイアログ</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        タイトル、説明文、クローズ機能を備えたシンプルなモーダルダイアログです。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <DialogDemo
+          client:only="vue"
+          title="Dialog Title"
+          description="This is a description of the dialog content. It provides additional context for users."
+          triggerText="Open Dialog"
+          triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+        >
+          <p class="mb-4">
+            This is the main content of the dialog. You can place any content here, such as text,
+            forms, or other components.
+          </p>
+          <p>
+            Press <kbd class="rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800">Escape</kbd> or
+            click outside to close.
+          </p>
+        </DialogDemo>
+      </div>
+    </div>
+
+    <!-- Dialog without description -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">説明なし</h3>
+      <p class="text-muted-foreground mb-4 text-sm">タイトルとコンテンツのみのダイアログです。</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <DialogDemo
+          client:only="vue"
+          title="Simple Dialog"
+          triggerText="Open Simple Dialog"
+          triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+        >
+          <p>This dialog has no description, only a title and content.</p>
+        </DialogDemo>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="Dialog.vue" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<template>
+  <Dialog
+    title="Dialog Title"
+    description="Optional description text"
+    @open-change="handleOpenChange"
+  >
+    <template #trigger="{ open }">
+      <button @click="open" class="btn-primary">Open Dialog</button>
+    </template>
+    <p>Dialog content goes here.</p>
+  </Dialog>
+</template>
+
+<script setup>
+import Dialog from './Dialog.vue';
+
+function handleOpenChange(open) {
+  console.log('Dialog:', open);
+}
+</script>`}
+      lang="vue"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>title</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">ダイアログのタイトル（アクセシビリティ用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>description</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">オプションの説明文</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">初期の開閉状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>closeOnOverlayClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">オーバーレイクリックで閉じる</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">ペイロード</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>openChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="py-2">開閉状態が変更されたときに発火</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Slots</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">スロット</th>
+            <th class="py-2 pr-4 text-left">Props</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>trigger</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ open: () => void }'}</td>
+            <td class="py-2">ダイアログを開くトリガー要素</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>default</code></td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ダイアログのコンテンツ</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Dialog.test.vue.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Dialog (Modal) パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="dialog" />
+    </ul>
+  </section>
+</PatternLayout>

@@ -1,0 +1,232 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Checkbox from '@patterns/checkbox/Checkbox.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/checkbox/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/checkbox/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/checkbox/NativeHtmlNotice.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/checkbox/Checkbox.svelte?raw';
+import testCode from '@patterns/checkbox/Checkbox.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Checkbox - Svelte"
+  pattern="checkbox"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Checkbox</h1>
+    <p class="text-muted-foreground text-lg">
+      セットから1つ以上のオプションを選択できるコントロール。
+    </p>
+    <AiGuideBadge pattern="checkbox" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="checkbox" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col items-start gap-4">
+        <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+          <Checkbox client:load id="demo-terms" />
+          I agree to the terms and conditions
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+          <Checkbox client:load id="demo-newsletter" initialChecked={true} />
+          Subscribe to newsletter
+        </label>
+        <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+          <Checkbox client:load id="demo-select-all" indeterminate={true} />
+          Select all items
+        </label>
+        <label class="inline-flex cursor-not-allowed items-center gap-2 font-medium opacity-50">
+          <Checkbox client:load id="demo-disabled" disabled />
+          Unavailable option (disabled)
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Checkbox.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import Checkbox from './Checkbox.svelte';
+
+  function handleChange(checked) {
+    console.log('Checked:', checked);
+  }
+</script>
+
+<form>
+  <!-- With wrapping label -->
+  <label class="inline-flex items-center gap-2">
+    <Checkbox name="terms" onCheckedChange={handleChange} />
+    I agree to the terms and conditions
+  </label>
+
+  <!-- With separate label -->
+  <label for="newsletter">Subscribe to newsletter</label>
+  <Checkbox id="newsletter" name="newsletter" initialChecked={true} />
+
+  <!-- Indeterminate state for "select all" -->
+  <label class="inline-flex items-center gap-2">
+    <Checkbox indeterminate aria-label="Select all items" />
+    Select all items
+  </label>
+</form>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>initialChecked</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">初期のチェック状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>indeterminate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">チェックボックスが不確定（混合）状態かどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onCheckedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(checked: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">状態が変更されたときのコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">チェックボックスを無効にするかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>name</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">フォームフィールド名</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>value</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">フォームフィールド値</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      その他のすべてのプロパティは、内部の <code>&lt;input&gt;</code> 要素に渡されます。
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Checkbox.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Checkbox パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="checkbox"&gt;
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="checkbox" />
+    </ul>
+  </section>
+</PatternLayout>

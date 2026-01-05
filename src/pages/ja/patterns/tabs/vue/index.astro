@@ -1,0 +1,289 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Tabs from '@patterns/tabs/Tabs.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/tabs/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/tabs/Tabs.vue?raw';
+import testCode from '@patterns/tabs/Tabs.test.vue.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const demoTabs = [
+  {
+    id: 'tab1',
+    label: 'Overview',
+    content:
+      'This is the overview panel content. It provides a general introduction to the product or service.',
+  },
+  {
+    id: 'tab2',
+    label: 'Features',
+    content: 'Keyboard navigation support, ARIA compliant, Automatic and manual activation modes.',
+  },
+  { id: 'tab3', label: 'Pricing', content: 'Pricing information would be displayed here.' },
+];
+
+const manualTabs = [
+  {
+    id: 'manual1',
+    label: 'Tab One',
+    content: 'Content for tab one. Press Enter or Space to activate tabs.',
+  },
+  { id: 'manual2', label: 'Tab Two', content: 'Content for tab two.' },
+  { id: 'manual3', label: 'Tab Three', content: 'Content for tab three.' },
+];
+
+const verticalTabs = [
+  { id: 'vert1', label: 'Settings', content: 'Configure your application settings here.' },
+  { id: 'vert2', label: 'Profile', content: 'Manage your profile information.' },
+  { id: 'vert3', label: 'Notifications', content: 'Set your notification preferences.' },
+];
+---
+
+<PatternLayout
+  title="タブ - Vue"
+  pattern="tabs"
+  framework="vue"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Tabs</h1>
+    <p class="text-muted-foreground text-lg">
+      タブパネルと呼ばれる階層化されたコンテンツのセットで、一度に1つのパネルを表示します。
+    </p>
+    <a
+      href="/patterns/tabs/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="tabs" currentFramework="vue" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Default (Automatic Activation) -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">自動アクティベーション（デフォルト）</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        矢印キーでフォーカスすると自動的にタブがアクティブになります。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs client:load tabs={demoTabs} label="Example tabs" />
+      </div>
+    </div>
+
+    <!-- Manual Activation -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">手動アクティベーション</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        フォーカス後、EnterまたはSpaceキーでタブをアクティブにする必要があります。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs
+          client:load
+          tabs={manualTabs}
+          label="Manual activation tabs"
+          activationMode="manual"
+        />
+      </div>
+    </div>
+
+    <!-- Vertical Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">垂直方向</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        上下矢印キーでナビゲーションする垂直配置のタブです。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Tabs client:load tabs={verticalTabs} label="Vertical tabs" orientation="vertical" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="Tabs.vue" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script setup>
+import Tabs from './Tabs.vue';
+
+const tabs = [
+  { id: 'tab1', label: 'First', content: 'First panel content' },
+  { id: 'tab2', label: 'Second', content: 'Second panel content' },
+  { id: 'tab3', label: 'Third', content: 'Third panel content' }
+];
+</script>
+
+<template>
+  <Tabs
+    :tabs="tabs"
+    label="My tabs"
+    @tab-change="(id) => console.log('Tab changed:', id)"
+  />
+</template>`}
+      lang="vue"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>tabs</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TabItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">id、label、contentを含むタブアイテムの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">タブリストのアクセシブルなラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultTab</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">最初のタブ</td>
+            <td class="py-2">初期選択されるタブのID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">タブのレイアウト方向</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>activationMode</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'automatic' | 'manual'</td>
+            <td class="text-muted-foreground py-2 pr-4">'automatic'</td>
+            <td class="py-2">タブのアクティベーション方法</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">ペイロード</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>tab-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="py-2">アクティブなタブが変更されたときに発火</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">TabItem インターフェース</h3>
+    <CodeBlock
+      code={`interface TabItem {
+  id: string;
+  label: string;
+  content: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Tabs.test.vue.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Tabs パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/tabs/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボードサポート、テストチェックリスト</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
