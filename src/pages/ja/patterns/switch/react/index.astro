@@ -1,0 +1,186 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { Switch } from '@patterns/switch/Switch';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/switch/AccessibilityDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/switch/Switch.tsx?raw';
+import testCode from '@patterns/switch/Switch.test.tsx?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="スイッチ - React"
+  pattern="switch"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Switch</h1>
+    <p class="text-muted-foreground text-lg">
+      チェック済み/未チェックではなく、オン/オフの値を表すチェックボックスの一種。
+    </p>
+    <a
+      href="/patterns/switch/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="switch" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col items-start gap-4">
+        <Switch client:load>Wi-Fi</Switch>
+        <Switch client:load initialChecked={true}>Bluetooth</Switch>
+        <Switch client:load disabled>Airplane Mode (disabled)</Switch>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Switch.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Switch } from './Switch';
+
+function App() {
+  return (
+    <Switch
+      initialChecked={false}
+      onCheckedChange={(checked) => console.log('Checked:', checked)}
+    >
+      Enable notifications
+    </Switch>
+  );
+}`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>initialChecked</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">初期チェック状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onCheckedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(checked: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">状態変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">スイッチが無効かどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">スイッチのラベル</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      その他のプロパティはすべて、基になる<code>&lt;button&gt;</code>要素に渡されます。
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <p class="text-muted-foreground mb-4">
+      APG準拠に関するテストには、キーボード操作、ARIA属性、アクセシビリティ検証が含まれます。
+    </p>
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="Switch.test.tsx"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/switch/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Switch パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/switch/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA仕様、キーボードサポート、テストチェックリスト</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

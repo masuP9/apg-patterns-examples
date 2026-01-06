@@ -1,0 +1,229 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Disclosure from '@patterns/disclosure/Disclosure';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/disclosure/AccessibilityDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/disclosure/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/disclosure/Disclosure.tsx?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="ディスクロージャー - React"
+  pattern="disclosure"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Disclosure</h1>
+    <p class="text-muted-foreground text-lg">コンテンツセクションの表示/非表示を制御するボタン。</p>
+    <a
+      href="/patterns/disclosure/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="disclosure" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic Disclosure -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的なディスクロージャー</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        クリックでコンテンツの表示/非表示を切り替えるシンプルなディスクロージャー。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="What is a Disclosure?">
+          <p>
+            A disclosure is a button that controls the visibility of a section of content. It is
+            commonly used for FAQ sections, additional details, or expandable navigation.
+          </p>
+        </Disclosure>
+      </div>
+    </div>
+
+    <!-- Initially Expanded -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">初期状態で展開</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>defaultExpanded</code> プロパティを使用すると、初期レンダリング時にコンテンツを表示できます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="This section is open by default" defaultExpanded={true}>
+          <p>
+            This content is visible when the page loads because <code>defaultExpanded</code> is set to
+            <code>true</code>.
+          </p>
+        </Disclosure>
+      </div>
+    </div>
+
+    <!-- Disabled -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">無効化状態</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>disabled</code> プロパティを使用すると、ディスクロージャーの操作を無効化できます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Disclosure client:load trigger="This disclosure is disabled" disabled={true}>
+          <p>This content cannot be revealed because the disclosure is disabled.</p>
+        </Disclosure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Disclosure.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      code={`import { Disclosure } from './Disclosure';
+
+function App() {
+  return (
+    <Disclosure
+      trigger="Show details"
+      defaultExpanded={false}
+      onExpandedChange={(expanded) => console.log('Expanded:', expanded)}
+    >
+      <p>Hidden content that can be revealed</p>
+    </Disclosure>
+  );
+}`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">DisclosureProps</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>trigger</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">トリガーボタンに表示されるコンテンツ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">パネルに表示されるコンテンツ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultExpanded</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">初期展開状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onExpandedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(expanded: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">展開状態変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">ディスクロージャーを無効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>className</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">追加の CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Disclosure パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;details&gt; element
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/disclosure/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

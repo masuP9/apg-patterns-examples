@@ -1,0 +1,206 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import AlertDemo from '@patterns/alert/AlertDemo.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/alert/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/alert/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/alert/Alert.svelte?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Alert - Svelte"
+  pattern="alert"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Alert</h1>
+    <p class="text-muted-foreground text-lg">
+      ユーザーのタスクを中断することなく、ユーザーの注意を引くように簡潔で重要なメッセージを表示する要素。
+    </p>
+    <AiGuideBadge pattern="alert" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="alert" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4">
+      以下のボタンをクリックして、異なるバリアントのアラートを表示します。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <AlertDemo client:load />
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Alert.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+  import Alert from './Alert.svelte';
+
+  let message = $state('');
+
+  function showAlert() {
+    message = 'Operation completed!';
+  }
+
+  function clearAlert() {
+    message = '';
+  }
+</script>
+
+<!-- 重要: アラートコンテナは常にDOMに存在します -->
+<Alert
+  id="my-alert"
+  {message}
+  variant="info"
+  dismissible
+  onDismiss={clearAlert}
+/>
+
+<button onclick={showAlert}>
+  Show Alert
+</button>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <h3 class="mb-3 text-lg font-medium">プロパティ</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>id</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">SSR一貫性のための必須ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>message</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">アラートメッセージの内容</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">Snippet</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">複雑なコンテンツ（messageの代替）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>variant</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'info' | 'success' | 'warning' | 'error'</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">'info'</td>
+            <td class="py-2">視覚的なスタイルバリアント</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>dismissible</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">閉じるボタンを表示</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onDismiss</code></td>
+            <td class="text-muted-foreground py-2 pr-4">() =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">閉じられた時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">追加のCSSクラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Alert パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Alert Dialog パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="alert" />
+    </ul>
+  </section>
+</PatternLayout>

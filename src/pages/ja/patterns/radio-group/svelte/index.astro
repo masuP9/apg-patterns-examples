@@ -1,0 +1,304 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import RadioGroup from '@patterns/radio-group/RadioGroup.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/radio-group/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/radio-group/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/radio-group/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/radio-group/RadioGroup.svelte?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const colorOptions = [
+  { id: 'red', label: 'Red', value: 'red' },
+  { id: 'blue', label: 'Blue', value: 'blue' },
+  { id: 'green', label: 'Green', value: 'green' },
+];
+
+const sizeOptions = [
+  { id: 'small', label: 'Small', value: 'small' },
+  { id: 'medium', label: 'Medium', value: 'medium' },
+  { id: 'large', label: 'Large', value: 'large' },
+];
+
+const planOptions = [
+  { id: 'free', label: 'Free', value: 'free' },
+  { id: 'pro', label: 'Pro', value: 'pro' },
+  { id: 'enterprise', label: 'Enterprise (Coming Soon)', value: 'enterprise', disabled: true },
+];
+
+const ratingOptions = [
+  { id: 'r1', label: '1', value: '1' },
+  { id: 'r2', label: '2', value: '2' },
+  { id: 'r3', label: '3', value: '3' },
+  { id: 'r4', label: '4', value: '4' },
+  { id: 'r5', label: '5', value: '5' },
+];
+---
+
+<PatternLayout
+  title="Radio Group - Svelte"
+  pattern="radio-group"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Radio Group</h1>
+    <p class="text-muted-foreground text-lg">
+      一度に1つだけチェックできるチェック可能なボタンのセット。
+    </p>
+    <AiGuideBadge pattern="radio-group" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="radio-group" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的な Radio Group</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        矢印キーを使用してナビゲートと選択を行います。Tab
+        キーでグループの内外にフォーカスを移動します。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup client:load options={colorOptions} name="color" aria-label="Favorite color" />
+      </div>
+    </div>
+
+    <!-- With Default Value -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">デフォルト値あり</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>defaultValue</code> プロパティを使用した事前選択されたオプション。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          client:load
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      </div>
+    </div>
+
+    <!-- With Disabled Option -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">無効なオプションあり</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        無効なオプションは、キーボードナビゲーション中にスキップされます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup client:load options={planOptions} name="plan" aria-label="Subscription plan" />
+      </div>
+    </div>
+
+    <!-- Horizontal Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">水平方向</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>orientation="horizontal"</code> を使用した水平レイアウト。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RadioGroup
+          client:load
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="RadioGroup.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import RadioGroup from './RadioGroup.svelte';
+
+  const options = [
+    { id: 'red', label: 'Red', value: 'red' },
+    { id: 'blue', label: 'Blue', value: 'blue' },
+    { id: 'green', label: 'Green', value: 'green' },
+  ];
+
+  function handleChange(value) {
+    console.log('Selected:', value);
+  }
+</script>
+
+<RadioGroup
+  {options}
+  name="color"
+  aria-label="Favorite color"
+  defaultValue="blue"
+  onValueChange={handleChange}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">RadioGroupProps</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">RadioOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">ラジオオプションの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>name</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">フォーム送信用のグループ名</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">グループのアクセシブルラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ラベル要素の ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">初期選択値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
+            <td class="py-2">レイアウト方向</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onValueChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: string) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">選択変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">追加 CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">RadioOption</h3>
+    <CodeBlock
+      code={`interface RadioOption {
+  id: string;
+  label: string;
+  value: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Radio Group パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="radio"&gt;
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="radio-group" />
+    </ul>
+  </section>
+</PatternLayout>

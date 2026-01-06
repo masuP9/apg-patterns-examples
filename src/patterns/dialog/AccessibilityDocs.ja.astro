@@ -1,0 +1,149 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">対象要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>dialog</code></td>
+          <td class="py-2 pr-4">ダイアログコンテナ</td>
+          <td class="py-2">その要素がダイアログウィンドウであることを示す</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#dialog" class="text-primary hover:underline">
+      WAI-ARIA dialog role
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">対象</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-modal</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">これがモーダルダイアログであることを示す</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4">タイトル要素への ID 参照</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">ダイアログのタイトルを参照する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2 pr-4">dialog</td>
+          <td class="py-2 pr-4">説明への ID 参照</td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">オプションの説明テキストを参照する</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">フォーカス管理</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">イベント</th>
+          <th class="py-2 text-left">動作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">ダイアログが開く</td>
+          <td class="py-2">ダイアログ内の最初のフォーカス可能な要素にフォーカスが移動する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">ダイアログが閉じる</td>
+          <td class="py-2">ダイアログを開いた要素にフォーカスが戻る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">フォーカストラップ</td>
+          <td class="py-2"
+            >Tab/Shift+Tab はダイアログ内のフォーカス可能な要素間のみをサイクルする</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">背景</td>
+          <td class="py-2">ダイアログ外のコンテンツは不活性化される（フォーカス不可・操作不可）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2"
+            >ダイアログ内の次のフォーカス可能な要素にフォーカスを移動する。最後の要素にフォーカスがある場合は最初の要素に移動する。</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd
+            ></td
+          >
+          <td class="py-2"
+            >ダイアログ内の前のフォーカス可能な要素にフォーカスを移動する。最初の要素にフォーカスがある場合は最後の要素に移動する。</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
+          <td class="py-2">ダイアログを閉じて、開いた要素にフォーカスを戻す</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">補足事項</h3>
+  <ul class="text-muted-foreground list-disc space-y-2 pl-6">
+    <li>
+      アクセシビリティのためにダイアログのタイトルは必須であり、ダイアログの目的を明確に説明する必要があります
+    </li>
+    <li>ダイアログが開いている間はページのスクロールが無効になります</li>
+    <li>オーバーレイ（背景）をクリックするとデフォルトでダイアログが閉じます</li>
+    <li>閉じるボタンにはスクリーンリーダー向けのアクセシブルなラベルが付いています</li>
+  </ul>
+</div>

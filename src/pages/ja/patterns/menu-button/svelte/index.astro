@@ -1,0 +1,218 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.svelte';
+import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/menu-button/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/menu-button/MenuButton.svelte?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Menu Button - Svelte"
+  pattern="menu-button"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Menu Button</h1>
+    <p class="text-muted-foreground text-lg">アクションまたはオプションのメニューを開くボタン。</p>
+    <a
+      href="/patterns/menu-button/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="menu-button" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的な Menu Button</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        ボタンをクリックするか、キーボードを使用してメニューを開きます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <MenuButtonDemo variant="basic" client:load />
+      </div>
+    </div>
+
+    <!-- With Disabled Items -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">無効な項目を含む</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        無効な項目は、キーボードナビゲーション中にスキップされます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <MenuButtonDemo variant="disabled-items" client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="MenuButton.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+  import MenuButton from './MenuButton.svelte';
+
+  const items = [
+    { id: 'cut', label: 'Cut' },
+    { id: 'copy', label: 'Copy' },
+    { id: 'paste', label: 'Paste' },
+    { id: 'delete', label: 'Delete', disabled: true },
+  ];
+
+  function handleItemSelect(itemId: string) {
+    console.log('Selected:', itemId);
+  }
+</script>
+
+<!-- 基本的な使用法 -->
+<MenuButton {items} label="Actions" onItemSelect={handleItemSelect} />
+
+<!-- デフォルトの開いた状態 -->
+<MenuButton {items} label="Actions" defaultOpen onItemSelect={handleItemSelect} />`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">MenuButton Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenuItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">メニュー項目の配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">ボタンのラベルテキスト</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultOpen</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">メニューが初期状態で開いているかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onItemSelect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(id: string) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">項目が選択されたときのコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">コンテナの追加 CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">MenuItem Interface</h3>
+    <CodeBlock
+      code={`interface MenuItem {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Menu Button パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/menu-button/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボード操作、テストチェックリスト</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

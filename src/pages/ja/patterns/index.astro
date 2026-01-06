@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { getAvailablePatterns, getPlannedPatterns } from '@/lib/patterns';
+import { withBase } from '@/lib/utils';
+import { getLocalizedPath, useTranslation, getPatternName, getPatternDescription } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const availablePatterns = getAvailablePatterns();
+const plannedPatterns = getPlannedPatterns();
+
+const complexityLabels = {
+  Low: t('complexity.low'),
+  Medium: t('complexity.medium'),
+  High: t('complexity.high'),
+};
+---
+
+<BaseLayout title={t('patterns.title')} locale={locale}>
+  <div class="mx-auto max-w-4xl">
+    <header class="mb-8">
+      <h1 class="mb-4 text-3xl font-bold">APG パターン</h1>
+      <p class="text-muted-foreground text-lg">
+        WAI-ARIA Authoring Practices Guide に基づいたアクセシブルなコンポーネントパターン。
+        各パターンは React、Vue、Svelte、Astro で実装されています。
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-xl font-semibold">{t('patterns.available')}</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          availablePatterns.map((pattern) => (
+            <Tile
+              variant="floating"
+              href={withBase(getLocalizedPath(`/patterns/${pattern.id}/`, locale))}
+            >
+              <TileContent class="flex flex-row items-start gap-4">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div class="flex-1">
+                  <TileTitle>{getPatternName(pattern.id, pattern.name, locale)}</TileTitle>
+                  <TileDescription>
+                    {getPatternDescription(pattern.id, pattern.description, locale)}
+                  </TileDescription>
+                  <div class="text-muted-foreground mt-2 text-xs">
+                    複雑度: {complexityLabels[pattern.complexity]}
+                  </div>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-muted-foreground mb-4 text-xl font-semibold">{t('patterns.planned')}</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          plannedPatterns.map((pattern) => (
+            <Tile variant="floating" class="cursor-default opacity-60">
+              <TileContent class="flex flex-row items-start gap-4">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {pattern.icon}
+                </div>
+                <div class="flex-1">
+                  <TileTitle>{getPatternName(pattern.id, pattern.name, locale)}</TileTitle>
+                  <TileDescription>
+                    {getPatternDescription(pattern.id, pattern.description, locale)}
+                  </TileDescription>
+                  <div class="text-muted-foreground mt-2 text-xs">
+                    複雑度: {complexityLabels[pattern.complexity]}
+                  </div>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <Tile variant="floating" class="bg-muted/50">
+      <TileContent>
+        <TileTitle class="text-xl">これらのパターンについて</TileTitle>
+        <TileDescription class="mb-4">
+          各パターンは <a
+            href="https://www.w3.org/WAI/ARIA/apg/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a
+          > の仕様に従い、適切なアクセシビリティサポートを確保しています。
+        </TileDescription>
+        <ul class="text-muted-foreground list-disc space-y-2 pl-6">
+          <li>適切な ARIA ロールと属性</li>
+          <li>完全なキーボードナビゲーションのサポート</li>
+          <li>スクリーンリーダーとの互換性</li>
+          <li>ハイコントラストモードのサポート</li>
+          <li>モーション軽減設定への対応</li>
+        </ul>
+      </TileContent>
+    </Tile>
+  </div>
+</BaseLayout>

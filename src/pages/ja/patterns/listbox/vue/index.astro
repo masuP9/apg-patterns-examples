@@ -1,0 +1,261 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import ListboxDemo from '@patterns/listbox/ListboxDemo.vue';
+import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/listbox/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/listbox/Listbox.vue?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const fruitOptions = [
+  { id: 'apple', label: 'リンゴ' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'チェリー' },
+  { id: 'date', label: 'デーツ' },
+  { id: 'elderberry', label: 'エルダーベリー' },
+  { id: 'fig', label: 'イチジク' },
+  { id: 'grape', label: 'ブドウ' },
+];
+
+const colorOptions = [
+  { id: 'red', label: '赤' },
+  { id: 'orange', label: 'オレンジ' },
+  { id: 'yellow', label: '黄色' },
+  { id: 'green', label: '緑', disabled: true },
+  { id: 'blue', label: '青' },
+  { id: 'indigo', label: '藍' },
+  { id: 'purple', label: '紫' },
+];
+---
+
+<PatternLayout
+  title="Listbox - Vue"
+  pattern="listbox"
+  framework="vue"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Listbox</h1>
+    <p class="text-muted-foreground text-lg">
+      ユーザーが選択肢のリストから1つまたは複数のアイテムを選択できるウィジェット。
+    </p>
+    <AiGuideBadge pattern="listbox" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="listbox" currentFramework="vue" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Single-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">単一選択（デフォルト）</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        選択はフォーカスに従います。矢印キーを使用してナビゲートおよび選択します。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <ListboxDemo
+          client:load
+          options={fruitOptions}
+          label="フルーツを選択："
+          defaultSelectedIds={['apple']}
+        />
+      </div>
+    </div>
+
+    <!-- Multi-Select -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">複数選択</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        フォーカスと選択は独立しています。Space でトグル、Shift+矢印キーで選択を拡張します。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <ListboxDemo
+          client:load
+          options={colorOptions}
+          label="色を選択（複数可）："
+          multiselectable
+        />
+      </div>
+    </div>
+
+    <!-- Horizontal Orientation -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">水平方向</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        ナビゲーションには左/右矢印キーを使用します。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <ListboxDemo
+          client:load
+          options={fruitOptions.slice(0, 5)}
+          label="フルーツを選択（水平）："
+          orientation="horizontal"
+          defaultSelectedIds={['apple']}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="Listbox.vue" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script setup>
+import Listbox from './Listbox.vue';
+
+const options = [
+  { id: 'apple', label: 'リンゴ' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'チェリー' },
+];
+
+const handleSelectionChange = (ids) => {
+  console.log('選択:', ids);
+};
+</script>
+
+<template>
+  <!-- 単一選択 -->
+  <Listbox
+    :options="options"
+    aria-label="フルーツを選択"
+    @selection-change="handleSelectionChange"
+  />
+
+  <!-- 複数選択 -->
+  <Listbox
+    :options="options"
+    multiselectable
+    aria-label="フルーツを選択"
+    @selection-change="handleSelectionChange"
+  />
+</template>`}
+      lang="vue"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">プロパティ</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ListboxOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">オプションの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">複数選択モードを有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical' | 'horizontal'</td>
+            <td class="text-muted-foreground py-2 pr-4">'vertical'</td>
+            <td class="py-2">Listbox の方向</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">初期選択されたオプション ID</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">イベント</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">ペイロード</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selection-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">選択が変更されたときに発行</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Listbox パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="listbox" />
+    </ul>
+  </section>
+</PatternLayout>

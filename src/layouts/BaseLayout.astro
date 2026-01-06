@@ -25,27 +25,30 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import MenuIcon from 'lucide-static/icons/menu.svg';
 import { withBase } from '@/lib/utils';
+import { getLocaleFromUrl, getLocalizedPath, useTranslation, type Locale } from '@/i18n';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher.astro';
 
 interface Props {
   title: string;
   description?: string;
+  locale?: Locale;
 }
 
-const {
-  title,
-  description = 'APG Patterns Examples - Accessible component patterns for React, Vue, Svelte, and Astro',
-} = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslation(locale);
+
+const { title, description = t('site.description') } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { text: 'Patterns', href: withBase('/patterns/') },
-  { text: 'Guide', href: withBase('/guide/') },
-  { text: 'About', href: withBase('/about/') },
+  { text: t('nav.patterns'), href: withBase(getLocalizedPath('/patterns/', locale)) },
+  { text: t('nav.guide'), href: withBase(getLocalizedPath('/guide/', locale)) },
+  { text: t('nav.about'), href: withBase(getLocalizedPath('/about/', locale)) },
 ];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,11 +58,11 @@ const navLinks = [
     <ThemeProvider />
   </head>
   <body class="bg-background text-foreground min-h-screen">
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link">{t('nav.skipToContent')}</a>
 
     <Header>
-      <Logo href={withBase('/')}>
-        <LogoText>APG Patterns</LogoText>
+      <Logo href={withBase(getLocalizedPath('/', locale))}>
+        <LogoText>{t('site.logo')}</LogoText>
       </Logo>
       <NavigationMenu class="mr-auto @max-lg:hidden">
         <NavigationMenuList>
@@ -78,6 +81,7 @@ const navLinks = [
         </NavigationMenuList>
       </NavigationMenu>
       <HeaderActions class="@max-lg:hidden">
+        <LanguageSwitcher locale={locale} />
         <Button
           variant="ghost"
           size="icon-sm"
@@ -90,7 +94,7 @@ const navLinks = [
         <ThemeToggle />
       </HeaderActions>
       <Sheet class="first:ml-auto">
-        <SheetTrigger class="@lg:hidden" variant="ghost" size="icon" aria-label="Open menu">
+        <SheetTrigger class="@lg:hidden" variant="ghost" size="icon" aria-label={t('nav.openMenu')}>
           <MenuIcon class="size-5" />
         </SheetTrigger>
         <SheetContent class="overflow-y-auto px-4 py-12">
@@ -112,6 +116,7 @@ const navLinks = [
             }
           </SidebarMenu>
           <HeaderActions class="mt-6">
+            <LanguageSwitcher locale={locale} />
             <Button
               variant="ghost"
               size="icon"
@@ -134,7 +139,7 @@ const navLinks = [
     <Footer>
       <FooterGroup class="items-center text-center">
         <FooterDescription>
-          APG Patterns Examples - Accessible component implementations
+          {t('site.footerDescription')}
         </FooterDescription>
         <FooterMenu orientation="horizontal">
           <FooterMenuItem>

@@ -1,0 +1,39 @@
+---
+/**
+ * LanguageSwitcher - Language toggle for switching between English and Japanese
+ *
+ * Displays the alternate language as a link.
+ * Accessible with proper lang and hreflang attributes.
+ */
+import { withBase } from '@/lib/utils';
+import { type Locale, languages, getLangFromUrl, getAlternatePath } from '@/i18n';
+import GlobeIcon from 'lucide-static/icons/globe.svg';
+
+interface Props {
+  locale?: Locale;
+  class?: string;
+}
+
+const locale = Astro.props.locale ?? getLangFromUrl(Astro.url);
+const currentPath = Astro.url.pathname;
+// Remove base path for alternate path calculation
+const pathWithoutBase = currentPath.replace(/^\/apg-patterns-examples/, '');
+const alternatePath = getAlternatePath(pathWithoutBase, locale);
+const alternateLocale: Locale = locale === 'en' ? 'ja' : 'en';
+const alternateLanguageName = languages[alternateLocale];
+---
+
+<a
+  href={withBase(alternatePath)}
+  lang={alternateLocale}
+  hreflang={alternateLocale}
+  class:list={[
+    'inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm transition-colors',
+    'text-muted-foreground hover:text-foreground hover:bg-muted',
+    Astro.props.class,
+  ]}
+  aria-label={`Switch to ${alternateLanguageName}`}
+>
+  <GlobeIcon class="size-4" aria-hidden="true" />
+  <span>{alternateLanguageName}</span>
+</a>

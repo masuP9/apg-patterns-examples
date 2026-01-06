@@ -1,0 +1,91 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <code>button</code> - アクティブ化されたときにアクションをトリガーするウィジェットを示す<br />
+      <ExternalLink
+        href="https://w3c.github.io/aria/#button"
+        class="text-primary text-sm hover:underline"
+      >
+        WAI-ARIA button ロール
+      </ExternalLink>
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート</h3>
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-pressed</code></h4>
+    <p class="text-muted-foreground mb-3">トグルボタンの現在の押下状態を示します。</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">値</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code>
+              <span class="text-muted-foreground ml-2 text-sm"
+                >（3状態ボタンでは <code>"mixed"</code> も使用可能）</span
+              >
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい（トグルボタンの場合）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">デフォルト</td>
+            <td class="py-2"
+              ><code>initialPressed</code> プロパティ（デフォルト: <code>false</code>）</td
+            >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">変更トリガー</td>
+            <td class="py-2">クリック、Enter、Space</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">リファレンス</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-pressed"
+                class="text-primary hover:underline"
+              >
+                aria-pressed
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">ボタンの状態を切り替える</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">ボタンの状態を切り替える</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+</div>

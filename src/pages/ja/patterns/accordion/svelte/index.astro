@@ -1,0 +1,314 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Accordion from '@patterns/accordion/Accordion.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/accordion/Accordion.svelte?raw';
+import TestingDocs from '@patterns/accordion/TestingDocs.ja.astro';
+import testCode from '@patterns/accordion/Accordion.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const defaultItems = [
+  {
+    id: 'section1',
+    header: 'What is an Accordion?',
+    content:
+      'An accordion is a vertically stacked set of interactive headings that each reveal a section of content. They are commonly used to reduce the need to scroll when presenting multiple sections of content on a single page.',
+    defaultExpanded: true,
+  },
+  {
+    id: 'section2',
+    header: 'When to use an Accordion?',
+    content:
+      'Use accordions when you need to organize content into collapsible sections. This helps reduce visual clutter while keeping information accessible. They are particularly useful for FAQs, settings panels, and navigation menus.',
+  },
+  {
+    id: 'section3',
+    header: 'Accessibility Considerations',
+    content:
+      'Accordions must be keyboard accessible and properly announce their expanded/collapsed state to screen readers. Each header should be a proper heading element, and the panel should be associated with its header via aria-controls and aria-labelledby.',
+  },
+];
+
+const multipleItems = [
+  {
+    id: 'multi1',
+    header: 'Section One',
+    content:
+      'Content for section one. With allowMultiple enabled, multiple sections can be open at the same time.',
+  },
+  {
+    id: 'multi2',
+    header: 'Section Two',
+    content: 'Content for section two. Try opening this while section one is still open.',
+  },
+  {
+    id: 'multi3',
+    header: 'Section Three',
+    content: 'Content for section three. All three sections can be expanded simultaneously.',
+  },
+];
+
+const disabledItems = [
+  {
+    id: 'dis1',
+    header: 'Available Section',
+    content: 'This section can be expanded and collapsed normally.',
+  },
+  {
+    id: 'dis2',
+    header: 'Disabled Section',
+    content: 'This content is not accessible because the section is disabled.',
+    disabled: true,
+  },
+  {
+    id: 'dis3',
+    header: 'Another Available Section',
+    content:
+      'This section can also be expanded. Notice that arrow key navigation skips the disabled section.',
+  },
+];
+---
+
+<PatternLayout
+  title="Accordion - Svelte"
+  pattern="accordion"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Accordion</h1>
+    <p class="text-muted-foreground text-lg">
+      垂直に積み重ねられたインタラクティブな見出しのセットで、それぞれがコンテンツのセクションを表示します。
+    </p>
+    <a
+      href="/patterns/accordion/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="accordion" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Default (Single Expansion) -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">シングル展開（デフォルト）</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        一度に1つのパネルのみを展開できます。新しいパネルを開くと、以前に開いていたパネルが閉じます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion client:load items={defaultItems} headingLevel={3} />
+      </div>
+    </div>
+
+    <!-- Multiple Expansion -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">マルチ展開</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>allowMultiple</code> プロパティを使用して、複数のパネルを同時に展開できます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion client:load items={multipleItems} allowMultiple={true} headingLevel={3} />
+      </div>
+    </div>
+
+    <!-- Disabled Items -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">無効化されたアイテム</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        個別のアコーディオンアイテムを無効化できます。キーボードナビゲーションは自動的に無効化されたアイテムをスキップします。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Accordion client:load items={disabledItems} headingLevel={3} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Accordion.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import Accordion from './Accordion.svelte';
+
+  const items = [
+    {
+      id: 'section1',
+      header: 'First Section',
+      content: 'Content for the first section...',
+      defaultExpanded: true,
+    },
+    {
+      id: 'section2',
+      header: 'Second Section',
+      content: 'Content for the second section...',
+    },
+  ];
+
+  function handleExpandedChange(ids) {
+    console.log('Expanded:', ids);
+  }
+</script>
+
+<Accordion
+  {items}
+  headingLevel={3}
+  allowMultiple={false}
+  onExpandedChange={handleExpandedChange}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">プロパティ</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">AccordionItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">アコーディオンアイテムの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>allowMultiple</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">複数のパネルの展開を許可</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>headingLevel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">2 | 3 | 4 | 5 | 6</td>
+            <td class="text-muted-foreground py-2 pr-4">3</td>
+            <td class="py-2">アクセシビリティのための見出しレベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enableArrowKeys</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">矢印キーナビゲーションを有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onExpandedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">展開状態変更時のコールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">AccordionItem インターフェース</h3>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`interface AccordionItem {
+  id: string;
+  header: string;
+  content?: string;
+  disabled?: boolean;
+  defaultExpanded?: boolean;
+}`}
+      lang="typescript"
+      title="型定義"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Accordion.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Accordion パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/accordion/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボード操作、テストチェックリスト</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

@@ -1,0 +1,42 @@
+---
+// Dynamic redirect to user's preferred framework page (Japanese version)
+// This single file handles redirects for all patterns
+
+import { FRAMEWORKS, DEFAULT_FRAMEWORK } from '@/lib/frameworks';
+import { getAvailablePatterns } from '@/lib/patterns';
+import { withBase } from '@/lib/utils';
+import { getLocalizedPath } from '@/i18n';
+
+const locale = 'ja';
+
+export function getStaticPaths() {
+  return getAvailablePatterns().map((p) => ({ params: { pattern: p.id } }));
+}
+
+const { pattern } = Astro.params;
+const defaultFramework = DEFAULT_FRAMEWORK;
+const validFrameworks = FRAMEWORKS;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const defaultRedirectUrl = withBase(
+  getLocalizedPath(`/patterns/${pattern}/${defaultFramework}/`, locale)
+);
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>リダイレクト中...</title>
+    <script is:inline define:vars={{ pattern, defaultFramework, validFrameworks, basePath }}>
+      const framework = localStorage.getItem('apg-selected-framework') || defaultFramework;
+      const selectedFramework = validFrameworks.includes(framework) ? framework : defaultFramework;
+      window.location.replace(`${basePath}/ja/patterns/${pattern}/${selectedFramework}/`);
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content={`0;url=${defaultRedirectUrl}`} />
+    </noscript>
+  </head>
+  <body>
+    <p><a href={defaultRedirectUrl}>{defaultFramework}</a> にリダイレクトしています...</p>
+  </body>
+</html>

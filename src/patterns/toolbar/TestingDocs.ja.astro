@@ -1,0 +1,203 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件におけるAPG準拠を検証します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight/Left</code></td>
+          <td class="py-2">アイテム間でフォーカスを移動（水平）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowDown/Up</code></td>
+          <td class="py-2">アイテム間でフォーカスを移動（垂直）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">最初のアイテムにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">最後のアイテムにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>No wrap</code></td>
+          <td class="py-2">フォーカスが端で停止（ループしない）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled skip</code></td>
+          <td class="py-2">ナビゲーション中に無効なアイテムをスキップ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter/Space</code></td>
+          <td class="py-2">ボタンを実行またはトグルボタンをトグル</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA 属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="toolbar"</code></td>
+          <td class="py-2">コンテナがtoolbarロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2">水平/垂直の向きを反映</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label/labelledby</code></td>
+          <td class="py-2">ツールバーがアクセシブルな名前を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-pressed</code></td>
+          <td class="py-2">トグルボタンが押下状態を反映</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="separator"</code></td>
+          <td class="py-2">セパレータが正しいロールと向きを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>type="button"</code></td>
+          <td class="py-2">ボタンが明示的なtype属性を持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理（Roving Tabindex）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=0</code></td>
+          <td class="py-2">最初の有効なアイテムがtabIndex=0を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=-1</code></td>
+          <td class="py-2">他のアイテムがtabIndex=-1を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click updates focus</code></td>
+          <td class="py-2">アイテムをクリックするとRovingフォーカス位置が更新される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AA 違反なし（jest-axeを使用）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Vertical toolbar</code></td>
+          <td class="py-2">垂直の向きもaxeに合格</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: HTML属性継承
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスがすべてのコンポーネントに適用される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細なドキュメントは <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

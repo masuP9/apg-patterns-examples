@@ -4,6 +4,7 @@ import { PatternSidebar } from '@/components/ui/pattern-sidebar';
 import { PatternBreadcrumb } from '@/components/ui/pattern-breadcrumb';
 import { type Framework } from '@/lib/frameworks';
 import { TableOfContents, type TocItem } from '@/components/ui/toc';
+import { type Locale, getLocaleFromUrl } from '@/i18n';
 
 interface Props {
   title: string;
@@ -11,13 +12,15 @@ interface Props {
   pattern: string;
   framework: Framework;
   tocItems?: TocItem[];
+  locale?: Locale;
 }
 
 const { title, description, pattern, framework, tocItems = [] } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const hasToc = tocItems.length > 0;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} locale={locale}>
   <div class="mx-auto max-w-7xl">
     <div
       class:list={[
@@ -30,14 +33,14 @@ const hasToc = tocItems.length > 0;
       <!-- Sidebar (desktop only) -->
       <aside class="hidden lg:block">
         <div class="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
-          <PatternSidebar currentPattern={pattern} currentFramework={framework} />
+          <PatternSidebar currentPattern={pattern} currentFramework={framework} locale={locale} />
         </div>
       </aside>
 
       <!-- Main content -->
       <div class="max-w-4xl min-w-0">
         <!-- Pattern breadcrumb with dropdown -->
-        <PatternBreadcrumb pattern={pattern} framework={framework} />
+        <PatternBreadcrumb pattern={pattern} framework={framework} locale={locale} />
 
         <slot />
       </div>
