@@ -1,0 +1,87 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="border-primary mb-8 rounded-lg border-2 p-4">
+  <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
+    <span aria-hidden="true">⚠️</span> ネイティブ HTML を優先
+  </h2>
+  <p class="mb-4">
+    <strong class="text-red-700 dark:text-red-400"
+      >このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;a href&gt;</code> 要素の使用を検討してください。</strong
+    >
+    ネイティブ要素は組み込みのアクセシビリティ、完全なブラウザ機能、SEO の利点を提供し、JavaScript なしで動作します。
+  </p>
+  <div class="bg-muted mb-4 rounded-md p-3">
+    <pre
+      class="m-0 overflow-x-auto text-sm"><code>&lt;a href="https://example.com"&gt;Visit Example&lt;/a&gt;
+
+&lt;!-- For new tab --&gt;
+&lt;a href="https://example.com" target="_blank" rel="noopener noreferrer"&gt;
+  External Link
+&lt;/a&gt;</code></pre>
+  </div>
+  <p class="mb-4 text-sm">
+    カスタムの <code>role="link"</code> 実装は、教育目的のみ、または SPA ルーティングを使用した複雑な
+    JavaScript 駆動のナビゲーションが必要な場合にのみ使用してください。
+  </p>
+
+  <ResponsiveTable>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">機能</th>
+          <th class="py-2 pr-4 text-left">ネイティブ <code>&lt;a href&gt;</code></th>
+          <th class="py-2 text-left">カスタム <code>role="link"</code></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Ctrl/Cmd + クリック（新しいタブ）</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">組み込み</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">サポートなし</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">右クリックコンテキストメニュー</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">完全なメニュー</b></td
+          >
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">制限あり</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">リンクアドレスのコピー</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">組み込み</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">サポートなし</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">ブックマークへのドラッグ</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">組み込み</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">サポートなし</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">SEO 認識</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">クロール対象</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">無視される可能性</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">JavaScript なしでの動作</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">動作する</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">動作しない</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">スクリーンリーダーの読み上げ</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">自動</b></td>
+          <td class="py-2">ARIA が必要</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">フォーカス管理</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">自動</b></td>
+          <td class="py-2">tabindex が必要</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-3 text-xs">
+    このカスタム実装は、APG パターンを実証するための教育目的で提供されています。
+    本番環境では、常にネイティブの <code>&lt;a href&gt;</code> 要素を優先してください。
+  </p>
+</div>
