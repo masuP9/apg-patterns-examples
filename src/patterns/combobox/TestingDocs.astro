@@ -1,0 +1,398 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance for ARIA attributes, keyboard interactions, filtering behavior, and
+    accessibility requirements.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Attributes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="combobox"</code></td>
+          <td class="py-2">Input element has the combobox role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="listbox"</code></td>
+          <td class="py-2">Popup element has the listbox role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="option"</code></td>
+          <td class="py-2">Each option has the option role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2">Input references the listbox ID (always present)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2">Reflects popup open/closed state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-autocomplete</code></td>
+          <td class="py-2">Set to "list", "none", or "both"</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-activedescendant</code></td>
+          <td class="py-2">References currently focused option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2">Indicates the currently highlighted option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">Indicates disabled options</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Accessible Name
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">Input references visible label element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby (listbox)</code></td>
+          <td class="py-2">Listbox also references the label</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction (Popup Closed)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Down Arrow</code></td>
+          <td class="py-2">Opens popup and focuses first option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Up Arrow</code></td>
+          <td class="py-2">Opens popup and focuses last option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Alt + Down Arrow</code></td>
+          <td class="py-2">Opens popup without changing focus</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Typing</code></td>
+          <td class="py-2">Opens popup and filters options</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction (Popup Open)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Down Arrow</code></td>
+          <td class="py-2">Moves to next enabled option (no wrap)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Up Arrow</code></td>
+          <td class="py-2">Moves to previous enabled option (no wrap)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">Moves to first enabled option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">Moves to last enabled option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter</code></td>
+          <td class="py-2">Selects focused option and closes popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape</code></td>
+          <td class="py-2">Closes popup and restores previous value</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Alt + Up Arrow</code></td>
+          <td class="py-2">Selects focused option and closes popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab</code></td>
+          <td class="py-2">Closes popup and moves to next focusable element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>DOM focus on input</code></td>
+          <td class="py-2">DOM focus remains on input at all times</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Virtual focus via aria-activedescendant</code></td>
+          <td class="py-2">Visual focus controlled by aria-activedescendant</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Clear on close</code></td>
+          <td class="py-2">aria-activedescendant cleared when popup closes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Skip disabled options</code></td>
+          <td class="py-2">Navigation skips disabled options</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Filtering
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Filter on typing</code></td>
+          <td class="py-2">Options filtered as user types</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Case insensitive</code></td>
+          <td class="py-2">Filtering is case insensitive</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>No filter (autocomplete="none")</code></td>
+          <td class="py-2">All options shown regardless of input</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Empty results</code></td>
+          <td class="py-2">aria-activedescendant cleared when no matches</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Mouse Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click option</code></td>
+          <td class="py-2">Selects option and closes popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Hover option</code></td>
+          <td class="py-2">Updates aria-activedescendant on hover</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click disabled</code></td>
+          <td class="py-2">Disabled options cannot be selected</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click outside</code></td>
+          <td class="py-2">Closes popup without selection</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: IME Composition
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>During composition</code></td>
+          <td class="py-2">Keyboard navigation blocked during IME</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>On composition end</code></td>
+          <td class="py-2">Filtering updates after composition ends</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Callbacks
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onSelect</code></td>
+          <td class="py-2">Called with option data when selected</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onInputChange</code></td>
+          <td class="py-2">Called with input value on typing</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onOpenChange</code></td>
+          <td class="py-2">Called when popup opens or closes</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attribute Inheritance
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">Custom class is applied to container</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>placeholder</code></td>
+          <td class="py-2">Placeholder text is shown in input</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled state</code></td>
+          <td class="py-2">Component is disabled when disabled prop is set</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>React:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/react-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        React Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Vue:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/vue-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Vue Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Svelte:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/svelte-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Svelte Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
+    </li>
+    <li>
+      <strong>Accessibility:</strong>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core"
+        class="text-primary hover:underline"
+      >
+        axe-core
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

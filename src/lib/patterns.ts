@@ -96,7 +96,7 @@ export const PATTERNS: Pattern[] = [
       'An input widget with an associated popup that enables users to select a value from a collection.',
     icon: '🔽',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'dialog',

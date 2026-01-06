@@ -1,0 +1,137 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="border-primary mb-8 rounded-lg border-2 p-4">
+  <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
+    <span aria-hidden="true">⚠️</span> Consider Native HTML First
+  </h2>
+  <p class="mb-4">
+    <strong class="text-red-700 dark:text-red-400"
+      >Before using a custom combobox, consider native HTML alternatives.</strong
+    >
+    They provide built-in semantics, work without JavaScript, and have native browser support.
+  </p>
+  <div class="bg-muted mb-4 rounded-md p-3">
+    <pre
+      class="m-0 overflow-x-auto text-sm"><code>&lt;!-- For simple dropdown selection --&gt;
+&lt;label for="fruit"&gt;Choose a fruit&lt;/label&gt;
+&lt;select id="fruit"&gt;
+  &lt;option value="apple"&gt;Apple&lt;/option&gt;
+  &lt;option value="banana"&gt;Banana&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;!-- For basic autocomplete --&gt;
+&lt;label for="browser"&gt;Choose your browser&lt;/label&gt;
+&lt;input list="browsers" id="browser" name="browser"&gt;
+&lt;datalist id="browsers"&gt;
+  &lt;option value="Chrome"&gt;
+  &lt;option value="Firefox"&gt;
+  &lt;option value="Safari"&gt;
+&lt;/datalist&gt;</code></pre>
+  </div>
+  <p class="mb-4 text-sm">
+    Use a custom combobox only when you need: custom styling, complex filtering logic, rich option
+    rendering, or behaviors not supported by native elements.
+  </p>
+
+  <ResponsiveTable>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Use Case</th>
+          <th class="py-2 pr-4 text-left">Native HTML</th>
+          <th class="py-2 text-left">Custom Implementation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Simple dropdown selection</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">&lt;select&gt; Recommended</b></td
+          >
+          <td class="py-2">Not needed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Basic autocomplete suggestions</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">&lt;datalist&gt; Recommended</b></td
+          >
+          <td class="py-2">Not needed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">JavaScript disabled support</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
+          >
+          <td class="py-2">Requires fallback</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Custom option rendering (icons, descriptions)</td>
+          <td class="py-2 pr-4">Not supported</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Custom filtering logic</td>
+          <td class="py-2 pr-4">Basic prefix matching</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Custom algorithms</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Consistent cross-browser styling</td>
+          <td class="py-2 pr-4">Limited (especially datalist)</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Keyboard navigation customization</td>
+          <td class="py-2 pr-4">Browser defaults only</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Customizable</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Disabled options</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">&lt;select&gt; only</b></td
+          >
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">Fully supported</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-3 text-xs">
+    The native <code>&lt;select&gt;</code> element provides excellent accessibility, form submission support,
+    and works without JavaScript. The <code>&lt;datalist&gt;</code> element provides basic autocomplete
+    functionality, but its appearance varies significantly across browsers and lacks support for disabled
+    options or custom rendering.
+  </p>
+
+  <div
+    class="mt-4 rounded-md border border-amber-300 bg-amber-50 p-3 dark:border-amber-700 dark:bg-amber-950"
+  >
+    <h3 class="mb-2 flex items-center gap-2 text-sm font-bold text-amber-800 dark:text-amber-200">
+      <span aria-hidden="true">⚠️</span> Accessibility Concerns with &lt;datalist&gt;
+    </h3>
+    <p class="mb-2 text-sm text-amber-900 dark:text-amber-100">
+      The <code>&lt;datalist&gt;</code> element has several known accessibility issues:
+    </p>
+    <ul class="mb-2 list-inside list-disc space-y-1 text-sm text-amber-900 dark:text-amber-100">
+      <li>
+        <strong>Text zoom not supported:</strong> The font size of datalist options does not scale when
+        users zoom the page, creating issues for users who rely on text magnification.
+      </li>
+      <li>
+        <strong>Limited CSS styling:</strong> Options cannot be styled for high-contrast mode, preventing
+        accommodation of users with visual impairments.
+      </li>
+      <li>
+        <strong>Screen reader compatibility:</strong> Some screen reader and browser combinations (e.g.,
+        NVDA with Firefox) do not announce the contents of the autosuggest popup.
+      </li>
+    </ul>
+    <p class="text-xs text-amber-700 dark:text-amber-300">
+      Source: <a
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/datalist#accessibility"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:no-underline">MDN Web Docs - &lt;datalist&gt;: Accessibility</a
+      >
+    </p>
+  </div>
+</div>

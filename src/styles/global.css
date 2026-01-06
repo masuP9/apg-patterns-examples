@@ -15,6 +15,7 @@
 @import './patterns/meter.css';
 @import './patterns/slider.css';
 @import './patterns/spinbutton.css';
+@import './patterns/combobox.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
