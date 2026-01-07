@@ -89,8 +89,11 @@ onMounted(() => {
   // Initialize selection
   if (props.defaultSelectedIds.length > 0) {
     selectedIds.value = new Set(props.defaultSelectedIds);
-  } else if (!props.multiselectable && availableOptions.value.length > 0) {
-    selectedIds.value = new Set([availableOptions.value[0].id]);
+  } else if (availableOptions.value.length > 0) {
+    // Single-select mode: select first available option by default
+    if (!props.multiselectable) {
+      selectedIds.value = new Set([availableOptions.value[0].id]);
+    }
   }
 
   // Initialize focused index and sync anchor

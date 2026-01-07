@@ -59,8 +59,11 @@
     if (options.length > 0 && selectedIds.size === 0) {
       if (defaultSelectedIds.length > 0) {
         selectedIds = new Set(defaultSelectedIds);
-      } else if (!multiselectable && availableOptions.length > 0) {
-        selectedIds = new Set([availableOptions[0].id]);
+      } else if (availableOptions.length > 0) {
+        // Single-select mode: select first available option by default
+        if (!multiselectable) {
+          selectedIds = new Set([availableOptions[0].id]);
+        }
       }
 
       // Initialize focused index and sync anchor

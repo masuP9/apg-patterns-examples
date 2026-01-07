@@ -51,9 +51,11 @@ export function Listbox({
     if (defaultSelectedIds.length > 0) {
       return new Set(defaultSelectedIds);
     }
-    // Single-select: select first available option by default
-    if (!multiselectable && availableOptions.length > 0) {
-      return new Set([availableOptions[0].id]);
+    if (availableOptions.length > 0) {
+      // Single-select mode: select first available option by default
+      if (!multiselectable) {
+        return new Set([availableOptions[0].id]);
+      }
     }
     return new Set<string>();
   }, [defaultSelectedIds, multiselectable, availableOptions]);
