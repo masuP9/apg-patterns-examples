@@ -13,7 +13,10 @@ const { class: className } = Astro.props;
   data-slot="theme-toggle"
   role="group"
   aria-label="Theme"
-  class={cn('inline-flex items-center rounded-md border border-input bg-muted p-0.5', className)}
+  class={cn(
+    'inline-flex h-8 items-center rounded-md border border-input bg-muted p-0.5',
+    className
+  )}
 >
   <button
     type="button"
