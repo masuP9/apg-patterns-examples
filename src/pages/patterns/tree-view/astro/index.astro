@@ -1,0 +1,435 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import TreeView from '@patterns/treeview/TreeView.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/treeview/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/treeview/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/treeview/TreeView.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+
+const fileSystemNodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+      {
+        id: 'projects',
+        label: 'Projects',
+        children: [
+          { id: 'project-a', label: 'Project A' },
+          { id: 'project-b', label: 'Project B' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    children: [
+      { id: 'vacation', label: 'vacation.jpg' },
+      { id: 'profile', label: 'profile.png' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+const disabledNodes = [
+  {
+    id: 'folder1',
+    label: 'Accessible Folder',
+    children: [
+      { id: 'file1', label: 'file1.txt' },
+      { id: 'file2', label: 'file2.txt', disabled: true },
+    ],
+  },
+  {
+    id: 'folder2',
+    label: 'Restricted Folder',
+    disabled: true,
+    children: [{ id: 'secret', label: 'secret.txt' }],
+  },
+  { id: 'public', label: 'public.txt' },
+];
+---
+
+<PatternLayout title="Tree View - Astro" pattern="tree-view" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Tree View</h1>
+    <p class="text-muted-foreground text-lg">
+      A hierarchical list where items with children can be expanded or collapsed. Common uses
+      include file browsers, navigation menus, and organizational charts.
+    </p>
+    <AiGuideBadge pattern="treeview" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="tree-view" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h3 class="mb-3 text-sm font-medium">Single-Select with Activation</h3>
+          <div class="flex flex-col gap-4">
+            <TreeView
+              nodes={fileSystemNodes}
+              aria-label="File Explorer"
+              defaultExpandedIds={['documents']}
+            />
+            <div class="flex items-center gap-3">
+              <div
+                id="activation-status"
+                role="status"
+                aria-live="polite"
+                class="flex-1 rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm dark:border-gray-600 dark:bg-gray-800"
+              >
+                <span class="text-muted-foreground">Activated: </span>
+                <span id="activated-label" class="text-muted-foreground italic"
+                  >Select a node with Enter, Space, or Click</span
+                >
+              </div>
+              <button
+                id="reset-button"
+                type="button"
+                class="hidden rounded-md border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="mb-3 text-sm font-medium">Multi-Select</h3>
+          <TreeView
+            nodes={fileSystemNodes}
+            aria-label="Multi-select File Explorer"
+            multiselectable
+            defaultExpandedIds={['documents', 'images']}
+          />
+        </div>
+        <div>
+          <h3 class="mb-3 text-sm font-medium">With Disabled Nodes</h3>
+          <TreeView
+            nodes={disabledNodes}
+            aria-label="File Explorer with Restricted Access"
+            defaultExpandedIds={['folder1']}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="TreeView.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import TreeView from './TreeView.astro';
+
+const nodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+---
+
+<!-- Basic single-select -->
+<TreeView
+  nodes={nodes}
+  aria-label="File Explorer"
+/>
+
+<!-- With default expanded -->
+<TreeView
+  nodes={nodes}
+  aria-label="Files"
+  defaultExpandedIds={['documents']}
+/>
+
+<!-- Multi-select mode -->
+<TreeView
+  nodes={nodes}
+  aria-label="Files"
+  multiselectable
+/>
+
+<!-- With callbacks via custom events -->
+<TreeView
+  nodes={nodes}
+  aria-label="Files"
+/>
+
+<script>
+  document.querySelector('apg-treeview')?.addEventListener('selection-change', (e) => {
+    console.log('Selected:', e.detail);
+  });
+  document.querySelector('apg-treeview')?.addEventListener('expanded-change', (e) => {
+    console.log('Expanded:', e.detail);
+  });
+  document.querySelector('apg-treeview')?.addEventListener('activate', (e) => {
+    console.log('Activated:', e.detail);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <h3 class="mb-3 text-lg font-medium">TreeNode Interface</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Property</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Required</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>id</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">Yes</td>
+            <td class="py-2">Unique identifier for the node</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">Yes</td>
+            <td class="py-2">Display label for the node</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeNode[]</td>
+            <td class="text-muted-foreground py-2 pr-4">No</td>
+            <td class="py-2">Child nodes (makes this a parent node)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">No</td>
+            <td class="py-2">Prevents selection, activation, and expansion</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>nodes</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeNode[]</td>
+            <td class="text-muted-foreground py-2 pr-4">Required</td>
+            <td class="py-2">Array of tree nodes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable multi-select mode</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">Initially selected node IDs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultExpandedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">Initially expanded node IDs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>typeAheadTimeout</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">500</td>
+            <td class="py-2">Type-ahead buffer reset timeout (ms)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Accessible label for the tree</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID of labeling element</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selection-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">Dispatched when selection changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>expanded-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">Dispatched when expansion state changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>activate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="py-2">Dispatched when node is activated (Enter key)</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Tree View Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/examples/treeview-navigation/"
+          class="text-primary hover:underline"
+        >
+          APG Example: Navigation Treeview
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components"
+          class="text-primary hover:underline"
+        >
+          MDN: Web Components
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="treeview" />
+    </ul>
+  </section>
+</PatternLayout>
+
+<script define:vars={{ fileSystemNodes }}>
+  const treeview = document.querySelector('apg-treeview');
+  const activatedLabel = document.getElementById('activated-label');
+  const resetButton = document.getElementById('reset-button');
+
+  function findNodeLabel(nodes, id) {
+    for (const node of nodes) {
+      if (node.id === id) {
+        return node.label;
+      }
+      if (node.children) {
+        const found = findNodeLabel(node.children, id);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return null;
+  }
+
+  function resetActivation() {
+    if (activatedLabel) {
+      activatedLabel.textContent = 'Select a node with Enter, Space, or Click';
+      activatedLabel.classList.add('italic', 'text-muted-foreground');
+      activatedLabel.classList.remove('font-medium');
+    }
+    resetButton?.classList.add('hidden');
+  }
+
+  treeview?.addEventListener('activate', (event) => {
+    const { nodeId } = event.detail;
+    const label = findNodeLabel(fileSystemNodes, nodeId);
+    if (activatedLabel && label) {
+      activatedLabel.textContent = label;
+      activatedLabel.classList.remove('italic', 'text-muted-foreground');
+      activatedLabel.classList.add('font-medium');
+      resetButton?.classList.remove('hidden');
+    }
+  });
+
+  resetButton?.addEventListener('click', resetActivation);
+</script>

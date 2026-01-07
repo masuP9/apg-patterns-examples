@@ -1,0 +1,730 @@
+---
+/**
+ * APG Tree View Pattern - Astro Implementation
+ *
+ * A widget that presents a hierarchical list where items with children can be
+ * expanded or collapsed.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
+ */
+
+export interface TreeNode {
+  id: string;
+  label: string;
+  children?: TreeNode[];
+  disabled?: boolean;
+}
+
+export interface Props {
+  /** Tree node data */
+  nodes: TreeNode[];
+  /** Enable multi-select mode */
+  multiselectable?: boolean;
+  /** Initially selected node IDs */
+  defaultSelectedIds?: string[];
+  /** Initially expanded node IDs */
+  defaultExpandedIds?: string[];
+  /** Accessible label for the tree */
+  'aria-label'?: string;
+  /** ID of element that labels the tree */
+  'aria-labelledby'?: string;
+  /** Type-ahead timeout in ms */
+  typeAheadTimeout?: number;
+  /** Additional CSS class */
+  class?: string;
+}
+
+interface FlatNode {
+  node: TreeNode;
+  depth: number;
+  parentId: string | null;
+  hasChildren: boolean;
+}
+
+const {
+  nodes = [],
+  multiselectable = false,
+  defaultSelectedIds = [],
+  defaultExpandedIds = [],
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  typeAheadTimeout = 500,
+  class: className = '',
+} = Astro.props;
+
+const instanceId = `treeview-${Math.random().toString(36).slice(2, 11)}`;
+
+// Flatten tree for navigation
+function flattenTree(
+  treeNodes: TreeNode[],
+  depth: number = 0,
+  parentId: string | null = null
+): FlatNode[] {
+  const result: FlatNode[] = [];
+  for (const node of treeNodes) {
+    const hasChildren = Boolean(node.children && node.children.length > 0);
+    result.push({ node, depth, parentId, hasChildren });
+    if (node.children) {
+      result.push(...flattenTree(node.children, depth + 1, node.id));
+    }
+  }
+  return result;
+}
+
+const allNodes = flattenTree(nodes);
+const nodeMap = new Map<string, FlatNode>(allNodes.map((fn) => [fn.node.id, fn]));
+
+// Initialize expanded IDs
+const expandedIds = new Set(defaultExpandedIds);
+
+// Initialize selected IDs (filter out disabled nodes)
+const selectedIds = new Set<string>();
+if (defaultSelectedIds.length > 0) {
+  for (const id of defaultSelectedIds) {
+    const flatNode = nodeMap.get(id);
+    if (flatNode && !flatNode.node.disabled) {
+      selectedIds.add(id);
+    }
+  }
+}
+// No auto-selection - user must explicitly select via Enter/Space/Click
+
+// Find initial focus
+let initialFocusId = [...selectedIds][0];
+if (!initialFocusId) {
+  const firstEnabled = allNodes.find((fn) => !fn.node.disabled);
+  if (firstEnabled) {
+    initialFocusId = firstEnabled.node.id;
+  }
+}
+
+const containerClass = `apg-treeview ${className}`.trim();
+
+function getNodeClass(node: TreeNode, hasChildren: boolean): string {
+  const classes = ['apg-treeview-item'];
+  if (selectedIds.has(node.id)) {
+    classes.push('apg-treeview-item--selected');
+  }
+  if (node.disabled) {
+    classes.push('apg-treeview-item--disabled');
+  }
+  if (hasChildren) {
+    classes.push('apg-treeview-item--parent');
+  } else {
+    classes.push('apg-treeview-item--leaf');
+  }
+  return classes.join(' ');
+}
+
+// Generate HTML string for recursive rendering
+function renderNodeHTML(node: TreeNode, depth: number): string {
+  const hasChildren = Boolean(node.children && node.children.length > 0);
+  const flatNode = nodeMap.get(node.id);
+  const isExpanded = expandedIds.has(node.id);
+  const isSelected = selectedIds.has(node.id);
+  const isFocused = node.id === initialFocusId;
+  const labelId = `${instanceId}-label-${node.id}`;
+  const parentId = flatNode?.parentId ?? '';
+  const nodeClass = getNodeClass(node, hasChildren);
+
+  const ariaExpandedAttr = hasChildren ? ` aria-expanded="${isExpanded}"` : '';
+  const ariaDisabledAttr = node.disabled ? ' aria-disabled="true"' : '';
+  const parentIdAttr = parentId ? ` data-parent-id="${parentId}"` : '';
+  const hasChildrenAttr = hasChildren ? ' data-has-children="true"' : '';
+  const hiddenAttr = !isExpanded ? ' hidden' : '';
+
+  const icon = hasChildren
+    ? `<span class="apg-treeview-item-icon" aria-hidden="true">${isExpanded ? '▼' : '▶'}</span>`
+    : '';
+
+  const childrenHTML =
+    hasChildren && node.children
+      ? `<ul role="group" class="apg-treeview-group"${hiddenAttr}>${node.children.map((child) => renderNodeHTML(child, depth + 1)).join('')}</ul>`
+      : '';
+
+  return `<li role="treeitem" data-node-id="${node.id}"${parentIdAttr}${hasChildrenAttr} data-depth="${depth}" aria-labelledby="${labelId}"${ariaExpandedAttr} aria-selected="${isSelected}"${ariaDisabledAttr} tabindex="${isFocused ? 0 : -1}" class="${nodeClass}" style="--depth: ${depth}"><span class="apg-treeview-item-content">${icon}<span id="${labelId}" class="apg-treeview-item-label">${node.label}</span></span>${childrenHTML}</li>`;
+}
+
+const treeHTML = nodes.map((node) => renderNodeHTML(node, 0)).join('');
+---
+
+<apg-treeview
+  data-multiselectable={multiselectable ? 'true' : undefined}
+  data-type-ahead-timeout={typeAheadTimeout}
+  data-initial-selected={JSON.stringify([...selectedIds])}
+  data-initial-expanded={JSON.stringify([...expandedIds])}
+  data-initial-focus-id={initialFocusId}
+>
+  <ul
+    role="tree"
+    aria-multiselectable={multiselectable || undefined}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    class={containerClass}
+    set:html={treeHTML}
+  />
+</apg-treeview>
+
+<script>
+  interface FlatNode {
+    id: string;
+    label: string;
+    depth: number;
+    parentId: string | null;
+    hasChildren: boolean;
+    disabled: boolean;
+  }
+
+  class ApgTreeView extends HTMLElement {
+    private tree: HTMLElement | null = null;
+    private rafId: number | null = null;
+    private focusedId = '';
+    private selectionAnchor = '';
+    private selectedIds: Set<string> = new Set();
+    private expandedIds: Set<string> = new Set();
+    private typeAheadBuffer = '';
+    private typeAheadTimeoutId: number | null = null;
+    private allNodes: FlatNode[] = [];
+    private nodeMap: Map<string, FlatNode> = new Map();
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.tree = this.querySelector('[role="tree"]');
+      if (!this.tree) {
+        console.warn('apg-treeview: tree element not found');
+        return;
+      }
+
+      // Build node map from DOM
+      this.buildNodeMap();
+
+      // Initialize from data attributes
+      try {
+        this.selectedIds = new Set(JSON.parse(this.dataset.initialSelected || '[]'));
+        this.expandedIds = new Set(JSON.parse(this.dataset.initialExpanded || '[]'));
+      } catch {
+        this.selectedIds = new Set();
+        this.expandedIds = new Set();
+      }
+
+      this.focusedId = this.dataset.initialFocusId || '';
+      this.selectionAnchor = this.focusedId;
+
+      this.tree.addEventListener('keydown', this.handleKeyDown);
+      this.tree.addEventListener('click', this.handleClick);
+      this.tree.addEventListener('focusin', this.handleFocus);
+
+      this.updateVisualState();
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+        this.typeAheadTimeoutId = null;
+      }
+      this.tree?.removeEventListener('keydown', this.handleKeyDown);
+      this.tree?.removeEventListener('click', this.handleClick);
+      this.tree?.removeEventListener('focusin', this.handleFocus);
+      this.tree = null;
+    }
+
+    private get isMultiselectable(): boolean {
+      return this.dataset.multiselectable === 'true';
+    }
+
+    private get typeAheadTimeout(): number {
+      return parseInt(this.dataset.typeAheadTimeout || '500', 10);
+    }
+
+    private buildNodeMap() {
+      this.allNodes = [];
+      this.nodeMap.clear();
+
+      const items = this.querySelectorAll<HTMLLIElement>('[role="treeitem"]');
+      items.forEach((item) => {
+        const id = item.dataset.nodeId || '';
+        const label = item.querySelector('.apg-treeview-item-label')?.textContent || '';
+        const depth = parseInt(item.dataset.depth || '0', 10);
+        const parentId = item.dataset.parentId || null;
+        const hasChildren = item.dataset.hasChildren === 'true';
+        const disabled = item.getAttribute('aria-disabled') === 'true';
+
+        const node: FlatNode = { id, label, depth, parentId, hasChildren, disabled };
+        this.allNodes.push(node);
+        this.nodeMap.set(id, node);
+      });
+    }
+
+    private getVisibleNodes(): FlatNode[] {
+      const result: FlatNode[] = [];
+      const collapsedParents = new Set<string>();
+
+      for (const node of this.allNodes) {
+        let isHidden = false;
+        let currentParentId = node.parentId;
+
+        while (currentParentId) {
+          if (collapsedParents.has(currentParentId) || !this.expandedIds.has(currentParentId)) {
+            isHidden = true;
+            break;
+          }
+          const parent = this.nodeMap.get(currentParentId);
+          currentParentId = parent?.parentId ?? null;
+        }
+
+        if (!isHidden) {
+          result.push(node);
+          if (node.hasChildren && !this.expandedIds.has(node.id)) {
+            collapsedParents.add(node.id);
+          }
+        }
+      }
+      return result;
+    }
+
+    private getVisibleIndexMap(): Map<string, number> {
+      const map = new Map<string, number>();
+      this.getVisibleNodes().forEach((node, index) => map.set(node.id, index));
+      return map;
+    }
+
+    private getNodeElement(nodeId: string): HTMLLIElement | null {
+      return this.querySelector<HTMLLIElement>(`[data-node-id="${CSS.escape(nodeId)}"]`);
+    }
+
+    private updateVisualState() {
+      // Update tabindex for roving tabindex
+      this.querySelectorAll<HTMLLIElement>('[role="treeitem"]').forEach((item) => {
+        const nodeId = item.dataset.nodeId || '';
+        item.tabIndex = nodeId === this.focusedId ? 0 : -1;
+      });
+    }
+
+    private focusNode(nodeId: string) {
+      this.focusedId = nodeId;
+      this.updateVisualState();
+      this.getNodeElement(nodeId)?.focus();
+    }
+
+    private expandNode(nodeId: string) {
+      const node = this.nodeMap.get(nodeId);
+      if (!node?.hasChildren || node.disabled) return;
+      if (this.expandedIds.has(nodeId)) return;
+
+      this.expandedIds.add(nodeId);
+      this.updateExpansionDOM(nodeId, true);
+
+      this.dispatchEvent(
+        new CustomEvent('expandedchange', {
+          detail: { expandedIds: [...this.expandedIds] },
+          bubbles: true,
+        })
+      );
+    }
+
+    private collapseNode(nodeId: string) {
+      const node = this.nodeMap.get(nodeId);
+      if (!node?.hasChildren || node.disabled) return;
+      if (!this.expandedIds.has(nodeId)) return;
+
+      this.expandedIds.delete(nodeId);
+      this.updateExpansionDOM(nodeId, false);
+
+      // If a child was focused, move focus to the collapsed parent
+      const currentFocused = this.nodeMap.get(this.focusedId);
+      if (currentFocused) {
+        let parentId = currentFocused.parentId;
+        while (parentId) {
+          if (parentId === nodeId) {
+            this.focusNode(nodeId);
+            break;
+          }
+          const parent = this.nodeMap.get(parentId);
+          parentId = parent?.parentId ?? null;
+        }
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('expandedchange', {
+          detail: { expandedIds: [...this.expandedIds] },
+          bubbles: true,
+        })
+      );
+    }
+
+    private updateExpansionDOM(nodeId: string, expanded: boolean) {
+      const item = this.getNodeElement(nodeId);
+      if (!item) return;
+
+      item.setAttribute('aria-expanded', String(expanded));
+
+      const icon = item.querySelector('.apg-treeview-item-icon');
+      if (icon) {
+        icon.textContent = expanded ? '▼' : '▶';
+      }
+
+      const group = item.querySelector(':scope > [role="group"]');
+      if (group) {
+        if (expanded) {
+          group.removeAttribute('hidden');
+        } else {
+          group.setAttribute('hidden', '');
+        }
+      }
+    }
+
+    private expandAllSiblings(nodeId: string) {
+      const node = this.nodeMap.get(nodeId);
+      if (!node) return;
+
+      for (const n of this.allNodes) {
+        if (n.parentId === node.parentId && n.hasChildren && !n.disabled) {
+          if (!this.expandedIds.has(n.id)) {
+            this.expandedIds.add(n.id);
+            this.updateExpansionDOM(n.id, true);
+          }
+        }
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('expandedchange', {
+          detail: { expandedIds: [...this.expandedIds] },
+          bubbles: true,
+        })
+      );
+    }
+
+    private updateSelection(nodeId: string | null, action: 'toggle' | 'set' | 'range' | 'all') {
+      const visibleNodes = this.getVisibleNodes();
+      const visibleIndexMap = this.getVisibleIndexMap();
+
+      if (action === 'all') {
+        this.selectedIds = new Set(visibleNodes.filter((n) => !n.disabled).map((n) => n.id));
+      } else if (action === 'range' && nodeId) {
+        const anchorIndex = visibleIndexMap.get(this.selectionAnchor) ?? 0;
+        const targetIndex = visibleIndexMap.get(nodeId) ?? 0;
+        const start = Math.min(anchorIndex, targetIndex);
+        const end = Math.max(anchorIndex, targetIndex);
+
+        for (let i = start; i <= end; i++) {
+          const node = visibleNodes[i];
+          if (node && !node.disabled) {
+            this.selectedIds.add(node.id);
+          }
+        }
+      } else if (nodeId) {
+        const node = this.nodeMap.get(nodeId);
+        if (node?.disabled) return;
+
+        if (this.isMultiselectable && action === 'toggle') {
+          if (this.selectedIds.has(nodeId)) {
+            this.selectedIds.delete(nodeId);
+          } else {
+            this.selectedIds.add(nodeId);
+          }
+        } else {
+          this.selectedIds = new Set([nodeId]);
+        }
+      }
+
+      // Update aria-selected
+      this.querySelectorAll<HTMLLIElement>('[role="treeitem"]').forEach((item) => {
+        const id = item.dataset.nodeId || '';
+        const isSelected = this.selectedIds.has(id);
+        item.setAttribute('aria-selected', String(isSelected));
+        item.classList.toggle('apg-treeview-item--selected', isSelected);
+      });
+
+      this.dispatchEvent(
+        new CustomEvent('selectionchange', {
+          detail: { selectedIds: [...this.selectedIds] },
+          bubbles: true,
+        })
+      );
+    }
+
+    private handleTypeAhead(char: string) {
+      const visibleNodes = this.getVisibleNodes();
+      if (visibleNodes.length === 0) return;
+
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+      }
+
+      this.typeAheadBuffer += char.toLowerCase();
+      const buffer = this.typeAheadBuffer;
+      const isSameChar = buffer.length > 1 && buffer.split('').every((c) => c === buffer[0]);
+
+      const visibleIndexMap = this.getVisibleIndexMap();
+      const currentIndex = visibleIndexMap.get(this.focusedId) ?? 0;
+      let startIndex: number;
+      let searchStr: string;
+
+      if (isSameChar) {
+        this.typeAheadBuffer = buffer[0];
+        startIndex = (currentIndex + 1) % visibleNodes.length;
+        searchStr = buffer[0];
+      } else if (buffer.length === 1) {
+        startIndex = (currentIndex + 1) % visibleNodes.length;
+        searchStr = buffer;
+      } else {
+        startIndex = currentIndex;
+        searchStr = buffer;
+      }
+
+      for (let i = 0; i < visibleNodes.length; i++) {
+        const index = (startIndex + i) % visibleNodes.length;
+        const node = visibleNodes[index];
+        if (node.disabled) continue;
+        if (node.label.toLowerCase().startsWith(searchStr)) {
+          this.focusNode(node.id);
+          this.selectionAnchor = node.id;
+          break;
+        }
+      }
+
+      this.typeAheadTimeoutId = window.setTimeout(() => {
+        this.typeAheadBuffer = '';
+        this.typeAheadTimeoutId = null;
+      }, this.typeAheadTimeout);
+    }
+
+    private handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const item = target.closest('[role="treeitem"]') as HTMLLIElement | null;
+      if (!item) return;
+
+      const nodeId = item.dataset.nodeId || '';
+      const node = this.nodeMap.get(nodeId);
+      if (!node) return;
+
+      event.stopPropagation();
+      this.focusNode(nodeId);
+
+      if (node.hasChildren) {
+        if (node.disabled) return;
+        if (this.expandedIds.has(nodeId)) {
+          this.collapseNode(nodeId);
+        } else {
+          this.expandNode(nodeId);
+        }
+      }
+
+      if (!node.disabled) {
+        if (this.isMultiselectable) {
+          this.updateSelection(nodeId, 'toggle');
+        } else {
+          this.updateSelection(nodeId, 'set');
+        }
+        this.selectionAnchor = nodeId;
+
+        // Fire activate event on click
+        this.dispatchEvent(
+          new CustomEvent('activate', {
+            detail: { nodeId },
+            bubbles: true,
+          })
+        );
+      }
+    };
+
+    private handleFocus = (event: FocusEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.getAttribute('role') !== 'treeitem') return;
+
+      const nodeId = (target as HTMLLIElement).dataset.nodeId || '';
+      if (nodeId && nodeId !== this.focusedId) {
+        this.focusedId = nodeId;
+        this.updateVisualState();
+      }
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      const visibleNodes = this.getVisibleNodes();
+      if (visibleNodes.length === 0) return;
+
+      const { key, shiftKey, ctrlKey, metaKey } = event;
+      const visibleIndexMap = this.getVisibleIndexMap();
+      const currentIndex = visibleIndexMap.get(this.focusedId) ?? 0;
+      const currentNode = visibleNodes[currentIndex];
+
+      const handledKeys = [
+        'ArrowDown',
+        'ArrowUp',
+        'ArrowRight',
+        'ArrowLeft',
+        'Home',
+        'End',
+        'Enter',
+        ' ',
+        '*',
+      ];
+      if (
+        handledKeys.includes(key) ||
+        (key.length === 1 && !ctrlKey && !metaKey) ||
+        ((key === 'a' || key === 'A') && (ctrlKey || metaKey) && this.isMultiselectable)
+      ) {
+        event.preventDefault();
+      }
+
+      switch (key) {
+        case 'ArrowDown': {
+          if (currentIndex < visibleNodes.length - 1) {
+            const nextIndex = currentIndex + 1;
+            const nextNode = visibleNodes[nextIndex];
+            this.focusNode(nextNode.id);
+            if (this.isMultiselectable && shiftKey) {
+              this.updateSelection(nextNode.id, 'range');
+            } else {
+              this.selectionAnchor = nextNode.id;
+            }
+          }
+          break;
+        }
+
+        case 'ArrowUp': {
+          if (currentIndex > 0) {
+            const prevIndex = currentIndex - 1;
+            const prevNode = visibleNodes[prevIndex];
+            this.focusNode(prevNode.id);
+            if (this.isMultiselectable && shiftKey) {
+              this.updateSelection(prevNode.id, 'range');
+            } else {
+              this.selectionAnchor = prevNode.id;
+            }
+          }
+          break;
+        }
+
+        case 'ArrowRight': {
+          if (!currentNode) break;
+          if (currentNode.hasChildren && !currentNode.disabled) {
+            if (!this.expandedIds.has(this.focusedId)) {
+              this.expandNode(this.focusedId);
+            } else {
+              const nextIndex = currentIndex + 1;
+              if (nextIndex < visibleNodes.length) {
+                const nextNode = visibleNodes[nextIndex];
+                if (nextNode.parentId === this.focusedId) {
+                  this.focusNode(nextNode.id);
+                  this.selectionAnchor = nextNode.id;
+                }
+              }
+            }
+          }
+          break;
+        }
+
+        case 'ArrowLeft': {
+          if (!currentNode) break;
+          if (
+            currentNode.hasChildren &&
+            this.expandedIds.has(this.focusedId) &&
+            !currentNode.disabled
+          ) {
+            this.collapseNode(this.focusedId);
+          } else if (currentNode.parentId) {
+            this.focusNode(currentNode.parentId);
+            this.selectionAnchor = currentNode.parentId;
+          }
+          break;
+        }
+
+        case 'Home': {
+          const firstNode = visibleNodes[0];
+          this.focusNode(firstNode.id);
+          if (this.isMultiselectable && shiftKey) {
+            this.updateSelection(firstNode.id, 'range');
+          } else {
+            this.selectionAnchor = firstNode.id;
+          }
+          break;
+        }
+
+        case 'End': {
+          const lastNode = visibleNodes[visibleNodes.length - 1];
+          this.focusNode(lastNode.id);
+          if (this.isMultiselectable && shiftKey) {
+            this.updateSelection(lastNode.id, 'range');
+          } else {
+            this.selectionAnchor = lastNode.id;
+          }
+          break;
+        }
+
+        case 'Enter': {
+          if (currentNode && !currentNode.disabled) {
+            if (this.isMultiselectable) {
+              this.updateSelection(this.focusedId, 'toggle');
+              this.selectionAnchor = this.focusedId;
+            } else {
+              this.updateSelection(this.focusedId, 'set');
+            }
+            this.dispatchEvent(
+              new CustomEvent('activate', {
+                detail: { nodeId: this.focusedId },
+                bubbles: true,
+              })
+            );
+          }
+          break;
+        }
+
+        case ' ': {
+          if (currentNode && !currentNode.disabled) {
+            if (this.isMultiselectable) {
+              this.updateSelection(this.focusedId, 'toggle');
+              // Ctrl+Space: toggle without updating anchor
+              // Space alone: update anchor for subsequent Shift+Arrow operations
+              if (!ctrlKey) {
+                this.selectionAnchor = this.focusedId;
+              }
+            } else {
+              this.updateSelection(this.focusedId, 'set');
+              this.dispatchEvent(
+                new CustomEvent('activate', {
+                  detail: { nodeId: this.focusedId },
+                  bubbles: true,
+                })
+              );
+            }
+          }
+          break;
+        }
+
+        case '*': {
+          this.expandAllSiblings(this.focusedId);
+          break;
+        }
+
+        case 'a':
+        case 'A': {
+          if ((ctrlKey || metaKey) && this.isMultiselectable) {
+            this.updateSelection(null, 'all');
+          } else if (!ctrlKey && !metaKey) {
+            this.handleTypeAhead(key);
+          }
+          break;
+        }
+
+        default: {
+          if (key.length === 1 && !ctrlKey && !metaKey) {
+            this.handleTypeAhead(key);
+          }
+        }
+      }
+    };
+  }
+
+  if (!customElements.get('apg-treeview')) {
+    customElements.define('apg-treeview', ApgTreeView);
+  }
+</script>

@@ -260,7 +260,7 @@ export const PATTERNS: Pattern[] = [
       'A widget that presents a hierarchical list with nested groups that can be collapsed and expanded.',
     icon: '🌲',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'treegrid',
