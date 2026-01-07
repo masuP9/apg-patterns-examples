@@ -1,0 +1,315 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">対象要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tree</code></td>
+          <td class="py-2 pr-4">コンテナ（<code>&lt;ul&gt;</code>）</td>
+          <td class="py-2">ツリーウィジェットのコンテナ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>treeitem</code></td>
+          <td class="py-2 pr-4">各ノード（<code>&lt;li&gt;</code>）</td>
+          <td class="py-2">個々のツリーノード（親ノードとリーフノードの両方）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>group</code></td>
+          <td class="py-2 pr-4">子コンテナ（<code>&lt;ul&gt;</code>）</td>
+          <td class="py-2">展開された親の子ノードを含むコンテナ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#tree" class="text-primary hover:underline">
+      WAI-ARIA tree ロール
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ（ツリーコンテナ）</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tree"</code></td>
+          <td class="py-2 pr-4">-</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">コンテナをツリーウィジェットとして識別</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">文字列</td>
+          <td class="py-2 pr-4">はい*</td>
+          <td class="py-2">ツリーのアクセシブル名</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">ID参照</td>
+          <td class="py-2 pr-4">はい*</td>
+          <td class="py-2">aria-label の代替（優先される）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">複数選択モード時のみ設定</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * <code>aria-label</code> または <code>aria-labelledby</code> のいずれかが必須
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート（ツリーアイテム）</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">はい*</td>
+          <td class="py-2">親ノードのみに設定。展開状態を示す</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">はい**</td>
+          <td class="py-2">すべてのtreeitemに必須（選択=true、その他=false）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">ノードが無効であることを示す</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex</code></td>
+          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">フォーカス管理用のローヴィングタブインデックス</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * 親ノードに必須。リーフノードには <code>aria-expanded</code> を設定しない<br />
+    ** 選択がサポートされている場合、すべてのtreeitemに <code>aria-selected</code> が必須
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <h4 class="mb-2 font-medium">ナビゲーション</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
+          >
+          <td class="py-2">次の表示されているノードにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">前の表示されているノードにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
+          >
+          <td class="py-2">閉じた親: 展開 / 開いた親: 最初の子に移動 / リーフ: 何もしない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
+          >
+          <td class="py-2"
+            >開いた親: 折りたたむ / 子または閉じた親: 親に移動 / ルート: 何もしない</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">最初のノードにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">最後の表示されているノードにフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">ノードを選択してアクティベート（下記の選択セクションを参照）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">*</kbd></td
+          >
+          <td class="py-2">現在のレベルのすべての兄弟を展開</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">文字入力</td>
+          <td class="py-2">その文字で始まる次の表示されているノードにフォーカスを移動</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">選択（単一選択モード）</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd> /
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">フォーカスのみ移動（選択はフォーカスに追従しない）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">フォーカス中のノードを選択してアクティベート（onActivate発火）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">フォーカス中のノードを選択してアクティベート（onActivate発火）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">クリック</td>
+          <td class="py-2">クリックしたノードを選択してアクティベート（onActivate発火）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">選択（複数選択モード）</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">フォーカス中のノードの選択をトグル</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
+            ></td
+          >
+          <td class="py-2">フォーカスを移動せずに選択をトグル</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd
+            > / <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">アンカーから選択範囲を拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">最初のノードまで選択を拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">最後の表示されているノードまで選択を拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
+            ></td
+          >
+          <td class="py-2">表示されているすべてのノードを選択</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">フォーカス管理</h3>
+  <p class="text-muted-foreground mb-4">
+    このコンポーネントは、フォーカス管理に<strong>ローヴィングタブインデックス</strong>を使用します:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>フォーカスされているノードのみが <code>tabindex="0"</code> を持つ</li>
+    <li>他のすべてのノードは <code>tabindex="-1"</code> を持つ</li>
+    <li>ツリーは単一のタブストップ（Tab で入り、Shift+Tab で出る）</li>
+    <li>フォーカスは表示されているノード間のみを移動（折りたたまれた子はスキップ）</li>
+    <li>子にフォーカスがある状態で親が折りたたまれると、フォーカスは親に移動</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">無効化されたノード</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li><code>aria-disabled="true"</code> を持つ</li>
+    <li>フォーカス可能（キーボードナビゲーションに含まれる）</li>
+    <li>選択またはアクティブ化できない</li>
+    <li>親ノードの場合、展開/折りたたみができない</li>
+    <li>視覚的に区別される（例: グレーアウト）</li>
+  </ul>
+</div>

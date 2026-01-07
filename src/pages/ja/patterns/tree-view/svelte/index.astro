@@ -1,0 +1,381 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import TreeView from '@patterns/treeview/TreeView.svelte';
+import TreeViewActivationDemo from '@patterns/treeview/TreeViewActivationDemo.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/treeview/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/treeview/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/treeview/TreeView.svelte?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const fileSystemNodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+      {
+        id: 'projects',
+        label: 'Projects',
+        children: [
+          { id: 'project-a', label: 'Project A' },
+          { id: 'project-b', label: 'Project B' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    children: [
+      { id: 'vacation', label: 'vacation.jpg' },
+      { id: 'profile', label: 'profile.png' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+const disabledNodes = [
+  {
+    id: 'folder1',
+    label: 'Accessible Folder',
+    children: [
+      { id: 'file1', label: 'file1.txt' },
+      { id: 'file2', label: 'file2.txt', disabled: true },
+    ],
+  },
+  {
+    id: 'folder2',
+    label: 'Restricted Folder',
+    disabled: true,
+    children: [{ id: 'secret', label: 'secret.txt' }],
+  },
+  { id: 'public', label: 'public.txt' },
+];
+---
+
+<PatternLayout
+  title="ツリービュー - Svelte"
+  pattern="tree-view"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Tree View</h1>
+    <p class="text-muted-foreground text-lg">
+      子を持つアイテムを展開または折りたたむことができる階層的なリスト。
+      ファイルブラウザ、ナビゲーションメニュー、組織図などでよく使用されます。
+    </p>
+    <AiGuideBadge pattern="treeview" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="tree-view" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-8">
+        <div>
+          <h3 class="mb-3 text-sm font-medium">単一選択 + アクティベーション</h3>
+          <TreeViewActivationDemo
+            client:load
+            nodes={fileSystemNodes}
+            ariaLabel="ファイルエクスプローラー"
+            defaultExpandedIds={['documents']}
+          />
+        </div>
+        <div>
+          <h3 class="mb-3 text-sm font-medium">複数選択</h3>
+          <TreeView
+            client:load
+            nodes={fileSystemNodes}
+            aria-label="複数選択ファイルエクスプローラー"
+            multiselectable
+            defaultExpandedIds={['documents', 'images']}
+          />
+        </div>
+        <div>
+          <h3 class="mb-3 text-sm font-medium">無効化されたノード</h3>
+          <TreeView
+            client:load
+            nodes={disabledNodes}
+            aria-label="アクセス制限付きファイルエクスプローラー"
+            defaultExpandedIds={['folder1']}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="TreeView.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+import TreeView from './TreeView.svelte';
+
+const nodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+function handleSelectionChange(event) {
+  console.log('Selected:', event.detail);
+}
+
+function handleExpandedChange(event) {
+  console.log('Expanded:', event.detail);
+}
+
+function handleActivate(event) {
+  console.log('Activated:', event.detail);
+}
+</script>
+
+<!-- 基本的な単一選択 -->
+<TreeView
+  {nodes}
+  aria-label="ファイルエクスプローラー"
+/>
+
+<!-- デフォルトで展開 -->
+<TreeView
+  {nodes}
+  aria-label="ファイル"
+  defaultExpandedIds={['documents']}
+/>
+
+<!-- 複数選択モード -->
+<TreeView
+  {nodes}
+  aria-label="ファイル"
+  multiselectable
+/>
+
+<!-- コールバック付き -->
+<TreeView
+  {nodes}
+  aria-label="ファイル"
+  onselectionchange={handleSelectionChange}
+  onexpandedchange={handleExpandedChange}
+  onactivate={handleActivate}
+/>`}
+      lang="svelte"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <h3 class="mb-3 text-lg font-medium">TreeNode インターフェース</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">必須</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>id</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">はい</td>
+            <td class="py-2">ノードの一意な識別子</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">はい</td>
+            <td class="py-2">ノードの表示ラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeNode[]</td>
+            <td class="text-muted-foreground py-2 pr-4">いいえ</td>
+            <td class="py-2">子ノード（これを親ノードにする）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">いいえ</td>
+            <td class="py-2">選択、アクティブ化、展開を無効化</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>nodes</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeNode[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">ツリーノードの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">複数選択モードを有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">初期選択されるノード ID（非制御）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultExpandedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">初期展開されるノード ID（非制御）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>typeAheadTimeout</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">500</td>
+            <td class="py-2">先行入力バッファのリセットタイムアウト（ミリ秒）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ツリーのアクセシブル名</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">イベント</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">詳細</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onselectionchange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">選択が変更された時に発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onexpandedchange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">展開状態が変更された時に発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onactivate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="py-2">ノードがアクティブ化された時に発火（Enter キー）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Tree View パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/examples/treeview-navigation/"
+          class="text-primary hover:underline"
+        >
+          APG サンプル: ナビゲーション Treeview
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="treeview" />
+    </ul>
+  </section>
+</PatternLayout>

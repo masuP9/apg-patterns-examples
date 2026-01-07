@@ -1,0 +1,455 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance for ARIA attributes, keyboard interactions, expansion/collapse
+    behavior, selection models, and accessibility requirements.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Structure
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tree"</code></td>
+          <td class="py-2">Container element has the tree role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="treeitem"</code></td>
+          <td class="py-2">Each node has the treeitem role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="group"</code></td>
+          <td class="py-2">Child containers have the group role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded (parent)</code></td>
+          <td class="py-2">Parent nodes have aria-expanded (true or false)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded (leaf)</code></td>
+          <td class="py-2">Leaf nodes do NOT have aria-expanded</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2">All treeitems have aria-selected (true or false)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2">Tree has aria-multiselectable="true" in multi-select mode</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">Disabled nodes have aria-disabled="true"</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Accessible Name
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">Tree has accessible name via aria-label</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">Tree can use aria-labelledby (takes precedence)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Navigation
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowDown</code></td>
+          <td class="py-2">Moves to next visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowUp</code></td>
+          <td class="py-2">Moves to previous visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">Moves to first node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">Moves to last visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Type-ahead</code></td>
+          <td class="py-2">Typing characters focuses matching visible node</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Expand/Collapse
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight (closed parent)</code></td>
+          <td class="py-2">Expands the parent node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight (open parent)</code></td>
+          <td class="py-2">Moves to first child</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight (leaf)</code></td>
+          <td class="py-2">Does nothing</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft (open parent)</code></td>
+          <td class="py-2">Collapses the parent node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft (child/closed)</code></td>
+          <td class="py-2">Moves to parent node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft (root)</code></td>
+          <td class="py-2">Does nothing</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>* (asterisk)</code></td>
+          <td class="py-2">Expands all siblings at current level</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter</code></td>
+          <td class="py-2">Activates node (does NOT toggle expansion)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Selection (Single-Select)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Arrow navigation</code></td>
+          <td class="py-2">Selection follows focus (arrows change selection)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space</code></td>
+          <td class="py-2">Has no effect in single-select mode</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Only one selected</code></td>
+          <td class="py-2">Only one node can be selected at a time</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Selection (Multi-Select)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space</code></td>
+          <td class="py-2">Toggles selection of focused node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+Space</code></td>
+          <td class="py-2">Toggles selection without moving focus</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+Arrow</code></td>
+          <td class="py-2">Extends selection range from anchor</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+Home</code></td>
+          <td class="py-2">Extends selection to first node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+End</code></td>
+          <td class="py-2">Extends selection to last visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+A</code></td>
+          <td class="py-2">Selects all visible nodes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Multiple selection</code></td>
+          <td class="py-2">Multiple nodes can be selected simultaneously</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Single Tab stop</code></td>
+          <td class="py-2">Tree is a single Tab stop (Tab/Shift+Tab)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">Focused node has tabindex="0"</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">Other nodes have tabindex="-1"</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Skip collapsed</code></td>
+          <td class="py-2">Collapsed children are skipped during navigation</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus to parent</code></td>
+          <td class="py-2">Focus moves to parent when child's parent is collapsed</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Disabled Nodes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focusable</code></td>
+          <td class="py-2">Disabled nodes can receive focus</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Not selectable</code></td>
+          <td class="py-2">Disabled nodes cannot be selected</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Not expandable</code></td>
+          <td class="py-2">Disabled parent nodes cannot be expanded/collapsed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Not activatable</code></td>
+          <td class="py-2">Enter key does not activate disabled nodes</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Type-Ahead
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Visible nodes only</code></td>
+          <td class="py-2">Type-ahead only searches visible nodes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Cycle on repeat</code></td>
+          <td class="py-2">Repeated character cycles through matches</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Multi-character prefix</code></td>
+          <td class="py-2">Multiple characters form a search prefix</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Timeout reset</code></td>
+          <td class="py-2">Buffer resets after timeout (default 500ms)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Skip disabled</code></td>
+          <td class="py-2">Type-ahead skips disabled nodes</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Mouse Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click parent</code></td>
+          <td class="py-2">Toggles expansion and selects node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click leaf</code></td>
+          <td class="py-2">Selects the leaf node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click disabled</code></td>
+          <td class="py-2">Disabled nodes cannot be selected or expanded</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Callbacks
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onSelectionChange</code></td>
+          <td class="py-2">Called with selected IDs when selection changes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onExpandedChange</code></td>
+          <td class="py-2">Called with expanded IDs when expansion changes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onActivate</code></td>
+          <td class="py-2">Called with node ID on Enter key</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>React:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/react-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        React Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Vue:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/vue-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Vue Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Svelte:</strong>
+      <ExternalLink
+        href="https://testing-library.com/docs/svelte-testing-library/intro/"
+        class="text-primary hover:underline"
+      >
+        Svelte Testing Library
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
+    </li>
+    <li>
+      <strong>Accessibility:</strong>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core"
+        class="text-primary hover:underline"
+      >
+        axe-core
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

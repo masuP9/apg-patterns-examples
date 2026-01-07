@@ -1,0 +1,317 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tree</code></td>
+          <td class="py-2 pr-4">Container (<code>&lt;ul&gt;</code>)</td>
+          <td class="py-2">The tree widget container</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>treeitem</code></td>
+          <td class="py-2 pr-4">Each node (<code>&lt;li&gt;</code>)</td>
+          <td class="py-2">Individual tree nodes (both parent and leaf)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>group</code></td>
+          <td class="py-2 pr-4">Child container (<code>&lt;ul&gt;</code>)</td>
+          <td class="py-2">Container for child nodes of an expanded parent</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#tree" class="text-primary hover:underline">
+      WAI-ARIA tree role
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Tree Container)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tree"</code></td>
+          <td class="py-2 pr-4">-</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Identifies the container as a tree widget</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">String</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Accessible name for the tree</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Alternative to aria-label (takes precedence)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Only present for multi-select mode</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Tree Items)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Present on parent nodes only. Indicates expansion state.</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes**</td>
+          <td class="py-2">All treeitems must have this (selected=true, others=false)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Indicates the node is disabled</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex</code></td>
+          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Roving tabindex for focus management</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Required on parent nodes. Leaf nodes must NOT have <code>aria-expanded</code>.<br />
+    ** When selection is supported, ALL treeitems must have <code>aria-selected</code>.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h4 class="mb-2 font-medium">Navigation</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
+          >
+          <td class="py-2">Move focus to next visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">Move focus to previous visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
+          >
+          <td class="py-2">
+            Closed parent: expand / Open parent: move to first child / Leaf: no action
+          </td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
+          >
+          <td class="py-2">
+            Open parent: collapse / Child or closed parent: move to parent / Root: no action
+          </td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move focus to first node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move focus to last visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Select and activate node (see Selection section below)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">*</kbd></td
+          >
+          <td class="py-2">Expand all siblings at current level</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Type characters</td>
+          <td class="py-2">Move focus to next visible node starting with that character</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Selection (Single-Select Mode)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd> /
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">Move focus only (selection does NOT follow focus)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Select focused node and activate (fire onActivate callback)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Select focused node and activate (fire onActivate callback)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Click</td>
+          <td class="py-2">Select clicked node and activate (fire onActivate callback)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Selection (Multi-Select Mode)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Toggle selection of focused node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
+            ></td
+          >
+          <td class="py-2">Toggle selection without moving focus</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd
+            > / <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">Extend selection range from anchor</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection to first node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection to last visible node</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
+            ></td
+          >
+          <td class="py-2">Select all visible nodes</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <p class="text-muted-foreground mb-4">
+    This component uses <strong>roving tabindex</strong> for focus management:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Only one node has <code>tabindex="0"</code> (the focused node)</li>
+    <li>All other nodes have <code>tabindex="-1"</code></li>
+    <li>Tree is a single Tab stop (Tab enters tree, Shift+Tab exits)</li>
+    <li>Focus moves only among visible nodes (collapsed children are skipped)</li>
+    <li>When a parent is collapsed while a child has focus, focus moves to the parent</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Disabled Nodes</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Have <code>aria-disabled="true"</code></li>
+    <li>Are focusable (included in keyboard navigation)</li>
+    <li>Cannot be selected or activated</li>
+    <li>Cannot be expanded or collapsed if a parent node</li>
+    <li>Visually distinct (e.g., grayed out)</li>
+  </ul>
+</div>
