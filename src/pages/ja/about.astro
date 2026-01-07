@@ -1,61 +1,63 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const locale = 'ja';
 ---
 
-<BaseLayout title="About">
+<BaseLayout title="このサイトについて" locale={locale}>
   <div class="mx-auto max-w-4xl">
     <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">About APG Patterns Examples</h1>
+      <h1 class="mb-4 text-3xl font-bold">APG パターン実装例について</h1>
       <p class="text-muted-foreground text-lg">
-        Accessible UI component implementations across React, Vue, Svelte, and Astro following
-        WAI-ARIA APG patterns
+        WAI-ARIA APG パターンに準拠した、React、Vue、Svelte、Astro で実装されたアクセシブルな UI
+        コンポーネント
       </p>
     </header>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Overview</h2>
+      <h2 class="mb-4 text-2xl font-semibold">概要</h2>
       <div class="text-muted-foreground space-y-4">
         <p>
-          This project provides accessible UI components and test cases that follow the
+          このプロジェクトでは、
           <a
             href="https://www.w3.org/WAI/ARIA/apg/patterns/"
             target="_blank"
             rel="noopener noreferrer"
             class="text-primary hover:underline"
           >
-            WAI-ARIA Authoring Practices Guide (APG)
+            WAI-ARIA Authoring Practices Guide（APG）
           </a>
-          patterns.
+          パターンに準拠したアクセシブルな UI コンポーネントとテストケースを提供しています。
         </p>
         <p>
-          Each component is implemented across four major frontend frameworks: <strong>React</strong
-          >, <strong>Vue</strong>, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components),
-          providing familiar implementation examples to help you learn about accessibility and WAI-ARIA.
+          各コンポーネントは <strong>React</strong>、<strong>Vue</strong>、<strong>Svelte</strong
+          >、<strong>Astro</strong>（Web Components）の 4
+          つの主要フロントエンドフレームワークで実装されており、アクセシビリティと WAI-ARIA
+          を学ぶための実装例を提供しています。
         </p>
         <p>
-          Each component includes tests to verify APG pattern compliance, which you can use directly
-          to ensure accessibility of your own components. The test documentation is also designed in
-          an AI-friendly format, making it easy to generate test cases.
+          各コンポーネントには APG
+          パターンへの準拠を検証するテストが含まれています。これらのテストを活用することで、あなた自身のコンポーネントのアクセシビリティを確認できます。また、テストドキュメントは
+          AI フレンドリーなフォーマットで設計されており、テストケースの生成が容易です。
         </p>
         <p>
-          Additionally, we provide styling that supports dark mode, high contrast mode, and forced
-          colors mode to further assist in developing accessible components.
+          さらに、ダークモード、ハイコントラストモード、強制カラーモードをサポートしたスタイリングを提供し、アクセシブルなコンポーネント開発をより一層支援します。
         </p>
       </div>
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Component Status</h2>
+      <h2 class="mb-4 text-2xl font-semibold">コンポーネント実装状況</h2>
       <div class="overflow-x-auto">
         <table class="w-full border-collapse text-sm">
           <thead>
             <tr class="border-b">
-              <th class="px-4 py-2 text-left font-semibold">Pattern</th>
+              <th class="px-4 py-2 text-left font-semibold">パターン</th>
               <th class="px-4 py-2 text-center font-semibold">React</th>
               <th class="px-4 py-2 text-center font-semibold">Vue</th>
               <th class="px-4 py-2 text-center font-semibold">Svelte</th>
               <th class="px-4 py-2 text-center font-semibold">Astro</th>
-              <th class="px-4 py-2 text-left font-semibold">Status</th>
+              <th class="px-4 py-2 text-left font-semibold">状態</th>
             </tr>
           </thead>
           <tbody class="text-muted-foreground">
@@ -63,132 +65,132 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               ><td class="px-4 py-2">Accordion</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Alert</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Alert Dialog</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Breadcrumb</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Carousel</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Checkbox</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Combobox</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Dialog</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Disclosure</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Feed</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Grid</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Landmarks</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Link</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Listbox</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Menu and Menubar</td><td class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
-              ><td class="px-4 py-2">Planned</td></tr
+              ><td class="px-4 py-2">予定</td></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Menu Button</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Meter</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Radio Group</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Slider</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
@@ -196,76 +198,76 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 >-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
-              ><td class="px-4 py-2">Planned</td></tr
+              ><td class="px-4 py-2">予定</td></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Spinbutton</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Switch</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Table</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Tabs</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Toggle Button</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Toolbar</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Tooltip</td><td class="px-4 py-2 text-center">✅</td><td
                 class="px-4 py-2 text-center">✅</td
               ><td class="px-4 py-2 text-center">✅</td><td class="px-4 py-2 text-center">✅</td><td
-                class="px-4 py-2">Complete</td
+                class="px-4 py-2">完了</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Tree View</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr class="border-b"
               ><td class="px-4 py-2">Treegrid</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
             <tr
               ><td class="px-4 py-2">Window Splitter</td><td class="px-4 py-2 text-center">-</td><td
                 class="px-4 py-2 text-center">-</td
               ><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2 text-center">-</td><td
-                class="px-4 py-2">Planned</td
+                class="px-4 py-2">予定</td
               ></tr
             >
           </tbody>
@@ -274,32 +276,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Styling</h2>
+      <h2 class="mb-4 text-2xl font-semibold">スタイリング</h2>
       <ul class="text-muted-foreground list-inside list-disc space-y-2">
-        <li>High contrast mode support</li>
-        <li>Reduced motion preferences support</li>
-        <li>Forced colors mode support</li>
+        <li>ハイコントラストモード対応</li>
+        <li>視覚効果軽減設定（prefers-reduced-motion）対応</li>
+        <li>強制カラーモード対応</li>
       </ul>
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
+      <h2 class="mb-4 text-2xl font-semibold">コントリビューション</h2>
       <p class="text-muted-foreground mb-4">
-        We welcome contributions! Please see our
+        コントリビューションを歓迎します！詳細は
         <a
           href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
           target="_blank"
           rel="noopener noreferrer"
           class="text-primary hover:underline"
         >
-          Contributing Guide
+          コントリビューションガイド
         </a>
-        for details.
+        をご覧ください。
       </p>
     </section>
 
     <section>
-      <h2 class="mb-4 text-2xl font-semibold">Links</h2>
+      <h2 class="mb-4 text-2xl font-semibold">リンク</h2>
       <ul class="text-muted-foreground list-inside list-disc space-y-2">
         <li>
           <a
@@ -318,7 +320,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             rel="noopener noreferrer"
             class="text-primary hover:underline"
           >
-            GitHub Repository
+            GitHub リポジトリ
           </a>
         </li>
         <li>
@@ -328,7 +330,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             rel="noopener noreferrer"
             class="text-primary hover:underline"
           >
-            Issue Tracker
+            Issue トラッカー
           </a>
         </li>
         <li>
@@ -338,7 +340,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             rel="noopener noreferrer"
             class="text-primary hover:underline"
           >
-            Discussions
+            ディスカッション
           </a>
         </li>
       </ul>
