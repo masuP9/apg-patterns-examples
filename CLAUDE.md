@@ -524,6 +524,70 @@ paginatedUsers.map(({ id, name }) => (
 ))
 ```
 
+#### 4. 肯定的な条件式
+
+条件分岐では否定形（`!` や `not`）より肯定形を優先する。否定形は脳内での変換を強いるため認知負荷が高く、二重否定は特に読みづらい。
+
+**if-else文では肯定形を優先**:
+
+```typescript
+// ❌ 否定形が先（読みづらい）
+if (!isUserLoggedIn) {
+  showLoginPrompt();
+} else {
+  showDashboard();
+}
+
+// ✅ 肯定形が先（読みやすい）
+if (isUserLoggedIn) {
+  showDashboard();
+} else {
+  showLoginPrompt();
+}
+```
+
+**変数名・関数名は肯定的に**:
+
+```typescript
+// ❌ 否定的な名前（二重否定を招きやすい）
+const isInvalid = !validate(input);
+const isNotVisible = element.hidden;
+if (!isInvalid) { /* ... */ }  // 二重否定で混乱
+
+// ✅ 肯定的な名前
+const isValid = validate(input);
+const isVisible = !element.hidden;
+if (isValid) { /* ... */ }  // 明快
+```
+
+**アーリーリターンとの使い分け**:
+
+アーリーリターン（ガード節）では、例外的なケースを「弾く」目的で否定形を使うのは正当。通常の if-else 分岐では肯定形を優先する。
+
+```typescript
+// ✅ アーリーリターンでは否定形OK（例外を弾く目的）
+function processData(data: Data | null) {
+  if (!data) {
+    return;
+  }
+  // メイン処理
+}
+
+// ✅ if-else分岐では肯定形を優先
+function renderContent(isLoading: boolean) {
+  if (isLoading) {
+    return <Spinner />;
+  }
+  return <Content />;
+}
+```
+
+**指針**:
+
+- コード内の `!` の出現回数を減らすことを意識する
+- 変数名に `no` や `not` を含めない（`noData` → `hasData`）
+- 否定的な状態を管理する場合は列挙型を検討（`Status.Disabled`）
+
 ---
 
 ## 参考リンク

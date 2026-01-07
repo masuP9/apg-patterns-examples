@@ -76,14 +76,24 @@ const typeAheadTimeoutId = ref<number | null>(null);
 
 const availableOptions = computed(() => props.options.filter((opt) => !opt.disabled));
 
+// Map of option id to index in availableOptions for O(1) lookup
+const availableIndexMap = computed(() => {
+  const map = new Map<string, number>();
+  availableOptions.value.forEach(({ id }, index) => map.set(id, index));
+  return map;
+});
+
 onMounted(() => {
   instanceId.value = `listbox-${Math.random().toString(36).slice(2, 11)}`;
 
   // Initialize selection
   if (props.defaultSelectedIds.length > 0) {
     selectedIds.value = new Set(props.defaultSelectedIds);
-  } else if (!props.multiselectable && availableOptions.value.length > 0) {
-    selectedIds.value = new Set([availableOptions.value[0].id]);
+  } else if (availableOptions.value.length > 0) {
+    // Single-select mode: select first available option by default
+    if (!props.multiselectable) {
+      selectedIds.value = new Set([availableOptions.value[0].id]);
+    }
   }
 
   // Initialize focused index and sync anchor
@@ -132,7 +142,7 @@ const getOptionClass = (option: ListboxOption) => {
 
 const getTabIndex = (option: ListboxOption): number => {
   if (option.disabled) return -1;
-  const availableIndex = availableOptions.value.findIndex((opt) => opt.id === option.id);
+  const availableIndex = availableIndexMap.value.get(option.id) ?? -1;
   return availableIndex === focusedIndex.value ? 0 : -1;
 };
 
@@ -226,7 +236,7 @@ const handleTypeAhead = (char: string) => {
 };
 
 const handleOptionClick = (optionId: string) => {
-  const index = availableOptions.value.findIndex((opt) => opt.id === optionId);
+  const index = availableIndexMap.value.get(optionId) ?? -1;
   focusOption(index);
   selectOption(optionId);
   selectionAnchor.value = index;
