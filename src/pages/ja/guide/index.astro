@@ -1,0 +1,269 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { withBase } from '@/lib/utils';
+
+const locale = 'ja';
+---
+
+<BaseLayout title="ガイド" locale={locale}>
+  <div class="mx-auto max-w-3xl">
+    <header class="mb-8">
+      <h1 class="mb-4 text-3xl font-bold">ガイド</h1>
+      <p class="text-muted-foreground text-lg">
+        APG パターン実装例を使って、アクセシブルなコンポーネントを構築する方法を紹介します。
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">AI コーディングアシスタントとの連携</h2>
+      <p class="text-muted-foreground mb-4">
+        各パターンには AI 向けの定義ファイル（<code
+          class="bg-muted rounded px-1.5 py-0.5 text-sm">llm.md</code
+        >）が含まれており、Claude、Cursor、GitHub Copilot などの AI
+        コーディングアシスタントで類似コンポーネントを実装する際のコンテキストとして利用できます。
+      </p>
+
+      <h3 class="mt-6 mb-3 text-xl font-medium">llm.md に含まれる内容</h3>
+      <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+        <li>ARIA role、property、state の要件</li>
+        <li>キーボード操作の仕様</li>
+        <li>フォーカス管理のルール</li>
+        <li>検証用のテストチェックリスト</li>
+        <li>テストコードのサンプル</li>
+      </ul>
+
+      <h3 class="mt-6 mb-3 text-xl font-medium">使い方</h3>
+
+      <div class="space-y-6">
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">1. プロンプトにコピー&ペースト</h4>
+          <p class="text-muted-foreground mb-3 text-sm">
+            内容をコピーして、AI
+            にコンポーネント実装を依頼する際のプロンプトに含めます。
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre
+              class="overflow-x-auto text-sm"><code>以下の仕様に従って Angular で Tabs コンポーネントを実装してください:
+
+[llm.md の内容をここにペースト]</code></pre>
+          </div>
+        </div>
+
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">2. プロジェクトコンテキストに追加</h4>
+          <p class="text-muted-foreground mb-3 text-sm">
+            Claude Code や Cursor
+            では、定義ファイルをプロジェクトに配置することで自動的にコンテキストとして参照されます。
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre
+              class="overflow-x-auto text-sm"><code>my-project/
+├── .ai/
+│   └── apg-patterns/
+│       ├── tabs.md
+│       ├── dialog.md
+│       └── accordion.md
+└── src/</code></pre>
+          </div>
+        </div>
+
+        <div class="border-border rounded-lg border p-4">
+          <h4 class="mb-2 font-medium">3. テスト生成に活用</h4>
+          <p class="text-muted-foreground mb-3 text-sm">
+            テストチェックリストを使って、AI
+            に包括的なアクセシビリティテストを生成させることができます。
+          </p>
+          <div class="bg-muted rounded-md p-3">
+            <pre
+              class="overflow-x-auto text-sm"><code>以下のチェックリストに基づいて Tabs コンポーネントの Jest テストを生成してください:
+
+## Test Checklist
+- [ ] ArrowRight で次のタブに移動する
+- [ ] 選択中のタブは aria-selected="true" を持つ
+- [ ] 選択中のタブのみ tabIndex="0" を持つ</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">利用可能なパターン</h2>
+      <p class="text-muted-foreground mb-4">
+        以下のパターンに AI 向け定義ファイルが用意されています:
+      </p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <Tile variant="floating" href={withBase('/ja/patterns/accordion/react/')}>
+          <TileContent>
+            <TileTitle>Accordion</TileTitle>
+            <TileDescription>
+              垂直に積み重ねられた見出しで、コンテンツセクションを表示・非表示できます。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/alert/react/')}>
+          <TileContent>
+            <TileTitle>Alert</TileTitle>
+            <TileDescription>
+              重要でタイムセンシティブなメッセージを通知するライブリージョンです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/breadcrumb/react/')}>
+          <TileContent>
+            <TileTitle>Breadcrumb</TileTitle>
+            <TileDescription>
+              階層内のページ位置を示すナビゲーショントレイルです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/button/react/')}>
+          <TileContent>
+            <TileTitle>Toggle Button</TileTitle>
+            <TileDescription>
+              aria-pressed でトグル動作を表現する 2 状態ボタンです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/dialog/react/')}>
+          <TileContent>
+            <TileTitle>Dialog</TileTitle>
+            <TileDescription>
+              フォーカストラップとキーボードサポートを備えたモーダルウィンドウです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/disclosure/react/')}>
+          <TileContent>
+            <TileTitle>Disclosure</TileTitle>
+            <TileDescription>
+              コンテンツの表示・非表示を切り替えるシンプルなトグルです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/listbox/react/')}>
+          <TileContent>
+            <TileTitle>Listbox</TileTitle>
+            <TileDescription>
+              単一選択および複数選択モードを持つ選択ウィジェットです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/switch/react/')}>
+          <TileContent>
+            <TileTitle>Switch</TileTitle>
+            <TileDescription>
+              aria-checked 状態を持つオン・オフトグルです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/tabs/react/')}>
+          <TileContent>
+            <TileTitle>Tabs</TileTitle>
+            <TileDescription>
+              roving tabindex を使った階層化されたコンテンツセクションです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/toolbar/react/')}>
+          <TileContent>
+            <TileTitle>Toolbar</TileTitle>
+            <TileDescription>
+              矢印キーナビゲーションを持つグループ化されたコントロールのコンテナです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/tooltip/react/')}>
+          <TileContent>
+            <TileTitle>Tooltip</TileTitle>
+            <TileDescription>
+              要素の説明を表示するコンテキストポップアップです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-2xl font-semibold">llm.md への直接リンク</h2>
+      <p class="text-muted-foreground mb-4">
+        これらの URL を直接コピーするか、AI ツールでフェッチできます:
+      </p>
+      <div class="bg-muted rounded-md p-4">
+        <ul class="space-y-1 text-sm">
+          <li>
+            <a href={withBase('/patterns/accordion/llm.md')} class="text-primary hover:underline"
+              >/patterns/accordion/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/alert/llm.md')} class="text-primary hover:underline"
+              >/patterns/alert/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/breadcrumb/llm.md')} class="text-primary hover:underline"
+              >/patterns/breadcrumb/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/button/llm.md')} class="text-primary hover:underline"
+              >/patterns/button/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/dialog/llm.md')} class="text-primary hover:underline"
+              >/patterns/dialog/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/disclosure/llm.md')} class="text-primary hover:underline"
+              >/patterns/disclosure/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/listbox/llm.md')} class="text-primary hover:underline"
+              >/patterns/listbox/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/switch/llm.md')} class="text-primary hover:underline"
+              >/patterns/switch/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/tabs/llm.md')} class="text-primary hover:underline"
+              >/patterns/tabs/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/toolbar/llm.md')} class="text-primary hover:underline"
+              >/patterns/toolbar/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/tooltip/llm.md')} class="text-primary hover:underline"
+              >/patterns/tooltip/llm.md</a
+            >
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-2xl font-semibold">コントリビューション</h2>
+      <p class="text-muted-foreground">
+        AI 向け定義ファイルの追加にご協力ください！
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          GitHub リポジトリ
+        </a>
+        からコントリビューションできます。
+      </p>
+    </section>
+  </div>
+</BaseLayout>
