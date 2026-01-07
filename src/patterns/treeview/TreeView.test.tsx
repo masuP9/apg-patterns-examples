@@ -671,11 +671,12 @@ describe('TreeView', () => {
     });
   });
 
-  // 🔴 High Priority: Selection (Single-Select)
+  // 🔴 High Priority: Selection (Single-Select) - Explicit Selection Model
+  // Arrow keys move focus only, Enter/Space/Click selects
   describe('APG: Selection (Single-Select)', () => {
-    it('selection follows focus', async () => {
+    it('arrow keys move focus only (selection does NOT follow focus)', async () => {
       const user = userEvent.setup();
-      render(<TreeView nodes={simpleNodes} aria-label="Files" />);
+      render(<TreeView nodes={simpleNodes} aria-label="Files" defaultSelectedIds={['docs']} />);
 
       const docs = screen.getByRole('treeitem', { name: 'Documents' });
       const images = screen.getByRole('treeitem', { name: 'Images' });
@@ -685,8 +686,10 @@ describe('TreeView', () => {
       expect(images).toHaveAttribute('aria-selected', 'false');
 
       await user.keyboard('{ArrowDown}');
-      expect(docs).toHaveAttribute('aria-selected', 'false');
-      expect(images).toHaveAttribute('aria-selected', 'true');
+      // Focus moved but selection did NOT follow
+      expect(images).toHaveFocus();
+      expect(docs).toHaveAttribute('aria-selected', 'true');
+      expect(images).toHaveAttribute('aria-selected', 'false');
     });
 
     it('only one node is selected at a time', async () => {
@@ -694,10 +697,20 @@ describe('TreeView', () => {
       render(<TreeView nodes={simpleNodes} aria-label="Files" />);
 
       const docs = screen.getByRole('treeitem', { name: 'Documents' });
+      const images = screen.getByRole('treeitem', { name: 'Images' });
       docs.focus();
 
+      // Select first node with Enter
+      await user.keyboard('{Enter}');
+      expect(docs).toHaveAttribute('aria-selected', 'true');
+
+      // Move focus and select another node
       await user.keyboard('{ArrowDown}');
-      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{Enter}');
+
+      // Only the new node should be selected
+      expect(docs).toHaveAttribute('aria-selected', 'false');
+      expect(images).toHaveAttribute('aria-selected', 'true');
 
       const selected = screen
         .getAllByRole('treeitem')
@@ -705,7 +718,7 @@ describe('TreeView', () => {
       expect(selected).toHaveLength(1);
     });
 
-    it('Space has no effect in single-select mode', async () => {
+    it('Space selects focused node in single-select mode', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
       render(
@@ -714,13 +727,13 @@ describe('TreeView', () => {
 
       const docs = screen.getByRole('treeitem', { name: 'Documents' });
       docs.focus();
-      onSelectionChange.mockClear();
 
       await user.keyboard(' ');
-      expect(onSelectionChange).not.toHaveBeenCalled();
+      expect(onSelectionChange).toHaveBeenCalledWith(['docs']);
+      expect(docs).toHaveAttribute('aria-selected', 'true');
     });
 
-    it('calls onSelectionChange when selection changes', async () => {
+    it('calls onSelectionChange when Enter selects a node', async () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
       render(
@@ -730,8 +743,8 @@ describe('TreeView', () => {
       const docs = screen.getByRole('treeitem', { name: 'Documents' });
       docs.focus();
 
-      await user.keyboard('{ArrowDown}');
-      expect(onSelectionChange).toHaveBeenCalledWith(['images']);
+      await user.keyboard('{Enter}');
+      expect(onSelectionChange).toHaveBeenCalledWith(['docs']);
     });
   });
 
