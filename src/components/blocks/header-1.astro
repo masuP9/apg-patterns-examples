@@ -60,43 +60,38 @@ const { logo, menus, links, socials } = Astro.props;
     <LogoImage src={logo?.src} alt={logo?.alt} />
     <LogoText>{logo?.text}</LogoText>
   </Logo>
-  <NavigationMenu class="mr-auto @max-5xl:hidden">
-    <NavigationMenuList>
-      {
-        menus?.map((menu) => (
-          <NavigationMenuItem>
-            {menu.links && menu.links.length > 0 ? (
-              <>
-                <NavigationMenuTrigger
-                  class="inline-flex h-8 items-center bg-transparent px-3 py-0"
-                  href={menu.href}
-                >
-                  {menu.text}
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <NavigationMenuSub>
-                    {menu.links?.map((link) => (
-                      <NavigationMenuSubItem>
-                        <NavigationMenuSubLink href={link.href}>{link.text}</NavigationMenuSubLink>
-                      </NavigationMenuSubItem>
-                    ))}
-                  </NavigationMenuSub>
-                </NavigationMenuContent>
-              </>
-            ) : (
-              <NavigationMenuLink
-                class="inline-flex h-8 items-center bg-transparent px-3 py-0"
-                variant="trigger"
-                href={menu.href}
-              >
-                {menu.text}
-              </NavigationMenuLink>
-            )}
-          </NavigationMenuItem>
-        ))
-      }
-    </NavigationMenuList>
-  </NavigationMenu>
+  {
+    menus && menus.length > 0 && (
+      <NavigationMenu class="mr-auto @max-5xl:hidden">
+        <NavigationMenuList>
+          {menus.map(({ text, href, links }) => (
+            <NavigationMenuItem>
+              {links && links.length > 0 ? (
+                <>
+                  <NavigationMenuTrigger href={href}>{text}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuSub>
+                      {links?.map((link) => (
+                        <NavigationMenuSubItem>
+                          <NavigationMenuSubLink href={link.href}>
+                            {link.text}
+                          </NavigationMenuSubLink>
+                        </NavigationMenuSubItem>
+                      ))}
+                    </NavigationMenuSub>
+                  </NavigationMenuContent>
+                </>
+              ) : (
+                <NavigationMenuLink variant="trigger" href={href}>
+                  {text}
+                </NavigationMenuLink>
+              )}
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+    )
+  }
   <HeaderActions class="@max-5xl:hidden">
     {
       socials?.map((social) => (
