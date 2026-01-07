@@ -86,6 +86,13 @@ const buttonId = computed(() => `${instanceId}-button`);
 const menuId = computed(() => `${instanceId}-menu`);
 const availableItems = computed(() => props.items.filter((item) => !item.disabled));
 
+// Map of item id to index in availableItems for O(1) lookup
+const availableIndexMap = computed(() => {
+  const map = new Map<string, number>();
+  availableItems.value.forEach(({ id }, index) => map.set(id, index));
+  return map;
+});
+
 onUnmounted(() => {
   if (typeAheadTimeoutId.value !== null) {
     clearTimeout(typeAheadTimeoutId.value);
@@ -114,7 +121,7 @@ const setItemRef = (id: string, el: unknown) => {
 
 const getTabIndex = (item: MenuItem): number => {
   if (item.disabled) return -1;
-  const availableIndex = availableItems.value.findIndex((i) => i.id === item.id);
+  const availableIndex = availableIndexMap.value.get(item.id) ?? -1;
   return availableIndex === focusedIndex.value ? 0 : -1;
 };
 
@@ -160,7 +167,7 @@ const handleItemClick = async (item: MenuItem) => {
 
 const handleItemFocus = (item: MenuItem) => {
   if (item.disabled) return;
-  const availableIndex = availableItems.value.findIndex((i) => i.id === item.id);
+  const availableIndex = availableIndexMap.value.get(item.id) ?? -1;
   if (availableIndex >= 0) {
     focusedIndex.value = availableIndex;
   }
@@ -185,7 +192,8 @@ const handleButtonKeyDown = (event: KeyboardEvent) => {
 };
 
 const handleTypeAhead = (char: string) => {
-  if (availableItems.value.length === 0) return;
+  const { value: items } = availableItems;
+  if (items.length === 0) return;
 
   if (typeAheadTimeoutId.value !== null) {
     clearTimeout(typeAheadTimeoutId.value);
@@ -195,6 +203,8 @@ const handleTypeAhead = (char: string) => {
 
   const buffer = typeAheadBuffer.value;
   const isSameChar = buffer.length > 1 && buffer.split('').every((c) => c === buffer[0]);
+  const currentFocusedIndex = focusedIndex.value;
+  const itemsLength = items.length;
 
   let startIndex: number;
   let searchStr: string;
@@ -202,20 +212,18 @@ const handleTypeAhead = (char: string) => {
   if (isSameChar) {
     typeAheadBuffer.value = buffer[0];
     searchStr = buffer[0];
-    startIndex =
-      focusedIndex.value >= 0 ? (focusedIndex.value + 1) % availableItems.value.length : 0;
+    startIndex = currentFocusedIndex >= 0 ? (currentFocusedIndex + 1) % itemsLength : 0;
   } else if (buffer.length === 1) {
     searchStr = buffer;
-    startIndex =
-      focusedIndex.value >= 0 ? (focusedIndex.value + 1) % availableItems.value.length : 0;
+    startIndex = currentFocusedIndex >= 0 ? (currentFocusedIndex + 1) % itemsLength : 0;
   } else {
     searchStr = buffer;
-    startIndex = focusedIndex.value >= 0 ? focusedIndex.value : 0;
+    startIndex = currentFocusedIndex >= 0 ? currentFocusedIndex : 0;
   }
 
-  for (let i = 0; i < availableItems.value.length; i++) {
-    const index = (startIndex + i) % availableItems.value.length;
-    const option = availableItems.value[index];
+  for (let i = 0; i < itemsLength; i++) {
+    const index = (startIndex + i) % itemsLength;
+    const option = items[index];
     if (option.label.toLowerCase().startsWith(searchStr)) {
       focusedIndex.value = index;
       break;
@@ -229,8 +237,11 @@ const handleTypeAhead = (char: string) => {
 };
 
 const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
+  const { value: items } = availableItems;
+  const itemsLength = items.length;
+
   // Guard: no available items
-  if (availableItems.value.length === 0) {
+  if (itemsLength === 0) {
     if (event.key === 'Escape') {
       event.preventDefault();
       closeMenu();
@@ -240,7 +251,7 @@ const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
     return;
   }
 
-  const currentIndex = availableItems.value.findIndex((i) => i.id === item.id);
+  const currentIndex = availableIndexMap.value.get(item.id) ?? -1;
 
   // Guard: disabled item received focus
   if (currentIndex < 0) {
@@ -256,13 +267,13 @@ const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
   switch (event.key) {
     case 'ArrowDown': {
       event.preventDefault();
-      const nextIndex = (currentIndex + 1) % availableItems.value.length;
+      const nextIndex = (currentIndex + 1) % itemsLength;
       focusedIndex.value = nextIndex;
       break;
     }
     case 'ArrowUp': {
       event.preventDefault();
-      const prevIndex = currentIndex === 0 ? availableItems.value.length - 1 : currentIndex - 1;
+      const prevIndex = currentIndex === 0 ? itemsLength - 1 : currentIndex - 1;
       focusedIndex.value = prevIndex;
       break;
     }
@@ -273,7 +284,7 @@ const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
     }
     case 'End': {
       event.preventDefault();
-      focusedIndex.value = availableItems.value.length - 1;
+      focusedIndex.value = itemsLength - 1;
       break;
     }
     case 'Escape': {
@@ -300,9 +311,10 @@ const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
     }
     default: {
       // Type-ahead: single printable character
-      if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      const { key, ctrlKey, metaKey, altKey } = event;
+      if (key.length === 1 && !ctrlKey && !metaKey && !altKey) {
         event.preventDefault();
-        handleTypeAhead(event.key);
+        handleTypeAhead(key);
       }
     }
   }
@@ -310,7 +322,8 @@ const handleMenuKeyDown = async (event: KeyboardEvent, item: MenuItem) => {
 
 // Click outside handler
 const handleClickOutside = (event: MouseEvent) => {
-  if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
+  const { value: container } = containerRef;
+  if (container && !container.contains(event.target as Node)) {
     closeMenu();
   }
 };

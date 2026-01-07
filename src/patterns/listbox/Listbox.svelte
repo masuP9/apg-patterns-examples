@@ -78,6 +78,13 @@
   // Derived values
   let availableOptions = $derived(options.filter((opt) => !opt.disabled));
 
+  // Map of option id to index in availableOptions for O(1) lookup
+  let availableIndexMap = $derived.by(() => {
+    const map = new Map<string, number>();
+    availableOptions.forEach(({ id }, index) => map.set(id, index));
+    return map;
+  });
+
   // If no available options, listbox itself needs tabIndex for keyboard access
   let listboxTabIndex = $derived(availableOptions.length === 0 ? 0 : undefined);
 
@@ -98,7 +105,7 @@
 
   function getTabIndex(option: ListboxOption): number {
     if (option.disabled) return -1;
-    const availableIndex = availableOptions.findIndex((opt) => opt.id === option.id);
+    const availableIndex = availableIndexMap.get(option.id) ?? -1;
     return availableIndex === focusedIndex ? 0 : -1;
   }
 
@@ -191,7 +198,7 @@
   }
 
   function handleOptionClick(optionId: string) {
-    const index = availableOptions.findIndex((opt) => opt.id === optionId);
+    const index = availableIndexMap.get(optionId) ?? -1;
     focusOption(index);
     selectOption(optionId);
     selectionAnchor = index;

@@ -41,6 +41,13 @@ export function MenuButton({
   // Get available (non-disabled) items
   const availableItems = useMemo(() => items.filter((item) => !item.disabled), [items]);
 
+  // Map of item id to index in availableItems for O(1) lookup
+  const availableIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    availableItems.forEach(({ id }, index) => map.set(id, index));
+    return map;
+  }, [availableItems]);
+
   const closeMenu = useCallback(() => {
     setIsOpen(false);
     setFocusedIndex(-1);
@@ -182,7 +189,7 @@ export function MenuButton({
         return;
       }
 
-      const currentIndex = availableItems.findIndex((i) => i.id === item.id);
+      const currentIndex = availableIndexMap.get(item.id) ?? -1;
 
       // Guard: disabled item received focus (e.g., programmatic focus)
       if (currentIndex < 0) {
@@ -240,14 +247,15 @@ export function MenuButton({
         }
         default: {
           // Type-ahead: single printable character
-          if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          const { key, ctrlKey, metaKey, altKey } = event;
+          if (key.length === 1 && !ctrlKey && !metaKey && !altKey) {
             event.preventDefault();
-            handleTypeAhead(event.key);
+            handleTypeAhead(key);
           }
         }
       }
     },
-    [availableItems, closeMenu, onItemSelect, handleTypeAhead]
+    [availableIndexMap, availableItems, closeMenu, onItemSelect, handleTypeAhead]
   );
 
   // Cleanup type-ahead timeout on unmount
@@ -302,7 +310,7 @@ export function MenuButton({
         inert={!isOpen || undefined}
       >
         {items.map((item) => {
-          const availableIndex = availableItems.findIndex((i) => i.id === item.id);
+          const availableIndex = availableIndexMap.get(item.id) ?? -1;
           const isFocused = availableIndex === focusedIndex;
           const tabIndex = item.disabled ? -1 : isFocused ? 0 : -1;
 

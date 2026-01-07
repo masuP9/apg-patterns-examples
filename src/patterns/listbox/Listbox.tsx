@@ -40,6 +40,13 @@ export function Listbox({
 }: ListboxProps): React.ReactElement {
   const availableOptions = useMemo(() => options.filter((opt) => !opt.disabled), [options]);
 
+  // Map of option id to index in availableOptions for O(1) lookup
+  const availableIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    availableOptions.forEach(({ id }, index) => map.set(id, index));
+    return map;
+  }, [availableOptions]);
+
   const initialSelectedIds = useMemo(() => {
     if (defaultSelectedIds.length > 0) {
       return new Set(defaultSelectedIds);
@@ -371,7 +378,7 @@ export function Listbox({
     >
       {options.map((option) => {
         const isSelected = selectedIds.has(option.id);
-        const availableIndex = availableOptions.findIndex((opt) => opt.id === option.id);
+        const availableIndex = availableIndexMap.get(option.id) ?? -1;
         const isFocusTarget = availableIndex === focusedIndex;
         const tabIndex = option.disabled ? -1 : isFocusTarget ? 0 : -1;
 

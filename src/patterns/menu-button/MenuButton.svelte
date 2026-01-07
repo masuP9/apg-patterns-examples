@@ -41,6 +41,14 @@
 
   // Derived
   let availableItems = $derived(items.filter((item) => !item.disabled));
+
+  // Map of item id to index in availableItems for O(1) lookup
+  let availableIndexMap = $derived.by(() => {
+    const map = new Map<string, number>();
+    availableItems.forEach(({ id }, index) => map.set(id, index));
+    return map;
+  });
+
   let buttonId = $derived(`${instanceId}-button`);
   let menuId = $derived(`${instanceId}-menu`);
 
@@ -96,7 +104,7 @@
 
   function getTabIndex(item: MenuItem): number {
     if (item.disabled) return -1;
-    const availableIndex = availableItems.findIndex((i) => i.id === item.id);
+    const availableIndex = availableIndexMap.get(item.id) ?? -1;
     return availableIndex === focusedIndex ? 0 : -1;
   }
 
@@ -146,7 +154,7 @@
 
   function handleItemFocus(item: MenuItem) {
     if (item.disabled) return;
-    const availableIndex = availableItems.findIndex((i) => i.id === item.id);
+    const availableIndex = availableIndexMap.get(item.id) ?? -1;
     if (availableIndex >= 0) {
       focusedIndex = availableIndex;
     }
@@ -213,8 +221,10 @@
   }
 
   async function handleMenuKeyDown(event: KeyboardEvent, item: MenuItem) {
+    const itemsLength = availableItems.length;
+
     // Guard: no available items
-    if (availableItems.length === 0) {
+    if (itemsLength === 0) {
       if (event.key === 'Escape') {
         event.preventDefault();
         closeMenu();
@@ -224,7 +234,7 @@
       return;
     }
 
-    const currentIndex = availableItems.findIndex((i) => i.id === item.id);
+    const currentIndex = availableIndexMap.get(item.id) ?? -1;
 
     // Guard: disabled item received focus
     if (currentIndex < 0) {
@@ -240,13 +250,13 @@
     switch (event.key) {
       case 'ArrowDown': {
         event.preventDefault();
-        const nextIndex = (currentIndex + 1) % availableItems.length;
+        const nextIndex = (currentIndex + 1) % itemsLength;
         focusedIndex = nextIndex;
         break;
       }
       case 'ArrowUp': {
         event.preventDefault();
-        const prevIndex = currentIndex === 0 ? availableItems.length - 1 : currentIndex - 1;
+        const prevIndex = currentIndex === 0 ? itemsLength - 1 : currentIndex - 1;
         focusedIndex = prevIndex;
         break;
       }
@@ -257,7 +267,7 @@
       }
       case 'End': {
         event.preventDefault();
-        focusedIndex = availableItems.length - 1;
+        focusedIndex = itemsLength - 1;
         break;
       }
       case 'Escape': {
@@ -284,9 +294,10 @@
       }
       default: {
         // Type-ahead: single printable character
-        if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        const { key, ctrlKey, metaKey, altKey } = event;
+        if (key.length === 1 && !ctrlKey && !metaKey && !altKey) {
           event.preventDefault();
-          handleTypeAhead(event.key);
+          handleTypeAhead(key);
         }
       }
     }
