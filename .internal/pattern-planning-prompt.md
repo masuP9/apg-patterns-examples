@@ -71,17 +71,26 @@ Phase 1 で llm.md とテストを先に作成し、その後実装に進みま�
 - [ ] `src/styles/patterns/{pattern}.css` - CSS スタイル
 - [ ] `src/styles/global.css` に CSS をインポート追加
 
-### Phase 3: ドキュメント
+### Phase 3: ドキュメント（英語）
 - [ ] `AccessibilityDocs.astro` - ARIA 仕様解説
 - [ ] `TestingDocs.astro` - テスト解説
 - [ ] `NativeHtmlNotice.astro` - ネイティブ HTML 注記（該当パターンのみ）
 
-### Phase 4: ページ作成
+### Phase 4: 日本語ドキュメント
+- [ ] `AccessibilityDocs.ja.astro` - ARIA 仕様解説（日本語）
+- [ ] `TestingDocs.ja.astro` - テスト解説（日本語）
+- [ ] `NativeHtmlNotice.ja.astro` - ネイティブ HTML 注記（日本語、該当パターンのみ）
+
+### Phase 5: ページ作成
 - [ ] `src/pages/patterns/{pattern}/index.astro` - リダイレクト
 - [ ] `src/pages/patterns/{pattern}/react/index.astro`
 - [ ] `src/pages/patterns/{pattern}/vue/index.astro`
 - [ ] `src/pages/patterns/{pattern}/svelte/index.astro`
 - [ ] `src/pages/patterns/{pattern}/astro/index.astro`
+- [ ] `src/pages/ja/patterns/{pattern}/react/index.astro` - 日本語版
+- [ ] `src/pages/ja/patterns/{pattern}/vue/index.astro` - 日本語版
+- [ ] `src/pages/ja/patterns/{pattern}/svelte/index.astro` - 日本語版
+- [ ] `src/pages/ja/patterns/{pattern}/astro/index.astro` - 日本語版
 
 ## 出力形式
 
@@ -386,27 +395,45 @@ export interface {ComponentName}Props extends Omit<
 
 ### Phase 4: ドキュメント作成/更新
 
-1. **AccessibilityDocs.astro**
+1. **AccessibilityDocs.astro**（英語）
    - llm.md の内容を元に詳細な解説を作成
 
-2. **TestingDocs.astro**
+2. **TestingDocs.astro**（英語）
    - テスト設計の解説を作成
 
-3. **NativeHtmlNotice.astro**（該当パターンのみ）
+3. **NativeHtmlNotice.astro**（英語、該当パターンのみ）
    - ネイティブ HTML 要素の推奨と判断基準
 
-### Phase 5: ページ作成・統合
+### Phase 5: 日本語ドキュメント作成
 
-1. **デモページ作成**
+1. **AccessibilityDocs.ja.astro**
+   - 英語版を元に日本語版を作成
+   - 既存の日本語ドキュメント（例: `listbox/AccessibilityDocs.ja.astro`）を参考に
+
+2. **TestingDocs.ja.astro**
+   - 英語版を元に日本語版を作成
+
+3. **NativeHtmlNotice.ja.astro**（該当パターンのみ）
+   - 英語版を元に日本語版を作成
+
+### Phase 6: ページ作成・統合
+
+1. **英語デモページ作成**
    - 各フレームワーク用のページを作成
    - index.astro でのリダイレクト設定
 
-2. **patterns.ts** / **README.md** / **README.ja.md** / **llm.md**
+2. **日本語デモページ作成**
+   - `src/pages/ja/patterns/{pattern}/{framework}/index.astro`
+   - 日本語版ドキュメント（`.ja.astro`）をインポート
+   - `locale = 'ja'` と `useTranslation(locale)` を使用
+   - 既存の日本語ページ（例: `listbox/react/index.astro`）を参考に
+
+3. **patterns.ts** / **README.md** / **README.ja.md** / **llm.md**
    - 実装したコンポーネントの status を available に
    - README.md / README.ja.md のコンポーネント実装状況を更新
    - 計画と実装で乖離した点を整理して、llm.mdに反映
 
-3. **最終確認**
+4. **最終確認**
    ```bash
    npm run build
    npm run test
@@ -523,7 +550,9 @@ export interface {ComponentName}Props extends Omit<
 | Phase 1 | テストコードレビュー | テスト設計の妥当性確認 |
 | Phase 2 | 実装コードレビュー | APG 準拠・品質確認 |
 | Phase 3 | リファクタリングレビュー | コード品質向上 |
-| Phase 4 | ドキュメントレビュー | 正確性・可読性確認 |
+| Phase 4 | ドキュメントレビュー（英語） | 正確性・可読性確認 |
+| Phase 5 | 日本語ドキュメントレビュー | 翻訳の正確性・用語の一貫性確認 |
+| Phase 6 | 最終レビュー | 全体の整合性・品質確認 |
 
 ---
 
