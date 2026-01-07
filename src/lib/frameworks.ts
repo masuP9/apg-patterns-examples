@@ -77,5 +77,5 @@ export const FRAMEWORK_INFO: Record<Framework, FrameworkInfo> = {
  * Type guard to check if a value is a valid framework
  */
 export function isValidFramework(value: unknown): value is Framework {
-  return typeof value === 'string' && FRAMEWORKS.includes(value as Framework);
+  return typeof value === 'string' && FRAMEWORKS.some((fw) => fw === value);
 }

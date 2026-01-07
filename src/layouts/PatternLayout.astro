@@ -21,7 +21,7 @@ const hasToc = tocItems.length > 0;
 ---
 
 <BaseLayout title={title} description={description} locale={locale}>
-  <div class="mx-auto max-w-7xl">
+  <div class="max-w-8xl mx-auto">
     <div
       class:list={[
         'lg:grid lg:gap-16 xl:gap-20',
@@ -38,7 +38,7 @@ const hasToc = tocItems.length > 0;
       </aside>
 
       <!-- Main content -->
-      <div class="max-w-4xl min-w-0">
+      <div class="max-w-5xl min-w-0">
         <!-- Pattern breadcrumb with dropdown -->
         <PatternBreadcrumb pattern={pattern} framework={framework} locale={locale} />
 

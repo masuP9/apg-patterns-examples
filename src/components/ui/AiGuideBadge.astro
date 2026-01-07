@@ -1,11 +1,13 @@
 ---
 interface Props {
   pattern: string;
+  locale?: string;
   class?: string;
 }
 
-const { pattern, class: className } = Astro.props;
-const href = `/patterns/${pattern}/llm.md`;
+const { pattern, locale, class: className } = Astro.props;
+const basePath = locale ? `/${locale}` : '';
+const href = `${basePath}/patterns/${pattern}/llm.md`;
 ---
 
 <a
