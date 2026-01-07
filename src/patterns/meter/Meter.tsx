@@ -22,6 +22,7 @@ type MeterBaseProps = {
   className?: string;
   tabIndex?: number;
   'aria-describedby'?: string;
+  'data-testid'?: string;
 };
 
 export type MeterProps = MeterBaseProps & LabelProps & ValueTextProps;
@@ -87,7 +88,7 @@ export const Meter: React.FC<MeterProps> = ({
       id={rest.id}
       tabIndex={rest.tabIndex}
       aria-describedby={rest['aria-describedby']}
-      data-testid={rest['data-testid' as keyof typeof rest]}
+      data-testid={rest['data-testid']}
     >
       {label && (
         <span className="apg-meter-label" aria-hidden="true">

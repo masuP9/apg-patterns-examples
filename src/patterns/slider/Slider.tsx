@@ -275,7 +275,7 @@ export const Slider: React.FC<SliderProps> = ({
       <div
         ref={trackRef}
         className="apg-slider-track"
-        style={{ '--slider-position': `${percent}%` } as React.CSSProperties}
+        style={{ '--slider-position': `${percent}%` }}
         onClick={handleTrackClick}
       >
         <div className="apg-slider-fill" aria-hidden="true" />

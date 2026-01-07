@@ -47,7 +47,7 @@ export function DialogRoot({
   onOpenChange,
 }: DialogRootProps): React.ReactElement {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const instanceId = useId();
   const [mounted, setMounted] = useState(false);
 
@@ -65,7 +65,8 @@ export function DialogRoot({
 
   const open = useCallback(() => {
     if (dialogRef.current) {
-      triggerRef.current = document.activeElement as HTMLButtonElement;
+      const { activeElement } = document;
+      triggerRef.current = activeElement instanceof HTMLElement ? activeElement : null;
       dialogRef.current.showModal();
       onOpenChange?.(true);
     }
