@@ -145,10 +145,7 @@
   }
 
   body {
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
+    font-family: sans-serif;
     @apply bg-background text-foreground;
   }
 
