@@ -351,6 +351,179 @@ const value = computed(() => {
 });
 ```
 
+### コードスタイル規約
+
+#### 1. アーリーリターンの徹底
+
+条件分岐はアーリーリターンを使用してネストを浅く保つ。処理を続行できない条件を先に弾くことで、メインロジックのインデントを減らし可読性を向上させる。
+
+```typescript
+// ❌ ネストが深く、メインロジックが埋もれている
+function openPopup(focusPosition?: 'first' | 'last') {
+  if (!isOpen) {
+    valueBeforeOpen = inputValue;
+    isOpen = true;
+
+    if (focusPosition) {
+      if (enabledOptions.length > 0) {
+        const targetOption = focusPosition === 'first'
+          ? enabledOptions[0]
+          : enabledOptions[enabledOptions.length - 1];
+        activeIndex = filteredOptions.findIndex((o) => o.id === targetOption.id);
+      }
+    }
+  }
+}
+
+// ✅ アーリーリターンでフラットに
+function openPopup(focusPosition?: 'first' | 'last') {
+  if (isOpen) {
+    return;
+  }
+
+  valueBeforeOpen = inputValue;
+  isOpen = true;
+
+  if (!focusPosition || enabledOptions.length === 0) {
+    return;
+  }
+
+  const targetOption = focusPosition === 'first'
+    ? enabledOptions[0]
+    : enabledOptions[enabledOptions.length - 1];
+  const { id: targetId } = targetOption;
+  activeIndex = filteredOptions.findIndex(({ id }) => id === targetId);
+}
+```
+
+#### 2. プロパティアクセスの低減
+
+同じオブジェクトのプロパティに繰り返しアクセスする場合、分割代入や変数への代入で冗長なアクセスを減らす。コードの簡潔さと可読性が向上する。
+
+**関数の引数で分割代入**:
+
+```typescript
+// ❌ option.xxx と繰り返しアクセス
+function selectOption(option: ComboboxOption) {
+  if (option.disabled) return;
+  internalSelectedId = option.id;
+  updateInputValue(option.label);
+  onSelect(option);
+}
+
+// ✅ 引数で分割代入し、プロパティに直接アクセス
+function selectOption({ id, label, disabled }: ComboboxOption) {
+  if (disabled) {
+    return;
+  }
+
+  internalSelectedId = id;
+  updateInputValue(label);
+  onSelect({ id, label, disabled });
+}
+```
+
+**コールバック関数で分割代入**:
+
+```typescript
+// ❌ option.label, o.id と繰り返しアクセス
+const filtered = options.filter((option) =>
+  option.label.toLowerCase().includes(inputValue.toLowerCase())
+);
+const index = options.findIndex((o) => o.id === targetId);
+
+// ✅ 必要なプロパティだけ取り出す
+const filtered = options.filter(({ label }) =>
+  label.toLowerCase().includes(inputValue.toLowerCase())
+);
+const index = options.findIndex(({ id }) => id === targetId);
+```
+
+**イベントオブジェクト**:
+
+```typescript
+// ❌ event.key, event.altKey と繰り返しアクセス
+function handleKeyDown(event: KeyboardEvent) {
+  switch (event.key) {
+    case 'ArrowDown':
+      if (event.altKey) { /* ... */ }
+      break;
+    case 'ArrowUp':
+      if (event.altKey) { /* ... */ }
+      break;
+  }
+}
+
+// ✅ 先に取り出しておく
+function handleKeyDown(event: KeyboardEvent) {
+  const { key, altKey } = event;
+
+  switch (key) {
+    case 'ArrowDown':
+      if (altKey) { /* ... */ }
+      break;
+    case 'ArrowUp':
+      if (altKey) { /* ... */ }
+      break;
+  }
+}
+```
+
+**Vue の ref**:
+
+```typescript
+// ❌ containerRef.value を繰り返しアクセス
+const handleClickOutside = (event: MouseEvent) => {
+  if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
+    closePopup();
+  }
+};
+
+// ✅ 変数に取り出してからチェック
+const handleClickOutside = (event: MouseEvent) => {
+  const { value: container } = containerRef;
+
+  if (container === undefined) {
+    return;
+  }
+
+  if (!container.contains(event.target as Node)) {
+    closePopup();
+  }
+};
+```
+
+#### 3. 計算結果の再利用
+
+同じ計算結果を複数回使用する場合、変数に保存して再利用する。
+
+```tsx
+// ✅ Good: 計算結果を変数に保存
+paginatedUsers.map(({ id, name }) => {
+  const isSelected = selectedIds.has(id)
+  return (
+    <TableRow
+      key={id}
+      aria-selected={isSelected}
+      data-state={isSelected ? 'selected' : undefined}
+    >
+      <Checkbox checked={isSelected} aria-label={`${name}を選択`} />
+    </TableRow>
+  )
+})
+
+// ❌ Bad: 同じ計算を繰り返す
+paginatedUsers.map(({ id, name }) => (
+  <TableRow
+    key={id}
+    aria-selected={selectedIds.has(id)}
+    data-state={selectedIds.has(id) ? 'selected' : undefined}
+  >
+    <Checkbox checked={selectedIds.has(id)} aria-label={`${name}を選択`} />
+  </TableRow>
+))
+```
+
 ---
 
 ## 参考リンク

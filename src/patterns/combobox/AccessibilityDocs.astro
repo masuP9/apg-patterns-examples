@@ -1,0 +1,284 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>combobox</code></td>
+          <td class="py-2 pr-4">Input (<code>&lt;input&gt;</code>)</td>
+          <td class="py-2">The text input element that users type into</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>listbox</code></td>
+          <td class="py-2 pr-4">Popup (<code>&lt;ul&gt;</code>)</td>
+          <td class="py-2">The popup containing selectable options</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>option</code></td>
+          <td class="py-2 pr-4">Each item (<code>&lt;li&gt;</code>)</td>
+          <td class="py-2">An individual selectable option</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#combobox" class="text-primary hover:underline">
+      WAI-ARIA combobox role
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Input)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="combobox"</code></td>
+          <td class="py-2 pr-4">-</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Identifies the input as a combobox</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the listbox popup (even when closed)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Indicates whether the popup is open</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-autocomplete</code></td>
+          <td class="py-2 pr-4"><code>list</code> | <code>none</code> | <code>both</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Describes the autocomplete behavior</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-activedescendant</code></td>
+          <td class="py-2 pr-4">ID reference | empty</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the currently focused option in the popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">References the label element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Listbox & Options)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Target</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">listbox</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the label element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4">option</td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Indicates the currently focused option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4">option</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Indicates the option is disabled</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h4 class="mb-2 font-medium">Input (Popup Closed)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
+          >
+          <td class="py-2">Open popup and focus first option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
+          >
+          <td class="py-2">Open popup and focus last option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Alt</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd
+            ></td
+          >
+          <td class="py-2">Open popup without changing focus position</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Type characters</td>
+          <td class="py-2">Filter options and open popup</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Input (Popup Open)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
+          >
+          <td class="py-2">Move focus to next enabled option (no wrap)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
+          >
+          <td class="py-2">Move focus to previous enabled option (no wrap)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move focus to first enabled option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move focus to last enabled option</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Select focused option and close popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
+          <td class="py-2">Close popup and restore previous input value</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Alt</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd
+            ></td
+          >
+          <td class="py-2">Select focused option and close popup</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Close popup and move to next focusable element</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <p class="text-muted-foreground mb-4">
+    This component uses <strong>aria-activedescendant</strong> for virtual focus management:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>DOM focus remains on the input at all times</li>
+    <li><code>aria-activedescendant</code> references the visually focused option</li>
+    <li>Arrow keys update <code>aria-activedescendant</code> without moving DOM focus</li>
+    <li>Disabled options are skipped during navigation</li>
+    <li>
+      <code>aria-activedescendant</code> is cleared when the popup closes or filter results are empty
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Autocomplete Modes</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Mode</th>
+          <th class="py-2 text-left">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>list</code></td>
+          <td class="py-2">Options are filtered based on input value (default)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>none</code></td>
+          <td class="py-2">All options shown regardless of input value</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>both</code></td>
+          <td class="py-2">Options filtered and first match auto-completed in input</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Hidden State</h3>
+  <p class="text-muted-foreground mb-4">
+    When closed, the listbox uses the <code>hidden</code> attribute to:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Hide the popup from visual display</li>
+    <li>Remove the popup from the accessibility tree</li>
+    <li>The listbox element remains in the DOM so <code>aria-controls</code> reference is valid</li>
+  </ul>
+</div>

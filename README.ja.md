@@ -27,7 +27,7 @@
 | Button              | -     | -   | -      | -     | 予定       |
 | Carousel            | -     | -   | -      | -     | 予定       |
 | Checkbox            | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Combobox            | -     | -   | -      | -     | 予定       |
+| Combobox            | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Dialog              | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Disclosure          | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Feed                | -     | -   | -      | -     | 予定       |
@@ -41,7 +41,7 @@
 | Radio Group         | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Slider              | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Slider (Multi-Thumb)| -     | -   | -      | -     | 予定       |
-| Spinbutton          | -     | -   | -      | -     | 予定       |
+| Spinbutton          | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Switch              | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Table               | -     | -   | -      | -     | 予定       |
 | Tabs                | ✅    | ✅  | ✅     | ✅    | 完了       |

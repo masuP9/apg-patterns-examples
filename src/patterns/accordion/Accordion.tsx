@@ -167,7 +167,14 @@ export function Accordion({
   const useRegion = items.length <= 6;
 
   // Dynamic heading component with proper typing
-  const HeadingTag = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  const headingTagMap = {
+    2: 'h2',
+    3: 'h3',
+    4: 'h4',
+    5: 'h5',
+    6: 'h6',
+  } as const;
+  const HeadingTag = headingTagMap[headingLevel];
 
   return (
     <div className={`apg-accordion ${className}`.trim()}>

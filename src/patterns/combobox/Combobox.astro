@@ -1,0 +1,643 @@
+---
+/**
+ * APG Combobox Pattern - Astro Implementation
+ *
+ * An editable combobox with list autocomplete.
+ * Uses Web Components for enhanced control and proper focus management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/combobox/
+ */
+
+import { cn } from '@/lib/utils';
+
+export interface ComboboxOption {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
+
+export interface Props {
+  /** Array of options */
+  options: ComboboxOption[];
+  /** Label text */
+  label: string;
+  /** Placeholder text */
+  placeholder?: string;
+  /** Default input value */
+  defaultInputValue?: string;
+  /** Default selected option ID */
+  defaultSelectedOptionId?: string;
+  /** Autocomplete type */
+  autocomplete?: 'none' | 'list' | 'both';
+  /** Disabled state */
+  disabled?: boolean;
+  /** Message shown when no results found */
+  noResultsMessage?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  options = [],
+  label,
+  placeholder = '',
+  defaultInputValue = '',
+  defaultSelectedOptionId,
+  autocomplete = 'list',
+  disabled = false,
+  noResultsMessage = 'No results found',
+  class: className = '',
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = `combobox-${Math.random().toString(36).slice(2, 11)}`;
+const inputId = `${instanceId}-input`;
+const labelId = `${instanceId}-label`;
+const listboxId = `${instanceId}-listbox`;
+
+// Calculate initial input value
+const initialInputValue = defaultSelectedOptionId
+  ? (options.find((o) => o.id === defaultSelectedOptionId)?.label ?? defaultInputValue)
+  : defaultInputValue;
+---
+
+<apg-combobox
+  data-autocomplete={autocomplete}
+  data-default-input-value={initialInputValue}
+  data-default-selected-id={defaultSelectedOptionId || ''}
+>
+  <div class={cn('apg-combobox', className)}>
+    <label id={labelId} for={inputId} class="apg-combobox-label">
+      {label}
+    </label>
+    <div class="apg-combobox-input-wrapper">
+      <input
+        id={inputId}
+        type="text"
+        role="combobox"
+        class="apg-combobox-input"
+        aria-autocomplete={autocomplete}
+        aria-expanded="false"
+        aria-controls={listboxId}
+        aria-labelledby={labelId}
+        value={initialInputValue}
+        placeholder={placeholder}
+        disabled={disabled}
+        data-combobox-input
+      />
+      <span class="apg-combobox-caret" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </span>
+    </div>
+    <ul
+      id={listboxId}
+      role="listbox"
+      aria-labelledby={labelId}
+      class="apg-combobox-listbox"
+      hidden
+      data-combobox-listbox
+    >
+      <li class="apg-combobox-no-results" role="status" hidden data-no-results>
+        {noResultsMessage}
+      </li>
+      {
+        options.map((option) => (
+          <li
+            id={`${instanceId}-option-${option.id}`}
+            role="option"
+            class="apg-combobox-option"
+            aria-selected="false"
+            aria-disabled={option.disabled || undefined}
+            data-option-id={option.id}
+            data-option-label={option.label}
+            data-selected={option.id === defaultSelectedOptionId || undefined}
+          >
+            <span class="apg-combobox-option-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <path d="M10.28 2.28a.75.75 0 00-1.06-1.06L4.5 5.94 2.78 4.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.06 0l5.25-5.25z" />
+              </svg>
+            </span>
+            {option.label}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</apg-combobox>
+
+<script>
+  class ApgCombobox extends HTMLElement {
+    private container: HTMLDivElement | null = null;
+    private input: HTMLInputElement | null = null;
+    private listbox: HTMLUListElement | null = null;
+    private rafId: number | null = null;
+
+    private isOpen = false;
+    private activeIndex = -1;
+    private isComposing = false;
+    private valueBeforeOpen = '';
+    private autocomplete: 'none' | 'list' | 'both' = 'list';
+    private allOptions: HTMLLIElement[] = [];
+    private noResultsElement: HTMLLIElement | null = null;
+    private isSearching = false;
+    private selectedId: string | null = null;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.container = this.querySelector('.apg-combobox');
+      this.input = this.querySelector('[data-combobox-input]');
+      this.listbox = this.querySelector('[data-combobox-listbox]');
+
+      if (!this.input || !this.listbox) {
+        console.warn('apg-combobox: required elements not found');
+        return;
+      }
+
+      // Initialize state from data attributes
+      this.autocomplete = (this.dataset.autocomplete as 'none' | 'list' | 'both') || 'list';
+      this.allOptions = Array.from(this.listbox.querySelectorAll<HTMLLIElement>('[role="option"]'));
+      this.noResultsElement = this.listbox.querySelector<HTMLLIElement>('[data-no-results]');
+      this.selectedId = this.dataset.defaultSelectedId || null;
+
+      // Attach event listeners
+      this.input.addEventListener('input', this.handleInput);
+      this.input.addEventListener('keydown', this.handleKeyDown);
+      this.input.addEventListener('focus', this.handleFocus);
+      this.input.addEventListener('compositionstart', this.handleCompositionStart);
+      this.input.addEventListener('compositionend', this.handleCompositionEnd);
+      this.listbox.addEventListener('click', this.handleListboxClick);
+      this.listbox.addEventListener('mouseenter', this.handleListboxMouseEnter, true);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      document.removeEventListener('pointerdown', this.handleClickOutside);
+      this.input?.removeEventListener('input', this.handleInput);
+      this.input?.removeEventListener('keydown', this.handleKeyDown);
+      this.input?.removeEventListener('focus', this.handleFocus);
+      this.input?.removeEventListener('compositionstart', this.handleCompositionStart);
+      this.input?.removeEventListener('compositionend', this.handleCompositionEnd);
+      this.listbox?.removeEventListener('click', this.handleListboxClick);
+      this.listbox?.removeEventListener('mouseenter', this.handleListboxMouseEnter, true);
+    }
+
+    private getSelectedLabel(): string {
+      if (!this.selectedId) {
+        return '';
+      }
+      const selectedOption = this.allOptions.find(
+        (option) => option.dataset.optionId === this.selectedId
+      );
+      return selectedOption?.dataset.optionLabel ?? '';
+    }
+
+    private getFilteredOptions(): HTMLLIElement[] {
+      if (!this.input) {
+        return [];
+      }
+
+      const inputValue = this.input.value;
+      const selectedLabel = this.getSelectedLabel();
+
+      // Don't filter if autocomplete is none
+      if (this.autocomplete === 'none') {
+        return this.allOptions;
+      }
+
+      // Don't filter if input is empty
+      if (!inputValue) {
+        return this.allOptions;
+      }
+
+      // Don't filter if not in search mode AND input matches selected label
+      if (!this.isSearching && inputValue === selectedLabel) {
+        return this.allOptions;
+      }
+
+      const lowerInputValue = inputValue.toLowerCase();
+
+      return this.allOptions.filter((option) => {
+        const { optionLabel } = option.dataset;
+        const label = optionLabel?.toLowerCase() ?? '';
+        return label.includes(lowerInputValue);
+      });
+    }
+
+    private getEnabledOptions(): HTMLLIElement[] {
+      return this.getFilteredOptions().filter(
+        (option) => option.getAttribute('aria-disabled') !== 'true'
+      );
+    }
+
+    private updateListboxVisibility() {
+      if (!this.listbox) return;
+
+      const filteredOptions = this.getFilteredOptions();
+
+      // Hide all options first
+      this.allOptions.forEach((option) => {
+        option.hidden = true;
+      });
+
+      // Show filtered options
+      filteredOptions.forEach((option) => {
+        option.hidden = false;
+      });
+
+      // Show/hide no results message
+      if (this.noResultsElement) {
+        this.noResultsElement.hidden = filteredOptions.length > 0;
+      }
+    }
+
+    private openPopup(focusPosition?: 'first' | 'last') {
+      if (!this.input || !this.listbox || this.isOpen) {
+        return;
+      }
+
+      this.valueBeforeOpen = this.input.value;
+      this.isOpen = true;
+      this.input.setAttribute('aria-expanded', 'true');
+      this.listbox.removeAttribute('hidden');
+
+      this.updateListboxVisibility();
+      document.addEventListener('pointerdown', this.handleClickOutside);
+
+      if (!focusPosition) {
+        return;
+      }
+
+      const enabledOptions = this.getEnabledOptions();
+
+      if (enabledOptions.length === 0) {
+        return;
+      }
+
+      const targetOption =
+        focusPosition === 'first' ? enabledOptions[0] : enabledOptions[enabledOptions.length - 1];
+      const filteredOptions = this.getFilteredOptions();
+      this.activeIndex = filteredOptions.indexOf(targetOption);
+      this.updateActiveDescendant();
+    }
+
+    private closePopup(restore = false) {
+      if (!this.input || !this.listbox) {
+        return;
+      }
+
+      this.isOpen = false;
+      this.activeIndex = -1;
+      this.isSearching = false;
+      this.input.setAttribute('aria-expanded', 'false');
+      this.input.removeAttribute('aria-activedescendant');
+      this.listbox.setAttribute('hidden', '');
+
+      // Reset aria-selected
+      this.allOptions.forEach((option) => {
+        option.setAttribute('aria-selected', 'false');
+      });
+
+      document.removeEventListener('pointerdown', this.handleClickOutside);
+
+      if (restore && this.input) {
+        this.input.value = this.valueBeforeOpen;
+      }
+    }
+
+    private updateSelectedState() {
+      this.allOptions.forEach((option) => {
+        const { optionId } = option.dataset;
+        if (optionId === this.selectedId) {
+          option.dataset.selected = 'true';
+        } else {
+          delete option.dataset.selected;
+        }
+      });
+    }
+
+    private selectOption(option: HTMLLIElement) {
+      if (!this.input || option.getAttribute('aria-disabled') === 'true') {
+        return;
+      }
+
+      const { optionLabel, optionId } = option.dataset;
+      const label = optionLabel ?? option.textContent?.trim() ?? '';
+      const id = optionId ?? '';
+
+      this.selectedId = id;
+      this.isSearching = false;
+      this.input.value = label;
+      this.updateSelectedState();
+
+      this.dispatchEvent(
+        new CustomEvent('select', {
+          detail: { id, label },
+          bubbles: true,
+        })
+      );
+
+      this.closePopup();
+    }
+
+    private updateActiveDescendant() {
+      if (!this.input) {
+        return;
+      }
+
+      const filteredOptions = this.getFilteredOptions();
+
+      // Reset all aria-selected
+      this.allOptions.forEach((option) => {
+        option.setAttribute('aria-selected', 'false');
+      });
+
+      if (this.activeIndex < 0 || this.activeIndex >= filteredOptions.length) {
+        this.input.removeAttribute('aria-activedescendant');
+        return;
+      }
+
+      const activeOption = filteredOptions[this.activeIndex];
+      this.input.setAttribute('aria-activedescendant', activeOption.id);
+      activeOption.setAttribute('aria-selected', 'true');
+    }
+
+    private findEnabledIndex(
+      startIndex: number,
+      direction: 'next' | 'prev' | 'first' | 'last'
+    ): number {
+      const enabledOptions = this.getEnabledOptions();
+      const filteredOptions = this.getFilteredOptions();
+
+      if (enabledOptions.length === 0) {
+        return -1;
+      }
+
+      if (direction === 'first') {
+        return filteredOptions.indexOf(enabledOptions[0]);
+      }
+
+      if (direction === 'last') {
+        return filteredOptions.indexOf(enabledOptions[enabledOptions.length - 1]);
+      }
+
+      const currentOption = filteredOptions[startIndex];
+      const currentEnabledIndex = currentOption ? enabledOptions.indexOf(currentOption) : -1;
+
+      if (direction === 'next') {
+        if (currentEnabledIndex < 0) {
+          return filteredOptions.indexOf(enabledOptions[0]);
+        }
+
+        if (currentEnabledIndex >= enabledOptions.length - 1) {
+          return startIndex;
+        }
+
+        return filteredOptions.indexOf(enabledOptions[currentEnabledIndex + 1]);
+      }
+
+      // direction === 'prev'
+      if (currentEnabledIndex < 0) {
+        return filteredOptions.indexOf(enabledOptions[enabledOptions.length - 1]);
+      }
+
+      if (currentEnabledIndex <= 0) {
+        return startIndex;
+      }
+
+      return filteredOptions.indexOf(enabledOptions[currentEnabledIndex - 1]);
+    }
+
+    private handleInput = () => {
+      if (!this.input) {
+        return;
+      }
+
+      this.isSearching = true;
+
+      if (!this.isOpen && !this.isComposing) {
+        this.valueBeforeOpen = this.input.value;
+        this.openPopup();
+      }
+
+      this.updateListboxVisibility();
+      this.activeIndex = -1;
+      this.updateActiveDescendant();
+
+      // Reset search mode if input matches selected label or is empty
+      const selectedLabel = this.getSelectedLabel();
+      if (this.input.value === '' || this.input.value === selectedLabel) {
+        this.isSearching = false;
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('inputchange', {
+          detail: { value: this.input.value },
+          bubbles: true,
+        })
+      );
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      if (this.isComposing) {
+        return;
+      }
+
+      const { key, altKey } = event;
+
+      switch (key) {
+        case 'ArrowDown': {
+          event.preventDefault();
+
+          if (altKey) {
+            if (this.isOpen) {
+              return;
+            }
+
+            this.openPopup();
+            return;
+          }
+
+          if (!this.isOpen) {
+            this.openPopup('first');
+            return;
+          }
+
+          const nextIndex = this.findEnabledIndex(this.activeIndex, 'next');
+
+          if (nextIndex >= 0) {
+            this.activeIndex = nextIndex;
+            this.updateActiveDescendant();
+          }
+          break;
+        }
+        case 'ArrowUp': {
+          event.preventDefault();
+
+          if (altKey) {
+            if (!this.isOpen || this.activeIndex < 0) {
+              return;
+            }
+
+            const filteredOptions = this.getFilteredOptions();
+            const option = filteredOptions[this.activeIndex];
+
+            if (!option || option.getAttribute('aria-disabled') === 'true') {
+              return;
+            }
+
+            this.selectOption(option);
+            return;
+          }
+
+          if (!this.isOpen) {
+            this.openPopup('last');
+            return;
+          }
+
+          const prevIndex = this.findEnabledIndex(this.activeIndex, 'prev');
+
+          if (prevIndex >= 0) {
+            this.activeIndex = prevIndex;
+            this.updateActiveDescendant();
+          }
+          break;
+        }
+        case 'Home': {
+          if (!this.isOpen) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const firstIndex = this.findEnabledIndex(0, 'first');
+
+          if (firstIndex >= 0) {
+            this.activeIndex = firstIndex;
+            this.updateActiveDescendant();
+          }
+          break;
+        }
+        case 'End': {
+          if (!this.isOpen) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const lastIndex = this.findEnabledIndex(0, 'last');
+
+          if (lastIndex >= 0) {
+            this.activeIndex = lastIndex;
+            this.updateActiveDescendant();
+          }
+          break;
+        }
+        case 'Enter': {
+          if (!this.isOpen || this.activeIndex < 0) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const filteredOptions = this.getFilteredOptions();
+          const option = filteredOptions[this.activeIndex];
+
+          if (!option || option.getAttribute('aria-disabled') === 'true') {
+            return;
+          }
+
+          this.selectOption(option);
+          break;
+        }
+        case 'Escape': {
+          if (!this.isOpen) {
+            return;
+          }
+
+          event.preventDefault();
+          this.closePopup(true);
+          break;
+        }
+        case 'Tab': {
+          if (this.isOpen) {
+            this.closePopup();
+          }
+          break;
+        }
+      }
+    };
+
+    private handleListboxClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const option = target.closest('[role="option"]') as HTMLLIElement | null;
+
+      if (!option || option.getAttribute('aria-disabled') === 'true') {
+        return;
+      }
+
+      this.selectOption(option);
+    };
+
+    private handleListboxMouseEnter = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const option = target.closest('[role="option"]') as HTMLLIElement | null;
+
+      if (!option) {
+        return;
+      }
+
+      const filteredOptions = this.getFilteredOptions();
+      const index = filteredOptions.indexOf(option);
+
+      if (index < 0) {
+        return;
+      }
+
+      this.activeIndex = index;
+      this.updateActiveDescendant();
+    };
+
+    private handleCompositionStart = () => {
+      this.isComposing = true;
+    };
+
+    private handleCompositionEnd = () => {
+      this.isComposing = false;
+    };
+
+    // Handle focus - open popup when input receives focus
+    private handleFocus = () => {
+      if (this.isOpen || !this.input || this.input.disabled) {
+        return;
+      }
+
+      this.openPopup();
+    };
+
+    private handleClickOutside = (event: PointerEvent) => {
+      if (!this.container) {
+        return;
+      }
+
+      if (!this.container.contains(event.target as Node)) {
+        this.closePopup();
+      }
+    };
+  }
+
+  if (!customElements.get('apg-combobox')) {
+    customElements.define('apg-combobox', ApgCombobox);
+  }
+</script>

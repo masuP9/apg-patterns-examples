@@ -11,8 +11,19 @@ import { languages, defaultLang, showDefaultLang, type Locale } from './ui';
 export type { Locale };
 export { languages, defaultLang, showDefaultLang };
 
+/**
+ * Check if a locale is valid
+ */
+export function isValidLocale(locale: string): locale is Locale {
+  return locale in languages;
+}
+
 // Derived values
-export const locales = Object.keys(languages) as Locale[];
+// Object.keys returns string[], but we know these are valid Locale keys
+function getLocaleKeys(): Locale[] {
+  return Object.keys(languages).filter((key): key is Locale => isValidLocale(key));
+}
+export const locales = getLocaleKeys();
 
 /**
  * Get locale from URL path
@@ -25,8 +36,9 @@ export function getLangFromUrl(url: URL): Locale {
   const pathWithoutBase = pathname.replace(/^\/apg-patterns-examples/, '');
   const segments = pathWithoutBase.split('/').filter(Boolean);
 
-  if (segments[0] && segments[0] in languages) {
-    return segments[0] as Locale;
+  const firstSegment = segments[0];
+  if (firstSegment && isValidLocale(firstSegment)) {
+    return firstSegment;
   }
   return defaultLang;
 }
@@ -66,11 +78,4 @@ export function getLocalizedPath(path: string, lang: Locale): string {
 export function getAlternatePath(currentPath: string, currentLang: Locale): string {
   const targetLang = currentLang === 'en' ? 'ja' : 'en';
   return getLocalizedPath(currentPath, targetLang);
-}
-
-/**
- * Check if a locale is valid
- */
-export function isValidLocale(locale: string): locale is Locale {
-  return locale in languages;
 }

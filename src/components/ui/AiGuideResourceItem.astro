@@ -3,10 +3,12 @@ import ExternalLink from './ExternalLink.astro';
 
 interface Props {
   pattern: string;
+  locale?: string;
 }
 
-const { pattern } = Astro.props;
-const href = `/patterns/${pattern}/llm.md`;
+const { pattern, locale } = Astro.props;
+const basePath = locale ? `/${locale}` : '';
+const href = `${basePath}/patterns/${pattern}/llm.md`;
 ---
 
 <li>

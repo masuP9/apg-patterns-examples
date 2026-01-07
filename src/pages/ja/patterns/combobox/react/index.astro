@@ -1,0 +1,334 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { Combobox } from '@patterns/combobox/Combobox';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/combobox/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/combobox/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/combobox/NativeHtmlNotice.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/combobox/Combobox.tsx?raw';
+import testCode from '@patterns/combobox/Combobox.test.tsx?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const fruitOptions = [
+  { id: 'apple', label: 'りんご' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'さくらんぼ' },
+  { id: 'date', label: 'デーツ' },
+  { id: 'elderberry', label: 'エルダーベリー' },
+  { id: 'fig', label: 'いちじく' },
+  { id: 'grape', label: 'ぶどう' },
+];
+
+const countryOptions = [
+  { id: 'jp', label: '日本' },
+  { id: 'us', label: 'アメリカ' },
+  { id: 'uk', label: 'イギリス' },
+  { id: 'de', label: 'ドイツ', disabled: true },
+  { id: 'fr', label: 'フランス' },
+  { id: 'it', label: 'イタリア' },
+  { id: 'es', label: 'スペイン', disabled: true },
+  { id: 'au', label: 'オーストラリア' },
+];
+---
+
+<PatternLayout
+  title="コンボボックス - React"
+  pattern="combobox"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Combobox</h1>
+    <p class="text-muted-foreground text-lg">
+      リストオートコンプリート機能を持つ編集可能なコンボボックス。ユーザーは入力してオプションをフィルタリングしたり、キーボードやマウスでポップアップリストボックスから選択したりできます。
+    </p>
+    <AiGuideBadge pattern="combobox" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="combobox" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Combobox
+            client:load
+            options={fruitOptions}
+            label="お気に入りのフルーツ"
+            placeholder="検索..."
+          />
+        </div>
+        <div>
+          <Combobox
+            client:load
+            options={fruitOptions}
+            label="デフォルト値あり"
+            defaultSelectedOptionId="cherry"
+          />
+        </div>
+        <div>
+          <Combobox
+            client:load
+            options={countryOptions}
+            label="国（無効なオプションあり）"
+            placeholder="国を選択..."
+          />
+        </div>
+        <div>
+          <Combobox
+            client:load
+            options={fruitOptions}
+            label="フィルタなし (autocomplete='none')"
+            autocomplete="none"
+            placeholder="すべてのオプションを表示..."
+          />
+        </div>
+        <div>
+          <Combobox
+            client:load
+            options={fruitOptions}
+            label="無効なコンボボックス"
+            disabled
+            placeholder="操作不可"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Combobox.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Combobox } from './Combobox';
+
+const options = [
+  { id: 'apple', label: 'りんご' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'さくらんぼ' },
+];
+
+function App() {
+  return (
+    <div>
+      {/* 基本的な使い方 */}
+      <Combobox
+        options={options}
+        label="お気に入りのフルーツ"
+        placeholder="検索..."
+      />
+
+      {/* デフォルト値あり */}
+      <Combobox
+        options={options}
+        label="フルーツ"
+        defaultSelectedOptionId="banana"
+      />
+
+      {/* 無効なオプションあり */}
+      <Combobox
+        options={[
+          { id: 'a', label: 'オプション A' },
+          { id: 'b', label: 'オプション B', disabled: true },
+          { id: 'c', label: 'オプション C' },
+        ]}
+        label="オプションを選択"
+      />
+
+      {/* フィルタなし (autocomplete="none") */}
+      <Combobox
+        options={options}
+        label="選択"
+        autocomplete="none"
+      />
+
+      {/* コールバック付き */}
+      <Combobox
+        options={options}
+        label="フルーツ"
+        onSelect={(option) => console.log('選択:', option)}
+        onInputChange={(value) => console.log('入力:', value)}
+        onOpenChange={(isOpen) => console.log('開閉:', isOpen)}
+      />
+    </div>
+  );
+}`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>options</code></td>
+            <td class="text-muted-foreground py-2 pr-4">ComboboxOption[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">id、label、オプションの disabled を持つオプションの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">表示されるラベルテキスト</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>placeholder</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">入力のプレースホルダーテキスト</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultInputValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">デフォルトの入力値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultSelectedOptionId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">初期選択されるオプションの ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>inputValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">制御された入力値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectedOptionId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">制御された選択オプション ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>autocomplete</code></td>
+            <td class="text-muted-foreground py-2 pr-4">"none" | "list" | "both"</td>
+            <td class="text-muted-foreground py-2 pr-4">"list"</td>
+            <td class="py-2">オートコンプリートの動作</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">コンボボックスを無効にするかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSelect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(option: ComboboxOption) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">オプション選択時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onInputChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: string) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">入力値変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onOpenChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(isOpen: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ポップアップ開閉時のコールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.testing')}</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="Combobox.test.tsx"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Combobox パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;datalist&gt; 要素
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="combobox" locale={locale} />
+    </ul>
+  </section>
+</PatternLayout>
