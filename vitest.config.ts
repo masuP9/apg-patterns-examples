@@ -10,12 +10,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    include: [
-      'src/**/*.test.{ts,tsx}',
-      'src/**/*.test.vue.ts',
-      'src/**/*.test.svelte.ts',
-      'src/**/*.test.astro.ts',
-    ],
+    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.test.vue.ts', 'src/**/*.test.svelte.ts'],
+    // Exclude Astro and browser tests - they have their own configs
+    // - Astro: vitest.astro.config.ts (Container API)
+    // - Browser: vitest.browser.config.ts (real browser with getBoundingClientRect)
+    exclude: ['src/**/*.test.astro.ts', 'src/**/*.browser.test.*', 'node_modules/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
