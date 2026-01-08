@@ -3,9 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 const isCI = !!process.env.CI;
 
 // Base path depends on deploy target:
-// - CI (DEPLOY_TARGET=github-pages): /apg-patterns-examples
-// - Local (no DEPLOY_TARGET): /
-const basePath = isCI ? '/apg-patterns-examples' : '';
+// - DEPLOY_TARGET=github-pages: /apg-patterns-examples
+// - Otherwise: /
+const basePath = process.env.DEPLOY_TARGET === 'github-pages' ? '/apg-patterns-examples' : '';
 
 /**
  * Playwright E2E Test Configuration
@@ -23,7 +23,7 @@ export default defineConfig({
   workers: isCI ? 1 : undefined,
   reporter: isCI ? 'github' : 'html',
   use: {
-    baseURL: `http://localhost:4321${basePath}`,
+    baseURL: `http://localhost:4321${basePath}/`,
     trace: 'on-first-retry',
   },
 
