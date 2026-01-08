@@ -17,7 +17,8 @@ const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 for (const framework of frameworks) {
   test.describe(`Table Visual Spanning (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/patterns/table/${framework}/`);
+      // Use relative path (no leading /) to preserve baseURL path component
+      await page.goto(`patterns/table/${framework}/`);
       // Wait for the page to fully load
       await page.waitForLoadState('networkidle');
     });
