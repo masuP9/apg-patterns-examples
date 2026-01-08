@@ -265,6 +265,134 @@ for (const framework of frameworks) {
 }
 ```
 
+### Astro Web Component パターンの2層テスト戦略
+
+Astro コンポーネントが Web Component（`<script>` 内の `class extends HTMLElement`）を使用する場合、
+テストを **2層** に分離する必要がある。
+
+#### なぜ2層か
+
+Astro コンポーネントは以下の2つの部分で構成される：
+
+1. **テンプレート部分** - サーバーサイドでレンダリングされる HTML 出力
+2. **Web Component 部分** - クライアントサイドで実行される JavaScript
+
+Container API は Node.js 環境で動作するため、`HTMLElement` が定義されておらず、
+Web Component のクライアントサイド動作をテストできない。
+
+#### テスト分離の方針
+
+| テスト層 | 対象 | ツール | テスト内容 |
+|---------|------|--------|-----------|
+| **Unit (Container API)** | テンプレート出力 | Vitest + JSDOM | HTML構造、属性、CSSクラス |
+| **E2E (Playwright)** | Web Component 動作 | Playwright | クリック、キーボード、イベント、フォーカス |
+
+#### Container API でテストできるもの
+
+- HTML 要素の存在と階層構造
+- 初期属性値（`checked`, `disabled`, `aria-*` など）
+- props から生成される属性
+- CSS クラスの適用
+- 条件付きレンダリング
+
+#### E2E でテストすべきもの
+
+- クリック・キーボード操作による状態変更
+- カスタムイベントのディスパッチ
+- `indeterminate` など JavaScript で設定される状態
+- フォーカス管理とタブナビゲーション
+- ラベルクリックによるトグル動作
+
+#### 例: Checkbox
+
+```
+src/patterns/checkbox/
+├── Checkbox.astro           # コンポーネント本体
+├── Checkbox.test.astro.ts   # Container API テスト（テンプレート出力）
+
+e2e/
+└── checkbox.spec.ts         # E2E テスト（Web Component 動作）
+```
+
+**Container API テスト（テンプレート出力の検証）:**
+
+```typescript
+// Checkbox.test.astro.ts
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import Checkbox from './Checkbox.astro';
+
+describe('Checkbox (Astro Container API)', () => {
+  let container: AstroContainer;
+
+  beforeEach(async () => {
+    container = await AstroContainer.create();
+  });
+
+  it('renders input with type="checkbox"', async () => {
+    const html = await container.renderToString(Checkbox, { props: {} });
+    const doc = new JSDOM(html).window.document;
+    expect(doc.querySelector('input[type="checkbox"]')).not.toBeNull();
+  });
+
+  it('renders with checked attribute when initialChecked is true', async () => {
+    const html = await container.renderToString(Checkbox, {
+      props: { initialChecked: true }
+    });
+    const doc = new JSDOM(html).window.document;
+    expect(doc.querySelector('input')?.hasAttribute('checked')).toBe(true);
+  });
+});
+```
+
+**E2E テスト（Web Component 動作の検証）:**
+
+```typescript
+// e2e/checkbox.spec.ts
+const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
+
+for (const framework of frameworks) {
+  test.describe(`Checkbox (${framework})`, () => {
+    // Helper to get checkbox and its visual control
+    const getCheckbox = (page, id: string) => {
+      const checkbox = page.locator(`#${id}`);
+      // The visual control is a sibling of the input
+      const control = checkbox.locator('~ .apg-checkbox-control');
+      return { checkbox, control };
+    };
+
+    test('toggles checked state on click', async ({ page }) => {
+      await page.goto(`patterns/checkbox/${framework}/`);
+      // Note: The input is visually hidden (1x1px), so we click
+      // the visual control instead of the input directly
+      const { checkbox, control } = getCheckbox(page, 'demo-terms');
+
+      await expect(checkbox).not.toBeChecked();
+      await control.click();
+      await expect(checkbox).toBeChecked();
+    });
+
+    test('clicking label toggles checkbox', async ({ page }) => {
+      // Label association test - clicks label, not the control
+      const { checkbox } = getCheckbox(page, 'demo-terms');
+      const label = page.locator('label').filter({ has: checkbox });
+
+      await expect(checkbox).not.toBeChecked();
+      await label.click();
+      await expect(checkbox).toBeChecked();
+    });
+
+    test('dispatches checkedchange event', async ({ page }) => {
+      // カスタムイベントのテストは E2E で行う（Astro only）
+    });
+  });
+}
+```
+
+#### Web Component を使わない Astro パターン
+
+Table のように Web Component を使わず、純粋なテンプレートのみのパターンは
+Container API テストのみで十分にカバーできる。
+
 ### なぜ独立したテストか
 
 1. **DAMP 原則に従う** - 各テストが自己完結
