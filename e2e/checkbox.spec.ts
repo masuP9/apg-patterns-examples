@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
  * These tests verify the Web Component behavior that cannot be tested
  * with Container API unit tests, including:
  * - Click interaction and state changes
- * - Custom event dispatching
+ * - Custom event dispatching (Astro only - uses Web Component)
  * - Disabled state behavior
  * - Indeterminate state clearing
  * - Label association
@@ -93,57 +93,71 @@ for (const framework of frameworks) {
       });
     });
 
-    test.describe('Custom Events', () => {
-      test('dispatches checkedchange event on state change', async ({ page }) => {
-        const checkbox = page.locator('#demo-terms');
-        const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
-        await expect(checkbox).toBeVisible();
+    // Custom Events tests are only for Astro (Web Component with checkedchange event)
+    // React/Vue/Svelte use framework-specific callbacks instead
+    if (framework === 'astro') {
+      test.describe('Custom Events (Astro Web Component)', () => {
+        test('dispatches checkedchange event on state change', async ({ page }) => {
+          const checkbox = page.locator('#demo-terms');
+          const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
+          await expect(checkbox).toBeVisible();
 
-        // Set up event listener
-        const eventPromise = wrapper.evaluate((el) => {
-          return new Promise<{ checked: boolean }>((resolve) => {
-            el.addEventListener(
-              'checkedchange',
-              (e) => {
-                resolve((e as CustomEvent).detail);
-              },
-              { once: true }
-            );
-          });
+          // Set up event listener with timeout to prevent hanging
+          const eventPromise = Promise.race([
+            wrapper.evaluate((el) => {
+              return new Promise<{ checked: boolean }>((resolve) => {
+                el.addEventListener(
+                  'checkedchange',
+                  (e) => {
+                    resolve((e as CustomEvent).detail);
+                  },
+                  { once: true }
+                );
+              });
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('checkedchange event not fired within 5s')), 5000)
+            ),
+          ]);
+
+          // Click to trigger event
+          await checkbox.click();
+
+          // Verify event was dispatched with correct detail
+          const eventDetail = await eventPromise;
+          expect(eventDetail.checked).toBe(true);
         });
 
-        // Click to trigger event
-        await checkbox.click();
+        test('event detail reflects current state', async ({ page }) => {
+          const checkbox = page.locator('#demo-newsletter');
+          const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
+          await expect(checkbox).toBeVisible();
 
-        // Verify event was dispatched with correct detail
-        const eventDetail = await eventPromise;
-        expect(eventDetail.checked).toBe(true);
-      });
+          // Checkbox starts checked, so unchecking should dispatch checked: false
+          const eventPromise = Promise.race([
+            wrapper.evaluate((el) => {
+              return new Promise<{ checked: boolean }>((resolve) => {
+                el.addEventListener(
+                  'checkedchange',
+                  (e) => {
+                    resolve((e as CustomEvent).detail);
+                  },
+                  { once: true }
+                );
+              });
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('checkedchange event not fired within 5s')), 5000)
+            ),
+          ]);
 
-      test('event detail reflects current state', async ({ page }) => {
-        const checkbox = page.locator('#demo-newsletter');
-        const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
-        await expect(checkbox).toBeVisible();
+          await checkbox.click();
 
-        // Checkbox starts checked, so unchecking should dispatch checked: false
-        const eventPromise = wrapper.evaluate((el) => {
-          return new Promise<{ checked: boolean }>((resolve) => {
-            el.addEventListener(
-              'checkedchange',
-              (e) => {
-                resolve((e as CustomEvent).detail);
-              },
-              { once: true }
-            );
-          });
+          const eventDetail = await eventPromise;
+          expect(eventDetail.checked).toBe(false);
         });
-
-        await checkbox.click();
-
-        const eventDetail = await eventPromise;
-        expect(eventDetail.checked).toBe(false);
       });
-    });
+    }
 
     test.describe('Label Association', () => {
       test('clicking label toggles checkbox', async ({ page }) => {
