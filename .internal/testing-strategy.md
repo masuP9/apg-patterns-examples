@@ -352,17 +352,37 @@ const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 
 for (const framework of frameworks) {
   test.describe(`Checkbox (${framework})`, () => {
+    // Helper to get checkbox and its visual control
+    const getCheckbox = (page, id: string) => {
+      const checkbox = page.locator(`#${id}`);
+      // The visual control is a sibling of the input
+      const control = checkbox.locator('~ .apg-checkbox-control');
+      return { checkbox, control };
+    };
+
     test('toggles checked state on click', async ({ page }) => {
       await page.goto(`patterns/checkbox/${framework}/`);
-      const checkbox = page.locator('#demo-terms');
+      // Note: The input is visually hidden (1x1px), so we click
+      // the visual control instead of the input directly
+      const { checkbox, control } = getCheckbox(page, 'demo-terms');
 
       await expect(checkbox).not.toBeChecked();
-      await checkbox.click();
+      await control.click();
+      await expect(checkbox).toBeChecked();
+    });
+
+    test('clicking label toggles checkbox', async ({ page }) => {
+      // Label association test - clicks label, not the control
+      const { checkbox } = getCheckbox(page, 'demo-terms');
+      const label = page.locator('label').filter({ has: checkbox });
+
+      await expect(checkbox).not.toBeChecked();
+      await label.click();
       await expect(checkbox).toBeChecked();
     });
 
     test('dispatches checkedchange event', async ({ page }) => {
-      // カスタムイベントのテストは E2E で行う
+      // カスタムイベントのテストは E2E で行う（Astro only）
     });
   });
 }
