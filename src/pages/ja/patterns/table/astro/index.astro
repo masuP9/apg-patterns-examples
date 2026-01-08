@@ -1,0 +1,376 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import Table from '@patterns/table/Table.astro';
+import AccessibilityDocs from '@patterns/table/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/table/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/table/Table.astro?raw';
+import testCode from '@patterns/table/Table.test.astro.ts?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const basicColumns = [
+  { id: 'name', header: '名前' },
+  { id: 'age', header: '年齢' },
+  { id: 'city', header: '都市' },
+];
+
+const basicRows = [
+  { id: '1', cells: ['Alice', '30', '東京'] },
+  { id: '2', cells: ['Bob', '25', '大阪'] },
+  { id: '3', cells: ['Charlie', '35', '京都'] },
+  { id: '4', cells: ['Diana', '28', '名古屋'] },
+  { id: '5', cells: ['Edward', '42', '札幌'] },
+];
+
+const sortableColumns = [
+  { id: 'name', header: '名前', sortable: true, sort: 'ascending' as const },
+  { id: 'age', header: '年齢', sortable: true },
+  { id: 'city', header: '都市', sortable: true },
+];
+
+const rowHeaderRows = [
+  { id: '1', cells: ['Alice', '30', '東京'], hasRowHeader: true },
+  { id: '2', cells: ['Bob', '25', '大阪'], hasRowHeader: true },
+  { id: '3', cells: ['Charlie', '35', '京都'], hasRowHeader: true },
+];
+
+const virtualizedRows = [
+  { id: '5', cells: ['Alice', '30', '東京'], rowIndex: 5 },
+  { id: '6', cells: ['Bob', '25', '大阪'], rowIndex: 6 },
+  { id: '7', cells: ['Charlie', '35', '京都'], rowIndex: 7 },
+  { id: '8', cells: ['Diana', '28', '名古屋'], rowIndex: 8 },
+  { id: '9', cells: ['Edward', '42', '札幌'], rowIndex: 9 },
+];
+
+const spanningColumns = [
+  { id: 'product', header: '製品' },
+  { id: 'q1', header: 'Q1' },
+  { id: 'q2', header: 'Q2' },
+  { id: 'q3', header: 'Q3' },
+  { id: 'q4', header: 'Q4' },
+];
+
+const spanningRows = [
+  {
+    id: 'electronics',
+    cells: [{ content: '電子機器', rowspan: 2 }, '150', '180', '200', '220'],
+  },
+  { id: 'electronics-sub', cells: ['175', '190', '210', '240'] },
+  { id: 'clothing', cells: ['衣料品', { content: 'N/A', colspan: 2 }, '90', '120'] },
+  { id: 'summary', cells: [{ content: '合計', colspan: 4 }, '1775'] },
+];
+---
+
+<PatternLayout
+  title="テーブル - Astro"
+  pattern="table"
+  framework="astro"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Table</h1>
+    <p class="text-muted-foreground text-lg">行と列でデータを表示するための静的な表構造。</p>
+    <AiGuideBadge pattern="table" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="table" currentFramework="astro" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的なテーブル</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        シンプルなデータ表示用の静的テーブル。インタラクティブな機能なし。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Table columns={basicColumns} rows={basicRows} aria-label="ユーザー一覧" />
+      </div>
+    </div>
+
+    <!-- Sortable Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">ソート可能なテーブル</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        列ヘッダーをクリックしてソート。<code>aria-sort</code>
+        でソート方向を示します。注: Astro コンポーネントは静的なため、ソートにはページリロードまたはクライアントサイド
+        JavaScript が必要です。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Table columns={sortableColumns} rows={basicRows} aria-label="ソート可能なユーザー一覧" />
+      </div>
+    </div>
+
+    <!-- Row Headers -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">行ヘッダー付き</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        各行の最初のセルに <code>role="rowheader"</code> を使用して、スクリーンリーダーでのナビゲーションを改善。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Table
+          columns={basicColumns}
+          rows={rowHeaderRows}
+          aria-label="行ヘッダー付きユーザー一覧"
+        />
+      </div>
+    </div>
+
+    <!-- Virtualized Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">仮想化サポート</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        大規模なデータセットでは、<code>aria-rowcount</code>、<code>aria-colcount</code>、
+        <code>aria-rowindex</code> を使用してテーブル全体の構造を伝えます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Table
+          columns={basicColumns}
+          rows={virtualizedRows}
+          aria-label="仮想化テーブル（100行中5-9行目）"
+          totalRows={100}
+          totalColumns={3}
+          startColIndex={1}
+        />
+      </div>
+    </div>
+
+    <!-- Spanning Cells -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">セルの結合</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>colspan</code> と <code>rowspan</code>
+        を使用してセルを複数列・複数行にまたがらせることができます。この実装では CSS Grid の
+        <code>grid-column: span N</code> と <code>grid-row: span N</code>
+        で視覚的な結合を実現し、さらに <code>aria-colspan</code> と <code>aria-rowspan</code>
+        でスクリーンリーダーのアクセシビリティを確保しています。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Table columns={spanningColumns} rows={spanningRows} aria-label="セル結合付き四半期売上" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="Table.astro" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Table from './Table.astro';
+
+const columns = [
+  { id: 'name', header: '名前' },
+  { id: 'age', header: '年齢' },
+  { id: 'city', header: '都市' },
+];
+
+const rows = [
+  { id: '1', cells: ['Alice', '30', '東京'] },
+  { id: '2', cells: ['Bob', '25', '大阪'] },
+  { id: '3', cells: ['Charlie', '35', '京都'] },
+];
+---
+
+<!-- 基本的なテーブル -->
+<Table columns={columns} rows={rows} aria-label="ユーザー一覧" />
+
+<!-- ソート可能なテーブル -->
+<Table
+  columns={sortableColumns}
+  rows={rows}
+  aria-label="ソート可能なユーザー一覧"
+/>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Table Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableColumn[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableRow[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">行データ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>caption</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">テーブルのキャプション（任意）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalColumns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">総列数（仮想化用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalRows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">総行数（仮想化用）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">TableColumn インターフェース</h3>
+    <CodeBlock
+      code={`interface TableColumn {
+  id: string;
+  header: string;
+  sortable?: boolean;
+  sort?: 'ascending' | 'descending' | 'none';
+}`}
+      lang="typescript"
+      title="Types"
+    />
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">TableRow インターフェース</h3>
+    <CodeBlock
+      code={`interface TableCell {
+  content: string;
+  colspan?: number; // 結合する列数（視覚的 + aria-colspan）
+  rowspan?: number; // 結合する行数（視覚的 + aria-rowspan）
+}
+
+type TableCellValue = string | TableCell;
+
+interface TableRow {
+  id: string;
+  cells: TableCellValue[];
+  hasRowHeader?: boolean;
+  rowIndex?: number; // 仮想化用（1始まり）
+}`}
+      lang="typescript"
+      title="Types"
+    />
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">Web Component イベント</h3>
+    <p class="text-muted-foreground mb-3 text-sm">
+      Astro 実装は Web Component (<code>apg-table</code>) を使用し、ソートボタンがクリックされると
+      <code>sortchange</code> カスタムイベントを発行します。
+    </p>
+    <CodeBlock
+      code={`// ソート変更をリッスン
+document.querySelector('apg-table').addEventListener('sortchange', (e) => {
+  console.log(e.detail); // { columnId: 'name', direction: 'descending' }
+});`}
+      lang="javascript"
+      title="イベントハンドリング"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Table.test.astro.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/table/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Table パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/table"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;table&gt; 要素
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="table" />
+    </ul>
+  </section>
+</PatternLayout>

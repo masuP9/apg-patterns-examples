@@ -224,7 +224,7 @@ export const PATTERNS: Pattern[] = [
       'A static tabular structure containing one or more rows that each contain one or more cells.',
     icon: '📋',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'tabs',

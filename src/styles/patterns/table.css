@@ -1,0 +1,169 @@
+/* =============================================================================
+   TABLE COMPONENT STYLES - CSS Grid + Subgrid
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-table {
+  display: contents;
+}
+
+/* When apg-table has .apg-table class, it becomes the grid container */
+/* The inner div[role="table"] needs to be transparent */
+apg-table.apg-table > [role='table'] {
+  display: contents;
+}
+
+/* Table Base - CSS Grid */
+.apg-table {
+  display: grid;
+  grid-template-columns: repeat(var(--table-cols, 1), 1fr);
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  gap: 1px;
+  background: var(--border);
+}
+
+/* Caption - spans all columns */
+.apg-table-caption {
+  grid-column: 1 / -1;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: center;
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Row Groups - use subgrid to inherit parent columns */
+.apg-table-header,
+.apg-table-body {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  gap: 1px;
+  background: var(--border);
+}
+
+/* Rows - display: contents so cells become direct grid items */
+.apg-table-row {
+  display: contents;
+}
+
+/* Cells - gap creates borders, cells need background */
+.apg-table-columnheader,
+.apg-table-rowheader,
+.apg-table-cell {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: var(--background);
+}
+
+.apg-table-columnheader {
+  font-weight: 600;
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.apg-table-rowheader {
+  font-weight: 500;
+  background: var(--muted);
+}
+
+.apg-table-cell {
+  color: var(--foreground);
+}
+
+/* Sort Button */
+.apg-table-sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.apg-table-sort-button:hover {
+  color: var(--primary);
+}
+
+.apg-table-sort-button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.apg-table-sort-icon {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Hover effect for body cells */
+.apg-table-cell:hover,
+.apg-table-rowheader:hover {
+  background: var(--muted);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-table {
+    border-width: 2px;
+    gap: 2px;
+  }
+
+  .apg-table-header,
+  .apg-table-body {
+    gap: 2px;
+  }
+
+  .apg-table-sort-button:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-table-body > .apg-table-row:hover > .apg-table-cell,
+  .apg-table-body > .apg-table-row:hover > .apg-table-rowheader {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-table {
+    border: 2px solid ButtonBorder;
+    background: ButtonBorder;
+    forced-color-adjust: none;
+  }
+
+  .apg-table-header,
+  .apg-table-body {
+    background: ButtonBorder;
+  }
+
+  .apg-table-columnheader {
+    color: ButtonText;
+    background: ButtonFace;
+  }
+
+  .apg-table-cell,
+  .apg-table-rowheader {
+    background: Canvas;
+  }
+
+  .apg-table-sort-button:focus-visible {
+    outline: 3px solid Highlight;
+  }
+}

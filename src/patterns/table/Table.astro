@@ -1,0 +1,223 @@
+---
+/**
+ * APG Table Pattern - Astro Implementation
+ *
+ * A static tabular structure for displaying data.
+ * Uses Web Components for sort button interactions.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/table/
+ */
+
+export interface TableColumn {
+  id: string;
+  header: string;
+  /** Column is sortable */
+  sortable?: boolean;
+  /** Current sort direction */
+  sort?: 'ascending' | 'descending' | 'none';
+}
+
+/**
+ * Cell with spanning support
+ */
+export interface TableCell {
+  content: string;
+  /** Number of columns this cell spans */
+  colspan?: number;
+  /** Number of rows this cell spans */
+  rowspan?: number;
+}
+
+/**
+ * Cell value - can be simple string or object with spanning
+ */
+export type TableCellValue = string | TableCell;
+
+/**
+ * Type guard to check if cell is a TableCell object
+ */
+function isTableCell(cell: TableCellValue): cell is TableCell {
+  return typeof cell === 'object' && cell !== null && 'content' in cell;
+}
+
+export interface TableRow {
+  id: string;
+  cells: TableCellValue[];
+  /** First cell is row header */
+  hasRowHeader?: boolean;
+  /** Row index for virtualization (1-based) */
+  rowIndex?: number;
+}
+
+export interface Props {
+  /** Column definitions */
+  columns: TableColumn[];
+  /** Row data */
+  rows: TableRow[];
+  /** Caption text (optional) */
+  caption?: string;
+
+  // Virtualization support
+  /** Total number of columns (for virtualization) */
+  totalColumns?: number;
+  /** Total number of rows (for virtualization) */
+  totalRows?: number;
+  /** Starting column index (1-based, for virtualization) */
+  startColIndex?: number;
+
+  /** Additional CSS class */
+  class?: string;
+  /** Table id */
+  id?: string;
+  /** Accessible label */
+  'aria-label'?: string;
+  /** Reference to external label element */
+  'aria-labelledby'?: string;
+  /** Reference to description element */
+  'aria-describedby'?: string;
+}
+
+const {
+  columns,
+  rows,
+  caption,
+  totalColumns,
+  totalRows,
+  startColIndex,
+  class: className = '',
+  id,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+} = Astro.props;
+
+function getSortIcon(sort?: 'ascending' | 'descending' | 'none'): string {
+  if (sort === 'ascending') return '▲';
+  if (sort === 'descending') return '▼';
+  return '⇅';
+}
+
+function getCellGridStyle(cell: TableCellValue): string | undefined {
+  if (!isTableCell(cell)) return undefined;
+  const styles: string[] = [];
+  if (cell.colspan && cell.colspan > 1) {
+    styles.push(`grid-column: span ${cell.colspan}`);
+  }
+  if (cell.rowspan && cell.rowspan > 1) {
+    styles.push(`grid-row: span ${cell.rowspan}`);
+  }
+  return styles.length > 0 ? styles.join('; ') : undefined;
+}
+---
+
+<apg-table class={`apg-table ${className}`.trim()} style={`--table-cols: ${columns.length}`}>
+  <div
+    role="table"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-describedby={ariaDescribedby}
+    aria-colcount={totalColumns}
+    aria-rowcount={totalRows}
+    id={id}
+  >
+    {caption && <div class="apg-table-caption">{caption}</div>}
+
+    {/* Header rowgroup */}
+    <div role="rowgroup" class="apg-table-header">
+      <div role="row" class="apg-table-row">
+        {
+          columns.map((column, colIndex) => (
+            <div
+              role="columnheader"
+              class="apg-table-columnheader"
+              aria-sort={column.sortable ? column.sort || 'none' : undefined}
+              aria-colindex={startColIndex !== undefined ? startColIndex + colIndex : undefined}
+            >
+              {column.sortable ? (
+                <button
+                  type="button"
+                  class="apg-table-sort-button"
+                  data-sort-column={column.id}
+                  data-current-sort={column.sort || 'none'}
+                  aria-label={`Sort by ${column.header}`}
+                >
+                  {column.header}
+                  <span class="apg-table-sort-icon" aria-hidden="true">
+                    {getSortIcon(column.sort)}
+                  </span>
+                </button>
+              ) : (
+                column.header
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {/* Body rowgroup */}
+    <div role="rowgroup" class="apg-table-body">
+      {
+        rows.map((row) => (
+          <div role="row" class="apg-table-row" aria-rowindex={row.rowIndex}>
+            {row.cells.map((cell, cellIndex) => {
+              const isRowHeader = row.hasRowHeader && cellIndex === 0;
+              const cellRole = isRowHeader ? 'rowheader' : 'cell';
+              const cellData = isTableCell(cell) ? cell : { content: cell };
+              const gridStyle = getCellGridStyle(cell);
+              return (
+                <div
+                  role={cellRole}
+                  class={`apg-table-${cellRole}`}
+                  style={gridStyle}
+                  aria-colindex={
+                    startColIndex !== undefined ? startColIndex + cellIndex : undefined
+                  }
+                  aria-colspan={
+                    cellData.colspan && cellData.colspan > 1 ? cellData.colspan : undefined
+                  }
+                  aria-rowspan={
+                    cellData.rowspan && cellData.rowspan > 1 ? cellData.rowspan : undefined
+                  }
+                >
+                  {cellData.content}
+                </div>
+              );
+            })}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</apg-table>
+
+<script>
+  class ApgTable extends HTMLElement {
+    connectedCallback() {
+      this.setupSortHandlers();
+    }
+
+    private setupSortHandlers() {
+      const sortButtons = this.querySelectorAll('[data-sort-column]');
+      sortButtons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+          const target = e.currentTarget as HTMLElement;
+          const columnId = target.dataset.sortColumn;
+          const currentSort = target.dataset.currentSort;
+          const newDirection = currentSort === 'ascending' ? 'descending' : 'ascending';
+
+          this.dispatchEvent(
+            new CustomEvent('sortchange', {
+              detail: { columnId, direction: newDirection },
+              bubbles: true,
+            })
+          );
+        });
+      });
+    }
+  }
+
+  if (!customElements.get('apg-table')) {
+    customElements.define('apg-table', ApgTable);
+  }
+</script>
