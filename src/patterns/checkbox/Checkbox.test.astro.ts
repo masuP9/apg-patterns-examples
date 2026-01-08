@@ -22,15 +22,17 @@ describe('Checkbox (Astro Container API)', () => {
   });
 
   // Helper to render and parse HTML
-  async function renderCheckbox(props: {
-    initialChecked?: boolean;
-    indeterminate?: boolean;
-    disabled?: boolean;
-    name?: string;
-    value?: string;
-    id?: string;
-    class?: string;
-  } = {}): Promise<Document> {
+  async function renderCheckbox(
+    props: {
+      initialChecked?: boolean;
+      indeterminate?: boolean;
+      disabled?: boolean;
+      name?: string;
+      value?: string;
+      id?: string;
+      class?: string;
+    } = {}
+  ): Promise<Document> {
     const html = await container.renderToString(Checkbox, { props });
     const dom = new JSDOM(html);
     return dom.window.document;

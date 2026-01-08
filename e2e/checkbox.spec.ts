@@ -76,9 +76,7 @@ for (const framework of frameworks) {
         await expect(checkbox).toBeVisible();
 
         // Check indeterminate state via JavaScript
-        const isIndeterminate = await checkbox.evaluate(
-          (el: HTMLInputElement) => el.indeterminate
-        );
+        const isIndeterminate = await checkbox.evaluate((el: HTMLInputElement) => el.indeterminate);
         expect(isIndeterminate).toBe(true);
 
         // Click to clear indeterminate
