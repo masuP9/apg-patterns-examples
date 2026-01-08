@@ -5,14 +5,80 @@ import { ResponsiveTable } from '@/components/ui/table';
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    テストは、キーボード操作、ARIA属性、アクセシビリティ要件全般にわたってAPG準拠を検証します。
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件全般にわたってAPG準拠を検証します。Checkboxコンポーネントは2層テスト戦略を採用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Container API)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Astro Container APIを使用してコンポーネントのHTML出力を検証します。ブラウザを必要とせずに正しいテンプレートレンダリングを確認できます。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML構造と要素の階層</li>
+      <li>初期属性値（checked、disabled、indeterminate）</li>
+      <li>フォーム連携属性（name、value、id）</li>
+      <li>CSSクラスの適用</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      実際のブラウザ環境でWeb Componentの動作を検証します。JavaScript実行が必要なインタラクションをカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>クリック・キーボード操作</li>
+      <li>カスタムイベントのディスパッチ（checkedchange）</li>
+      <li>ユーザー操作によるindeterminate状態のクリア</li>
+      <li>ラベル関連付けとクリック動作</li>
+      <li>フォーカス管理とタブナビゲーション</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG キーボード操作
+    高優先度: HTML構造 (Unit)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>input type</code></td>
+          <td class="py-2">type="checkbox"のinputをレンダリング</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>checked attribute</code></td>
+          <td class="py-2">checked属性がinitialChecked propを反映</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled attribute</code></td>
+          <td class="py-2">disabled propがtrueのときdisabled属性が設定される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-indeterminate</code></td>
+          <td class="py-2">indeterminate状態用のdata属性が設定される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>control aria-hidden</code></td>
+          <td class="py-2">視覚的コントロール要素にaria-hidden="true"が設定される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: キーボード操作 (E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -48,7 +114,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: DOM ステート & ARIA
+    高優先度: クリック操作 (E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -59,70 +125,21 @@ import { ResponsiveTable } from '@/components/ui/table';
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="checkbox"</code></td>
-          <td class="py-2">要素がcheckboxロールを持つ（ネイティブまたは明示的）</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>checked initial</code></td>
-          <td class="py-2">初期状態が未チェック</td>
-        </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>checked toggle</code></td>
           <td class="py-2">クリックでチェック状態を切り替える</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>indeterminate</code></td>
-          <td class="py-2">JavaScriptで不確定状態を設定できる</td>
+          <td class="py-2 pr-4"><code>disabled click</code></td>
+          <td class="py-2">無効なチェックボックスはクリック操作を防ぐ</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>indeterminate clear</code></td>
-          <td class="py-2">ユーザー操作で不確定状態がクリアされる</td>
+          <td class="py-2">ユーザー操作でindeterminate状態がクリアされる</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>disabled</code></td>
-          <td class="py-2">無効なチェックボックスは操作を防ぐ</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: ラベル & フォーム
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">テスト</th>
-          <th class="py-2 text-left">説明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2">aria-labelによるアクセシブルな名前</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>External label</code></td>
-          <td class="py-2">for/idを使った外部 &lt;label&gt; によるアクセシブルな名前</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Label click</code></td>
-          <td class="py-2">外部ラベルをクリックするとチェックボックスが切り替わる</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2">外部要素参照によるアクセシブルな名前</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>name attribute</code></td>
-          <td class="py-2">フォーム送信にチェックボックスデータが含まれる</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>value attribute</code></td>
-          <td class="py-2">フォームの値が正しく設定される</td>
+          <td class="py-2 pr-4"><code>checkedchange event</code></td>
+          <td class="py-2">正しいdetailでカスタムイベントがディスパッチされる</td>
         </tr>
       </tbody>
     </table>
@@ -130,7 +147,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: アクセシビリティ
+    中優先度: フォーム連携 (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -142,20 +159,41 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">WCAG 2.1 AAの違反なし（jest-axe使用）</td>
+          <td class="py-2 pr-4"><code>name attribute</code></td>
+          <td class="py-2">フォームのname属性がレンダリングされる</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>checked axe</code></td>
-          <td class="py-2">チェック状態での違反なし</td>
+          <td class="py-2 pr-4"><code>value attribute</code></td>
+          <td class="py-2">フォームのvalue属性がレンダリングされる</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>indeterminate axe</code></td>
-          <td class="py-2">不確定状態での違反なし</td>
+          <td class="py-2 pr-4"><code>id attribute</code></td>
+          <td class="py-2">ラベル関連付けのためにID属性が正しく設定される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: ラベル関連付け (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Label click</code></td>
+          <td class="py-2">外部ラベルをクリックするとチェックボックスが切り替わる</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>disabled axe</code></td>
-          <td class="py-2">無効状態での違反なし</td>
+          <td class="py-2 pr-4"><code>Wrapping label</code></td>
+          <td class="py-2">ラップするラベルをクリックするとチェックボックスが切り替わる</td>
         </tr>
       </tbody>
     </table>
@@ -163,7 +201,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    低優先度: HTML 属性の継承
+    低優先度: CSSクラス (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -175,20 +213,12 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className merge</code></td>
+          <td class="py-2 pr-4"><code>default class</code></td>
+          <td class="py-2">apg-checkboxクラスがラッパーに適用される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>custom class</code></td>
           <td class="py-2">カスタムクラスがコンポーネントクラスとマージされる</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>data-* attributes</code></td>
-          <td class="py-2">カスタムdata属性が渡される</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>id attribute</code></td>
-          <td class="py-2">ラベル関連付けのためにID属性が正しく設定される</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>required attribute</code></td>
-          <td class="py-2">required属性が渡される</td>
         </tr>
       </tbody>
     </table>
@@ -200,20 +230,26 @@ import { ResponsiveTable } from '@/components/ui/table';
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
         >Vitest</ExternalLink
       >
-      - テストランナー
+      - ユニットテスト用テストランナー
+    </li>
+    <li>
+      <ExternalLink
+        href="https://docs.astro.build/en/reference/container-reference/"
+        class="text-primary hover:underline">Astro Container API</ExternalLink
+      >
+      - ユニットテスト用サーバーサイドコンポーネントレンダリング
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2Eテスト用ブラウザ自動化
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
         >Testing Library</ExternalLink
       >
-      - フレームワーク固有のテストユーティリティ
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/nickcolley/jest-axe"
-        class="text-primary hover:underline">jest-axe</ExternalLink
-      >
-      - 自動アクセシビリティテスト
+      - フレームワーク固有のテストユーティリティ（React、Vue、Svelte）
     </li>
   </ul>
 
