@@ -12,7 +12,8 @@ import { test, expect } from '@playwright/test';
  * - Label association
  *
  * Note: The checkbox input is visually hidden (1x1px) with a custom visual control.
- * We click on the wrapping label instead of the input directly.
+ * We click on the visual control (.apg-checkbox-control) for most tests,
+ * and test label association separately.
  */
 
 const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
@@ -24,69 +25,70 @@ for (const framework of frameworks) {
       await page.waitForLoadState('networkidle');
     });
 
-    // Helper to get checkbox and its label
-    const getCheckboxWithLabel = (page: import('@playwright/test').Page, id: string) => {
+    // Helper to get checkbox and its visual control
+    const getCheckbox = (page: import('@playwright/test').Page, id: string) => {
       const checkbox = page.locator(`#${id}`);
-      const label = page.locator('label').filter({ has: checkbox });
-      return { checkbox, label };
+      // The visual control is a sibling of the input within the same wrapper
+      const control = checkbox.locator('~ .apg-checkbox-control');
+      return { checkbox, control };
     };
 
     test.describe('Click Interaction', () => {
       test('toggles checked state on click', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-terms');
+        const { checkbox, control } = getCheckbox(page, 'demo-terms');
 
         // Initial state: unchecked
         await expect(checkbox).not.toBeChecked();
 
-        // Click label to check (input is visually hidden)
-        await label.click();
+        // Click visual control to check
+        await control.click();
         await expect(checkbox).toBeChecked();
 
-        // Click label to uncheck
-        await label.click();
+        // Click visual control to uncheck
+        await control.click();
         await expect(checkbox).not.toBeChecked();
       });
 
       test('initially checked checkbox can be unchecked', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-newsletter');
+        const { checkbox, control } = getCheckbox(page, 'demo-newsletter');
 
         // Initial state: checked
         await expect(checkbox).toBeChecked();
 
-        // Click label to uncheck
-        await label.click();
+        // Click visual control to uncheck
+        await control.click();
         await expect(checkbox).not.toBeChecked();
 
-        // Click label to check again
-        await label.click();
+        // Click visual control to check again
+        await control.click();
         await expect(checkbox).toBeChecked();
       });
     });
 
     test.describe('Disabled State', () => {
       test('does not toggle when disabled', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-disabled');
+        const { checkbox, control } = getCheckbox(page, 'demo-disabled');
         await expect(checkbox).toBeDisabled();
 
         // Initial state: unchecked and disabled
         await expect(checkbox).not.toBeChecked();
 
-        // Attempt to click label (should have no effect due to disabled input)
-        await label.click({ force: true });
+        // Attempt to click control (should have no effect due to disabled input)
+        await control.click({ force: true });
         await expect(checkbox).not.toBeChecked();
       });
     });
 
     test.describe('Indeterminate State', () => {
       test('clears indeterminate state on click', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-select-all');
+        const { checkbox, control } = getCheckbox(page, 'demo-select-all');
 
         // Check indeterminate state via JavaScript
         const isIndeterminate = await checkbox.evaluate((el: HTMLInputElement) => el.indeterminate);
         expect(isIndeterminate).toBe(true);
 
-        // Click label to clear indeterminate
-        await label.click();
+        // Click control to clear indeterminate
+        await control.click();
 
         // After click, indeterminate should be false
         const isIndeterminateAfter = await checkbox.evaluate(
@@ -104,7 +106,7 @@ for (const framework of frameworks) {
     if (framework === 'astro') {
       test.describe('Custom Events (Astro Web Component)', () => {
         test('dispatches checkedchange event on state change', async ({ page }) => {
-          const { checkbox, label } = getCheckboxWithLabel(page, 'demo-terms');
+          const { checkbox, control } = getCheckbox(page, 'demo-terms');
           const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
 
           // Set up event listener with timeout to prevent hanging
@@ -125,8 +127,8 @@ for (const framework of frameworks) {
             ),
           ]);
 
-          // Click label to trigger event
-          await label.click();
+          // Click control to trigger event
+          await control.click();
 
           // Verify event was dispatched with correct detail
           const eventDetail = await eventPromise;
@@ -134,7 +136,7 @@ for (const framework of frameworks) {
         });
 
         test('event detail reflects current state', async ({ page }) => {
-          const { checkbox, label } = getCheckboxWithLabel(page, 'demo-newsletter');
+          const { checkbox, control } = getCheckbox(page, 'demo-newsletter');
           const wrapper = page.locator('apg-checkbox').filter({ has: checkbox });
 
           // Checkbox starts checked, so unchecking should dispatch checked: false
@@ -155,7 +157,7 @@ for (const framework of frameworks) {
             ),
           ]);
 
-          await label.click();
+          await control.click();
 
           const eventDetail = await eventPromise;
           expect(eventDetail.checked).toBe(false);
@@ -165,12 +167,14 @@ for (const framework of frameworks) {
 
     test.describe('Label Association', () => {
       test('clicking label toggles checkbox', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-terms');
+        const { checkbox } = getCheckbox(page, 'demo-terms');
+        // Find label that wraps this checkbox
+        const label = page.locator('label').filter({ has: checkbox });
 
         // Initial state
         await expect(checkbox).not.toBeChecked();
 
-        // Click on label
+        // Click on label (not the control) to verify label association
         await label.click();
         await expect(checkbox).toBeChecked();
       });
@@ -178,7 +182,7 @@ for (const framework of frameworks) {
 
     test.describe('Keyboard Interaction', () => {
       test('Space key toggles checkbox when focused', async ({ page }) => {
-        const { checkbox } = getCheckboxWithLabel(page, 'demo-terms');
+        const { checkbox } = getCheckbox(page, 'demo-terms');
 
         // Focus the checkbox (input is focusable even if visually hidden)
         await checkbox.focus();
@@ -196,12 +200,12 @@ for (const framework of frameworks) {
       });
 
       test('Space key does not toggle disabled checkbox', async ({ page }) => {
-        const { checkbox, label } = getCheckboxWithLabel(page, 'demo-disabled');
+        const { checkbox } = getCheckbox(page, 'demo-disabled');
         await expect(checkbox).toBeDisabled();
 
         // Try to focus - disabled checkbox should not be focusable
         // Focus on the previous checkbox first
-        const { checkbox: selectAll } = getCheckboxWithLabel(page, 'demo-select-all');
+        const { checkbox: selectAll } = getCheckbox(page, 'demo-select-all');
         await selectAll.focus();
 
         // Initial state
@@ -218,12 +222,12 @@ for (const framework of frameworks) {
 
     test.describe('Accessibility', () => {
       test('checkbox has correct role', async ({ page }) => {
-        const { checkbox } = getCheckboxWithLabel(page, 'demo-terms');
+        const { checkbox } = getCheckbox(page, 'demo-terms');
         await expect(checkbox).toHaveRole('checkbox');
       });
 
       test('checkbox is keyboard focusable', async ({ page }) => {
-        const { checkbox } = getCheckboxWithLabel(page, 'demo-terms');
+        const { checkbox } = getCheckbox(page, 'demo-terms');
 
         // Focus the checkbox directly
         await checkbox.focus();
@@ -232,8 +236,8 @@ for (const framework of frameworks) {
 
       test('disabled checkbox is not focusable via tab', async ({ page }) => {
         // Focus on the element before disabled checkbox
-        const { checkbox: selectAll } = getCheckboxWithLabel(page, 'demo-select-all');
-        const { checkbox: disabled } = getCheckboxWithLabel(page, 'demo-disabled');
+        const { checkbox: selectAll } = getCheckbox(page, 'demo-select-all');
+        const { checkbox: disabled } = getCheckbox(page, 'demo-disabled');
 
         await selectAll.focus();
         await expect(selectAll).toBeFocused();
