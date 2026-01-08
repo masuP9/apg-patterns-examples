@@ -2,6 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 const isCI = !!process.env.CI;
 
+// Base path depends on deploy target:
+// - CI (DEPLOY_TARGET=github-pages): /apg-patterns-examples
+// - Local (no DEPLOY_TARGET): /
+const basePath = isCI ? '/apg-patterns-examples' : '';
+
 /**
  * Playwright E2E Test Configuration
  *
@@ -18,8 +23,7 @@ export default defineConfig({
   workers: isCI ? 1 : undefined,
   reporter: isCI ? 'github' : 'html',
   use: {
-    // Include base path for GitHub Pages deployment
-    baseURL: 'http://localhost:4321/apg-patterns-examples',
+    baseURL: `http://localhost:4321${basePath}`,
     trace: 'on-first-retry',
   },
 
@@ -34,8 +38,7 @@ export default defineConfig({
     // CI: Use preview server (serves pre-built dist/)
     // Local: Use dev server (hot reload)
     command: isCI ? 'npx astro preview --host 0.0.0.0' : 'npm run dev',
-    // Use full URL with base path for health check (Astro uses /apg-patterns-examples base)
-    url: 'http://localhost:4321/apg-patterns-examples/',
+    url: `http://localhost:4321${basePath}/`,
     reuseExistingServer: !isCI,
     timeout: 180 * 1000, // 3 minutes for CI
     stdout: 'pipe',
