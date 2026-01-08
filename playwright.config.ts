@@ -7,6 +7,9 @@ const isCI = !!process.env.CI;
 // - Otherwise: /
 const basePath = process.env.DEPLOY_TARGET === 'github-pages' ? '/apg-patterns-examples' : '';
 
+// Framework filter from environment variable (for CI parallel execution)
+const frameworkFilter = process.env.E2E_FRAMEWORK;
+
 /**
  * Playwright E2E Test Configuration
  *
@@ -14,6 +17,12 @@ const basePath = process.env.DEPLOY_TARGET === 'github-pages' ? '/apg-patterns-e
  *
  * In CI: Uses `npm run preview` to serve pre-built files from dist/
  * Locally: Uses `npm run dev` for hot reload during development
+ *
+ * Framework-specific runs:
+ *   E2E_FRAMEWORK=react npx playwright test
+ *   E2E_FRAMEWORK=vue npx playwright test
+ *   E2E_FRAMEWORK=svelte npx playwright test
+ *   E2E_FRAMEWORK=astro npx playwright test
  */
 export default defineConfig({
   testDir: './e2e',
@@ -22,6 +31,8 @@ export default defineConfig({
   retries: isCI ? 2 : 0,
   workers: isCI ? 1 : undefined,
   reporter: isCI ? 'github' : 'html',
+  // Filter tests by framework if E2E_FRAMEWORK is set
+  grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,
   use: {
     baseURL: `http://localhost:4321${basePath}/`,
     trace: 'on-first-retry',
