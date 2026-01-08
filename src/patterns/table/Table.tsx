@@ -79,10 +79,9 @@ export function Table({
     onSortChange(column.id, newDirection);
   };
 
-  // CSS Grid needs to know the column count
-  const tableStyle = {
-    '--table-cols': columns.length,
-  } as React.CSSProperties;
+  // CSS Grid needs to know the column count (using const assertion for custom property)
+  const cssVars = { '--table-cols': columns.length } as const;
+  const tableStyle = { ...cssVars };
 
   return (
     <div

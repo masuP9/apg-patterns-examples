@@ -18,7 +18,8 @@ export default defineConfig({
   workers: isCI ? 1 : undefined,
   reporter: isCI ? 'github' : 'html',
   use: {
-    baseURL: 'http://localhost:4321',
+    // Include base path for GitHub Pages deployment
+    baseURL: 'http://localhost:4321/apg-patterns-examples',
     trace: 'on-first-retry',
   },
 
@@ -33,7 +34,8 @@ export default defineConfig({
     // CI: Use preview server (serves pre-built dist/)
     // Local: Use dev server (hot reload)
     command: isCI ? 'npx astro preview --host 0.0.0.0' : 'npm run dev',
-    url: 'http://localhost:4321',
+    // Use full URL with base path for health check (Astro uses /apg-patterns-examples base)
+    url: 'http://localhost:4321/apg-patterns-examples/',
     reuseExistingServer: !isCI,
     timeout: 180 * 1000, // 3 minutes for CI
     stdout: 'pipe',

@@ -38,8 +38,11 @@ export function SortableTableDemo() {
 
     const columnIndex = columns.findIndex(({ id }) => id === columnId);
     const sortedRows = [...rows].sort((a, b) => {
-      const aVal = a.cells[columnIndex];
-      const bVal = b.cells[columnIndex];
+      const aCell = a.cells[columnIndex];
+      const bCell = b.cells[columnIndex];
+      // Extract string value from cell (cells in this demo are always strings)
+      const aVal = typeof aCell === 'string' ? aCell : '';
+      const bVal = typeof bCell === 'string' ? bCell : '';
 
       // Try numeric comparison for Age column
       if (columnId === 'age') {
@@ -121,7 +124,13 @@ export function SpanningCellsTableDemo() {
   const rows: TableRow[] = [
     {
       id: 'electronics',
-      cells: [{ content: 'Electronics', rowspan: 2 } as TableCell, '150', '180', '200', '220'],
+      cells: [
+        { content: 'Electronics', rowspan: 2 } satisfies TableCell,
+        '150',
+        '180',
+        '200',
+        '220',
+      ],
     },
     {
       id: 'electronics-sub',
@@ -129,11 +138,11 @@ export function SpanningCellsTableDemo() {
     },
     {
       id: 'clothing',
-      cells: ['Clothing', { content: 'N/A', colspan: 2 } as TableCell, '90', '120'],
+      cells: ['Clothing', { content: 'N/A', colspan: 2 } satisfies TableCell, '90', '120'],
     },
     {
       id: 'summary',
-      cells: [{ content: 'Total', colspan: 4 } as TableCell, '1775'],
+      cells: [{ content: 'Total', colspan: 4 } satisfies TableCell, '1775'],
     },
   ];
 

@@ -10,7 +10,8 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { JSDOM } from 'jsdom';
 import Table from './Table.astro';
-import type { TableColumn, TableRow, TableCell } from './Table.astro';
+// Import types from React implementation (types are shared across frameworks)
+import type { TableColumn, TableRow, TableCell } from './Table';
 
 describe('Table (Astro Container API)', () => {
   let container: AstroContainer;
