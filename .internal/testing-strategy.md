@@ -217,23 +217,53 @@ describe('ComponentName', () => {
 ```
 src/patterns/button/
 ├── ToggleButton.tsx
-├── ToggleButton.test.tsx        # React テスト
+├── ToggleButton.test.tsx        # React ユニットテスト
 ├── ToggleButton.vue
-├── ToggleButton.test.vue.ts     # Vue テスト
+├── ToggleButton.test.vue.ts     # Vue ユニットテスト
 ├── ToggleButton.svelte
-├── ToggleButton.test.svelte.ts  # Svelte テスト
+├── ToggleButton.test.svelte.ts  # Svelte ユニットテスト
 ├── ToggleButton.astro
-└── ToggleButton.test.astro.ts   # Astro テスト（Playwright）
+└── ToggleButton.test.astro.ts   # Astro ユニットテスト（Container API）
+
+e2e/
+└── table-visual-spanning.spec.ts  # E2E テスト（全フレームワーク共通）
 ```
 
-### フレームワーク別テストツール
+### テストの種類
 
-| フレームワーク | テストライブラリ        | 実行環境       |
-| -------------- | ----------------------- | -------------- |
-| React          | @testing-library/react  | Vitest + jsdom |
-| Vue            | @testing-library/vue    | Vitest + jsdom |
-| Svelte         | @testing-library/svelte | Vitest + jsdom |
-| Astro          | Playwright              | ブラウザ       |
+| テスト種別   | 対象               | ツール                     | 実行コマンド        |
+| ------------ | ------------------ | -------------------------- | ------------------- |
+| ユニット     | React/Vue/Svelte   | @testing-library + jsdom   | `npm run test:unit` |
+| ユニット     | Astro              | Container API + JSDOM      | `npm run test:astro`|
+| E2E          | 全フレームワーク   | Playwright                 | `npm run test:e2e`  |
+
+### フレームワーク別ユニットテスト
+
+| フレームワーク | テストライブラリ        | 実行環境             | コマンド             |
+| -------------- | ----------------------- | -------------------- | -------------------- |
+| React          | @testing-library/react  | Vitest + jsdom       | `npm run test:react` |
+| Vue            | @testing-library/vue    | Vitest + jsdom       | `npm run test:vue`   |
+| Svelte         | @testing-library/svelte | Vitest + jsdom       | `npm run test:svelte`|
+| Astro          | Container API           | Vitest + JSDOM       | `npm run test:astro` |
+
+### E2E テスト
+
+E2E テストは `e2e/` ディレクトリに配置し、Playwright で全フレームワークを横断的にテストする。
+視覚的なレンダリング（CSS Grid のスパン表示など）や実際のブラウザ動作を検証する場合に使用。
+
+```typescript
+// e2e/table-visual-spanning.spec.ts
+const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
+
+for (const framework of frameworks) {
+  test.describe(`Table Visual Spanning (${framework})`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(`/patterns/table/${framework}/`);
+    });
+    // ...
+  });
+}
+```
 
 ### なぜ独立したテストか
 
@@ -282,17 +312,18 @@ src/patterns/button/
 
 ## 使用ツール
 
-| ツール                      | 用途                        |
-| --------------------------- | --------------------------- |
-| Vitest                      | テストランナー              |
-| @testing-library/react      | React コンポーネントテスト  |
-| @testing-library/vue        | Vue コンポーネントテスト    |
-| @testing-library/svelte     | Svelte コンポーネントテスト |
-| @testing-library/user-event | ユーザー操作                |
-| @testing-library/jest-dom   | カスタムマッチャー          |
-| jest-axe                    | アクセシビリティ自動テスト  |
-| Playwright                  | Astro E2E テスト            |
-| @vitest/coverage-v8         | カバレッジ測定              |
+| ツール                      | 用途                                    |
+| --------------------------- | --------------------------------------- |
+| Vitest                      | テストランナー                          |
+| @testing-library/react      | React コンポーネントテスト              |
+| @testing-library/vue        | Vue コンポーネントテスト                |
+| @testing-library/svelte     | Svelte コンポーネントテスト             |
+| @testing-library/user-event | ユーザー操作                            |
+| @testing-library/jest-dom   | カスタムマッチャー                      |
+| jest-axe                    | アクセシビリティ自動テスト              |
+| Astro Container API         | Astro コンポーネントテスト              |
+| Playwright                  | E2E テスト（全フレームワーク）          |
+| @vitest/coverage-v8         | カバレッジ測定                          |
 
 ### セットアップファイル
 
