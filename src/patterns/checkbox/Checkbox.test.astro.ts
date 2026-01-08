@@ -1,296 +1,207 @@
 /**
- * Checkbox Web Component Tests
+ * Checkbox Astro Component Tests using Container API
  *
- * Note: These are unit tests for the Web Component class.
- * Full keyboard navigation and focus management tests require E2E testing
- * with Playwright due to jsdom limitations with focus events.
+ * These tests verify the actual Checkbox.astro component output using Astro's Container API.
+ * This ensures the component renders correct HTML structure and attributes.
+ *
+ * Note: Web Component behavior tests (click interaction, event dispatching) require
+ * E2E testing with Playwright as they need a real browser environment.
+ *
+ * @see https://docs.astro.build/en/reference/container-reference/
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { JSDOM } from 'jsdom';
+import Checkbox from './Checkbox.astro';
 
-describe('Checkbox (Web Component)', () => {
-  let container: HTMLElement;
+describe('Checkbox (Astro Container API)', () => {
+  let container: AstroContainer;
 
-  // Web Component class extracted for testing
-  class TestApgCheckbox extends HTMLElement {
-    private input: HTMLInputElement | null = null;
-    private rafId: number | null = null;
+  beforeEach(async () => {
+    container = await AstroContainer.create();
+  });
 
-    connectedCallback() {
-      this.rafId = requestAnimationFrame(() => this.initialize());
-    }
-
-    private initialize() {
-      this.rafId = null;
-      this.input = this.querySelector('input[type="checkbox"]');
-
-      if (!this.input) {
-        return;
-      }
-
-      // Set initial indeterminate state if specified
-      if (this.dataset.indeterminate === 'true') {
-        this.input.indeterminate = true;
-      }
-
-      this.input.addEventListener('change', this.handleChange);
-    }
-
-    disconnectedCallback() {
-      if (this.rafId !== null) {
-        cancelAnimationFrame(this.rafId);
-        this.rafId = null;
-      }
-      this.input?.removeEventListener('change', this.handleChange);
-    }
-
-    private handleChange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-
-      // Clear indeterminate on user interaction
-      if (target.indeterminate) {
-        target.indeterminate = false;
-      }
-
-      this.dispatchEvent(
-        new CustomEvent('checkedchange', {
-          detail: { checked: target.checked },
-          bubbles: true,
-        })
-      );
-    };
-
-    // Expose for testing
-    get _input() {
-      return this.input;
-    }
+  // Helper to render and parse HTML
+  async function renderCheckbox(props: {
+    initialChecked?: boolean;
+    indeterminate?: boolean;
+    disabled?: boolean;
+    name?: string;
+    value?: string;
+    id?: string;
+    class?: string;
+  } = {}): Promise<Document> {
+    const html = await container.renderToString(Checkbox, { props });
+    const dom = new JSDOM(html);
+    return dom.window.document;
   }
 
-  function createCheckboxHTML(
-    options: {
-      checked?: boolean;
-      disabled?: boolean;
-      indeterminate?: boolean;
-      name?: string;
-      value?: string;
-      id?: string;
-      ariaLabel?: string;
-    } = {}
-  ) {
-    const {
-      checked = false,
-      disabled = false,
-      indeterminate = false,
-      name,
-      value,
-      id,
-      ariaLabel = 'Accept terms',
-    } = options;
-
-    return `
-      <apg-checkbox class="apg-checkbox" ${indeterminate ? 'data-indeterminate="true"' : ''}>
-        <input
-          type="checkbox"
-          class="apg-checkbox-input"
-          ${id ? `id="${id}"` : ''}
-          ${checked ? 'checked' : ''}
-          ${disabled ? 'disabled' : ''}
-          ${name ? `name="${name}"` : ''}
-          ${value ? `value="${value}"` : ''}
-          aria-label="${ariaLabel}"
-        />
-        <span class="apg-checkbox-control" aria-hidden="true">
-          <span class="apg-checkbox-icon apg-checkbox-icon--check">✓</span>
-          <span class="apg-checkbox-icon apg-checkbox-icon--indeterminate">−</span>
-        </span>
-      </apg-checkbox>
-    `;
-  }
-
-  beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    // Register custom element if not already registered
-    if (!customElements.get('apg-checkbox')) {
-      customElements.define('apg-checkbox', TestApgCheckbox);
-    }
-  });
-
-  afterEach(() => {
-    container.remove();
-    vi.restoreAllMocks();
-  });
-
-  describe('Initial Rendering', () => {
-    it('renders with unchecked state by default', async () => {
-      container.innerHTML = createCheckboxHTML();
-
-      // Wait for custom element to initialize
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input).toBeTruthy();
-      expect(input.checked).toBe(false);
+  // 🔴 High Priority: HTML Structure
+  describe('HTML Structure', () => {
+    it('renders apg-checkbox custom element wrapper', async () => {
+      const doc = await renderCheckbox();
+      const wrapper = doc.querySelector('apg-checkbox');
+      expect(wrapper).not.toBeNull();
     });
 
-    it('renders with checked state when checked is true', async () => {
-      container.innerHTML = createCheckboxHTML({ checked: true });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.checked).toBe(true);
+    it('renders input with type="checkbox"', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input).not.toBeNull();
     });
 
-    it('renders with disabled state', async () => {
-      container.innerHTML = createCheckboxHTML({ disabled: true });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.disabled).toBe(true);
-    });
-
-    it('renders with indeterminate state', async () => {
-      container.innerHTML = createCheckboxHTML({ indeterminate: true });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.indeterminate).toBe(true);
-    });
-
-    it('renders with name attribute', async () => {
-      container.innerHTML = createCheckboxHTML({ name: 'terms' });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.name).toBe('terms');
-    });
-
-    it('renders with value attribute', async () => {
-      container.innerHTML = createCheckboxHTML({ value: 'accepted' });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.value).toBe('accepted');
-    });
-
-    it('renders with id attribute for external label association', async () => {
-      container.innerHTML = createCheckboxHTML({ id: 'my-checkbox' });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.id).toBe('my-checkbox');
-    });
-  });
-
-  describe('Click Interaction', () => {
-    it('toggles checked on click', async () => {
-      container.innerHTML = createCheckboxHTML();
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(input.checked).toBe(false);
-
-      input.click();
-      expect(input.checked).toBe(true);
-
-      input.click();
-      expect(input.checked).toBe(false);
-    });
-
-    it('dispatches checkedchange event on click', async () => {
-      container.innerHTML = createCheckboxHTML();
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const element = container.querySelector('apg-checkbox') as HTMLElement;
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      const changeHandler = vi.fn();
-      element.addEventListener('checkedchange', changeHandler);
-
-      input.click();
-
-      expect(changeHandler).toHaveBeenCalledTimes(1);
-      expect(changeHandler.mock.calls[0][0].detail.checked).toBe(true);
-    });
-
-    it('does not toggle when disabled', async () => {
-      container.innerHTML = createCheckboxHTML({ disabled: true });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(input.checked).toBe(false);
-      input.click();
-      expect(input.checked).toBe(false);
-    });
-
-    it('clears indeterminate on click', async () => {
-      container.innerHTML = createCheckboxHTML({ indeterminate: true });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(input.indeterminate).toBe(true);
-      input.click();
-      expect(input.indeterminate).toBe(false);
-    });
-  });
-
-  describe('External Label Association', () => {
-    it('can be associated with external label via for/id', async () => {
-      container.innerHTML = `
-        <label for="terms-cb">Accept terms</label>
-        ${createCheckboxHTML({ id: 'terms-cb', ariaLabel: '' })}
-      `;
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const label = container.querySelector('label') as HTMLLabelElement;
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(input.checked).toBe(false);
-      label.click();
-      expect(input.checked).toBe(true);
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('has proper input type', async () => {
-      container.innerHTML = createCheckboxHTML();
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input') as HTMLInputElement;
-      expect(input.type).toBe('checkbox');
-    });
-
-    it('supports aria-label for accessible name', async () => {
-      container.innerHTML = createCheckboxHTML({ ariaLabel: 'Accept terms and conditions' });
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const input = container.querySelector('input') as HTMLInputElement;
-      expect(input.getAttribute('aria-label')).toBe('Accept terms and conditions');
-    });
-
-    it('control is marked as aria-hidden', async () => {
-      container.innerHTML = createCheckboxHTML();
-
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const control = container.querySelector('.apg-checkbox-control');
+    it('renders checkbox control span with aria-hidden', async () => {
+      const doc = await renderCheckbox();
+      const control = doc.querySelector('.apg-checkbox-control');
+      expect(control).not.toBeNull();
       expect(control?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('renders check icon inside control', async () => {
+      const doc = await renderCheckbox();
+      const checkIcon = doc.querySelector('.apg-checkbox-icon--check');
+      expect(checkIcon).not.toBeNull();
+      expect(checkIcon?.querySelector('svg')).not.toBeNull();
+    });
+
+    it('renders indeterminate icon inside control', async () => {
+      const doc = await renderCheckbox();
+      const indeterminateIcon = doc.querySelector('.apg-checkbox-icon--indeterminate');
+      expect(indeterminateIcon).not.toBeNull();
+      expect(indeterminateIcon?.querySelector('svg')).not.toBeNull();
+    });
+  });
+
+  // 🔴 High Priority: Checked State
+  describe('Checked State', () => {
+    it('renders unchecked by default', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]') as HTMLInputElement | null;
+      expect(input?.hasAttribute('checked')).toBe(false);
+    });
+
+    it('renders checked when initialChecked is true', async () => {
+      const doc = await renderCheckbox({ initialChecked: true });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('checked')).toBe(true);
+    });
+  });
+
+  // 🔴 High Priority: Disabled State
+  describe('Disabled State', () => {
+    it('renders without disabled attribute by default', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('renders with disabled attribute when disabled is true', async () => {
+      const doc = await renderCheckbox({ disabled: true });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('disabled')).toBe(true);
+    });
+  });
+
+  // 🟡 Medium Priority: Indeterminate State
+  describe('Indeterminate State', () => {
+    it('does not have data-indeterminate by default', async () => {
+      const doc = await renderCheckbox();
+      const wrapper = doc.querySelector('apg-checkbox');
+      expect(wrapper?.hasAttribute('data-indeterminate')).toBe(false);
+    });
+
+    it('has data-indeterminate="true" when indeterminate is true', async () => {
+      const doc = await renderCheckbox({ indeterminate: true });
+      const wrapper = doc.querySelector('apg-checkbox');
+      expect(wrapper?.getAttribute('data-indeterminate')).toBe('true');
+    });
+  });
+
+  // 🟡 Medium Priority: Form Integration
+  describe('Form Integration', () => {
+    it('renders without name attribute by default', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('name')).toBe(false);
+    });
+
+    it('renders with name attribute when provided', async () => {
+      const doc = await renderCheckbox({ name: 'terms' });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.getAttribute('name')).toBe('terms');
+    });
+
+    it('renders without value attribute by default', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('value')).toBe(false);
+    });
+
+    it('renders with value attribute when provided', async () => {
+      const doc = await renderCheckbox({ value: 'accepted' });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.getAttribute('value')).toBe('accepted');
+    });
+  });
+
+  // 🟡 Medium Priority: Label Association
+  describe('Label Association', () => {
+    it('renders without id attribute by default', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('id')).toBe(false);
+    });
+
+    it('renders with id attribute when provided for external label association', async () => {
+      const doc = await renderCheckbox({ id: 'my-checkbox' });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.getAttribute('id')).toBe('my-checkbox');
+    });
+  });
+
+  // 🟢 Low Priority: CSS Classes
+  describe('CSS Classes', () => {
+    it('has default apg-checkbox class on wrapper', async () => {
+      const doc = await renderCheckbox();
+      const wrapper = doc.querySelector('apg-checkbox');
+      expect(wrapper?.classList.contains('apg-checkbox')).toBe(true);
+    });
+
+    it('has apg-checkbox-input class on input', async () => {
+      const doc = await renderCheckbox();
+      const input = doc.querySelector('input');
+      expect(input?.classList.contains('apg-checkbox-input')).toBe(true);
+    });
+
+    it('appends custom class to wrapper', async () => {
+      const doc = await renderCheckbox({ class: 'custom-class' });
+      const wrapper = doc.querySelector('apg-checkbox');
+      expect(wrapper?.classList.contains('apg-checkbox')).toBe(true);
+      expect(wrapper?.classList.contains('custom-class')).toBe(true);
+    });
+  });
+
+  // 🟢 Low Priority: Combined States
+  describe('Combined States', () => {
+    it('renders checked and disabled together', async () => {
+      const doc = await renderCheckbox({ initialChecked: true, disabled: true });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.hasAttribute('checked')).toBe(true);
+      expect(input?.hasAttribute('disabled')).toBe(true);
+    });
+
+    it('renders with all form attributes', async () => {
+      const doc = await renderCheckbox({
+        id: 'terms-checkbox',
+        name: 'terms',
+        value: 'accepted',
+        initialChecked: true,
+      });
+      const input = doc.querySelector('input[type="checkbox"]');
+      expect(input?.getAttribute('id')).toBe('terms-checkbox');
+      expect(input?.getAttribute('name')).toBe('terms');
+      expect(input?.getAttribute('value')).toBe('accepted');
+      expect(input?.hasAttribute('checked')).toBe(true);
     });
   });
 });
