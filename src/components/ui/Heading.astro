@@ -12,6 +12,18 @@ const Tag = `h${level}` as 'h2' | 'h3' | 'h4';
 const slotContent = await Astro.slots.render('default');
 // Strip HTML tags to get plain text
 const text = slotContent.replace(/<[^>]*>/g, '').trim();
+
+// Warn if text contains non-ASCII characters and id is not specified
+// Non-ASCII characters (like Japanese) are stripped by the slug generation regex,
+// resulting in empty or incorrect IDs that break TOC navigation.
+const hasNonAscii = /[^\x00-\x7F]/.test(text);
+if (hasNonAscii && !id) {
+  console.warn(
+    `[Heading] Non-ASCII text without explicit id: "${text}". ` +
+      `Add id prop to ensure TOC navigation works correctly.`
+  );
+}
+
 const slug =
   id ??
   text

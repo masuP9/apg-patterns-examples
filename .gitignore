@@ -68,3 +68,5 @@ temp/
 # Claude related files
 .claude/
 .serena/
+playwright-report/
+test-results/

@@ -43,12 +43,12 @@
 | Slider (Multi-Thumb)| -     | -   | -      | -     | 予定       |
 | Spinbutton          | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Switch              | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Table               | -     | -   | -      | -     | 予定       |
+| Table               | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Tabs                | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Toggle Button       | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Toolbar             | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Tooltip             | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Tree View           | -     | -   | -      | -     | 予定       |
+| Tree View           | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Treegrid            | -     | -   | -      | -     | 予定       |
 | Window Splitter     | -     | -   | -      | -     | 予定       |
 

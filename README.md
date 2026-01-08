@@ -43,12 +43,12 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |
 | Spinbutton           | ✅    | ✅  | ✅     | ✅    | Complete |
 | Switch               | ✅    | ✅  | ✅     | ✅    | Complete |
-| Table                | -     | -   | -      | -     | Planned  |
+| Table                | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tabs                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | Complete |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tree View            | -     | -   | -      | -     | Planned  |
+| Tree View            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Treegrid             | -     | -   | -      | -     | Planned  |
 | Window Splitter      | -     | -   | -      | -     | Planned  |
 

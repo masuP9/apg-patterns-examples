@@ -1,0 +1,322 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import {
+  BasicTableDemo,
+  SortableTableDemo,
+  RowHeaderTableDemo,
+  VirtualizedTableDemo,
+  SpanningCellsTableDemo,
+} from '@patterns/table/TableDemo';
+import AccessibilityDocs from '@patterns/table/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/table/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/table/Table.tsx?raw';
+import testCode from '@patterns/table/Table.test.tsx?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="テーブル - React"
+  pattern="table"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Table</h1>
+    <p class="text-muted-foreground text-lg">行と列でデータを表示するための静的な表構造。</p>
+    <AiGuideBadge pattern="table" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="table" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <!-- Basic Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">基本的なテーブル</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        シンプルなデータ表示用の静的テーブル。インタラクティブな機能なし。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <BasicTableDemo />
+      </div>
+    </div>
+
+    <!-- Sortable Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">ソート可能なテーブル</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        列ヘッダーをクリックしてソート。<code>aria-sort</code> でソート方向を示します。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <SortableTableDemo client:load />
+      </div>
+    </div>
+
+    <!-- Row Headers -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">行ヘッダー付き</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        各行の最初のセルに <code>role="rowheader"</code> を使用して、スクリーンリーダーでのナビゲーションを改善。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <RowHeaderTableDemo />
+      </div>
+    </div>
+
+    <!-- Virtualized Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">仮想化サポート</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        大規模なデータセットでは、<code>aria-rowcount</code>、<code>aria-colcount</code>、
+        <code>aria-rowindex</code> を使用してテーブル全体の構造を伝えます。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <VirtualizedTableDemo />
+      </div>
+    </div>
+
+    <!-- Spanning Cells -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">セルの結合</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        <code>colspan</code> と <code>rowspan</code>
+        を使用してセルを複数列・複数行にまたがらせることができます。この実装では CSS Grid の
+        <code>grid-column: span N</code> と <code>grid-row: span N</code>
+        で視覚的な結合を実現し、さらに <code>aria-colspan</code> と <code>aria-rowspan</code>
+        でスクリーンリーダーのアクセシビリティを確保しています。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <SpanningCellsTableDemo />
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Table.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Table } from './Table';
+import type { TableColumn, TableRow } from './Table';
+
+const columns: TableColumn[] = [
+  { id: 'name', header: '名前' },
+  { id: 'age', header: '年齢' },
+  { id: 'city', header: '都市' },
+];
+
+const rows: TableRow[] = [
+  { id: '1', cells: ['Alice', '30', '東京'] },
+  { id: '2', cells: ['Bob', '25', '大阪'] },
+  { id: '3', cells: ['Charlie', '35', '京都'] },
+];
+
+// 基本的なテーブル
+<Table
+  columns={columns}
+  rows={rows}
+  aria-label="ユーザー一覧"
+/>
+
+// ソート可能な列
+const sortableColumns: TableColumn[] = [
+  { id: 'name', header: '名前', sortable: true, sort: 'ascending' },
+  { id: 'age', header: '年齢', sortable: true },
+  { id: 'city', header: '都市' },
+];
+
+<Table
+  columns={sortableColumns}
+  rows={rows}
+  aria-label="ソート可能なユーザー一覧"
+  onSortChange={(columnId, direction) => {
+    console.log(\`Sort \${columnId} \${direction}\`);
+  }}
+/>`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Table Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableColumn[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableRow[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">行データ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>caption</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">テーブルのキャプション（任意）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSortChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(columnId: string, direction) =&gt; void</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ソート変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalColumns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">総列数（仮想化用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalRows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">総行数（仮想化用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>startColIndex</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">開始列インデックス（1始まり）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">TableColumn インターフェース</h3>
+    <CodeBlock
+      code={`interface TableColumn {
+  id: string;
+  header: string;
+  sortable?: boolean;
+  sort?: 'ascending' | 'descending' | 'none';
+}`}
+      lang="typescript"
+      title="Types"
+    />
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">TableRow インターフェース</h3>
+    <CodeBlock
+      code={`interface TableCell {
+  content: string | ReactNode;
+  colspan?: number; // 結合する列数（視覚的 + aria-colspan）
+  rowspan?: number; // 結合する行数（視覚的 + aria-rowspan）
+}
+
+type TableCellValue = string | ReactNode | TableCell;
+
+interface TableRow {
+  id: string;
+  cells: TableCellValue[];
+  hasRowHeader?: boolean;
+  rowIndex?: number; // 仮想化用（1始まり）
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Table.test.tsx" />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/table/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Table パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/table"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;table&gt; 要素
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="table" />
+    </ul>
+  </section>
+</PatternLayout>

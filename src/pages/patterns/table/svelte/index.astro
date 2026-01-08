@@ -1,0 +1,319 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import TableDemo from '@patterns/table/TableDemo.svelte';
+import AccessibilityDocs from '@patterns/table/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/table/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/table/Table.svelte?raw';
+import testCode from '@patterns/table/Table.test.svelte.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Table - Svelte" pattern="table" framework="svelte" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Table</h1>
+    <p class="text-muted-foreground text-lg">
+      A static tabular structure for displaying data with rows and columns.
+    </p>
+    <AiGuideBadge pattern="table" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="table" currentFramework="svelte" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Basic Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Basic Table</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A simple static table displaying data. No interactive features.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TableDemo variant="basic" />
+      </div>
+    </div>
+
+    <!-- Sortable Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TableDemo variant="sortable" client:load />
+      </div>
+    </div>
+
+    <!-- Row Headers -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">With Row Headers</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        First cell in each row uses <code>role="rowheader"</code> for better screen reader navigation.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TableDemo variant="rowHeader" />
+      </div>
+    </div>
+
+    <!-- Virtualized Table -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Virtualization Support</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        For large datasets, use <code>aria-rowcount</code>, <code>aria-colcount</code>, and
+        <code>aria-rowindex</code> to communicate the full table structure.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TableDemo variant="virtualized" />
+      </div>
+    </div>
+
+    <!-- Spanning Cells -->
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Spanning Cells</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Cells can span multiple columns or rows using <code>colspan</code> and <code>rowspan</code>.
+        This implementation uses CSS Grid with <code>grid-column: span N</code> and
+        <code>grid-row: span N</code> for visual spanning, plus <code>aria-colspan</code> and
+        <code>aria-rowspan</code> for screen reader accessibility.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <TableDemo variant="spanning" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Table.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+  import Table from './Table.svelte';
+  import type { TableColumn, TableRow } from './Table.svelte';
+
+  const columns: TableColumn[] = [
+    { id: 'name', header: 'Name' },
+    { id: 'age', header: 'Age' },
+    { id: 'city', header: 'City' },
+  ];
+
+  const rows: TableRow[] = [
+    { id: '1', cells: ['Alice', '30', 'Tokyo'] },
+    { id: '2', cells: ['Bob', '25', 'Osaka'] },
+    { id: '3', cells: ['Charlie', '35', 'Kyoto'] },
+  ];
+
+  // Sortable columns
+  let sortableColumns = $state<TableColumn[]>([
+    { id: 'name', header: 'Name', sortable: true, sort: 'ascending' },
+    { id: 'age', header: 'Age', sortable: true },
+    { id: 'city', header: 'City' },
+  ]);
+
+  function handleSortChange(columnId: string, direction: 'ascending' | 'descending') {
+    // Handle sort change
+  }
+</script>
+
+<!-- Basic table -->
+<Table {columns} {rows} aria-label="User List" />
+
+<!-- Sortable table -->
+<Table
+  columns={sortableColumns}
+  {rows}
+  aria-label="Sortable User List"
+  onSortChange={handleSortChange}
+/>
+
+<!-- With row headers -->
+<Table
+  {columns}
+  rows={rowsWithHeaders}
+  aria-label="User List with Row Headers"
+/>`}
+      lang="svelte"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Table Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableColumn[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Column definitions</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TableRow[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Row data</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>caption</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Optional table caption</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSortChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(columnId: string, direction) =&gt; void</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when sort changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalColumns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Total columns (for virtualization)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>totalRows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Total rows (for virtualization)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>startColIndex</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Starting column index (1-based)</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">TableColumn Interface</h3>
+    <CodeBlock
+      code={`interface TableColumn {
+  id: string;
+  header: string;
+  sortable?: boolean;
+  sort?: 'ascending' | 'descending' | 'none';
+}`}
+      lang="typescript"
+      title="Types"
+    />
+
+    <h3 class="mt-6 mb-3 text-lg font-medium">TableRow Interface</h3>
+    <CodeBlock
+      code={`interface TableCell {
+  content: string;
+  colspan?: number; // Columns spanned (visual + aria-colspan)
+  rowspan?: number; // Rows spanned (visual + aria-rowspan)
+}
+
+type TableCellValue = string | TableCell;
+
+interface TableRow {
+  id: string;
+  cells: TableCellValue[];
+  hasRowHeader?: boolean;
+  rowIndex?: number; // For virtualization (1-based)
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Table.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/table/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Table Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;table&gt; element
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="table" />
+    </ul>
+  </section>
+</PatternLayout>
