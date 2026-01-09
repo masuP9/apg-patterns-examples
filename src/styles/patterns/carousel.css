@@ -1,0 +1,451 @@
+/* =============================================================================
+   CAROUSEL COMPONENT STYLES
+   ============================================================================= */
+
+/* Carousel Container */
+.apg-carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  overflow: hidden;
+}
+
+/* Slides Container */
+.apg-carousel-slides {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--background) 95%, var(--foreground));
+  /* Allow vertical scrolling but capture horizontal swipes */
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Disable transition during drag */
+.apg-carousel-slides--dragging {
+  cursor: grabbing;
+}
+
+/* Individual Slide */
+.apg-carousel-slide {
+  padding: 2rem;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Prevent text selection during swipe */
+  user-select: none;
+}
+
+/* During drag, position both active and adjacent slides absolutely for alignment */
+.apg-carousel-slides--dragging .apg-carousel-slide--active {
+  position: relative;
+}
+
+/* Adjacent slides during swipe (positioned absolutely, transforms applied via inline styles) */
+.apg-carousel-slide--swipe-prev,
+.apg-carousel-slide--swipe-next {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+
+/* =============================================================================
+   SLIDE TRANSITION ANIMATIONS
+   ============================================================================= */
+
+/* Slide entering from right (going to next slide) */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide entering from left (going to previous slide) */
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide exiting to left (going to next slide) */
+@keyframes slide-out-to-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Slide exiting to right (going to previous slide) */
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Animation classes */
+.apg-carousel-slide--entering-next {
+  animation: slide-in-from-right 0.3s ease-out forwards;
+}
+
+.apg-carousel-slide--entering-prev {
+  animation: slide-in-from-left 0.3s ease-out forwards;
+}
+
+.apg-carousel-slide--exiting-next {
+  animation: slide-out-to-left 0.3s ease-out forwards;
+}
+
+.apg-carousel-slide--exiting-prev {
+  animation: slide-out-to-right 0.3s ease-out forwards;
+}
+
+/* Exiting slides need absolute positioning to overlay */
+.apg-carousel-slide--exiting-next,
+.apg-carousel-slide--exiting-prev {
+  position: absolute;
+  inset: 0;
+}
+
+/* Allow pointer events to pass through slide content for swipe detection */
+.apg-carousel-slide > * {
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for interactive elements inside slides */
+.apg-carousel-slide a,
+.apg-carousel-slide button,
+.apg-carousel-slide input,
+.apg-carousel-slide select,
+.apg-carousel-slide textarea,
+.apg-carousel-slide video,
+.apg-carousel-slide audio,
+.apg-carousel-slide [role='button'],
+.apg-carousel-slide [role='link'],
+.apg-carousel-slide [tabindex]:not([tabindex='-1']) {
+  pointer-events: auto;
+}
+
+/* Hide non-active slides by default */
+.apg-carousel-slide:not(.apg-carousel-slide--active):not(.apg-carousel-slide--swipe-prev):not(
+    .apg-carousel-slide--swipe-next
+  ):not(.apg-carousel-slide--exiting-next):not(.apg-carousel-slide--exiting-prev) {
+  display: none;
+}
+
+.apg-carousel-slide--active {
+  display: flex;
+}
+
+/* Slide Content - Images */
+.apg-carousel-slide img,
+.apg-carousel-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  display: block;
+}
+
+/* =============================================================================
+   CONTROLS
+   ============================================================================= */
+
+/* Controls Container (below slides) */
+.apg-carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--background);
+  border-top: 1px solid var(--border);
+}
+
+/* Play/Pause Button */
+.apg-carousel-play-pause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.apg-carousel-play-pause:hover {
+  background: color-mix(in srgb, var(--background) 90%, var(--foreground));
+}
+
+.apg-carousel-play-pause:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-carousel-play-pause[data-playing='true'] {
+  color: var(--primary);
+}
+
+/* =============================================================================
+   TABLIST (Slide Indicators)
+   ============================================================================= */
+
+/* Tablist Container */
+.apg-carousel-tablist {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 4px; /* Focus indicator spacing */
+  margin: -4px; /* Compensate for padding */
+}
+
+/* Individual Tab (Dot) */
+.apg-carousel-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apg-carousel-tab:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* Tab Indicator (Visual Dot) */
+.apg-carousel-tab-indicator {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+.apg-carousel-tab:hover .apg-carousel-tab-indicator {
+  opacity: 0.7;
+}
+
+.apg-carousel-tab--selected .apg-carousel-tab-indicator {
+  background: var(--primary);
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* =============================================================================
+   NAVIGATION BUTTONS (Prev/Next)
+   ============================================================================= */
+
+/* Nav Button Group */
+.apg-carousel-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Prev/Next Buttons */
+.apg-carousel-prev,
+.apg-carousel-next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.apg-carousel-prev:hover,
+.apg-carousel-next:hover {
+  background: color-mix(in srgb, var(--background) 90%, var(--foreground));
+}
+
+.apg-carousel-prev:focus,
+.apg-carousel-next:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-carousel-prev:active,
+.apg-carousel-next:active {
+  transform: scale(0.95);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-carousel-tab-indicator {
+    opacity: 1;
+    background: black;
+  }
+
+  .apg-carousel-tab--selected .apg-carousel-tab-indicator {
+    background: #facc15;
+  }
+
+  .apg-carousel-play-pause,
+  .apg-carousel-prev,
+  .apg-carousel-next {
+    border-width: 2px;
+    background: white;
+    color: black;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-carousel-tab,
+  .apg-carousel-tab-indicator,
+  .apg-carousel-play-pause,
+  .apg-carousel-prev,
+  .apg-carousel-next {
+    transition: none;
+  }
+
+  .apg-carousel-tab--selected .apg-carousel-tab-indicator {
+    transform: none;
+  }
+
+  /* Disable slide transition animations */
+  .apg-carousel-slide--entering-next,
+  .apg-carousel-slide--entering-prev,
+  .apg-carousel-slide--exiting-next,
+  .apg-carousel-slide--exiting-prev {
+    animation: none;
+  }
+}
+
+/* Focus Enhancement for Keyboard Users */
+.apg-carousel-tab:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-carousel-play-pause:focus-visible,
+.apg-carousel-prev:focus-visible,
+.apg-carousel-next:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-carousel {
+    background: ButtonFace;
+  }
+
+  .apg-carousel-slides {
+    background: Canvas;
+  }
+
+  .apg-carousel-slide {
+    color: CanvasText;
+  }
+
+  .apg-carousel-controls {
+    background: ButtonFace;
+    border-color: ButtonBorder;
+  }
+
+  .apg-carousel-play-pause,
+  .apg-carousel-prev,
+  .apg-carousel-next {
+    border-color: ButtonBorder;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .apg-carousel-play-pause:hover,
+  .apg-carousel-prev:hover,
+  .apg-carousel-next:hover {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .apg-carousel-tab:focus,
+  .apg-carousel-play-pause:focus,
+  .apg-carousel-prev:focus,
+  .apg-carousel-next:focus {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-carousel-tab-indicator {
+    background: ButtonText;
+    opacity: 0.5;
+  }
+
+  .apg-carousel-tab--selected .apg-carousel-tab-indicator {
+    background: Highlight;
+    opacity: 1;
+  }
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================= */
+
+@media (max-width: 640px) {
+  .apg-carousel-slide {
+    padding: 1rem;
+    min-height: 150px;
+  }
+
+  .apg-carousel-controls {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .apg-carousel-tablist {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .apg-carousel-play-pause {
+    order: 1;
+  }
+
+  .apg-carousel-nav {
+    order: 3;
+  }
+}

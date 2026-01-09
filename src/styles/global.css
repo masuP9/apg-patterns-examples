@@ -18,6 +18,7 @@
 @import './patterns/combobox.css';
 @import './patterns/treeview.css';
 @import './patterns/table.css';
+@import './patterns/carousel.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

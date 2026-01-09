@@ -17,9 +17,11 @@ export default getViteConfig({
   test: {
     globals: true,
     // Include tests that use Container API pattern
+    // Other Astro tests using Web Component classes should be tested via E2E or browser tests
     include: [
       'src/patterns/table/Table.test.astro.ts',
       'src/patterns/checkbox/Checkbox.test.astro.ts',
+      'src/patterns/carousel/Carousel.test.astro.ts',
     ],
   },
 });

@@ -1,0 +1,848 @@
+---
+/**
+ * APG Carousel Pattern - Astro Implementation
+ *
+ * A carousel displays a set of slides, one at a time, with controls to navigate
+ * between them and optionally auto-rotate.
+ * Uses Web Components for client-side keyboard navigation and state management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/carousel/
+ */
+
+export interface CarouselSlide {
+  id: string;
+  /** Slide content (HTML string) */
+  content: string;
+  label?: string;
+}
+
+export interface Props {
+  /** Array of slides */
+  slides: CarouselSlide[];
+  /** Accessible label for the carousel (required) */
+  'aria-label': string;
+  /** Initial slide index (0-based) */
+  initialSlide?: number;
+  /** Enable auto-rotation */
+  autoRotate?: boolean;
+  /** Rotation interval in milliseconds (default: 5000) */
+  rotationInterval?: number;
+  /** Additional CSS class */
+  class?: string;
+  /** Instance ID (optional, auto-generated if not provided) */
+  id?: string;
+  /** Test ID for E2E testing */
+  'data-testid'?: string;
+}
+
+const {
+  slides,
+  'aria-label': ariaLabel,
+  initialSlide = 0,
+  autoRotate = false,
+  rotationInterval = 5000,
+  class: className = '',
+  id,
+  'data-testid': testId,
+} = Astro.props;
+
+// Validate initialSlide - fallback to 0 if out of bounds
+const validInitialSlide = initialSlide >= 0 && initialSlide < slides.length ? initialSlide : 0;
+
+// Generate unique ID for this instance
+const instanceId = id || `carousel-${Math.random().toString(36).substring(2, 11)}`;
+const slidesContainerId = `${instanceId}-slides`;
+
+const containerClass = `apg-carousel ${className}`.trim();
+---
+
+<apg-carousel
+  data-auto-rotate={autoRotate ? 'true' : 'false'}
+  data-rotation-interval={rotationInterval.toString()}
+  data-initial-slide={validInitialSlide.toString()}
+>
+  <section
+    class={containerClass}
+    aria-roledescription="carousel"
+    aria-label={ariaLabel}
+    id={id}
+    data-testid={testId}
+  >
+    <!-- Slides Container -->
+    <div
+      id={slidesContainerId}
+      data-testid="slides-container"
+      class="apg-carousel-slides"
+      role="group"
+      aria-live={autoRotate ? 'off' : 'polite'}
+      aria-atomic="false"
+    >
+      {
+        slides.map((slide, index) => {
+          const isActive = index === validInitialSlide;
+          const panelId = `${instanceId}-panel-${slide.id}`;
+          const tabId = `${instanceId}-tab-${slide.id}`;
+
+          return (
+            <div
+              id={panelId}
+              role="tabpanel"
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${slides.length}`}
+              aria-labelledby={tabId}
+              aria-hidden={!isActive}
+              inert={!isActive ? true : undefined}
+              class={`apg-carousel-slide ${isActive ? 'apg-carousel-slide--active' : ''}`}
+              data-slide-id={slide.id}
+              data-slide-index={index.toString()}
+            >
+              <Fragment set:html={slide.content} />
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <!-- Controls -->
+    <div class="apg-carousel-controls">
+      <!-- Play/Pause Button (first in tab order) -->
+      {
+        autoRotate && (
+          <button
+            type="button"
+            class="apg-carousel-play-pause"
+            aria-label="Stop automatic slide show"
+            data-playing="true"
+          >
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="3" y="2" width="4" height="12" rx="1.5" />
+              <rect x="9" y="2" width="4" height="12" rx="1.5" />
+            </svg>
+          </button>
+        )
+      }
+
+      <!-- Tablist (slide indicators) -->
+      <div role="tablist" aria-label="Slides" class="apg-carousel-tablist">
+        {
+          slides.map((slide, index) => {
+            const isSelected = index === validInitialSlide;
+            const tabId = `${instanceId}-tab-${slide.id}`;
+            const panelId = `${instanceId}-panel-${slide.id}`;
+
+            return (
+              <button
+                type="button"
+                role="tab"
+                id={tabId}
+                aria-selected={isSelected ? 'true' : 'false'}
+                aria-controls={panelId}
+                tabindex={isSelected ? 0 : -1}
+                class={`apg-carousel-tab ${isSelected ? 'apg-carousel-tab--selected' : ''}`}
+                aria-label={slide.label || `Slide ${index + 1}`}
+                data-tab-index={index.toString()}
+              >
+                <span class="apg-carousel-tab-indicator" aria-hidden="true" />
+              </button>
+            );
+          })
+        }
+      </div>
+
+      <!-- Previous/Next Buttons -->
+      <div role="group" aria-label="Slide controls" class="apg-carousel-nav">
+        <button
+          type="button"
+          class="apg-carousel-prev"
+          aria-label="Previous slide"
+          aria-controls={slidesContainerId}
+        >
+          <svg
+            aria-hidden="true"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="15" y1="10" x2="5" y2="10"></line>
+            <polyline points="10 5 5 10 10 15"></polyline>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="apg-carousel-next"
+          aria-label="Next slide"
+          aria-controls={slidesContainerId}
+        >
+          <svg
+            aria-hidden="true"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="5" y1="10" x2="15" y2="10"></line>
+            <polyline points="10 5 15 10 10 15"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    class ApgCarousel extends HTMLElement {
+      private currentSlide = 0;
+      private focusedIndex = 0;
+      // New state model: separate user intent from temporary pause
+      private autoRotateMode = false;
+      private isPausedByInteraction = false;
+      private timerRef: ReturnType<typeof setInterval> | null = null;
+      private animationTimeoutRef: ReturnType<typeof setTimeout> | null = null;
+      private rafRef: number | null = null;
+      private pendingDragOffset = 0;
+      private pointerStartX: number | null = null;
+      private activePointerId: number | null = null;
+      private isDragging = false;
+      private dragOffset = 0;
+      private slides: HTMLElement[] = [];
+      private tabs: HTMLButtonElement[] = [];
+      private tablist: HTMLElement | null = null;
+      private slidesContainer: HTMLElement | null = null;
+      private playPauseButton: HTMLButtonElement | null = null;
+      private prevButton: HTMLButtonElement | null = null;
+      private nextButton: HTMLButtonElement | null = null;
+
+      // Bound event handlers (stored for cleanup)
+      private boundHandleKeyDown: (e: KeyboardEvent) => void;
+      private boundToggleAutoRotateMode: () => void;
+      private boundGoToPrevSlide: () => void;
+      private boundGoToNextSlide: () => void;
+      private boundHandleCarouselFocusIn: () => void;
+      private boundHandleCarouselFocusOut: (e: FocusEvent) => void;
+      private boundHandleSlidesMouseEnter: () => void;
+      private boundHandleSlidesMouseLeave: () => void;
+      private boundHandlePointerDown: (e: PointerEvent) => void;
+      private boundHandlePointerMove: (e: PointerEvent) => void;
+      private boundHandlePointerUp: (e: PointerEvent) => void;
+      private boundHandlePointerCancel: (e: PointerEvent) => void;
+      private tabClickHandlers: Array<() => void> = [];
+
+      constructor() {
+        super();
+        // Bind handlers once in constructor
+        this.boundHandleKeyDown = this.handleKeyDown.bind(this);
+        this.boundToggleAutoRotateMode = this.toggleAutoRotateMode.bind(this);
+        this.boundGoToPrevSlide = this.goToPrevSlide.bind(this);
+        this.boundGoToNextSlide = this.goToNextSlide.bind(this);
+        this.boundHandleCarouselFocusIn = this.handleCarouselFocusIn.bind(this);
+        this.boundHandleCarouselFocusOut = this.handleCarouselFocusOut.bind(this);
+        this.boundHandleSlidesMouseEnter = this.handleSlidesMouseEnter.bind(this);
+        this.boundHandleSlidesMouseLeave = this.handleSlidesMouseLeave.bind(this);
+        this.boundHandlePointerDown = this.handlePointerDown.bind(this);
+        this.boundHandlePointerMove = this.handlePointerMove.bind(this);
+        this.boundHandlePointerUp = this.handlePointerUp.bind(this);
+        this.boundHandlePointerCancel = this.handlePointerCancel.bind(this);
+      }
+
+      connectedCallback() {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          this.initializeElements();
+          this.initializeState();
+          this.setupEventListeners();
+          this.startAutoRotation();
+        });
+      }
+
+      disconnectedCallback() {
+        this.stopAutoRotation();
+        if (this.animationTimeoutRef) {
+          clearTimeout(this.animationTimeoutRef);
+          this.animationTimeoutRef = null;
+        }
+        if (this.rafRef) {
+          cancelAnimationFrame(this.rafRef);
+          this.rafRef = null;
+        }
+        this.removeEventListeners();
+      }
+
+      private initializeElements() {
+        this.slides = Array.from(this.querySelectorAll('[role="tabpanel"]'));
+        this.tabs = Array.from(this.querySelectorAll('[role="tab"]'));
+        this.tablist = this.querySelector('[role="tablist"]');
+        this.slidesContainer = this.querySelector('[data-testid="slides-container"]');
+        this.playPauseButton = this.querySelector('.apg-carousel-play-pause');
+        this.prevButton = this.querySelector('.apg-carousel-prev');
+        this.nextButton = this.querySelector('.apg-carousel-next');
+      }
+
+      private initializeState() {
+        const initialSlide = parseInt(this.dataset.initialSlide || '0', 10);
+        this.currentSlide = initialSlide;
+        this.focusedIndex = initialSlide;
+
+        const autoRotate = this.dataset.autoRotate === 'true';
+
+        // Check prefers-reduced-motion
+        if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+          const prefersReducedMotion = window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+          ).matches;
+          if (prefersReducedMotion) {
+            this.autoRotateMode = false;
+          } else {
+            this.autoRotateMode = autoRotate;
+          }
+        } else {
+          this.autoRotateMode = autoRotate;
+        }
+
+        this.updateAriaLive();
+        // Sync play/pause button state with autoRotateMode (important for prefers-reduced-motion)
+        this.updatePlayPauseButton();
+      }
+
+      private setupEventListeners() {
+        // Tablist keyboard navigation
+        this.tablist?.addEventListener('keydown', this.boundHandleKeyDown);
+
+        // Tab clicks
+        this.tabClickHandlers = [];
+        this.tabs.forEach((tab, index) => {
+          const handler = () => this.goToSlide(index);
+          this.tabClickHandlers.push(handler);
+          tab.addEventListener('click', handler);
+        });
+
+        // Play/Pause button
+        this.playPauseButton?.addEventListener('click', this.boundToggleAutoRotateMode);
+
+        // Previous/Next buttons
+        this.prevButton?.addEventListener('click', this.boundGoToPrevSlide);
+        this.nextButton?.addEventListener('click', this.boundGoToNextSlide);
+
+        // Focus/blur for auto-rotation pause (on entire carousel)
+        this.addEventListener('focusin', this.boundHandleCarouselFocusIn);
+        this.addEventListener('focusout', this.boundHandleCarouselFocusOut);
+
+        // Mouse hover for auto-rotation pause (only on slides container)
+        this.slidesContainer?.addEventListener('mouseenter', this.boundHandleSlidesMouseEnter);
+        this.slidesContainer?.addEventListener('mouseleave', this.boundHandleSlidesMouseLeave);
+
+        // Touch/swipe
+        this.slidesContainer?.addEventListener('pointerdown', this.boundHandlePointerDown);
+        this.slidesContainer?.addEventListener('pointermove', this.boundHandlePointerMove);
+        this.slidesContainer?.addEventListener('pointerup', this.boundHandlePointerUp);
+        this.slidesContainer?.addEventListener('pointercancel', this.boundHandlePointerCancel);
+      }
+
+      private removeEventListeners() {
+        // Tablist keyboard navigation
+        this.tablist?.removeEventListener('keydown', this.boundHandleKeyDown);
+
+        // Tab clicks
+        this.tabs.forEach((tab, index) => {
+          const handler = this.tabClickHandlers[index];
+          if (handler) {
+            tab.removeEventListener('click', handler);
+          }
+        });
+        this.tabClickHandlers = [];
+
+        // Play/Pause button
+        this.playPauseButton?.removeEventListener('click', this.boundToggleAutoRotateMode);
+
+        // Previous/Next buttons
+        this.prevButton?.removeEventListener('click', this.boundGoToPrevSlide);
+        this.nextButton?.removeEventListener('click', this.boundGoToNextSlide);
+
+        // Focus/blur for auto-rotation pause (on entire carousel)
+        this.removeEventListener('focusin', this.boundHandleCarouselFocusIn);
+        this.removeEventListener('focusout', this.boundHandleCarouselFocusOut);
+
+        // Mouse hover for auto-rotation pause (only on slides container)
+        this.slidesContainer?.removeEventListener('mouseenter', this.boundHandleSlidesMouseEnter);
+        this.slidesContainer?.removeEventListener('mouseleave', this.boundHandleSlidesMouseLeave);
+
+        // Touch/swipe
+        this.slidesContainer?.removeEventListener('pointerdown', this.boundHandlePointerDown);
+        this.slidesContainer?.removeEventListener('pointermove', this.boundHandlePointerMove);
+        this.slidesContainer?.removeEventListener('pointerup', this.boundHandlePointerUp);
+        this.slidesContainer?.removeEventListener('pointercancel', this.boundHandlePointerCancel);
+      }
+
+      private handleKeyDown(event: KeyboardEvent) {
+        const { key } = event;
+
+        let newIndex = this.focusedIndex;
+        let shouldPreventDefault = false;
+
+        switch (key) {
+          case 'ArrowRight':
+            newIndex = (this.focusedIndex + 1) % this.slides.length;
+            shouldPreventDefault = true;
+            break;
+
+          case 'ArrowLeft':
+            newIndex = (this.focusedIndex - 1 + this.slides.length) % this.slides.length;
+            shouldPreventDefault = true;
+            break;
+
+          case 'Home':
+            newIndex = 0;
+            shouldPreventDefault = true;
+            break;
+
+          case 'End':
+            newIndex = this.slides.length - 1;
+            shouldPreventDefault = true;
+            break;
+
+          case 'Enter':
+          case ' ':
+            this.goToSlide(this.focusedIndex);
+            shouldPreventDefault = true;
+            break;
+        }
+
+        if (shouldPreventDefault) {
+          event.preventDefault();
+
+          if (newIndex !== this.focusedIndex) {
+            this.focusedIndex = newIndex;
+            this.tabs[newIndex]?.focus();
+            this.goToSlide(newIndex);
+          }
+        }
+      }
+
+      private goToSlide(index: number) {
+        if (this.slides.length < 2) return;
+        const newIndex = ((index % this.slides.length) + this.slides.length) % this.slides.length;
+        if (newIndex === this.currentSlide) return;
+
+        const previousSlide = this.currentSlide;
+
+        // Determine direction based on index change
+        const isWrapForward = previousSlide === this.slides.length - 1 && newIndex === 0;
+        const isWrapBackward = previousSlide === 0 && newIndex === this.slides.length - 1;
+        const direction =
+          isWrapForward || (!isWrapBackward && newIndex > previousSlide) ? 'next' : 'prev';
+
+        this.currentSlide = newIndex;
+        this.focusedIndex = newIndex;
+
+        // Update slides with animation classes
+        this.slides.forEach((slide, i) => {
+          const isActive = i === newIndex;
+          const isExiting = i === previousSlide;
+
+          // Only active slide is exposed to AT, exiting is visual-only during animation
+          slide.setAttribute('aria-hidden', (!isActive).toString());
+          if (isActive) {
+            slide.removeAttribute('inert');
+          } else {
+            slide.setAttribute('inert', '');
+          }
+          slide.classList.toggle('apg-carousel-slide--active', isActive);
+
+          // Remove old animation classes
+          slide.classList.remove(
+            'apg-carousel-slide--entering-next',
+            'apg-carousel-slide--entering-prev',
+            'apg-carousel-slide--exiting-next',
+            'apg-carousel-slide--exiting-prev',
+            'apg-carousel-slide--swipe-prev',
+            'apg-carousel-slide--swipe-next'
+          );
+
+          // Add new animation classes
+          if (isActive) {
+            slide.classList.add(`apg-carousel-slide--entering-${direction}`);
+          } else if (isExiting) {
+            slide.classList.add(`apg-carousel-slide--exiting-${direction}`);
+          }
+        });
+
+        // Update tabs
+        this.tabs.forEach((tab, i) => {
+          const isSelected = i === newIndex;
+          const isFocusTarget = i === this.focusedIndex;
+          tab.setAttribute('aria-selected', isSelected.toString());
+          tab.tabIndex = isFocusTarget ? 0 : -1;
+          tab.classList.toggle('apg-carousel-tab--selected', isSelected);
+        });
+
+        // Dispatch event
+        this.dispatchEvent(new CustomEvent('slidechange', { detail: { index: newIndex } }));
+
+        // Clean up after animation
+        this.animationTimeoutRef = setTimeout(() => {
+          this.animationTimeoutRef = null;
+
+          // Hide exiting slide and remove animation classes
+          this.slides.forEach((slide, i) => {
+            const shouldHide = i !== this.currentSlide;
+            slide.setAttribute('aria-hidden', shouldHide.toString());
+            if (shouldHide) {
+              slide.setAttribute('inert', '');
+            } else {
+              slide.removeAttribute('inert');
+            }
+            slide.classList.remove(
+              'apg-carousel-slide--entering-next',
+              'apg-carousel-slide--entering-prev',
+              'apg-carousel-slide--exiting-next',
+              'apg-carousel-slide--exiting-prev'
+            );
+          });
+        }, 300);
+      }
+
+      // Instant slide change (no animation) for swipe completion
+      private goToSlideInstant(index: number) {
+        if (this.slides.length < 2) return;
+        const newIndex = ((index % this.slides.length) + this.slides.length) % this.slides.length;
+
+        this.currentSlide = newIndex;
+        this.focusedIndex = newIndex;
+
+        // Update slides without animation
+        this.slides.forEach((slide, i) => {
+          const isActive = i === newIndex;
+          slide.setAttribute('aria-hidden', (!isActive).toString());
+          if (isActive) {
+            slide.removeAttribute('inert');
+          } else {
+            slide.setAttribute('inert', '');
+          }
+          slide.classList.toggle('apg-carousel-slide--active', isActive);
+
+          // Remove all animation and swipe classes
+          slide.classList.remove(
+            'apg-carousel-slide--entering-next',
+            'apg-carousel-slide--entering-prev',
+            'apg-carousel-slide--exiting-next',
+            'apg-carousel-slide--exiting-prev',
+            'apg-carousel-slide--swipe-prev',
+            'apg-carousel-slide--swipe-next'
+          );
+          slide.style.transform = '';
+        });
+
+        // Update tabs
+        this.tabs.forEach((tab, i) => {
+          const isSelected = i === newIndex;
+          const isFocusTarget = i === this.focusedIndex;
+          tab.setAttribute('aria-selected', isSelected.toString());
+          tab.tabIndex = isFocusTarget ? 0 : -1;
+          tab.classList.toggle('apg-carousel-tab--selected', isSelected);
+        });
+
+        // Dispatch event
+        this.dispatchEvent(new CustomEvent('slidechange', { detail: { index: newIndex } }));
+      }
+
+      private goToNextSlide() {
+        this.goToSlide(this.currentSlide + 1);
+      }
+
+      private goToPrevSlide() {
+        this.goToSlide(this.currentSlide - 1);
+      }
+
+      // Computed: actual rotation state
+      private get isActuallyRotating() {
+        return this.autoRotateMode && !this.isPausedByInteraction;
+      }
+
+      private get rotationInterval() {
+        return parseInt(this.dataset.rotationInterval || '5000', 10);
+      }
+
+      private startAutoRotation() {
+        this.stopAutoRotation();
+
+        if (this.isActuallyRotating) {
+          this.timerRef = setInterval(() => {
+            this.goToSlide(this.currentSlide + 1);
+          }, this.rotationInterval);
+        }
+      }
+
+      private stopAutoRotation() {
+        if (this.timerRef) {
+          clearInterval(this.timerRef);
+          this.timerRef = null;
+        }
+      }
+
+      private updateAriaLive() {
+        if (this.slidesContainer) {
+          this.slidesContainer.setAttribute(
+            'aria-live',
+            this.isActuallyRotating ? 'off' : 'polite'
+          );
+        }
+      }
+
+      private updatePlayPauseButton() {
+        if (this.playPauseButton) {
+          // Button reflects autoRotateMode (user intent), not isActuallyRotating
+          this.playPauseButton.setAttribute(
+            'aria-label',
+            this.autoRotateMode ? 'Stop automatic slide show' : 'Start automatic slide show'
+          );
+          this.playPauseButton.innerHTML = this.autoRotateMode
+            ? '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="4" height="12" rx="1" /><rect x="9" y="2" width="4" height="12" rx="1" /></svg>'
+            : '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11a.5.5 0 0 0 .75.43l9-5.5a.5.5 0 0 0 0-.86l-9-5.5A.5.5 0 0 0 4 2.5z" /></svg>';
+          this.playPauseButton.dataset.playing = this.autoRotateMode.toString();
+        }
+      }
+
+      // Toggle auto-rotate mode (user intent)
+      private toggleAutoRotateMode() {
+        this.autoRotateMode = !this.autoRotateMode;
+        // When enabling auto-rotate, reset interaction pause so rotation starts immediately
+        if (this.autoRotateMode) {
+          this.isPausedByInteraction = false;
+        }
+        this.startAutoRotation();
+        this.updateAriaLive();
+        this.updatePlayPauseButton();
+      }
+
+      // Pause/resume by interaction (hover/focus)
+      private pauseByInteraction() {
+        this.isPausedByInteraction = true;
+        this.stopAutoRotation();
+        this.updateAriaLive();
+      }
+
+      private resumeByInteraction() {
+        this.isPausedByInteraction = false;
+        this.startAutoRotation();
+        this.updateAriaLive();
+      }
+
+      // Focus/blur handlers for entire carousel
+      private handleCarouselFocusIn() {
+        if (this.autoRotateMode) {
+          this.pauseByInteraction();
+        }
+      }
+
+      private handleCarouselFocusOut(event: FocusEvent) {
+        if (!this.autoRotateMode) {
+          return;
+        }
+
+        // Only resume if focus is leaving the carousel entirely
+        const { relatedTarget } = event;
+        // Treat null relatedTarget (focus moved to body) as "left carousel"
+        const focusLeftCarousel =
+          relatedTarget === null ||
+          (relatedTarget instanceof Node && !this.contains(relatedTarget));
+        if (focusLeftCarousel) {
+          this.resumeByInteraction();
+        }
+      }
+
+      // Mouse hover handlers for slides container only
+      private handleSlidesMouseEnter() {
+        if (this.autoRotateMode) {
+          this.pauseByInteraction();
+        }
+      }
+
+      private handleSlidesMouseLeave() {
+        if (this.autoRotateMode) {
+          this.resumeByInteraction();
+        }
+      }
+
+      private handlePointerDown(event: PointerEvent) {
+        if (this.slides.length < 2) return; // Disable swipe for single slide
+        if (this.activePointerId !== null) return; // Ignore if already tracking a pointer
+        this.activePointerId = event.pointerId;
+        this.pointerStartX = event.clientX;
+        this.isDragging = true;
+        this.dragOffset = 0;
+        // Capture pointer to receive events even if pointer moves outside element
+        (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+        // Add dragging class
+        this.slidesContainer?.classList.add('apg-carousel-slides--dragging');
+        if (this.autoRotateMode) {
+          this.pauseByInteraction();
+        }
+      }
+
+      private handlePointerMove(event: PointerEvent) {
+        if (this.activePointerId !== event.pointerId) return; // Ignore other pointers
+        if (this.pointerStartX === null || !this.isDragging) return;
+        const diff = event.clientX - this.pointerStartX;
+        this.pendingDragOffset = diff;
+
+        // Throttle updates using requestAnimationFrame
+        if (this.rafRef === null) {
+          this.rafRef = requestAnimationFrame(() => {
+            this.dragOffset = this.pendingDragOffset;
+            this.rafRef = null;
+            this.updateSwipeVisual();
+          });
+        }
+      }
+
+      private updateSwipeVisual() {
+        const diff = this.dragOffset;
+
+        // Compute which adjacent slide to show during drag
+        const swipeAdjacentSlide =
+          diff !== 0
+            ? diff > 0
+              ? (this.currentSlide - 1 + this.slides.length) % this.slides.length // swiping right, show prev
+              : (this.currentSlide + 1) % this.slides.length // swiping left, show next
+            : null;
+
+        // Update slides for swipe visual
+        this.slides.forEach((slide, i) => {
+          const isActive = i === this.currentSlide;
+          const isSwipeAdjacent = i === swipeAdjacentSlide;
+
+          // Only active slide is exposed to AT, adjacent is visual-only
+          slide.setAttribute('aria-hidden', (!isActive).toString());
+          if (isActive) {
+            slide.removeAttribute('inert');
+          } else {
+            slide.setAttribute('inert', '');
+          }
+
+          // Remove animation classes during drag
+          slide.classList.remove(
+            'apg-carousel-slide--entering-next',
+            'apg-carousel-slide--entering-prev',
+            'apg-carousel-slide--exiting-next',
+            'apg-carousel-slide--exiting-prev'
+          );
+
+          // Add/remove swipe classes
+          slide.classList.remove(
+            'apg-carousel-slide--swipe-prev',
+            'apg-carousel-slide--swipe-next'
+          );
+          if (isSwipeAdjacent) {
+            slide.classList.add(
+              diff > 0 ? 'apg-carousel-slide--swipe-prev' : 'apg-carousel-slide--swipe-next'
+            );
+          }
+
+          // Apply transform to active and adjacent slides
+          if (isActive) {
+            slide.style.transform = `translateX(${diff}px)`;
+          } else if (isSwipeAdjacent) {
+            // Position adjacent slide next to current slide
+            const baseOffset = diff > 0 ? '-100%' : '100%';
+            slide.style.transform = `translateX(calc(${baseOffset} + ${diff}px))`;
+          } else {
+            slide.style.transform = '';
+          }
+        });
+      }
+
+      private handlePointerUp(event: PointerEvent) {
+        if (this.activePointerId !== event.pointerId) return; // Ignore other pointers
+        if (!this.isDragging || this.pointerStartX === null) return;
+
+        const diff = event.clientX - this.pointerStartX;
+        const containerWidth = this.slidesContainer?.offsetWidth || 300;
+        const threshold = containerWidth * 0.2; // 20% of container width
+
+        if (diff > threshold) {
+          // Swiped right - go to previous slide (instant, no animation)
+          this.goToSlideInstant(this.currentSlide - 1);
+        } else if (diff < -threshold) {
+          // Swiped left - go to next slide (instant, no animation)
+          this.goToSlideInstant(this.currentSlide + 1);
+        } else {
+          // Snap back - reset slide styles
+          this.slides.forEach((slide, i) => {
+            const isActive = i === this.currentSlide;
+            slide.setAttribute('aria-hidden', (!isActive).toString());
+            if (isActive) {
+              slide.removeAttribute('inert');
+            } else {
+              slide.setAttribute('inert', '');
+            }
+            slide.classList.remove(
+              'apg-carousel-slide--swipe-prev',
+              'apg-carousel-slide--swipe-next'
+            );
+            slide.style.transform = '';
+          });
+        }
+
+        // Cancel any pending RAF
+        if (this.rafRef !== null) {
+          cancelAnimationFrame(this.rafRef);
+          this.rafRef = null;
+        }
+
+        this.activePointerId = null;
+        this.pointerStartX = null;
+        this.isDragging = false;
+        this.dragOffset = 0;
+        // Reset visual feedback
+        this.slidesContainer?.classList.remove('apg-carousel-slides--dragging');
+
+        if (this.autoRotateMode) {
+          this.resumeByInteraction();
+        }
+      }
+
+      private handlePointerCancel(event: PointerEvent) {
+        if (this.activePointerId !== event.pointerId) return; // Ignore other pointers
+        // Cancel any pending RAF
+        if (this.rafRef !== null) {
+          cancelAnimationFrame(this.rafRef);
+          this.rafRef = null;
+        }
+        this.activePointerId = null;
+        this.pointerStartX = null;
+        this.isDragging = false;
+        this.dragOffset = 0;
+        // Reset visual feedback
+        this.slidesContainer?.classList.remove('apg-carousel-slides--dragging');
+
+        // Reset slide styles
+        this.slides.forEach((slide, i) => {
+          const isActive = i === this.currentSlide;
+          slide.setAttribute('aria-hidden', (!isActive).toString());
+          if (isActive) {
+            slide.removeAttribute('inert');
+          } else {
+            slide.setAttribute('inert', '');
+          }
+          slide.classList.remove(
+            'apg-carousel-slide--swipe-prev',
+            'apg-carousel-slide--swipe-next'
+          );
+          slide.style.transform = '';
+        });
+      }
+    }
+
+    // Register the custom element
+    if (!customElements.get('apg-carousel')) {
+      customElements.define('apg-carousel', ApgCarousel);
+    }
+  </script>
+</apg-carousel>

@@ -1,0 +1,314 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、自動回転の動作、アクセシビリティ要件全体にわたってAPG準拠を検証します。Carouselコンポーネントは2層テスト戦略を採用しています。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト（Container API）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Astro Container
+      APIを使用してコンポーネントのHTML出力を検証します。これらのテストはブラウザを必要とせずに正しいテンプレートレンダリングを確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML構造と要素の階層</li>
+      <li>初期ARIA属性（aria-roledescription, aria-label, aria-selected）</li>
+      <li>tablist/tab/tabpanel構造</li>
+      <li>初期tabindex値（ローヴィングタブインデックス）</li>
+      <li>CSSクラスの適用</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      実際のブラウザ環境でWeb
+      Componentの動作を検証します。これらのテストはJavaScriptの実行を必要とするインタラクションをカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>キーボードナビゲーション（矢印キー、Home、End）</li>
+      <li>タブ選択とスライド変更</li>
+      <li>自動回転の開始/停止</li>
+      <li>再生/一時停止ボタンの操作</li>
+      <li>ナビゲーション中のフォーカス管理</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: ARIA構造（ユニット）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-roledescription="carousel"</code></td>
+          <td class="py-2">コンテナにcarouselロール記述がある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-roledescription="slide"</code></td>
+          <td class="py-2">各tabpanelにslideロール記述がある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label（コンテナ）</code></td>
+          <td class="py-2">コンテナにアクセシブルな名前がある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label="N of M"</code></td>
+          <td class="py-2">各スライドに位置ラベルがある（例: "1 of 5"）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: Tablist ARIA（ユニット）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tablist"</code></td>
+          <td class="py-2">タブコンテナにtablistロールがある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tab"</code></td>
+          <td class="py-2">各スライドインジケータにtabロールがある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tabpanel"</code></td>
+          <td class="py-2">各スライドにtabpanelロールがある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2">アクティブなタブに<code>aria-selected="true"</code>がある</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2">タブがaria-controls経由でスライドを参照</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: キーボード操作（E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight</code></td>
+          <td class="py-2">次のスライドタブにフォーカスを移動しアクティブ化</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft</code></td>
+          <td class="py-2">前のスライドタブにフォーカスを移動しアクティブ化</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ループナビゲーション</code></td>
+          <td class="py-2">矢印キーで最後から最初へ、またはその逆にループ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home/End</code></td>
+          <td class="py-2">最初/最後のスライドタブにフォーカスを移動</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理（ユニット + E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=0（ユニット）</code></td>
+          <td class="py-2">選択されたタブは初期状態でtabIndex=0を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=-1（ユニット）</code></td>
+          <td class="py-2">選択されていないタブは初期状態でtabIndex=-1を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ローヴィングタブインデックス（E2E）</code></td>
+          <td class="py-2">ナビゲーション中に1つのタブのみがtabIndex=0を持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: 自動回転（ユニット + E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-live="off"（ユニット）</code></td>
+          <td class="py-2">autoRotateがtrueの場合の初期aria-live</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-live="polite"（ユニット）</code></td>
+          <td class="py-2">autoRotateがfalseの場合の初期aria-live</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>再生/一時停止ボタン（ユニット）</code></td>
+          <td class="py-2">autoRotateがtrueの場合にボタンがレンダリングされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>再生/一時停止切り替え（E2E）</code></td>
+          <td class="py-2">ボタンで回転状態を切り替え</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: ナビゲーションコントロール（ユニット + E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>前へ/次へボタン（ユニット）</code></td>
+          <td class="py-2">ナビゲーションボタンがレンダリングされる</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls（ユニット）</code></td>
+          <td class="py-2">ボタンがスライドコンテナを指すaria-controlsを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>次へボタン（E2E）</code></td>
+          <td class="py-2">クリックで次のスライドを表示</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>前へボタン（E2E）</code></td>
+          <td class="py-2">クリックで前のスライドを表示</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ループナビゲーション（E2E）</code></td>
+          <td class="py-2">最後から最初へ、またはその逆にループ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: HTML属性（ユニット）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>class属性</code></td>
+          <td class="py-2">カスタムクラスがコンテナに適用される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id属性</code></td>
+          <td class="py-2">ID属性が正しく設定される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - 自動回転テスト用のフェイクタイマー付きテストランナー
+    </li>
+    <li>
+      <ExternalLink
+        href="https://docs.astro.build/en/reference/container-reference/"
+        class="text-primary hover:underline">Astro Container API</ExternalLink
+      >
+      - ユニットテスト用のサーバーサイドコンポーネントレンダリング
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2Eテスト用のブラウザ自動化
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ（React、Vue、Svelte）
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細なドキュメントについては、<ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    >を参照してください。
+  </p>
+</div>
