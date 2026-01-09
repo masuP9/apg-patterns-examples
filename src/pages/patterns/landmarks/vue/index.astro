@@ -1,0 +1,124 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import LandmarkDemo from '@patterns/landmarks/LandmarkDemo.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/landmarks/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/landmarks/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/landmarks/NativeHtmlNotice.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/landmarks/LandmarkDemo.vue?raw';
+import testCode from '@patterns/landmarks/LandmarkDemo.test.vue.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Landmarks - Vue" pattern="landmarks" framework="vue" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Landmarks</h1>
+    <p class="text-muted-foreground text-lg">
+      A set of eight ARIA landmark roles that identify the major sections of a page for assistive
+      technology users.
+    </p>
+    <AiGuideBadge pattern="landmarks" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="landmarks" currentFramework="vue" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <p class="text-muted-foreground mb-4">
+      This demo visualizes the 8 landmark regions with distinct colored borders. Each landmark is
+      labeled to help identify its role.
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <LandmarkDemo showLabels={true} />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="vue"
+      title="LandmarkDemo.vue"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="LandmarkDemo.test.vue.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Landmarks Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Landmark Regions
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role"
+          class="text-primary hover:underline"
+        >
+          MDN: ARIA Landmark Roles
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="landmarks" />
+    </ul>
+  </section>
+</PatternLayout>

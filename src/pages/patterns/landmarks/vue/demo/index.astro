@@ -1,0 +1,28 @@
+---
+/**
+ * Demo-only Page: LandmarkDemo (Vue)
+ *
+ * This page renders the LandmarkDemo component in isolation without
+ * the site layout. This ensures proper landmark semantics are preserved
+ * (e.g., <header> retains its implicit banner role).
+ *
+ * Used for:
+ * - E2E testing with correct landmark structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import LandmarkDemo from '@patterns/landmarks/LandmarkDemo.vue';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Landmarks (Vue)</title>
+  </head>
+  <body>
+    <LandmarkDemo client:load showLabels={true} />
+  </body>
+</html>

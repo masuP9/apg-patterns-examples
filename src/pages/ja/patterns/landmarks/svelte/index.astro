@@ -1,0 +1,137 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import LandmarkDemo from '@patterns/landmarks/LandmarkDemo.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/landmarks/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/landmarks/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/landmarks/NativeHtmlNotice.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/landmarks/LandmarkDemo.svelte?raw';
+import testCode from '@patterns/landmarks/LandmarkDemo.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'Native HTML' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="ランドマーク - Svelte"
+  pattern="landmarks"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Landmarks</h1>
+    <p class="text-muted-foreground text-lg">
+      ページの主要セクションを識別する8つのARIAランドマークロールのセット。支援技術ユーザーのナビゲーションを効率化します。
+    </p>
+    <AiGuideBadge pattern="landmarks" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="landmarks" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4">
+      このデモでは8つのランドマーク領域を色分けされたボーダーで視覚化しています。各ランドマークにはロールを識別するためのラベルが表示されています。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <LandmarkDemo showLabels={true} />
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="LandmarkDemo.svelte"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="LandmarkDemo.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: ランドマークパターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: ランドマーク領域
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role"
+          class="text-primary hover:underline"
+        >
+          MDN: ARIA ランドマークロール
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="landmarks" />
+    </ul>
+  </section>
+</PatternLayout>

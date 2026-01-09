@@ -400,6 +400,122 @@ Container API テストのみで十分にカバーできる。
 3. **並列実行可能** - CI で効率的に実行
 4. **学習リソースとして有用** - 各フレームワークのテスト手法を示す
 
+### デモ単独ページ（E2E テスト用）
+
+一部のパターン（特に Landmarks など）では、コンポーネントがページレイアウト内に埋め込まれると
+セマンティクスが変わる場合がある。例えば `<header>` 要素は、ページの `<main>` 内にネストされると
+暗黙的な `banner` ロールを失う。
+
+このようなパターンでは、**デモ単独ページ** を作成する。このページは：
+- E2E テストで正確なセマンティクスを検証するために使用
+- ユーザーがデモのみを確認するためのリンクとしても提供
+
+#### ディレクトリ構成
+
+```
+src/pages/patterns/landmarks/
+├── react/
+│   ├── index.astro      # 通常のパターンページ（レイアウト付き）
+│   └── demo/
+│       └── index.astro  # デモ単独ページ（レイアウトなし）
+├── vue/
+│   ├── index.astro
+│   └── demo/
+│       └── index.astro
+├── svelte/
+│   ├── index.astro
+│   └── demo/
+│       └── index.astro
+└── astro/
+    ├── index.astro
+    └── demo/
+        └── index.astro
+```
+
+#### デモ単独ページの実装
+
+```astro
+---
+// src/pages/patterns/landmarks/react/demo/index.astro
+/**
+ * Demo-only Page: LandmarkDemo (React)
+ *
+ * This page renders the LandmarkDemo component in isolation without
+ * the site layout. This ensures proper landmark semantics are preserved
+ * (e.g., <header> retains its implicit banner role).
+ *
+ * Used for:
+ * - E2E testing with correct landmark structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import LandmarkDemo from '@patterns/landmarks/LandmarkDemo.tsx';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Landmarks (React)</title>
+  </head>
+  <body>
+    <LandmarkDemo client:load showLabels={true} />
+  </body>
+</html>
+```
+
+#### パターンページからデモ単独ページへのリンク
+
+パターンページのデモセクションに「Open demo only」リンクを追加する：
+
+```astro
+<!-- Demo Section -->
+<section class="mb-12">
+  <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+  <p class="text-muted-foreground mb-4">
+    This demo visualizes the 8 landmark regions with distinct colored borders.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <LandmarkDemo showLabels={true} />
+  </div>
+  <p class="text-muted-foreground mt-2 text-sm">
+    <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+  </p>
+</section>
+```
+
+#### E2E テストのパス
+
+```typescript
+// e2e/landmarks.spec.ts
+for (const framework of frameworks) {
+  test.describe(`Landmarks (${framework})`, () => {
+    test.beforeEach(async ({ page }) => {
+      // デモ単独ページを使用
+      await page.goto(`patterns/landmarks/${framework}/demo/`);
+    });
+    // ...
+  });
+}
+```
+
+#### このアプローチを使うべきパターン
+
+| パターン   | 理由                                                     |
+| ---------- | -------------------------------------------------------- |
+| Landmarks  | `<header>`/`<footer>` がページ `<main>` 内でロールを失う |
+| Dialog     | フォーカストラップがページ要素と干渉する可能性           |
+| その他     | ページレイアウトがコンポーネントの動作に影響する場合     |
+
+#### 注意事項
+
+- デモ単独ページは `robots: noindex, nofollow` メタタグで検索エンジンから除外
+- パス構造 `/patterns/{pattern}/{framework}/demo/` は URL として意味が明確
+- パターンページから「Open demo only」リンクでアクセス可能
+- CI 時間を増やさない（別ビルド不要）ため、このアプローチを推奨
+
 ### 共通のテスト観点
 
 フレームワークが異なっても、APG 準拠コンポーネントは同じ観点でテストする。

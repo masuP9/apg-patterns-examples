@@ -1,0 +1,374 @@
+/**
+ * Landmarks Pattern Styles
+ *
+ * These styles visualize the landmark structure for educational purposes.
+ * Each landmark has a distinct border color to help identify the regions.
+ */
+
+/* Container */
+.apg-landmark-demo {
+  --landmark-border-radius: 0.5rem;
+  --landmark-padding: 1rem;
+  --landmark-gap: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--landmark-gap);
+  font-family: system-ui, sans-serif;
+}
+
+/* Landmark Label Overlay */
+.apg-landmark-label {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: white;
+  background-color: oklch(0.3 0 0 / 80%);
+  border-radius: 0.25rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.apg-landmark-label.hidden {
+  display: none;
+}
+
+/* Common Landmark Styles */
+.apg-landmark-banner,
+.apg-landmark-main,
+.apg-landmark-contentinfo,
+.apg-landmark-navigation,
+.apg-landmark-region,
+.apg-landmark-complementary,
+.apg-landmark-search,
+.apg-landmark-form {
+  position: relative;
+  border-radius: var(--landmark-border-radius);
+  border-width: 2px;
+  border-style: dashed;
+}
+
+/* Banner (header) */
+.apg-landmark-banner {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.7 0.15 30); /* Orange */
+  background-color: oklch(0.95 0.02 30);
+}
+
+.dark .apg-landmark-banner {
+  background-color: oklch(0.25 0.02 30);
+}
+
+.apg-landmark-banner .apg-landmark-label {
+  background-color: oklch(0.45 0.15 30);
+}
+
+/* Main */
+.apg-landmark-main {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.6 0.2 145); /* Green */
+  background-color: oklch(0.95 0.02 145);
+}
+
+.dark .apg-landmark-main {
+  background-color: oklch(0.25 0.02 145);
+}
+
+.apg-landmark-main .apg-landmark-label {
+  background-color: oklch(0.4 0.15 145);
+}
+
+/* Contentinfo (footer) */
+.apg-landmark-contentinfo {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.6 0.15 280); /* Purple */
+  background-color: oklch(0.95 0.02 280);
+}
+
+.dark .apg-landmark-contentinfo {
+  background-color: oklch(0.25 0.02 280);
+}
+
+.apg-landmark-contentinfo .apg-landmark-label {
+  background-color: oklch(0.4 0.15 280);
+}
+
+/* Navigation */
+.apg-landmark-navigation {
+  padding: 0.75rem;
+  border-color: oklch(0.65 0.2 230); /* Blue */
+  background-color: oklch(0.97 0.01 230);
+}
+
+.dark .apg-landmark-navigation {
+  background-color: oklch(0.2 0.02 230);
+}
+
+.apg-landmark-navigation .apg-landmark-label {
+  background-color: oklch(0.4 0.18 230);
+}
+
+/* Region (section with label) */
+.apg-landmark-region {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.65 0.15 60); /* Yellow */
+  background-color: oklch(0.97 0.02 60);
+}
+
+.dark .apg-landmark-region {
+  background-color: oklch(0.22 0.02 60);
+}
+
+.apg-landmark-region .apg-landmark-label {
+  background-color: oklch(0.4 0.12 70);
+}
+
+/* Complementary (aside) */
+.apg-landmark-complementary {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.65 0.18 180); /* Teal */
+  background-color: oklch(0.97 0.02 180);
+}
+
+.dark .apg-landmark-complementary {
+  background-color: oklch(0.22 0.02 180);
+}
+
+.apg-landmark-complementary .apg-landmark-label {
+  background-color: oklch(0.4 0.15 180);
+}
+
+/* Search */
+.apg-landmark-search {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.6 0.2 330); /* Pink */
+  background-color: oklch(0.97 0.02 330);
+}
+
+.dark .apg-landmark-search {
+  background-color: oklch(0.22 0.02 330);
+}
+
+.apg-landmark-search .apg-landmark-label {
+  background-color: oklch(0.4 0.18 330);
+}
+
+/* Form */
+.apg-landmark-form {
+  padding: var(--landmark-padding);
+  border-color: oklch(0.55 0.18 15); /* Red */
+  background-color: oklch(0.97 0.02 15);
+}
+
+.dark .apg-landmark-form {
+  background-color: oklch(0.22 0.02 15);
+}
+
+.apg-landmark-form .apg-landmark-label {
+  background-color: oklch(0.4 0.15 15);
+}
+
+/* Layout */
+.apg-landmark-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.apg-landmark-main-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--landmark-gap);
+}
+
+@media (min-width: 768px) {
+  .apg-landmark-main-content {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .apg-landmark-region {
+    grid-column: 1;
+  }
+
+  .apg-landmark-complementary {
+    grid-column: 2;
+    grid-row: 1 / 2;
+  }
+}
+
+/* Logo */
+.apg-landmark-logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+
+/* Navigation List */
+.apg-landmark-nav-list {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.apg-landmark-nav-list a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.apg-landmark-nav-list a:hover {
+  text-decoration: underline;
+}
+
+/* Headings */
+.apg-landmark-heading {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Search Form */
+.apg-landmark-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.apg-landmark-search-label {
+  font-weight: 500;
+}
+
+.apg-landmark-search-input {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.apg-landmark-search-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.apg-landmark-search-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.apg-landmark-search-button:hover {
+  opacity: 0.9;
+}
+
+.apg-landmark-search-button:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Contact Form */
+.apg-landmark-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.apg-landmark-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.apg-landmark-form-field label {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.apg-landmark-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.apg-landmark-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.apg-landmark-submit {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.apg-landmark-submit:hover {
+  opacity: 0.9;
+}
+
+.apg-landmark-submit:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Copyright */
+.apg-landmark-copyright {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+/* Complementary List */
+.apg-landmark-complementary ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.apg-landmark-complementary li {
+  margin-bottom: 0.25rem;
+}
+
+.apg-landmark-complementary a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.apg-landmark-complementary a:hover {
+  text-decoration: underline;
+}
+
+/* Region Content */
+.apg-landmark-region p {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+.apg-landmark-region code {
+  padding: 0.125rem 0.375rem;
+  background-color: var(--muted);
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
