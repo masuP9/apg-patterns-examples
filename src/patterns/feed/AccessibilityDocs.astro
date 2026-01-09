@@ -1,0 +1,271 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>feed</code></td>
+          <td class="py-2 pr-4">Container element</td>
+          <td class="py-2">A dynamic list of articles where scrolling may add/remove content</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>article</code></td>
+          <td class="py-2 pr-4">Each article element</td>
+          <td class="py-2">Independent content item within the feed</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink
+      href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
+      class="text-primary hover:underline"
+    >
+      WAI-ARIA APG Feed Pattern
+    </ExternalLink>
+  </p>
+
+  <div
+    class="border-primary bg-primary/5 mb-6 rounded-md border-l-4 p-4"
+    role="note"
+    aria-labelledby="note-heading"
+  >
+    <p id="note-heading" class="mb-2 font-medium">Note: Feed is a Structure, Not a Widget</p>
+    <p class="text-muted-foreground text-sm">
+      Unlike widget patterns (e.g., Listbox, Menu), the feed pattern is a <strong>structure</strong
+      >. This means assistive technologies can use their default reading mode when navigating feed
+      content. The feed role enables users to navigate articles using Page Up/Down while still
+      allowing natural reading within each article.
+    </p>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Target</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">Feed container</td>
+          <td class="py-2 pr-4">Text</td>
+          <td class="py-2 pr-4">Conditional*</td>
+          <td class="py-2">Accessible name for the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">Feed container</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Conditional*</td>
+          <td class="py-2">References visible heading for the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">Each article</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the article title element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2 pr-4">Each article</td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Recommended</td>
+          <td class="py-2">References the article description or content</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-posinset</code></td>
+          <td class="py-2 pr-4">Each article</td>
+          <td class="py-2 pr-4">Number (1-based)</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Position of article in the feed (starts at 1)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-setsize</code></td>
+          <td class="py-2 pr-4">Each article</td>
+          <td class="py-2 pr-4">Number or -1</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Total articles in feed, or -1 if unknown</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required on the feed container.
+    Use <code>aria-labelledby</code> when a visible heading exists.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-busy</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates when the feed is loading new content. Screen readers will wait to announce changes
+      until loading completes.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Target</td>
+            <td class="py-2">Feed container</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Values</td>
+            <td class="py-2"><code>true</code> | <code>false</code></td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">Conditional (when loading occurs)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Change Trigger</td>
+            <td class="py-2">Loading starts (true), loading completes (false)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-busy"
+                class="text-primary hover:underline"
+              >
+                aria-busy
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <strong>Note:</strong> Set to <code>true</code> when adding multiple articles to prevent premature
+      announcements. Set to <code>false</code> after all DOM updates are complete.
+    </p>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Page Down</kbd>
+          </td>
+          <td class="py-2">Move focus to next article in the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Page Up</kbd>
+          </td>
+          <td class="py-2">Move focus to previous article in the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd>
+            +
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd>
+          </td>
+          <td class="py-2">Move focus to first focusable element after the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd>
+            +
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd>
+          </td>
+          <td class="py-2">Move focus to first focusable element before the feed</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-4 text-sm">
+    <strong>Why Page Up/Down instead of Arrow keys?</strong> Feeds contain long-form content like articles.
+    Using Page Up/Down allows users to navigate between articles while Arrow keys remain available for
+    reading within articles.
+  </p>
+
+  <div
+    class="mb-6 rounded-md border-l-4 border-amber-500 bg-amber-500/5 p-4"
+    role="note"
+    aria-labelledby="keyboard-docs-note"
+  >
+    <p id="keyboard-docs-note" class="mb-2 font-medium">Important: Keyboard Documentation</p>
+    <p class="text-muted-foreground text-sm">
+      The Feed pattern uses Page Up/Down for navigation, which differs from common widget patterns
+      that use Arrow keys. As the
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
+        class="text-primary hover:underline"
+      >
+        APG specification
+      </ExternalLink>
+      notes: <em
+        >"Due to the lack of convention, providing easily discoverable keyboard interface
+        documentation is especially important."</em
+      >
+      Always display keyboard hints near the feed to help users discover these navigation options.
+    </p>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Behavior</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Roving tabindex</td>
+          <td class="py-2">
+            Only one article has <code>tabindex="0"</code>, others have <code>tabindex="-1"</code>
+          </td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Initial focus</td>
+          <td class="py-2">First article has <code>tabindex="0"</code> by default</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Focus tracking</td>
+          <td class="py-2">
+            <code>tabindex</code> updates as focus moves between articles
+          </td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">No wrap</td>
+          <td class="py-2">Focus does not wrap from first to last article or vice versa</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Content inside articles</td>
+          <td class="py-2">Interactive elements inside articles remain keyboard accessible</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+</div>

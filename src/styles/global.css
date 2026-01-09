@@ -20,6 +20,7 @@
 @import './patterns/table.css';
 @import './patterns/carousel.css';
 @import './patterns/landmarks.css';
+@import './patterns/feed.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

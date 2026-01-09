@@ -1,0 +1,237 @@
+---
+import Feed, { type FeedArticle } from './Feed.astro';
+import KeyboardHints from './KeyboardHints.astro';
+
+const demoArticles: FeedArticle[] = [
+  {
+    id: 'article-1',
+    title: 'Getting Started with Accessible Components',
+    description: 'Learn the fundamentals of building accessible web components.',
+    content:
+      'Building accessible web components is essential for creating inclusive web experiences. This guide covers the basics of ARIA attributes, keyboard navigation, and focus management.',
+  },
+  {
+    id: 'article-2',
+    title: 'Understanding the Feed Pattern',
+    description: 'Deep dive into the APG Feed pattern implementation.',
+    content:
+      'The Feed pattern is designed for content that loads dynamically as users scroll. Unlike other patterns, Feed is a structure that allows screen readers to use their default reading mode.',
+  },
+  {
+    id: 'article-3',
+    title: 'Keyboard Navigation Best Practices',
+    description: 'Tips for implementing effective keyboard navigation.',
+    content:
+      'Effective keyboard navigation is crucial for accessibility. This article explores Page Up/Down navigation in feeds and how it differs from other patterns that use arrow keys.',
+  },
+];
+---
+
+<apg-feed-infinite-demo>
+  <div class="apg-feed-demo-wrapper">
+    <KeyboardHints />
+    <button type="button" class="apg-feed-demo-button" data-testid="before-feed" data-add-article>
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path
+          d="M8 2a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 2z"
+        ></path>
+      </svg>
+      Add Article
+    </button>
+    <div
+      class="apg-feed-scroll-container"
+      style="max-height: 400px; overflow: auto"
+      data-scroll-container
+    >
+      <Feed
+        articles={demoArticles}
+        aria-label="Blog articles with infinite scroll"
+        setSize={-1}
+        loadMoreRootMargin="100px"
+        data-testid="feed-demo"
+      />
+      <div class="apg-feed-loading-indicator" aria-live="polite" data-loading-indicator hidden>
+        Loading more articles...
+      </div>
+      <div class="apg-feed-end-message" data-end-message hidden>
+        You've reached the end of the feed.
+      </div>
+    </div>
+    <button data-testid="after-feed" class="apg-feed-demo-button">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path
+          d="M8 3.5a.75.75 0 0 1 .53.22l4 4a.75.75 0 1 1-1.06 1.06L8 5.31 4.53 8.78a.75.75 0 0 1-1.06-1.06l4-4A.75.75 0 0 1 8 3.5z"
+        ></path>
+        <path d="M8 7.5a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 7.5z"></path>
+      </svg>
+      Back to top
+    </button>
+  </div>
+
+  <template data-article-template>
+    <article class="apg-feed-article" tabindex="-1" aria-posinset="" aria-setsize="-1">
+      <h3 data-title>
+        <a href="#" class="apg-feed-article-title-link" onclick="event.preventDefault()"></a>
+      </h3>
+      <p data-description></p>
+      <div class="apg-feed-article-content" data-content></div>
+    </article>
+  </template>
+</apg-feed-infinite-demo>
+
+<script>
+  const articleTitles = [
+    'Getting Started with Accessible Components',
+    'Understanding the Feed Pattern',
+    'Keyboard Navigation Best Practices',
+    'ARIA Attributes Deep Dive',
+    'Building Inclusive Web Experiences',
+  ];
+
+  const articleDescriptions = [
+    'Learn the fundamentals of building accessible web components.',
+    'Deep dive into the APG Feed pattern implementation.',
+    'Tips for implementing effective keyboard navigation.',
+    'Understanding ARIA roles, states, and properties.',
+    'Creating web experiences that work for everyone.',
+  ];
+
+  const articleContents = [
+    'Building accessible web components is essential for creating inclusive web experiences.',
+    'The Feed pattern is designed for content that loads dynamically as users scroll.',
+    'Effective keyboard navigation is crucial for accessibility.',
+    'ARIA provides attributes that define ways to make web content more accessible.',
+    'Inclusive design ensures that everyone can access and use your web application.',
+  ];
+
+  class ApgFeedInfiniteDemo extends HTMLElement {
+    private articleCount = 3;
+    private loading = false;
+    private hasMore = true;
+    private maxArticles = 10;
+
+    connectedCallback() {
+      const apgFeed = this.querySelector('apg-feed');
+      if (apgFeed) {
+        apgFeed.addEventListener('feed:loadmore', () => this.loadMore());
+      }
+
+      const addArticleBtn = this.querySelector('[data-add-article]');
+      if (addArticleBtn) {
+        addArticleBtn.addEventListener('click', () => this.addSingleArticle());
+      }
+
+      const backToTopBtn = this.querySelector('[data-testid="after-feed"]');
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => this.scrollToTop());
+      }
+    }
+
+    addSingleArticle() {
+      this.addArticles(1);
+    }
+
+    scrollToTop() {
+      const scrollContainer = this.querySelector('[data-scroll-container]');
+      scrollContainer?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    loadMore() {
+      if (this.loading || !this.hasMore) return;
+
+      this.loading = true;
+      const loadingIndicator = this.querySelector('[data-loading-indicator]');
+      const feed = this.querySelector('[role="feed"]');
+
+      if (loadingIndicator) {
+        loadingIndicator.removeAttribute('hidden');
+      }
+      if (feed) {
+        feed.setAttribute('aria-busy', 'true');
+      }
+
+      // Simulate API call
+      setTimeout(() => {
+        this.addArticles(2);
+        this.loading = false;
+
+        if (loadingIndicator) {
+          loadingIndicator.setAttribute('hidden', '');
+        }
+        if (feed) {
+          feed.setAttribute('aria-busy', 'false');
+        }
+
+        if (this.articleCount >= this.maxArticles) {
+          this.hasMore = false;
+          const endMessage = this.querySelector('[data-end-message]');
+          if (endMessage) {
+            endMessage.removeAttribute('hidden');
+          }
+        }
+      }, 1000);
+    }
+
+    addArticles(count: number) {
+      const feed = this.querySelector('[role="feed"]');
+      const template = this.querySelector<HTMLTemplateElement>('[data-article-template]');
+      const sentinel = feed?.querySelector('.apg-feed-sentinel');
+
+      if (!feed || !template) return;
+
+      for (let i = 0; i < count; i++) {
+        this.articleCount++;
+        const idx = this.articleCount;
+        const clone = template.content.cloneNode(true) as DocumentFragment;
+        const article = clone.querySelector('article');
+
+        if (article) {
+          const titleId = `infinite-article-${idx}-title`;
+          const descId = `infinite-article-${idx}-desc`;
+
+          article.setAttribute('aria-labelledby', titleId);
+          article.setAttribute('aria-describedby', descId);
+          article.setAttribute('aria-posinset', String(idx));
+
+          const title = article.querySelector('[data-title]');
+          const titleLink = title?.querySelector('a');
+          const desc = article.querySelector('[data-description]');
+          const content = article.querySelector('[data-content]');
+
+          if (title) {
+            title.id = titleId;
+          }
+          if (titleLink) {
+            titleLink.textContent = articleTitles[(idx - 1) % articleTitles.length];
+          }
+          if (desc) {
+            desc.id = descId;
+            desc.textContent = articleDescriptions[(idx - 1) % articleDescriptions.length];
+          }
+          if (content) {
+            content.textContent = articleContents[(idx - 1) % articleContents.length];
+          }
+
+          // Insert before sentinel if it exists, otherwise append
+          if (sentinel) {
+            feed.insertBefore(article, sentinel);
+          } else {
+            feed.appendChild(article);
+          }
+        }
+      }
+
+      // Update aria-posinset on all articles
+      const articles = feed.querySelectorAll('[role="article"]');
+      articles.forEach((article, index) => {
+        article.setAttribute('aria-posinset', String(index + 1));
+      });
+    }
+  }
+
+  customElements.define('apg-feed-infinite-demo', ApgFeedInfiniteDemo);
+</script>
+
+<style>
+  /* Styles are in src/styles/patterns/feed.css */
+</style>

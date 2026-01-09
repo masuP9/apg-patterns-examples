@@ -106,13 +106,68 @@ WAI-ARIA APG パターンの実装例を React / Vue / Svelte / Astro で提供�
 
 ### URL 構造
 
-| URL                        | 内容                                        |
-| -------------------------- | ------------------------------------------- |
-| `/patterns/button/`        | Toggle Button 概要（リダイレクト）          |
-| `/patterns/button/react/`  | React 実装 + デモ + コード                  |
-| `/patterns/button/vue/`    | Vue 実装 + デモ + コード                    |
-| `/patterns/button/svelte/` | Svelte 実装 + デモ + コード                 |
-| `/patterns/button/astro/`  | Astro 実装（Web Components）+ デモ + コード |
+| URL                              | 内容                                        |
+| -------------------------------- | ------------------------------------------- |
+| `/patterns/button/`              | Toggle Button 概要（リダイレクト）          |
+| `/patterns/button/react/`        | React 実装 + デモ + コード                  |
+| `/patterns/button/vue/`          | Vue 実装 + デモ + コード                    |
+| `/patterns/button/svelte/`       | Svelte 実装 + デモ + コード                 |
+| `/patterns/button/astro/`        | Astro 実装（Web Components）+ デモ + コード |
+| `/patterns/button/react/demo/`   | React デモのみ（E2E テスト用）              |
+| `/patterns/button/vue/demo/`     | Vue デモのみ（E2E テスト用）                |
+| `/patterns/button/svelte/demo/`  | Svelte デモのみ（E2E テスト用）             |
+| `/patterns/button/astro/demo/`   | Astro デモのみ（E2E テスト用）              |
+
+### E2E テスト用デモページ
+
+各パターンのフレームワーク別ページには、デモコンポーネントのみを表示する専用ページを用意する。
+
+**目的**:
+- サイトレイアウトなしでコンポーネントをテストできる
+- E2E テストの信頼性向上（サイト UI との干渉を回避）
+- 開発者がコンポーネント単体の動作を確認できる
+
+**ファイル構成**:
+```
+src/pages/patterns/{pattern}/{framework}/
+├── index.astro        # パターンページ（フルレイアウト）
+└── demo/
+    └── index.astro    # デモのみページ（レイアウトなし）
+```
+
+**デモページの構造**:
+```astro
+---
+import '@/styles/global.css';
+import FeedDemo from '@patterns/feed/FeedDemo.tsx';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Feed (React)</title>
+  </head>
+  <body>
+    <FeedDemo client:load />
+  </body>
+</html>
+```
+
+**パターンページからのリンク**:
+
+デモセクションの最後に「Open demo only →」リンクを配置:
+
+```astro
+<div class="border-border bg-background rounded-lg border p-6">
+  <FeedDemo client:load />
+</div>
+<p class="text-muted-foreground mt-2 text-sm">
+  <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+</p>
+```
 
 ### フレームワーク別ページレイアウト
 

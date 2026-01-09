@@ -121,7 +121,7 @@ export const PATTERNS: Pattern[] = [
       'A section of a page that automatically loads new sections of content as the user scrolls.',
     icon: '📰',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'grid',

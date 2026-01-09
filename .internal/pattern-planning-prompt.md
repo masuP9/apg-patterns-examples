@@ -121,10 +121,11 @@ Phase 1 で llm.md とテストを先に作成し、その後実装に進みま�
 - [ ] `src/patterns/{pattern}/llm.md` - AI 向け定義ファイル
 
 ### Phase 1: テスト作成（実装前）
-- [ ] `{Component}.test.tsx` - React テスト
-- [ ] `{Component}.test.vue.ts` - Vue テスト
-- [ ] `{Component}.test.svelte.ts` - Svelte テスト
-- [ ] `{Component}.test.astro.ts` - Astro E2E テスト
+- [ ] `{Component}.test.tsx` - React ユニットテスト
+- [ ] `{Component}.test.vue.ts` - Vue ユニットテスト
+- [ ] `{Component}.test.svelte.ts` - Svelte ユニットテスト
+- [ ] `{Component}.test.astro.ts` - Astro ユニットテスト（Container API）
+- [ ] `e2e/{pattern}.spec.ts` - E2E テスト（Playwright、全フレームワーク共通）
 
 ### Phase 2: コンポーネント実装
 - [ ] `{Component}.tsx` - React 実装
@@ -150,6 +151,7 @@ Phase 1 で llm.md とテストを先に作成し、その後実装に進みま�
 - [ ] `src/pages/patterns/{pattern}/vue/index.astro`
 - [ ] `src/pages/patterns/{pattern}/svelte/index.astro`
 - [ ] `src/pages/patterns/{pattern}/astro/index.astro`
+- [ ] `src/pages/patterns/{pattern}/{framework}/demo/index.astro` - E2Eテスト用デモページ（4ファイル）
 - [ ] `src/pages/ja/patterns/{pattern}/react/index.astro` - 日本語版
 - [ ] `src/pages/ja/patterns/{pattern}/vue/index.astro` - 日本語版
 - [ ] `src/pages/ja/patterns/{pattern}/svelte/index.astro` - 日本語版
@@ -475,12 +477,17 @@ export interface {ComponentName}Props extends Omit<
    - 全テストが FAIL することを確認（実装前）
    - テスト観点の網羅性を確認
 
-2. **他フレームワークのテスト作成**
+2. **他フレームワークのユニットテスト作成**
    - Vue: `{Component}.test.vue.ts`
    - Svelte: `{Component}.test.svelte.ts`
-   - Astro: `{Component}.test.astro.ts`
+   - Astro: `{Component}.test.astro.ts`（Container API）
 
-3. **🔴 チェックリスト照合（必須 - ゲート条件）**
+3. **E2E テスト作成**
+   - `e2e/{pattern}.spec.ts`（Playwright、全フレームワーク共通）
+   - Web Component 動作（クリック、キーボード、イベント）をテスト
+   - 視覚的なレンダリングやブラウザ動作の検証
+
+4. **🔴 チェックリスト照合（必須 - ゲート条件）**
 
    > **ゲート条件**: 照合表が完成し、全項目が対応するまで Phase 2 に進まない
 
@@ -522,7 +529,7 @@ export interface {ComponentName}Props extends Omit<
    3. 曖昧な項目は具体化する（「何をテストすべきか」が不明確な場合）
    4. **差分項目のテスト漏れは最優先で追加**
 
-4. **Codex レビュー依頼（テスト）**
+5. **Codex レビュー依頼（テスト）**
    ```
    テストコードをレビューしてください。
    - APG 仕様の網羅性

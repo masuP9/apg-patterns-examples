@@ -1,0 +1,278 @@
+/* =============================================================================
+   FEED COMPONENT STYLES
+   ============================================================================= */
+
+/* Feed Container */
+.apg-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Article Styles */
+.apg-feed-article {
+  padding: 1.5rem;
+  background: var(--background);
+  border: 1px solid color-mix(in srgb, var(--foreground) 30%, transparent);
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.apg-feed-article:focus {
+  outline: none;
+}
+
+.apg-feed-article:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-color: var(--ring);
+}
+
+/* Article Title */
+.apg-feed-article h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.apg-feed-article-title-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.apg-feed-article-title-link:focus {
+  outline: none;
+}
+
+.apg-feed-article-title-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Article Description */
+.apg-feed-article > p {
+  margin: 0 0 1rem;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+  font-size: 0.875rem;
+}
+
+/* Article Content */
+.apg-feed-article-content {
+  color: var(--foreground);
+}
+
+.apg-feed-article-content p {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+.apg-feed-article-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.apg-feed-article-link:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* =============================================================================
+   LOADING STATE
+   ============================================================================= */
+
+.apg-feed[aria-busy='true'] {
+  opacity: 0.7;
+}
+
+.apg-feed[aria-busy='true'] .apg-feed-article:last-of-type {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =============================================================================
+   DEMO WRAPPER
+   ============================================================================= */
+
+.apg-feed-demo-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.apg-feed-demo-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.apg-feed-demo-button:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 40%, transparent);
+}
+
+.apg-feed-demo-button:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Search Field */
+.apg-feed-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.apg-feed-search-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.apg-feed-search-input {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 0.375rem;
+  transition: border-color 0.2s ease;
+}
+
+.apg-feed-search-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-color: var(--ring);
+}
+
+.apg-feed-search-input::placeholder {
+  color: color-mix(in srgb, var(--foreground) 50%, transparent);
+}
+
+/* =============================================================================
+   INFINITE SCROLL
+   ============================================================================= */
+
+.apg-feed-scroll-container {
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.apg-feed-loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+  font-size: 0.875rem;
+}
+
+.apg-feed-loading-indicator::before {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.apg-feed-end-message {
+  text-align: center;
+  padding: 1rem;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* =============================================================================
+   KEYBOARD HINTS
+   ============================================================================= */
+
+.apg-feed-keyboard-hints {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.apg-feed-keyboard-hints-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.apg-feed-keyboard-hints-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+}
+
+.apg-feed-keyboard-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.apg-feed-keyboard-hint dt {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.apg-feed-keyboard-hint dd {
+  margin: 0;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+
+.apg-feed-keyboard-hints kbd {
+  display: inline-block;
+  padding: 0.125rem 0.375rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 15%, transparent);
+}

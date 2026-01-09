@@ -5,6 +5,38 @@ import { expect } from 'vitest';
 // jest-axe マッチャーを追加
 expect.extend(toHaveNoViolations);
 
+// IntersectionObserver モック（jsdom 未サポート）
+// Feed パターンの無限スクロール機能でIntersection Observerを使用
+class IntersectionObserverMock implements IntersectionObserver {
+  root: Element | Document | null = null;
+  rootMargin: string = '';
+  thresholds: ReadonlyArray<number> = [];
+  private callback: IntersectionObserverCallback;
+
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback;
+  }
+
+  observe(): void {
+    // テスト中は即座にコールバックを呼び出さない
+  }
+
+  unobserve(): void {
+    // No-op
+  }
+
+  disconnect(): void {
+    // No-op
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+
+// グローバルに IntersectionObserver を設定
+global.IntersectionObserver = IntersectionObserverMock;
+
 // <dialog> 要素のポリフィル（jsdom 未サポート）
 // ネイティブの <dialog> は showModal() で開くと自動的に Escape キーで閉じる。
 // jsdom ではこの動作がサポートされていないためエミュレートする。
