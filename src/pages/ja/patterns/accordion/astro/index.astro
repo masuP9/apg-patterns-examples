@@ -113,7 +113,7 @@ const disabledItems = [
 
   <!-- Demo Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
 
     <!-- Default (Single Expansion) -->
     <div class="mb-8">
@@ -151,13 +151,17 @@ const disabledItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.accessibility')}</Heading>
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
     <AccessibilityDocs />
   </section>
 
   <!-- Source Code Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.sourceCode')}</Heading>
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -169,7 +173,7 @@ const disabledItems = [
 
   <!-- Usage Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
     <CodeBlock
       collapsible
       collapsedLines={5}
@@ -203,7 +207,7 @@ const items = [
 
   <!-- API Section -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
 
     <h3 class="mb-3 text-lg font-medium">プロパティ</h3>
     <ResponsiveTable class="mb-6">
@@ -289,7 +293,9 @@ const items = [
 
   <!-- Implementation Notes -->
   <section class="mb-12">
-    <Heading level={2} class="mb-4 text-xl font-semibold">実装上の注意</Heading>
+    <Heading level={2} id="implementation-notes" class="mb-4 text-xl font-semibold"
+      >実装上の注意</Heading
+    >
     <div class="prose dark:prose-invert max-w-none">
       <p>
         この Astro 実装は、クライアント側のインタラクティビティに Web Components（<code
@@ -308,7 +314,9 @@ const items = [
 
   <!-- Resources -->
   <section>
-    <Heading level={2} class="mb-4 text-xl font-semibold">{t('pattern.resources')}</Heading>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
     <ul class="list-disc space-y-2 pl-6">
       <li>
         <ExternalLink
