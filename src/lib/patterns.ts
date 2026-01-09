@@ -78,7 +78,7 @@ export const PATTERNS: Pattern[] = [
       'Presents a set of items, referred to as slides, by sequentially displaying a subset of one or more slides.',
     icon: '🎠',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'checkbox',

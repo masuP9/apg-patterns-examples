@@ -1,0 +1,316 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, auto-rotation
+    behavior, and accessibility requirements. The Carousel component uses a two-layer testing
+    strategy.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Container API)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's HTML output using Astro Container API. These tests ensure correct
+      template rendering without requiring a browser.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML structure and element hierarchy</li>
+      <li>Initial ARIA attributes (aria-roledescription, aria-label, aria-selected)</li>
+      <li>Tablist/tab/tabpanel structure</li>
+      <li>Initial tabindex values (roving tabindex)</li>
+      <li>CSS class application</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify Web Component behavior in a real browser environment. These tests cover interactions
+      that require JavaScript execution.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Keyboard navigation (Arrow keys, Home, End)</li>
+      <li>Tab selection and slide changes</li>
+      <li>Auto-rotation start/stop</li>
+      <li>Play/pause button interaction</li>
+      <li>Focus management during navigation</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Structure (Unit)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-roledescription="carousel"</code></td>
+          <td class="py-2">Container has carousel role description</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-roledescription="slide"</code></td>
+          <td class="py-2">Each tabpanel has slide role description</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label (container)</code></td>
+          <td class="py-2">Container has accessible name</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label="N of M"</code></td>
+          <td class="py-2">Each slide has position label (e.g., "1 of 5")</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Tablist ARIA (Unit)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tablist"</code></td>
+          <td class="py-2">Tab container has tablist role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tab"</code></td>
+          <td class="py-2">Each slide indicator has tab role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tabpanel"</code></td>
+          <td class="py-2">Each slide has tabpanel role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2">Active tab has <code>aria-selected="true"</code></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2">Tab references its slide via aria-controls</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight</code></td>
+          <td class="py-2">Moves focus and activates next slide tab</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft</code></td>
+          <td class="py-2">Moves focus and activates previous slide tab</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Loop navigation</code></td>
+          <td class="py-2">Arrow keys loop from last to first and vice versa</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home/End</code></td>
+          <td class="py-2">Moves focus to first/last slide tab</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=0 (Unit)</code></td>
+          <td class="py-2">Selected tab has tabIndex=0 initially</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabIndex=-1 (Unit)</code></td>
+          <td class="py-2">Non-selected tabs have tabIndex=-1 initially</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Roving tabindex (E2E)</code></td>
+          <td class="py-2">Only one tab has tabIndex=0 during navigation</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Auto-Rotation (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-live="off" (Unit)</code></td>
+          <td class="py-2">Initial aria-live when autoRotate is true</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-live="polite" (Unit)</code></td>
+          <td class="py-2">Initial aria-live when autoRotate is false</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Play/Pause button (Unit)</code></td>
+          <td class="py-2">Button is rendered when autoRotate is true</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Play/Pause toggle (E2E)</code></td>
+          <td class="py-2">Button toggles rotation state</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Navigation Controls (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Prev/Next buttons (Unit)</code></td>
+          <td class="py-2">Navigation buttons are rendered</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls (Unit)</code></td>
+          <td class="py-2">Buttons have aria-controls pointing to slides container</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Next button (E2E)</code></td>
+          <td class="py-2">Shows next slide on click</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Previous button (E2E)</code></td>
+          <td class="py-2">Shows previous slide on click</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Loop navigation (E2E)</code></td>
+          <td class="py-2">Loops from last to first and vice versa</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attributes (Unit)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>class attribute</code></td>
+          <td class="py-2">Custom classes are applied to container</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>id attribute</code></td>
+          <td class="py-2">ID attribute is correctly set</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner for unit tests with fake timers for auto-rotation testing
+    </li>
+    <li>
+      <ExternalLink
+        href="https://docs.astro.build/en/reference/container-reference/"
+        class="text-primary hover:underline">Astro Container API</ExternalLink
+      >
+      - Server-side component rendering for unit tests
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - Browser automation for E2E tests
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities (React, Vue, Svelte)
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - Automated accessibility testing
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
+</div>
