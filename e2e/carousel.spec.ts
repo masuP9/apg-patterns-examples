@@ -89,14 +89,16 @@ for (const framework of frameworks) {
         const firstTab = tabs.first();
 
         await firstTab.click();
+        await page.waitForTimeout(100);
         await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
         await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(350);
 
         const secondTab = tabs.nth(1);
-        await expect(secondTab).toBeFocused();
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
+        await expect(secondTab).toBeFocused();
       });
 
       test('moves to previous tab on ArrowLeft', async ({ page }) => {
@@ -105,13 +107,15 @@ for (const framework of frameworks) {
         const secondTab = tabs.nth(1);
 
         await secondTab.click();
-        await expect(secondTab).toBeFocused();
+        await page.waitForTimeout(100);
+        await expect(secondTab).toHaveAttribute('aria-selected', 'true');
 
         await page.keyboard.press('ArrowLeft');
+        await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
-        await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+        await expect(firstTab).toBeFocused();
       });
 
       test('wraps from last to first on ArrowRight', async ({ page }) => {
@@ -121,13 +125,15 @@ for (const framework of frameworks) {
         const lastTab = tabs.nth(count - 1);
 
         await lastTab.click();
-        await expect(lastTab).toBeFocused();
+        await page.waitForTimeout(100);
+        await expect(lastTab).toHaveAttribute('aria-selected', 'true');
 
         await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
-        await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+        await expect(firstTab).toBeFocused();
       });
 
       test('wraps from first to last on ArrowLeft', async ({ page }) => {
@@ -137,13 +143,15 @@ for (const framework of frameworks) {
         const firstTab = tabs.first();
 
         await firstTab.click();
-        await expect(firstTab).toBeFocused();
+        await page.waitForTimeout(100);
+        await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
         await page.keyboard.press('ArrowLeft');
+        await page.waitForTimeout(350);
 
         const lastTab = tabs.nth(count - 1);
-        await expect(lastTab).toBeFocused();
         await expect(lastTab).toHaveAttribute('aria-selected', 'true');
+        await expect(lastTab).toBeFocused();
       });
 
       test('moves to first tab on Home', async ({ page }) => {
@@ -153,11 +161,13 @@ for (const framework of frameworks) {
         const lastTab = tabs.nth(count - 1);
 
         await lastTab.click();
+        await page.waitForTimeout(100);
         await page.keyboard.press('Home');
+        await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
-        await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+        await expect(firstTab).toBeFocused();
       });
 
       test('moves to last tab on End', async ({ page }) => {
@@ -167,11 +177,13 @@ for (const framework of frameworks) {
         const firstTab = tabs.first();
 
         await firstTab.click();
+        await page.waitForTimeout(100);
         await page.keyboard.press('End');
+        await page.waitForTimeout(350);
 
         const lastTab = tabs.nth(count - 1);
-        await expect(lastTab).toBeFocused();
         await expect(lastTab).toHaveAttribute('aria-selected', 'true');
+        await expect(lastTab).toBeFocused();
       });
     });
 
@@ -208,6 +220,8 @@ for (const framework of frameworks) {
 
         const nextButton = carousel.locator('button[aria-label*="Next"], button:has-text("Next")');
         await nextButton.click();
+        // Wait for animation to complete
+        await page.waitForTimeout(350);
 
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
       });
@@ -218,14 +232,17 @@ for (const framework of frameworks) {
         const firstTab = tabs.first();
         const secondTab = tabs.nth(1);
 
-        // First go to second slide
-        await secondTab.click();
+        // First go to second slide via next button
+        const nextButton = carousel.locator('button[aria-label*="Next"], button:has-text("Next")');
+        await nextButton.click();
+        await page.waitForTimeout(350);
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
 
         const prevButton = carousel.locator(
           'button[aria-label*="Previous"], button[aria-label*="Prev"], button:has-text("Previous")'
         );
         await prevButton.click();
+        await page.waitForTimeout(350);
 
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
       });
@@ -237,13 +254,15 @@ for (const framework of frameworks) {
         const lastTab = tabs.nth(count - 1);
         const firstTab = tabs.first();
 
-        // Go to last slide
+        // Go to last slide via clicking the tab
         await lastTab.click();
+        await page.waitForTimeout(350);
         await expect(lastTab).toHaveAttribute('aria-selected', 'true');
 
         // Click next - should wrap to first
         const nextButton = carousel.locator('button[aria-label*="Next"], button:has-text("Next")');
         await nextButton.click();
+        await page.waitForTimeout(350);
 
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
       });

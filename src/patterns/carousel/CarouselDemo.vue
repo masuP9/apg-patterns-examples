@@ -7,7 +7,12 @@
     :rotation-interval="5000"
     data-testid="carousel-auto"
   />
-  <Carousel v-else :slides="demoSlides" aria-label="Featured content" data-testid="carousel-demo" />
+  <Carousel
+    v-else
+    :slides="demoSlides"
+    aria-label="Featured content"
+    data-testid="carousel-manual"
+  />
 </template>
 
 <script setup lang="ts">

@@ -100,7 +100,9 @@ export function CarouselDemo({ variant = 'default' }: CarouselDemoProps) {
     );
   }
 
-  return <Carousel slides={demoSlides} aria-label="Featured content" data-testid="carousel-demo" />;
+  return (
+    <Carousel slides={demoSlides} aria-label="Featured content" data-testid="carousel-manual" />
+  );
 }
 
 export default CarouselDemo;

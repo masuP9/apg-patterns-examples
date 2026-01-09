@@ -65,5 +65,5 @@
     data-testid="carousel-auto"
   />
 {:else}
-  <Carousel slides={demoSlides} aria-label="Featured content" data-testid="carousel-demo" />
+  <Carousel slides={demoSlides} aria-label="Featured content" data-testid="carousel-manual" />
 {/if}
