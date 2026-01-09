@@ -32,7 +32,7 @@ export const PATTERNS: Pattern[] = [
     name: 'Accordion',
     description:
       'A vertically stacked set of interactive headings that each reveal a section of content.',
-    icon: '📋',
+    icon: '🪗',
     complexity: 'Medium',
     status: 'available',
   },
@@ -222,7 +222,7 @@ export const PATTERNS: Pattern[] = [
     name: 'Table',
     description:
       'A static tabular structure containing one or more rows that each contain one or more cells.',
-    icon: '📋',
+    icon: '🧮',
     complexity: 'Medium',
     status: 'available',
   },
@@ -231,7 +231,7 @@ export const PATTERNS: Pattern[] = [
     name: 'Tabs',
     description:
       'A set of layered sections of content, known as tab panels, that display one panel at a time.',
-    icon: '📑',
+    icon: '🗂️',
     complexity: 'Medium',
     status: 'available',
   },
