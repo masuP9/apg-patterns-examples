@@ -22,6 +22,7 @@ export default getViteConfig({
       'src/patterns/table/Table.test.astro.ts',
       'src/patterns/checkbox/Checkbox.test.astro.ts',
       'src/patterns/carousel/Carousel.test.astro.ts',
+      'src/patterns/landmarks/LandmarkDemo.test.astro.ts',
     ],
   },
 });

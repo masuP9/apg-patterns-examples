@@ -19,6 +19,7 @@
 @import './patterns/treeview.css';
 @import './patterns/table.css';
 @import './patterns/carousel.css';
+@import './patterns/landmarks.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

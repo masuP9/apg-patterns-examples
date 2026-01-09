@@ -138,7 +138,7 @@ export const PATTERNS: Pattern[] = [
     description: 'A set of eight roles that identify the major sections of a page.',
     icon: '🗺️',
     complexity: 'Low',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'link',
