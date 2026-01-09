@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: FeedDemo (Astro)
+ *
+ * This page renders the FeedDemo component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct feed structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import FeedDemo from '@patterns/feed/FeedDemo.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Feed (Astro)</title>
+  </head>
+  <body>
+    <FeedDemo />
+  </body>
+</html>

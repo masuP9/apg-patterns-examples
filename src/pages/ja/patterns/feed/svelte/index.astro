@@ -1,0 +1,253 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import FeedDemo from '@patterns/feed/FeedDemo.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/feed/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/feed/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/feed/Feed.svelte?raw';
+import testCode from '@patterns/feed/Feed.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Feed - Svelte"
+  pattern="feed"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Feed</h1>
+    <p class="text-muted-foreground text-lg">
+      スクロールに応じて新しいコンテンツが追加される記事リストで、Page Up/Down
+      キーで記事間をナビゲートできます。
+    </p>
+    <a
+      href="/patterns/feed/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="feed" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+
+    <p class="text-muted-foreground mb-4 text-sm">
+      Page Down（次へ）と Page Up（前へ）で記事間を移動できます。Ctrl+End でフィードの後、Ctrl+Home
+      でフィードの前にフォーカスを移動します。 下にスクロールすると自動的に記事が追加されます。
+    </p>
+    <p class="text-muted-foreground mb-4 text-sm">
+      <strong>aria-busy:</strong> 新しい記事を読み込む際、スクリーンリーダーが不完全なコンテンツを読み上げないよう
+      <code>aria-busy="true"</code> が設定されます。読み込み完了後、<code>false</code> に戻ります。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <FeedDemo client:load />
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="svelte" title="Feed.svelte" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+  import Feed from './Feed.svelte';
+
+  const articles = [
+    {
+      id: 'article-1',
+      title: 'Svelte 入門',
+      description: 'Svelte 開発の基礎を学ぶ',
+      content: '記事の全内容...'
+    },
+    {
+      id: 'article-2',
+      title: '高度なパターン',
+      description: 'Svelte の高度なパターンを探る',
+      content: '記事の全内容...'
+    }
+  ];
+
+  function handleLoadMore() {
+    console.log('記事を追加読み込み');
+  }
+
+  function handleFocusChange(id: string, index: number) {
+    console.log('フォーカス:', id, index);
+  }
+</script>
+
+<Feed
+  {articles}
+  aria-label="ブログ記事"
+  setSize={-1}
+  loading={false}
+  onloadmore={handleLoadMore}
+  onfocuschange={handleFocusChange}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Feed Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>articles</code></td>
+            <td class="text-muted-foreground py-2 pr-4">FeedArticle[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">記事アイテムの配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">条件付き</td>
+            <td class="py-2">アクセシブルな名前（aria-labelledby がない場合必須）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">条件付き</td>
+            <td class="py-2">可視見出しへの ID 参照</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>setSize</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">articles.length</td>
+            <td class="py-2">総数、または不明な場合は -1</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>loading</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">読み込み状態（aria-busy を設定）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onloadmore</code></td>
+            <td class="text-muted-foreground py-2 pr-4">() =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">追加読み込みのコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onfocuschange</code></td>
+            <td class="text-muted-foreground py-2 pr-4"
+              >(articleId: string, index: number) =&gt; void</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">フォーカス変更時のコールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">FeedArticle インターフェース</h3>
+    <CodeBlock
+      code={`interface FeedArticle {
+  id: string;
+  title: string;
+  description?: string;
+  content: string;
+}`}
+      lang="typescript"
+      title="型定義"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Feed.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Feed パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/feed/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA 仕様、キーボードサポート、テストチェックリスト</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

@@ -1,0 +1,238 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across ARIA structure, keyboard navigation, focus management, and
+    dynamic loading states. The Feed component uses a two-layer testing strategy.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Container API / Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's HTML output and basic interactions. These tests ensure correct template
+      rendering and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML structure with feed/article roles</li>
+      <li>ARIA attributes (aria-labelledby, aria-posinset, aria-setsize)</li>
+      <li>Initial tabindex values (roving tabindex)</li>
+      <li>Dynamic loading state (aria-busy)</li>
+      <li>CSS class application</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment. These tests cover interactions that
+      require JavaScript execution.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Page Up/Down navigation between articles</li>
+      <li>Ctrl+Home/End for escaping the feed</li>
+      <li>Focus management and tabindex updates</li>
+      <li>Navigation from inside article elements</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Structure
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="feed"</code></td>
+          <td class="py-2">Container has feed role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="article"</code></td>
+          <td class="py-2">Each item has article role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label/labelledby (feed)</code></td>
+          <td class="py-2">Feed container has accessible name</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby (article)</code></td>
+          <td class="py-2">Each article references its title</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-posinset</code></td>
+          <td class="py-2">Sequential starting from 1</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-setsize</code></td>
+          <td class="py-2">Total count or -1 if unknown</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Page Down</code></td>
+          <td class="py-2">Moves focus to next article</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Page Up</code></td>
+          <td class="py-2">Moves focus to previous article</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>No wrap</code></td>
+          <td class="py-2">Does not loop at first/last article</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+End</code></td>
+          <td class="py-2">Moves focus after the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+Home</code></td>
+          <td class="py-2">Moves focus before the feed</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Inside article</code></td>
+          <td class="py-2">Page Down works from inside article elements</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Roving tabindex</code></td>
+          <td class="py-2">Only one article has tabindex="0"</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex update</code></td>
+          <td class="py-2">tabindex updates when focus moves</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Initial state</code></td>
+          <td class="py-2">First article has tabindex="0" by default</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Dynamic Loading
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-busy="false"</code></td>
+          <td class="py-2">Default state when not loading</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-busy="true"</code></td>
+          <td class="py-2">Set during loading</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus maintenance</code></td>
+          <td class="py-2">Focus maintained during loading</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Loading state</code></td>
+          <td class="py-2">No axe violations during loading</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2">Present when description provided</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Feed unit tests
+npm run test:unit -- Feed
+
+# Run framework-specific tests
+npm run test:react -- Feed.test.tsx
+npm run test:vue -- Feed.test.vue.ts
+npm run test:svelte -- Feed.test.svelte.ts
+npm run test:astro</code></pre>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Feed E2E tests
+npm run test:e2e -- feed.spec.ts
+
+# Run in UI mode
+npm run test:e2e:ui -- feed.spec.ts</code></pre>
+  </div>
+</div>

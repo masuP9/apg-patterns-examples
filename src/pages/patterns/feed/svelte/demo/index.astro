@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: FeedDemo (Svelte)
+ *
+ * This page renders the FeedDemo component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct feed structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import FeedDemo from '@patterns/feed/FeedDemo.svelte';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Feed (Svelte)</title>
+  </head>
+  <body>
+    <FeedDemo client:load />
+  </body>
+</html>

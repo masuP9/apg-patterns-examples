@@ -1,0 +1,24 @@
+<template>
+  <div class="apg-feed-keyboard-hints">
+    <div class="apg-feed-keyboard-hints-title">Keyboard Navigation</div>
+    <dl class="apg-feed-keyboard-hints-list">
+      <div class="apg-feed-keyboard-hint">
+        <dt><kbd>Page Down</kbd> / <kbd>Page Up</kbd></dt>
+        <dd>Move between articles</dd>
+      </div>
+      <div class="apg-feed-keyboard-hint">
+        <dt><kbd>Ctrl</kbd> + <kbd>End</kbd></dt>
+        <dd>Move focus after feed</dd>
+      </div>
+      <div class="apg-feed-keyboard-hint">
+        <dt><kbd>Ctrl</kbd> + <kbd>Home</kbd></dt>
+        <dd>Move focus before feed</dd>
+      </div>
+    </dl>
+  </div>
+</template>
+
+<script setup lang="ts">
+// Keyboard hints component for Feed demo
+// Styles are in src/styles/patterns/feed.css
+</script>

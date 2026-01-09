@@ -1,0 +1,317 @@
+---
+/**
+ * APG Feed Pattern - Astro Implementation
+ *
+ * A feed is a section of a page that automatically loads new sections of content
+ * as the user scrolls. It is a structure (not a widget), allowing assistive
+ * technologies to use their default reading mode.
+ *
+ * Uses Web Components for client-side keyboard navigation and infinite scroll.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/feed/
+ */
+
+export interface FeedArticle {
+  /** Unique identifier for the article */
+  id: string;
+  /** Article title (required for aria-labelledby) */
+  title: string;
+  /** Optional description (used for aria-describedby) */
+  description?: string;
+  /** Article content (plain text) */
+  content: string;
+}
+
+export interface Props {
+  /** Array of article data */
+  articles: FeedArticle[];
+  /** Accessible name for the feed (mutually exclusive with aria-labelledby) */
+  'aria-label'?: string;
+  /** ID reference to visible label (mutually exclusive with aria-label) */
+  'aria-labelledby'?: string;
+  /**
+   * Total number of articles
+   * - undefined: use articles.length (auto-calculate)
+   * - -1: unknown total (infinite scroll)
+   * - positive number: explicit total count
+   */
+  setSize?: number;
+  /** Loading state */
+  loading?: boolean;
+  /** Additional CSS class */
+  class?: string;
+  /** Instance ID (optional, auto-generated if not provided) */
+  id?: string;
+  /** Test ID for E2E testing */
+  'data-testid'?: string;
+  /** Disable automatic infinite scroll (manual load only) */
+  disableAutoLoad?: boolean;
+  /** Intersection Observer root margin for triggering load (default: "200px") */
+  loadMoreRootMargin?: string;
+}
+
+const {
+  articles,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  setSize,
+  loading = false,
+  class: className = '',
+  id,
+  'data-testid': testId,
+  disableAutoLoad = false,
+  loadMoreRootMargin = '200px',
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = id || `feed-${Math.random().toString(36).substring(2, 11)}`;
+
+// Calculate set size
+const computedSetSize = setSize !== undefined ? setSize : articles.length;
+---
+
+<apg-feed
+  data-disable-auto-load={disableAutoLoad ? 'true' : undefined}
+  data-load-more-root-margin={loadMoreRootMargin}
+>
+  <div
+    role="feed"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-busy={loading}
+    class:list={['apg-feed', className]}
+    id={id}
+    data-testid={testId}
+  >
+    {
+      articles.map((article, index) => {
+        const titleId = `${instanceId}-article-${article.id}-title`;
+        const descId = article.description ? `${instanceId}-article-${article.id}-desc` : undefined;
+        const isFirst = index === 0;
+
+        return (
+          <article
+            role="article"
+            class="apg-feed-article"
+            tabindex={isFirst ? 0 : -1}
+            aria-labelledby={titleId}
+            aria-describedby={descId}
+            aria-posinset={index + 1}
+            aria-setsize={computedSetSize}
+            data-article-id={article.id}
+            data-article-index={index.toString()}
+          >
+            <h3 id={titleId}>
+              <a href="#" class="apg-feed-article-title-link" onclick="event.preventDefault()">
+                {article.title}
+              </a>
+            </h3>
+            {article.description && <p id={descId}>{article.description}</p>}
+            <div class="apg-feed-article-content">{article.content}</div>
+          </article>
+        );
+      })
+    }
+    <!-- Sentinel element for infinite scroll detection -->
+    {!disableAutoLoad && <div class="apg-feed-sentinel" aria-hidden="true" />}
+  </div>
+
+  <script>
+    class ApgFeed extends HTMLElement {
+      private feedElement: HTMLElement | null = null;
+      private articles: HTMLElement[] = [];
+      private focusedIndex = 0;
+      private observer: IntersectionObserver | null = null;
+      private sentinel: HTMLElement | null = null;
+      private boundHandleKeyDown: ((event: KeyboardEvent) => void) | null = null;
+
+      connectedCallback() {
+        this.feedElement = this.querySelector('[role="feed"]');
+        if (!this.feedElement) return;
+
+        this.articles = Array.from(this.feedElement.querySelectorAll('[role="article"]'));
+        if (this.articles.length === 0) return;
+
+        // Set up event listeners (store bound function for cleanup)
+        this.boundHandleKeyDown = this.handleKeyDown.bind(this);
+        this.feedElement.addEventListener('keydown', this.boundHandleKeyDown);
+
+        // Set up focus tracking
+        this.articles.forEach((article, index) => {
+          article.addEventListener('focus', () => this.handleArticleFocus(index));
+        });
+
+        // Set up Intersection Observer for infinite scroll
+        this.setupIntersectionObserver();
+      }
+
+      disconnectedCallback() {
+        // Clean up event listeners
+        if (this.feedElement && this.boundHandleKeyDown) {
+          this.feedElement.removeEventListener('keydown', this.boundHandleKeyDown);
+        }
+        // Clean up observer
+        if (this.observer) {
+          this.observer.disconnect();
+        }
+      }
+
+      private setupIntersectionObserver() {
+        const disableAutoLoad = this.dataset.disableAutoLoad === 'true';
+        if (disableAutoLoad) return;
+
+        this.sentinel = this.querySelector('.apg-feed-sentinel');
+        if (!this.sentinel) return;
+
+        const rootMargin = this.dataset.loadMoreRootMargin || '200px';
+
+        this.observer = new IntersectionObserver(
+          (entries) => {
+            const entry = entries[0];
+            const feedElement = this.feedElement;
+            if (
+              entry.isIntersecting &&
+              feedElement &&
+              feedElement.getAttribute('aria-busy') !== 'true'
+            ) {
+              // Dispatch custom event for infinite scroll
+              this.dispatchEvent(
+                new CustomEvent('feed:loadmore', {
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            }
+          },
+          {
+            rootMargin,
+            threshold: 0,
+          }
+        );
+
+        this.observer.observe(this.sentinel);
+      }
+
+      private handleKeyDown(event: KeyboardEvent) {
+        const { target } = event;
+        if (!(target instanceof HTMLElement)) return;
+
+        let currentIndex = this.focusedIndex;
+
+        // Find current article
+        for (let i = 0; i < this.articles.length; i++) {
+          const article = this.articles[i];
+          if (article === target || article.contains(target)) {
+            currentIndex = i;
+            break;
+          }
+        }
+
+        switch (event.key) {
+          case 'PageDown':
+            event.preventDefault();
+            if (currentIndex < this.articles.length - 1) {
+              this.focusArticle(currentIndex + 1);
+            }
+            break;
+
+          case 'PageUp':
+            event.preventDefault();
+            if (currentIndex > 0) {
+              this.focusArticle(currentIndex - 1);
+            }
+            break;
+
+          case 'End':
+            if (event.ctrlKey || event.metaKey) {
+              event.preventDefault();
+              this.focusOutsideFeed('after');
+            }
+            break;
+
+          case 'Home':
+            if (event.ctrlKey || event.metaKey) {
+              event.preventDefault();
+              this.focusOutsideFeed('before');
+            }
+            break;
+        }
+      }
+
+      private focusArticle(index: number) {
+        const article = this.articles[index];
+        if (!article) return;
+
+        // Update tabindex
+        this.articles.forEach((a, i) => {
+          a.setAttribute('tabindex', i === index ? '0' : '-1');
+        });
+
+        article.focus();
+        this.focusedIndex = index;
+
+        // Dispatch focus change event
+        this.dispatchEvent(
+          new CustomEvent('feed:focuschange', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              articleId: article.dataset.articleId,
+              index,
+            },
+          })
+        );
+      }
+
+      private handleArticleFocus(index: number) {
+        // Update tabindex
+        this.articles.forEach((a, i) => {
+          a.setAttribute('tabindex', i === index ? '0' : '-1');
+        });
+        this.focusedIndex = index;
+      }
+
+      private focusOutsideFeed(direction: 'before' | 'after') {
+        if (!this.feedElement) return;
+
+        const focusableSelector =
+          'a[href], button:not([disabled]), input:not([disabled]), ' +
+          'select:not([disabled]), textarea:not([disabled]), ' +
+          '[tabindex]:not([tabindex="-1"])';
+
+        const allFocusable = Array.from(document.querySelectorAll<HTMLElement>(focusableSelector));
+
+        // Find the index range of feed elements
+        let feedStartIndex = -1;
+        let feedEndIndex = -1;
+
+        for (let i = 0; i < allFocusable.length; i++) {
+          if (this.feedElement.contains(allFocusable[i]) || allFocusable[i] === this.feedElement) {
+            if (feedStartIndex === -1) feedStartIndex = i;
+            feedEndIndex = i;
+          }
+        }
+
+        if (direction === 'before') {
+          if (feedStartIndex > 0) {
+            allFocusable[feedStartIndex - 1].focus();
+          }
+        } else {
+          if (feedEndIndex >= 0 && feedEndIndex < allFocusable.length - 1) {
+            allFocusable[feedEndIndex + 1].focus();
+          }
+        }
+      }
+    }
+
+    customElements.define('apg-feed', ApgFeed);
+  </script>
+</apg-feed>
+
+<style>
+  /* Styles are in src/styles/patterns/feed.css */
+  .apg-feed-sentinel {
+    height: 1px;
+    visibility: hidden;
+  }
+</style>
