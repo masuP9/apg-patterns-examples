@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run generate:og && astro build",
-    "generate:og": "node scripts/generate-og-image.mjs",
+    "generate:og": "node scripts/generate-og-image.mjs && node scripts/generate-pattern-og-images.mjs",
     "preview": "astro preview",
     "lint": "astro check && tsc --noEmit && eslint src/**/*.ts src/**/*.tsx",
     "format": "prettier --write .",
