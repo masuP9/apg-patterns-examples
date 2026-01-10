@@ -1,0 +1,204 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">対象要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>separator</code></td>
+          <td class="py-2 pr-4">スプリッター要素</td>
+          <td class="py-2">ペインサイズを制御するフォーカス可能なセパレーター</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#separator" class="text-primary hover:underline">
+      WAI-ARIA separator ロール
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">対象</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">0-100</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">プライマリペインのサイズ（パーセンテージ）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemin</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">最小値（デフォルト: 10）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-valuemax</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">最大値（デフォルト: 90）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">ID参照</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">プライマリペインのID（+ セカンダリペインID（任意））</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">文字列</td>
+          <td class="py-2 pr-4">条件付き</td>
+          <td class="py-2">アクセシブルな名前（aria-labelledbyがない場合は必須）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4">ID参照</td>
+          <td class="py-2 pr-4">条件付き</td>
+          <td class="py-2">可視ラベル要素への参照</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4"><code>"horizontal"</code> | <code>"vertical"</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">デフォルト: horizontal（左右分割）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4">separator</td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">無効状態</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>注意:</strong>
+    <code>aria-readonly</code> は <code>role="separator"</code> では有効ではありません。 読み取り専用の動作はJavaScriptでのみ制御する必要があります。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート</h3>
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuenow</code></h4>
+    <p class="text-muted-foreground mb-3">スプリッターの現在位置（パーセンテージ 0-100）。</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">対象</td>
+            <td class="py-2">separator 要素</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">値</td>
+            <td class="py-2">0-100（0 = 折り畳み、50 = 半分、100 = 完全展開）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">変更トリガー</td>
+            <td class="py-2">矢印キー、Home/End、Enter（折り畳み/展開）、ポインタードラッグ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">参照</td>
+            <td class="py-2">
+              <ExternalLink
+                href="https://w3c.github.io/aria/#aria-valuenow"
+                class="text-primary hover:underline"
+              >
+                aria-valuenow
+              </ExternalLink>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">動作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd> /
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd>
+          </td>
+          <td class="py-2">水平スプリッターを移動（増加/減少）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd> /
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd>
+          </td>
+          <td class="py-2">垂直スプリッターを移動（増加/減少）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> +
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">矢印</kbd>
+          </td>
+          <td class="py-2">大きなステップで移動（デフォルト: 10%）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd>
+          </td>
+          <td class="py-2">最小位置に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd>
+          </td>
+          <td class="py-2">最大位置に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd>
+          </td>
+          <td class="py-2">プライマリペインの折り畳み/展開を切り替え</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground text-sm">
+    <strong>注意:</strong> 矢印キーは向きに基づいて制限されます。 水平スプリッターは左/右のみ、垂直スプリッターは上/下のみに応答します。
+    RTLモードでは、水平スプリッターの場合、左矢印で増加、右矢印で減少します。
+  </p>
+</div>

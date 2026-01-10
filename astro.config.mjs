@@ -9,32 +9,6 @@ import mdx from '@astrojs/mdx';
 
 /** @typedef {'github-pages' | 'cloudflare-pages' | 'local'} DeployTarget */
 
-/** @type {Record<DeployTarget, { site: string; base: string }>} */
-const siteConfig = {
-  'github-pages': {
-    site: 'https://masup9.github.io',
-    base: '/apg-patterns-examples',
-  },
-  'cloudflare-pages': {
-    site: process.env.CF_PAGES_URL || 'https://apg-patterns-examples.pages.dev',
-    base: '/',
-  },
-  local: {
-    site: 'http://localhost:4321',
-    base: '/',
-  },
-};
-
-// Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
-const deployTargetEnv =
-  process.env.DEPLOY_TARGET || (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
-
-/** @type {DeployTarget} */
-const deployTarget =
-  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'local';
-
-const { site, base } = siteConfig[deployTarget];
-
 /**
  * Get dev server port from environment variable or generate from worktree path
  * This allows multiple worktrees to run dev servers simultaneously
@@ -56,13 +30,42 @@ function getDevPort() {
   return 4321 + (hash % 79);
 }
 
+// Get port early so it can be used in siteConfig
+const devPort = getDevPort();
+
+/** @type {Record<DeployTarget, { site: string; base: string }>} */
+const siteConfig = {
+  'github-pages': {
+    site: 'https://masup9.github.io',
+    base: '/apg-patterns-examples',
+  },
+  'cloudflare-pages': {
+    site: process.env.CF_PAGES_URL || 'https://apg-patterns-examples.pages.dev',
+    base: '/',
+  },
+  local: {
+    site: `http://localhost:${devPort}`,
+    base: '/',
+  },
+};
+
+// Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
+const deployTargetEnv =
+  process.env.DEPLOY_TARGET || (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
+
+/** @type {DeployTarget} */
+const deployTarget =
+  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'local';
+
+const { site, base } = siteConfig[deployTarget];
+
 // https://astro.build/config
 export default defineConfig({
   site,
   base,
 
   server: {
-    port: getDevPort(),
+    port: devPort,
   },
 
   integrations: [

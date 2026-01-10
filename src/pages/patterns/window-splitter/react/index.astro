@@ -1,0 +1,280 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import { WindowSplitterDemo } from '@patterns/window-splitter/WindowSplitterDemo';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/window-splitter/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/window-splitter/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/window-splitter/WindowSplitter.tsx?raw';
+import testCode from '@patterns/window-splitter/WindowSplitter.test.tsx?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Window Splitter - React"
+  pattern="window-splitter"
+  framework="react"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Window Splitter</h1>
+    <p class="text-muted-foreground text-lg">
+      A movable separator between two panes that allows users to resize the relative size of each
+      pane. Used in IDEs, file browsers, and resizable layouts.
+    </p>
+    <a
+      href="/patterns/window-splitter/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI Implementation Guide
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="window-splitter" currentFramework="react" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <p class="text-muted-foreground mb-4 text-sm">
+      Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a
+      larger step. Home/End moves to min/max position.
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <WindowSplitterDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="tsx"
+      title="WindowSplitter.tsx"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { WindowSplitter } from './WindowSplitter';
+
+function App() {
+  return (
+    <div className="layout">
+      <div id="primary-pane" style={{ width: 'var(--splitter-position)' }}>
+        Primary Content
+      </div>
+      <WindowSplitter
+        primaryPaneId="primary-pane"
+        secondaryPaneId="secondary-pane"
+        defaultPosition={50}
+        min={20}
+        max={80}
+        step={5}
+        aria-label="Resize panels"
+        onPositionChange={(position, sizeInPx) => {
+          console.log('Position:', position, 'Size:', sizeInPx);
+        }}
+      />
+      <div id="secondary-pane">
+        Secondary Content
+      </div>
+    </div>
+  );
+}`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">WindowSplitter Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>primaryPaneId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">ID of primary pane (for aria-controls)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>secondaryPaneId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID of secondary pane (optional)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultPosition</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">50</td>
+            <td class="py-2">Initial position as percentage (0-100)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultCollapsed</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Start in collapsed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>expandedPosition</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Position when expanding from initial collapse</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">10</td>
+            <td class="py-2">Minimum position (%)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">90</td>
+            <td class="py-2">Maximum position (%)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">5</td>
+            <td class="py-2">Keyboard step size (%)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">10</td>
+            <td class="py-2">Shift+Arrow step size (%)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">Splitter orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>dir</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'ltr' | 'rtl'</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Text direction for RTL support</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>collapsible</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">Allow collapse/expand with Enter</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Disabled state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>readonly</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Readonly state (focusable but not operable)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onPositionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4"
+              >(position: number, sizeInPx: number) =&gt; void</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when position changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onCollapsedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4"
+              >(collapsed: boolean, previousPosition: number) =&gt; void</td
+            >
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when collapsed state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="WindowSplitter.test.tsx"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Window Splitter Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/window-splitter/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist</span
+        >
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

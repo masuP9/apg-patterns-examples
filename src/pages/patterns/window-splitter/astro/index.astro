@@ -1,0 +1,257 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import WindowSplitterDemo from '@patterns/window-splitter/WindowSplitterDemo.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AccessibilityDocs from '@patterns/window-splitter/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/window-splitter/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/window-splitter/WindowSplitter.astro?raw';
+import testCode from '@patterns/window-splitter/WindowSplitter.test.astro.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Window Splitter - Astro"
+  pattern="window-splitter"
+  framework="astro"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Window Splitter</h1>
+    <p class="text-muted-foreground text-lg">
+      A movable separator between two panes that allows users to resize the relative size of each
+      pane. Uses Web Components for client-side interactivity.
+    </p>
+    <a
+      href="/patterns/window-splitter/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI Implementation Guide
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="window-splitter" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <p class="text-muted-foreground mb-4 text-sm">
+      Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a
+      larger step. Home/End moves to min/max position.
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <WindowSplitterDemo />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="WindowSplitter.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import WindowSplitter from './WindowSplitter.astro';
+---
+
+<div class="layout">
+  <div id="primary-pane">
+    Primary Content
+  </div>
+  <WindowSplitter
+    primaryPaneId="primary-pane"
+    secondaryPaneId="secondary-pane"
+    position={50}
+    min={20}
+    max={80}
+    step={5}
+    aria-label="Resize panels"
+  />
+  <div id="secondary-pane">
+    Secondary Content
+  </div>
+</div>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>primaryPaneId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">ID of primary pane</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>secondaryPaneId</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID of secondary pane</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>position</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">50</td>
+            <td class="py-2">Initial position (%)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>collapsed</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Start collapsed</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">Splitter orientation</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Disabled state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>readonly</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Readonly state</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Element (<code>apg-window-splitter</code>)</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      The Astro component renders an <code>&lt;apg-window-splitter&gt;</code> Web Component. Configuration
+      is passed via <code>data-*</code> attributes and the component handles all keyboard and pointer
+      interaction client-side.
+    </p>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Attribute</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-primary-pane-id</code></td>
+            <td class="py-2">ID of primary pane for aria-controls</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-secondary-pane-id</code></td>
+            <td class="py-2">ID of secondary pane</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-position</code></td>
+            <td class="py-2">Initial position percentage</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-min / data-max</code></td>
+            <td class="py-2">Min/max position values</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-step / data-large-step</code></td>
+            <td class="py-2">Keyboard step sizes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>data-orientation</code></td>
+            <td class="py-2">'horizontal' or 'vertical'</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="WindowSplitter.test.astro.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Window Splitter Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/window-splitter/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>
