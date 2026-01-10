@@ -32,12 +32,24 @@ interface Props {
   title: string;
   description?: string;
   locale?: Locale;
+  ogImage?: string;
 }
 
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-const { title, description = t('site.description') } = Astro.props;
+const { title, description = t('site.description'), ogImage } = Astro.props;
+
+// Generate absolute URLs for OGP
+const siteUrl =
+  Astro.site?.toString().replace(/\/$/, '') ?? 'https://masup9.github.io/apg-patterns-examples';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageUrl = ogImage
+  ? new URL(ogImage, siteUrl).toString()
+  : new URL(withBase('/og-image.png'), siteUrl).toString();
+const ogLocale = locale === 'ja' ? 'ja_JP' : 'en_US';
+const siteName = 'APG Patterns Examples';
+const fullTitle = `${title} | ${siteName}`;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
@@ -54,7 +66,24 @@ const navLinks = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
-    <title>{title} | APG Patterns Examples</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{fullTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={ogLocale} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <ThemeProvider />
   </head>
   <body class="bg-background text-foreground min-h-screen">
