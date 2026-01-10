@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 export interface SwitchProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -13,6 +13,8 @@ export interface SwitchProps extends Omit<
   onCheckedChange?: (checked: boolean) => void;
 }
 
+const SWIPE_THRESHOLD = 10;
+
 export const Switch: React.FC<SwitchProps> = ({
   initialChecked = false,
   children,
@@ -22,25 +24,71 @@ export const Switch: React.FC<SwitchProps> = ({
   ...buttonProps
 }) => {
   const [checked, setChecked] = useState(initialChecked);
+  const pointerStartX = useRef<number | null>(null);
+  const hasSwiped = useRef(false);
+
+  const setCheckedState = useCallback(
+    (newChecked: boolean) => {
+      if (newChecked !== checked) {
+        setChecked(newChecked);
+        onCheckedChange?.(newChecked);
+      }
+    },
+    [checked, onCheckedChange]
+  );
 
   const handleClick = useCallback(() => {
-    if (disabled) return;
-    const newChecked = !checked;
-    setChecked(newChecked);
-    onCheckedChange?.(newChecked);
-  }, [checked, onCheckedChange, disabled]);
+    if (disabled || hasSwiped.current) return;
+    setCheckedState(!checked);
+  }, [checked, setCheckedState, disabled]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
       if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
-        const newChecked = !checked;
-        setChecked(newChecked);
-        onCheckedChange?.(newChecked);
+        setCheckedState(!checked);
       }
     },
-    [checked, onCheckedChange, disabled]
+    [checked, setCheckedState, disabled]
+  );
+
+  const handlePointerDown = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (disabled) return;
+      pointerStartX.current = event.clientX;
+      hasSwiped.current = false;
+      const target = event.target as HTMLElement;
+      target.setPointerCapture?.(event.pointerId);
+    },
+    [disabled]
+  );
+
+  const handlePointerMove = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (disabled || pointerStartX.current === null) return;
+      const deltaX = event.clientX - pointerStartX.current;
+      if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+        hasSwiped.current = true;
+        const newChecked = deltaX > 0;
+        setCheckedState(newChecked);
+        pointerStartX.current = null;
+      }
+    },
+    [disabled, setCheckedState]
+  );
+
+  const handlePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      pointerStartX.current = null;
+      const target = event.target as HTMLElement;
+      target.releasePointerCapture?.(event.pointerId);
+      // Reset hasSwiped after a microtask to allow click handler to check it
+      queueMicrotask(() => {
+        hasSwiped.current = false;
+      });
+    },
+    []
   );
 
   return (
@@ -54,6 +102,9 @@ export const Switch: React.FC<SwitchProps> = ({
       disabled={disabled}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
     >
       <span className="apg-switch-track">
         <span className="apg-switch-icon" aria-hidden="true">

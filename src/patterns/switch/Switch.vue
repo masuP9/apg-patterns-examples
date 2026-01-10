@@ -9,6 +9,9 @@
     v-bind="$attrs"
     @click="handleClick"
     @keydown="handleKeyDown"
+    @pointerdown="handlePointerDown"
+    @pointermove="handlePointerMove"
+    @pointerup="handlePointerUp"
   >
     <span class="apg-switch-track">
       <span class="apg-switch-icon" aria-hidden="true">
@@ -57,17 +60,27 @@ defineSlots<{
   default(): unknown;
 }>();
 
+const SWIPE_THRESHOLD = 10;
+
 const checked = ref(props.initialChecked);
+let pointerStartX: number | null = null;
+let hasSwiped = false;
+
+const setCheckedState = (newChecked: boolean) => {
+  if (newChecked !== checked.value) {
+    checked.value = newChecked;
+    props.onCheckedChange?.(newChecked);
+    emit('change', newChecked);
+  }
+};
 
 const toggle = () => {
   if (props.disabled) return;
-  const newChecked = !checked.value;
-  checked.value = newChecked;
-  props.onCheckedChange?.(newChecked);
-  emit('change', newChecked);
+  setCheckedState(!checked.value);
 };
 
 const handleClick = () => {
+  if (hasSwiped) return;
   toggle();
 };
 
@@ -76,5 +89,34 @@ const handleKeyDown = (event: KeyboardEvent) => {
     event.preventDefault();
     toggle();
   }
+};
+
+const handlePointerDown = (event: PointerEvent) => {
+  if (props.disabled) return;
+  pointerStartX = event.clientX;
+  hasSwiped = false;
+  const target = event.target as HTMLElement;
+  target.setPointerCapture?.(event.pointerId);
+};
+
+const handlePointerMove = (event: PointerEvent) => {
+  if (props.disabled || pointerStartX === null) return;
+  const deltaX = event.clientX - pointerStartX;
+  if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+    hasSwiped = true;
+    const newChecked = deltaX > 0;
+    setCheckedState(newChecked);
+    pointerStartX = null;
+  }
+};
+
+const handlePointerUp = (event: PointerEvent) => {
+  pointerStartX = null;
+  const target = event.target as HTMLElement;
+  target.releasePointerCapture?.(event.pointerId);
+  // Reset hasSwiped after a microtask to allow click handler to check it
+  queueMicrotask(() => {
+    hasSwiped = false;
+  });
 };
 </script>

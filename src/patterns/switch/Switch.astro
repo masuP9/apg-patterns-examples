@@ -53,6 +53,9 @@ const { initialChecked = false, disabled = false, class: className = '' } = Astr
   class ApgSwitch extends HTMLElement {
     private button: HTMLButtonElement | null = null;
     private rafId: number | null = null;
+    private pointerStartX: number | null = null;
+    private hasSwiped = false;
+    private static readonly SWIPE_THRESHOLD = 10;
 
     connectedCallback() {
       this.rafId = requestAnimationFrame(() => this.initialize());
@@ -68,6 +71,9 @@ const { initialChecked = false, disabled = false, class: className = '' } = Astr
 
       this.button.addEventListener('click', this.handleClick);
       this.button.addEventListener('keydown', this.handleKeyDown);
+      this.button.addEventListener('pointerdown', this.handlePointerDown);
+      this.button.addEventListener('pointermove', this.handlePointerMove);
+      this.button.addEventListener('pointerup', this.handlePointerUp);
     }
 
     disconnectedCallback() {
@@ -77,26 +83,36 @@ const { initialChecked = false, disabled = false, class: className = '' } = Astr
       }
       this.button?.removeEventListener('click', this.handleClick);
       this.button?.removeEventListener('keydown', this.handleKeyDown);
+      this.button?.removeEventListener('pointerdown', this.handlePointerDown);
+      this.button?.removeEventListener('pointermove', this.handlePointerMove);
+      this.button?.removeEventListener('pointerup', this.handlePointerUp);
       this.button = null;
+    }
+
+    private setCheckedState(newChecked: boolean) {
+      if (!this.button) return;
+
+      const currentChecked = this.button.getAttribute('aria-checked') === 'true';
+      if (newChecked !== currentChecked) {
+        this.button.setAttribute('aria-checked', String(newChecked));
+        this.dispatchEvent(
+          new CustomEvent('change', {
+            detail: { checked: newChecked },
+            bubbles: true,
+          })
+        );
+      }
     }
 
     private toggle() {
       if (!this.button || this.button.disabled) return;
 
       const currentChecked = this.button.getAttribute('aria-checked') === 'true';
-      const newChecked = !currentChecked;
-
-      this.button.setAttribute('aria-checked', String(newChecked));
-
-      this.dispatchEvent(
-        new CustomEvent('change', {
-          detail: { checked: newChecked },
-          bubbles: true,
-        })
-      );
+      this.setCheckedState(!currentChecked);
     }
 
     private handleClick = () => {
+      if (this.hasSwiped) return;
       this.toggle();
     };
 
@@ -105,6 +121,35 @@ const { initialChecked = false, disabled = false, class: className = '' } = Astr
         event.preventDefault();
         this.toggle();
       }
+    };
+
+    private handlePointerDown = (event: PointerEvent) => {
+      if (!this.button || this.button.disabled) return;
+      this.pointerStartX = event.clientX;
+      this.hasSwiped = false;
+      const target = event.target as HTMLElement;
+      target.setPointerCapture?.(event.pointerId);
+    };
+
+    private handlePointerMove = (event: PointerEvent) => {
+      if (!this.button || this.button.disabled || this.pointerStartX === null) return;
+      const deltaX = event.clientX - this.pointerStartX;
+      if (Math.abs(deltaX) >= ApgSwitch.SWIPE_THRESHOLD) {
+        this.hasSwiped = true;
+        const newChecked = deltaX > 0;
+        this.setCheckedState(newChecked);
+        this.pointerStartX = null;
+      }
+    };
+
+    private handlePointerUp = (event: PointerEvent) => {
+      this.pointerStartX = null;
+      const target = event.target as HTMLElement;
+      target.releasePointerCapture?.(event.pointerId);
+      // Reset hasSwiped after a microtask to allow click handler to check it
+      queueMicrotask(() => {
+        this.hasSwiped = false;
+      });
     };
   }
 

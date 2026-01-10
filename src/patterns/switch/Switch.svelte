@@ -10,6 +10,8 @@
     [key: string]: unknown;
   }
 
+  const SWIPE_THRESHOLD = 10;
+
   let {
     children,
     initialChecked = false,
@@ -19,14 +21,23 @@
   }: SwitchProps = $props();
 
   let checked = $state(untrack(() => initialChecked));
+  let pointerStartX: number | null = null;
+  let hasSwiped = false;
+
+  function setCheckedState(newChecked: boolean) {
+    if (newChecked !== checked) {
+      checked = newChecked;
+      onCheckedChange(checked);
+    }
+  }
 
   function toggle() {
     if (disabled) return;
-    checked = !checked;
-    onCheckedChange(checked);
+    setCheckedState(!checked);
   }
 
   function handleClick() {
+    if (hasSwiped) return;
     toggle();
   }
 
@@ -35,6 +46,35 @@
       event.preventDefault();
       toggle();
     }
+  }
+
+  function handlePointerDown(event: PointerEvent) {
+    if (disabled) return;
+    pointerStartX = event.clientX;
+    hasSwiped = false;
+    const target = event.target as HTMLElement;
+    target.setPointerCapture?.(event.pointerId);
+  }
+
+  function handlePointerMove(event: PointerEvent) {
+    if (disabled || pointerStartX === null) return;
+    const deltaX = event.clientX - pointerStartX;
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      hasSwiped = true;
+      const newChecked = deltaX > 0;
+      setCheckedState(newChecked);
+      pointerStartX = null;
+    }
+  }
+
+  function handlePointerUp(event: PointerEvent) {
+    pointerStartX = null;
+    const target = event.target as HTMLElement;
+    target.releasePointerCapture?.(event.pointerId);
+    // Reset hasSwiped after a microtask to allow click handler to check it
+    queueMicrotask(() => {
+      hasSwiped = false;
+    });
   }
 </script>
 
@@ -47,6 +87,9 @@
   {disabled}
   onclick={handleClick}
   onkeydown={handleKeyDown}
+  onpointerdown={handlePointerDown}
+  onpointermove={handlePointerMove}
+  onpointerup={handlePointerUp}
   {...restProps}
 >
   <span class="apg-switch-track">
