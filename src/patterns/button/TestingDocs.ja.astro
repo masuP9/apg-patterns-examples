@@ -5,8 +5,37 @@ import { ResponsiveTable } from '@/components/ui/table';
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    テストは、キーボード操作、ARIA属性、アクセシビリティ要件の観点からAPG準拠を検証します。
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件の観点からAPG準拠を検証します。Toggle Buttonコンポーネントは2層テスト戦略を採用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のTesting Libraryユーティリティを使用してコンポーネントのレンダリングとインタラクションを検証します。分離された環境で正しいコンポーネント動作を確認できます。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML構造と要素の階層</li>
+      <li>初期属性値（aria-pressed、type）</li>
+      <li>クリックイベント処理と状態切り替え</li>
+      <li>CSSクラスの適用</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      4つのフレームワーク全体で実際のブラウザ環境でのコンポーネント動作を検証します。フルブラウザコンテキストが必要なインタラクションをカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>キーボード操作（Space、Enter）</li>
+      <li>aria-pressed状態の切り替え</li>
+      <li>無効状態の動作</li>
+      <li>フォーカス管理とTabナビゲーション</li>
+      <li>クロスフレームワーク一貫性</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
@@ -136,20 +165,26 @@ import { ResponsiveTable } from '@/components/ui/table';
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
         >Vitest</ExternalLink
       >
-      - テストランナー
+      - ユニットテストランナー
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
         >Testing Library</ExternalLink
       >
-      - フレームワーク別テストユーティリティ
+      - フレームワーク別テストユーティリティ（React、Vue、Svelte）
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2Eテスト用ブラウザ自動化
     </li>
     <li>
       <ExternalLink
-        href="https://github.com/nickcolley/jest-axe"
-        class="text-primary hover:underline">jest-axe</ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
       >
-      - 自動アクセシビリティテスト
+      - E2Eでの自動アクセシビリティテスト
     </li>
   </ul>
 
