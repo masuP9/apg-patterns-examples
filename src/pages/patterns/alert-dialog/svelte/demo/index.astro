@@ -1,0 +1,23 @@
+---
+/**
+ * Demo-only Page: AlertDialog (Svelte)
+ *
+ * This page renders the AlertDialog component in isolation for E2E testing.
+ */
+import '@/styles/global.css';
+import '@/styles/patterns/alert-dialog.css';
+import AlertDialogDemo from '@patterns/alert-dialog/AlertDialogDemo.svelte';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Alert Dialog (Svelte)</title>
+  </head>
+  <body class="space-y-8 p-6">
+    <AlertDialogDemo client:only="svelte" />
+  </body>
+</html>

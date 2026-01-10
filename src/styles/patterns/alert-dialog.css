@@ -1,0 +1,244 @@
+/* =============================================================================
+   ALERT DIALOG COMPONENT STYLES
+   ============================================================================= */
+
+/* Native <dialog> backdrop */
+dialog.apg-alert-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  animation: apg-alert-dialog-overlay-show 0.2s ease-out;
+}
+
+@keyframes apg-alert-dialog-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Alert Dialog Container */
+.apg-alert-dialog {
+  position: relative;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 28rem;
+  width: calc(100% - 2rem);
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  animation: apg-alert-dialog-show 0.2s ease-out;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+/* Native dialog element reset and positioning */
+dialog.apg-alert-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  z-index: 9999;
+}
+
+dialog.apg-alert-dialog:not([open]) {
+  display: none;
+}
+
+/* Prevent body scroll when dialog is open */
+body:has(dialog.apg-alert-dialog[open]) {
+  overflow: hidden;
+}
+
+@keyframes apg-alert-dialog-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Alert Dialog Title */
+.apg-alert-dialog-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.75rem;
+}
+
+/* Alert Dialog Message */
+.apg-alert-dialog-message {
+  margin: 0 0 1.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Alert Dialog Actions */
+.apg-alert-dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Alert Dialog Buttons - Base */
+.apg-alert-dialog-cancel,
+.apg-alert-dialog-confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+  min-width: 5rem;
+}
+
+/* Cancel Button */
+.apg-alert-dialog-cancel {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.apg-alert-dialog-cancel:hover {
+  background: var(--muted);
+  border-color: var(--muted);
+}
+
+.apg-alert-dialog-cancel:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-alert-dialog-cancel:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Confirm Button - Default */
+.apg-alert-dialog-confirm {
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--primary-foreground);
+}
+
+.apg-alert-dialog-confirm:hover {
+  background: var(--primary);
+  opacity: 0.9;
+}
+
+.apg-alert-dialog-confirm:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-alert-dialog-confirm:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Confirm Button - Danger Variant */
+.apg-alert-dialog-confirm--danger {
+  background: var(--destructive);
+  border-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+.apg-alert-dialog-confirm--danger:hover {
+  background: var(--destructive);
+  opacity: 0.9;
+}
+
+.apg-alert-dialog-confirm--danger:focus {
+  outline: 2px solid var(--destructive);
+  outline-offset: 2px;
+}
+
+/* Alert Dialog Trigger */
+.apg-alert-dialog-trigger {
+  cursor: pointer;
+}
+
+.apg-alert-dialog-trigger:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.apg-alert-dialog-trigger:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Focus on dialog itself (for screen readers) */
+.apg-alert-dialog:focus {
+  outline: none;
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-alert-dialog {
+    border-width: 2px;
+  }
+
+  dialog.apg-alert-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-alert-dialog,
+  dialog.apg-alert-dialog::backdrop {
+    animation: none;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-alert-dialog {
+    border: 2px solid ButtonBorder;
+    background: Canvas;
+  }
+
+  dialog.apg-alert-dialog::backdrop {
+    background: Canvas;
+    opacity: 0.9;
+  }
+
+  .apg-alert-dialog-title {
+    color: CanvasText;
+  }
+
+  .apg-alert-dialog-message {
+    color: CanvasText;
+  }
+
+  .apg-alert-dialog-cancel,
+  .apg-alert-dialog-confirm {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .apg-alert-dialog-cancel:focus,
+  .apg-alert-dialog-confirm:focus {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-alert-dialog-confirm--danger {
+    border-color: LinkText;
+  }
+}

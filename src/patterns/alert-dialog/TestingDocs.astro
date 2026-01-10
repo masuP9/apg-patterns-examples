@@ -1,0 +1,267 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
+    requirements. Alert Dialog has stricter requirements than regular Dialog. The Alert Dialog
+    component uses a two-layer testing strategy.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library / jest-axe)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's HTML output, ARIA attributes, and accessibility. These tests ensure
+      correct rendering and compliance with APG requirements.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>role="alertdialog" (NOT dialog)</li>
+      <li>aria-labelledby and aria-describedby attributes</li>
+      <li>Modal behavior via showModal()</li>
+      <li>WCAG 2.1 AA compliance via axe-core</li>
+      <li>Props behavior (allowEscapeClose, confirmVariant)</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks (React, Vue,
+      Svelte, Astro). These tests cover interactions requiring JavaScript execution.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Focus on Cancel button when dialog opens (safest action)</li>
+      <li>Tab/Shift+Tab wrap within dialog (focus trap)</li>
+      <li>Enter/Space activates focused button</li>
+      <li>Escape key disabled by default</li>
+      <li>Focus returns to trigger on close</li>
+      <li>No close button (×) unlike regular Dialog</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG Keyboard Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape key (disabled)</code></td>
+          <td class="py-2">Escape does NOT close the dialog by default</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape key (enabled)</code></td>
+          <td class="py-2">Escape closes the dialog when <code>allowEscapeClose</code> is true</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter on button</code></td>
+          <td class="py-2">Activates the focused button</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space on button</code></td>
+          <td class="py-2">Activates the focused button</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG ARIA Attributes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="alertdialog"</code></td>
+          <td class="py-2">Dialog element has alertdialog role (not dialog)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Modal behavior</code></td>
+          <td class="py-2"
+            >Opened via <code>showModal()</code> (verified by <code>::backdrop</code> existence)</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">References the alert dialog title</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2">References the alert message (required, unlike Dialog)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Initial focus</code></td>
+          <td class="py-2">Focus moves to Cancel button on open (safest action)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus restore</code></td>
+          <td class="py-2">Focus returns to trigger on close</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus trap</code></td>
+          <td class="py-2">Tab cycling stays within dialog (via native dialog)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Title and message</code></td>
+          <td class="py-2">Both are rendered and properly associated</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Props & Behavior
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>allowEscapeClose</code></td>
+          <td class="py-2">Controls Escape key behavior (default: false)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>confirmVariant</code></td>
+          <td class="py-2">Danger variant applies correct styling</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onConfirm</code></td>
+          <td class="py-2">Callback fires when Confirm button is clicked</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onCancel</code></td>
+          <td class="py-2">Callback fires when Cancel button is clicked</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">Custom classes are applied</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - Automated accessibility testing
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2E testing for cross-framework validation
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all AlertDialog unit tests
+npm run test:unit -- AlertDialog
+
+# Run framework-specific tests
+npm run test:react -- AlertDialog.test.tsx
+npm run test:vue -- AlertDialog.test.vue.ts
+npm run test:svelte -- AlertDialog.test.svelte.ts
+npm run test:astro</code></pre>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Alert Dialog E2E tests
+npm run test:e2e -- alert-dialog.spec.ts
+
+# Run in UI mode
+npm run test:e2e:ui -- alert-dialog.spec.ts</code></pre>
+  </div>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
+</div>

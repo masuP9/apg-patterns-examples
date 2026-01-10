@@ -1,0 +1,270 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA 属性、およびアクセシビリティ要件全体にわたる APG
+    準拠を検証します。Alert Dialog は通常の Dialog よりも厳格な要件があります。Alert Dialog
+    コンポーネントは2層テスト戦略を使用しています。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library / jest-axe)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      コンポーネントのHTML出力、ARIA属性、およびアクセシビリティを検証します。これらのテストは正しいレンダリングとAPG要件への準拠を保証します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>role="alertdialog"（dialog ではない）</li>
+      <li>aria-labelledby と aria-describedby 属性</li>
+      <li>showModal() によるモーダル動作</li>
+      <li>axe-core による WCAG 2.1 AA 準拠</li>
+      <li>プロパティ動作（allowEscapeClose, confirmVariant）</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワーク（React、Vue、Svelte、Astro）で実際のブラウザ環境でのコンポーネント動作を検証します。JavaScript
+      実行を必要とするインタラクションをカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ダイアログ表示時にキャンセルボタンにフォーカス（最も安全なアクション）</li>
+      <li>Tab/Shift+Tab がダイアログ内でラップする（フォーカストラップ）</li>
+      <li>Enter/Space でフォーカスされたボタンを実行</li>
+      <li>デフォルトで Escape キー無効</li>
+      <li>閉じる時に開いた要素にフォーカスが戻る</li>
+      <li>通常の Dialog と違い閉じるボタン（×）がない</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG キーボード操作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape key（無効）</code></td>
+          <td class="py-2">デフォルトでは Escape キーでダイアログを閉じない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape key（有効）</code></td>
+          <td class="py-2"
+            ><code>allowEscapeClose</code> が true の場合、Escape でダイアログを閉じる</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter on button</code></td>
+          <td class="py-2">フォーカスされたボタンを実行する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space on button</code></td>
+          <td class="py-2">フォーカスされたボタンを実行する</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: APG ARIA 属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="alertdialog"</code></td>
+          <td class="py-2">ダイアログ要素に alertdialog ロールがある（dialog ではない）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>モーダル動作</code></td>
+          <td class="py-2"
+            ><code>showModal()</code> で開かれている（<code>::backdrop</code> の存在で確認）</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2">アラートダイアログのタイトルを参照する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2">アラートメッセージを参照する（Dialog とは異なり必須）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Initial focus</code></td>
+          <td class="py-2"
+            >開いたときにキャンセルボタンにフォーカスが移動する（最も安全なアクション）</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus restore</code></td>
+          <td class="py-2">閉じたときに開いた要素にフォーカスが戻る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus trap</code></td>
+          <td class="py-2">Tab サイクルがダイアログ内に留まる（ネイティブ dialog 経由）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AA 違反がない（jest-axe 経由）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Title and message</code></td>
+          <td class="py-2">両方がレンダリングされ、適切に関連付けられている</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: プロパティと動作
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>allowEscapeClose</code></td>
+          <td class="py-2">Escape キーの動作を制御する（デフォルト: false）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>confirmVariant</code></td>
+          <td class="py-2">danger バリアントが正しいスタイリングを適用する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onConfirm</code></td>
+          <td class="py-2">確認ボタンがクリックされたときにコールバックが発火する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onCancel</code></td>
+          <td class="py-2">キャンセルボタンがクリックされたときにコールバックが発火する</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスが適用される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - フレームワーク固有のテストユーティリティ
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - 自動アクセシビリティテスト
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - クロスフレームワーク検証のための E2E テスト
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">テストの実行</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># AlertDialog の全ユニットテストを実行
+npm run test:unit -- AlertDialog
+
+# フレームワーク別テストを実行
+npm run test:react -- AlertDialog.test.tsx
+npm run test:vue -- AlertDialog.test.vue.ts
+npm run test:svelte -- AlertDialog.test.svelte.ts
+npm run test:astro</code></pre>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Alert Dialog の全 E2E テストを実行
+npm run test:e2e -- alert-dialog.spec.ts
+
+# UI モードで実行
+npm run test:e2e:ui -- alert-dialog.spec.ts</code></pre>
+  </div>
+
+  <p class="text-muted-foreground text-sm">
+    詳細なドキュメントは <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
+</div>

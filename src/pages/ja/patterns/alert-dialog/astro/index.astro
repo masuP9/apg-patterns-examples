@@ -1,0 +1,301 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import AlertDialog from '@patterns/alert-dialog/AlertDialog.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/alert-dialog/AccessibilityDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/alert-dialog/AlertDialog.astro?raw';
+import TestingDocs from '@patterns/alert-dialog/TestingDocs.ja.astro';
+import testCode from '@patterns/alert-dialog/AlertDialog.test.astro.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Alert Dialog - Astro"
+  pattern="alert-dialog"
+  framework="astro"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Alert Dialog</h1>
+    <p class="text-muted-foreground text-lg">
+      ユーザーのワークフローを中断し、重要なメッセージを伝えて応答を求めるモーダルダイアログ。
+    </p>
+    <AiGuideBadge pattern="alert-dialog" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="alert-dialog" currentFramework="astro" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4">
+      以下のアラートダイアログを試してください。重要な確認では Escape
+      キーがデフォルトで無効になっており、初期フォーカスはキャンセルボタン（最も安全なアクション）に移動します。
+    </p>
+
+    <!-- Delete Confirmation -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">削除確認</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        明示的な確認が必要な破壊的なアクション。Escape キーは無効です。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <AlertDialog
+          title="このアイテムを削除しますか？"
+          message="この操作は取り消せません。アイテムはアカウントから完全に削除されます。"
+          triggerText="アイテムを削除"
+          confirmLabel="削除"
+          cancelLabel="キャンセル"
+          confirmVariant="danger"
+          triggerClass="bg-destructive text-destructive-foreground rounded-md px-4 py-2 hover:opacity-90"
+        />
+      </div>
+    </div>
+
+    <!-- Discard Changes -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">変更の破棄</h3>
+      <p class="text-muted-foreground mb-4 text-sm">保存されていない変更を失う前に確認します。</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <AlertDialog
+          title="未保存の変更を破棄しますか？"
+          message="保存されていない変更があります。本当に破棄しますか？"
+          triggerText="エディターを閉じる"
+          confirmLabel="破棄"
+          cancelLabel="編集を続ける"
+          triggerClass="bg-secondary text-secondary-foreground rounded-md px-4 py-2 hover:opacity-90"
+        />
+      </div>
+    </div>
+
+    <!-- Information Acknowledgment -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">情報の確認</h3>
+      <p class="text-muted-foreground mb-4 text-sm">Escape キーが有効な非破壊的なアラート。</p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <AlertDialog
+          title="システムメンテナンス"
+          message="日曜日午前2時にシステムメンテナンスが予定されています。それまでに作業を保存してください。"
+          triggerText="お知らせを表示"
+          confirmLabel="了解"
+          cancelLabel="後で通知"
+          allowEscapeClose={true}
+          triggerClass="bg-primary text-primary-foreground rounded-md px-4 py-2 hover:opacity-90"
+        />
+      </div>
+    </div>
+    <p class="text-muted-foreground mt-4 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="AlertDialog.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import AlertDialog from './AlertDialog.astro';
+---
+
+<AlertDialog
+  title="このアイテムを削除しますか？"
+  message="この操作は取り消せません。アイテムは完全に削除されます。"
+  triggerText="アイテムを削除"
+  confirmLabel="削除"
+  cancelLabel="キャンセル"
+  confirmVariant="danger"
+  triggerClass="bg-destructive text-destructive-foreground px-4 py-2 rounded"
+/>
+
+<script>
+  // カスタムイベントをリッスン
+  document.querySelector('apg-alert-dialog')?.addEventListener('confirm', () => {
+    console.log('確認されました！');
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>title</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">アラートダイアログのタイトル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>message</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">アラートメッセージ（アクセシビリティ上必須）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>triggerText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">トリガーボタンのテキスト</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>confirmLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">"OK"</td>
+            <td class="py-2">確認ボタンのラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>cancelLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">"Cancel"</td>
+            <td class="py-2">キャンセルボタンのラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>confirmVariant</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'default' | 'danger'</td>
+            <td class="text-muted-foreground py-2 pr-4">'default'</td>
+            <td class="py-2">確認ボタンのスタイル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>allowEscapeClose</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Escape キーで閉じることを許可</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>triggerClass</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">トリガーボタンの追加 CSS クラス</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">カスタムイベント</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>confirm</code></td>
+            <td class="py-2">確認ボタンがクリックされたときに発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>cancel</code></td>
+            <td class="py-2">キャンセルボタンがクリックされたときに発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>alertdialogopen</code></td>
+            <td class="py-2">ダイアログが開いたときに発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>alertdialogclose</code></td>
+            <td class="py-2">ダイアログが閉じたときに発火</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="AlertDialog.test.astro.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Alert Dialog パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <AiGuideResourceItem pattern="alert-dialog" locale={locale} />
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

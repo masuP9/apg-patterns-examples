@@ -1,0 +1,62 @@
+---
+/**
+ * Demo-only Page: AlertDialog (Astro)
+ *
+ * This page renders the AlertDialog component in isolation for E2E testing.
+ */
+import '@/styles/global.css';
+import '@/styles/patterns/alert-dialog.css';
+import AlertDialog from '@patterns/alert-dialog/AlertDialog.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Alert Dialog (Astro)</title>
+  </head>
+  <body class="space-y-8 p-6">
+    <!-- Delete Confirmation -->
+    <section class="space-y-4">
+      <h3 class="text-lg font-semibold">Delete Confirmation</h3>
+      <AlertDialog
+        title="Delete this item?"
+        message="This action cannot be undone. This will permanently delete the item from your account."
+        triggerText="Delete Item"
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        confirmVariant="danger"
+        triggerClass="bg-destructive text-destructive-foreground rounded-md px-4 py-2 hover:opacity-90"
+      />
+    </section>
+
+    <!-- Discard Changes -->
+    <section class="space-y-4">
+      <h3 class="text-lg font-semibold">Discard Changes</h3>
+      <AlertDialog
+        title="Discard unsaved changes?"
+        message="You have unsaved changes. Are you sure you want to discard them?"
+        triggerText="Close Editor"
+        confirmLabel="Discard"
+        cancelLabel="Keep Editing"
+        triggerClass="bg-secondary text-secondary-foreground rounded-md px-4 py-2 hover:opacity-90"
+      />
+    </section>
+
+    <!-- Information Acknowledgment -->
+    <section class="space-y-4">
+      <h3 class="text-lg font-semibold">Information Acknowledgment</h3>
+      <AlertDialog
+        title="System Maintenance"
+        message="The system will undergo maintenance on Sunday at 2:00 AM. Please save your work before then."
+        triggerText="Show Notice"
+        confirmLabel="Understood"
+        cancelLabel="Remind Me Later"
+        allowEscapeClose={true}
+        triggerClass="bg-primary text-primary-foreground rounded-md px-4 py-2 hover:opacity-90"
+      />
+    </section>
+  </body>
+</html>
