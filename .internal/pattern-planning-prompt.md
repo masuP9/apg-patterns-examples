@@ -137,12 +137,12 @@ Phase 1 で llm.md とテストを先に作成し、その後実装に進みま�
 
 ### Phase 3: ドキュメント（英語）
 - [ ] `AccessibilityDocs.astro` - ARIA 仕様解説
-- [ ] `TestingDocs.astro` - テスト解説
+- [ ] `TestingDocs.astro` - テスト解説 ※ `.internal/TestingDocs-template.astro` を参照
 - [ ] `NativeHtmlNotice.astro` - ネイティブ HTML 注記（該当パターンのみ）
 
 ### Phase 4: 日本語ドキュメント
 - [ ] `AccessibilityDocs.ja.astro` - ARIA 仕様解説（日本語）
-- [ ] `TestingDocs.ja.astro` - テスト解説（日本語）
+- [ ] `TestingDocs.ja.astro` - テスト解説（日本語）※ `.internal/TestingDocs-template.astro` を参照
 - [ ] `NativeHtmlNotice.ja.astro` - ネイティブ HTML 注記（日本語、該当パターンのみ）
 
 ### Phase 5: ページ作成
@@ -676,7 +676,11 @@ export interface {ComponentName}Props extends Omit<
    - llm.md の内容を元に詳細な解説を作成
 
 2. **TestingDocs.astro**（英語）
-   - テスト設計の解説を作成
+   - `.internal/TestingDocs-template.astro` をベースに作成
+   - **必須セクション**:
+     - Testing Strategy（Unit Tests + E2E Tests の2層構造）
+     - Test Categories（優先度別テスト一覧）
+     - Running Tests（テスト実行コマンド）
 
 3. **NativeHtmlNotice.astro**（英語、該当パターンのみ）
    - ネイティブ HTML 要素の推奨と判断基準
@@ -689,6 +693,8 @@ export interface {ComponentName}Props extends Omit<
 
 2. **TestingDocs.ja.astro**
    - 英語版を元に日本語版を作成
+   - Testing Strategy / Test Categories / Running Tests の構造を維持
+   - セクション見出しを日本語化（テスト戦略 / テストカテゴリ / テストの実行）
 
 3. **NativeHtmlNotice.ja.astro**（該当パターンのみ）
    - 英語版を元に日本語版を作成
@@ -1114,6 +1120,7 @@ export interface {ComponentName}Props extends Omit<
 | ドキュメント | 用途 |
 |--------------|------|
 | [llm-md-template.md](.internal/llm-md-template.md) | llm.md のテンプレート |
+| [TestingDocs-template.astro](.internal/TestingDocs-template.astro) | TestingDocs のテンプレート（Unit + E2E の2層構造） |
 | [testing-strategy.md](.internal/testing-strategy.md) | テスト設計方針 |
 | [site-specification.md](.internal/site-specification.md) | サイト仕様書 |
 | [CLAUDE.md](../CLAUDE.md) | プロジェクト概要 |
