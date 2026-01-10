@@ -2,6 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 const isCI = !!process.env.CI;
 
+// Skip webServer when running as part of parallel execution (server managed externally)
+const skipWebServer = !!process.env.E2E_SKIP_SERVER;
+
 // Base path depends on deploy target:
 // - DEPLOY_TARGET=github-pages: /apg-patterns-examples
 // - Otherwise: /
@@ -48,7 +51,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  workers: isCI ? 1 : undefined,
+  workers: 1,
   reporter: isCI ? 'github' : 'html',
   // Filter tests by framework if E2E_FRAMEWORK is set
   grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,
@@ -64,14 +67,16 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    // CI: Use preview server (serves pre-built dist/)
-    // Local: Use dev server (hot reload)
-    command: isCI ? `npx astro preview --host 0.0.0.0 --port ${devPort}` : 'npm run dev',
-    url: `http://localhost:${devPort}${basePath}/`,
-    reuseExistingServer: !isCI,
-    timeout: 180 * 1000, // 3 minutes for CI
-    stdout: 'pipe',
-    stderr: 'pipe',
-  },
+  webServer: skipWebServer
+    ? undefined
+    : {
+        // CI: Use preview server (serves pre-built dist/)
+        // Local: Use dev server (hot reload)
+        command: isCI ? `npx astro preview --host 0.0.0.0 --port ${devPort}` : 'npm run dev',
+        url: `http://localhost:${devPort}${basePath}/`,
+        reuseExistingServer: !isCI,
+        timeout: 180 * 1000, // 3 minutes for CI
+        stdout: 'pipe',
+        stderr: 'pipe',
+      },
 });
