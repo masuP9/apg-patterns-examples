@@ -52,7 +52,7 @@ export const PATTERNS: Pattern[] = [
       "A modal dialog that interrupts the user's workflow to communicate an important message and acquire a response.",
     icon: '🚨',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'breadcrumb',

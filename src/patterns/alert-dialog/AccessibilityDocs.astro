@@ -1,0 +1,235 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>alertdialog</code></td>
+          <td class="py-2 pr-4">Dialog container</td>
+          <td class="py-2"
+            >A type of dialog that interrupts the user's workflow to communicate an important
+            message and require a response. May trigger system alert sounds in assistive
+            technologies.</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink
+      href="https://w3c.github.io/aria/#alertdialog"
+      class="text-primary hover:underline">WAI-ARIA alertdialog role</ExternalLink
+    >
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Target</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-modal</code></td>
+          <td class="py-2 pr-4">alertdialog</td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">Implicit</td>
+          <td class="py-2"
+            >Provided automatically by <code>showModal()</code>. No explicit attribute needed when
+            using native <code>&lt;dialog&gt;</code> element.</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">alertdialog</td>
+          <td class="py-2 pr-4">ID reference to title element</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">References the alert dialog title</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2 pr-4">alertdialog</td>
+          <td class="py-2 pr-4">ID reference to message</td>
+          <td class="py-2 pr-4">Yes (required)</td>
+          <td class="py-2"
+            >References the alert message. Unlike regular Dialog, this is required for Alert Dialog
+            as the message is central to the user's understanding of what action is being confirmed.</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Event</th>
+          <th class="py-2 text-left">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Dialog opens</td>
+          <td class="py-2"
+            >Focus moves to the Cancel button (safest action). This differs from regular Dialog
+            which focuses the first focusable element.</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Dialog closes</td>
+          <td class="py-2">Focus returns to the element that triggered the dialog</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Focus trap</td>
+          <td class="py-2"
+            >Tab/Shift+Tab cycles through focusable elements within the dialog only</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Background</td>
+          <td class="py-2">Content outside dialog is made inert (not focusable or interactive)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2"
+            >Move focus to next focusable element within dialog. When focus is on the last element,
+            moves to first.</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd
+            ></td
+          >
+          <td class="py-2"
+            >Move focus to previous focusable element within dialog. When focus is on the first
+            element, moves to last.</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
+          <td class="py-2"
+            >Disabled by default. Unlike regular Dialog, Alert Dialog prevents Escape key closure to
+            ensure users explicitly respond to the alert. Can be enabled via
+            <code>allowEscapeClose</code> prop for non-critical alerts.</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Activates the focused button</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Activates the focused button</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Differences from Dialog</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Feature</th>
+          <th class="py-2 pr-4 text-left">Dialog</th>
+          <th class="py-2 text-left">Alert Dialog</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Role</td>
+          <td class="py-2 pr-4"><code>dialog</code></td>
+          <td class="py-2"><code>alertdialog</code></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Message (<code>aria-describedby</code>)</td>
+          <td class="py-2 pr-4">Optional</td>
+          <td class="py-2">Required</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Escape key</td>
+          <td class="py-2 pr-4">Enabled by default</td>
+          <td class="py-2">Disabled by default</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Initial focus</td>
+          <td class="py-2 pr-4">First focusable element</td>
+          <td class="py-2">Cancel button (safest action)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Close button</td>
+          <td class="py-2 pr-4">Yes (×)</td>
+          <td class="py-2">No (explicit response required)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Overlay click</td>
+          <td class="py-2 pr-4">Closes dialog</td>
+          <td class="py-2">Does not close (explicit response required)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Additional Notes</h3>
+  <ul class="text-muted-foreground list-disc space-y-2 pl-6">
+    <li>
+      Alert Dialog is for critical messages that require user acknowledgment or a decision. For
+      general content, use regular Dialog.
+    </li>
+    <li>
+      The <code>alertdialog</code> role may cause assistive technologies to announce the dialog more urgently
+      or with an alert sound.
+    </li>
+    <li>
+      Both title and message are required to provide complete context for the user's decision.
+    </li>
+    <li>The Cancel button should always be the safest choice (no destructive action).</li>
+    <li>
+      Consider using the <code>danger</code> variant for destructive actions to provide visual distinction.
+    </li>
+  </ul>
+</div>

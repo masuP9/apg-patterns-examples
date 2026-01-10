@@ -1,0 +1,250 @@
+---
+/**
+ * TestingDocs Template
+ *
+ * このテンプレートは新しい APG パターンの TestingDocs.astro を作成する際の雛形です。
+ * 以下の点を必ず含めてください:
+ *
+ * 1. Testing Strategy セクション（Unit Tests + E2E Tests の2層構造）
+ * 2. Test Categories セクション（優先度別のテスト一覧）
+ * 3. Running Tests セクション（テスト実行コマンド）
+ *
+ * 使用方法:
+ * 1. このファイルを src/patterns/{pattern}/TestingDocs.astro にコピー
+ * 2. {PatternName} と {pattern} を実際の値に置き換え
+ * 3. 各セクションの内容をパターンに合わせて編集
+ * 4. 日本語版 TestingDocs.ja.astro も同様に作成
+ */
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across ARIA structure, keyboard navigation, focus management, and
+    accessibility requirements. The {PatternName} component uses a two-layer testing strategy.
+  </p>
+
+  <!-- ==================== -->
+  <!-- Testing Strategy     -->
+  <!-- ==================== -->
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library / jest-axe)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's HTML output, ARIA attributes, and accessibility. These tests ensure
+      correct rendering and compliance with APG requirements.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <!-- パターン固有のユニットテスト項目を記載 -->
+      <li>role="{role}" on container element</li>
+      <li>aria-* attributes (aria-labelledby, aria-selected, etc.)</li>
+      <li>State changes (aria-expanded, aria-pressed, etc.)</li>
+      <li>WCAG 2.1 AA compliance via axe-core</li>
+      <li>Props behavior and callbacks</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks (React, Vue,
+      Svelte, Astro). These tests cover interactions requiring JavaScript execution.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <!-- パターン固有の E2E テスト項目を記載 -->
+      <li>Keyboard navigation (Arrow keys, Home, End)</li>
+      <li>Focus management and tabindex updates</li>
+      <li>User interactions (click, keyboard activation)</li>
+      <li>Cross-framework consistency</li>
+    </ul>
+  </div>
+
+  <!-- ==================== -->
+  <!-- Test Categories      -->
+  <!-- ==================== -->
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <!-- High Priority: ARIA Attributes -->
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: ARIA Attributes
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="{role}"</code></td>
+          <td class="py-2">Container has correct role</td>
+        </tr>
+        <!-- 追加のテスト項目 -->
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <!-- High Priority: Keyboard Interaction -->
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Arrow keys</code></td>
+          <td class="py-2">Navigate between items</td>
+        </tr>
+        <!-- 追加のテスト項目 -->
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <!-- High Priority: Focus Management -->
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Focus Management
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Roving tabindex</code></td>
+          <td class="py-2">Only one element has tabindex="0"</td>
+        </tr>
+        <!-- 追加のテスト項目 -->
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <!-- Medium Priority: Accessibility -->
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations</td>
+        </tr>
+        <!-- 追加のテスト項目 -->
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <!-- Low Priority: Props & Behavior -->
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Props & Behavior
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">Custom classes are applied</td>
+        </tr>
+        <!-- 追加のテスト項目 -->
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <!-- ==================== -->
+  <!-- Testing Tools        -->
+  <!-- ==================== -->
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/nickcolley/jest-axe"
+        class="text-primary hover:underline">jest-axe</ExternalLink
+      >
+      - Automated accessibility testing
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2E testing for cross-framework validation
+    </li>
+  </ul>
+
+  <!-- ==================== -->
+  <!-- Running Tests        -->
+  <!-- ==================== -->
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all {PatternName} unit tests
+npm run test:unit -- {PatternName}
+
+# Run framework-specific tests
+npm run test:react -- {PatternName}.test.tsx
+npm run test:vue -- {PatternName}.test.vue.ts
+npm run test:svelte -- {PatternName}.test.svelte.ts
+npm run test:astro</code></pre>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests</h4>
+    <pre
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all {pattern} E2E tests
+npm run test:e2e -- {pattern}.spec.ts
+
+# Run in UI mode
+npm run test:e2e:ui -- {pattern}.spec.ts</code></pre>
+  </div>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
+</div>

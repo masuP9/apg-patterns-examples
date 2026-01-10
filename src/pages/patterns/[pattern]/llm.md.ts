@@ -5,6 +5,7 @@ import { join } from 'path';
 const patterns = [
   'accordion',
   'alert',
+  'alert-dialog',
   'breadcrumb',
   'button',
   'checkbox',
