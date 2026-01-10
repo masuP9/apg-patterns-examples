@@ -22,6 +22,7 @@
 @import './patterns/landmarks.css';
 @import './patterns/feed.css';
 @import './patterns/alert-dialog.css';
+@import './patterns/window-splitter.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

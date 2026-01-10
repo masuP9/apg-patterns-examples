@@ -5,7 +5,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance across ARIA structure, keyboard navigation, focus management, and
-    dynamic loading states. The Feed component uses a two-layer testing strategy.
+    pointer interaction. The Window Splitter component uses a two-layer testing strategy.
   </p>
 
   <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
@@ -17,25 +17,24 @@ import { ResponsiveTable } from '@/components/ui/table';
       rendering and ARIA attributes.
     </p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>HTML structure with feed/article roles</li>
-      <li>ARIA attributes (aria-labelledby, aria-posinset, aria-setsize)</li>
-      <li>Initial tabindex values (roving tabindex)</li>
-      <li>Dynamic loading state (aria-busy)</li>
-      <li>CSS class application</li>
+      <li>ARIA structure (role, aria-valuenow, aria-controls)</li>
+      <li>Keyboard interaction (Arrow keys, Home/End, Enter)</li>
+      <li>Collapse/expand functionality</li>
+      <li>RTL support</li>
+      <li>Disabled/readonly states</li>
     </ul>
   </div>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
     <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
     <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment. These tests cover interactions that
-      require JavaScript execution.
+      Verify component behavior in a real browser environment including pointer interactions.
     </p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Page Up/Down navigation between articles</li>
-      <li>Ctrl+Home/End for escaping the feed</li>
-      <li>Focus management and tabindex updates</li>
-      <li>Navigation from inside article elements</li>
+      <li>Pointer drag to resize</li>
+      <li>Focus management across Tab navigation</li>
+      <li>Cross-framework consistency</li>
+      <li>Visual state (CSS custom property updates)</li>
     </ul>
   </div>
 
@@ -55,28 +54,28 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="feed"</code></td>
-          <td class="py-2">Container has feed role</td>
+          <td class="py-2 pr-4"><code>role="separator"</code></td>
+          <td class="py-2">Splitter has separator role</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="article"</code></td>
-          <td class="py-2">Each item has article role</td>
+          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
+          <td class="py-2">Primary pane size as percentage (0-100)</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label/labelledby (feed)</code></td>
-          <td class="py-2">Feed container has accessible name</td>
+          <td class="py-2 pr-4"><code>aria-valuemin/max</code></td>
+          <td class="py-2">Minimum and maximum values set</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby (article)</code></td>
-          <td class="py-2">Each article references its title</td>
+          <td class="py-2 pr-4"><code>aria-controls</code></td>
+          <td class="py-2">References primary (and optional secondary) pane</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-posinset</code></td>
-          <td class="py-2">Sequential starting from 1</td>
+          <td class="py-2 pr-4"><code>aria-orientation</code></td>
+          <td class="py-2">Set to "vertical" for vertical splitter</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-setsize</code></td>
-          <td class="py-2">Total count or -1 if unknown</td>
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">Set to "true" when disabled</td>
         </tr>
       </tbody>
     </table>
@@ -96,28 +95,36 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Page Down</code></td>
-          <td class="py-2">Moves focus to next article</td>
+          <td class="py-2 pr-4"><code>ArrowRight/Left</code></td>
+          <td class="py-2">Moves horizontal splitter (increases/decreases)</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Page Up</code></td>
-          <td class="py-2">Moves focus to previous article</td>
+          <td class="py-2 pr-4"><code>ArrowUp/Down</code></td>
+          <td class="py-2">Moves vertical splitter (increases/decreases)</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>No wrap</code></td>
-          <td class="py-2">Does not loop at first/last article</td>
+          <td class="py-2 pr-4"><code>Direction restriction</code></td>
+          <td class="py-2">Wrong-direction keys have no effect</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Ctrl+End</code></td>
-          <td class="py-2">Moves focus after the feed</td>
+          <td class="py-2 pr-4"><code>Shift+Arrow</code></td>
+          <td class="py-2">Moves by large step</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Ctrl+Home</code></td>
-          <td class="py-2">Moves focus before the feed</td>
+          <td class="py-2 pr-4"><code>Home/End</code></td>
+          <td class="py-2">Moves to min/max position</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Inside article</code></td>
-          <td class="py-2">Page Down works from inside article elements</td>
+          <td class="py-2 pr-4"><code>Enter (collapse)</code></td>
+          <td class="py-2">Collapses to 0</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter (expand)</code></td>
+          <td class="py-2">Restores previous position</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>RTL support</code></td>
+          <td class="py-2">ArrowLeft/Right reversed in RTL mode</td>
         </tr>
       </tbody>
     </table>
@@ -137,24 +144,28 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Roving tabindex</code></td>
-          <td class="py-2">Only one article has tabindex="0"</td>
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">Splitter is focusable</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex update</code></td>
-          <td class="py-2">tabindex updates when focus moves</td>
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">Disabled splitter is not focusable</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Initial state</code></td>
-          <td class="py-2">First article has tabindex="0" by default</td>
+          <td class="py-2 pr-4"><code>readonly focusable</code></td>
+          <td class="py-2">Readonly splitter is focusable but not operable</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus after collapse</code></td>
+          <td class="py-2">Focus remains on splitter</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Dynamic Loading
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Pointer Interaction
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -166,16 +177,20 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-busy="false"</code></td>
-          <td class="py-2">Default state when not loading</td>
+          <td class="py-2 pr-4"><code>Drag to resize</code></td>
+          <td class="py-2">Position updates during drag</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-busy="true"</code></td>
-          <td class="py-2">Set during loading</td>
+          <td class="py-2 pr-4"><code>Focus on click</code></td>
+          <td class="py-2">Clicking focuses the splitter</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus maintenance</code></td>
-          <td class="py-2">Focus maintained during loading</td>
+          <td class="py-2 pr-4"><code>Disabled no response</code></td>
+          <td class="py-2">Disabled splitter ignores pointer</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Readonly no response</code></td>
+          <td class="py-2">Readonly splitter ignores pointer</td>
         </tr>
       </tbody>
     </table>
@@ -199,12 +214,12 @@ import { ResponsiveTable } from '@/components/ui/table';
           <td class="py-2">No WCAG 2.1 AA violations</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Loading state</code></td>
-          <td class="py-2">No axe violations during loading</td>
+          <td class="py-2 pr-4"><code>Collapsed state</code></td>
+          <td class="py-2">No violations when collapsed</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-describedby</code></td>
-          <td class="py-2">Present when description provided</td>
+          <td class="py-2 pr-4"><code>Disabled state</code></td>
+          <td class="py-2">No violations when disabled</td>
         </tr>
       </tbody>
     </table>
@@ -215,23 +230,23 @@ import { ResponsiveTable } from '@/components/ui/table';
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
     <h4 class="mb-2 font-medium">Unit Tests</h4>
     <pre
-      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Feed unit tests
-npm run test:unit -- Feed
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Window Splitter unit tests
+npx vitest run src/patterns/window-splitter/
 
 # Run framework-specific tests
-npm run test:react -- Feed.test.tsx
-npm run test:vue -- Feed.test.vue.ts
-npm run test:svelte -- Feed.test.svelte.ts
+npm run test:react -- WindowSplitter.test.tsx
+npm run test:vue -- WindowSplitter.test.vue.ts
+npm run test:svelte -- WindowSplitter.test.svelte.ts
 npm run test:astro</code></pre>
   </div>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
     <h4 class="mb-2 font-medium">E2E Tests</h4>
     <pre
-      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Feed E2E tests
-npm run test:e2e -- feed.spec.ts
+      class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Window Splitter E2E tests
+npm run test:e2e -- window-splitter.spec.ts
 
 # Run in UI mode
-npm run test:e2e:ui -- feed.spec.ts</code></pre>
+npm run test:e2e:ui -- window-splitter.spec.ts</code></pre>
   </div>
 </div>
