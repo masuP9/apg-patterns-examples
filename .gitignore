@@ -69,4 +69,5 @@ temp/
 .claude/
 .serena/
 playwright-report/
+.playwright-mcp/
 test-results/

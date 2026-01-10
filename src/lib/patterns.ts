@@ -158,13 +158,13 @@ export const PATTERNS: Pattern[] = [
     status: 'available',
   },
   {
-    id: 'menu',
-    name: 'Menu / Menubar',
+    id: 'menubar',
+    name: 'Menubar',
     description:
-      'A widget that offers a list of choices to the user, such as a set of actions or functions.',
-    icon: '☰',
+      'A horizontal menu bar with dropdown menus, submenus, checkbox items, and radio groups for application-style navigation.',
+    icon: '🖥️',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'menu-button',

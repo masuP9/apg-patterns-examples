@@ -1,0 +1,243 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import Menubar, { type MenubarItem } from '@patterns/menubar/Menubar.astro';
+import AccessibilityDocs from '@patterns/menubar/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/menubar/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/menubar/Menubar.astro?raw';
+import '@patterns/menubar/menubar.css';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const menubarItems: MenubarItem[] = [
+  {
+    id: 'file',
+    label: 'File',
+    items: [
+      { type: 'item', id: 'new', label: 'New' },
+      { type: 'item', id: 'open', label: 'Open' },
+      {
+        type: 'submenu',
+        id: 'open-recent',
+        label: 'Open Recent',
+        items: [
+          { type: 'item', id: 'project1', label: 'project-alpha.js' },
+          { type: 'item', id: 'project2', label: 'dashboard.tsx' },
+          { type: 'item', id: 'project3', label: 'styles.css' },
+        ],
+      },
+      { type: 'separator', id: 'sep1' },
+      { type: 'item', id: 'save', label: 'Save' },
+      { type: 'item', id: 'save-as', label: 'Save As...' },
+      { type: 'separator', id: 'sep2' },
+      { type: 'item', id: 'export', label: 'Export', disabled: true },
+      { type: 'item', id: 'print', label: 'Print...' },
+    ],
+  },
+  {
+    id: 'edit',
+    label: 'Edit',
+    items: [
+      { type: 'item', id: 'undo', label: 'Undo' },
+      { type: 'item', id: 'redo', label: 'Redo' },
+      { type: 'separator', id: 'sep3' },
+      { type: 'item', id: 'cut', label: 'Cut' },
+      { type: 'item', id: 'copy', label: 'Copy' },
+      { type: 'item', id: 'paste', label: 'Paste' },
+    ],
+  },
+  {
+    id: 'view',
+    label: 'View',
+    items: [
+      { type: 'checkbox', id: 'show-toolbar', label: 'Show Toolbar', checked: true },
+      { type: 'checkbox', id: 'show-sidebar', label: 'Show Sidebar', checked: false },
+      { type: 'separator', id: 'sep4' },
+      {
+        type: 'radiogroup',
+        id: 'theme-group',
+        label: 'Theme',
+        items: [
+          { type: 'radio', id: 'theme-light', label: 'Light', checked: true },
+          { type: 'radio', id: 'theme-dark', label: 'Dark', checked: false },
+          { type: 'radio', id: 'theme-auto', label: 'System', checked: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'help',
+    label: 'Help',
+    items: [
+      { type: 'item', id: 'docs', label: 'Documentation' },
+      { type: 'item', id: 'shortcuts', label: 'Keyboard Shortcuts' },
+      { type: 'separator', id: 'sep5' },
+      { type: 'item', id: 'about', label: 'About' },
+    ],
+  },
+];
+---
+
+<PatternLayout
+  title="メニューバー - Astro"
+  pattern="menubar"
+  framework="astro"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Menubar</h1>
+    <p class="text-muted-foreground text-lg">
+      ドロップダウンメニュー、サブメニュー、チェックボックス、ラジオグループをサポートする、アプリケーションスタイルの水平メニューバー。
+    </p>
+    <a
+      href="/patterns/menubar/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI 実装ガイド
+    </a>
+  </header>
+
+  <FrameworkTabs pattern="menubar" currentFramework="astro" locale={locale} />
+
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">フル機能のメニューバー</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        サブメニュー、チェックボックス、ラジオグループ、区切り線を含みます。Web Componentsを使用。
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <Menubar items={menubarItems} aria-label="Application" />
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="Menubar.astro"
+    />
+  </section>
+
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import Menubar, { type MenubarItem } from '@patterns/menubar/Menubar.astro';
+import '@patterns/menubar/menubar.css';
+
+const menuItems: MenubarItem[] = [
+  {
+    id: 'file',
+    label: 'File',
+    items: [
+      { type: 'item', id: 'new', label: 'New' },
+      { type: 'item', id: 'save', label: 'Save' },
+    ],
+  },
+];
+---
+
+<Menubar items={menuItems} aria-label="Application" />`}
+      lang="astro"
+      title="使用例"
+    />
+  </section>
+
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenubarItem[]</td>
+            <td class="py-2">トップレベルのメニュー項目の配列</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="py-2">アクセシブルな名前</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <h3 class="mb-3 text-lg font-medium">実装メモ</h3>
+    <p class="text-muted-foreground mb-4">
+      Astro実装はインタラクティブ性のためにWeb Components（Custom Elements）を使用しています。<code
+        >&lt;apg-menubar&gt;</code
+      >カスタム要素がクライアント側で全てのキーボードナビゲーション、メニューの開閉、状態管理を処理します。
+    </p>
+  </section>
+
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+  </section>
+
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Menubar パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/menubar/llm.md" class="text-primary hover:underline">
+          AI 実装ガイド (llm.md)
+        </ExternalLink>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

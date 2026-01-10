@@ -1,0 +1,656 @@
+/**
+ * APG Menubar Pattern Styles
+ *
+ * Provides styling for the menubar component across all frameworks.
+ * Supports both:
+ * - React/Vue/Svelte: ul[role="menubar"].apg-menubar with class-based children
+ * - Astro: nav.apg-menubar with data-attribute-based children
+ *
+ * Uses CSS custom properties for theming compatibility.
+ */
+
+/* =============================================================================
+   MENUBAR CONTAINER
+   ============================================================================= */
+
+/* Base container - applies to both nav wrapper (Astro) and ul (React/Vue/Svelte) */
+.apg-menubar {
+  display: inline-block;
+}
+
+/* When the element with .apg-menubar also has role="menubar" (React/Vue/Svelte) */
+.apg-menubar[role='menubar'] {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin: 0;
+  list-style: none;
+  border-radius: 0.375rem;
+  background-color: var(--muted, hsl(210 40% 96.1%));
+}
+
+/* When menubar is nested inside .apg-menubar (Astro with nav wrapper) */
+.apg-menubar [role='menubar'] {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin: 0;
+  list-style: none;
+  border-radius: 0.375rem;
+  background-color: var(--muted, hsl(210 40% 96.1%));
+}
+
+/* Menubar li container for each menubar item */
+.apg-menubar > li,
+.apg-menubar [role='menubar'] > li {
+  position: relative;
+  list-style: none;
+}
+
+/* =============================================================================
+   MENUBAR TRIGGER (Top-level menu items)
+   ============================================================================= */
+
+/* Class-based trigger (React/Vue/Svelte) */
+.apg-menubar-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+/* Data-attribute trigger (Astro) */
+.apg-menubar [data-menubar-trigger] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.apg-menubar-trigger:hover,
+.apg-menubar [data-menubar-trigger]:hover {
+  background-color: oklch(0.95 0 0);
+}
+
+.apg-menubar-trigger:focus,
+.apg-menubar [data-menubar-trigger]:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+/* Active state - pressed or menu open */
+.apg-menubar-trigger:active,
+.apg-menubar [data-menubar-trigger]:active,
+.apg-menubar-trigger[aria-expanded='true'],
+.apg-menubar [data-menubar-trigger][aria-expanded='true'] {
+  background-color: oklch(0.9 0 0);
+}
+
+/* =============================================================================
+   DROPDOWN MENU
+   ============================================================================= */
+
+/* Class-based menu (React/Vue/Svelte) */
+.apg-menubar-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  min-width: 12rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--border, hsl(214.3 31.8% 91.4%));
+  border-radius: 0.375rem;
+  background-color: var(--popover, #ffffff);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Data-attribute menu (Astro) */
+.apg-menubar [data-menubar-menu] {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  min-width: 12rem;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--border, hsl(214.3 31.8% 91.4%));
+  border-radius: 0.375rem;
+  background-color: var(--popover, #ffffff);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Hidden state - use aria-hidden with visibility for animation support */
+.apg-menubar-menu[aria-hidden='true'],
+.apg-menubar [data-menubar-menu][aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible state - slides in from top */
+.apg-menubar-menu[aria-hidden='false'],
+.apg-menubar [data-menubar-menu][aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  animation: menubar-slide-down 200ms ease-out;
+}
+
+@keyframes menubar-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =============================================================================
+   MENU ITEMS
+   ============================================================================= */
+
+/* Base menu item styles - applies to both class and role-based selectors */
+.apg-menubar-menuitem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--popover-foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+/* Role-based menu items within menubar context */
+.apg-menubar-menu [role='menuitem'],
+.apg-menubar-menu [role='menuitemcheckbox'],
+.apg-menubar-menu [role='menuitemradio'],
+.apg-menubar [data-menubar-menu] [role='menuitem'],
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox'],
+.apg-menubar [data-menubar-menu] [role='menuitemradio'] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--popover-foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.apg-menubar-menuitem:hover,
+.apg-menubar-menu [role='menuitem']:hover,
+.apg-menubar-menu [role='menuitemcheckbox']:hover,
+.apg-menubar-menu [role='menuitemradio']:hover,
+.apg-menubar [data-menubar-menu] [role='menuitem']:hover,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox']:hover,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']:hover {
+  background-color: oklch(0.95 0 0);
+}
+
+.apg-menubar-menuitem:focus,
+.apg-menubar-menu [role='menuitem']:focus,
+.apg-menubar-menu [role='menuitemcheckbox']:focus,
+.apg-menubar-menu [role='menuitemradio']:focus,
+.apg-menubar [data-menubar-menu] [role='menuitem']:focus,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox']:focus,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+  background-color: oklch(0.95 0 0);
+}
+
+/* Active state - pressed */
+.apg-menubar-menuitem:active,
+.apg-menubar-menu [role='menuitem']:active,
+.apg-menubar-menu [role='menuitemcheckbox']:active,
+.apg-menubar-menu [role='menuitemradio']:active,
+.apg-menubar [data-menubar-menu] [role='menuitem']:active,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox']:active,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']:active {
+  background-color: oklch(0.9 0 0);
+}
+
+/* Disabled items */
+.apg-menubar-menuitem[aria-disabled='true'],
+.apg-menubar-menu [aria-disabled='true'],
+.apg-menubar [data-menubar-menu] [aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =============================================================================
+   SEPARATOR
+   ============================================================================= */
+
+.apg-menubar-separator,
+.apg-menubar-menu [role='separator'],
+.apg-menubar [data-menubar-menu] [role='separator'] {
+  height: 1px;
+  margin: 0.25rem 0.5rem;
+  background-color: var(--border, hsl(214.3 31.8% 91.4%));
+  border: none;
+}
+
+/* =============================================================================
+   SUBMENU
+   ============================================================================= */
+
+/* Submenu container */
+.apg-menubar-submenu-container {
+  position: relative;
+}
+
+/* Submenu trigger - class based */
+.apg-menubar-submenu-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--popover-foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+/* Submenu trigger - data attribute based (Astro) */
+.apg-menubar [data-submenu-trigger] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--popover-foreground, hsl(222.2 84% 4.9%));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.apg-menubar-submenu-trigger:hover,
+.apg-menubar [data-submenu-trigger]:hover {
+  background-color: oklch(0.95 0 0);
+}
+
+.apg-menubar-submenu-trigger:focus,
+.apg-menubar [data-submenu-trigger]:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+  background-color: oklch(0.95 0 0);
+}
+
+/* Active state - pressed or submenu open */
+.apg-menubar-submenu-trigger:active,
+.apg-menubar [data-submenu-trigger]:active,
+.apg-menubar-submenu-trigger[aria-expanded='true'],
+.apg-menubar [data-submenu-trigger][aria-expanded='true'] {
+  background-color: oklch(0.9 0 0);
+}
+
+/* Submenu dropdown */
+.apg-menubar-submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  z-index: 51;
+  min-width: 10rem;
+  margin-left: 0.25rem;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--border, hsl(214.3 31.8% 91.4%));
+  border-radius: 0.375rem;
+  background-color: var(--popover, #ffffff);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.apg-menubar [data-submenu] {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  z-index: 51;
+  min-width: 10rem;
+  margin-left: 0.25rem;
+  padding: 0.25rem;
+  list-style: none;
+  border: 1px solid var(--border, hsl(214.3 31.8% 91.4%));
+  border-radius: 0.375rem;
+  background-color: var(--popover, #ffffff);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Hidden state - use aria-hidden with visibility for animation support */
+.apg-menubar-submenu[aria-hidden='true'],
+.apg-menubar [data-submenu][aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible state - slides in from left */
+.apg-menubar-submenu[aria-hidden='false'],
+.apg-menubar [data-submenu][aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  animation: menubar-slide-right 200ms ease-out;
+}
+
+@keyframes menubar-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =============================================================================
+   RADIO GROUP
+   ============================================================================= */
+
+.apg-menubar-group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Radio group label */
+.apg-menubar-group-label,
+.apg-menubar [role='group'] > .apg-menubar-group-label {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground, hsl(215.4 16.3% 46.9%));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   CHECKBOX & RADIO INDICATORS
+   ============================================================================= */
+
+.apg-menubar-menuitemcheckbox,
+.apg-menubar-menuitemradio {
+  padding-left: 2rem;
+  position: relative;
+}
+
+.apg-menubar-menuitemcheckbox::before,
+.apg-menubar-menuitemradio::before,
+.apg-menubar-menu [role='menuitemcheckbox']::before,
+.apg-menubar-menu [role='menuitemradio']::before,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox']::before,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 1px solid var(--border, hsl(214.3 31.8% 91.4%));
+  border-radius: 0.125rem;
+  background-color: transparent;
+  flex-shrink: 0;
+}
+
+.apg-menubar-menuitemradio::before,
+.apg-menubar-menu [role='menuitemradio']::before,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']::before {
+  border-radius: 50%;
+}
+
+.apg-menubar-menuitemcheckbox[aria-checked='true']::before,
+.apg-menubar-menu [role='menuitemcheckbox'][aria-checked='true']::before,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox'][aria-checked='true']::before {
+  background-color: var(--primary, hsl(222.2 47.4% 11.2%));
+  border-color: var(--primary, hsl(222.2 47.4% 11.2%));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+  background-size: 0.75rem;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.apg-menubar-menuitemradio[aria-checked='true']::before,
+.apg-menubar-menu [role='menuitemradio'][aria-checked='true']::before,
+.apg-menubar [data-menubar-menu] [role='menuitemradio'][aria-checked='true']::before {
+  background-color: var(--primary, hsl(222.2 47.4% 11.2%));
+  border-color: var(--primary, hsl(222.2 47.4% 11.2%));
+  box-shadow: inset 0 0 0 3px var(--popover, hsl(0 0% 100%));
+}
+
+/* =============================================================================
+   DARK MODE SUPPORT
+   ============================================================================= */
+
+.dark .apg-menubar[role='menubar'],
+.dark .apg-menubar [role='menubar'] {
+  background-color: var(--muted);
+}
+
+.dark .apg-menubar-trigger,
+.dark .apg-menubar [data-menubar-trigger] {
+  color: var(--foreground);
+}
+
+.dark .apg-menubar-trigger:hover,
+.dark .apg-menubar [data-menubar-trigger]:hover {
+  background-color: oklch(0.3 0 0);
+}
+
+.dark .apg-menubar-trigger:active,
+.dark .apg-menubar [data-menubar-trigger]:active,
+.dark .apg-menubar-trigger[aria-expanded='true'],
+.dark .apg-menubar [data-menubar-trigger][aria-expanded='true'] {
+  background-color: oklch(0.35 0 0);
+}
+
+.dark .apg-menubar-menu,
+.dark .apg-menubar [data-menubar-menu] {
+  background-color: var(--popover);
+  border-color: var(--border);
+}
+
+.dark .apg-menubar-menuitem:hover,
+.dark .apg-menubar-menuitem:focus,
+.dark .apg-menubar-menu [role='menuitem']:hover,
+.dark .apg-menubar-menu [role='menuitem']:focus,
+.dark .apg-menubar-menu [role='menuitemcheckbox']:hover,
+.dark .apg-menubar-menu [role='menuitemcheckbox']:focus,
+.dark .apg-menubar-menu [role='menuitemradio']:hover,
+.dark .apg-menubar-menu [role='menuitemradio']:focus {
+  background-color: oklch(0.3 0 0);
+}
+
+.dark .apg-menubar-menuitem:active,
+.dark .apg-menubar-menu [role='menuitem']:active,
+.dark .apg-menubar-menu [role='menuitemcheckbox']:active,
+.dark .apg-menubar-menu [role='menuitemradio']:active {
+  background-color: oklch(0.35 0 0);
+}
+
+.dark .apg-menubar-submenu-trigger:hover,
+.dark .apg-menubar [data-submenu-trigger]:hover {
+  background-color: oklch(0.3 0 0);
+}
+
+.dark .apg-menubar-submenu-trigger:active,
+.dark .apg-menubar [data-submenu-trigger]:active,
+.dark .apg-menubar-submenu-trigger[aria-expanded='true'],
+.dark .apg-menubar [data-submenu-trigger][aria-expanded='true'] {
+  background-color: oklch(0.35 0 0);
+}
+
+.dark .apg-menubar-separator,
+.dark .apg-menubar-menu [role='separator'],
+.dark .apg-menubar [data-menubar-menu] [role='separator'] {
+  background-color: var(--border);
+}
+
+.dark .apg-menubar-submenu,
+.dark .apg-menubar [data-submenu] {
+  background-color: var(--popover);
+  border-color: var(--border);
+}
+
+/* Checkbox/Radio indicators - dark mode needs dark checkmark on light background */
+.dark .apg-menubar-menuitemcheckbox[aria-checked='true']::before,
+.dark .apg-menubar-menu [role='menuitemcheckbox'][aria-checked='true']::before,
+.dark .apg-menubar [data-menubar-menu] [role='menuitemcheckbox'][aria-checked='true']::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23171717' stroke-width='3'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+}
+
+.dark .apg-menubar-menuitemradio[aria-checked='true']::before,
+.dark .apg-menubar-menu [role='menuitemradio'][aria-checked='true']::before,
+.dark .apg-menubar [data-menubar-menu] [role='menuitemradio'][aria-checked='true']::before {
+  box-shadow: inset 0 0 0 3px var(--popover);
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-menubar[role='menubar'],
+  .apg-menubar [role='menubar'] {
+    border: 2px solid currentColor;
+  }
+
+  .apg-menubar-menu,
+  .apg-menubar [data-menubar-menu],
+  .apg-menubar-submenu,
+  .apg-menubar [data-submenu] {
+    border-width: 2px;
+  }
+
+  .apg-menubar-trigger:focus,
+  .apg-menubar [data-menubar-trigger]:focus,
+  .apg-menubar-menuitem:focus,
+  .apg-menubar-menu [role='menuitem']:focus,
+  .apg-menubar-menu [role='menuitemcheckbox']:focus,
+  .apg-menubar-menu [role='menuitemradio']:focus {
+    outline: 3px solid #facc15;
+    outline-offset: -3px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-menubar-trigger,
+  .apg-menubar [data-menubar-trigger],
+  .apg-menubar-menuitem,
+  .apg-menubar-menu [role='menuitem'],
+  .apg-menubar-menu [role='menuitemcheckbox'],
+  .apg-menubar-menu [role='menuitemradio'] {
+    transition: none;
+  }
+
+  .apg-menubar-menu[aria-hidden='false'],
+  .apg-menubar [data-menubar-menu][aria-hidden='false'],
+  .apg-menubar-submenu[aria-hidden='false'],
+  .apg-menubar [data-submenu][aria-hidden='false'] {
+    animation: none;
+  }
+}
+
+/* Windows High Contrast Mode */
+@media (forced-colors: active) {
+  .apg-menubar[role='menubar'],
+  .apg-menubar [role='menubar'] {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+  }
+
+  .apg-menubar-trigger,
+  .apg-menubar [data-menubar-trigger] {
+    color: ButtonText;
+  }
+
+  .apg-menubar-menu,
+  .apg-menubar [data-menubar-menu],
+  .apg-menubar-submenu,
+  .apg-menubar [data-submenu] {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+  }
+
+  .apg-menubar-menuitem,
+  .apg-menubar-menu [role='menuitem'],
+  .apg-menubar-menu [role='menuitemcheckbox'],
+  .apg-menubar-menu [role='menuitemradio'] {
+    color: ButtonText;
+  }
+
+  .apg-menubar-trigger:focus,
+  .apg-menubar [data-menubar-trigger]:focus,
+  .apg-menubar-menuitem:focus,
+  .apg-menubar-menu [role='menuitem']:focus {
+    outline: 2px solid Highlight;
+  }
+
+  .apg-menubar-menuitem[aria-disabled='true'],
+  .apg-menubar-menu [aria-disabled='true'] {
+    color: GrayText;
+  }
+
+  .apg-menubar-separator,
+  .apg-menubar-menu [role='separator'] {
+    background: ButtonBorder;
+  }
+}

@@ -1,0 +1,232 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import { BasicMenubarDemo } from '@patterns/menubar/MenubarDemo';
+import AccessibilityDocs from '@patterns/menubar/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/menubar/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/menubar/Menubar.tsx?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Menubar - React" pattern="menubar" framework="react" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Menubar</h1>
+    <p class="text-muted-foreground text-lg">
+      A horizontal menu bar that provides application-style navigation with dropdown menus,
+      submenus, checkbox items, and radio groups.
+    </p>
+    <a
+      href="/patterns/menubar/llm.md"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
+    >
+      <span class="text-base">🤖</span>
+      AI Implementation Guide
+    </a>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="menubar" currentFramework="react" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+
+    <!-- Full Featured -->
+    <div class="mb-8">
+      <h3 class="mb-3 text-lg font-medium">Full Featured Menubar</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Includes submenus, checkboxes, radio groups, separators, and disabled items.
+      </p>
+      <div class="border-border bg-background rounded-lg border p-6">
+        <BasicMenubarDemo client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Menubar.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Menubar, type MenubarItem } from './Menubar';
+import '@patterns/menubar/menubar.css';
+
+const menuItems: MenubarItem[] = [
+  {
+    id: 'file',
+    label: 'File',
+    items: [
+      { type: 'item', id: 'new', label: 'New' },
+      { type: 'item', id: 'open', label: 'Open' },
+      { type: 'separator', id: 'sep1' },
+      { type: 'item', id: 'save', label: 'Save' },
+      { type: 'item', id: 'export', label: 'Export', disabled: true },
+    ],
+  },
+  {
+    id: 'edit',
+    label: 'Edit',
+    items: [
+      { type: 'item', id: 'cut', label: 'Cut' },
+      { type: 'item', id: 'copy', label: 'Copy' },
+      { type: 'item', id: 'paste', label: 'Paste' },
+    ],
+  },
+  {
+    id: 'view',
+    label: 'View',
+    items: [
+      { type: 'checkbox', id: 'toolbar', label: 'Show Toolbar', checked: true },
+      { type: 'separator', id: 'sep2' },
+      {
+        type: 'radiogroup',
+        id: 'theme',
+        label: 'Theme',
+        items: [
+          { type: 'radio', id: 'light', label: 'Light', checked: true },
+          { type: 'radio', id: 'dark', label: 'Dark', checked: false },
+        ],
+      },
+    ],
+  },
+];
+
+<Menubar
+  items={menuItems}
+  aria-label="Application"
+  onItemSelect={(id) => console.log('Selected:', id)}
+/>`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Menubar Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>items</code></td>
+            <td class="text-muted-foreground py-2 pr-4">MenubarItem[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Array of top-level menu items</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Accessible name (required if no aria-labelledby)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID of labelling element (required if no aria-label)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onItemSelect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(id: string) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Callback when an item is activated</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>className</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">Additional CSS class for the container</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">MenuItem Types</h3>
+    <CodeBlock
+      code={`// Top-level menubar item
+interface MenubarItem {
+  id: string;
+  label: string;
+  items: MenuItem[];
+}
+
+// Menu items (used in dropdowns and submenus)
+type MenuItem =
+  | { type: 'item'; id: string; label: string; disabled?: boolean }
+  | { type: 'separator'; id: string }
+  | { type: 'checkbox'; id: string; label: string; checked: boolean; disabled?: boolean }
+  | { type: 'radio'; id: string; label: string; checked: boolean; disabled?: boolean }
+  | { type: 'radiogroup'; id: string; label: string; items: MenuItemRadio[] }
+  | { type: 'submenu'; id: string; label: string; items: MenuItem[]; disabled?: boolean };`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Menubar Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="/patterns/menubar/llm.md" class="text-primary hover:underline">
+          AI Implementation Guide (llm.md)
+        </ExternalLink>
+        <span class="text-muted-foreground text-sm">
+          - ARIA specs, keyboard support, test checklist
+        </span>
+      </li>
+    </ul>
+  </section>
+</PatternLayout>

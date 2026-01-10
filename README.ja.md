@@ -35,7 +35,7 @@
 | Landmarks           | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Link                | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Listbox             | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Menu and Menubar    | -     | -   | -      | -     | 予定       |
+| Menubar             | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Menu Button         | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Meter               | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Radio Group         | ✅    | ✅  | ✅     | ✅    | 完了       |
