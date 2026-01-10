@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: Switch (Svelte)
+ *
+ * This page renders the Switch component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Switch from '@patterns/switch/Switch.svelte';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Switch (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-4">
+      <Switch client:load>Wi-Fi</Switch>
+      <Switch client:load initialChecked={true}>Bluetooth</Switch>
+      <Switch client:load disabled>Airplane Mode (disabled)</Switch>
+    </div>
+  </body>
+</html>

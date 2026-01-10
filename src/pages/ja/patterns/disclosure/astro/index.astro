@@ -6,6 +6,7 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/disclosure/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/disclosure/TestingDocs.ja.astro';
 import NativeHtmlNotice from '@patterns/disclosure/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -23,6 +24,7 @@ const tocItems = [
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
   { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
   { id: 'resources', text: t('pattern.resources') },
 ];
 ---
@@ -91,6 +93,9 @@ const tocItems = [
         </Disclosure>
       </div>
     </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
   </section>
 
   <!-- Native HTML Section -->
@@ -206,6 +211,14 @@ import Disclosure from './Disclosure.astro';
         </tbody>
       </table>
     </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
   </section>
 
   <!-- Resources -->

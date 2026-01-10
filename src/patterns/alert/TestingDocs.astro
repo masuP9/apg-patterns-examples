@@ -1,4 +1,5 @@
 ---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 ---
 
@@ -165,6 +166,35 @@ import { ResponsiveTable } from '@/components/ui/table';
     Verify that message changes trigger immediate announcement and that existing content on page
     load is NOT announced.
   </p>
+
+  <h3 class="mt-6 mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner for unit tests
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities (React, Vue, Svelte)
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - Browser automation for E2E tests
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
+      >
+      - Automated accessibility testing in E2E
+    </li>
+  </ul>
 
   <h3 class="mt-6 mb-3 text-lg font-medium">Running Tests</h3>
   <pre

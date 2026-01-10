@@ -1,0 +1,31 @@
+---
+/**
+ * Demo-only Page: ToggleButtonDemo (React)
+ *
+ * This page renders the ToggleButtonDemo components in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct focus management
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/button/ToggleButtonDemo';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Toggle Button (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-wrap gap-4">
+      <MuteDemo client:load />
+      <DarkModeDemo client:load />
+      <NotificationsDemo client:load />
+    </div>
+  </body>
+</html>

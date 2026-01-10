@@ -1,0 +1,33 @@
+---
+/**
+ * Demo-only Page: Disclosure (Astro)
+ *
+ * This page renders the Disclosure component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Disclosure from '@patterns/disclosure/Disclosure.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Disclosure (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col gap-4">
+      <Disclosure trigger="What is a Disclosure?">
+        <p>A disclosure is a button that controls the visibility of a section of content.</p>
+      </Disclosure>
+      <Disclosure trigger="This section is open by default" defaultExpanded={true}>
+        <p>This content is visible when the page loads.</p>
+      </Disclosure>
+      <Disclosure trigger="This disclosure is disabled" disabled={true}>
+        <p>This content cannot be revealed because the disclosure is disabled.</p>
+      </Disclosure>
+    </div>
+  </body>
+</html>

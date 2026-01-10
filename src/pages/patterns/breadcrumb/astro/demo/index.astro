@@ -1,0 +1,52 @@
+---
+/**
+ * Demo-only Page: Breadcrumb (Astro)
+ *
+ * This page renders the Breadcrumb component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct selector isolation
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import Breadcrumb from '@patterns/breadcrumb/Breadcrumb.astro';
+
+const basicItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Patterns', href: '/patterns/' },
+  { label: 'Breadcrumb' },
+];
+
+const longPathItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'Electronics', href: '/products/electronics/' },
+  { label: 'Computers', href: '/products/electronics/computers/' },
+  { label: 'Laptops', href: '/products/electronics/computers/laptops/' },
+  { label: 'MacBook Pro' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Breadcrumb (Astro)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Breadcrumb Demo</h1>
+
+    <div class="mb-8">
+      <h2 class="mb-3 text-lg font-medium">Basic Breadcrumb</h2>
+      <Breadcrumb items={basicItems} ariaLabel="Basic Breadcrumb" />
+    </div>
+
+    <div>
+      <h2 class="mb-3 text-lg font-medium">Long Path</h2>
+      <Breadcrumb items={longPathItems} ariaLabel="Long Path Breadcrumb" />
+    </div>
+  </body>
+</html>
