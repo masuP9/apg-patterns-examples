@@ -14,11 +14,7 @@ describe('WindowSplitter', () => {
 
     it('has aria-valuenow representing primary pane percentage', () => {
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-valuenow', '50');
@@ -33,11 +29,7 @@ describe('WindowSplitter', () => {
     it('has aria-valuenow="0" when collapsed', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -49,11 +41,7 @@ describe('WindowSplitter', () => {
 
     it('has aria-valuenow="0" when defaultCollapsed is true', () => {
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultCollapsed
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultCollapsed aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-valuenow', '0');
@@ -72,25 +60,19 @@ describe('WindowSplitter', () => {
     });
 
     it('has custom aria-valuemin when provided', () => {
-      render(
-        <WindowSplitter primaryPaneId="primary" min={20} aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="primary" min={20} aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-valuemin', '20');
     });
 
     it('has custom aria-valuemax when provided', () => {
-      render(
-        <WindowSplitter primaryPaneId="primary" max={80} aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="primary" max={80} aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-valuemax', '80');
     });
 
     it('has aria-controls referencing primary pane', () => {
-      render(
-        <WindowSplitter primaryPaneId="main-panel" aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="main-panel" aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-controls', 'main-panel');
     });
@@ -115,20 +97,14 @@ describe('WindowSplitter', () => {
 
     it('has aria-orientation="vertical" for vertical splitter', () => {
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          orientation="vertical"
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" orientation="vertical" aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-orientation', 'vertical');
     });
 
     it('has aria-disabled="true" when disabled', () => {
-      render(
-        <WindowSplitter primaryPaneId="primary" disabled aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="primary" disabled aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('aria-disabled', 'true');
     });
@@ -141,9 +117,7 @@ describe('WindowSplitter', () => {
   describe('Accessible Name', () => {
     it('has accessible name via aria-label', () => {
       render(<WindowSplitter primaryPaneId="primary" aria-label="Resize panels" />);
-      expect(
-        screen.getByRole('separator', { name: 'Resize panels' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Resize panels' })).toBeInTheDocument();
     });
 
     it('has accessible name via aria-labelledby', () => {
@@ -153,9 +127,7 @@ describe('WindowSplitter', () => {
           <WindowSplitter primaryPaneId="primary" aria-labelledby="splitter-label" />
         </>
       );
-      expect(
-        screen.getByRole('separator', { name: 'Adjust panel size' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Adjust panel size' })).toBeInTheDocument();
     });
   });
 
@@ -374,11 +346,7 @@ describe('WindowSplitter', () => {
     it('collapses on Enter (aria-valuenow becomes 0)', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -391,11 +359,7 @@ describe('WindowSplitter', () => {
     it('expands to previous value on Enter after collapse', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -665,17 +629,13 @@ describe('WindowSplitter', () => {
     });
 
     it('has tabindex="-1" when disabled', () => {
-      render(
-        <WindowSplitter primaryPaneId="primary" disabled aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="primary" disabled aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('tabindex', '-1');
     });
 
     it('has tabindex="0" when readonly (focusable but not operable)', () => {
-      render(
-        <WindowSplitter primaryPaneId="primary" readonly aria-label="Resize panels" />
-      );
+      render(<WindowSplitter primaryPaneId="primary" readonly aria-label="Resize panels" />);
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('tabindex', '0');
     });
@@ -715,11 +675,7 @@ describe('WindowSplitter', () => {
     it('focus remains on splitter after collapse', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -790,7 +746,12 @@ describe('WindowSplitter', () => {
   // 🟡 Medium Priority: Accessibility
   describe('Accessibility', () => {
     // Helper: Render with pane elements for aria-controls validation
-    const renderWithPanes = (splitterProps: Partial<Parameters<typeof WindowSplitter>[0]> & { 'aria-label'?: string; 'aria-labelledby'?: string }) => {
+    const renderWithPanes = (
+      splitterProps: Partial<Parameters<typeof WindowSplitter>[0]> & {
+        'aria-label'?: string;
+        'aria-labelledby'?: string;
+      }
+    ) => {
       return render(
         <>
           <div id="primary">Primary Pane</div>
@@ -1000,11 +961,7 @@ describe('WindowSplitter', () => {
     it('uses default step of 5', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -1017,11 +974,7 @@ describe('WindowSplitter', () => {
     it('uses default largeStep of 10', async () => {
       const user = userEvent.setup();
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          defaultPosition={50}
-          aria-label="Resize panels"
-        />
+        <WindowSplitter primaryPaneId="primary" defaultPosition={50} aria-label="Resize panels" />
       );
       const splitter = screen.getByRole('separator');
 
@@ -1048,11 +1001,7 @@ describe('WindowSplitter', () => {
 
     it('sets id attribute on splitter element', () => {
       render(
-        <WindowSplitter
-          primaryPaneId="primary"
-          aria-label="Resize panels"
-          id="my-splitter"
-        />
+        <WindowSplitter primaryPaneId="primary" aria-label="Resize panels" id="my-splitter" />
       );
       const splitter = screen.getByRole('separator');
       expect(splitter).toHaveAttribute('id', 'my-splitter');

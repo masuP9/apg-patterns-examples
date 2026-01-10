@@ -73,10 +73,7 @@ describe('WindowSplitter (Svelte)', () => {
       render(WindowSplitter, {
         props: { primaryPaneId: 'main-panel', 'aria-label': 'Resize panels' },
       });
-      expect(screen.getByRole('separator')).toHaveAttribute(
-        'aria-controls',
-        'main-panel'
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', 'main-panel');
     });
 
     it('has aria-controls referencing both panes when secondaryPaneId provided', () => {
@@ -87,10 +84,7 @@ describe('WindowSplitter (Svelte)', () => {
           'aria-label': 'Resize panels',
         },
       });
-      expect(screen.getByRole('separator')).toHaveAttribute(
-        'aria-controls',
-        'primary secondary'
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', 'primary secondary');
     });
 
     it('has aria-valuenow="0" when collapsed', () => {
@@ -161,16 +155,12 @@ describe('WindowSplitter (Svelte)', () => {
       render(WindowSplitter, {
         props: { primaryPaneId: 'primary', 'aria-label': 'Resize panels' },
       });
-      expect(
-        screen.getByRole('separator', { name: 'Resize panels' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Resize panels' })).toBeInTheDocument();
     });
 
     it('has accessible name via aria-labelledby', () => {
       render(WindowSplitterWithLabel);
-      expect(
-        screen.getByRole('separator', { name: 'Panel Divider' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Panel Divider' })).toBeInTheDocument();
     });
 
     it('supports aria-describedby', () => {
@@ -947,9 +937,7 @@ describe('WindowSplitter (Svelte)', () => {
           class: 'custom-splitter',
         },
       });
-      const container = screen
-        .getByRole('separator')
-        .closest('.apg-window-splitter');
+      const container = screen.getByRole('separator').closest('.apg-window-splitter');
       expect(container).toHaveClass('custom-splitter');
     });
 

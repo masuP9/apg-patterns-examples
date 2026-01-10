@@ -100,10 +100,7 @@ describe('WindowSplitter (Vue)', () => {
         props: { primaryPaneId: 'main-panel' },
         attrs: { 'aria-label': 'Resize panels' },
       });
-      expect(screen.getByRole('separator')).toHaveAttribute(
-        'aria-controls',
-        'main-panel'
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', 'main-panel');
     });
 
     it('has aria-controls referencing both panes when secondaryPaneId provided', () => {
@@ -111,10 +108,7 @@ describe('WindowSplitter (Vue)', () => {
         props: { primaryPaneId: 'primary', secondaryPaneId: 'secondary' },
         attrs: { 'aria-label': 'Resize panels' },
       });
-      expect(screen.getByRole('separator')).toHaveAttribute(
-        'aria-controls',
-        'primary secondary'
-      );
+      expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', 'primary secondary');
     });
 
     it('has aria-valuenow="0" when collapsed', () => {
@@ -173,9 +167,7 @@ describe('WindowSplitter (Vue)', () => {
         props: { primaryPaneId: 'primary' },
         attrs: { 'aria-label': 'Resize panels' },
       });
-      expect(
-        screen.getByRole('separator', { name: 'Resize panels' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Resize panels' })).toBeInTheDocument();
     });
 
     it('has accessible name via aria-labelledby', () => {
@@ -188,9 +180,7 @@ describe('WindowSplitter (Vue)', () => {
           </div>
         `,
       });
-      expect(
-        screen.getByRole('separator', { name: 'Panel Divider' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('separator', { name: 'Panel Divider' })).toBeInTheDocument();
     });
 
     it('supports aria-describedby', () => {
@@ -735,10 +725,7 @@ describe('WindowSplitter (Vue)', () => {
   // 🟡 Medium Priority: Accessibility
   describe('Accessibility', () => {
     it('has no axe violations', async () => {
-      const { container } = renderWithPanes(
-        {},
-        { 'aria-label': 'Resize panels' }
-      );
+      const { container } = renderWithPanes({}, { 'aria-label': 'Resize panels' });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
@@ -753,10 +740,7 @@ describe('WindowSplitter (Vue)', () => {
     });
 
     it('has no axe violations when disabled', async () => {
-      const { container } = renderWithPanes(
-        { disabled: true },
-        { 'aria-label': 'Resize panels' }
-      );
+      const { container } = renderWithPanes({ disabled: true }, { 'aria-label': 'Resize panels' });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
@@ -816,10 +800,7 @@ describe('WindowSplitter (Vue)', () => {
       await user.keyboard('{Enter}');
 
       expect(emitted('collapsedChange')).toBeTruthy();
-      const [collapsed, previousPosition] = emitted('collapsedChange')[0] as [
-        boolean,
-        number,
-      ];
+      const [collapsed, previousPosition] = emitted('collapsedChange')[0] as [boolean, number];
       expect(collapsed).toBe(true);
       expect(previousPosition).toBe(50);
     });
@@ -852,10 +833,7 @@ describe('WindowSplitter (Vue)', () => {
       await user.keyboard('{ArrowRight}');
 
       expect(emitted('positionChange')).toBeTruthy();
-      const [position, sizeInPx] = emitted('positionChange')[0] as [
-        number,
-        number,
-      ];
+      const [position, sizeInPx] = emitted('positionChange')[0] as [number, number];
       expect(position).toBe(55);
       expect(typeof sizeInPx).toBe('number');
     });
@@ -954,9 +932,7 @@ describe('WindowSplitter (Vue)', () => {
         props: { primaryPaneId: 'primary' },
         attrs: { 'aria-label': 'Resize panels', class: 'custom-splitter' },
       });
-      const container = screen
-        .getByRole('separator')
-        .closest('.apg-window-splitter');
+      const container = screen.getByRole('separator').closest('.apg-window-splitter');
       expect(container).toHaveClass('custom-splitter');
     });
 

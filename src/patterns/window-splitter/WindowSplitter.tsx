@@ -103,18 +103,14 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
   id,
 }) => {
   // Calculate initial position: clamp to valid range, or 0 if collapsed
-  const initialPosition = defaultCollapsed
-    ? 0
-    : clamp(defaultPosition, min, max);
+  const initialPosition = defaultCollapsed ? 0 : clamp(defaultPosition, min, max);
 
   const [position, setPosition] = useState(initialPosition);
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
   const splitterRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const previousPositionRef = useRef<number | null>(
-    defaultCollapsed ? null : initialPosition
-  );
+  const previousPositionRef = useRef<number | null>(defaultCollapsed ? null : initialPosition);
 
   const isHorizontal = orientation === 'horizontal';
   const isVertical = orientation === 'vertical';
@@ -151,10 +147,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
     if (collapsed) {
       // Expand: restore to previous or fallback
       const restorePosition =
-        previousPositionRef.current ??
-        expandedPosition ??
-        defaultPosition ??
-        50;
+        previousPositionRef.current ?? expandedPosition ?? defaultPosition ?? 50;
       const clampedRestore = clamp(restorePosition, min, max);
 
       onCollapsedChange?.(false, position);
@@ -163,8 +156,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
       const container = containerRef.current;
       const sizeInPx = container
-        ? (clampedRestore / 100) *
-          (isHorizontal ? container.offsetWidth : container.offsetHeight)
+        ? (clampedRestore / 100) * (isHorizontal ? container.offsetWidth : container.offsetHeight)
         : 0;
       onPositionChange?.(clampedRestore, sizeInPx);
     } else {
@@ -298,7 +290,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
       // Use demo container for stable measurement if available
       const demoContainerElement = container.closest('.apg-window-splitter-demo-container');
-      const demoContainer = demoContainerElement instanceof HTMLElement ? demoContainerElement : null;
+      const demoContainer =
+        demoContainerElement instanceof HTMLElement ? demoContainerElement : null;
       const measureElement = demoContainer || container.parentElement || container;
       const rect = measureElement.getBoundingClientRect();
 
@@ -317,10 +310,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
       // Update CSS variable directly for smooth dragging
       if (demoContainer) {
-        demoContainer.style.setProperty(
-          '--splitter-position',
-          `${clampedPercent}%`
-        );
+        demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
       }
 
       updatePosition(percent);
@@ -341,9 +331,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
   }, []);
 
   // Compute aria-controls
-  const ariaControls = secondaryPaneId
-    ? `${primaryPaneId} ${secondaryPaneId}`
-    : primaryPaneId;
+  const ariaControls = secondaryPaneId ? `${primaryPaneId} ${secondaryPaneId}` : primaryPaneId;
 
   return (
     <div

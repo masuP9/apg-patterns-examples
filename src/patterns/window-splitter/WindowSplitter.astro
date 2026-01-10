@@ -84,9 +84,7 @@ const clamp = (value: number, minVal: number, maxVal: number): number => {
 const initialPosition = defaultCollapsed ? 0 : clamp(defaultPosition, min, max);
 
 // Compute aria-controls
-const ariaControls = secondaryPaneId
-  ? `${primaryPaneId} ${secondaryPaneId}`
-  : primaryPaneId;
+const ariaControls = secondaryPaneId ? `${primaryPaneId} ${secondaryPaneId}` : primaryPaneId;
 
 const isVertical = orientation === 'vertical';
 ---
@@ -250,10 +248,7 @@ const isVertical = orientation === 'vertical';
 
       // Update visual via CSS custom property
       if (this.container) {
-        this.container.style.setProperty(
-          '--splitter-position',
-          `${clampedPosition}%`
-        );
+        this.container.style.setProperty('--splitter-position', `${clampedPosition}%`);
       }
 
       // Calculate size in px
@@ -261,9 +256,7 @@ const isVertical = orientation === 'vertical';
       if (this.container) {
         sizeInPx =
           (clampedPosition / 100) *
-          (this.isHorizontal
-            ? this.container.offsetWidth
-            : this.container.offsetHeight);
+          (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
       }
 
       // Dispatch event
@@ -282,10 +275,7 @@ const isVertical = orientation === 'vertical';
       if (this.collapsed) {
         // Expand
         const restorePosition =
-          this.previousPosition ??
-          this.expandedPosition ??
-          this.defaultPosition ??
-          50;
+          this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
         const clampedRestore = this.clamp(restorePosition);
 
         this.dispatchEvent(
@@ -299,19 +289,14 @@ const isVertical = orientation === 'vertical';
         this.separator.setAttribute('aria-valuenow', String(clampedRestore));
 
         if (this.container) {
-          this.container.style.setProperty(
-            '--splitter-position',
-            `${clampedRestore}%`
-          );
+          this.container.style.setProperty('--splitter-position', `${clampedRestore}%`);
         }
 
         let sizeInPx = 0;
         if (this.container) {
           sizeInPx =
             (clampedRestore / 100) *
-            (this.isHorizontal
-              ? this.container.offsetWidth
-              : this.container.offsetHeight);
+            (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
         }
 
         this.dispatchEvent(
@@ -421,7 +406,9 @@ const isVertical = orientation === 'vertical';
       if (!this.isDragging || !this.container) return;
 
       // Use demo container for stable measurement if available
-      const demoContainer = this.container.closest('.apg-window-splitter-demo-container') as HTMLElement | null;
+      const demoContainer = this.container.closest(
+        '.apg-window-splitter-demo-container'
+      ) as HTMLElement | null;
       const measureElement = demoContainer || this.container.parentElement || this.container;
       const rect = measureElement.getBoundingClientRect();
 
@@ -440,20 +427,14 @@ const isVertical = orientation === 'vertical';
 
       // Update CSS variable directly for smooth dragging
       if (demoContainer) {
-        demoContainer.style.setProperty(
-          '--splitter-position',
-          `${clampedPercent}%`
-        );
+        demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
       }
 
       this.updatePosition(percent);
     }
 
     private handlePointerUp(event: PointerEvent) {
-      if (
-        this.separator &&
-        typeof this.separator.releasePointerCapture === 'function'
-      ) {
+      if (this.separator && typeof this.separator.releasePointerCapture === 'function') {
         try {
           this.separator.releasePointerCapture(event.pointerId);
         } catch {

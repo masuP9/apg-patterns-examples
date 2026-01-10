@@ -109,10 +109,7 @@ describe('WindowSplitter (Web Component)', () => {
       this.separator.setAttribute('aria-valuenow', String(clampedPosition));
 
       if (this.containerEl) {
-        this.containerEl.style.setProperty(
-          '--splitter-position',
-          `${clampedPosition}%`
-        );
+        this.containerEl.style.setProperty('--splitter-position', `${clampedPosition}%`);
       }
 
       this.dispatchEvent(
@@ -130,10 +127,7 @@ describe('WindowSplitter (Web Component)', () => {
       if (this.collapsed) {
         // Expand
         const restorePosition =
-          this.previousPosition ??
-          this.expandedPosition ??
-          this.defaultPosition ??
-          50;
+          this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
         const clampedRestore = this.clamp(restorePosition);
 
         this.dispatchEvent(
@@ -147,10 +141,7 @@ describe('WindowSplitter (Web Component)', () => {
         this.separator.setAttribute('aria-valuenow', String(clampedRestore));
 
         if (this.containerEl) {
-          this.containerEl.style.setProperty(
-            '--splitter-position',
-            `${clampedRestore}%`
-          );
+          this.containerEl.style.setProperty('--splitter-position', `${clampedRestore}%`);
         }
 
         this.dispatchEvent(
@@ -303,9 +294,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     const initialPosition = collapsed ? 0 : Math.min(max, Math.max(min, position));
     const isVertical = orientation === 'vertical';
-    const ariaControls = secondaryPaneId
-      ? `${primaryPaneId} ${secondaryPaneId}`
-      : primaryPaneId;
+    const ariaControls = secondaryPaneId ? `${primaryPaneId} ${secondaryPaneId}` : primaryPaneId;
 
     return `
       <apg-window-splitter
@@ -358,11 +347,7 @@ describe('WindowSplitter (Web Component)', () => {
   });
 
   // Helper to dispatch keyboard events
-  function pressKey(
-    element: HTMLElement,
-    key: string,
-    options: { shiftKey?: boolean } = {}
-  ) {
+  function pressKey(element: HTMLElement, key: string, options: { shiftKey?: boolean } = {}) {
     const event = new KeyboardEvent('keydown', {
       key,
       bubbles: true,
@@ -437,9 +422,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Keyboard Interaction - Horizontal', () => {
     it('increases value by step on ArrowRight', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -451,9 +434,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('decreases value by step on ArrowLeft', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -465,9 +446,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('increases value by largeStep on Shift+ArrowRight', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, largeStep: 10 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -479,9 +458,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('ignores ArrowUp on horizontal splitter', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -493,9 +470,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('ignores ArrowDown on horizontal splitter', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -512,9 +487,7 @@ describe('WindowSplitter (Web Component)', () => {
         position: 50,
         orientation: 'vertical',
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -529,9 +502,7 @@ describe('WindowSplitter (Web Component)', () => {
         position: 50,
         orientation: 'vertical',
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -546,9 +517,7 @@ describe('WindowSplitter (Web Component)', () => {
         position: 50,
         orientation: 'vertical',
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -563,9 +532,7 @@ describe('WindowSplitter (Web Component)', () => {
         position: 50,
         orientation: 'vertical',
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -579,9 +546,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Keyboard Interaction - Collapse/Expand', () => {
     it('collapses on Enter', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -593,9 +558,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('restores previous value on Enter after collapse', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -611,9 +574,7 @@ describe('WindowSplitter (Web Component)', () => {
         collapsed: true,
         expandedPosition: 30,
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -628,9 +589,7 @@ describe('WindowSplitter (Web Component)', () => {
         position: 50,
         collapsible: false,
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -644,9 +603,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Keyboard Interaction - Home/End', () => {
     it('sets min value on Home', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, min: 10 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -658,9 +615,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('sets max value on End', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, max: 90 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -674,9 +629,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Keyboard Interaction - RTL', () => {
     it('ArrowLeft increases value in RTL mode', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, dir: 'rtl' });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -688,9 +641,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('ArrowRight decreases value in RTL mode', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, dir: 'rtl' });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -704,9 +655,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Keyboard Interaction - Disabled/Readonly', () => {
     it('does not change value when disabled', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, disabled: true });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -718,9 +667,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('does not change value when readonly', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, readonly: true });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -732,9 +679,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('does not collapse when disabled', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, disabled: true });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -746,9 +691,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('does not collapse when readonly', async () => {
       container.innerHTML = createSplitterHTML({ position: 50, readonly: true });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -786,9 +729,7 @@ describe('WindowSplitter (Web Component)', () => {
         max: 90,
         step: 5,
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -804,9 +745,7 @@ describe('WindowSplitter (Web Component)', () => {
         min: 10,
         step: 5,
       });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -832,9 +771,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Events', () => {
     it('dispatches positionchange on keyboard interaction', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -850,9 +787,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('dispatches collapsedchange on collapse', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -869,9 +804,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('dispatches collapsedchange on expand', async () => {
       container.innerHTML = createSplitterHTML({ collapsed: true });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -889,9 +822,7 @@ describe('WindowSplitter (Web Component)', () => {
   describe('Public API', () => {
     it('can set position programmatically', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 
@@ -903,9 +834,7 @@ describe('WindowSplitter (Web Component)', () => {
 
     it('can toggle collapse programmatically', async () => {
       container.innerHTML = createSplitterHTML({ position: 50 });
-      const element = container.querySelector(
-        'apg-window-splitter'
-      ) as TestApgWindowSplitter;
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
       await customElements.whenDefined('apg-window-splitter');
       element.connectedCallback();
 

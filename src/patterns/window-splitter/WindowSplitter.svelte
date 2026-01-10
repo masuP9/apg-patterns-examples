@@ -110,8 +110,7 @@
 
     if (collapsed) {
       // Expand: restore to previous or fallback
-      const restorePosition =
-        previousPosition ?? expandedPosition ?? defaultPosition ?? 50;
+      const restorePosition = previousPosition ?? expandedPosition ?? defaultPosition ?? 50;
       const clampedRestore = clamp(restorePosition, min, max);
 
       oncollapsedchange?.(false, position);
@@ -212,7 +211,9 @@
     if (!containerEl) return;
 
     // Use demo container for stable measurement if available
-    const demoContainer = containerEl.closest('.apg-window-splitter-demo-container') as HTMLElement | null;
+    const demoContainer = containerEl.closest(
+      '.apg-window-splitter-demo-container'
+    ) as HTMLElement | null;
     const measureElement = demoContainer || containerEl.parentElement || containerEl;
     const rect = measureElement.getBoundingClientRect();
 
@@ -231,10 +232,7 @@
 
     // Update CSS variable directly for smooth dragging
     if (demoContainer) {
-      demoContainer.style.setProperty(
-        '--splitter-position',
-        `${clampedPercent}%`
-      );
+      demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
     }
 
     updatePosition(percent);

@@ -46,9 +46,7 @@
 
   <!-- Horizontal Splitter Demo -->
   <section class="apg-window-splitter-demo-section">
-    <h2 class="apg-window-splitter-demo-title" id="horizontal-demo-label">
-      Horizontal Splitter
-    </h2>
+    <h2 class="apg-window-splitter-demo-title" id="horizontal-demo-label">Horizontal Splitter</h2>
     <div class="apg-window-splitter-demo-info">
       Position: {horizontalPosition}% | Collapsed: {horizontalCollapsed ? 'Yes' : 'No'}
     </div>
@@ -66,8 +64,8 @@
         aria-labelledby="horizontal-demo-label"
         data-testid="horizontal-splitter"
         defaultPosition={50}
-        onpositionchange={(pos) => horizontalPosition = pos}
-        oncollapsedchange={(col) => horizontalCollapsed = col}
+        onpositionchange={(pos) => (horizontalPosition = pos)}
+        oncollapsedchange={(col) => (horizontalCollapsed = col)}
       />
       <div class="apg-window-splitter-pane" id="horizontal-secondary">
         <div class="apg-window-splitter-pane-content">Secondary Pane</div>
@@ -77,9 +75,7 @@
 
   <!-- Vertical Splitter Demo -->
   <section class="apg-window-splitter-demo-section">
-    <h2 class="apg-window-splitter-demo-title" id="vertical-demo-label">
-      Vertical Splitter
-    </h2>
+    <h2 class="apg-window-splitter-demo-title" id="vertical-demo-label">Vertical Splitter</h2>
     <div class="apg-window-splitter-demo-info">
       Position: {verticalPosition}% | Collapsed: {verticalCollapsed ? 'Yes' : 'No'}
     </div>
@@ -98,8 +94,8 @@
         aria-labelledby="vertical-demo-label"
         data-testid="vertical-splitter"
         defaultPosition={50}
-        onpositionchange={(pos) => verticalPosition = pos}
-        oncollapsedchange={(col) => verticalCollapsed = col}
+        onpositionchange={(pos) => (verticalPosition = pos)}
+        oncollapsedchange={(col) => (verticalCollapsed = col)}
       />
       <div class="apg-window-splitter-pane" id="vertical-secondary">
         <div class="apg-window-splitter-pane-content">Secondary Pane</div>
@@ -109,9 +105,7 @@
 
   <!-- Disabled Splitter Demo -->
   <section class="apg-window-splitter-demo-section">
-    <h2 class="apg-window-splitter-demo-title" id="disabled-demo-label">
-      Disabled Splitter
-    </h2>
+    <h2 class="apg-window-splitter-demo-title" id="disabled-demo-label">Disabled Splitter</h2>
     <div
       class="apg-window-splitter-demo-container"
       data-testid="disabled-demo"
@@ -136,9 +130,7 @@
 
   <!-- Readonly Splitter Demo -->
   <section class="apg-window-splitter-demo-section">
-    <h2 class="apg-window-splitter-demo-title" id="readonly-demo-label">
-      Readonly Splitter
-    </h2>
+    <h2 class="apg-window-splitter-demo-title" id="readonly-demo-label">Readonly Splitter</h2>
     <div
       class="apg-window-splitter-demo-container"
       data-testid="readonly-demo"
@@ -163,9 +155,7 @@
 
   <!-- Initially Collapsed Demo -->
   <section class="apg-window-splitter-demo-section">
-    <h2 class="apg-window-splitter-demo-title" id="collapsed-demo-label">
-      Initially Collapsed
-    </h2>
+    <h2 class="apg-window-splitter-demo-title" id="collapsed-demo-label">Initially Collapsed</h2>
     <div
       class="apg-window-splitter-demo-container"
       data-testid="collapsed-demo"

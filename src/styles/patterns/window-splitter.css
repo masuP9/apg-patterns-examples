@@ -135,11 +135,13 @@ apg-window-splitter {
 }
 
 /* Primary pane uses splitter position */
-.apg-window-splitter-demo-container:not(.apg-window-splitter-demo-container--vertical) .apg-window-splitter-pane:first-child {
+.apg-window-splitter-demo-container:not(.apg-window-splitter-demo-container--vertical)
+  .apg-window-splitter-pane:first-child {
   flex: 0 0 var(--splitter-position);
 }
 
-.apg-window-splitter-demo-container:not(.apg-window-splitter-demo-container--vertical) .apg-window-splitter-pane:last-child {
+.apg-window-splitter-demo-container:not(.apg-window-splitter-demo-container--vertical)
+  .apg-window-splitter-pane:last-child {
   flex: 1;
 }
 

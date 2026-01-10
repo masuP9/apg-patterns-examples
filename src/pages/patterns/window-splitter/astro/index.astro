@@ -22,12 +22,17 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Window Splitter - Astro" pattern="window-splitter" framework="astro" tocItems={tocItems}>
+<PatternLayout
+  title="Window Splitter - Astro"
+  pattern="window-splitter"
+  framework="astro"
+  tocItems={tocItems}
+>
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">Window Splitter</h1>
     <p class="text-muted-foreground text-lg">
-      A movable separator between two panes that allows users to resize the relative size of each pane.
-      Uses Web Components for client-side interactivity.
+      A movable separator between two panes that allows users to resize the relative size of each
+      pane. Uses Web Components for client-side interactivity.
     </p>
     <a
       href="/patterns/window-splitter/llm.md"
@@ -48,8 +53,8 @@ const tocItems = [
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
 
     <p class="text-muted-foreground mb-4 text-sm">
-      Use Arrow keys to move the splitter. Press Enter to collapse/expand.
-      Shift+Arrow moves by a larger step. Home/End moves to min/max position.
+      Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a
+      larger step. Home/End moves to min/max position.
     </p>
     <div class="border-border bg-background rounded-lg border p-6">
       <WindowSplitterDemo />
@@ -68,7 +73,13 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="WindowSplitter.astro" />
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="WindowSplitter.astro"
+    />
   </section>
 
   <!-- Usage Section -->
@@ -167,9 +178,9 @@ import WindowSplitter from './WindowSplitter.astro';
 
     <h3 class="mb-3 text-lg font-medium">Custom Element (<code>apg-window-splitter</code>)</h3>
     <p class="text-muted-foreground mb-4 text-sm">
-      The Astro component renders an <code>&lt;apg-window-splitter&gt;</code> Web Component.
-      Configuration is passed via <code>data-*</code> attributes and the component handles
-      all keyboard and pointer interaction client-side.
+      The Astro component renders an <code>&lt;apg-window-splitter&gt;</code> Web Component. Configuration
+      is passed via <code>data-*</code> attributes and the component handles all keyboard and pointer
+      interaction client-side.
     </p>
     <ResponsiveTable class="mb-6">
       <table class="w-full border-collapse">
@@ -214,7 +225,13 @@ import WindowSplitter from './WindowSplitter.astro';
     <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     <TestingDocs />
     <div class="mt-6">
-      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="typescript" title="WindowSplitter.test.astro.ts" />
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="WindowSplitter.test.astro.ts"
+      />
     </div>
   </section>
 
