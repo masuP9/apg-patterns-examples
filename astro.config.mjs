@@ -35,10 +35,35 @@ const deployTarget =
 
 const { site, base } = siteConfig[deployTarget];
 
+/**
+ * Get dev server port from environment variable or generate from worktree path
+ * This allows multiple worktrees to run dev servers simultaneously
+ */
+function getDevPort() {
+  // Explicit port from environment
+  if (process.env.DEV_PORT) {
+    return parseInt(process.env.DEV_PORT, 10);
+  }
+
+  // Auto-generate port based on worktree path hash
+  // This ensures each worktree gets a consistent, unique port
+  const cwd = process.cwd();
+  let hash = 0;
+  for (let i = 0; i < cwd.length; i++) {
+    hash = (hash * 31 + cwd.charCodeAt(i)) >>> 0;
+  }
+  // Port range: 4321-4399 (Astro default is 4321)
+  return 4321 + (hash % 79);
+}
+
 // https://astro.build/config
 export default defineConfig({
   site,
   base,
+
+  server: {
+    port: getDevPort(),
+  },
 
   integrations: [
     react(),
