@@ -22,17 +22,17 @@
 | ------------------- | ----- | --- | ------ | ----- | ---------- |
 | Accordion           | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Alert               | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Alert Dialog        | -     | -   | -      | -     | 予定       |
+| Alert Dialog        | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Breadcrumb          | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Button              | -     | -   | -      | -     | 予定       |
-| Carousel            | -     | -   | -      | -     | 予定       |
+| Carousel            | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Checkbox            | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Combobox            | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Dialog              | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Disclosure          | ✅    | ✅  | ✅     | ✅    | 完了       |
-| Feed                | -     | -   | -      | -     | 予定       |
+| Feed                | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Grid                | -     | -   | -      | -     | 予定       |
-| Landmarks           | -     | -   | -      | -     | 予定       |
+| Landmarks           | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Link                | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Listbox             | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Menu and Menubar    | -     | -   | -      | -     | 予定       |
@@ -50,7 +50,7 @@
 | Tooltip             | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Tree View           | ✅    | ✅  | ✅     | ✅    | 完了       |
 | Treegrid            | -     | -   | -      | -     | 予定       |
-| Window Splitter     | -     | -   | -      | -     | 予定       |
+| Window Splitter     | ✅    | ✅  | ✅     | ✅    | 完了       |
 
 ## スタイリング
 

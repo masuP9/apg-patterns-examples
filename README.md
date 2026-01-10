@@ -22,17 +22,17 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | -------------------- | ----- | --- | ------ | ----- | -------- |
 | Accordion            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Alert                | ✅    | ✅  | ✅     | ✅    | Complete |
-| Alert Dialog         | -     | -   | -      | -     | Planned  |
+| Alert Dialog         | ✅    | ✅  | ✅     | ✅    | Complete |
 | Breadcrumb           | ✅    | ✅  | ✅     | ✅    | Complete |
 | Button               | -     | -   | -      | -     | Planned  |
-| Carousel             | -     | -   | -      | -     | Planned  |
+| Carousel             | ✅    | ✅  | ✅     | ✅    | Complete |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | Complete |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | Complete |
 | Dialog               | ✅    | ✅  | ✅     | ✅    | Complete |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | Complete |
-| Feed                 | -     | -   | -      | -     | Planned  |
+| Feed                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Grid                 | -     | -   | -      | -     | Planned  |
-| Landmarks            | -     | -   | -      | -     | Planned  |
+| Landmarks            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Link                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Menu and Menubar     | -     | -   | -      | -     | Planned  |
@@ -50,7 +50,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tree View            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Treegrid             | -     | -   | -      | -     | Planned  |
-| Window Splitter      | -     | -   | -      | -     | Planned  |
+| Window Splitter      | ✅    | ✅  | ✅     | ✅    | Complete |
 
 ## Styling
 
