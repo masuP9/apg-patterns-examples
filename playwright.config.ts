@@ -67,9 +67,7 @@ export default defineConfig({
   webServer: {
     // CI: Use preview server (serves pre-built dist/)
     // Local: Use dev server (hot reload)
-    command: isCI
-      ? `npx astro preview --host 0.0.0.0 --port ${devPort}`
-      : 'npm run dev',
+    command: isCI ? `npx astro preview --host 0.0.0.0 --port ${devPort}` : 'npm run dev',
     url: `http://localhost:${devPort}${basePath}/`,
     reuseExistingServer: !isCI,
     timeout: 180 * 1000, // 3 minutes for CI
