@@ -278,7 +278,7 @@ export const PATTERNS: Pattern[] = [
       'A moveable separator between two sections, or panes, that enables users to change the relative size of the panes.',
     icon: '⬛',
     complexity: 'Medium',
-    status: 'planned',
+    status: 'available',
   },
 ];
 

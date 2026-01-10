@@ -1,0 +1,480 @@
+---
+/**
+ * APG Window Splitter Pattern - Astro Implementation
+ *
+ * A movable separator between two panes that allows users to resize
+ * the relative size of each pane.
+ * Uses Web Components for interactive behavior.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/
+ */
+
+export interface Props {
+  /** Primary pane ID (required for aria-controls) */
+  primaryPaneId: string;
+  /** Secondary pane ID (optional, added to aria-controls) */
+  secondaryPaneId?: string;
+  /** Initial position as % (0-100, default: 50) */
+  defaultPosition?: number;
+  /** Initial collapsed state (default: false) */
+  defaultCollapsed?: boolean;
+  /** Position when expanding from initial collapse */
+  expandedPosition?: number;
+  /** Minimum position as % (default: 10) */
+  min?: number;
+  /** Maximum position as % (default: 90) */
+  max?: number;
+  /** Keyboard step as % (default: 5) */
+  step?: number;
+  /** Shift+Arrow step as % (default: 10) */
+  largeStep?: number;
+  /** Splitter orientation (default: horizontal = left-right split) */
+  orientation?: 'horizontal' | 'vertical';
+  /** Text direction for RTL support */
+  dir?: 'ltr' | 'rtl';
+  /** Whether pane can be collapsed (default: true) */
+  collapsible?: boolean;
+  /** Disabled state (not focusable, not operable) */
+  disabled?: boolean;
+  /** Readonly state (focusable but not operable) */
+  readonly?: boolean;
+  /** Splitter id */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+  /** Accessible label when no visible label */
+  'aria-label'?: string;
+  /** Reference to external label element */
+  'aria-labelledby'?: string;
+  /** Reference to description element */
+  'aria-describedby'?: string;
+  /** Test id for testing */
+  'data-testid'?: string;
+}
+
+const {
+  primaryPaneId,
+  secondaryPaneId,
+  defaultPosition = 50,
+  defaultCollapsed = false,
+  expandedPosition,
+  min = 10,
+  max = 90,
+  step = 5,
+  largeStep = 10,
+  orientation = 'horizontal',
+  dir,
+  collapsible = true,
+  disabled = false,
+  readonly = false,
+  id,
+  class: className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+  'data-testid': dataTestid,
+} = Astro.props;
+
+// Utility function
+const clamp = (value: number, minVal: number, maxVal: number): number => {
+  return Math.min(maxVal, Math.max(minVal, value));
+};
+
+// Calculate initial position
+const initialPosition = defaultCollapsed ? 0 : clamp(defaultPosition, min, max);
+
+// Compute aria-controls
+const ariaControls = secondaryPaneId
+  ? `${primaryPaneId} ${secondaryPaneId}`
+  : primaryPaneId;
+
+const isVertical = orientation === 'vertical';
+---
+
+<apg-window-splitter
+  data-min={min}
+  data-max={max}
+  data-step={step}
+  data-large-step={largeStep}
+  data-orientation={orientation}
+  data-dir={dir}
+  data-collapsible={collapsible}
+  data-disabled={disabled}
+  data-readonly={readonly}
+  data-default-position={defaultPosition}
+  data-expanded-position={expandedPosition}
+  data-collapsed={defaultCollapsed}
+>
+  <div
+    class={`apg-window-splitter ${isVertical ? 'apg-window-splitter--vertical' : ''} ${disabled ? 'apg-window-splitter--disabled' : ''} ${className}`.trim()}
+    style={`--splitter-position: ${initialPosition}%`}
+  >
+    <div
+      role="separator"
+      id={id}
+      tabindex={disabled ? -1 : 0}
+      aria-valuenow={initialPosition}
+      aria-valuemin={min}
+      aria-valuemax={max}
+      aria-controls={ariaControls}
+      aria-orientation={isVertical ? 'vertical' : undefined}
+      aria-disabled={disabled ? true : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
+      aria-describedby={ariaDescribedby}
+      data-testid={dataTestid}
+      class="apg-window-splitter__separator"
+    >
+    </div>
+  </div>
+</apg-window-splitter>
+
+<script>
+  class ApgWindowSplitter extends HTMLElement {
+    private separator: HTMLElement | null = null;
+    private container: HTMLElement | null = null;
+    private isDragging = false;
+    private previousPosition: number | null = null;
+    private collapsed = false;
+
+    // Bound event handlers (stored to properly remove listeners)
+    private boundHandleKeyDown = this.handleKeyDown.bind(this);
+    private boundHandlePointerDown = this.handlePointerDown.bind(this);
+    private boundHandlePointerMove = this.handlePointerMove.bind(this);
+    private boundHandlePointerUp = this.handlePointerUp.bind(this);
+
+    connectedCallback() {
+      this.separator = this.querySelector('[role="separator"]');
+      this.container = this.querySelector('.apg-window-splitter');
+
+      // Initialize state from data attributes
+      this.collapsed = this.dataset.collapsed === 'true';
+      if (!this.collapsed) {
+        this.previousPosition = this.currentPosition;
+      }
+
+      if (this.separator) {
+        this.separator.addEventListener('keydown', this.boundHandleKeyDown);
+        this.separator.addEventListener('pointerdown', this.boundHandlePointerDown);
+        this.separator.addEventListener('pointermove', this.boundHandlePointerMove);
+        this.separator.addEventListener('pointerup', this.boundHandlePointerUp);
+      }
+    }
+
+    disconnectedCallback() {
+      if (this.separator) {
+        this.separator.removeEventListener('keydown', this.boundHandleKeyDown);
+        this.separator.removeEventListener('pointerdown', this.boundHandlePointerDown);
+        this.separator.removeEventListener('pointermove', this.boundHandlePointerMove);
+        this.separator.removeEventListener('pointerup', this.boundHandlePointerUp);
+      }
+    }
+
+    private get min(): number {
+      return Number(this.dataset.min) || 10;
+    }
+
+    private get max(): number {
+      return Number(this.dataset.max) || 90;
+    }
+
+    private get step(): number {
+      return Number(this.dataset.step) || 5;
+    }
+
+    private get largeStep(): number {
+      return Number(this.dataset.largeStep) || 10;
+    }
+
+    private get orientation(): string {
+      return this.dataset.orientation || 'horizontal';
+    }
+
+    private get isHorizontal(): boolean {
+      return this.orientation === 'horizontal';
+    }
+
+    private get isVertical(): boolean {
+      return this.orientation === 'vertical';
+    }
+
+    private get textDir(): string | undefined {
+      return this.dataset.dir;
+    }
+
+    private get isRTL(): boolean {
+      if (this.textDir === 'rtl') return true;
+      if (this.textDir === 'ltr') return false;
+      return document.dir === 'rtl';
+    }
+
+    private get isCollapsible(): boolean {
+      return this.dataset.collapsible !== 'false';
+    }
+
+    private get isDisabled(): boolean {
+      return this.dataset.disabled === 'true';
+    }
+
+    private get isReadonly(): boolean {
+      return this.dataset.readonly === 'true';
+    }
+
+    private get defaultPosition(): number {
+      return Number(this.dataset.defaultPosition) || 50;
+    }
+
+    private get expandedPosition(): number | undefined {
+      const val = this.dataset.expandedPosition;
+      return val !== undefined ? Number(val) : undefined;
+    }
+
+    private get currentPosition(): number {
+      return Number(this.separator?.getAttribute('aria-valuenow')) || 0;
+    }
+
+    private clamp(value: number): number {
+      return Math.min(this.max, Math.max(this.min, value));
+    }
+
+    private updatePosition(newPosition: number) {
+      if (!this.separator || this.isDisabled) return;
+
+      const clampedPosition = this.clamp(newPosition);
+      const currentPosition = this.currentPosition;
+
+      if (clampedPosition === currentPosition) return;
+
+      // Update ARIA
+      this.separator.setAttribute('aria-valuenow', String(clampedPosition));
+
+      // Update visual via CSS custom property
+      if (this.container) {
+        this.container.style.setProperty(
+          '--splitter-position',
+          `${clampedPosition}%`
+        );
+      }
+
+      // Calculate size in px
+      let sizeInPx = 0;
+      if (this.container) {
+        sizeInPx =
+          (clampedPosition / 100) *
+          (this.isHorizontal
+            ? this.container.offsetWidth
+            : this.container.offsetHeight);
+      }
+
+      // Dispatch event
+      this.dispatchEvent(
+        new CustomEvent('positionchange', {
+          detail: { position: clampedPosition, sizeInPx },
+          bubbles: true,
+        })
+      );
+    }
+
+    private handleToggleCollapse() {
+      if (!this.isCollapsible || this.isDisabled || this.isReadonly) return;
+      if (!this.separator) return;
+
+      if (this.collapsed) {
+        // Expand
+        const restorePosition =
+          this.previousPosition ??
+          this.expandedPosition ??
+          this.defaultPosition ??
+          50;
+        const clampedRestore = this.clamp(restorePosition);
+
+        this.dispatchEvent(
+          new CustomEvent('collapsedchange', {
+            detail: { collapsed: false, previousPosition: this.currentPosition },
+            bubbles: true,
+          })
+        );
+
+        this.collapsed = false;
+        this.separator.setAttribute('aria-valuenow', String(clampedRestore));
+
+        if (this.container) {
+          this.container.style.setProperty(
+            '--splitter-position',
+            `${clampedRestore}%`
+          );
+        }
+
+        let sizeInPx = 0;
+        if (this.container) {
+          sizeInPx =
+            (clampedRestore / 100) *
+            (this.isHorizontal
+              ? this.container.offsetWidth
+              : this.container.offsetHeight);
+        }
+
+        this.dispatchEvent(
+          new CustomEvent('positionchange', {
+            detail: { position: clampedRestore, sizeInPx },
+            bubbles: true,
+          })
+        );
+      } else {
+        // Collapse
+        this.previousPosition = this.currentPosition;
+
+        this.dispatchEvent(
+          new CustomEvent('collapsedchange', {
+            detail: { collapsed: true, previousPosition: this.currentPosition },
+            bubbles: true,
+          })
+        );
+
+        this.collapsed = true;
+        this.separator.setAttribute('aria-valuenow', '0');
+
+        if (this.container) {
+          this.container.style.setProperty('--splitter-position', '0%');
+        }
+
+        this.dispatchEvent(
+          new CustomEvent('positionchange', {
+            detail: { position: 0, sizeInPx: 0 },
+            bubbles: true,
+          })
+        );
+      }
+    }
+
+    private handleKeyDown(event: KeyboardEvent) {
+      if (this.isDisabled || this.isReadonly) return;
+
+      const hasShift = event.shiftKey;
+      const currentStep = hasShift ? this.largeStep : this.step;
+
+      let delta = 0;
+      let handled = false;
+
+      switch (event.key) {
+        case 'ArrowRight':
+          if (!this.isHorizontal) break;
+          delta = this.isRTL ? -currentStep : currentStep;
+          handled = true;
+          break;
+
+        case 'ArrowLeft':
+          if (!this.isHorizontal) break;
+          delta = this.isRTL ? currentStep : -currentStep;
+          handled = true;
+          break;
+
+        case 'ArrowUp':
+          if (!this.isVertical) break;
+          delta = currentStep;
+          handled = true;
+          break;
+
+        case 'ArrowDown':
+          if (!this.isVertical) break;
+          delta = -currentStep;
+          handled = true;
+          break;
+
+        case 'Enter':
+          this.handleToggleCollapse();
+          handled = true;
+          break;
+
+        case 'Home':
+          this.updatePosition(this.min);
+          handled = true;
+          break;
+
+        case 'End':
+          this.updatePosition(this.max);
+          handled = true;
+          break;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        if (delta !== 0) {
+          this.updatePosition(this.currentPosition + delta);
+        }
+      }
+    }
+
+    private handlePointerDown(event: PointerEvent) {
+      if (this.isDisabled || this.isReadonly || !this.separator) return;
+
+      event.preventDefault();
+
+      if (typeof this.separator.setPointerCapture === 'function') {
+        this.separator.setPointerCapture(event.pointerId);
+      }
+      this.isDragging = true;
+      this.separator.focus();
+    }
+
+    private handlePointerMove(event: PointerEvent) {
+      if (!this.isDragging || !this.container) return;
+
+      // Use demo container for stable measurement if available
+      const demoContainer = this.container.closest('.apg-window-splitter-demo-container') as HTMLElement | null;
+      const measureElement = demoContainer || this.container.parentElement || this.container;
+      const rect = measureElement.getBoundingClientRect();
+
+      let percent: number;
+      if (this.isHorizontal) {
+        const x = event.clientX - rect.left;
+        percent = (x / rect.width) * 100;
+      } else {
+        const y = event.clientY - rect.top;
+        // For vertical, y position corresponds to primary pane height
+        percent = (y / rect.height) * 100;
+      }
+
+      // Clamp the percent to min/max
+      const clampedPercent = this.clamp(percent);
+
+      // Update CSS variable directly for smooth dragging
+      if (demoContainer) {
+        demoContainer.style.setProperty(
+          '--splitter-position',
+          `${clampedPercent}%`
+        );
+      }
+
+      this.updatePosition(percent);
+    }
+
+    private handlePointerUp(event: PointerEvent) {
+      if (
+        this.separator &&
+        typeof this.separator.releasePointerCapture === 'function'
+      ) {
+        try {
+          this.separator.releasePointerCapture(event.pointerId);
+        } catch {
+          // Ignore
+        }
+      }
+      this.isDragging = false;
+    }
+
+    // Public method to update position programmatically
+    setPosition(newPosition: number) {
+      this.updatePosition(newPosition);
+    }
+
+    // Public method to toggle collapse
+    toggleCollapse() {
+      this.handleToggleCollapse();
+    }
+  }
+
+  if (!customElements.get('apg-window-splitter')) {
+    customElements.define('apg-window-splitter', ApgWindowSplitter);
+  }
+</script>

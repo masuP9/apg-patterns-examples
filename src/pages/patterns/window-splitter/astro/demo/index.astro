@@ -1,0 +1,23 @@
+---
+/**
+ * Demo-only Page: WindowSplitterDemo (Astro)
+ *
+ * This page renders the WindowSplitterDemo component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import WindowSplitterDemo from '@patterns/window-splitter/WindowSplitterDemo.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Window Splitter (Astro)</title>
+  </head>
+  <body>
+    <WindowSplitterDemo />
+  </body>
+</html>
