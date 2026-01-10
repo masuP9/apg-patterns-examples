@@ -45,6 +45,7 @@
     "test:svelte": "vitest run .test.svelte.ts",
     "test:astro": "vitest run --config vitest.astro.config.ts",
     "test:e2e": "DEV_PORT=4321 start-server-and-test dev http-get://localhost:4321 test:e2e:parallel",
+    "test:e2e:ci": "playwright test",
     "test:e2e:parallel": "DEV_PORT=4321 run-p test:e2e:react test:e2e:vue test:e2e:svelte test:e2e:astro",
     "test:e2e:react": "E2E_FRAMEWORK=react E2E_SKIP_SERVER=1 playwright test",
     "test:e2e:vue": "E2E_FRAMEWORK=vue E2E_SKIP_SERVER=1 playwright test",
