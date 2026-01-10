@@ -5,6 +5,7 @@ import { PatternBreadcrumb } from '@/components/ui/pattern-breadcrumb';
 import { type Framework } from '@/lib/frameworks';
 import { TableOfContents, type TocItem } from '@/components/ui/toc';
 import { type Locale, getLocaleFromUrl } from '@/i18n';
+import { withBase } from '@/lib/utils';
 
 interface Props {
   title: string;
@@ -18,9 +19,12 @@ interface Props {
 const { title, description, pattern, framework, tocItems = [] } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const hasToc = tocItems.length > 0;
+
+// Use pattern-specific OG image
+const ogImage = withBase(`/og-images/patterns/${pattern}.png`);
 ---
 
-<BaseLayout title={title} description={description} locale={locale}>
+<BaseLayout title={title} description={description} locale={locale} ogImage={ogImage}>
   <div class="max-w-8xl mx-auto">
     <div
       class:list={[
