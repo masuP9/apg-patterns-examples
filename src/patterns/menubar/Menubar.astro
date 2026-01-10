@@ -1,0 +1,808 @@
+---
+/**
+ * APG Menubar Pattern - Astro Implementation
+ *
+ * A horizontal bar of menu triggers that open dropdown menus.
+ * Uses Web Components for enhanced control and proper focus management.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
+ */
+
+// MenuItem interface with discriminated union pattern
+// type can be: 'item' | 'separator' | 'checkbox' | 'radio' | 'radiogroup' | 'submenu'
+export interface MenuItem {
+  type: string;
+  id: string;
+  label?: string;
+  disabled?: boolean;
+  checked?: boolean;
+  name?: string; // for radiogroup
+  items?: MenuItem[]; // for submenu and radiogroup
+}
+
+// Type guard helper for action items in submenus
+type MenuItemAction = MenuItem & { type: 'item' | 'separator' };
+
+export interface MenubarItem {
+  id: string;
+  label: string;
+  items: MenuItem[];
+}
+
+export interface Props {
+  items: MenubarItem[];
+  class?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+}
+
+const {
+  items = [],
+  class: className = '',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+} = Astro.props;
+
+// Generate unique ID for this instance
+const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
+---
+
+<apg-menubar>
+  <nav class={`apg-menubar ${className}`.trim()}>
+    <ul
+      role="menubar"
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
+      class="apg-menubar-list"
+      data-menubar
+    >
+      {
+        items.map((menubarItem, index) => {
+          const triggerId = `${instanceId}-${menubarItem.id}-trigger`;
+          const menuId = `${instanceId}-${menubarItem.id}-menu`;
+          const isFirstItem = index === 0;
+
+          return (
+            <li role="none">
+              <span
+                id={triggerId}
+                role="menuitem"
+                tabindex={isFirstItem ? 0 : -1}
+                aria-haspopup="menu"
+                aria-expanded="false"
+                class="apg-menubar-trigger"
+                data-menubar-trigger
+                data-menubar-index={index}
+              >
+                {menubarItem.label}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  style="position: relative; top: 1px; opacity: 0.7"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </span>
+              <ul
+                id={menuId}
+                role="menu"
+                aria-labelledby={triggerId}
+                class="apg-menubar-menu"
+                aria-hidden="true"
+                data-menubar-menu
+                data-menubar-index={index}
+              >
+                {menubarItem.items.map((item) => {
+                  if (item.type === 'separator') {
+                    return (
+                      <li role="none">
+                        <hr role="separator" class="apg-menubar-separator" />
+                      </li>
+                    );
+                  }
+
+                  if (item.type === 'radiogroup') {
+                    return (
+                      <li role="none">
+                        <ul role="group" aria-label={item.label} class="apg-menubar-group">
+                          {item.items?.map((radioItem) => (
+                            <li role="none">
+                              <span
+                                role="menuitemradio"
+                                tabindex="-1"
+                                aria-checked={radioItem.checked ? 'true' : 'false'}
+                                aria-disabled={radioItem.disabled || undefined}
+                                class="apg-menubar-menuitem apg-menubar-menuitemradio"
+                                data-item-id={radioItem.id}
+                                data-radio-group={item.name}
+                              >
+                                {radioItem.label}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    );
+                  }
+
+                  if (item.type === 'checkbox') {
+                    return (
+                      <li role="none">
+                        <span
+                          role="menuitemcheckbox"
+                          tabindex="-1"
+                          aria-checked={item.checked ? 'true' : 'false'}
+                          aria-disabled={item.disabled || undefined}
+                          class="apg-menubar-menuitem apg-menubar-menuitemcheckbox"
+                          data-item-id={item.id}
+                        >
+                          {item.label}
+                        </span>
+                      </li>
+                    );
+                  }
+
+                  if (item.type === 'submenu') {
+                    const submenuTriggerId = `${instanceId}-${item.id}-submenu-trigger`;
+                    const submenuId = `${instanceId}-${item.id}-submenu`;
+
+                    return (
+                      <li role="none" class="apg-menubar-submenu-container">
+                        <span
+                          id={submenuTriggerId}
+                          role="menuitem"
+                          tabindex="-1"
+                          aria-haspopup="menu"
+                          aria-expanded="false"
+                          aria-disabled={item.disabled || undefined}
+                          class="apg-menubar-menuitem apg-menubar-submenu-trigger"
+                          data-item-id={item.id}
+                          data-submenu-trigger
+                        >
+                          {item.label}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                            style="margin-left: auto; position: relative; top: 1px"
+                          >
+                            <path d="m9 18 6-6-6-6" />
+                          </svg>
+                        </span>
+                        <ul
+                          id={submenuId}
+                          role="menu"
+                          aria-labelledby={submenuTriggerId}
+                          class="apg-menubar-submenu"
+                          aria-hidden="true"
+                          data-submenu
+                        >
+                          {(item.items ?? [])
+                            .filter(
+                              (subItem): subItem is MenuItemAction =>
+                                subItem.type === 'item' || subItem.type === 'separator'
+                            )
+                            .map((subItem) => {
+                              if (subItem.type === 'separator') {
+                                return (
+                                  <li role="none">
+                                    <hr role="separator" class="apg-menubar-separator" />
+                                  </li>
+                                );
+                              }
+                              return (
+                                <li role="none">
+                                  <span
+                                    role="menuitem"
+                                    tabindex="-1"
+                                    aria-disabled={subItem.disabled || undefined}
+                                    class="apg-menubar-menuitem"
+                                    data-item-id={subItem.id}
+                                  >
+                                    {subItem.label}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </li>
+                    );
+                  }
+
+                  // Default: action item
+                  return (
+                    <li role="none">
+                      <span
+                        role="menuitem"
+                        tabindex="-1"
+                        aria-disabled={item.disabled || undefined}
+                        class="apg-menubar-menuitem"
+                        data-item-id={item.id}
+                      >
+                        {item.label}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</apg-menubar>
+
+<script>
+  class ApgMenubar extends HTMLElement {
+    private menubar: HTMLUListElement | null = null;
+    private menubarItems: HTMLElement[] = [];
+    private rafId: number | null = null;
+
+    // State
+    private openMenuIndex = -1;
+    private focusedMenubarIndex = 0;
+    private typeAheadBuffer = '';
+    private typeAheadTimeoutId: number | null = null;
+    private readonly typeAheadTimeout = 500;
+
+    // Checkbox/Radio states (stored separately since we're modifying aria-checked)
+    private checkboxStates: Map<string, boolean> = new Map();
+    private radioStates: Map<string, string> = new Map(); // group name -> checked id
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.menubar = this.querySelector('[data-menubar]');
+
+      if (!this.menubar) {
+        console.warn('apg-menubar: menubar element not found');
+        return;
+      }
+
+      this.menubarItems = Array.from(
+        this.menubar.querySelectorAll<HTMLElement>('[data-menubar-trigger]')
+      );
+
+      // Initialize checkbox/radio states from aria-checked
+      this.initializeCheckboxRadioStates();
+
+      // Attach event listeners
+      this.menubar.addEventListener('click', this.handleClick);
+      this.menubar.addEventListener('keydown', this.handleKeyDown);
+      this.menubar.addEventListener('mouseover', this.handleMouseOver);
+      document.addEventListener('pointerdown', this.handleClickOutside);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+        this.typeAheadTimeoutId = null;
+      }
+      document.removeEventListener('pointerdown', this.handleClickOutside);
+      this.menubar?.removeEventListener('click', this.handleClick);
+      this.menubar?.removeEventListener('keydown', this.handleKeyDown);
+      this.menubar?.removeEventListener('mouseover', this.handleMouseOver);
+    }
+
+    private initializeCheckboxRadioStates() {
+      // Checkboxes
+      const checkboxes = this.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]');
+      checkboxes.forEach((cb) => {
+        const id = cb.dataset.itemId;
+        if (id) {
+          this.checkboxStates.set(id, cb.getAttribute('aria-checked') === 'true');
+        }
+      });
+
+      // Radio groups
+      const radios = this.querySelectorAll<HTMLElement>('[role="menuitemradio"]');
+      radios.forEach((radio) => {
+        const id = radio.dataset.itemId;
+        const group = radio.dataset.radioGroup;
+        if (id && group && radio.getAttribute('aria-checked') === 'true') {
+          this.radioStates.set(group, id);
+        }
+      });
+    }
+
+    private getMenuForIndex(index: number): HTMLElement | null {
+      return this.querySelector(`[data-menubar-menu][data-menubar-index="${index}"]`);
+    }
+
+    private getMenuItems(menu: HTMLElement): HTMLElement[] {
+      // Get direct menu items (not submenu items)
+      // Note: Disabled items ARE included - they should be focusable but not activatable per APG
+      const items: HTMLElement[] = [];
+      const allItems = menu.querySelectorAll<HTMLElement>(
+        '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]'
+      );
+      allItems.forEach((item) => {
+        // Exclude items that are inside a nested submenu
+        const parentMenu = item.closest('[role="menu"]');
+        if (parentMenu === menu) {
+          items.push(item);
+        }
+      });
+      return items;
+    }
+
+    private openMenu(menubarIndex: number, focusPosition: 'first' | 'last' = 'first') {
+      // Close any open menu first
+      if (this.openMenuIndex >= 0 && this.openMenuIndex !== menubarIndex) {
+        this.closeMenu();
+      }
+
+      const trigger = this.menubarItems[menubarIndex];
+      const menu = this.getMenuForIndex(menubarIndex);
+      if (!trigger || !menu) return;
+
+      this.openMenuIndex = menubarIndex;
+      trigger.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+
+      // Focus first/last available item
+      const menuItems = this.getMenuItems(menu);
+      if (menuItems.length > 0) {
+        const targetIndex = focusPosition === 'first' ? 0 : menuItems.length - 1;
+        menuItems[targetIndex]?.focus();
+      }
+    }
+
+    private closeMenu() {
+      if (this.openMenuIndex < 0) return;
+
+      const trigger = this.menubarItems[this.openMenuIndex];
+      const menu = this.getMenuForIndex(this.openMenuIndex);
+
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+      if (menu) {
+        menu.setAttribute('aria-hidden', 'true');
+
+        // Close any open submenus
+        const submenus = menu.querySelectorAll('[data-submenu]');
+        submenus.forEach((submenu) => {
+          submenu.setAttribute('aria-hidden', 'true');
+          const submenuTrigger = submenu
+            .closest('.apg-menubar-submenu-container')
+            ?.querySelector('[data-submenu-trigger]');
+          submenuTrigger?.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      // Clear type-ahead
+      this.typeAheadBuffer = '';
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+        this.typeAheadTimeoutId = null;
+      }
+
+      this.openMenuIndex = -1;
+    }
+
+    private closeAllMenus() {
+      this.closeMenu();
+    }
+
+    private updateMenubarTabindex(newIndex: number) {
+      this.menubarItems.forEach((item, idx) => {
+        item.tabIndex = idx === newIndex ? 0 : -1;
+      });
+      this.focusedMenubarIndex = newIndex;
+    }
+
+    private handleClick = (event: MouseEvent) => {
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+      const target = event.target;
+
+      // Handle menubar trigger click
+      const menubarTrigger = target.closest('[data-menubar-trigger]');
+      if (menubarTrigger instanceof HTMLElement) {
+        const index = parseInt(menubarTrigger.dataset.menubarIndex || '0', 10);
+        if (this.openMenuIndex === index) {
+          this.closeMenu();
+        } else {
+          this.openMenu(index);
+        }
+        return;
+      }
+
+      // Handle submenu trigger click
+      const submenuTrigger = target.closest('[data-submenu-trigger]');
+      if (
+        submenuTrigger instanceof HTMLElement &&
+        submenuTrigger.getAttribute('aria-disabled') !== 'true'
+      ) {
+        const isExpanded = submenuTrigger.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          const container = submenuTrigger.closest('.apg-menubar-submenu-container');
+          const submenu = container?.querySelector('[data-submenu]');
+          if (submenu instanceof HTMLElement) {
+            this.closeSubmenu(submenu);
+          }
+        } else {
+          this.openSubmenu(submenuTrigger);
+        }
+        return;
+      }
+
+      // Handle menu item click
+      const menuItem = target.closest(
+        '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]'
+      );
+      if (menuItem instanceof HTMLElement && menuItem.getAttribute('aria-disabled') !== 'true') {
+        this.activateItem(menuItem);
+      }
+    };
+
+    private handleMouseOver = (event: MouseEvent) => {
+      // Only handle hover switching when a menu is already open
+      if (this.openMenuIndex < 0) return;
+
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+      const target = event.target;
+      const menubarTrigger = target.closest('[data-menubar-trigger]');
+      if (menubarTrigger instanceof HTMLElement) {
+        const index = parseInt(menubarTrigger.dataset.menubarIndex || '0', 10);
+        if (index !== this.openMenuIndex) {
+          this.openMenu(index);
+        }
+      }
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+      const target = event.target;
+
+      // Determine if we're on menubar or inside menu
+      const isOnMenubar = target.hasAttribute('data-menubar-trigger');
+      const isInMenu = target.closest('[data-menubar-menu]') || target.closest('[data-submenu]');
+
+      if (isOnMenubar) {
+        this.handleMenubarKeyDown(event, target);
+      } else if (isInMenu) {
+        this.handleMenuKeyDown(event, target);
+      }
+    };
+
+    private handleMenubarKeyDown(event: KeyboardEvent, target: HTMLElement) {
+      const index = parseInt(target.dataset.menubarIndex || '0', 10);
+
+      switch (event.key) {
+        case 'ArrowRight': {
+          event.preventDefault();
+          const nextIndex = (index + 1) % this.menubarItems.length;
+          this.updateMenubarTabindex(nextIndex);
+          this.menubarItems[nextIndex]?.focus();
+          if (this.openMenuIndex >= 0) {
+            this.openMenu(nextIndex);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          event.preventDefault();
+          const prevIndex = index === 0 ? this.menubarItems.length - 1 : index - 1;
+          this.updateMenubarTabindex(prevIndex);
+          this.menubarItems[prevIndex]?.focus();
+          if (this.openMenuIndex >= 0) {
+            this.openMenu(prevIndex);
+          }
+          break;
+        }
+        case 'ArrowDown':
+        case 'Enter':
+        case ' ': {
+          event.preventDefault();
+          this.openMenu(index, 'first');
+          break;
+        }
+        case 'ArrowUp': {
+          event.preventDefault();
+          this.openMenu(index, 'last');
+          break;
+        }
+        case 'Home': {
+          event.preventDefault();
+          this.updateMenubarTabindex(0);
+          this.menubarItems[0]?.focus();
+          break;
+        }
+        case 'End': {
+          event.preventDefault();
+          const lastIndex = this.menubarItems.length - 1;
+          this.updateMenubarTabindex(lastIndex);
+          this.menubarItems[lastIndex]?.focus();
+          break;
+        }
+        case 'Escape': {
+          event.preventDefault();
+          this.closeMenu();
+          break;
+        }
+        case 'Tab': {
+          // Close menus when Tab is pressed from menubar
+          this.closeAllMenus();
+          break;
+        }
+      }
+    }
+
+    private handleMenuKeyDown(event: KeyboardEvent, target: HTMLElement) {
+      const isSubmenuTrigger = target.hasAttribute('data-submenu-trigger');
+
+      // Get the current menu context
+      const currentMenu = target.closest('[role="menu"]');
+      if (!(currentMenu instanceof HTMLElement)) {
+        return;
+      }
+
+      const menuItems = this.getMenuItems(currentMenu);
+      const currentIndex = menuItems.indexOf(target);
+
+      switch (event.key) {
+        case 'ArrowDown': {
+          event.preventDefault();
+          if (currentIndex >= 0) {
+            const nextIndex = (currentIndex + 1) % menuItems.length;
+            menuItems[nextIndex]?.focus();
+          }
+          break;
+        }
+        case 'ArrowUp': {
+          event.preventDefault();
+          if (currentIndex >= 0) {
+            const prevIndex = currentIndex === 0 ? menuItems.length - 1 : currentIndex - 1;
+            menuItems[prevIndex]?.focus();
+          }
+          break;
+        }
+        case 'ArrowRight': {
+          event.preventDefault();
+          if (isSubmenuTrigger) {
+            // Open submenu
+            this.openSubmenu(target);
+          } else {
+            // Move to next menubar item
+            const nextIndex = (this.openMenuIndex + 1) % this.menubarItems.length;
+            this.updateMenubarTabindex(nextIndex);
+            this.openMenu(nextIndex);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          event.preventDefault();
+          const parentSubmenu = target.closest('[data-submenu]');
+          if (parentSubmenu instanceof HTMLElement) {
+            // Close submenu and return to parent
+            this.closeSubmenu(parentSubmenu);
+          } else {
+            // Move to previous menubar item
+            const prevIndex =
+              this.openMenuIndex === 0 ? this.menubarItems.length - 1 : this.openMenuIndex - 1;
+            this.updateMenubarTabindex(prevIndex);
+            this.openMenu(prevIndex);
+          }
+          break;
+        }
+        case 'Home': {
+          event.preventDefault();
+          menuItems[0]?.focus();
+          break;
+        }
+        case 'End': {
+          event.preventDefault();
+          menuItems[menuItems.length - 1]?.focus();
+          break;
+        }
+        case 'Enter':
+        case ' ': {
+          event.preventDefault();
+          if (isSubmenuTrigger) {
+            this.openSubmenu(target);
+          } else {
+            this.activateItem(target);
+          }
+          break;
+        }
+        case 'Escape': {
+          event.preventDefault();
+          const parentSubmenu = target.closest('[data-submenu]');
+          if (parentSubmenu instanceof HTMLElement) {
+            this.closeSubmenu(parentSubmenu);
+          } else {
+            this.closeMenu();
+            this.menubarItems[this.focusedMenubarIndex]?.focus();
+          }
+          break;
+        }
+        case 'Tab': {
+          this.closeAllMenus();
+          break;
+        }
+        default: {
+          // Type-ahead
+          if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            event.preventDefault();
+            this.handleTypeAhead(event.key, menuItems, currentIndex);
+          }
+        }
+      }
+    }
+
+    private openSubmenu(trigger: HTMLElement) {
+      const container = trigger.closest('.apg-menubar-submenu-container');
+      const submenu = container?.querySelector('[data-submenu]');
+      if (!(submenu instanceof HTMLElement)) {
+        return;
+      }
+
+      trigger.setAttribute('aria-expanded', 'true');
+      submenu.setAttribute('aria-hidden', 'false');
+
+      // Focus first item in submenu
+      const items = this.getMenuItems(submenu);
+      items[0]?.focus();
+    }
+
+    private closeSubmenu(submenu: HTMLElement) {
+      const container = submenu.closest('.apg-menubar-submenu-container');
+      const trigger = container?.querySelector('[data-submenu-trigger]');
+      if (trigger instanceof HTMLElement) {
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+      submenu.setAttribute('aria-hidden', 'true');
+    }
+
+    private activateItem(item: HTMLElement) {
+      // Disabled items should not be activatable
+      if (item.getAttribute('aria-disabled') === 'true') {
+        return;
+      }
+
+      const role = item.getAttribute('role');
+      const itemId = item.dataset.itemId;
+
+      if (role === 'menuitemcheckbox') {
+        // Toggle checkbox
+        const currentChecked = item.getAttribute('aria-checked') === 'true';
+        const newChecked = !currentChecked;
+        item.setAttribute('aria-checked', String(newChecked));
+        if (itemId) {
+          this.checkboxStates.set(itemId, newChecked);
+        }
+        this.dispatchEvent(
+          new CustomEvent('checkboxchange', {
+            detail: { itemId, checked: newChecked },
+            bubbles: true,
+          })
+        );
+        // Don't close menu for checkbox
+        return;
+      }
+
+      if (role === 'menuitemradio') {
+        // Update radio group
+        const group = item.dataset.radioGroup;
+        if (group) {
+          // Uncheck all radios in the group
+          const groupRadios = this.querySelectorAll<HTMLElement>(
+            `[role="menuitemradio"][data-radio-group="${group}"]`
+          );
+          groupRadios.forEach((radio) => {
+            radio.setAttribute('aria-checked', 'false');
+          });
+          // Check the selected one
+          item.setAttribute('aria-checked', 'true');
+          if (itemId) {
+            this.radioStates.set(group, itemId);
+          }
+          this.dispatchEvent(
+            new CustomEvent('radiochange', {
+              detail: { group, itemId },
+              bubbles: true,
+            })
+          );
+        }
+        // Don't close menu for radio
+        return;
+      }
+
+      // Regular menu item - dispatch event and close
+      if (itemId) {
+        this.dispatchEvent(
+          new CustomEvent('itemselect', {
+            detail: { itemId },
+            bubbles: true,
+          })
+        );
+      }
+      this.closeAllMenus();
+      this.menubarItems[this.focusedMenubarIndex]?.focus();
+    }
+
+    private handleTypeAhead(char: string, menuItems: HTMLElement[], currentIndex: number) {
+      if (menuItems.length === 0) return;
+
+      if (this.typeAheadTimeoutId !== null) {
+        clearTimeout(this.typeAheadTimeoutId);
+      }
+
+      this.typeAheadBuffer += char.toLowerCase();
+
+      const buffer = this.typeAheadBuffer;
+      const isSameChar = buffer.length > 1 && buffer.split('').every((c) => c === buffer[0]);
+
+      let startIndex: number;
+      let searchStr: string;
+
+      if (isSameChar) {
+        this.typeAheadBuffer = buffer[0];
+        searchStr = buffer[0];
+        startIndex = currentIndex >= 0 ? (currentIndex + 1) % menuItems.length : 0;
+      } else if (buffer.length === 1) {
+        searchStr = buffer;
+        startIndex = currentIndex >= 0 ? (currentIndex + 1) % menuItems.length : 0;
+      } else {
+        searchStr = buffer;
+        startIndex = currentIndex >= 0 ? currentIndex : 0;
+      }
+
+      for (let i = 0; i < menuItems.length; i++) {
+        const index = (startIndex + i) % menuItems.length;
+        const item = menuItems[index];
+        const label = item.textContent?.trim().toLowerCase() || '';
+        if (label.startsWith(searchStr)) {
+          item.focus();
+          break;
+        }
+      }
+
+      this.typeAheadTimeoutId = window.setTimeout(() => {
+        this.typeAheadBuffer = '';
+        this.typeAheadTimeoutId = null;
+      }, this.typeAheadTimeout);
+    }
+
+    private handleClickOutside = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (this.openMenuIndex >= 0 && !this.contains(target)) {
+        this.closeAllMenus();
+      }
+    };
+  }
+
+  if (!customElements.get('apg-menubar')) {
+    customElements.define('apg-menubar', ApgMenubar);
+  }
+</script>

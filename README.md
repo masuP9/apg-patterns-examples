@@ -35,7 +35,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Landmarks            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Link                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Menu and Menubar     | -     | -   | -      | -     | Planned  |
+| Menubar              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
 | Meter                | ✅    | ✅  | ✅     | ✅    | Complete |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | Complete |
