@@ -108,7 +108,9 @@ for (const framework of frameworks) {
           for (let i = 0; i < 20; i++) {
             const focusedElement = page.locator(':focus');
             const isInNav = await focusedElement.evaluate((el) => {
-              return el.closest('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]') !== null;
+              return (
+                el.closest('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]') !== null
+              );
             });
 
             if (isInNav) {
@@ -218,7 +220,9 @@ test.describe('Breadcrumb - Cross-framework Consistency', () => {
       await page.goto(`patterns/breadcrumb/${framework}/demo/`);
       await page.waitForLoadState('networkidle');
 
-      const nav = page.locator('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]').first();
+      const nav = page
+        .locator('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]')
+        .first();
       const items = nav.locator('ol > li');
       itemCounts[framework] = await items.count();
     }
@@ -235,7 +239,9 @@ test.describe('Breadcrumb - Cross-framework Consistency', () => {
       await page.goto(`patterns/breadcrumb/${framework}/demo/`);
       await page.waitForLoadState('networkidle');
 
-      const nav = page.locator('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]').first();
+      const nav = page
+        .locator('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]')
+        .first();
       // The current page element should have aria-current="page"
       const currentPageElement = nav.locator('[aria-current="page"]');
       await expect(currentPageElement.first()).toBeAttached();

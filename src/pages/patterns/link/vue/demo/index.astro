@@ -19,18 +19,12 @@ import Link from '@patterns/link/Link.vue';
   </head>
   <body class="p-8">
     <div class="flex flex-col items-start gap-4">
-      <Link client:load href="https://www.w3.org/WAI/ARIA/apg/">
-        WAI-ARIA APG Documentation
-      </Link>
+      <Link client:load href="https://www.w3.org/WAI/ARIA/apg/"> WAI-ARIA APG Documentation </Link>
       <Link client:load href="https://example.com" target="_blank">
         External Link (opens in new tab)
       </Link>
-      <Link client:load href="#">
-        Link with hash href
-      </Link>
-      <Link client:load href="#" disabled>
-        Disabled Link
-      </Link>
+      <Link client:load href="#"> Link with hash href </Link>
+      <Link client:load href="#" disabled> Disabled Link </Link>
     </div>
   </body>
 </html>

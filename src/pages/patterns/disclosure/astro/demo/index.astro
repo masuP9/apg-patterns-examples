@@ -20,14 +20,10 @@ import Disclosure from '@patterns/disclosure/Disclosure.astro';
   <body class="p-8">
     <div class="flex flex-col gap-4">
       <Disclosure trigger="What is a Disclosure?">
-        <p>
-          A disclosure is a button that controls the visibility of a section of content.
-        </p>
+        <p>A disclosure is a button that controls the visibility of a section of content.</p>
       </Disclosure>
       <Disclosure trigger="This section is open by default" defaultExpanded={true}>
-        <p>
-          This content is visible when the page loads.
-        </p>
+        <p>This content is visible when the page loads.</p>
       </Disclosure>
       <Disclosure trigger="This disclosure is disabled" disabled={true}>
         <p>This content cannot be revealed because the disclosure is disabled.</p>
