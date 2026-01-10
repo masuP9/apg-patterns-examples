@@ -11,6 +11,25 @@ const basePath = process.env.DEPLOY_TARGET === 'github-pages' ? '/apg-patterns-e
 const frameworkFilter = process.env.E2E_FRAMEWORK;
 
 /**
+ * Get dev server port from environment variable or generate from worktree path
+ * This must match the logic in astro.config.mjs
+ */
+function getDevPort(): number {
+  if (process.env.DEV_PORT) {
+    return parseInt(process.env.DEV_PORT, 10);
+  }
+
+  const cwd = process.cwd();
+  let hash = 0;
+  for (let i = 0; i < cwd.length; i++) {
+    hash = (hash * 31 + cwd.charCodeAt(i)) >>> 0;
+  }
+  return 4321 + (hash % 79);
+}
+
+const devPort = getDevPort();
+
+/**
  * Playwright E2E Test Configuration
  *
  * Run with: npm run test:e2e
@@ -34,7 +53,7 @@ export default defineConfig({
   // Filter tests by framework if E2E_FRAMEWORK is set
   grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,
   use: {
-    baseURL: `http://localhost:4321${basePath}/`,
+    baseURL: `http://localhost:${devPort}${basePath}/`,
     trace: 'on-first-retry',
   },
 
@@ -48,8 +67,10 @@ export default defineConfig({
   webServer: {
     // CI: Use preview server (serves pre-built dist/)
     // Local: Use dev server (hot reload)
-    command: isCI ? 'npx astro preview --host 0.0.0.0' : 'npm run dev',
-    url: `http://localhost:4321${basePath}/`,
+    command: isCI
+      ? `npx astro preview --host 0.0.0.0 --port ${devPort}`
+      : 'npm run dev',
+    url: `http://localhost:${devPort}${basePath}/`,
     reuseExistingServer: !isCI,
     timeout: 180 * 1000, // 3 minutes for CI
     stdout: 'pipe',
