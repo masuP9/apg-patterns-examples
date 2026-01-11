@@ -4,6 +4,7 @@ import Tabs from '@patterns/tabs/Tabs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/tabs/TestingDocs.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -19,6 +20,7 @@ const tocItems = [
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
   { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
   { id: 'resources', text: t('pattern.resources') },
 ];
 
@@ -267,6 +269,14 @@ const tabs = [
       このコンポーネントは、クライアントサイドのキーボードナビゲーションと状態管理のためにWeb
       Component（<code>&lt;apg-tabs&gt;</code>）を使用しています。
     </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
   </section>
 
   <!-- Resources -->
