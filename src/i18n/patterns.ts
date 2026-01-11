@@ -84,9 +84,10 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
       name: 'リストボックス',
       description: 'ユーザーが選択肢のリストから1つまたは複数のアイテムを選択できるウィジェット。',
     },
-    menu: {
-      name: 'メニュー / メニューバー',
-      description: 'アクションや機能のセットなど、ユーザーに選択肢のリストを提供するウィジェット。',
+    menubar: {
+      name: 'メニューバー',
+      description:
+        'ドロップダウンメニュー、サブメニュー、チェックボックス項目、ラジオグループを備えた水平メニューバー。アプリケーションスタイルのナビゲーションに使用します。',
     },
     'menu-button': {
       name: 'メニューボタン',
