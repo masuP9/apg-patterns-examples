@@ -6,14 +6,45 @@ import { ResponsiveTable } from '@/components/ui/table';
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements.
+    requirements. The Switch component uses a two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role="switch", aria-checked)</li>
+      <li>Keyboard interaction (Space, Enter)</li>
+      <li>Disabled state handling</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Click and keyboard toggle behavior</li>
+      <li>ARIA structure in live browser</li>
+      <li>Disabled state interactions</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction
+    High Priority: APG Keyboard Interaction (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -50,7 +81,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes
+    High Priority: APG ARIA Attributes (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -87,7 +118,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
+    Medium Priority: Accessibility (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -120,7 +151,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: HTML Attribute Inheritance
+    Low Priority: HTML Attribute Inheritance (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -138,6 +169,35 @@ import { ResponsiveTable } from '@/components/ui/table';
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>data-* attributes</code></td>
           <td class="py-2">Custom data attributes are passed through</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Cross-framework Consistency (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks have switch</code></td>
+          <td class="py-2">React, Vue, Svelte, Astro all render switch elements</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Toggle on click</code></td>
+          <td class="py-2">All frameworks toggle correctly on click</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">All frameworks have consistent ARIA structure</td>
         </tr>
       </tbody>
     </table>
