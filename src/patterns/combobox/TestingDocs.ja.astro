@@ -6,14 +6,46 @@ import { ResponsiveTable } from '@/components/ui/table';
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     テストは ARIA 属性、キーボード操作、フィルタリング動作、アクセシビリティ要件に対する APG
-    準拠を検証します。
+    準拠を検証します。Combobox コンポーネントは2層のテスト戦略を採用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用してコンポーネントの出力を検証します。正しい HTML
+      構造と ARIA 属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA 属性（role、aria-controls、aria-expanded など）</li>
+      <li>キーボード操作（矢印キー、Enter、Escape など）</li>
+      <li>フィルタリング動作とオプションのレンダリング</li>
+      <li>jest-axe によるアクセシビリティ検証</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      実際のブラウザ環境で全フレームワークのコンポーネント動作を検証します。インタラクションと
+      クロスフレームワークの一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>キーボードナビゲーションと選択</li>
+      <li>マウス操作（クリック、ホバー）</li>
+      <li>ライブブラウザでの ARIA 構造</li>
+      <li>aria-activedescendant によるフォーカス管理</li>
+      <li>axe-core によるアクセシビリティスキャン</li>
+      <li>クロスフレームワーク一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: ARIA 属性
+    高優先度: ARIA 属性 (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -66,7 +98,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: アクセシブル名
+    高優先度: アクセシブル名 (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -91,7 +123,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: キーボード操作（ポップアップ閉時）
+    高優先度: キーボード操作 - ポップアップ閉時 (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -124,7 +156,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: キーボード操作（ポップアップ開時）
+    高優先度: キーボード操作 - ポップアップ開時 (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -173,7 +205,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: フォーカス管理
+    高優先度: フォーカス管理 (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -206,7 +238,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: フィルタリング
+    中優先度: フィルタリング (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -239,7 +271,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: マウス操作
+    中優先度: マウス操作 (E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -272,7 +304,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: IME 入力
+    中優先度: IME 入力 (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -297,7 +329,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: コールバック
+    中優先度: コールバック (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -326,7 +358,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    低優先度: HTML 属性継承
+    低優先度: HTML 属性継承 (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -353,46 +385,68 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: クロスフレームワーク一貫性 (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>全フレームワークにコンボボックス</code></td>
+          <td class="py-2">React、Vue、Svelte、Astro すべてがコンボボックス要素をレンダリング</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>クリックで選択</code></td>
+          <td class="py-2">すべてのフレームワークがクリックで正しく選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>一貫した ARIA</code></td>
+          <td class="py-2">すべてのフレームワークが一貫した ARIA 構造を持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
   <h3 class="mb-3 text-lg font-medium">テストツール</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>React:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/react-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
       >
-        React Testing Library
-      </ExternalLink>
+      - ユニットテスト用テストランナー
     </li>
     <li>
-      <strong>Vue:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/vue-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
       >
-        Vue Testing Library
-      </ExternalLink>
+      - フレームワーク固有のテストユーティリティ（React、Vue、Svelte）
     </li>
     <li>
-      <strong>Svelte:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/svelte-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
       >
-        Svelte Testing Library
-      </ExternalLink>
+      - E2E テスト用ブラウザ自動化
     </li>
     <li>
-      <strong>Astro:</strong> Web Component ユニットテスト用の Vitest + JSDOM
-    </li>
-    <li>
-      <strong>アクセシビリティ:</strong>
       <ExternalLink
-        href="https://github.com/dequelabs/axe-core"
-        class="text-primary hover:underline"
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
       >
-        axe-core
-      </ExternalLink>
+      - E2E での自動アクセシビリティテスト
     </li>
   </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細なドキュメントは <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > を参照してください。
+  </p>
 </div>
