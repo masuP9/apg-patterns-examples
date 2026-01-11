@@ -4,19 +4,47 @@ import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">テスト概要</h3>
   <p class="text-muted-foreground mb-4">
-    Alert コンポーネントのテストは、正しいライブリージョンの動作と APG
-    準拠の検証に焦点を当てています。最も重要なテストは、コンテンツが変更されたときにアラートコンテナが
-    DOM に残ることを確認することです。
+    テストは、ライブリージョンの動作、ARIA属性、アクセシビリティ要件全体にわたってAPG準拠を検証します。
+    Alertコンポーネントは2層のテスト戦略を採用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用してコンポーネントのレンダリング出力を検証します。これらのテストは正しいHTML構造とARIA属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA属性（role="alert"）</li>
+      <li>ライブリージョンコンテナのDOM内での永続性</li>
+      <li>閉じるボタンのアクセシビリティ</li>
+      <li>jest-axeによるアクセシビリティ検証</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワークで実際のブラウザ環境でコンポーネントの動作を検証します。これらのテストはインタラクションとフレームワーク間の一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ライブブラウザでのARIA構造</li>
+      <li>フォーカス管理（アラートはフォーカスを奪わない）</li>
+      <li>閉じるボタンのキーボード操作</li>
+      <li>Tabナビゲーションの動作</li>
+      <li>axe-coreによるアクセシビリティスキャン</li>
+      <li>フレームワーク間の一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-      高優先度: APG コア準拠
+      高優先度: APG コア準拠（Unit + E2E）
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -55,7 +83,7 @@ import { ResponsiveTable } from '@/components/ui/table';
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-      中優先度: アクセシビリティ検証
+      中優先度: アクセシビリティ検証（Unit + E2E）
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -94,7 +122,7 @@ import { ResponsiveTable } from '@/components/ui/table';
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-      低優先度: Props と拡張性
+      低優先度: Props と拡張性（Unit）
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -124,6 +152,37 @@ import { ResponsiveTable } from '@/components/ui/table';
           <tr class="border-border border-b">
             <td class="py-2 pr-4">onDismiss コールバックが発火</td>
             <td class="py-2">イベント処理</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+      低優先度: フレームワーク間の一貫性（E2E）
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">テスト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">すべてのフレームワークにアラートがある</td>
+            <td class="py-2">React、Vue、Svelte、Astroすべてがアラート要素をレンダリング</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">同じトリガーボタン</td>
+            <td class="py-2">すべてのフレームワークで一貫したトリガーボタン</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">クリックでアラートを表示</td>
+            <td class="py-2">すべてのフレームワークでボタンクリック時にアラートを表示</td>
           </tr>
         </tbody>
       </table>
@@ -205,4 +264,11 @@ npm run test -- alert
 npm run test -- Alert.test.tsx    # React
 npm run test -- Alert.test.vue    # Vue
 npm run test -- Alert.test.svelte # Svelte</code></pre>
+
+  <p class="text-muted-foreground text-sm">
+    完全なドキュメントについては<ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    >を参照してください。
+  </p>
 </div>
