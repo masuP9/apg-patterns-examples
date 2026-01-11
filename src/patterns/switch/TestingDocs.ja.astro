@@ -5,14 +5,43 @@ import { ResponsiveTable } from '@/components/ui/table';
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    テストは、キーボードインタラクション、ARIA属性、アクセシビリティ要件全体でAPG準拠を検証します。
+    テストは、キーボードインタラクション、ARIA属性、アクセシビリティ要件全体でAPG準拠を検証します。Switchコンポーネントは2層のテスト戦略を採用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用してコンポーネントのレンダリング出力を検証します。これらのテストは正しいHTML構造とARIA属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA属性（role="switch"、aria-checked）</li>
+      <li>キーボードインタラクション（Space、Enter）</li>
+      <li>無効状態の処理</li>
+      <li>jest-axeによるアクセシビリティ検証</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワークで実際のブラウザ環境でコンポーネントの動作を検証します。これらのテストはインタラクションとフレームワーク間の一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>クリックとキーボードのトグル動作</li>
+      <li>ライブブラウザでのARIA構造</li>
+      <li>無効状態のインタラクション</li>
+      <li>axe-coreによるアクセシビリティスキャン</li>
+      <li>フレームワーク間の一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG キーボードインタラクション
+    高優先度: APG キーボードインタラクション（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -49,7 +78,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG ARIA 属性
+    高優先度: APG ARIA 属性（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -86,7 +115,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: アクセシビリティ
+    中優先度: アクセシビリティ（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -119,7 +148,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    低優先度: HTML属性継承
+    低優先度: HTML属性継承（Unit）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -137,6 +166,35 @@ import { ResponsiveTable } from '@/components/ui/table';
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>data-* attributes</code></td>
           <td class="py-2">カスタムdata属性が引き継がれる</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: フレームワーク間の一貫性（E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks have switch</code></td>
+          <td class="py-2">React、Vue、Svelte、Astroすべてがスイッチ要素をレンダリング</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Toggle on click</code></td>
+          <td class="py-2">すべてのフレームワークでクリック時に正しくトグル</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">すべてのフレームワークで一貫したARIA構造</td>
         </tr>
       </tbody>
     </table>

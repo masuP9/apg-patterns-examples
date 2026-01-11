@@ -4,18 +4,49 @@ import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">Testing Overview</h3>
   <p class="text-muted-foreground mb-4">
-    The Alert component tests focus on verifying correct live region behavior and APG compliance.
-    The most critical test is ensuring the alert container remains in the DOM when content changes.
+    Tests verify APG compliance for live region behavior, ARIA attributes, and accessibility
+    requirements. The Alert component uses a two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role="alert")</li>
+      <li>Live region container persistence in DOM</li>
+      <li>Dismiss button accessibility</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA structure in live browser</li>
+      <li>Focus management (alert does NOT steal focus)</li>
+      <li>Dismiss button keyboard interactions</li>
+      <li>Tab navigation behavior</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-      High Priority: APG Core Compliance
+      High Priority: APG Core Compliance (Unit + E2E)
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -54,7 +85,7 @@ import { ResponsiveTable } from '@/components/ui/table';
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-      Medium Priority: Accessibility Validation
+      Medium Priority: Accessibility Validation (Unit + E2E)
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -93,7 +124,7 @@ import { ResponsiveTable } from '@/components/ui/table';
   <div class="mb-6">
     <h4 class="mb-2 flex items-center gap-2 font-medium">
       <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-      Low Priority: Props &amp; Extensibility
+      Low Priority: Props &amp; Extensibility (Unit)
     </h4>
     <ResponsiveTable>
       <table class="w-full border-collapse text-sm">
@@ -123,6 +154,37 @@ import { ResponsiveTable } from '@/components/ui/table';
           <tr class="border-border border-b">
             <td class="py-2 pr-4">onDismiss callback fires</td>
             <td class="py-2">Event handling</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 flex items-center gap-2 font-medium">
+      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+      Low Priority: Cross-framework Consistency (E2E)
+    </h4>
+    <ResponsiveTable>
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Test</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">All frameworks have alert</td>
+            <td class="py-2">React, Vue, Svelte, Astro all render alert element</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Same trigger buttons</td>
+            <td class="py-2">All frameworks have consistent trigger buttons</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Show alert on click</td>
+            <td class="py-2">All frameworks show alert when button is clicked</td>
           </tr>
         </tbody>
       </table>
@@ -205,4 +267,11 @@ npm run test -- alert
 npm run test -- Alert.test.tsx    # React
 npm run test -- Alert.test.vue    # Vue
 npm run test -- Alert.test.svelte # Svelte</code></pre>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
 </div>
