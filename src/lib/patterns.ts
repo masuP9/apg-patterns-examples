@@ -276,7 +276,7 @@ export const PATTERNS: Pattern[] = [
     name: 'Window Splitter',
     description:
       'A moveable separator between two sections, or panes, that enables users to change the relative size of the panes.',
-    icon: '⬛',
+    icon: '↔️',
     complexity: 'Medium',
     status: 'available',
   },
