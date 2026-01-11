@@ -417,31 +417,6 @@ const ogImageTemplate = {
                 children: 'Accessible component patterns for React, Vue, Svelte & Astro',
               },
             },
-            // Framework badges
-            {
-              type: 'div',
-              props: {
-                style: {
-                  display: 'flex',
-                  gap: 16,
-                },
-                children: ['React', 'Vue', 'Svelte', 'Astro'].map((fw) => ({
-                  type: 'div',
-                  props: {
-                    style: {
-                      padding: '8px 20px',
-                      backgroundColor: 'rgba(168, 85, 247, 0.2)',
-                      border: '1px solid rgba(168, 85, 247, 0.4)',
-                      borderRadius: 20,
-                      fontSize: 16,
-                      fontWeight: 500,
-                      color: '#c084fc',
-                    },
-                    children: fw,
-                  },
-                })),
-              },
-            },
           ],
         },
       },
