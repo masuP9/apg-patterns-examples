@@ -130,7 +130,7 @@ export const PATTERNS: Pattern[] = [
       'A container that enables users to navigate the information or interactive elements using directional navigation keys.',
     icon: '📊',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'landmarks',

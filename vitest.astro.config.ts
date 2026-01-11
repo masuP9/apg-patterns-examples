@@ -24,6 +24,7 @@ export default getViteConfig({
       'src/patterns/carousel/Carousel.test.astro.ts',
       'src/patterns/landmarks/LandmarkDemo.test.astro.ts',
       'src/patterns/feed/Feed.test.astro.ts',
+      'src/patterns/grid/Grid.test.astro.ts',
     ],
   },
 });

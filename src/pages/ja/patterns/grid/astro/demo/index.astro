@@ -1,0 +1,87 @@
+---
+/**
+ * Demo-only Page: Grid (Astro)
+ *
+ * This page renders the Grid component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct grid structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import Grid, { type GridColumnDef, type GridRowData } from '@patterns/grid/Grid.astro';
+
+const columns: GridColumnDef[] = [
+  { id: 'name', header: '名前' },
+  { id: 'email', header: 'メール' },
+  { id: 'role', header: '役割' },
+  { id: 'status', header: 'ステータス' },
+];
+
+const rows: GridRowData[] = [
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-0', value: '田中太郎' },
+      { id: 'user1-1', value: 'tanaka@example.com' },
+      { id: 'user1-2', value: '管理者' },
+      { id: 'user1-3', value: 'アクティブ' },
+    ],
+  },
+  {
+    id: 'user2',
+    cells: [
+      { id: 'user2-0', value: '鈴木花子' },
+      { id: 'user2-1', value: 'suzuki@example.com' },
+      { id: 'user2-2', value: '編集者' },
+      { id: 'user2-3', value: 'アクティブ' },
+    ],
+  },
+  {
+    id: 'user3',
+    cells: [
+      { id: 'user3-0', value: '佐藤次郎' },
+      { id: 'user3-1', value: 'sato@example.com', disabled: true },
+      { id: 'user3-2', value: '閲覧者' },
+      { id: 'user3-3', value: '非アクティブ' },
+    ],
+  },
+  {
+    id: 'user4',
+    cells: [
+      { id: 'user4-0', value: '高橋美咲' },
+      { id: 'user4-1', value: 'takahashi@example.com' },
+      { id: 'user4-2', value: '管理者' },
+      { id: 'user4-3', value: 'アクティブ' },
+    ],
+  },
+  {
+    id: 'user5',
+    cells: [
+      { id: 'user5-0', value: '山田健一' },
+      { id: 'user5-1', value: 'yamada@example.com' },
+      { id: 'user5-2', value: '編集者' },
+      { id: 'user5-3', value: 'アクティブ' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: Grid (Astro)</title>
+  </head>
+  <body>
+    <div class="apg-grid-demo">
+      <div class="apg-grid-demo__description">
+        <p>矢印キーでセル間を移動。Spaceでセルを選択/選択解除。Enterでセルをアクティベート。</p>
+      </div>
+      <Grid columns={columns} rows={rows} ariaLabel="ユーザー一覧" selectable multiselectable />
+    </div>
+  </body>
+</html>

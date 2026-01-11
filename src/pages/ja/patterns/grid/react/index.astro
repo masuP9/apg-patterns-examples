@@ -1,0 +1,327 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import { GridDemo } from '@patterns/grid/GridDemo';
+import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/grid/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/grid/Grid.tsx?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'grid-vs-table', text: 'Grid vs Table' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Grid - React"
+  pattern="grid"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      キーボードナビゲーション、セル選択、アクティベーションを備えたインタラクティブな2Dデータグリッド。
+    </p>
+    <AiGuideBadge pattern="grid" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="grid" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4 text-sm">
+      矢印キーでセル間を移動。Spaceでセルを選択/選択解除。Enterでセルをアクティベート。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <GridDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Grid vs Table Section -->
+  <section class="mb-12">
+    <Heading level={2} id="grid-vs-table" class="mb-4 text-xl font-semibold">Grid vs Table</Heading>
+    <p class="text-muted-foreground mb-4">
+      インタラクティブなデータグリッドには<code>grid</code>ロールを、静的なデータ表示には<code
+        >table</code
+      >ロールを使用します。
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">機能</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Table</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">キーボードナビゲーション</td>
+            <td class="py-2 pr-4">2D（矢印キー）</td>
+            <td class="py-2">テーブルナビゲーション（ブラウザデフォルト）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">セルフォーカス</td>
+            <td class="py-2 pr-4">必須（roving tabindex）</td>
+            <td class="py-2">不要</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">選択</td>
+            <td class="py-2 pr-4">aria-selected</td>
+            <td class="py-2">未対応</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">編集</td>
+            <td class="py-2 pr-4">オプション</td>
+            <td class="py-2">未対応</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">ユースケース</td>
+            <td class="py-2 pr-4">スプレッドシート風、データグリッド</td>
+            <td class="py-2">静的データ表示</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Grid.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Grid } from './Grid';
+import type { GridColumnDef, GridRowData } from './Grid';
+
+const columns: GridColumnDef[] = [
+  { id: 'name', header: '名前' },
+  { id: 'email', header: 'メール' },
+  { id: 'role', header: '役割' },
+];
+
+const rows: GridRowData[] = [
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-0', value: '田中太郎' },
+      { id: 'user1-1', value: 'tanaka@example.com' },
+      { id: 'user1-2', value: '管理者' },
+    ],
+  },
+  {
+    id: 'user2',
+    cells: [
+      { id: 'user2-0', value: '鈴木花子' },
+      { id: 'user2-1', value: 'suzuki@example.com' },
+      { id: 'user2-2', value: 'ユーザー' },
+    ],
+  },
+];
+
+// 基本的なGrid
+<Grid
+  columns={columns}
+  rows={rows}
+  ariaLabel="ユーザー一覧"
+/>
+
+// 選択機能付き
+<Grid
+  columns={columns}
+  rows={rows}
+  ariaLabel="ユーザー一覧"
+  selectable
+  multiselectable
+  selectedIds={selectedIds}
+  onSelectionChange={(ids) => setSelectedIds(ids)}
+  onCellActivate={(cellId, rowId, colId) => {
+    console.log('アクティベート:', { cellId, rowId, colId });
+  }}
+/>`}
+      lang="tsx"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Grid Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">GridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">GridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">行データ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">グリッドのアクセシブルな名前</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">アクセシブルな名前のID参照</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">セル選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">複数セル選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">選択中のセルID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">選択変更コールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onCellActivate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(cellId, rowId, colId) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">セルアクティベーションコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>wrapNavigation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">行端でナビゲーションを折り返す</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pageSize</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">5</td>
+            <td class="py-2">PageUp/Downでスキップする行数</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">型定義</h3>
+    <CodeBlock
+      code={`interface GridColumnDef {
+  id: string;
+  header: string;
+}
+
+interface GridCellData {
+  id: string;
+  value: string;
+  disabled?: boolean;
+}
+
+interface GridRowData {
+  id: string;
+  cells: GridCellData[];
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/example-index/grid/dataGrids.html"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid 例
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="grid" locale={locale} />
+    </ul>
+  </section>
+</PatternLayout>

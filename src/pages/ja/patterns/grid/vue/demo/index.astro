@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: GridDemo (Vue)
+ *
+ * This page renders the GridDemo component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct grid structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import GridDemo from '@patterns/grid/GridDemo.vue';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: Grid (Vue)</title>
+  </head>
+  <body>
+    <GridDemo client:load />
+  </body>
+</html>

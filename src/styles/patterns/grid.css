@@ -1,0 +1,177 @@
+/* =============================================================================
+ * APG Grid Pattern Styles
+ * ============================================================================= */
+
+.apg-grid {
+  display: block;
+  width: 100%;
+}
+
+.apg-grid [role='grid'] {
+  display: grid;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.apg-grid [role='row'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.apg-grid [role='columnheader'] {
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  text-align: left;
+  background-color: var(--header-bg, #f8fafc);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  border-right: 1px solid var(--border-color, #e2e8f0);
+}
+
+.apg-grid [role='columnheader']:last-child {
+  border-right: none;
+}
+
+.apg-grid [role='rowheader'] {
+  font-weight: 500;
+  background-color: var(--row-header-bg, #f8fafc);
+}
+
+.apg-grid-cell {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  border-right: 1px solid var(--border-color, #e2e8f0);
+  outline: none;
+  cursor: default;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+  /* Text wrapping for long content */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Links inside grid cells */
+.apg-grid-cell a {
+  color: var(--link-color, #2563eb);
+  text-decoration: underline;
+}
+
+/* Remove outline from links inside cells - cell's .focused style is sufficient */
+.apg-grid-cell a:focus {
+  outline: none;
+}
+
+.apg-grid-cell:last-child {
+  border-right: none;
+}
+
+.apg-grid [role='row']:last-child .apg-grid-cell {
+  border-bottom: none;
+}
+
+/* Focus state - only show when cell actually has focus */
+.apg-grid-cell:focus {
+  box-shadow: inset 0 0 0 2px var(--focus-color, #3b82f6);
+  background-color: var(--focus-bg, #eff6ff);
+}
+
+/* Show focused class styling only when grid has focus */
+.apg-grid:focus-within .apg-grid-cell.focused {
+  box-shadow: inset 0 0 0 2px var(--focus-color, #3b82f6);
+  background-color: var(--focus-bg, #eff6ff);
+}
+
+/* Selected state */
+.apg-grid-cell.selected {
+  background-color: var(--selected-bg, #dbeafe);
+}
+
+.apg-grid-cell.selected:focus,
+.apg-grid:focus-within .apg-grid-cell.selected.focused {
+  background-color: var(--selected-focus-bg, #bfdbfe);
+}
+
+/* Disabled state */
+.apg-grid-cell.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--disabled-color, #94a3b8);
+}
+
+/* Hover state (for non-disabled cells) */
+.apg-grid-cell:not(.disabled):hover {
+  background-color: var(--hover-bg, #f1f5f9);
+}
+
+.apg-grid-cell.selected:not(.disabled):hover {
+  background-color: var(--selected-hover-bg, #bfdbfe);
+}
+
+/* =============================================================================
+ * Demo-specific styles
+ * ============================================================================= */
+
+.apg-grid-demo {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.apg-grid-demo__title {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.apg-grid-demo__description {
+  margin-bottom: 1.5rem;
+  color: var(--text-muted, #64748b);
+}
+
+.apg-grid-demo__controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.apg-grid-demo__selection-info {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--info-bg, #f0f9ff);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+/* =============================================================================
+ * Dark mode support
+ * ============================================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .apg-grid {
+    --border-color: #374151;
+    --header-bg: #1f2937;
+    --row-header-bg: #1f2937;
+    --focus-color: #60a5fa;
+    --focus-bg: #1e3a5f;
+    --selected-bg: #1e3a5f;
+    --selected-focus-bg: #1e4a7f;
+    --selected-hover-bg: #1e4a7f;
+    --hover-bg: #374151;
+    --disabled-color: #6b7280;
+  }
+}
+
+/* Dark mode class-based (for manual toggle) */
+.dark .apg-grid {
+  --border-color: #374151;
+  --header-bg: #1f2937;
+  --row-header-bg: #1f2937;
+  --focus-color: #60a5fa;
+  --focus-bg: #1e3a5f;
+  --selected-bg: #1e3a5f;
+  --selected-focus-bg: #1e4a7f;
+  --selected-hover-bg: #1e4a7f;
+  --hover-bg: #374151;
+  --disabled-color: #6b7280;
+}

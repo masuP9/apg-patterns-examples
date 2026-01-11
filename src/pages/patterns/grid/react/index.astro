@@ -1,0 +1,313 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import GridDemo from '@patterns/grid/GridDemo';
+import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/grid/Grid.tsx?raw';
+import testCode from '@patterns/grid/Grid.test.tsx?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'grid-vs-table', text: 'Grid vs Table' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout title="Grid - React" pattern="grid" framework="react" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      An interactive 2D data grid with keyboard navigation, cell selection, and activation.
+    </p>
+    <AiGuideBadge pattern="grid" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="grid" currentFramework="react" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <p class="text-muted-foreground mb-4 text-sm">
+      Navigate with arrow keys. Press Space to select cells. Press Enter to activate.
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <GridDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Grid vs Table Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Grid vs Table</Heading>
+    <p class="text-muted-foreground mb-4">
+      Use <code>grid</code> role for interactive data grids, and <code>table</code> role for static data
+      presentation.
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Feature</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Table</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Keyboard Navigation</td>
+            <td class="py-2 pr-4">2D (Arrow keys)</td>
+            <td class="py-2">Table navigation (browser default)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Cell Focus</td>
+            <td class="py-2 pr-4">Required (roving tabindex)</td>
+            <td class="py-2">Not required</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Selection</td>
+            <td class="py-2 pr-4">aria-selected</td>
+            <td class="py-2">Not supported</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Editing</td>
+            <td class="py-2 pr-4">Optional</td>
+            <td class="py-2">Not supported</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Use Case</td>
+            <td class="py-2 pr-4">Spreadsheet-like, data grids</td>
+            <td class="py-2">Static data display</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Grid.tsx" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`import { Grid } from './Grid';
+import type { GridColumnDef, GridRowData } from './Grid';
+
+const columns: GridColumnDef[] = [
+  { id: 'name', header: 'Name' },
+  { id: 'email', header: 'Email' },
+  { id: 'role', header: 'Role' },
+];
+
+const rows: GridRowData[] = [
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-0', value: 'Alice Johnson' },
+      { id: 'user1-1', value: 'alice@example.com' },
+      { id: 'user1-2', value: 'Admin' },
+    ],
+  },
+  {
+    id: 'user2',
+    cells: [
+      { id: 'user2-0', value: 'Bob Smith' },
+      { id: 'user2-1', value: 'bob@example.com' },
+      { id: 'user2-2', value: 'User' },
+    ],
+  },
+];
+
+// Basic Grid
+<Grid
+  columns={columns}
+  rows={rows}
+  ariaLabel="User list"
+/>
+
+// With selection
+<Grid
+  columns={columns}
+  rows={rows}
+  ariaLabel="User list"
+  selectable
+  multiselectable
+  selectedIds={selectedIds}
+  onSelectionChange={(ids) => setSelectedIds(ids)}
+  onCellActivate={(cellId, rowId, colId) => {
+    console.log('Activated:', { cellId, rowId, colId });
+  }}
+/>`}
+      lang="tsx"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Grid Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">GridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Column definitions</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">GridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Row data</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Accessible name for grid</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ID reference for accessible name</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable cell selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>multiselectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable multi-cell selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="text-muted-foreground py-2 pr-4">[]</td>
+            <td class="py-2">Selected cell IDs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Selection change callback</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onCellActivate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(cellId, rowId, colId) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Cell activation callback</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>wrapNavigation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Wrap navigation at row edges</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pageSize</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">5</td>
+            <td class="py-2">Rows to skip with PageUp/Down</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Type Definitions</h3>
+    <CodeBlock
+      code={`interface GridColumnDef {
+  id: string;
+  header: string;
+}
+
+interface GridCellData {
+  id: string;
+  value: string;
+  disabled?: boolean;
+}
+
+interface GridRowData {
+  id: string;
+  cells: GridCellData[];
+}`}
+      lang="typescript"
+      title="Types"
+    />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <p class="text-muted-foreground mb-4">
+      Grid tests focus on 2D keyboard navigation, cell selection, and ARIA attributes.
+    </p>
+    <div class="mt-6">
+      <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Grid.test.tsx" />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/example-index/grid/dataGrids.html"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid Examples
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="grid" />
+    </ul>
+  </section>
+</PatternLayout>
