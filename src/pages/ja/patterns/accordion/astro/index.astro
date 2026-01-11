@@ -4,6 +4,7 @@ import Accordion from '@patterns/accordion/Accordion.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/accordion/TestingDocs.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -19,6 +20,7 @@ const tocItems = [
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
   { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
   { id: 'implementation-notes', text: '実装上の注意' },
   { id: 'resources', text: t('pattern.resources') },
 ];
@@ -289,6 +291,14 @@ const items = [
       lang="typescript"
       title="型定義"
     />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
   </section>
 
   <!-- Implementation Notes -->

@@ -6,6 +6,7 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/tooltip/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/tooltip/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -17,6 +18,7 @@ const tocItems = [
   { id: 'source-code', text: 'Source Code' },
   { id: 'usage', text: 'Usage' },
   { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
   { id: 'resources', text: 'Resources' },
 ];
 ---
@@ -169,6 +171,12 @@ import Tooltip from './Tooltip.astro';
       This implementation uses a Web Component (<code>&lt;apg-tooltip&gt;</code>) for client-side
       interactivity.
     </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
   </section>
 
   <!-- Resources -->

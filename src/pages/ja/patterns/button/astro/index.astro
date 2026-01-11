@@ -8,6 +8,7 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/button/TestingDocs.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/button/ToggleButton.astro?raw';
@@ -22,6 +23,7 @@ const tocItems = [
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
   { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
   { id: 'resources', text: t('pattern.resources') },
 ];
 ---
@@ -213,6 +215,14 @@ import Icon from './Icon.astro';
         >&lt;apg-toggle-button&gt;</code
       >）を使用しています。
     </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
   </section>
 
   <!-- Resources -->
