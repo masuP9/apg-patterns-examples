@@ -272,6 +272,24 @@ export const PATTERNS: Pattern[] = [
     status: 'planned',
   },
   {
+    id: 'data-grid',
+    name: 'Data Grid',
+    description:
+      'An advanced grid for displaying and manipulating tabular data with sorting, filtering, and row selection.',
+    icon: '📋',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
+    id: 'editable-grid',
+    name: 'Editable Grid',
+    description:
+      'A spreadsheet-like grid with inline cell editing, dropdowns, and validation support.',
+    icon: '✏️',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
     id: 'window-splitter',
     name: 'Window Splitter',
     description:
