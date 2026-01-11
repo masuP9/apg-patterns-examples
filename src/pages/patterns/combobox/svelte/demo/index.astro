@@ -1,0 +1,77 @@
+---
+/**
+ * Demo-only Page: Combobox (Svelte)
+ *
+ * This page renders the Combobox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Combobox from '@patterns/combobox/Combobox.svelte';
+
+const fruitOptions = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+  { id: 'date', label: 'Date' },
+  { id: 'elderberry', label: 'Elderberry' },
+  { id: 'fig', label: 'Fig' },
+  { id: 'grape', label: 'Grape' },
+];
+
+const countryOptions = [
+  { id: 'jp', label: 'Japan' },
+  { id: 'us', label: 'United States' },
+  { id: 'uk', label: 'United Kingdom' },
+  { id: 'de', label: 'Germany', disabled: true },
+  { id: 'fr', label: 'France' },
+  { id: 'it', label: 'Italy' },
+  { id: 'es', label: 'Spain', disabled: true },
+  { id: 'au', label: 'Australia' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Combobox (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-6">
+      <Combobox
+        client:load
+        options={fruitOptions}
+        label="Favorite Fruit"
+        placeholder="Type to search..."
+      />
+      <Combobox
+        client:load
+        options={fruitOptions}
+        label="With Default Value"
+        defaultSelectedOptionId="cherry"
+      />
+      <Combobox
+        client:load
+        options={countryOptions}
+        label="Country (with disabled options)"
+        placeholder="Select a country..."
+      />
+      <Combobox
+        client:load
+        options={fruitOptions}
+        label="No Filter (autocomplete='none')"
+        autocomplete="none"
+        placeholder="All options shown..."
+      />
+      <Combobox
+        client:load
+        options={fruitOptions}
+        label="Disabled Combobox"
+        disabled
+        placeholder="Cannot interact"
+      />
+    </div>
+  </body>
+</html>

@@ -6,14 +6,46 @@ import { ResponsiveTable } from '@/components/ui/table';
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance for ARIA attributes, keyboard interactions, filtering behavior, and
-    accessibility requirements.
+    accessibility requirements. The Combobox component uses a two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role, aria-controls, aria-expanded, etc.)</li>
+      <li>Keyboard interaction (Arrow keys, Enter, Escape, etc.)</li>
+      <li>Filtering behavior and option rendering</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Keyboard navigation and selection</li>
+      <li>Mouse interactions (click, hover)</li>
+      <li>ARIA structure in live browser</li>
+      <li>Focus management with aria-activedescendant</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: ARIA Attributes
+    High Priority: ARIA Attributes (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -66,7 +98,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Accessible Name
+    High Priority: Accessible Name (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -91,7 +123,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Keyboard Interaction (Popup Closed)
+    High Priority: Keyboard Interaction - Popup Closed (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -124,7 +156,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Keyboard Interaction (Popup Open)
+    High Priority: Keyboard Interaction - Popup Open (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -173,7 +205,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management
+    High Priority: Focus Management (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -206,7 +238,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Filtering
+    Medium Priority: Filtering (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -239,7 +271,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Mouse Interaction
+    Medium Priority: Mouse Interaction (E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -272,7 +304,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: IME Composition
+    Medium Priority: IME Composition (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -297,7 +329,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Callbacks
+    Medium Priority: Callbacks (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -326,7 +358,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: HTML Attribute Inheritance
+    Low Priority: HTML Attribute Inheritance (Unit)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -353,46 +385,68 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Cross-framework Consistency (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks have combobox</code></td>
+          <td class="py-2">React, Vue, Svelte, Astro all render combobox elements</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Select on click</code></td>
+          <td class="py-2">All frameworks select correctly on click</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">All frameworks have consistent ARIA structure</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
   <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>React:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/react-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
       >
-        React Testing Library
-      </ExternalLink>
+      - Test runner for unit tests
     </li>
     <li>
-      <strong>Vue:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/vue-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
       >
-        Vue Testing Library
-      </ExternalLink>
+      - Framework-specific testing utilities (React, Vue, Svelte)
     </li>
     <li>
-      <strong>Svelte:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/svelte-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
       >
-        Svelte Testing Library
-      </ExternalLink>
+      - Browser automation for E2E tests
     </li>
     <li>
-      <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
-    </li>
-    <li>
-      <strong>Accessibility:</strong>
       <ExternalLink
-        href="https://github.com/dequelabs/axe-core"
-        class="text-primary hover:underline"
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
       >
-        axe-core
-      </ExternalLink>
+      - Automated accessibility testing in E2E
     </li>
   </ul>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
 </div>
