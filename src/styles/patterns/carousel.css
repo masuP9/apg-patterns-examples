@@ -430,22 +430,31 @@
   }
 
   .apg-carousel-controls {
-    flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.5rem;
     padding: 0.5rem;
   }
 
+  /* Reduce button sizes for mobile */
+  .apg-carousel-play-pause,
+  .apg-carousel-prev,
+  .apg-carousel-next {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Reduce tab size for mobile */
+  .apg-carousel-tab {
+    width: 28px;
+    height: 28px;
+  }
+
+  .apg-carousel-tab-indicator {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Tighter spacing for tablist */
   .apg-carousel-tablist {
-    order: 2;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .apg-carousel-play-pause {
-    order: 1;
-  }
-
-  .apg-carousel-nav {
-    order: 3;
+    gap: 0.25rem;
   }
 }
