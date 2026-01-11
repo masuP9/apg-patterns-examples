@@ -4,6 +4,7 @@ import Accordion from '@patterns/accordion/Accordion.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/accordion/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -15,6 +16,7 @@ const tocItems = [
   { id: 'source-code', text: 'Source Code' },
   { id: 'usage', text: 'Usage' },
   { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
   { id: 'implementation-notes', text: 'Implementation Notes' },
   { id: 'resources', text: 'Resources' },
 ];
@@ -277,6 +279,12 @@ const items = [
       lang="typescript"
       title="Types"
     />
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
   </section>
 
   <!-- Implementation Notes -->
