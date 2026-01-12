@@ -1,0 +1,73 @@
+---
+/**
+ * Demo-only Page: Listbox (Vue) - Japanese
+ *
+ * This page renders the Listbox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import ListboxDemo from '@patterns/listbox/ListboxDemo.vue';
+
+const fruitOptions = [
+  { id: 'apple', label: 'りんご' },
+  { id: 'apricot', label: 'アプリコット' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'さくらんぼ' },
+  { id: 'date', label: 'デーツ' },
+  { id: 'elderberry', label: 'エルダーベリー' },
+  { id: 'fig', label: 'いちじく' },
+  { id: 'grape', label: 'ぶどう' },
+];
+
+const colorOptions = [
+  { id: 'red', label: '赤' },
+  { id: 'orange', label: 'オレンジ' },
+  { id: 'yellow', label: '黄' },
+  { id: 'green', label: '緑', disabled: true },
+  { id: 'blue', label: '青' },
+  { id: 'indigo', label: '藍' },
+  { id: 'purple', label: '紫' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: リストボックス (Vue)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">単一選択リストボックス</h2>
+        <ListboxDemo
+          client:load
+          options={fruitOptions}
+          label="フルーツを選択:"
+          defaultSelectedIds={['apple']}
+        />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">複数選択リストボックス</h2>
+        <ListboxDemo
+          client:load
+          options={colorOptions}
+          label="色を選択（複数可）:"
+          multiselectable
+        />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">水平リストボックス</h2>
+        <ListboxDemo
+          client:load
+          options={fruitOptions.slice(0, 5)}
+          label="フルーツを選択（水平）:"
+          orientation="horizontal"
+          defaultSelectedIds={['apple']}
+        />
+      </section>
+    </div>
+  </body>
+</html>

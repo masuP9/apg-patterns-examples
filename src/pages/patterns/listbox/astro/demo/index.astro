@@ -1,0 +1,90 @@
+---
+/**
+ * Demo-only Page: Listbox (Astro)
+ *
+ * This page renders the Listbox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Listbox from '@patterns/listbox/Listbox.astro';
+
+const fruitOptions = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'apricot', label: 'Apricot' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+  { id: 'date', label: 'Date' },
+  { id: 'elderberry', label: 'Elderberry' },
+  { id: 'fig', label: 'Fig' },
+  { id: 'grape', label: 'Grape' },
+];
+
+const colorOptions = [
+  { id: 'red', label: 'Red' },
+  { id: 'orange', label: 'Orange' },
+  { id: 'yellow', label: 'Yellow' },
+  { id: 'green', label: 'Green', disabled: true },
+  { id: 'blue', label: 'Blue' },
+  { id: 'indigo', label: 'Indigo' },
+  { id: 'purple', label: 'Purple' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Listbox (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Single-Select Listbox</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="fruit-label-astro" class="mb-2 block text-sm font-medium">
+              Choose a fruit:
+            </label>
+            <Listbox
+              options={fruitOptions}
+              aria-labelledby="fruit-label-astro"
+              defaultSelectedIds={['apple']}
+            />
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Multi-Select Listbox</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="color-label-astro" class="mb-2 block text-sm font-medium">
+              Choose colors (multiple):
+            </label>
+            <Listbox options={colorOptions} aria-labelledby="color-label-astro" multiselectable />
+          </div>
+          <p class="text-muted-foreground text-xs">
+            Tip: Use Space to toggle, Shift+Arrow to extend selection, Ctrl+A to select all
+          </p>
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Horizontal Listbox</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="horizontal-label-astro" class="mb-2 block text-sm font-medium">
+              Choose a fruit (horizontal):
+            </label>
+            <Listbox
+              options={fruitOptions.slice(0, 5)}
+              aria-labelledby="horizontal-label-astro"
+              orientation="horizontal"
+              defaultSelectedIds={['apple']}
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

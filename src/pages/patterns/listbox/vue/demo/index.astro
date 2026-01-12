@@ -1,0 +1,73 @@
+---
+/**
+ * Demo-only Page: Listbox (Vue)
+ *
+ * This page renders the Listbox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import ListboxDemo from '@patterns/listbox/ListboxDemo.vue';
+
+const fruitOptions = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'apricot', label: 'Apricot' },
+  { id: 'banana', label: 'Banana' },
+  { id: 'cherry', label: 'Cherry' },
+  { id: 'date', label: 'Date' },
+  { id: 'elderberry', label: 'Elderberry' },
+  { id: 'fig', label: 'Fig' },
+  { id: 'grape', label: 'Grape' },
+];
+
+const colorOptions = [
+  { id: 'red', label: 'Red' },
+  { id: 'orange', label: 'Orange' },
+  { id: 'yellow', label: 'Yellow' },
+  { id: 'green', label: 'Green', disabled: true },
+  { id: 'blue', label: 'Blue' },
+  { id: 'indigo', label: 'Indigo' },
+  { id: 'purple', label: 'Purple' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Listbox (Vue)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Single-Select Listbox</h2>
+        <ListboxDemo
+          client:load
+          options={fruitOptions}
+          label="Choose a fruit:"
+          defaultSelectedIds={['apple']}
+        />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Multi-Select Listbox</h2>
+        <ListboxDemo
+          client:load
+          options={colorOptions}
+          label="Choose colors (multiple):"
+          multiselectable
+        />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Horizontal Listbox</h2>
+        <ListboxDemo
+          client:load
+          options={fruitOptions.slice(0, 5)}
+          label="Choose a fruit (horizontal):"
+          orientation="horizontal"
+          defaultSelectedIds={['apple']}
+        />
+      </section>
+    </div>
+  </body>
+</html>

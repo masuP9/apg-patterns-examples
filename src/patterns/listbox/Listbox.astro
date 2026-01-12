@@ -306,7 +306,7 @@ const listboxTabIndex = availableOptions.length === 0 ? 0 : undefined;
       for (let i = 0; i < options.length; i++) {
         const index = (startIndex + i) % options.length;
         const option = options[index];
-        const label = option.textContent?.toLowerCase() || '';
+        const label = option.textContent?.trim().toLowerCase() || '';
         const searchStr = isSameChar ? buffer[0] : this.typeAheadBuffer;
 
         if (label.startsWith(searchStr)) {

@@ -1,0 +1,40 @@
+---
+/**
+ * Demo-only Page: Listbox (React)
+ *
+ * This page renders the Listbox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import {
+  SingleSelectListboxDemo,
+  MultiSelectListboxDemo,
+  HorizontalListboxDemo,
+} from '@patterns/listbox/ListboxDemo';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Listbox (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Single-Select Listbox</h2>
+        <SingleSelectListboxDemo client:load />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Multi-Select Listbox</h2>
+        <MultiSelectListboxDemo client:load />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Horizontal Listbox</h2>
+        <HorizontalListboxDemo client:load />
+      </section>
+    </div>
+  </body>
+</html>

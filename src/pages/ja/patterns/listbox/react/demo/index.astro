@@ -1,0 +1,98 @@
+---
+/**
+ * Demo-only Page: Listbox (React) - Japanese
+ *
+ * This page renders the Listbox component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import { Listbox } from '@patterns/listbox/Listbox';
+import { useState } from 'react';
+
+const fruitOptions = [
+  { id: 'apple', label: 'りんご' },
+  { id: 'apricot', label: 'アプリコット' },
+  { id: 'banana', label: 'バナナ' },
+  { id: 'cherry', label: 'さくらんぼ' },
+  { id: 'date', label: 'デーツ' },
+  { id: 'elderberry', label: 'エルダーベリー' },
+  { id: 'fig', label: 'いちじく' },
+  { id: 'grape', label: 'ぶどう' },
+];
+
+const colorOptions = [
+  { id: 'red', label: '赤' },
+  { id: 'orange', label: 'オレンジ' },
+  { id: 'yellow', label: '黄' },
+  { id: 'green', label: '緑', disabled: true },
+  { id: 'blue', label: '青' },
+  { id: 'indigo', label: '藍' },
+  { id: 'purple', label: '紫' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: リストボックス (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col items-start gap-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">単一選択リストボックス</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="fruit-label-ja" class="mb-2 block text-sm font-medium">
+              フルーツを選択:
+            </label>
+            <Listbox
+              client:load
+              options={fruitOptions}
+              aria-labelledby="fruit-label-ja"
+              defaultSelectedIds={['apple']}
+            />
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">複数選択リストボックス</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="color-label-ja" class="mb-2 block text-sm font-medium">
+              色を選択（複数可）:
+            </label>
+            <Listbox
+              client:load
+              options={colorOptions}
+              aria-labelledby="color-label-ja"
+              multiselectable
+            />
+          </div>
+          <p class="text-muted-foreground text-xs">
+            ヒント: Spaceで選択切替、Shift+矢印で範囲選択、Ctrl+Aで全選択
+          </p>
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">水平リストボックス</h2>
+        <div class="space-y-4">
+          <div>
+            <label id="horizontal-label-ja" class="mb-2 block text-sm font-medium">
+              フルーツを選択（水平）:
+            </label>
+            <Listbox
+              client:load
+              options={fruitOptions.slice(0, 5)}
+              aria-labelledby="horizontal-label-ja"
+              orientation="horizontal"
+              defaultSelectedIds={['apple']}
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
