@@ -31,7 +31,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Dialog               | ✅    | ✅  | ✅     | ✅    | Complete |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | Complete |
 | Feed                 | ✅    | ✅  | ✅     | ✅    | Complete |
-| Grid                 | -     | -   | -      | -     | Planned  |
+| Grid                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Landmarks            | ✅    | ✅  | ✅     | ✅    | Complete |
 | Link                 | ✅    | ✅  | ✅     | ✅    | Complete |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |

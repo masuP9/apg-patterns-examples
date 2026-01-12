@@ -1,0 +1,487 @@
+---
+// =============================================================================
+// Types
+// =============================================================================
+
+export interface GridCellData {
+  id: string;
+  value: string | number;
+  disabled?: boolean;
+  colspan?: number;
+  rowspan?: number;
+}
+
+export interface GridColumnDef {
+  id: string;
+  header: string;
+  colspan?: number;
+}
+
+export interface GridRowData {
+  id: string;
+  cells: GridCellData[];
+  hasRowHeader?: boolean;
+  disabled?: boolean;
+}
+
+interface Props {
+  columns: GridColumnDef[];
+  rows: GridRowData[];
+  ariaLabel?: string;
+  ariaLabelledby?: string;
+  selectable?: boolean;
+  multiselectable?: boolean;
+  defaultSelectedIds?: string[];
+  defaultFocusedId?: string;
+  totalColumns?: number;
+  totalRows?: number;
+  startRowIndex?: number;
+  startColIndex?: number;
+  wrapNavigation?: boolean;
+  enablePageNavigation?: boolean;
+  pageSize?: number;
+  class?: string;
+  renderCell?: (cell: GridCellData, rowId: string, colId: string) => string;
+}
+
+// =============================================================================
+// Props
+// =============================================================================
+
+const {
+  columns,
+  rows,
+  ariaLabel,
+  ariaLabelledby,
+  selectable = false,
+  multiselectable = false,
+  defaultSelectedIds = [],
+  defaultFocusedId,
+  totalColumns,
+  totalRows,
+  startRowIndex = 1,
+  startColIndex = 1,
+  wrapNavigation = false,
+  enablePageNavigation = false,
+  pageSize = 5,
+  class: className,
+  renderCell,
+} = Astro.props;
+
+// Determine initial focused cell
+const initialFocusedId = defaultFocusedId ?? rows[0]?.cells[0]?.id ?? null;
+---
+
+<apg-grid
+  class={`apg-grid ${className ?? ''}`}
+  data-wrap-navigation={wrapNavigation}
+  data-enable-page-navigation={enablePageNavigation}
+  data-page-size={pageSize}
+  data-selectable={selectable}
+  data-multiselectable={multiselectable}
+>
+  <div
+    role="grid"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-multiselectable={multiselectable ? 'true' : undefined}
+    aria-rowcount={totalRows}
+    aria-colcount={totalColumns}
+  >
+    {/* Header Row */}
+    <div role="row" aria-rowindex={totalRows ? 1 : undefined}>
+      {
+        columns.map((col, colIndex) => (
+          <div
+            role="columnheader"
+            aria-colindex={totalColumns ? startColIndex + colIndex : undefined}
+            aria-colspan={col.colspan}
+            data-col-id={col.id}
+          >
+            {col.header}
+          </div>
+        ))
+      }
+    </div>
+
+    {/* Data Rows */}
+    {
+      rows.map((row, rowIndex) => (
+        <div
+          role="row"
+          aria-rowindex={totalRows ? startRowIndex + rowIndex : undefined}
+          data-row-id={row.id}
+        >
+          {row.cells.map((cell, colIndex) => {
+            const isRowHeader = row.hasRowHeader && colIndex === 0;
+            const isFocused = cell.id === initialFocusedId;
+            const isSelected = defaultSelectedIds.includes(cell.id);
+            const colId = columns[colIndex]?.id ?? '';
+
+            return (
+              <div
+                role={isRowHeader ? 'rowheader' : 'gridcell'}
+                tabindex={isFocused ? 0 : -1}
+                aria-selected={selectable ? (isSelected ? 'true' : 'false') : undefined}
+                aria-disabled={cell.disabled ? 'true' : undefined}
+                aria-colindex={totalColumns ? startColIndex + colIndex : undefined}
+                aria-colspan={cell.colspan}
+                aria-rowspan={cell.rowspan}
+                data-cell-id={cell.id}
+                data-row-id={row.id}
+                data-col-id={colId}
+                data-row-index={rowIndex}
+                data-col-index={colIndex}
+                data-disabled={cell.disabled ? 'true' : undefined}
+                class={`apg-grid-cell ${isFocused ? 'focused' : ''} ${isSelected ? 'selected' : ''} ${cell.disabled ? 'disabled' : ''}`}
+              >
+                {renderCell ? <Fragment set:html={renderCell(cell, row.id, colId)} /> : cell.value}
+              </div>
+            );
+          })}
+        </div>
+      ))
+    }
+  </div>
+</apg-grid>
+
+<script>
+  class ApgGrid extends HTMLElement {
+    private focusedId: string | null = null;
+    private selectedIds: Set<string> = new Set();
+    private wrapNavigation = false;
+    private enablePageNavigation = false;
+    private pageSize = 5;
+    private selectable = false;
+    private multiselectable = false;
+
+    connectedCallback() {
+      this.wrapNavigation = this.dataset.wrapNavigation === 'true';
+      this.enablePageNavigation = this.dataset.enablePageNavigation === 'true';
+      this.pageSize = parseInt(this.dataset.pageSize || '5', 10);
+      this.selectable = this.dataset.selectable === 'true';
+      this.multiselectable = this.dataset.multiselectable === 'true';
+
+      // Find initial focused cell
+      const focusedCell = this.querySelector<HTMLElement>('[tabindex="0"]');
+      this.focusedId = focusedCell?.dataset.cellId ?? null;
+
+      // Load initial selected ids
+      this.querySelectorAll<HTMLElement>('[aria-selected="true"]').forEach((el) => {
+        const cellId = el.dataset.cellId;
+        if (cellId) this.selectedIds.add(cellId);
+      });
+
+      // Set tabindex="-1" on all focusable elements inside grid cells
+      // This ensures Tab exits the grid instead of moving between widgets
+      this.querySelectorAll<HTMLElement>(
+        '[role="gridcell"] a[href], [role="gridcell"] button, [role="rowheader"] a[href], [role="rowheader"] button'
+      ).forEach((el) => {
+        el.setAttribute('tabindex', '-1');
+      });
+
+      // Add event listeners to all cells
+      // Use focusin instead of focus because focus doesn't bubble
+      // This ensures we catch focus on widgets inside cells
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          cell.addEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+          cell.addEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+        }
+      );
+    }
+
+    disconnectedCallback() {
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          cell.removeEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+          cell.removeEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+        }
+      );
+    }
+
+    private getCells(): HTMLElement[] {
+      return Array.from(
+        this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]')
+      );
+    }
+
+    private getRows(): HTMLElement[] {
+      return Array.from(this.querySelectorAll<HTMLElement>('[role="row"]')).slice(1); // Skip header row
+    }
+
+    private getColumnCount(): number {
+      return this.querySelectorAll('[role="columnheader"]').length;
+    }
+
+    private getCellAt(rowIndex: number, colIndex: number): HTMLElement | null {
+      const rows = this.getRows();
+      const row = rows[rowIndex];
+      if (!row) return null;
+      const cells = row.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+      return cells[colIndex] as HTMLElement | null;
+    }
+
+    private focusCell(cell: HTMLElement) {
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      // Check if cell contains a focusable element (link, button, etc.)
+      // Per APG: when cell contains a single widget, focus should be on the widget
+      const focusableChild = cell.querySelector<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableChild) {
+        // Set tabindex="-1" so Tab skips this element and exits the grid
+        // The widget can still receive programmatic focus
+        focusableChild.setAttribute('tabindex', '-1');
+        focusableChild.focus();
+      } else {
+        cell.focus();
+      }
+      this.focusedId = cell.dataset.cellId ?? null;
+    }
+
+    private handleFocus(event: Event) {
+      // Use currentTarget (the cell) instead of target (which could be a link inside the cell)
+      const cell = event.currentTarget as HTMLElement;
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== cell) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      this.focusedId = cell.dataset.cellId ?? null;
+    }
+
+    private findNextCell(
+      rowIndex: number,
+      colIndex: number,
+      direction: 'right' | 'left' | 'up' | 'down'
+    ): HTMLElement | null {
+      const colCount = this.getColumnCount();
+      const rowCount = this.getRows().length;
+
+      let newRow = rowIndex;
+      let newCol = colIndex;
+
+      switch (direction) {
+        case 'right':
+          newCol++;
+          if (newCol >= colCount) {
+            if (this.wrapNavigation) {
+              newCol = 0;
+              newRow++;
+            } else {
+              return null;
+            }
+          }
+          break;
+        case 'left':
+          newCol--;
+          if (newCol < 0) {
+            if (this.wrapNavigation) {
+              newCol = colCount - 1;
+              newRow--;
+            } else {
+              return null;
+            }
+          }
+          break;
+        case 'down':
+          newRow++;
+          break;
+        case 'up':
+          newRow--;
+          break;
+      }
+
+      if (newRow < 0 || newRow >= rowCount) return null;
+
+      const cell = this.getCellAt(newRow, newCol);
+      if (!cell) return null;
+
+      // Skip disabled cells
+      if (cell.dataset.disabled === 'true') {
+        return this.findNextCell(newRow, newCol, direction);
+      }
+
+      return cell;
+    }
+
+    private toggleSelection(cell: HTMLElement) {
+      if (!this.selectable) return;
+      if (cell.dataset.disabled === 'true') return;
+
+      const cellId = cell.dataset.cellId;
+      if (!cellId) return;
+
+      if (this.multiselectable) {
+        if (this.selectedIds.has(cellId)) {
+          this.selectedIds.delete(cellId);
+          cell.setAttribute('aria-selected', 'false');
+        } else {
+          this.selectedIds.add(cellId);
+          cell.setAttribute('aria-selected', 'true');
+        }
+      } else {
+        // Clear previous selection
+        this.querySelectorAll('[aria-selected="true"]').forEach((el) => {
+          el.setAttribute('aria-selected', 'false');
+        });
+        this.selectedIds.clear();
+
+        if (!this.selectedIds.has(cellId)) {
+          this.selectedIds.add(cellId);
+          cell.setAttribute('aria-selected', 'true');
+        }
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedIds: Array.from(this.selectedIds) },
+        })
+      );
+    }
+
+    private selectAll() {
+      if (!this.selectable || !this.multiselectable) return;
+
+      this.getCells().forEach((cell) => {
+        if (cell.dataset.disabled !== 'true') {
+          const cellId = cell.dataset.cellId;
+          if (cellId) {
+            this.selectedIds.add(cellId);
+            cell.setAttribute('aria-selected', 'true');
+          }
+        }
+      });
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedIds: Array.from(this.selectedIds) },
+        })
+      );
+    }
+
+    private handleKeyDown(event: KeyboardEvent) {
+      // Use currentTarget (the cell) instead of target (which could be a link inside the cell)
+      const cell = event.currentTarget as HTMLElement;
+      const { key, ctrlKey } = event;
+      const {
+        rowIndex: rowIndexStr,
+        colIndex: colIndexStr,
+        disabled,
+        cellId,
+        rowId,
+        colId,
+      } = cell.dataset;
+      const rowIndex = parseInt(rowIndexStr || '0', 10);
+      const colIndex = parseInt(colIndexStr || '0', 10);
+
+      let handled = true;
+
+      switch (key) {
+        case 'ArrowRight': {
+          const next = this.findNextCell(rowIndex, colIndex, 'right');
+          if (next) this.focusCell(next);
+          break;
+        }
+        case 'ArrowLeft': {
+          const next = this.findNextCell(rowIndex, colIndex, 'left');
+          if (next) this.focusCell(next);
+          break;
+        }
+        case 'ArrowDown': {
+          const next = this.findNextCell(rowIndex, colIndex, 'down');
+          if (next) this.focusCell(next);
+          break;
+        }
+        case 'ArrowUp': {
+          const next = this.findNextCell(rowIndex, colIndex, 'up');
+          if (next) this.focusCell(next);
+          break;
+        }
+        case 'Home': {
+          if (ctrlKey) {
+            const firstCell = this.getCellAt(0, 0);
+            if (firstCell) this.focusCell(firstCell);
+          } else {
+            const firstInRow = this.getCellAt(rowIndex, 0);
+            if (firstInRow) this.focusCell(firstInRow);
+          }
+          break;
+        }
+        case 'End': {
+          const colCount = this.getColumnCount();
+          if (ctrlKey) {
+            const rowCount = this.getRows().length;
+            const lastCell = this.getCellAt(rowCount - 1, colCount - 1);
+            if (lastCell) this.focusCell(lastCell);
+          } else {
+            const lastInRow = this.getCellAt(rowIndex, colCount - 1);
+            if (lastInRow) this.focusCell(lastInRow);
+          }
+          break;
+        }
+        case 'PageDown': {
+          if (this.enablePageNavigation) {
+            const rowCount = this.getRows().length;
+            const targetRow = Math.min(rowIndex + this.pageSize, rowCount - 1);
+            const targetCell = this.getCellAt(targetRow, colIndex);
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case 'PageUp': {
+          if (this.enablePageNavigation) {
+            const targetRow = Math.max(rowIndex - this.pageSize, 0);
+            const targetCell = this.getCellAt(targetRow, colIndex);
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case ' ': {
+          this.toggleSelection(cell);
+          break;
+        }
+        case 'Enter': {
+          if (disabled !== 'true') {
+            this.dispatchEvent(
+              new CustomEvent('cell-activate', {
+                detail: { cellId, rowId, colId },
+              })
+            );
+          }
+          break;
+        }
+        case 'a': {
+          if (ctrlKey) {
+            this.selectAll();
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  }
+
+  customElements.define('apg-grid', ApgGrid);
+</script>

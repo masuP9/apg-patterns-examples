@@ -1,0 +1,111 @@
+---
+/**
+ * Demo-only Page: Grid (Astro)
+ *
+ * This page renders the Grid component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct grid structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import Grid, {
+  type GridColumnDef,
+  type GridRowData,
+  type GridCellData,
+} from '@patterns/grid/Grid.astro';
+
+// Make Name column a link (same as React/Vue/Svelte demos)
+function renderCell(cell: GridCellData, rowId: string, colId: string): string {
+  if (colId === 'name') {
+    return `<a href="#user-${rowId}">${cell.value}</a>`;
+  }
+  return String(cell.value);
+}
+
+const columns: GridColumnDef[] = [
+  { id: 'name', header: 'Name' },
+  { id: 'email', header: 'Email' },
+  { id: 'role', header: 'Role' },
+  { id: 'status', header: 'Status' },
+];
+
+const rows: GridRowData[] = [
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-0', value: 'Alice Johnson' },
+      { id: 'user1-1', value: 'alice@example.com' },
+      { id: 'user1-2', value: 'Admin' },
+      { id: 'user1-3', value: 'Active' },
+    ],
+  },
+  {
+    id: 'user2',
+    cells: [
+      { id: 'user2-0', value: 'Bob Smith' },
+      { id: 'user2-1', value: 'bob@example.com' },
+      { id: 'user2-2', value: 'Editor' },
+      { id: 'user2-3', value: 'Active' },
+    ],
+  },
+  {
+    id: 'user3',
+    cells: [
+      { id: 'user3-0', value: 'Charlie Brown' },
+      { id: 'user3-1', value: 'charlie@example.com', disabled: true },
+      { id: 'user3-2', value: 'Viewer' },
+      { id: 'user3-3', value: 'Inactive' },
+    ],
+  },
+  {
+    id: 'user4',
+    cells: [
+      { id: 'user4-0', value: 'Diana Prince' },
+      { id: 'user4-1', value: 'diana@example.com' },
+      { id: 'user4-2', value: 'Admin' },
+      { id: 'user4-3', value: 'Active' },
+    ],
+  },
+  {
+    id: 'user5',
+    cells: [
+      { id: 'user5-0', value: 'Eve Wilson' },
+      { id: 'user5-1', value: 'eve@example.com' },
+      { id: 'user5-2', value: 'Editor' },
+      { id: 'user5-3', value: 'Active' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Grid (Astro)</title>
+  </head>
+  <body>
+    <div class="apg-grid-demo">
+      <div class="apg-grid-demo__description">
+        <p>
+          Use arrow keys to navigate between cells. Press Space to select/deselect cells. Press
+          Enter to activate a cell.
+        </p>
+      </div>
+      <Grid
+        columns={columns}
+        rows={rows}
+        ariaLabel="User list"
+        selectable
+        multiselectable
+        renderCell={renderCell}
+        enablePageNavigation
+        pageSize={2}
+      />
+    </div>
+  </body>
+</html>

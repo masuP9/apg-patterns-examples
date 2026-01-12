@@ -1,0 +1,296 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">ネイティブHTMLとGridロール</h3>
+  <p class="text-muted-foreground mb-4">
+    <code>grid</code
+    >ロールは、2Dキーボードナビゲーションを備えたインタラクティブなデータグリッドを作成します。静的なデータテーブルには、代わりにネイティブの<code
+      >&lt;table&gt;</code
+    >要素を使用してください。<code>grid</code>は以下の場合に使用します：
+  </p>
+  <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+    <li>セルがフォーカス可能でインタラクティブ（編集可能、選択可能、またはウィジェットを含む）</li>
+    <li>セル間で2D矢印キーナビゲーションが必要</li>
+    <li>インターフェースがスプレッドシートやデータグリッドに類似している</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">対象要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>grid</code></td>
+          <td class="py-2 pr-4">コンテナ</td>
+          <td class="py-2">グリッドコンテナ（複合ウィジェット）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>row</code></td>
+          <td class="py-2 pr-4">行コンテナ</td>
+          <td class="py-2">セルを水平方向にグループ化</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>columnheader</code></td>
+          <td class="py-2 pr-4">ヘッダーセル</td>
+          <td class="py-2">列ヘッダー（この実装ではフォーカス不可）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>rowheader</code></td>
+          <td class="py-2 pr-4">行ヘッダーセル</td>
+          <td class="py-2">行ヘッダー（オプション）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>gridcell</code></td>
+          <td class="py-2 pr-4">データセル</td>
+          <td class="py-2">インタラクティブセル（フォーカス可能）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink href="https://w3c.github.io/aria/#grid" class="text-primary hover:underline">
+      WAI-ARIA grid ロール
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA プロパティ（グリッドコンテナ）</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="grid"</code></td>
+          <td class="py-2 pr-4">-</td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">コンテナをグリッドとして識別</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">文字列</td>
+          <td class="py-2 pr-4">はい*</td>
+          <td class="py-2">グリッドのアクセシブルな名前</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">ID参照</td>
+          <td class="py-2 pr-4">はい*</td>
+          <td class="py-2">aria-labelの代替</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">複数選択モード時のみ存在</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowcount</code></td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">総行数（仮想化用）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colcount</code></td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">総列数（仮想化用）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * <code>aria-label</code>または<code>aria-labelledby</code>のいずれかが必須です。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステート（グリッドセル）</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">属性</th>
+          <th class="py-2 pr-4 text-left">値</th>
+          <th class="py-2 pr-4 text-left">必須</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex</code></td>
+          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
+          <td class="py-2 pr-4">はい</td>
+          <td class="py-2">フォーカス管理用のroving tabindex</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">いいえ*</td>
+          <td class="py-2">グリッドが選択をサポートする場合に存在</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">セルが無効であることを示す</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowindex</code></td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">行位置（仮想化用）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colindex</code></td>
+          <td class="py-2 pr-4">数値</td>
+          <td class="py-2 pr-4">いいえ</td>
+          <td class="py-2">列位置（仮想化用）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * 選択をサポートする場合、すべてのgridcellに<code>aria-selected</code>が必要です。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">キーボード操作</h3>
+  <h4 class="mb-2 font-medium">2Dナビゲーション</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">動作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
+          >
+          <td class="py-2">フォーカスを右のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
+          >
+          <td class="py-2">フォーカスを左のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
+          >
+          <td class="py-2">フォーカスを下の行に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">フォーカスを上の行に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">フォーカスを行の最初のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">フォーカスを行の最後のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">フォーカスをグリッドの最初のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">フォーカスをグリッドの最後のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageDown</kbd></td
+          >
+          <td class="py-2">フォーカスをページサイズ分下に移動（デフォルト5）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageUp</kbd></td
+          >
+          <td class="py-2">フォーカスをページサイズ分上に移動（デフォルト5）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">選択とアクティベーション</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">動作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">フォーカス中のセルを選択/選択解除（選択可能時）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">フォーカス中のセルをアクティベート（onCellActivateをトリガー）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">フォーカス管理</h3>
+  <p class="text-muted-foreground mb-4">
+    このコンポーネントはフォーカス管理に<strong>roving tabindex</strong>を使用します：
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>1つのセルのみが<code>tabindex="0"</code>を持つ（フォーカス中のセル）</li>
+    <li>他のすべてのセルは<code>tabindex="-1"</code>を持つ</li>
+    <li>グリッドは単一のTabストップ（Tabでグリッドに入り、Shift+Tabで離脱）</li>
+    <li>
+      <strong>ヘッダーセル（columnheader）</strong>はフォーカス不可（この実装ではソート機能なし）
+    </li>
+    <li>データ行のgridcellのみがキーボードナビゲーションに含まれる</li>
+    <li>フォーカスメモリ：グリッドを離れて再入場した際、最後にフォーカスされたセルが記憶される</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">無効化セル</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li><code>aria-disabled="true"</code>を持つ</li>
+    <li>フォーカス可能（キーボードナビゲーションに含まれる）</li>
+    <li>選択またはアクティベートできない</li>
+    <li>視覚的に区別される（例：グレーアウト）</li>
+  </ul>
+</div>

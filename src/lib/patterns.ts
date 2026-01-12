@@ -130,7 +130,7 @@ export const PATTERNS: Pattern[] = [
       'A container that enables users to navigate the information or interactive elements using directional navigation keys.',
     icon: '📊',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'landmarks',
@@ -268,6 +268,24 @@ export const PATTERNS: Pattern[] = [
     description:
       'A widget that presents a hierarchical data grid consisting of tabular information that is editable or interactive.',
     icon: '📊',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
+    id: 'data-grid',
+    name: 'Data Grid',
+    description:
+      'An advanced grid for displaying and manipulating tabular data with sorting, filtering, and row selection.',
+    icon: '📋',
+    complexity: 'High',
+    status: 'planned',
+  },
+  {
+    id: 'editable-grid',
+    name: 'Editable Grid',
+    description:
+      'A spreadsheet-like grid with inline cell editing, dropdowns, and validation support.',
+    icon: '✏️',
     complexity: 'High',
     status: 'planned',
   },

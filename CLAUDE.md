@@ -326,6 +326,18 @@ npm run lint
 
 コードフォーマット規則とコードスタイル規約は [CODING_RULES.md](CODING_RULES.md) を参照。
 
+### E2E テストとページ確認
+
+- **ページの確認には Playwright を使用する**（curl ではなく）
+- Playwright の MCP ツール（`mcp__playwright__*`）を使用してブラウザでページを確認
+- DOM 構造や属性の確認も Playwright 経由で行う
+
+```typescript
+// 例: aria 属性の確認
+const grid = page.getByRole('grid');
+const rowcount = await grid.getAttribute('aria-rowcount');
+```
+
 ---
 
 ## 参考リンク

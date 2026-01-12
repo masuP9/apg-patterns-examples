@@ -1,12 +1,13 @@
 # TODO - APG Patterns Examples
 
-> 最終更新: 2026-01-04
+> 最終更新: 2026-01-12
 
 ## 現状
 
-**Astro 移行完了**
+**Astro 移行完了・大部分のパターン実装完了**
 
 Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの移行が完了。
+28 パターン中 27 パターンが実装済み。
 
 仕様詳細: [.internal/site-specification.md](.internal/site-specification.md)
 
@@ -16,13 +17,13 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 ### サイト完成
 
-- [ ] ガイドページ
-- [ ] About ページ
-- [ ] 404 ページ
+- [x] ガイドページ
+- [x] About ページ
+- [x] 404 ページ
 - [ ] Pagefind 検索設定
-- [ ] テスト整備（Vitest + Playwright）
-- [ ] GitHub Actions 設定更新
-- [ ] 動作確認・デプロイ
+- [x] テスト整備（Vitest + Playwright）
+- [x] GitHub Actions 設定更新
+- [x] 動作確認・デプロイ
 
 ---
 
@@ -30,70 +31,90 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 ### Tier 1 (高頻度使用)
 
-| パターン       | 状況      | 複雑度 |
-| -------------- | --------- | ------ |
-| Toggle Button  | ✅ 完了   | 低     |
-| Tabs           | ✅ 完了   | 中     |
-| Accordion      | ✅ 完了   | 中     |
-| Dialog (Modal) | ✅ 完了   | 高     |
-| Menu Button    | 📋 未実装 | 高     |
-| Disclosure     | ✅ 完了   | 低     |
-| Alert          | ✅ 完了   | 低     |
+| パターン       | 状況    | 複雑度 |
+| -------------- | ------- | ------ |
+| Toggle Button  | ✅ 完了 | 低     |
+| Tabs           | ✅ 完了 | 中     |
+| Accordion      | ✅ 完了 | 中     |
+| Dialog (Modal) | ✅ 完了 | 高     |
+| Menu Button    | ✅ 完了 | 中     |
+| Disclosure     | ✅ 完了 | 低     |
+| Alert          | ✅ 完了 | 低     |
 
 ### Tier 2 (中頻度使用)
 
-| パターン    | 状況      | 複雑度 |
-| ----------- | --------- | ------ |
-| Checkbox    | 📋 未実装 | 低     |
-| Radio Group | 📋 未実装 | 中     |
-| Switch      | ✅ 完了   | 低     |
-| Listbox     | ✅ 完了   | 高     |
-| Combobox    | 📋 未実装 | 高     |
-| Tooltip     | ✅ 完了   | 中     |
-| Breadcrumb  | 📋 未実装 | 低     |
-| Link        | 📋 未実装 | 低     |
+| パターン    | 状況    | 複雑度 |
+| ----------- | ------- | ------ |
+| Checkbox    | ✅ 完了 | 低     |
+| Radio Group | ✅ 完了 | 中     |
+| Switch      | ✅ 完了 | 低     |
+| Listbox     | ✅ 完了 | 高     |
+| Combobox    | ✅ 完了 | 高     |
+| Tooltip     | ✅ 完了 | 中     |
+| Breadcrumb  | ✅ 完了 | 低     |
+| Link        | ✅ 完了 | 低     |
 
 ### Tier 3-4 (特定用途・高度)
 
-| パターン        | 状況      | 複雑度 |
-| --------------- | --------- | ------ |
-| Toolbar         | ✅ 完了   | 中     |
-| Slider          | 📋 未実装 | 中     |
-| Spinbutton      | 📋 未実装 | 中     |
-| Meter           | 📋 未実装 | 低     |
-| Menu Bar        | 📋 未実装 | 高     |
-| Alert Dialog    | 📋 未実装 | 中     |
-| Carousel        | 📋 未実装 | 高     |
-| Grid            | 📋 未実装 | 高     |
-| Table           | 📋 未実装 | 中     |
-| Tree View       | 📋 未実装 | 高     |
-| Treegrid        | 📋 未実装 | 高     |
-| Feed            | 📋 未実装 | 中     |
-| Window Splitter | 📋 未実装 | 中     |
-| Landmarks       | 📋 未実装 | 低     |
+| パターン        | 状況      | 複雑度   |
+| --------------- | --------- | -------- |
+| Toolbar         | ✅ 完了   | 中       |
+| Menubar         | ✅ 完了   | 高       |
+| Grid            | ✅ 完了   | 高       |
+| Slider          | ✅ 完了   | 中       |
+| Spinbutton      | ✅ 完了   | 中       |
+| Meter           | ✅ 完了   | 低       |
+| Alert Dialog    | ✅ 完了   | 中       |
+| Carousel        | ✅ 完了   | 高       |
+| Table           | ✅ 完了   | 中       |
+| Tree View       | ✅ 完了   | 高       |
+| Feed            | ✅ 完了   | 中       |
+| Window Splitter | ✅ 完了   | 中       |
+| Landmarks       | ✅ 完了   | 低       |
+| Treegrid        | 📋 未実装 | 高       |
+| Data Grid       | 📋 未実装 | 非常に高 |
+| Editable Grid   | 📋 未実装 | 非常に高 |
 
 ---
 
 ## 技術スタック
 
-| 項目              | 技術                        |
-| ----------------- | --------------------------- |
-| フレームワーク    | Astro (Islands)             |
-| UI フレームワーク | React / Vue / Svelte        |
-| デモ表示          | フレームワーク別ページ方式  |
-| スタイリング      | Tailwind CSS                |
-| コード表示        | Shiki                       |
-| テスト            | Vitest + Playwright（予定） |
-| 多言語            | Astro i18n（予定）          |
-| 検索              | Pagefind（予定）            |
+| 項目              | 技術                 |
+| ----------------- | -------------------- |
+| フレームワーク    | Astro (Islands)      |
+| UI フレームワーク | React / Vue / Svelte |
+| デモ表示          | フレームワーク別ページ方式 |
+| スタイリング      | Tailwind CSS         |
+| コード表示        | Shiki                |
+| テスト            | Vitest + Playwright  |
+| 多言語            | Astro i18n           |
+| 検索              | Pagefind（未実装）   |
 
 ---
 
 ## 将来の計画
 
-- MCP (Model Context Protocol) 対応
-- npm パッケージ化
-- VS Code Extension
+### Phase 1: APG パターンの充実
+
+- [ ] Treegrid パターン
+- [ ] Data Grid パターン（詳細: [.internal/plans/grid-patterns-roadmap.md](.internal/plans/grid-patterns-roadmap.md)）
+- [ ] Editable Grid パターン
+
+### Phase 2: APG 以外のパターン
+
+- [ ] Toast / Snackbar（通知パターン）
+- [ ] Skeleton / Loading States
+- [ ] Infinite Scroll
+- [ ] Virtual List
+- [ ] その他、実プロダクトで頻出するパターン
+
+### 並行: 学習リソース・AI 対応の強化
+
+- [ ] llm.md の改善（より構造化された形式、トークン効率の向上）
+- [ ] インタラクティブなデモ体験（キーボード操作のガイド表示）
+- [ ] axe-core 連携（デモ上でアクセシビリティチェック結果を表示）
+- [ ] コピー可能な最小実装スニペット
+- [ ] Pagefind 検索機能
 
 ---
 
