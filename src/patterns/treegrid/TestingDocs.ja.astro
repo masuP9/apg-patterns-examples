@@ -1,0 +1,365 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストはキーボード操作、ARIA属性、アクセシビリティ要件にわたるAPG準拠を検証します。TreeGridコンポーネントはGridとTreeViewのテスト戦略を組み合わせています。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のTesting
+      Libraryユーティリティを使用して、コンポーネントのレンダリングとインタラクションを検証します。これらのテストはコンポーネントの動作を分離して確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML構造と要素階層（treegrid, row, rowheader, gridcell）</li>
+      <li>初期属性値（role, aria-label, aria-level, aria-expanded）</li>
+      <li>選択状態の変更（行のaria-selected）</li>
+      <li>階層の深さインジケーター（aria-level）</li>
+      <li>CSSクラスの適用</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      4つのすべてのフレームワークで、実際のブラウザ環境でコンポーネントの動作を検証します。これらのテストはフルブラウザコンテキストを必要とするインタラクションをカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>2Dキーボードナビゲーション（矢印キー）</li>
+      <li>rowheaderでのツリー操作（ArrowRight/Leftで展開/折りたたみ）</li>
+      <li>拡張ナビゲーション（Home, End, Ctrl+Home, Ctrl+End）</li>
+      <li>Spaceでの行選択</li>
+      <li>フォーカス管理とroving tabindex</li>
+      <li>非表示行の処理（折りたたまれた子要素）</li>
+      <li>クロスフレームワークの一貫性</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリー</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：APG ARIA属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="treegrid"</code></td>
+          <td class="py-2">コンテナがtreegridロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="row"</code></td>
+          <td class="py-2">すべての行がrowロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="rowheader"</code></td>
+          <td class="py-2">行の最初のセルがrowheaderロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="gridcell"</code></td>
+          <td class="py-2">その他のセルがgridcellロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="columnheader"</code></td>
+          <td class="py-2">ヘッダーセルがcolumnheaderロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2">TreeGridがaria-labelでアクセシブルな名前を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-level</code></td>
+          <td class="py-2">すべての行がaria-levelを持つ（1始まりの深さ）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-expanded</code></td>
+          <td class="py-2">親行がaria-expandedを持つ（true/false）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>行のaria-selected</code></td>
+          <td class="py-2">選択は行要素に（セルではなく）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2">複数選択が有効な場合に存在</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：ツリー操作（rowheaderにて）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRightで展開</code></td>
+          <td class="py-2">折りたたまれた親行を展開</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRightで子へ移動</code></td>
+          <td class="py-2">展開済みの場合、最初の子に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeftで折りたたみ</code></td>
+          <td class="py-2">展開された親行を折りたたむ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeftで親へ移動</code></td>
+          <td class="py-2">折りたたみ済みまたはリーフの場合、親行に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enterはアクティベートのみ</code></td>
+          <td class="py-2">Enterは展開/折りたたみをしない（Treeと異なる）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>子要素の非表示</code></td>
+          <td class="py-2">親が折りたたまれると子行が非表示に</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：2Dキーボードナビゲーション
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowRight（非rowheader）</code></td>
+          <td class="py-2">フォーカスを右に1セル移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowLeft（非rowheader）</code></td>
+          <td class="py-2">フォーカスを左に1セル移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowDown</code></td>
+          <td class="py-2">フォーカスを次の可視行に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ArrowUp</code></td>
+          <td class="py-2">フォーカスを前の可視行に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>非表示行のスキップ</code></td>
+          <td class="py-2">ArrowDown/Upで折りたたまれた子をスキップ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：拡張ナビゲーション
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Home</code></td>
+          <td class="py-2">フォーカスを行の最初のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>End</code></td>
+          <td class="py-2">フォーカスを行の最後のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+Home</code></td>
+          <td class="py-2">フォーカスを最初の可視行の最初のセルに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+End</code></td>
+          <td class="py-2">フォーカスを最後の可視行の最後のセルに移動</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：フォーカス管理 (Roving Tabindex)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">最初のフォーカス可能なセルがtabindex="0"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">他のセルがtabindex="-1"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ヘッダーはフォーカス不可</code></td>
+          <td class="py-2">columnheaderセルにtabindexがない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tabでtreegrid離脱</code></td>
+          <td class="py-2">Tabでフォーカスがtreegrid外に移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>フォーカス更新</code></td>
+          <td class="py-2">ナビゲーション時にフォーカスセルのtabindexが更新される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度：行選択
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Spaceで行トグル</code></td>
+          <td class="py-2">Spaceで行選択をトグル（セルではなく）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>単一選択</code></td>
+          <td class="py-2">単一選択モードではSpaceで前の選択をクリア</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>複数選択</code></td>
+          <td class="py-2">複数選択モードでは複数行を選択可能</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enterでセルアクティベート</code></td>
+          <td class="py-2">Enterでセルをアクティベート</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    中優先度：アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe-core</code></td>
+          <td class="py-2">アクセシビリティ違反がないこと</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Gridとの主な違い</h3>
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>
+        <strong>選択対象:</strong> TreeGridは<em>行</em>を選択（行のaria-selected）、Gridは<em
+          >セル</em
+        >を選択
+      </li>
+      <li>
+        <strong>rowheaderでの矢印動作:</strong>
+        ArrowRight/Leftはツリー操作を行い、セルナビゲーションではない
+      </li>
+      <li>
+        <strong>階層:</strong> aria-levelの値と親子関係をテストする必要がある
+      </li>
+      <li><strong>非表示行:</strong> ナビゲーション中に折りたたまれた子をスキップ</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">
+        Vitest
+      </ExternalLink>
+      - ユニットテスト用テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
+        Testing Library
+      </ExternalLink>
+      - フレームワーク固有のテストユーティリティ（React, Vue, Svelte）
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
+      </ExternalLink>
+      - E2Eテスト用ブラウザ自動化
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline"
+      >
+        axe-core/playwright
+      </ExternalLink>
+      - E2Eでの自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細は
+    <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline"
+    >
+      testing-strategy.md
+    </ExternalLink>
+    を参照してください。
+  </p>
+</div>

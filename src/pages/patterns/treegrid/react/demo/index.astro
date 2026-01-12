@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: TreeGridDemo (React)
+ *
+ * This page renders the TreeGridDemo component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct treegrid structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import { TreeGridDemo } from '@patterns/treegrid/TreeGridDemo';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: TreeGrid (React)</title>
+  </head>
+  <body>
+    <TreeGridDemo client:load />
+  </body>
+</html>
