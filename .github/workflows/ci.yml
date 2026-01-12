@@ -107,9 +107,36 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+  # Setup Playwright browsers once, cache for E2E jobs
+  setup-playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
   test-e2e-framework:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, setup-playwright]
     strategy:
       fail-fast: false
       matrix:
@@ -137,21 +164,14 @@ jobs:
           name: dist
           path: ./dist
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
+      - name: Restore Playwright browsers from cache
+        uses: actions/cache/restore@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
+          fail-on-cache-miss: true
 
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install Playwright dependencies (cached)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - name: Install Playwright system dependencies
         run: npx playwright install-deps chromium
 
       - name: Run E2E tests (${{ matrix.framework }})
