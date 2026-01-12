@@ -269,7 +269,7 @@ export const PATTERNS: Pattern[] = [
       'A widget that presents a hierarchical data grid consisting of tabular information that is editable or interactive.',
     icon: '📊',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'data-grid',

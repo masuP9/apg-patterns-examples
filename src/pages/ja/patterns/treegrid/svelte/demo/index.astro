@@ -1,0 +1,27 @@
+---
+/**
+ * Demo-only Page: TreeGridDemo (Svelte) - Japanese
+ *
+ * This page renders the TreeGridDemoJa component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct treegrid structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import TreeGridDemoJa from '@patterns/treegrid/TreeGridDemoJa.svelte';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: TreeGrid (Svelte)</title>
+  </head>
+  <body>
+    <TreeGridDemoJa client:load />
+  </body>
+</html>

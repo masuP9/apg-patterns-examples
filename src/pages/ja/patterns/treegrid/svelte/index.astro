@@ -1,0 +1,256 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import TreeGridDemoJa from '@patterns/treegrid/TreeGridDemoJa.svelte';
+import AccessibilityDocs from '@patterns/treegrid/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/treegrid/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/treegrid/TreeGrid.svelte?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'treegrid-vs-grid', text: 'TreeGrid vs Grid' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="TreeGrid - Svelte"
+  pattern="treegrid"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">TreeGrid</h1>
+    <p class="text-muted-foreground text-lg">
+      Gridの2Dナビゲーションと、TreeViewの展開可能な行を組み合わせた階層データグリッド。
+    </p>
+    <AiGuideBadge pattern="treegrid" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="treegrid" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4 text-sm">
+      矢印キーで移動。rowheaderでArrowRight/Leftで展開/折りたたみ。Spaceで行を選択。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <TreeGridDemoJa client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- TreeGrid vs Grid Section -->
+  <section class="mb-12">
+    <Heading level={2} id="treegrid-vs-grid" class="mb-4 text-xl font-semibold">
+      TreeGrid vs Grid
+    </Heading>
+    <p class="text-muted-foreground mb-4">
+      展開/折りたたみ可能な階層データには<code>treegrid</code>ロールを使用します。
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">機能</th>
+            <th class="py-2 pr-4 text-left">TreeGrid</th>
+            <th class="py-2 text-left">Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">階層</td>
+            <td class="py-2 pr-4">展開/折りたたみ可能な行</td>
+            <td class="py-2">フラット構造</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">選択</td>
+            <td class="py-2 pr-4">行選択（行のaria-selected）</td>
+            <td class="py-2">セル選択（セルのaria-selected）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">rowheaderでの矢印</td>
+            <td class="py-2 pr-4">ツリーの展開/折りたたみ</td>
+            <td class="py-2">フォーカス移動</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">必須ARIA</td>
+            <td class="py-2 pr-4">aria-level, aria-expanded</td>
+            <td class="py-2">なし（階層固有）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="TreeGrid.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+  import TreeGrid from './TreeGrid.svelte';
+
+  const columns = [
+    { id: 'name', header: '名前', isRowHeader: true },
+    { id: 'size', header: 'サイズ' },
+  ];
+
+  const nodes = [
+    {
+      id: 'folder1',
+      cells: [
+        { id: 'folder1-name', value: 'ドキュメント' },
+        { id: 'folder1-size', value: '--' },
+      ],
+      children: [
+        {
+          id: 'file1',
+          cells: [
+            { id: 'file1-name', value: 'レポート.pdf' },
+            { id: 'file1-size', value: '2.5 MB' },
+          ],
+        },
+      ],
+    },
+  ];
+
+  let expandedIds = $state(['folder1']);
+  let selectedRowIds = $state([]);
+</script>
+
+<TreeGrid
+  {columns}
+  {nodes}
+  ariaLabel="ファイルブラウザ"
+  selectable
+  multiselectable
+  {expandedIds}
+  {selectedRowIds}
+  onExpandedChange={(ids) => expandedIds = ids}
+  onSelectionChange={(ids) => selectedRowIds = ids}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeGridColumnDef[]</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>nodes</code></td>
+            <td class="text-muted-foreground py-2 pr-4">TreeGridNodeData[]</td>
+            <td class="py-2">階層ノードデータ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>expandedIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">展開された行ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>selectedRowIds</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">選択された行ID</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onExpandedChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="py-2">展開状態変更コールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="py-2">選択変更コールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: TreeGrid パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="treegrid" locale={locale} />
+    </ul>
+  </section>
+</PatternLayout>

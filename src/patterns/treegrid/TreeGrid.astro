@@ -1,0 +1,724 @@
+---
+// =============================================================================
+// Types
+// =============================================================================
+
+export interface TreeGridCellData {
+  id: string;
+  value: string | number;
+  disabled?: boolean;
+  colspan?: number;
+}
+
+export interface TreeGridNodeData {
+  id: string;
+  cells: TreeGridCellData[];
+  children?: TreeGridNodeData[];
+  disabled?: boolean;
+}
+
+export interface TreeGridColumnDef {
+  id: string;
+  header: string;
+  isRowHeader?: boolean;
+}
+
+interface FlatRow {
+  node: TreeGridNodeData;
+  level: number;
+  parentId: string | null;
+  hasChildren: boolean;
+}
+
+interface Props {
+  columns: TreeGridColumnDef[];
+  nodes: TreeGridNodeData[];
+  ariaLabel?: string;
+  ariaLabelledby?: string;
+  defaultExpandedIds?: string[];
+  selectable?: boolean;
+  multiselectable?: boolean;
+  defaultSelectedRowIds?: string[];
+  defaultFocusedCellId?: string;
+  totalRows?: number;
+  totalColumns?: number;
+  startRowIndex?: number;
+  startColIndex?: number;
+  enablePageNavigation?: boolean;
+  pageSize?: number;
+  class?: string;
+  renderCell?: (cell: TreeGridCellData, rowId: string, colId: string) => string;
+}
+
+// =============================================================================
+// Props
+// =============================================================================
+
+const {
+  columns,
+  nodes,
+  ariaLabel,
+  ariaLabelledby,
+  defaultExpandedIds = [],
+  selectable = false,
+  multiselectable = false,
+  defaultSelectedRowIds = [],
+  defaultFocusedCellId,
+  totalRows,
+  totalColumns,
+  startRowIndex = 2,
+  startColIndex = 1,
+  enablePageNavigation = false,
+  pageSize = 5,
+  class: className,
+  renderCell,
+} = Astro.props;
+
+// =============================================================================
+// Flatten Tree
+// =============================================================================
+
+function flattenTree(
+  treeNodes: TreeGridNodeData[],
+  level: number = 1,
+  parentId: string | null = null
+): FlatRow[] {
+  const result: FlatRow[] = [];
+  for (const node of treeNodes) {
+    const hasChildren = Boolean(node.children && node.children.length > 0);
+    result.push({ node, level, parentId, hasChildren });
+    if (node.children) {
+      result.push(...flattenTree(node.children, level + 1, node.id));
+    }
+  }
+  return result;
+}
+
+const allRows = flattenTree(nodes);
+const expandedIdsSet = new Set(defaultExpandedIds);
+
+// Determine if a row should be initially hidden
+function isRowInitiallyHidden(flatRow: FlatRow): boolean {
+  let currentParentId = flatRow.parentId;
+  while (currentParentId) {
+    if (!expandedIdsSet.has(currentParentId)) {
+      return true;
+    }
+    const parent = allRows.find((r) => r.node.id === currentParentId);
+    currentParentId = parent?.parentId ?? null;
+  }
+  return false;
+}
+
+// Find first visible row for initial focus
+const firstVisibleRow = allRows.find((row) => !isRowInitiallyHidden(row));
+const initialFocusedId = defaultFocusedCellId ?? firstVisibleRow?.node.cells[0]?.id ?? null;
+
+function getRowAriaExpanded(flatRow: FlatRow): 'true' | 'false' | undefined {
+  if (!flatRow.hasChildren) return undefined;
+  return expandedIdsSet.has(flatRow.node.id) ? 'true' : 'false';
+}
+
+function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
+  if (!selectable) return undefined;
+  return defaultSelectedRowIds.includes(flatRow.node.id) ? 'true' : 'false';
+}
+---
+
+<apg-treegrid
+  class={`apg-treegrid ${className ?? ''}`}
+  data-enable-page-navigation={enablePageNavigation}
+  data-page-size={pageSize}
+  data-selectable={selectable}
+  data-multiselectable={multiselectable}
+  data-all-rows={JSON.stringify(allRows)}
+  data-columns={JSON.stringify(columns)}
+>
+  <div
+    role="treegrid"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-multiselectable={multiselectable ? 'true' : undefined}
+    aria-rowcount={totalRows}
+    aria-colcount={totalColumns}
+  >
+    {/* Header Row */}
+    <div role="row" aria-rowindex={totalRows ? 1 : undefined}>
+      {
+        columns.map((col, colIndex) => (
+          <div
+            role="columnheader"
+            aria-colindex={totalColumns ? startColIndex + colIndex : undefined}
+            data-col-id={col.id}
+            data-is-row-header={col.isRowHeader ? 'true' : undefined}
+          >
+            {col.header}
+          </div>
+        ))
+      }
+    </div>
+
+    {/* Data Rows - render ALL rows, hide children of collapsed parents */}
+    {
+      allRows.map((flatRow, rowIndex) => {
+        const isHidden = isRowInitiallyHidden(flatRow);
+        return (
+          <div
+            role="row"
+            aria-level={flatRow.level}
+            aria-expanded={getRowAriaExpanded(flatRow)}
+            aria-selected={getRowAriaSelected(flatRow)}
+            aria-disabled={flatRow.node.disabled ? 'true' : undefined}
+            aria-rowindex={totalRows ? startRowIndex + rowIndex : undefined}
+            data-row-id={flatRow.node.id}
+            data-parent-id={flatRow.parentId}
+            data-has-children={flatRow.hasChildren ? 'true' : undefined}
+            data-level={flatRow.level}
+            style={isHidden ? 'display: none' : undefined}
+          >
+            {flatRow.node.cells.map((cell, colIndex) => {
+              const isRowHeader = columns[colIndex]?.isRowHeader ?? false;
+              const isFocused = cell.id === initialFocusedId;
+              const colId = columns[colIndex]?.id ?? '';
+              const paddingLeft = isRowHeader ? `${(flatRow.level - 1) * 20 + 8}px` : undefined;
+
+              return (
+                <div
+                  role={isRowHeader ? 'rowheader' : 'gridcell'}
+                  tabindex={isFocused ? 0 : -1}
+                  aria-disabled={cell.disabled || flatRow.node.disabled ? 'true' : undefined}
+                  aria-colindex={totalColumns ? startColIndex + colIndex : undefined}
+                  aria-colspan={cell.colspan}
+                  data-cell-id={cell.id}
+                  data-row-id={flatRow.node.id}
+                  data-col-id={colId}
+                  data-row-index={rowIndex}
+                  data-col-index={colIndex}
+                  data-is-row-header={isRowHeader ? 'true' : undefined}
+                  data-disabled={cell.disabled || flatRow.node.disabled ? 'true' : undefined}
+                  class={`apg-treegrid-cell ${isFocused ? 'focused' : ''} ${defaultSelectedRowIds.includes(flatRow.node.id) ? 'selected' : ''} ${cell.disabled || flatRow.node.disabled ? 'disabled' : ''}`}
+                  style={paddingLeft ? `padding-left: ${paddingLeft}` : undefined}
+                >
+                  {isRowHeader && flatRow.hasChildren && (
+                    <span class="expand-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 6 15 12 9 18" />
+                      </svg>
+                    </span>
+                  )}
+                  {renderCell ? (
+                    <Fragment set:html={renderCell(cell, flatRow.node.id, colId)} />
+                  ) : (
+                    cell.value
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })
+    }
+  </div>
+</apg-treegrid>
+
+<script>
+  interface FlatRowData {
+    node: {
+      id: string;
+      cells: { id: string; value: string | number; disabled?: boolean; colspan?: number }[];
+      children?: FlatRowData['node'][];
+      disabled?: boolean;
+    };
+    level: number;
+    parentId: string | null;
+    hasChildren: boolean;
+  }
+
+  interface ColumnDef {
+    id: string;
+    header: string;
+    isRowHeader?: boolean;
+  }
+
+  class ApgTreeGrid extends HTMLElement {
+    private focusedCellId: string | null = null;
+    private selectedRowIds: Set<string> = new Set();
+    private expandedIds: Set<string> = new Set();
+    private enablePageNavigation = false;
+    private pageSize = 5;
+    private selectable = false;
+    private multiselectable = false;
+    private allRows: FlatRowData[] = [];
+    private columns: ColumnDef[] = [];
+
+    connectedCallback() {
+      this.enablePageNavigation = this.dataset.enablePageNavigation === 'true';
+      this.pageSize = parseInt(this.dataset.pageSize || '5', 10);
+      this.selectable = this.dataset.selectable === 'true';
+      this.multiselectable = this.dataset.multiselectable === 'true';
+
+      try {
+        this.allRows = JSON.parse(this.dataset.allRows || '[]');
+        this.columns = JSON.parse(this.dataset.columns || '[]');
+      } catch {
+        this.allRows = [];
+        this.columns = [];
+      }
+
+      // Find initial focused cell
+      const focusedCell = this.querySelector<HTMLElement>('[tabindex="0"]');
+      this.focusedCellId = focusedCell?.dataset.cellId ?? null;
+
+      // Load initial expanded ids from DOM
+      this.querySelectorAll<HTMLElement>('[aria-expanded="true"]').forEach((el) => {
+        const rowId = el.dataset.rowId;
+        if (rowId) this.expandedIds.add(rowId);
+      });
+
+      // Load initial selected row ids
+      this.querySelectorAll<HTMLElement>('[aria-selected="true"]').forEach((el) => {
+        const rowId = el.dataset.rowId;
+        if (rowId) this.selectedRowIds.add(rowId);
+      });
+
+      // Set tabindex="-1" on all focusable elements inside cells
+      this.querySelectorAll<HTMLElement>(
+        '[role="gridcell"] a[href], [role="gridcell"] button, [role="rowheader"] a[href], [role="rowheader"] button'
+      ).forEach((el) => {
+        el.setAttribute('tabindex', '-1');
+      });
+
+      // Add event listeners
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          cell.addEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+          cell.addEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+        }
+      );
+    }
+
+    disconnectedCallback() {
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          cell.removeEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+          cell.removeEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+        }
+      );
+    }
+
+    private getVisibleRows(): HTMLElement[] {
+      return Array.from(this.querySelectorAll<HTMLElement>('[role="row"][aria-level]'));
+    }
+
+    private getColumnCount(): number {
+      return this.querySelectorAll('[role="columnheader"]').length;
+    }
+
+    private getCellAt(rowIndex: number, colIndex: number): HTMLElement | null {
+      const rows = this.getVisibleRows();
+      const row = rows[rowIndex];
+      if (!row) return null;
+      const cells = row.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+      return cells[colIndex] as HTMLElement | null;
+    }
+
+    private focusCell(cell: HTMLElement) {
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+
+      const focusableChild = cell.querySelector<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableChild) {
+        focusableChild.setAttribute('tabindex', '-1');
+        focusableChild.focus();
+      } else {
+        cell.focus();
+      }
+      this.focusedCellId = cell.dataset.cellId ?? null;
+    }
+
+    private handleFocus(event: Event) {
+      const cell = event.currentTarget as HTMLElement;
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== cell) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      this.focusedCellId = cell.dataset.cellId ?? null;
+    }
+
+    private expandRow(rowId: string) {
+      const row = this.querySelector<HTMLElement>(`[role="row"][data-row-id="${rowId}"]`);
+      if (!row) return;
+      if (row.dataset.hasChildren !== 'true') return;
+      if (row.getAttribute('aria-disabled') === 'true') return;
+      if (this.expandedIds.has(rowId)) return;
+
+      this.expandedIds.add(rowId);
+      row.setAttribute('aria-expanded', 'true');
+
+      // Show child rows
+      this.updateVisibleRows();
+
+      this.dispatchEvent(
+        new CustomEvent('expanded-change', {
+          detail: { expandedIds: Array.from(this.expandedIds) },
+        })
+      );
+    }
+
+    private collapseRow(rowId: string, currentColIndex: number) {
+      const row = this.querySelector<HTMLElement>(`[role="row"][data-row-id="${rowId}"]`);
+      if (!row) return;
+      if (row.dataset.hasChildren !== 'true') return;
+      if (row.getAttribute('aria-disabled') === 'true') return;
+      if (!this.expandedIds.has(rowId)) return;
+
+      this.expandedIds.delete(rowId);
+      row.setAttribute('aria-expanded', 'false');
+
+      // Check if focus was on a descendant - if so, move focus to parent's cell
+      if (this.focusedCellId) {
+        const focusedCell = this.querySelector<HTMLElement>(
+          `[data-cell-id="${this.focusedCellId}"]`
+        );
+        if (focusedCell) {
+          const focusedRowId = focusedCell.dataset.rowId;
+          if (focusedRowId && this.isDescendantOf(focusedRowId, rowId)) {
+            // Move focus to parent row's same column
+            const cells = row.querySelectorAll<HTMLElement>(
+              '[role="gridcell"], [role="rowheader"]'
+            );
+            const targetCell = cells[currentColIndex] as HTMLElement | null;
+            if (targetCell) {
+              this.focusCell(targetCell);
+            }
+          }
+        }
+      }
+
+      // Hide child rows
+      this.updateVisibleRows();
+
+      this.dispatchEvent(
+        new CustomEvent('expanded-change', {
+          detail: { expandedIds: Array.from(this.expandedIds) },
+        })
+      );
+    }
+
+    private isDescendantOf(childRowId: string, parentRowId: string): boolean {
+      const childRow = this.allRows.find((r) => r.node.id === childRowId);
+      if (!childRow) return false;
+
+      let currentParentId = childRow.parentId;
+      while (currentParentId) {
+        if (currentParentId === parentRowId) return true;
+        const parent = this.allRows.find((r) => r.node.id === currentParentId);
+        currentParentId = parent?.parentId ?? null;
+      }
+      return false;
+    }
+
+    private updateVisibleRows() {
+      // Show/hide rows based on expanded state
+      const rows = this.querySelectorAll<HTMLElement>('[role="row"][aria-level]');
+      rows.forEach((row) => {
+        const rowId = row.dataset.rowId;
+        if (!rowId) return;
+
+        const flatRow = this.allRows.find((r) => r.node.id === rowId);
+        if (!flatRow) return;
+
+        let isHidden = false;
+        let currentParentId = flatRow.parentId;
+        while (currentParentId) {
+          if (!this.expandedIds.has(currentParentId)) {
+            isHidden = true;
+            break;
+          }
+          const parent = this.allRows.find((r) => r.node.id === currentParentId);
+          currentParentId = parent?.parentId ?? null;
+        }
+
+        row.style.display = isHidden ? 'none' : '';
+      });
+    }
+
+    private toggleRowSelection(rowId: string, rowDisabled: boolean) {
+      if (!this.selectable || rowDisabled) return;
+
+      const row = this.querySelector<HTMLElement>(`[role="row"][data-row-id="${rowId}"]`);
+      if (!row) return;
+
+      if (this.multiselectable) {
+        if (this.selectedRowIds.has(rowId)) {
+          this.selectedRowIds.delete(rowId);
+          row.setAttribute('aria-selected', 'false');
+          row
+            .querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]')
+            .forEach((cell) => {
+              cell.classList.remove('selected');
+            });
+        } else {
+          this.selectedRowIds.add(rowId);
+          row.setAttribute('aria-selected', 'true');
+          row
+            .querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]')
+            .forEach((cell) => {
+              cell.classList.add('selected');
+            });
+        }
+      } else {
+        // Clear previous selection
+        this.querySelectorAll('[aria-selected="true"]').forEach((el) => {
+          el.setAttribute('aria-selected', 'false');
+          el.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+            (cell) => {
+              cell.classList.remove('selected');
+            }
+          );
+        });
+        this.selectedRowIds.clear();
+
+        if (!this.selectedRowIds.has(rowId)) {
+          this.selectedRowIds.add(rowId);
+          row.setAttribute('aria-selected', 'true');
+          row
+            .querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]')
+            .forEach((cell) => {
+              cell.classList.add('selected');
+            });
+        }
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedRowIds: Array.from(this.selectedRowIds) },
+        })
+      );
+    }
+
+    private selectAllVisibleRows() {
+      if (!this.selectable || !this.multiselectable) return;
+
+      this.getVisibleRows().forEach((row) => {
+        if (row.style.display === 'none') return;
+        if (row.getAttribute('aria-disabled') === 'true') return;
+
+        const rowId = row.dataset.rowId;
+        if (rowId) {
+          this.selectedRowIds.add(rowId);
+          row.setAttribute('aria-selected', 'true');
+          row
+            .querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]')
+            .forEach((cell) => {
+              cell.classList.add('selected');
+            });
+        }
+      });
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedRowIds: Array.from(this.selectedRowIds) },
+        })
+      );
+    }
+
+    private handleKeyDown(event: KeyboardEvent) {
+      const cell = event.currentTarget as HTMLElement;
+      const { key, ctrlKey } = event;
+      const {
+        rowIndex: rowIndexStr,
+        colIndex: colIndexStr,
+        disabled,
+        cellId,
+        rowId,
+        colId,
+        isRowHeader,
+      } = cell.dataset;
+      const rowIndex = parseInt(rowIndexStr || '0', 10);
+      const colIndex = parseInt(colIndexStr || '0', 10);
+      const colCount = this.getColumnCount();
+      const visibleRows = this.getVisibleRows().filter((r) => r.style.display !== 'none');
+      const currentRow = cell.closest<HTMLElement>('[role="row"]');
+
+      let handled = true;
+
+      switch (key) {
+        case 'ArrowRight': {
+          const hasChildren = currentRow?.dataset.hasChildren === 'true';
+          const rowDisabled = currentRow?.getAttribute('aria-disabled') === 'true';
+          const isExpanded = rowId ? this.expandedIds.has(rowId) : false;
+
+          if (isRowHeader === 'true' && hasChildren && !rowDisabled && !isExpanded) {
+            // Collapsed parent at rowheader: expand
+            this.expandRow(rowId!);
+          } else {
+            // Expanded parent at rowheader, leaf row at rowheader, or non-rowheader: move right
+            if (colIndex < colCount - 1) {
+              const currentRowEl = cell.closest('[role="row"]');
+              const cells = currentRowEl?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+              const nextCell = cells?.[colIndex + 1] as HTMLElement | null;
+              if (nextCell) this.focusCell(nextCell);
+            }
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          if (isRowHeader === 'true') {
+            const rowDisabled = currentRow?.getAttribute('aria-disabled') === 'true';
+            const isExpanded = rowId ? this.expandedIds.has(rowId) : false;
+            const hasChildren = currentRow?.dataset.hasChildren === 'true';
+
+            if (hasChildren && isExpanded && !rowDisabled) {
+              this.collapseRow(rowId!, colIndex);
+            } else if (currentRow?.dataset.parentId) {
+              // Move to parent row's same column
+              const parentRow = this.querySelector<HTMLElement>(
+                `[role="row"][data-row-id="${currentRow.dataset.parentId}"]`
+              );
+              if (parentRow && parentRow.style.display !== 'none') {
+                const parentCells = parentRow.querySelectorAll<HTMLElement>(
+                  '[role="gridcell"], [role="rowheader"]'
+                );
+                const parentCell = parentCells[colIndex];
+                if (parentCell) this.focusCell(parentCell);
+              }
+            }
+          } else {
+            // Move left
+            if (colIndex > 0) {
+              const currentRowEl = cell.closest('[role="row"]');
+              const cells = currentRowEl?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+              const prevCell = cells?.[colIndex - 1] as HTMLElement | null;
+              if (prevCell) this.focusCell(prevCell);
+            }
+          }
+          break;
+        }
+        case 'ArrowDown': {
+          const currentVisibleIndex = visibleRows.findIndex(
+            (r) => r.style.display !== 'none' && r.dataset.rowId === rowId
+          );
+          const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
+          const actualIndex = visibleOnly.indexOf(currentRow!);
+          if (actualIndex < visibleOnly.length - 1) {
+            const nextRow = visibleOnly[actualIndex + 1];
+            const cells = nextRow.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const nextCell = cells[colIndex] as HTMLElement | null;
+            if (nextCell) this.focusCell(nextCell);
+          }
+          break;
+        }
+        case 'ArrowUp': {
+          const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
+          const actualIndex = visibleOnly.indexOf(currentRow!);
+          if (actualIndex > 0) {
+            const prevRow = visibleOnly[actualIndex - 1];
+            const cells = prevRow.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const prevCell = cells[colIndex] as HTMLElement | null;
+            if (prevCell) this.focusCell(prevCell);
+          }
+          break;
+        }
+        case 'Home': {
+          if (ctrlKey) {
+            const firstCell = this.getCellAt(0, 0);
+            if (firstCell) this.focusCell(firstCell);
+          } else {
+            const currentRowEl = cell.closest('[role="row"]');
+            const cells = currentRowEl?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const firstCell = cells?.[0] as HTMLElement | null;
+            if (firstCell) this.focusCell(firstCell);
+          }
+          break;
+        }
+        case 'End': {
+          if (ctrlKey) {
+            const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
+            const lastRow = visibleOnly[visibleOnly.length - 1];
+            const cells = lastRow?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const lastCell = cells?.[cells.length - 1] as HTMLElement | null;
+            if (lastCell) this.focusCell(lastCell);
+          } else {
+            const currentRowEl = cell.closest('[role="row"]');
+            const cells = currentRowEl?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const lastCell = cells?.[cells.length - 1] as HTMLElement | null;
+            if (lastCell) this.focusCell(lastCell);
+          }
+          break;
+        }
+        case 'PageDown': {
+          if (this.enablePageNavigation) {
+            const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
+            const actualIndex = visibleOnly.indexOf(currentRow!);
+            const targetIndex = Math.min(actualIndex + this.pageSize, visibleOnly.length - 1);
+            const targetRow = visibleOnly[targetIndex];
+            const cells = targetRow?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const targetCell = cells?.[colIndex] as HTMLElement | null;
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case 'PageUp': {
+          if (this.enablePageNavigation) {
+            const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
+            const actualIndex = visibleOnly.indexOf(currentRow!);
+            const targetIndex = Math.max(actualIndex - this.pageSize, 0);
+            const targetRow = visibleOnly[targetIndex];
+            const cells = targetRow?.querySelectorAll('[role="gridcell"], [role="rowheader"]');
+            const targetCell = cells?.[colIndex] as HTMLElement | null;
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case ' ': {
+          const rowDisabled = currentRow?.getAttribute('aria-disabled') === 'true';
+          this.toggleRowSelection(rowId!, rowDisabled);
+          break;
+        }
+        case 'Enter': {
+          // Enter activates cell, does NOT expand/collapse
+          if (disabled !== 'true') {
+            this.dispatchEvent(
+              new CustomEvent('cell-activate', {
+                detail: { cellId, rowId, colId },
+              })
+            );
+          }
+          break;
+        }
+        case 'a': {
+          if (ctrlKey) {
+            this.selectAllVisibleRows();
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  }
+
+  customElements.define('apg-treegrid', ApgTreeGrid);
+</script>
