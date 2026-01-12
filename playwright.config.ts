@@ -52,7 +52,7 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: 2,
-  reporter: isCI ? 'github' : 'html',
+  reporter: isCI ? [['github'], ['html', { open: 'never' }]] : 'html',
   // Filter tests by framework if E2E_FRAMEWORK is set
   grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,
   use: {
