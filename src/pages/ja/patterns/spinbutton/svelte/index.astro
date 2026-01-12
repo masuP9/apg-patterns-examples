@@ -1,0 +1,301 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Spinbutton from '@patterns/spinbutton/Spinbutton.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/spinbutton/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/spinbutton/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/spinbutton/NativeHtmlNotice.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/spinbutton/Spinbutton.svelte?raw';
+import testCode from '@patterns/spinbutton/Spinbutton.test.svelte.ts?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'デモ' },
+  { id: 'native-html', text: 'ネイティブ HTML' },
+  { id: 'accessibility-features', text: 'アクセシビリティ機能' },
+  { id: 'source-code', text: 'ソースコード' },
+  { id: 'usage', text: '使用方法' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'テスト' },
+  { id: 'resources', text: 'リソース' },
+];
+---
+
+<PatternLayout
+  title="スピンボタン - Svelte"
+  pattern="spinbutton"
+  framework="svelte"
+  tocItems={tocItems}
+  locale="ja"
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">スピンボタン</h1>
+    <p class="text-muted-foreground text-lg">
+      増減ボタン、矢印キー、または直接入力を使用して、離散的なセットまたは範囲から値を選択できる入力ウィジェットです。
+    </p>
+    <AiGuideBadge pattern="spinbutton" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="spinbutton" currentFramework="svelte" locale="ja" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">デモ</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-6">
+        <div>
+          <Spinbutton client:load defaultValue={5} min={0} max={100} label="数量" />
+        </div>
+        <div>
+          <Spinbutton
+            client:load
+            defaultValue={3}
+            min={1}
+            max={10}
+            label="評価"
+            format="{value} / {max}"
+          />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={0.5} min={0} max={1} step={0.1} label="不透明度" />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={0} label="無制限" showButtons={true} />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={50} min={0} max={100} label="読み取り専用" readOnly />
+        </div>
+        <div>
+          <Spinbutton client:load defaultValue={50} min={0} max={100} label="無効" disabled />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">アクセシビリティ機能</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">ソースコード</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="Spinbutton.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">使用方法</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import Spinbutton from './Spinbutton.svelte';
+
+  function handleChange(value) {
+    console.log(value);
+  }
+</script>
+
+<!-- Basic usage with aria-label -->
+<Spinbutton aria-label="Quantity" />
+
+<!-- With visible label and min/max -->
+<Spinbutton
+  defaultValue={5}
+  min={0}
+  max={100}
+  label="Quantity"
+/>
+
+<!-- With format for display and aria-valuetext -->
+<Spinbutton
+  defaultValue={3}
+  min={1}
+  max={10}
+  label="Rating"
+  format="{value} of {max}"
+/>
+
+<!-- Decimal step values -->
+<Spinbutton
+  defaultValue={0.5}
+  min={0}
+  max={1}
+  step={0.1}
+  label="Opacity"
+/>
+
+<!-- Unbounded (no min/max limits) -->
+<Spinbutton
+  defaultValue={0}
+  label="Counter"
+/>
+
+<!-- With callback -->
+<Spinbutton
+  defaultValue={5}
+  min={0}
+  max={100}
+  label="Value"
+  onvaluechange={handleChange}
+/>`}
+      lang="svelte"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">API</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">スピンボタンの初期値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">undefined</td>
+            <td class="py-2">最小値（undefined = 制限なし）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">undefined</td>
+            <td class="py-2">最大値（undefined = 制限なし）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">キーボード/ボタンの増分ステップ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step * 10</td>
+            <td class="py-2">PageUp/PageDown の大きなステップ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">スピンボタンを無効にするかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>readOnly</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">スピンボタンを読み取り専用にするかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showButtons</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">増減ボタンを表示するかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">表示ラベル（aria-labelledby としても使用）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>valueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">aria-valuetext 用の人間が読める値</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >aria-valuetext のフォーマットパターン（例："{'{value}'} of {'{max}'}"）</td
+            >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onvaluechange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value: number) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">値が変更されたときのコールバック</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      アクセシビリティのため、<code>label</code>、<code>aria-label</code>、または <code>aria-labelledby</code> のいずれかが必要です。
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">テスト</Heading>
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Spinbutton.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">リソース</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: スピンボタンパターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;input type="number"&gt; 要素
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="spinbutton" />
+    </ul>
+  </section>
+</PatternLayout>
