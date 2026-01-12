@@ -69,7 +69,14 @@ const tocItems = [
           <Spinbutton client:load defaultValue={0} label="無制限" showButtons={true} />
         </div>
         <div>
-          <Spinbutton client:load defaultValue={50} min={0} max={100} label="読み取り専用" readOnly />
+          <Spinbutton
+            client:load
+            defaultValue={50}
+            min={0}
+            max={100}
+            label="読み取り専用"
+            readOnly
+          />
         </div>
         <div>
           <Spinbutton client:load defaultValue={50} min={0} max={100} label="無効" disabled />
@@ -86,7 +93,9 @@ const tocItems = [
 
   <!-- Accessibility Section -->
   <section class="mb-12">
-    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">アクセシビリティ機能</Heading>
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >アクセシビリティ機能</Heading
+    >
     <AccessibilityDocs />
   </section>
 
@@ -256,7 +265,9 @@ const tocItems = [
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      アクセシビリティのため、<code>label</code>、<code>aria-label</code>、または <code>aria-labelledby</code> のいずれかが必要です。
+      アクセシビリティのため、<code>label</code>、<code>aria-label</code>、または <code
+        >aria-labelledby</code
+      > のいずれかが必要です。
     </p>
   </section>
 
