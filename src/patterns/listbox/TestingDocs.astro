@@ -1,19 +1,59 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/listbox.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements.
+    Tests verify APG compliance for ARIA attributes, keyboard interactions, selection behavior, and
+    accessibility requirements. The Listbox component uses a two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role, aria-selected, aria-multiselectable, etc.)</li>
+      <li>Keyboard interaction (Arrow keys, Space, Home/End, etc.)</li>
+      <li>Selection behavior (single-select, multi-select)</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Keyboard navigation (single-select, multi-select, horizontal)</li>
+      <li>Mouse interactions (click selection, toggle)</li>
+      <li>ARIA structure in live browser</li>
+      <li>Focus management with roving tabindex</li>
+      <li>Type-ahead character navigation</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction
+    High Priority: APG Keyboard Interaction (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -74,7 +114,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes
+    High Priority: APG ARIA Attributes (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -119,7 +159,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management (Roving Tabindex)
+    High Priority: Focus Management - Roving Tabindex (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -152,7 +192,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
+    Medium Priority: Accessibility (Unit + E2E)
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -165,11 +205,85 @@ import { ResponsiveTable } from '@/components/ui/table';
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
+          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe/axe-core)</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Mouse Interaction (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click option</code></td>
+          <td class="py-2">Selects option on click (single-select)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click toggle</code></td>
+          <td class="py-2">Toggles selection on click (multi-select)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click disabled</code></td>
+          <td class="py-2">Disabled options cannot be selected</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Cross-framework Consistency (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks have listbox</code></td>
+          <td class="py-2">React, Vue, Svelte, Astro all render listbox elements</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">All frameworks have consistent ARIA structure</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Select on click</code></td>
+          <td class="py-2">All frameworks select correctly on click</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Keyboard navigation</code></td>
+          <td class="py-2">All frameworks respond to keyboard navigation consistently</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    The following is the actual E2E test file (<code>e2e/listbox.spec.ts</code>).
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/listbox.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
 
   <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
@@ -177,20 +291,26 @@ import { ResponsiveTable } from '@/components/ui/table';
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
         >Vitest</ExternalLink
       >
-      - Test runner
+      - Test runner for unit tests
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
         >Testing Library</ExternalLink
       >
-      - Framework-specific testing utilities
+      - Framework-specific testing utilities (React, Vue, Svelte)
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - Browser automation for E2E tests
     </li>
     <li>
       <ExternalLink
-        href="https://github.com/nickcolley/jest-axe"
-        class="text-primary hover:underline">jest-axe</ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
       >
-      - Automated accessibility testing
+      - Automated accessibility testing in E2E
     </li>
   </ul>
 

@@ -199,3 +199,19 @@ it('type-ahead focuses matching option', async () => {
   expect(screen.getByRole('option', { name: 'Green' })).toHaveFocus();
 });
 ```
+
+## E2E Test Execution
+
+```bash
+# Run all listbox E2E tests
+npx playwright test listbox
+
+# Run for specific framework
+npx playwright test listbox --grep "react"
+npx playwright test listbox --grep "vue"
+npx playwright test listbox --grep "svelte"
+npx playwright test listbox --grep "astro"
+
+# Run in UI mode for debugging
+npm run test:e2e:ui -- --grep listbox
+```

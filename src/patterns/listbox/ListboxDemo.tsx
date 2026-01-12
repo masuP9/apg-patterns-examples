@@ -3,6 +3,7 @@ import { Listbox, type ListboxOption } from './Listbox';
 
 const fruitOptions: ListboxOption[] = [
   { id: 'apple', label: 'Apple' },
+  { id: 'apricot', label: 'Apricot' },
   { id: 'banana', label: 'Banana' },
   { id: 'cherry', label: 'Cherry' },
   { id: 'date', label: 'Date' },
