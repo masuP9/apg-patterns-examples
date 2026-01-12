@@ -112,10 +112,6 @@ export function TreeGridDemoJa() {
     console.log('Cell activated:', { cellId, rowId, colId });
   }, []);
 
-  const renderCell = useCallback((cell: TreeGridCellData, rowId: string, colId: string) => {
-    return cell.value;
-  }, []);
-
   return (
     <div className="apg-treegrid-demo">
       <div className="apg-treegrid-demo__description">
@@ -146,7 +142,6 @@ export function TreeGridDemoJa() {
         onSelectionChange={handleSelectionChange}
         onExpandedChange={handleExpandedChange}
         onCellActivate={handleCellActivate}
-        renderCell={renderCell}
         enablePageNavigation
         pageSize={2}
       />

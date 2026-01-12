@@ -625,7 +625,7 @@ export function TreeGrid({
             aria-disabled={node.disabled ? 'true' : undefined}
             aria-rowindex={totalRows ? startRowIndex + visibleIndex : undefined}
             className={`apg-treegrid-row ${isSelected ? 'selected' : ''} ${node.disabled ? 'disabled' : ''}`}
-            style={{ '--level': level } as React.CSSProperties}
+            style={{ '--level': level } satisfies React.CSSProperties}
           >
             {node.cells.map((cell, colIndex) => {
               const col = columns[colIndex];
