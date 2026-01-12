@@ -84,9 +84,7 @@ import { withBase } from '@/lib/utils';
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-semibold">Available Patterns</h2>
-      <p class="text-muted-foreground mb-4">
-        The following patterns have AI-friendly definition files:
-      </p>
+      <p class="text-muted-foreground mb-4">All 28 patterns have AI-friendly definition files:</p>
       <div class="grid gap-4 md:grid-cols-2">
         <Tile variant="floating" href={withBase('/patterns/accordion/react/')}>
           <TileContent>
@@ -100,6 +98,14 @@ import { withBase } from '@/lib/utils';
           <TileContent>
             <TileTitle>Alert</TileTitle>
             <TileDescription> Live region for important, time-sensitive messages. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/alert-dialog/react/')}>
+          <TileContent>
+            <TileTitle>Alert Dialog</TileTitle>
+            <TileDescription>
+              Modal dialog requiring user response with accessible focus management.
+            </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/breadcrumb/react/')}>
@@ -118,6 +124,28 @@ import { withBase } from '@/lib/utils';
             </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/patterns/carousel/react/')}>
+          <TileContent>
+            <TileTitle>Carousel</TileTitle>
+            <TileDescription>
+              Rotating content with accessible navigation controls.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/checkbox/react/')}>
+          <TileContent>
+            <TileTitle>Checkbox</TileTitle>
+            <TileDescription> Single checkbox with optional tri-state support. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/combobox/react/')}>
+          <TileContent>
+            <TileTitle>Combobox</TileTitle>
+            <TileDescription>
+              Text input with dropdown suggestions and autocomplete.
+            </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/patterns/dialog/react/')}>
           <TileContent>
             <TileTitle>Dialog</TileTitle>
@@ -130,6 +158,32 @@ import { withBase } from '@/lib/utils';
             <TileDescription> Simple show/hide toggle for content visibility. </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/patterns/feed/react/')}>
+          <TileContent>
+            <TileTitle>Feed</TileTitle>
+            <TileDescription>
+              Scrollable list of articles with accessible navigation.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/grid/react/')}>
+          <TileContent>
+            <TileTitle>Grid</TileTitle>
+            <TileDescription> Interactive grid with keyboard navigation support. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/landmarks/react/')}>
+          <TileContent>
+            <TileTitle>Landmarks</TileTitle>
+            <TileDescription> Page regions for assistive technology navigation. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/link/react/')}>
+          <TileContent>
+            <TileTitle>Link</TileTitle>
+            <TileDescription> Accessible links with proper semantics and states. </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/patterns/listbox/react/')}>
           <TileContent>
             <TileTitle>Listbox</TileTitle>
@@ -138,10 +192,56 @@ import { withBase } from '@/lib/utils';
             </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/patterns/menu-button/react/')}>
+          <TileContent>
+            <TileTitle>Menu Button</TileTitle>
+            <TileDescription>
+              Button that opens a menu with accessible keyboard support.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/menubar/react/')}>
+          <TileContent>
+            <TileTitle>Menubar</TileTitle>
+            <TileDescription>
+              Horizontal menu with submenus and keyboard navigation.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/meter/react/')}>
+          <TileContent>
+            <TileTitle>Meter</TileTitle>
+            <TileDescription> Visual indicator of a value within a known range. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/radio-group/react/')}>
+          <TileContent>
+            <TileTitle>Radio Group</TileTitle>
+            <TileDescription> Single selection from mutually exclusive options. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/slider/react/')}>
+          <TileContent>
+            <TileTitle>Slider</TileTitle>
+            <TileDescription> Input for selecting a value from a range. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/spinbutton/react/')}>
+          <TileContent>
+            <TileTitle>Spinbutton</TileTitle>
+            <TileDescription> Numeric input with increment/decrement controls. </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/patterns/switch/react/')}>
           <TileContent>
             <TileTitle>Switch</TileTitle>
             <TileDescription> On/off toggle with aria-checked state. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/table/react/')}>
+          <TileContent>
+            <TileTitle>Table</TileTitle>
+            <TileDescription> Data table with proper headers and structure. </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/tabs/react/')}>
@@ -162,6 +262,26 @@ import { withBase } from '@/lib/utils';
           <TileContent>
             <TileTitle>Tooltip</TileTitle>
             <TileDescription> Contextual popup for element descriptions. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/treegrid/react/')}>
+          <TileContent>
+            <TileTitle>Treegrid</TileTitle>
+            <TileDescription> Grid with expandable rows and tree-like hierarchy. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/treeview/react/')}>
+          <TileContent>
+            <TileTitle>Tree View</TileTitle>
+            <TileDescription>
+              Hierarchical list with expandable/collapsible nodes.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/window-splitter/react/')}>
+          <TileContent>
+            <TileTitle>Window Splitter</TileTitle>
+            <TileDescription> Resizable panes with keyboard-accessible separator. </TileDescription>
           </TileContent>
         </Tile>
       </div>
@@ -185,6 +305,11 @@ import { withBase } from '@/lib/utils';
             >
           </li>
           <li>
+            <a href={withBase('/patterns/alert-dialog/llm.md')} class="text-primary hover:underline"
+              >/patterns/alert-dialog/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/breadcrumb/llm.md')} class="text-primary hover:underline"
               >/patterns/breadcrumb/llm.md</a
             >
@@ -192,6 +317,21 @@ import { withBase } from '@/lib/utils';
           <li>
             <a href={withBase('/patterns/button/llm.md')} class="text-primary hover:underline"
               >/patterns/button/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/carousel/llm.md')} class="text-primary hover:underline"
+              >/patterns/carousel/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/checkbox/llm.md')} class="text-primary hover:underline"
+              >/patterns/checkbox/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/combobox/llm.md')} class="text-primary hover:underline"
+              >/patterns/combobox/llm.md</a
             >
           </li>
           <li>
@@ -205,13 +345,68 @@ import { withBase } from '@/lib/utils';
             >
           </li>
           <li>
+            <a href={withBase('/patterns/feed/llm.md')} class="text-primary hover:underline"
+              >/patterns/feed/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/grid/llm.md')} class="text-primary hover:underline"
+              >/patterns/grid/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/landmarks/llm.md')} class="text-primary hover:underline"
+              >/patterns/landmarks/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/link/llm.md')} class="text-primary hover:underline"
+              >/patterns/link/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/listbox/llm.md')} class="text-primary hover:underline"
               >/patterns/listbox/llm.md</a
             >
           </li>
           <li>
+            <a href={withBase('/patterns/menu-button/llm.md')} class="text-primary hover:underline"
+              >/patterns/menu-button/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/menubar/llm.md')} class="text-primary hover:underline"
+              >/patterns/menubar/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/meter/llm.md')} class="text-primary hover:underline"
+              >/patterns/meter/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/radio-group/llm.md')} class="text-primary hover:underline"
+              >/patterns/radio-group/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/slider/llm.md')} class="text-primary hover:underline"
+              >/patterns/slider/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/spinbutton/llm.md')} class="text-primary hover:underline"
+              >/patterns/spinbutton/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/switch/llm.md')} class="text-primary hover:underline"
               >/patterns/switch/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/table/llm.md')} class="text-primary hover:underline"
+              >/patterns/table/llm.md</a
             >
           </li>
           <li>
@@ -227,6 +422,22 @@ import { withBase } from '@/lib/utils';
           <li>
             <a href={withBase('/patterns/tooltip/llm.md')} class="text-primary hover:underline"
               >/patterns/tooltip/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/treegrid/llm.md')} class="text-primary hover:underline"
+              >/patterns/treegrid/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/treeview/llm.md')} class="text-primary hover:underline"
+              >/patterns/treeview/llm.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/window-splitter/llm.md')}
+              class="text-primary hover:underline">/patterns/window-splitter/llm.md</a
             >
           </li>
         </ul>

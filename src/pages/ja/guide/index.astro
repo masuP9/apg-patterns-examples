@@ -89,7 +89,7 @@ const locale = 'ja';
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-semibold">利用可能なパターン</h2>
       <p class="text-muted-foreground mb-4">
-        以下のパターンに AI 向け定義ファイルが用意されています:
+        全 28 パターンに AI 向け定義ファイルが用意されています:
       </p>
       <div class="grid gap-4 md:grid-cols-2">
         <Tile variant="floating" href={withBase('/ja/patterns/accordion/react/')}>
@@ -105,6 +105,14 @@ const locale = 'ja';
             <TileTitle>Alert</TileTitle>
             <TileDescription>
               重要でタイムセンシティブなメッセージを通知するライブリージョンです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/alert-dialog/react/')}>
+          <TileContent>
+            <TileTitle>Alert Dialog</TileTitle>
+            <TileDescription>
+              ユーザーの応答が必要なモーダルダイアログで、アクセシブルなフォーカス管理を備えています。
             </TileDescription>
           </TileContent>
         </Tile>
@@ -124,6 +132,30 @@ const locale = 'ja';
             </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/carousel/react/')}>
+          <TileContent>
+            <TileTitle>Carousel</TileTitle>
+            <TileDescription>
+              アクセシブルなナビゲーションコントロールを持つ回転コンテンツです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/checkbox/react/')}>
+          <TileContent>
+            <TileTitle>Checkbox</TileTitle>
+            <TileDescription>
+              オプションの3状態サポートを持つ単一チェックボックスです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/combobox/react/')}>
+          <TileContent>
+            <TileTitle>Combobox</TileTitle>
+            <TileDescription>
+              ドロップダウン候補とオートコンプリート機能を持つテキスト入力です。
+            </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/ja/patterns/dialog/react/')}>
           <TileContent>
             <TileTitle>Dialog</TileTitle>
@@ -140,6 +172,36 @@ const locale = 'ja';
             </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/feed/react/')}>
+          <TileContent>
+            <TileTitle>Feed</TileTitle>
+            <TileDescription>
+              アクセシブルなナビゲーションを持つスクロール可能な記事リストです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/grid/react/')}>
+          <TileContent>
+            <TileTitle>Grid</TileTitle>
+            <TileDescription>
+              キーボードナビゲーションサポートを持つインタラクティブなグリッドです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/landmarks/react/')}>
+          <TileContent>
+            <TileTitle>Landmarks</TileTitle>
+            <TileDescription> 支援技術のナビゲーション用のページ領域です。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/link/react/')}>
+          <TileContent>
+            <TileTitle>Link</TileTitle>
+            <TileDescription>
+              適切なセマンティクスと状態を持つアクセシブルなリンクです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/ja/patterns/listbox/react/')}>
           <TileContent>
             <TileTitle>Listbox</TileTitle>
@@ -148,10 +210,56 @@ const locale = 'ja';
             </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/menu-button/react/')}>
+          <TileContent>
+            <TileTitle>Menu Button</TileTitle>
+            <TileDescription>
+              アクセシブルなキーボードサポートを持つメニューを開くボタンです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/menubar/react/')}>
+          <TileContent>
+            <TileTitle>Menubar</TileTitle>
+            <TileDescription>
+              サブメニューとキーボードナビゲーションを持つ水平メニューです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/meter/react/')}>
+          <TileContent>
+            <TileTitle>Meter</TileTitle>
+            <TileDescription> 既知の範囲内の値を視覚的に示すインジケーターです。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/radio-group/react/')}>
+          <TileContent>
+            <TileTitle>Radio Group</TileTitle>
+            <TileDescription> 相互に排他的なオプションからの単一選択です。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/slider/react/')}>
+          <TileContent>
+            <TileTitle>Slider</TileTitle>
+            <TileDescription> 範囲から値を選択するための入力です。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/spinbutton/react/')}>
+          <TileContent>
+            <TileTitle>Spinbutton</TileTitle>
+            <TileDescription> 増減コントロールを持つ数値入力です。 </TileDescription>
+          </TileContent>
+        </Tile>
         <Tile variant="floating" href={withBase('/ja/patterns/switch/react/')}>
           <TileContent>
             <TileTitle>Switch</TileTitle>
             <TileDescription> aria-checked 状態を持つオン・オフトグルです。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/table/react/')}>
+          <TileContent>
+            <TileTitle>Table</TileTitle>
+            <TileDescription> 適切なヘッダーと構造を持つデータテーブルです。 </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/ja/patterns/tabs/react/')}>
@@ -176,6 +284,26 @@ const locale = 'ja';
             <TileDescription> 要素の説明を表示するコンテキストポップアップです。 </TileDescription>
           </TileContent>
         </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/treegrid/react/')}>
+          <TileContent>
+            <TileTitle>Treegrid</TileTitle>
+            <TileDescription> 展開可能な行とツリー状の階層を持つグリッドです。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/treeview/react/')}>
+          <TileContent>
+            <TileTitle>Tree View</TileTitle>
+            <TileDescription> 展開・折りたたみ可能なノードを持つ階層リストです。 </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/ja/patterns/window-splitter/react/')}>
+          <TileContent>
+            <TileTitle>Window Splitter</TileTitle>
+            <TileDescription>
+              キーボードでアクセス可能なセパレーターを持つリサイズ可能なペインです。
+            </TileDescription>
+          </TileContent>
+        </Tile>
       </div>
     </section>
 
@@ -197,6 +325,11 @@ const locale = 'ja';
             >
           </li>
           <li>
+            <a href={withBase('/patterns/alert-dialog/llm.md')} class="text-primary hover:underline"
+              >/patterns/alert-dialog/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/breadcrumb/llm.md')} class="text-primary hover:underline"
               >/patterns/breadcrumb/llm.md</a
             >
@@ -204,6 +337,21 @@ const locale = 'ja';
           <li>
             <a href={withBase('/patterns/button/llm.md')} class="text-primary hover:underline"
               >/patterns/button/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/carousel/llm.md')} class="text-primary hover:underline"
+              >/patterns/carousel/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/checkbox/llm.md')} class="text-primary hover:underline"
+              >/patterns/checkbox/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/combobox/llm.md')} class="text-primary hover:underline"
+              >/patterns/combobox/llm.md</a
             >
           </li>
           <li>
@@ -217,13 +365,68 @@ const locale = 'ja';
             >
           </li>
           <li>
+            <a href={withBase('/patterns/feed/llm.md')} class="text-primary hover:underline"
+              >/patterns/feed/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/grid/llm.md')} class="text-primary hover:underline"
+              >/patterns/grid/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/landmarks/llm.md')} class="text-primary hover:underline"
+              >/patterns/landmarks/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/link/llm.md')} class="text-primary hover:underline"
+              >/patterns/link/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/listbox/llm.md')} class="text-primary hover:underline"
               >/patterns/listbox/llm.md</a
             >
           </li>
           <li>
+            <a href={withBase('/patterns/menu-button/llm.md')} class="text-primary hover:underline"
+              >/patterns/menu-button/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/menubar/llm.md')} class="text-primary hover:underline"
+              >/patterns/menubar/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/meter/llm.md')} class="text-primary hover:underline"
+              >/patterns/meter/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/radio-group/llm.md')} class="text-primary hover:underline"
+              >/patterns/radio-group/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/slider/llm.md')} class="text-primary hover:underline"
+              >/patterns/slider/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/spinbutton/llm.md')} class="text-primary hover:underline"
+              >/patterns/spinbutton/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/switch/llm.md')} class="text-primary hover:underline"
               >/patterns/switch/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/table/llm.md')} class="text-primary hover:underline"
+              >/patterns/table/llm.md</a
             >
           </li>
           <li>
@@ -239,6 +442,22 @@ const locale = 'ja';
           <li>
             <a href={withBase('/patterns/tooltip/llm.md')} class="text-primary hover:underline"
               >/patterns/tooltip/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/treegrid/llm.md')} class="text-primary hover:underline"
+              >/patterns/treegrid/llm.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/treeview/llm.md')} class="text-primary hover:underline"
+              >/patterns/treeview/llm.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/window-splitter/llm.md')}
+              class="text-primary hover:underline">/patterns/window-splitter/llm.md</a
             >
           </li>
         </ul>
