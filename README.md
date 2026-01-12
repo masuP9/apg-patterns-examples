@@ -49,7 +49,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | Complete |
 | Tree View            | ✅    | ✅  | ✅     | ✅    | Complete |
-| Treegrid             | -     | -   | -      | -     | Planned  |
+| Treegrid             | ✅    | ✅  | ✅     | ✅    | Complete |
 | Window Splitter      | ✅    | ✅  | ✅     | ✅    | Complete |
 
 ## Styling
