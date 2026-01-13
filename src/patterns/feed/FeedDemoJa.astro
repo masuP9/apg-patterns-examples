@@ -1,6 +1,6 @@
 ---
 import Feed, { type FeedArticle } from './Feed.astro';
-import KeyboardHints from './KeyboardHints.astro';
+import KeyboardHintsJa from './KeyboardHintsJa.astro';
 import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
 
 const availablePatterns = getAvailablePatterns();
@@ -8,8 +8,8 @@ const availablePatterns = getAvailablePatterns();
 const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
-  description: `Complexity: ${pattern.complexity}`,
-  content: `${pattern.description}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/astro/`,
+  description: `複雑度: ${pattern.complexity}`,
+  content: `${pattern.description}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/astro/`,
 });
 
 const initialArticles: FeedArticle[] = availablePatterns
@@ -28,16 +28,16 @@ const patternsJson = JSON.stringify(
 );
 ---
 
-<apg-feed-infinite-demo data-patterns={patternsJson}>
+<apg-feed-infinite-demo-ja data-patterns={patternsJson}>
   <div class="apg-feed-demo-wrapper">
-    <KeyboardHints />
+    <KeyboardHintsJa />
     <button type="button" class="apg-feed-demo-button" data-testid="before-feed" data-add-article>
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
         <path
           d="M8 2a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 2z"
         ></path>
       </svg>
-      Add Pattern
+      パターンを追加
     </button>
     <div
       class="apg-feed-scroll-container"
@@ -46,16 +46,16 @@ const patternsJson = JSON.stringify(
     >
       <Feed
         articles={initialArticles}
-        aria-label="APG Patterns feed with infinite scroll"
+        aria-label="無限スクロール付き APG パターンフィード"
         setSize={-1}
         loadMoreRootMargin="100px"
         data-testid="feed-demo"
       />
       <div class="apg-feed-loading-indicator" aria-live="polite" data-loading-indicator hidden>
-        Loading more articles...
+        記事を読み込み中...
       </div>
       <div class="apg-feed-end-message" data-end-message hidden>
-        You've reached the end of the feed.
+        フィードの終わりです。
       </div>
     </div>
     <button type="button" data-testid="after-feed" class="apg-feed-demo-button" data-scroll-top>
@@ -65,7 +65,7 @@ const patternsJson = JSON.stringify(
         ></path>
         <path d="M8 7.5a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 7.5z"></path>
       </svg>
-      Back to top
+      トップに戻る
     </button>
   </div>
 
@@ -76,7 +76,7 @@ const patternsJson = JSON.stringify(
       <div class="apg-feed-article-content" data-content></div>
     </article>
   </template>
-</apg-feed-infinite-demo>
+</apg-feed-infinite-demo-ja>
 
 <script>
   interface PatternData {
@@ -87,7 +87,7 @@ const patternsJson = JSON.stringify(
     complexity: string;
   }
 
-  class ApgFeedInfiniteDemo extends HTMLElement {
+  class ApgFeedInfiniteDemoJa extends HTMLElement {
     private articleCount = 3;
     private loading = false;
     private hasMore = true;
@@ -194,10 +194,10 @@ const patternsJson = JSON.stringify(
           }
           if (desc) {
             desc.id = descId;
-            desc.textContent = `Complexity: ${pattern.complexity}`;
+            desc.textContent = `複雑度: ${pattern.complexity}`;
           }
           if (content) {
-            content.textContent = `${pattern.description}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/astro/`;
+            content.textContent = `${pattern.description}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/astro/`;
           }
 
           // Insert before sentinel if it exists, otherwise append
@@ -217,7 +217,7 @@ const patternsJson = JSON.stringify(
     }
   }
 
-  customElements.define('apg-feed-infinite-demo', ApgFeedInfiniteDemo);
+  customElements.define('apg-feed-infinite-demo-ja', ApgFeedInfiniteDemoJa);
 </script>
 
 <style>

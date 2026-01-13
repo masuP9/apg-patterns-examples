@@ -21,7 +21,7 @@
       @focus="handleArticleFocus(index)"
     >
       <h3 :id="`${baseId}-article-${article.id}-title`">
-        <a href="#" class="apg-feed-article-title-link" @click.prevent>{{ article.title }}</a>
+        {{ article.title }}
       </h3>
       <p v-if="article.description" :id="`${baseId}-article-${article.id}-desc`">
         {{ article.description }}

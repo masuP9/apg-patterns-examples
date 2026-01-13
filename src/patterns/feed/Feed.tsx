@@ -87,7 +87,7 @@ export function Feed({
     if (!ariaLabel && !ariaLabelledby) {
       console.warn(
         'Feed: An accessible name is required. ' +
-          'Provide either aria-label or aria-labelledby prop.'
+        'Provide either aria-label or aria-labelledby prop.'
       );
     }
   }, [ariaLabel, ariaLabelledby]);
@@ -235,6 +235,8 @@ export function Feed({
   );
 
   return (
+    // disabled to allow div with role="feed" to have keyboard events for capture children elements events
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
       ref={containerRef}
       role="feed"
@@ -245,13 +247,13 @@ export function Feed({
       onKeyDown={handleKeyDown}
       {...rest}
     >
-      {articles.map((article, index) => {
-        const titleId = `${baseId}-article-${article.id}-title`;
-        const descId = article.description ? `${baseId}-article-${article.id}-desc` : undefined;
+      {articles.map(({ id, title, description, content }, index) => {
+        const titleId = `${baseId}-article-${id}-title`;
+        const descId = description ? `${baseId}-article-${id}-desc` : undefined;
 
         return (
           <article
-            key={article.id}
+            key={id}
             ref={(el) => {
               articleRefs.current[index] = el;
             }}
@@ -264,16 +266,10 @@ export function Feed({
             onFocus={() => handleArticleFocus(index)}
           >
             <h3 id={titleId}>
-              <a
-                href="#"
-                className="apg-feed-article-title-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                {article.title}
-              </a>
+              {title}
             </h3>
-            {article.description && <p id={descId}>{article.description}</p>}
-            <div className="apg-feed-article-content">{article.content}</div>
+            {description && <p id={descId}>{description}</p>}
+            <div className="apg-feed-article-content">{content}</div>
           </article>
         );
       })}

@@ -228,9 +228,7 @@
       onfocus={() => handleArticleFocus(index)}
     >
       <h3 id={`${baseId}-article-${article.id}-title`}>
-        <a href="#" class="apg-feed-article-title-link" onclick={(e) => e.preventDefault()}
-          >{article.title}</a
-        >
+        {article.title}
       </h3>
       {#if article.description}
         <p id={`${baseId}-article-${article.id}-desc`}>{article.description}</p>

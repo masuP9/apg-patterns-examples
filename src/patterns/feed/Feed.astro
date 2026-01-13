@@ -102,9 +102,7 @@ const computedSetSize = setSize !== undefined ? setSize : articles.length;
             data-article-index={index.toString()}
           >
             <h3 id={titleId}>
-              <a href="#" class="apg-feed-article-title-link" onclick="event.preventDefault()">
-                {article.title}
-              </a>
+              {article.title}
             </h3>
             {article.description && <p id={descId}>{article.description}</p>}
             <div class="apg-feed-article-content">{article.content}</div>
