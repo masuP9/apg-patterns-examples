@@ -47,7 +47,7 @@
 | Tabs                 | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
-| Tooltip              | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Tree View            | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
 | Treegrid             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Window Splitter      | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
