@@ -1,18 +1,18 @@
 ---
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
-import TreeView from '@patterns/treeview/TreeView.vue';
-import TreeViewActivationDemo from '@patterns/treeview/TreeViewActivationDemo.vue';
+import TreeView from '@patterns/tree-view/TreeView.vue';
+import TreeViewActivationDemo from '@patterns/tree-view/TreeViewActivationDemo.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/treeview/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/treeview/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/tree-view/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/tree-view/TestingDocs.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
-import sourceCode from '@patterns/treeview/TreeView.vue?raw';
-import treeNodeCode from '@patterns/treeview/TreeNode.vue?raw';
+import sourceCode from '@patterns/tree-view/TreeView.vue?raw';
+import treeNodeCode from '@patterns/tree-view/TreeNode.vue?raw';
 import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
@@ -88,7 +88,7 @@ const disabledNodes = [
       子を持つアイテムを展開または折りたたむことができる階層的なリスト。
       ファイルブラウザ、ナビゲーションメニュー、組織図などでよく使用されます。
     </p>
-    <AiGuideBadge pattern="treeview" />
+    <AiGuideBadge pattern="tree-view" />
   </header>
 
   <!-- Framework Selector -->
@@ -381,7 +381,7 @@ function handleActivate(id) {
           APG サンプル: ナビゲーション Treeview
         </ExternalLink>
       </li>
-      <AiGuideResourceItem pattern="treeview" />
+      <AiGuideResourceItem pattern="tree-view" />
     </ul>
   </section>
 </PatternLayout>
