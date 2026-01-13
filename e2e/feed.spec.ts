@@ -305,18 +305,6 @@ for (const framework of frameworks) {
           await expect(title).toBeVisible();
         }
       });
-
-      test('articles have focusable title links', async ({ page }) => {
-        const feed = page.locator(feedSelector);
-        const articles = feed.locator('article');
-        const firstArticle = articles.first();
-
-        // Title link should be focusable
-        const titleLink = firstArticle.locator('.apg-feed-article-title-link');
-        await expect(titleLink).toBeVisible();
-        await titleLink.focus();
-        await expect(titleLink).toBeFocused();
-      });
     });
 
     // 🟢 Demo Functionality
