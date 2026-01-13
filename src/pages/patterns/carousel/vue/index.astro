@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import CarouselDemo from '@patterns/carousel/CarouselDemo.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -32,7 +33,7 @@ const tocItems = [
       between them.
     </p>
     <a
-      href="/patterns/carousel/llm.md"
+      href={withBase('/patterns/carousel/llm.md')}
       target="_blank"
       rel="noopener noreferrer"
       class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
@@ -229,7 +230,10 @@ function handleSlideChange(index: number) {
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="/patterns/carousel/llm.md" class="text-primary hover:underline">
+        <ExternalLink
+          href={withBase('/patterns/carousel/llm.md')}
+          class="text-primary hover:underline"
+        >
           AI Implementation Guide (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">

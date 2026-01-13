@@ -1,17 +1,17 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import TreeView from '@patterns/treeview/TreeView.svelte';
-import TreeViewActivationDemo from '@patterns/treeview/TreeViewActivationDemo.svelte';
+import TreeView from '@patterns/tree-view/TreeView.svelte';
+import TreeViewActivationDemo from '@patterns/tree-view/TreeViewActivationDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/treeview/AccessibilityDocs.astro';
-import TestingDocs from '@patterns/treeview/TestingDocs.astro';
+import AccessibilityDocs from '@patterns/tree-view/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/tree-view/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
-import sourceCode from '@patterns/treeview/TreeView.svelte?raw';
+import sourceCode from '@patterns/tree-view/TreeView.svelte?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -82,7 +82,7 @@ const disabledNodes = [
       A hierarchical list where items with children can be expanded or collapsed. Common uses
       include file browsers, navigation menus, and organizational charts.
     </p>
-    <AiGuideBadge pattern="treeview" />
+    <AiGuideBadge pattern="tree-view" />
   </header>
 
   <!-- Framework Selector -->
@@ -380,7 +380,7 @@ function handleActivate(event) {
           APG Example: Navigation Treeview
         </ExternalLink>
       </li>
-      <AiGuideResourceItem pattern="treeview" />
+      <AiGuideResourceItem pattern="tree-view" />
     </ul>
   </section>
 </PatternLayout>

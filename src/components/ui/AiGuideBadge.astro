@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/lib/utils';
+
 interface Props {
   pattern: string;
   locale?: string;
@@ -7,7 +9,7 @@ interface Props {
 
 const { pattern, locale, class: className } = Astro.props;
 const basePath = locale ? `/${locale}` : '';
-const href = `${basePath}/patterns/${pattern}/llm.md`;
+const href = withBase(`${basePath}/patterns/${pattern}/llm.md`);
 ---
 
 <a

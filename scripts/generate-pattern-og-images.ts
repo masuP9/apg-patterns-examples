@@ -34,14 +34,11 @@ const SITE_NAME = 'APG Patterns Examples';
 type SilhouetteRenderer = (baseStyle: Record<string, unknown>) => unknown;
 
 /**
- * Map pattern ID to directory name
- * Handles special cases like tree-view -> treeview
+ * Get pattern directory name
+ * Pattern IDs directly map to directory names
  */
 function getPatternDirName(patternId: string): string {
-  const mapping: Record<string, string> = {
-    'tree-view': 'treeview',
-  };
-  return mapping[patternId] || patternId;
+  return patternId;
 }
 
 /**

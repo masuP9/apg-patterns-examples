@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import MenuButton from '@patterns/menu-button/MenuButton.astro';
 import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.astro';
@@ -47,7 +48,7 @@ const fileItems = [
     <h1 class="mb-4 text-3xl font-bold">Menu Button</h1>
     <p class="text-muted-foreground text-lg">A button that opens a menu of actions or options.</p>
     <a
-      href="/patterns/menu-button/llm.md"
+      href={withBase('/patterns/menu-button/llm.md')}
       target="_blank"
       rel="noopener noreferrer"
       class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
@@ -257,7 +258,10 @@ const items = [
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="/patterns/menu-button/llm.md" class="text-primary hover:underline">
+        <ExternalLink
+          href={withBase('/patterns/menu-button/llm.md')}
+          class="text-primary hover:underline"
+        >
           AI Implementation Guide (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">

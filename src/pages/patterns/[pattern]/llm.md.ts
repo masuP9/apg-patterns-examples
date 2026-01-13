@@ -1,24 +1,10 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { getAvailablePatterns } from '@/lib/patterns';
 
-const patterns = [
-  'accordion',
-  'alert',
-  'alert-dialog',
-  'breadcrumb',
-  'button',
-  'checkbox',
-  'dialog',
-  'disclosure',
-  'listbox',
-  'menu-button',
-  'radio-group',
-  'switch',
-  'tabs',
-  'toolbar',
-  'tooltip',
-];
+// Get pattern IDs from the centralized patterns definition
+const patterns = getAvailablePatterns().map((p) => p.id);
 
 export const getStaticPaths: GetStaticPaths = () => {
   return patterns.map((pattern) => ({
