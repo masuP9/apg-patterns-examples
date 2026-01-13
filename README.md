@@ -20,7 +20,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 
 | Pattern              | React | Vue | Svelte | Astro | E2E | Status   |
 | -------------------- | ----- | --- | ------ | ----- | --- | -------- |
-| Accordion            | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Accordion            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Alert                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Alert Dialog         | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Breadcrumb           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
@@ -38,13 +38,13 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Menubar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | -   | Complete |
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Radio Group          | ✅    | ✅  | ✅     | ✅    | -   | Complete |
-| Slider               | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | -   | Planned  |
 | Spinbutton           | ✅    | ✅  | ✅     | ✅    | -   | Complete |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Tabs                 | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Tabs                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |

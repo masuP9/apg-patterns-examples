@@ -1,6 +1,8 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import e2eTestCode from '../../../e2e/slider.spec.ts?raw';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
@@ -279,46 +281,93 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h3 class="mb-3 text-lg font-medium">E2Eテスト</h3>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-blue-500"></span>
+    クロスフレームワーク整合性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>全フレームワークでスライダーを描画</code></td>
+          <td class="py-2">React、Vue、Svelte、Astroすべてでスライダー要素を描画</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>一貫したARIA属性</code></td>
+          <td class="py-2">全フレームワークで一貫したaria-valuenow、aria-valuemin、aria-valuemax</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>キーボードナビゲーション</code></td>
+          <td class="py-2"
+            >全フレームワークで矢印キー、Home、Endキーボードナビゲーションをサポート</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストコード例</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    以下は実際のE2Eテストファイル（<code>e2e/slider.spec.ts</code>）です。
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/slider.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
+
+  <h3 class="mb-3 text-lg font-medium">テストの実行</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Sliderのユニットテストを実行
+npm run test -- slider
+
+# SliderのE2Eテストを実行（全フレームワーク）
+npm run test:e2e:pattern --pattern=slider
+
+# 特定フレームワークのE2Eテストを実行
+npm run test:e2e:react:pattern --pattern=slider
+npm run test:e2e:vue:pattern --pattern=slider
+npm run test:e2e:svelte:pattern --pattern=slider
+npm run test:e2e:astro:pattern --pattern=slider</code></pre>
+
   <h3 class="mb-3 text-lg font-medium">テストツール</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>React:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/react-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
       >
-        React Testing Library
-      </ExternalLink>
+      - ユニットテスト用テストランナー
     </li>
     <li>
-      <strong>Vue:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/vue-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
       >
-        Vue Testing Library
-      </ExternalLink>
+      - E2Eテスト用ブラウザ自動化
     </li>
     <li>
-      <strong>Svelte:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/svelte-testing-library/intro/"
-        class="text-primary hover:underline"
-      >
-        Svelte Testing Library
-      </ExternalLink>
-    </li>
-    <li>
-      <strong>Astro:</strong> Web Componentユニットテスト用のVitest with JSDOM
-    </li>
-    <li>
-      <strong>Accessibility:</strong>
       <ExternalLink
         href="https://github.com/dequelabs/axe-core"
         class="text-primary hover:underline"
       >
         axe-core
       </ExternalLink>
+      - アクセシビリティテストエンジン
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
+        Testing Library
+      </ExternalLink>
+      - フレームワーク別テストユーティリティ
     </li>
   </ul>
 </div>

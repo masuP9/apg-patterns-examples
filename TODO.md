@@ -27,15 +27,15 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 ### E2E テスト
 
-21/28 パターン完了（75%）
+25/28 パターン完了（89%）
 
-- [ ] Accordion
+- [x] Accordion
 - [ ] Dialog
 - [ ] Menu Button
-- [ ] Radio Group
-- [ ] Slider
+- [x] Radio Group
+- [x] Slider
 - [ ] Spinbutton
-- [ ] Tabs
+- [x] Tabs
 - [x] Toolbar
 - [x] Tooltip
 - [ ] Tree View
@@ -49,8 +49,8 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | パターン       | 状況    | E2E | 複雑度 |
 | -------------- | ------- | --- | ------ |
 | Toggle Button  | ✅ 完了 | ✅  | 低     |
-| Tabs           | ✅ 完了 | -   | 中     |
-| Accordion      | ✅ 完了 | -   | 中     |
+| Tabs           | ✅ 完了 | ✅  | 中     |
+| Accordion      | ✅ 完了 | ✅  | 中     |
 | Dialog (Modal) | ✅ 完了 | -   | 高     |
 | Menu Button    | ✅ 完了 | -   | 中     |
 | Disclosure     | ✅ 完了 | ✅  | 低     |
@@ -61,7 +61,7 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | パターン    | 状況    | E2E | 複雑度 |
 | ----------- | ------- | --- | ------ |
 | Checkbox    | ✅ 完了 | ✅  | 低     |
-| Radio Group | ✅ 完了 | -   | 中     |
+| Radio Group | ✅ 完了 | ✅  | 中     |
 | Switch      | ✅ 完了 | ✅  | 低     |
 | Listbox     | ✅ 完了 | ✅  | 高     |
 | Combobox    | ✅ 完了 | ✅  | 高     |
@@ -76,7 +76,7 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | Toolbar         | ✅ 完了 | ✅  | 中     |
 | Menubar         | ✅ 完了 | ✅  | 高     |
 | Grid            | ✅ 完了 | ✅  | 高     |
-| Slider          | ✅ 完了 | -   | 中     |
+| Slider          | ✅ 完了 | ✅  | 中     |
 | Spinbutton      | ✅ 完了 | -   | 中     |
 | Meter           | ✅ 完了 | ✅  | 低     |
 | Alert Dialog    | ✅ 完了 | ✅  | 中     |

@@ -4,7 +4,7 @@
 
 E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実装計画。
 
-**対象パターン**: ~~Accordion~~, Dialog, Menu Button, Radio Group, Slider, Spinbutton, ~~Tabs~~, Toolbar, ~~Tooltip~~, Tree View
+**対象パターン**: ~~Accordion~~, Dialog, Menu Button, ~~Radio Group~~, ~~Slider~~, Spinbutton, ~~Tabs~~, ~~Toolbar~~, ~~Tooltip~~, Tree View
 
 **現状**: 22/28パターン完了（79%）→ 完了後28/28（100%）
 
@@ -17,7 +17,7 @@ E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実�
 | Tabs        | ✅        | ✅         | ✅          | ✅     | 完了 |
 | Radio Group | ✅        | ✅         | ✅          | ✅     | 完了 |
 | Toolbar     | ✅        | ✅         | ✅          | ✅     | 完了 |
-| Slider      | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Slider      | ✅        | ✅         | ✅          | ✅     | 完了 |
 | Dialog      | ⬜        | ⬜         | ⬜          | ⬜     |      |
 | Menu Button | ⬜        | ⬜         | ⬜          | ⬜     |      |
 | Spinbutton  | ⬜        | ⬜         | ⬜          | ⬜     |      |

@@ -20,7 +20,7 @@
 
 | パターン             | React | Vue | Svelte | Astro | E2E | ステータス |
 | -------------------- | ----- | --- | ------ | ----- | --- | ---------- |
-| Accordion            | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Accordion            | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Alert                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Alert Dialog         | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Breadcrumb           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
@@ -38,13 +38,13 @@
 | Menubar              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Menu Button          | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Radio Group          | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
-| Slider               | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
+| Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | -   | 予定       |
 | Spinbutton           | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Tabs                 | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Tabs                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
