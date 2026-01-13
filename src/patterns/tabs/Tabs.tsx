@@ -152,16 +152,16 @@ export function Tabs({
     }
   }, [selectedId, availableTabs, activation, focusedIndex]);
 
-  const containerClass = `apg-tabs ${
-    orientation === 'vertical' ? 'apg-tabs--vertical' : 'apg-tabs--horizontal'
-  } ${className}`.trim();
+  const containerClass = `apg-tabs ${orientation === 'vertical' ? 'apg-tabs--vertical' : 'apg-tabs--horizontal'
+    } ${className}`.trim();
 
-  const tablistClass = `apg-tablist ${
-    orientation === 'vertical' ? 'apg-tablist--vertical' : 'apg-tablist--horizontal'
-  }`;
+  const tablistClass = `apg-tablist ${orientation === 'vertical' ? 'apg-tablist--vertical' : 'apg-tablist--horizontal'
+    }`;
 
   return (
     <div className={containerClass}>
+      {/* tablist capture child elements keydown events */}
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
       <div
         ref={tablistRef}
         role="tablist"
@@ -177,11 +177,9 @@ export function Tabs({
           const tabIndex = tab.disabled ? -1 : isFocusTarget ? 0 : -1;
           const tabPanelId = `${tablistId}-panel-${tab.id}`;
 
-          const tabClass = `apg-tab ${
-            orientation === 'vertical' ? 'apg-tab--vertical' : 'apg-tab--horizontal'
-          } ${isSelected ? 'apg-tab--selected' : ''} ${
-            tab.disabled ? 'apg-tab--disabled' : ''
-          }`.trim();
+          const tabClass = `apg-tab ${orientation === 'vertical' ? 'apg-tab--vertical' : 'apg-tab--horizontal'
+            } ${isSelected ? 'apg-tab--selected' : ''} ${tab.disabled ? 'apg-tab--disabled' : ''
+            }`.trim();
 
           return (
             <button
@@ -221,9 +219,8 @@ export function Tabs({
               id={tabPanelId}
               aria-labelledby={`${tablistId}-tab-${tab.id}`}
               hidden={!isSelected}
-              className={`apg-tabpanel ${
-                isSelected ? 'apg-tabpanel--active' : 'apg-tabpanel--inactive'
-              }`}
+              className={`apg-tabpanel ${isSelected ? 'apg-tabpanel--active' : 'apg-tabpanel--inactive'
+                }`}
               tabIndex={isSelected ? 0 : -1}
             >
               {tab.content}

@@ -28,7 +28,5 @@
   {#snippet trigger({ open })}
     <button type="button" onclick={open}>Open Dialog</button>
   {/snippet}
-  {#snippet children()}
-    <p>{contentText}</p>
-  {/snippet}
+  <p>{contentText}</p>
 </Dialog>

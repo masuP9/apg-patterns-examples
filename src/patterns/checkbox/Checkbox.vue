@@ -94,6 +94,7 @@ const wrapperAttrs = computed(() => {
 });
 
 const inputAttrs = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { class: _className, 'data-testid': _testId, ...rest } = attrs;
   return rest;
 });

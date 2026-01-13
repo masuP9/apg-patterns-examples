@@ -636,7 +636,6 @@
   {@const isFocused = focusedId === node.id}
   {@const labelId = `${instanceId}-label-${node.id}`}
 
-  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
   <li
     use:trackNodeRef={node.id}
     role="treeitem"
@@ -669,7 +668,7 @@
     </span>
     {#if hasChildren && isExpanded && node.children}
       <ul role="group" class="apg-treeview-group">
-        {#each node.children as child}
+        {#each node.children as child (child.id)}
           {@render renderNode(child, depth + 1)}
         {/each}
       </ul>
@@ -685,7 +684,7 @@
   class={containerClass}
   onkeydown={handleKeyDown}
 >
-  {#each nodes as node}
+  {#each nodes as node (node.id)}
     {@render renderNode(node, 0)}
   {/each}
 </ul>

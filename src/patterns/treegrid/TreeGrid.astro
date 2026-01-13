@@ -536,16 +536,7 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
     private handleKeyDown(event: KeyboardEvent) {
       const cell = event.currentTarget as HTMLElement;
       const { key, ctrlKey } = event;
-      const {
-        rowIndex: rowIndexStr,
-        colIndex: colIndexStr,
-        disabled,
-        cellId,
-        rowId,
-        colId,
-        isRowHeader,
-      } = cell.dataset;
-      const rowIndex = parseInt(rowIndexStr || '0', 10);
+      const { colIndex: colIndexStr, disabled, cellId, rowId, colId, isRowHeader } = cell.dataset;
       const colIndex = parseInt(colIndexStr || '0', 10);
       const colCount = this.getColumnCount();
       const visibleRows = this.getVisibleRows().filter((r) => r.style.display !== 'none');
@@ -606,9 +597,6 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
           break;
         }
         case 'ArrowDown': {
-          const currentVisibleIndex = visibleRows.findIndex(
-            (r) => r.style.display !== 'none' && r.dataset.rowId === rowId
-          );
           const visibleOnly = visibleRows.filter((r) => r.style.display !== 'none');
           const actualIndex = visibleOnly.indexOf(currentRow!);
           if (actualIndex < visibleOnly.length - 1) {

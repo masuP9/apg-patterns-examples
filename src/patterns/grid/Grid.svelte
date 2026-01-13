@@ -44,7 +44,7 @@
     onSelectionChange?: (selectedIds: string[]) => void;
     onFocusChange?: (focusedId: string | null) => void;
     onCellActivate?: (cellId: string, rowId: string, colId: string) => void;
-    renderCell?: (cell: GridCellData, rowId: string, colId: string) => any;
+    renderCell?: (cell: GridCellData, rowId: string, colId: string) => string | number;
   }
 
   // =============================================================================

@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import TreeGrid, {
   type TreeGridColumnDef,
   type TreeGridNodeData,
-  type TreeGridCellData,
 } from './TreeGrid.vue';
 
 const columns: TreeGridColumnDef[] = [
@@ -107,8 +106,9 @@ function handleExpandedChange(ids: string[]) {
   expandedIds.value = ids;
 }
 
-function handleCellActivate(cellId: string, rowId: string, colId: string) {
-  console.log('Cell activated:', { cellId, rowId, colId });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function handleCellActivate(_cellId: string, _rowId: string, _colId: string) {
+  // Handle cell activation (e.g., navigate, open modal, etc.)
 }
 </script>
 

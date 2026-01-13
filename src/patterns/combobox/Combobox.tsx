@@ -569,6 +569,7 @@ export function Combobox({
           const isSelected = id === selectedId;
 
           return (
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- managed on option aria-activedescendant
             <li
               key={id}
               id={getOptionId(id)}

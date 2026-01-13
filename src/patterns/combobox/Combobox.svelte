@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from '@/lib/utils';
-  import { onDestroy, tick } from 'svelte';
+  import { onDestroy } from 'svelte';
 
   export interface ComboboxOption {
     id: string;
@@ -478,7 +478,6 @@
       </svg>
     </span>
   </div>
-  <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
   <ul
     id={listboxId}
     role="listbox"
@@ -491,10 +490,9 @@
         {noResultsMessage}
       </li>
     {/if}
-    {#each filteredOptions as option, index}
+    {#each filteredOptions as option, index (option.id)}
       {@const isActive = index === activeIndex}
       {@const isSelected = option.id === currentSelectedId}
-      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
       <li
         id={getOptionId(option.id)}
         role="option"

@@ -26,7 +26,7 @@
     'aria-labelledby': ariaLabelledby,
     defaultValue = '',
     orientation = 'vertical',
-    onValueChange = (_) => {},
+    onValueChange = () => {},
     class: className,
   }: RadioGroupProps = $props();
 

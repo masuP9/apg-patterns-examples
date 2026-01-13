@@ -63,7 +63,7 @@ const initialFocusIndex = defaultOpen && availableItems.length > 0 ? 0 : -1;
       data-menu-list
     >
       {
-        items.map((item, index) => {
+        items.map((item) => {
           const availableIndex = availableItems.findIndex((i) => i.id === item.id);
           const isFocusTarget = availableIndex === initialFocusIndex;
           const tabIndex = item.disabled ? -1 : isFocusTarget ? 0 : -1;

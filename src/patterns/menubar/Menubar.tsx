@@ -1,5 +1,5 @@
 import type { HTMLAttributes, KeyboardEvent, ReactElement } from 'react';
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 // Menu item types
 export interface MenuItemBase {
@@ -446,8 +446,6 @@ export function Menubar({
       radioGroupName?: string
     ) => {
       const focusableItems = getFocusableItems(menuItems);
-      const enabledItems = focusableItems.filter((i) => ('disabled' in i ? !i.disabled : true));
-
       const currentIndex = focusableItems.findIndex((i) => i.id === item.id);
 
       switch (event.key) {
@@ -582,17 +580,7 @@ export function Menubar({
         }
       }
     },
-    [
-      getFocusableItems,
-      getFirstFocusableItem,
-      state.openMenubarIndex,
-      state.focusedItemPath,
-      items.length,
-      openMenubarMenu,
-      closeAllMenus,
-      activateMenuItem,
-      handleTypeAhead,
-    ]
+    [getFocusableItems, getFirstFocusableItem, state.openMenubarIndex, state.openSubmenuPath, items.length, openMenubarMenu, closeAllMenus, activateMenuItem, handleTypeAhead]
   );
 
   // Render menu items recursively
@@ -609,39 +597,41 @@ export function Menubar({
         if (item.type === 'separator') {
           elements.push(
             <li key={item.id} role="none">
-              <hr role="separator" className="apg-menubar-separator" />
+              <hr className="apg-menubar-separator" />
             </li>
           );
         } else if (item.type === 'radiogroup') {
+          const { name, label, id } = item;
           elements.push(
-            <li key={item.id} role="none">
-              <ul role="group" aria-label={item.label} className="apg-menubar-group">
+            <li key={id} role="none">
+              <ul role="group" aria-label={label} className="apg-menubar-group">
                 {item.items.map((radioItem) => {
-                  const isChecked = radioStates.get(item.name) === radioItem.id;
+                  const { id: radioItemId, label: radioItemLabel, disabled } = radioItem;
+                  const isChecked = radioStates.get(name) === radioItemId;
                   const isFocused =
-                    state.focusedItemPath[state.focusedItemPath.length - 1] === radioItem.id;
+                    state.focusedItemPath[state.focusedItemPath.length - 1] === radioItemId
 
                   return (
-                    <li key={radioItem.id} role="none">
+                    <li key={radioItemId} role="none">
                       <span
                         ref={(el) => {
                           if (el) {
-                            menuItemRefs.current.set(radioItem.id, el);
+                            menuItemRefs.current.set(radioItemId, el);
                           } else {
-                            menuItemRefs.current.delete(radioItem.id);
+                            menuItemRefs.current.delete(radioItemId);
                           }
                         }}
                         role="menuitemradio"
                         aria-checked={isChecked}
-                        aria-disabled={radioItem.disabled || undefined}
+                        aria-disabled={disabled || undefined}
                         tabIndex={isFocused ? 0 : -1}
                         className="apg-menubar-menuitem apg-menubar-menuitemradio"
-                        onClick={() => activateMenuItem(radioItem, item.name)}
+                        onClick={() => activateMenuItem(radioItem, name)}
                         onKeyDown={(e) =>
-                          handleMenuKeyDown(e, radioItem, menuItems, isSubmenu, item.name)
+                          handleMenuKeyDown(e, radioItem, menuItems, isSubmenu, name)
                         }
                       >
-                        {radioItem.label}
+                        {radioItemLabel}
                       </span>
                     </li>
                   );

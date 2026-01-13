@@ -43,7 +43,7 @@ const variants = cva(
   }
 );
 
-const { class: className, variant, size, href, text, html, ...props } = Astro.props;
+const { class: className, variant, size, href, text: _text, html: _html, ...props } = Astro.props;
 
 const slot = await Astro.slots.render('default');
 

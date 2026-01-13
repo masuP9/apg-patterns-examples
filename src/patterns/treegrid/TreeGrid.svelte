@@ -60,7 +60,7 @@
     onSelectionChange?: (selectedRowIds: string[]) => void;
     onFocusChange?: (cellId: string | null) => void;
     onCellActivate?: (cellId: string, rowId: string, colId: string) => void;
-    renderCell?: (cell: TreeGridCellData, rowId: string, colId: string) => any;
+    renderCell?: (cell: TreeGridCellData, rowId: string, colId: string) => string | number;
   }
 
   // =============================================================================
@@ -503,11 +503,6 @@
 
   function getCellRole(colIndex: number): 'rowheader' | 'gridcell' {
     return columns[colIndex]?.isRowHeader ? 'rowheader' : 'gridcell';
-  }
-
-  function getExpandIcon(flatRow: FlatRow): string {
-    if (!flatRow.hasChildren) return '';
-    return expandedIds.has(flatRow.node.id) ? '\u25BC' : '\u25B6';
   }
 
   function getCellPaddingLeft(flatRow: FlatRow, colIndex: number): string | undefined {

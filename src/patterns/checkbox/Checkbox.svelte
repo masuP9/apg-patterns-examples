@@ -17,7 +17,7 @@
     disabled = false,
     name,
     value,
-    onCheckedChange = (_) => {},
+    onCheckedChange = () => {},
     ...restProps
   }: CheckboxProps = $props();
 

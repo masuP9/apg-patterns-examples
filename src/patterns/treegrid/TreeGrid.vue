@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, nextTick, type Ref } from 'vue';
+import { computed, ref, onMounted, nextTick } from 'vue';
 
 // =============================================================================
 // Types
@@ -502,10 +502,6 @@ function getCellRole(colIndex: number): 'rowheader' | 'gridcell' {
   return props.columns[colIndex]?.isRowHeader ? 'rowheader' : 'gridcell';
 }
 
-function getExpandIcon(flatRow: FlatRow): string {
-  if (!flatRow.hasChildren) return '';
-  return expandedIds.value.has(flatRow.node.id) ? '\u25BC' : '\u25B6';
-}
 </script>
 
 <template>

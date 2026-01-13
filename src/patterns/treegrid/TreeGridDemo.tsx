@@ -3,7 +3,6 @@ import {
   TreeGrid,
   type TreeGridColumnDef,
   type TreeGridNodeData,
-  type TreeGridCellData,
 } from './TreeGrid';
 
 const columns: TreeGridColumnDef[] = [
@@ -108,8 +107,9 @@ export function TreeGridDemo() {
     setExpandedIds(ids);
   }, []);
 
-  const handleCellActivate = useCallback((cellId: string, rowId: string, colId: string) => {
-    console.log('Cell activated:', { cellId, rowId, colId });
+   
+  const handleCellActivate = useCallback((_cellId: string, _rowId: string, _colId: string) => {
+    // Handle cell activation (e.g., navigate, open modal, etc.)
   }, []);
 
   return (

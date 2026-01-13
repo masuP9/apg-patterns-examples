@@ -178,6 +178,8 @@ export function Dialog({
   if (!mounted) return null;
 
   return createPortal(
+    // disable dialog a11y warnings, as only dropdown click. there are alternative keyboard ways to close
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
     <dialog
       ref={dialogRef}
       className={`apg-dialog ${className}`.trim()}

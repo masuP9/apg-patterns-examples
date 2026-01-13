@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, nextTick, type Ref } from 'vue';
+import { computed, ref, onMounted, nextTick } from 'vue';
 
 // =============================================================================
 // Types

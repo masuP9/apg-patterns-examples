@@ -187,7 +187,8 @@ const initStates = () => {
         if (checked) {
           radioStates.value.set(item.name, checked.id);
         }
-        item.items.forEach((radio) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        item.items.forEach((_radio) => {
           // Track individual radio items too
         });
       } else if (item.type === 'submenu') {
