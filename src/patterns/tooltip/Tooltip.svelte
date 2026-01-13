@@ -32,7 +32,7 @@
 
 <script lang="ts">
   import { cn } from '@/lib/utils';
-  import { onDestroy } from 'svelte';
+  import { onDestroy, untrack } from 'svelte';
 
   let {
     content,
@@ -51,7 +51,7 @@
   // Use provided id directly - required for SSR/hydration consistency
   const tooltipId = $derived(id);
 
-  let internalOpen = $state(defaultOpen);
+  let internalOpen = $state(untrack(() => defaultOpen));
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
   let isControlled = $derived(controlledOpen !== undefined);

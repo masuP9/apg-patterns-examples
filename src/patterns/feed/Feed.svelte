@@ -66,6 +66,7 @@
   // Refs
   let containerRef: HTMLDivElement;
   let articleRefs: (HTMLElement | null)[] = [];
+  // eslint-disable-next-line svelte/valid-compile -- sentinelRef is only used in effects, not reactive context
   let sentinelRef: HTMLDivElement;
 
   // Computed
@@ -217,6 +218,7 @@
   {...restProps}
 >
   {#each articles as article, index (article.id)}
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <article
       bind:this={articleRefs[index]}
       class="apg-feed-article"

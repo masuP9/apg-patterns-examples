@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from '@/lib/utils';
-  import { onDestroy } from 'svelte';
+  import { onDestroy, untrack } from 'svelte';
 
   export interface ComboboxOption {
     id: string;
@@ -55,13 +55,13 @@
     return defaultInputValue;
   };
 
-  // State
+  // State - use untrack for initial values
   let isOpen = $state(false);
   let activeIndex = $state(-1);
   let isComposing = $state(false);
   let valueBeforeOpen = '';
-  let internalInputValue = $state(getInitialInputValue());
-  let internalSelectedId = $state<string | undefined>(defaultSelectedOptionId);
+  let internalInputValue = $state(untrack(() => getInitialInputValue()));
+  let internalSelectedId = $state<string | undefined>(untrack(() => defaultSelectedOptionId));
   let isSearching = $state(false);
 
   // Refs
@@ -493,6 +493,7 @@
     {#each filteredOptions as option, index (option.id)}
       {@const isActive = index === activeIndex}
       {@const isSelected = option.id === currentSelectedId}
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <li
         id={getOptionId(option.id)}
         role="option"

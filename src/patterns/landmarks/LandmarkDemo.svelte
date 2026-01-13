@@ -7,13 +7,17 @@
    * @see https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/
    */
 
-  /** Show landmark labels overlay */
-  export let showLabels: boolean = false;
-  let className: string = '';
-  export { className as class };
+  interface Props {
+    /** Show landmark labels overlay */
+    showLabels?: boolean;
+    class?: string;
+    [key: string]: unknown;
+  }
+
+  let { showLabels = false, class: className = '', ...restProps }: Props = $props();
 </script>
 
-<div class="apg-landmark-demo {className}" {...$$restProps}>
+<div class="apg-landmark-demo {className}" {...restProps}>
   <!-- Banner Landmark -->
   <header class="apg-landmark-banner">
     <span class="apg-landmark-label" class:hidden={!showLabels} aria-hidden="true">banner</span>

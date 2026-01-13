@@ -1,5 +1,6 @@
 <script lang="ts">
   import { untrack } from 'svelte';
+  import { SvelteMap } from 'svelte/reactivity';
 
   interface RadioOption {
     id: string;
@@ -52,7 +53,7 @@
   let selectedValue = $state(untrack(() => getInitialValue()));
 
   // Refs for focus management
-  let radioRefs: Map<string, HTMLDivElement> = new Map();
+  let radioRefs: Map<string, HTMLDivElement> = new SvelteMap();
 
   function radioRefAction(node: HTMLDivElement, value: string) {
     radioRefs.set(value, node);

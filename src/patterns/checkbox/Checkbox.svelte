@@ -22,6 +22,7 @@
   }: CheckboxProps = $props();
 
   let checked = $state(untrack(() => initialChecked));
+  // eslint-disable-next-line svelte/prefer-writable-derived -- isIndeterminate is modified both by props sync and user interaction in handleChange
   let isIndeterminate = $state(untrack(() => indeterminateProp));
   let inputRef: HTMLInputElement | undefined = $state();
 

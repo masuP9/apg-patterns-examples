@@ -152,6 +152,7 @@
 </script>
 
 <div class={containerClass}>
+  <!-- svelte-ignore a11y_interactive_supports_focus -->
   <div
     bind:this={tablistElement}
     role="tablist"
@@ -194,6 +195,7 @@
         tabindex={isSelected ? 0 : -1}
       >
         {#if tab.content}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -- Content is provided by the consuming application -->
           {@html tab.content}
         {/if}
       </div>

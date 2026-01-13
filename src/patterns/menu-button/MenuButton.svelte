@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onDestroy, tick } from 'svelte';
+  import { onDestroy, tick, untrack } from 'svelte';
+  import { SvelteMap } from 'svelte/reactivity';
 
   export interface MenuItem {
     id: string;
@@ -24,9 +25,8 @@
     ...restProps
   }: MenuButtonProps = $props();
 
-  // State - capture defaultOpen value to avoid reactivity warning
-  const initialOpen = defaultOpen;
-  let isOpen = $state(initialOpen);
+  // State - use untrack to capture defaultOpen initial value only
+  let isOpen = $state(untrack(() => defaultOpen));
   let focusedIndex = $state(-1);
   // Generate ID immediately for SSR-safe aria-controls/aria-labelledby
   const instanceId = `menu-button-${Math.random().toString(36).slice(2, 11)}`;
@@ -37,14 +37,14 @@
   // Refs
   let containerElement: HTMLDivElement;
   let buttonElement: HTMLButtonElement;
-  let menuItemRefs = new Map<string, HTMLLIElement>();
+  let menuItemRefs = new SvelteMap<string, HTMLLIElement>();
 
   // Derived
   let availableItems = $derived(items.filter((item) => !item.disabled));
 
   // Map of item id to index in availableItems for O(1) lookup
   let availableIndexMap = $derived.by(() => {
-    const map = new Map<string, number>();
+    const map = new SvelteMap<string, number>();
     availableItems.forEach(({ id }, index) => map.set(id, index));
     return map;
   });

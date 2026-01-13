@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { SvelteMap } from 'svelte/reactivity';
+
   // =============================================================================
   // Types
   // =============================================================================
@@ -83,7 +85,7 @@
   let initialized = $state(false);
 
   let gridRef: HTMLDivElement | null = $state(null);
-  let cellRefs: Map<string, HTMLDivElement> = new Map();
+  let cellRefs: Map<string, HTMLDivElement> = new SvelteMap();
 
   // Compute effective focused ID (use state if set, otherwise derive from props)
   const focusedId = $derived(focusedIdState ?? defaultFocusedId ?? rows[0]?.cells[0]?.id ?? null);
@@ -127,7 +129,7 @@
 
   // Map cellId to cell info for O(1) lookup
   const cellById = $derived.by(() => {
-    const map = new Map<
+    const map = new SvelteMap<
       string,
       { rowIndex: number; colIndex: number; cell: GridCellData; rowId: string }
     >();
@@ -435,6 +437,7 @@
           use:registerCell={cell.id}
         >
           {#if renderCell}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -- renderCell returns sanitized HTML from the consuming application -->
             {@html renderCell(cell, row.id, colId)}
           {:else}
             {cell.value}
