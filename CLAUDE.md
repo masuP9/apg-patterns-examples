@@ -311,6 +311,14 @@ npm run test:astro    # Container API テスト
 npm run test:e2e
 npm run test:e2e:ui   # UI モード
 
+# 特定パターンの E2E テスト
+npm run test:e2e:pattern --pattern=tabs
+npm run test:e2e:pattern --pattern=accordion
+
+# 特定フレームワーク + 特定パターン（要: npm run dev 別ターミナル）
+npm run test:e2e:react:pattern --pattern=tabs
+npm run test:e2e:vue:pattern --pattern=tabs
+
 # その他
 npm run test:watch    # ウォッチモード
 npm run test:coverage # カバレッジ

@@ -1,0 +1,71 @@
+---
+/**
+ * Demo-only Page: Tabs (React) - Japanese
+ *
+ * This page renders the Tabs component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import { Tabs } from '@patterns/tabs/Tabs';
+
+const basicTabs = [
+  { id: 'tab1', label: '概要', content: '概要の内容です。これは最初のタブパネルです。' },
+  { id: 'tab2', label: '機能', content: '機能の内容です。このタブでは機能について説明します。' },
+  { id: 'tab3', label: '料金', content: '料金の内容です。こちらで料金プランをご確認ください。' },
+];
+
+const manualTabs = [
+  { id: 'manual1', label: 'タブ A', content: 'タブ A の内容です。手動アクティベーションモード。' },
+  {
+    id: 'manual2',
+    label: 'タブ B',
+    content: 'タブ B の内容です。Enter または Space で選択します。',
+  },
+  { id: 'manual3', label: 'タブ C', content: 'タブ C の内容です。' },
+];
+
+const verticalTabs = [
+  { id: 'v1', label: '設定', content: '設定パネルの内容です。' },
+  { id: 'v2', label: 'プロフィール', content: 'プロフィールパネルの内容です。' },
+  { id: 'v3', label: '通知', content: '通知パネルの内容です。' },
+];
+
+const disabledTabs = [
+  { id: 'd1', label: 'アクティブ', content: 'このタブはアクティブで選択可能です。' },
+  { id: 'd2', label: '無効', content: 'この内容は表示されません。', disabled: true },
+  { id: 'd3', label: '別のタブ', content: '別のアクティブなタブの内容です。' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: タブ (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">自動アクティベーション（デフォルト）</h2>
+        <Tabs client:load tabs={basicTabs} />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">手動アクティベーション</h2>
+        <Tabs client:load tabs={manualTabs} activation="manual" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">縦方向</h2>
+        <Tabs client:load tabs={verticalTabs} orientation="vertical" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">無効なタブあり</h2>
+        <Tabs client:load tabs={disabledTabs} />
+      </div>
+    </div>
+  </body>
+</html>
