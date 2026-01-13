@@ -162,3 +162,67 @@ it('only selected tab has tabIndex=0', () => {
   expect(tabs[1]).toHaveAttribute('tabIndex', '-1');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('tabs have proper ARIA structure', async ({ page }) => {
+  await page.goto('patterns/tabs/react/demo/');
+  const tabs = page.locator('.apg-tabs').first();
+
+  // Check roles
+  await expect(tabs.getByRole('tablist')).toBeAttached();
+  await expect(tabs.getByRole('tab').first()).toBeAttached();
+  await expect(tabs.getByRole('tabpanel')).toBeAttached();
+
+  // Check aria-selected and aria-controls linkage
+  const selectedTab = tabs.getByRole('tab', { selected: true });
+  await expect(selectedTab).toHaveAttribute('aria-selected', 'true');
+  await expect(selectedTab).toHaveAttribute('aria-controls', /.+/);
+
+  const controlsId = await selectedTab.getAttribute('aria-controls');
+  const panel = page.locator(`#${controlsId}`);
+  await expect(panel).toHaveRole('tabpanel');
+});
+
+// Keyboard navigation test (automatic mode)
+test('arrow keys navigate and select tabs', async ({ page }) => {
+  await page.goto('patterns/tabs/react/demo/');
+  const tabs = page.locator('.apg-tabs').first();
+  const tabButtons = tabs.getByRole('tab');
+  const firstTab = tabButtons.first();
+  const secondTab = tabButtons.nth(1);
+
+  await firstTab.click();
+  await expect(firstTab).toBeFocused();
+
+  await page.keyboard.press('ArrowRight');
+  await expect(secondTab).toBeFocused();
+  await expect(secondTab).toHaveAttribute('aria-selected', 'true');
+
+  // Test loop at boundaries
+  await page.keyboard.press('End');
+  const lastTab = tabButtons.last();
+  await expect(lastTab).toBeFocused();
+
+  await page.keyboard.press('ArrowRight');
+  await expect(firstTab).toBeFocused();
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/tabs/react/demo/');
+  await page.locator('.apg-tabs').first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('.apg-tabs')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

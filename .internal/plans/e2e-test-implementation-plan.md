@@ -10,18 +10,18 @@ E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実�
 
 ### 進捗
 
-| パターン    | E2Eテスト | デモページ | TestingDocs | 備考 |
-| ----------- | --------- | ---------- | ----------- | ---- |
-| Tooltip     | ✅        | ✅         | ✅          | 完了 |
-| Accordion   | ✅        | ✅         | ✅          | 完了 |
-| Tabs        | ✅        | ✅         | ✅          | 完了 |
-| Radio Group | ✅        | ✅         | ✅          | 完了 |
-| Toolbar     | ⬜        | ⬜         | ⬜          |      |
-| Slider      | ⬜        | ⬜         | ⬜          |      |
-| Dialog      | ⬜        | ⬜         | ⬜          |      |
-| Menu Button | ⬜        | ⬜         | ⬜          |      |
-| Spinbutton  | ⬜        | ⬜         | ⬜          |      |
-| Tree View   | ⬜        | ⬜         | ⬜          |      |
+| パターン    | E2Eテスト | デモページ | TestingDocs | llm.md | 備考 |
+| ----------- | --------- | ---------- | ----------- | ------ | ---- |
+| Tooltip     | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Accordion   | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Tabs        | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Radio Group | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Toolbar     | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Slider      | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Dialog      | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Menu Button | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Spinbutton  | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Tree View   | ⬜        | ⬜         | ⬜          | ⬜     |      |
 
 ---
 
@@ -914,7 +914,61 @@ const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 />
 ```
 
-### 5. チェックリスト
+### 5. llm.md の更新
+
+E2Eテスト実装後、llm.md にE2Eテスト情報を追加する。
+
+**更新ファイル**:
+```
+src/patterns/{pattern}/llm.md
+```
+
+**追加内容**:
+「Example Test Code」セクションの後に「Example E2E Test Code (Playwright)」セクションを追加。
+
+**テンプレート**:
+```markdown
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/{pattern}/react/demo/');
+
+  const component = page.getByRole('{role}');
+  await expect(component).toBeVisible();
+  // ... specific assertions
+});
+
+// Keyboard interaction test
+test('{Key} key performs action', async ({ page }) => {
+  await page.goto('patterns/{pattern}/react/demo/');
+
+  // ... keyboard test
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/{pattern}/react/demo/');
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="{role}"]')
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```
+```
+
+**注意点**:
+- Unit Test とは別セクションとして追加
+- パターン固有の重要なテストケースを2-3個含める
+- axe-core によるアクセシビリティテストを含める
+
+### 6. チェックリスト
 
 各パターン実装時のドキュメンテーション作業チェックリスト：
 
@@ -925,6 +979,7 @@ const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 - [ ] 日本語パターンページにデモリンク追加（4フレームワーク）
 - [ ] TestingDocs.astro 更新
 - [ ] TestingDocs.ja.astro 更新
+- [ ] llm.md 更新（E2Eテストコード追加）
 
 ---
 

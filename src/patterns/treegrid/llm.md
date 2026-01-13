@@ -413,3 +413,121 @@ it('Enter activates but does NOT expand', async () => {
   expect(parentRow).toHaveAttribute('aria-expanded', 'false'); // Still collapsed
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect, type Locator, type Page } from '@playwright/test';
+
+// Helper to focus a cell (handles cells containing links/buttons)
+async function focusCell(page: Page, cell: Locator): Promise<void> {
+  await cell.click({ position: { x: 5, y: 5 } });
+}
+
+// Helper to check if cell or focusable child is focused
+async function expectCellOrChildFocused(page: Page, cell: Locator): Promise<void> {
+  const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
+  if (cellIsFocused) {
+    await expect(cell).toBeFocused();
+    return;
+  }
+  // Check for focused child (links, buttons)
+  const focusedChild = cell.locator('a[href], button:not([disabled])');
+  const childCount = await focusedChild.count();
+  for (let i = 0; i < childCount; i++) {
+    const child = focusedChild.nth(i);
+    if (await child.evaluate((el) => document.activeElement === el)) {
+      await expect(child).toBeFocused();
+      return;
+    }
+  }
+  await expect(cell).toBeFocused();
+}
+
+// ARIA structure test
+test('has correct treegrid ARIA structure', async ({ page }) => {
+  await page.goto('patterns/treegrid/react/demo/');
+  await page.waitForSelector('[role="treegrid"]');
+
+  const treegrid = page.getByRole('treegrid');
+  await expect(treegrid).toBeVisible();
+
+  // Check accessible name
+  const label = await treegrid.getAttribute('aria-label');
+  const labelledby = await treegrid.getAttribute('aria-labelledby');
+  expect(label || labelledby).toBeTruthy();
+
+  // Check row structure
+  const rows = treegrid.getByRole('row');
+  expect(await rows.count()).toBeGreaterThan(1);
+
+  // Check aria-level on data rows
+  for (let i = 0; i < await rows.count(); i++) {
+    const row = rows.nth(i);
+    const ariaLevel = await row.getAttribute('aria-level');
+    if (ariaLevel !== null) {
+      expect(parseInt(ariaLevel, 10)).toBeGreaterThanOrEqual(1);
+    }
+  }
+
+  // Check aria-expanded on parent rows
+  let foundParentRow = false;
+  for (let i = 0; i < await rows.count(); i++) {
+    const row = rows.nth(i);
+    const ariaExpanded = await row.getAttribute('aria-expanded');
+    if (ariaExpanded !== null) {
+      foundParentRow = true;
+      expect(['true', 'false']).toContain(ariaExpanded);
+    }
+  }
+  expect(foundParentRow).toBe(true);
+});
+
+// Keyboard tree operations test
+test('ArrowRight expands collapsed parent at rowheader', async ({ page }) => {
+  await page.goto('patterns/treegrid/react/demo/');
+  const treegrid = page.getByRole('treegrid');
+  const rows = treegrid.getByRole('row');
+
+  // Find a collapsed parent row
+  let collapsedRow: Locator | null = null;
+  for (let i = 0; i < await rows.count(); i++) {
+    const row = rows.nth(i);
+    if (await row.getAttribute('aria-expanded') === 'false') {
+      collapsedRow = row;
+      break;
+    }
+  }
+  if (!collapsedRow) return;
+
+  const rowheader = collapsedRow.getByRole('rowheader');
+  await focusCell(page, rowheader);
+  await page.keyboard.press('ArrowRight');
+
+  await expect(collapsedRow).toHaveAttribute('aria-expanded', 'true');
+});
+
+// Row selection test
+test('Space toggles row selection', async ({ page }) => {
+  await page.goto('patterns/treegrid/react/demo/');
+  const treegrid = page.getByRole('treegrid');
+  const rows = treegrid.getByRole('row');
+
+  // Find a selectable row
+  let selectableRow: Locator | null = null;
+  for (let i = 0; i < await rows.count(); i++) {
+    const row = rows.nth(i);
+    if (await row.getAttribute('aria-selected') !== null) {
+      selectableRow = row;
+      break;
+    }
+  }
+  if (!selectableRow) return;
+
+  const rowheader = selectableRow.getByRole('rowheader');
+  await focusCell(page, rowheader);
+  await page.keyboard.press('Space');
+
+  await expect(selectableRow).toHaveAttribute('aria-selected', 'true');
+});
+```

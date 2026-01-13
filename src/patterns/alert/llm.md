@@ -163,3 +163,47 @@ it('is not focusable', () => {
   expect(alert).not.toHaveAttribute('tabindex');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA Structure: Live region exists in DOM
+test('has role="alert" on container', async ({ page }) => {
+  await page.goto('patterns/alert/react/');
+  const alert = page.locator('[role="alert"]');
+  await expect(alert).toHaveAttribute('role', 'alert');
+  await expect(alert).toBeAttached();
+});
+
+// Focus Management: Alert does NOT steal focus
+test('does NOT steal focus when alert appears', async ({ page }) => {
+  await page.goto('patterns/alert/react/');
+  const infoButton = page.getByRole('button', { name: 'Info' });
+
+  await infoButton.focus();
+  await expect(infoButton).toBeFocused();
+
+  await infoButton.click();
+
+  // Focus should still be on the button, not on the alert
+  await expect(infoButton).toBeFocused();
+});
+
+// Accessibility: No axe-core violations
+test('has no axe-core violations (with message)', async ({ page }) => {
+  await page.goto('patterns/alert/react/');
+  const infoButton = page.getByRole('button', { name: 'Info' });
+
+  await infoButton.click();
+  await expect(page.locator('[role="alert"]')).toContainText('informational');
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('[role="alert"]')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

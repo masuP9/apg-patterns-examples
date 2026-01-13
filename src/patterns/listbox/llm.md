@@ -215,3 +215,71 @@ npx playwright test listbox --grep "astro"
 # Run in UI mode for debugging
 npm run test:e2e:ui -- --grep listbox
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('patterns/listbox/react/demo/');
+  await page.waitForLoadState('networkidle');
+});
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  const listbox = page.locator('[role="listbox"]').first();
+  await expect(listbox).toHaveAttribute('role', 'listbox');
+
+  // Check accessible name
+  const ariaLabelledby = await listbox.getAttribute('aria-labelledby');
+  expect(ariaLabelledby).toBeTruthy();
+
+  // Check options have correct role
+  const options = listbox.locator('[role="option"]');
+  const count = await options.count();
+  expect(count).toBeGreaterThan(0);
+
+  // Multi-select listbox has aria-multiselectable
+  const multiSelectListbox = page.locator('[role="listbox"]').nth(1);
+  await expect(multiSelectListbox).toHaveAttribute('aria-multiselectable', 'true');
+});
+
+// Keyboard navigation test (single-select)
+test('ArrowDown moves focus and selection in single-select', async ({ page }) => {
+  const listbox = page.locator('[role="listbox"]').first();
+  const options = listbox.locator('[role="option"]:not([aria-disabled="true"])');
+  const firstOption = options.first();
+  const secondOption = options.nth(1);
+
+  await firstOption.focus();
+  await expect(firstOption).toHaveAttribute('aria-selected', 'true');
+
+  await page.keyboard.press('ArrowDown');
+  await expect(secondOption).toHaveAttribute('tabindex', '0');
+  await expect(secondOption).toHaveAttribute('aria-selected', 'true');
+  await expect(firstOption).toHaveAttribute('aria-selected', 'false');
+});
+
+// Multi-select keyboard test
+test('Space toggles selection in multi-select', async ({ page }) => {
+  const listbox = page.locator('[role="listbox"]').nth(1);
+  const firstOption = listbox.locator('[role="option"]:not([aria-disabled="true"])').first();
+
+  await firstOption.focus();
+  await expect(firstOption).not.toHaveAttribute('aria-selected', 'true');
+
+  await page.keyboard.press('Space');
+  await expect(firstOption).toHaveAttribute('aria-selected', 'true');
+
+  await page.keyboard.press('Space');
+  await expect(firstOption).toHaveAttribute('aria-selected', 'false');
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  const results = await new AxeBuilder({ page }).include('[role="listbox"]').analyze();
+  expect(results.violations).toEqual([]);
+});
+```

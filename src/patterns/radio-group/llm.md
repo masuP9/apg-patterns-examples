@@ -205,3 +205,68 @@ it('has only one tabindex="0" in group', () => {
   expect(tabbable).toHaveLength(1);
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('radio group has proper ARIA structure', async ({ page }) => {
+  await page.goto('patterns/radio-group/react/demo/');
+  const radiogroup = page.getByRole('radiogroup').first();
+
+  // Check role and accessible name
+  await expect(radiogroup).toHaveRole('radiogroup');
+  const ariaLabel = await radiogroup.getAttribute('aria-label');
+  const ariaLabelledby = await radiogroup.getAttribute('aria-labelledby');
+  expect(ariaLabel || ariaLabelledby).toBeTruthy();
+
+  // Check radio roles and aria-checked
+  const radios = radiogroup.getByRole('radio');
+  const count = await radios.count();
+  expect(count).toBeGreaterThan(0);
+
+  // Click first to select
+  await radios.first().click();
+  await expect(radios.first()).toHaveAttribute('aria-checked', 'true');
+  await expect(radios.nth(1)).toHaveAttribute('aria-checked', 'false');
+});
+
+// Keyboard navigation test
+test('arrow keys move and select radios with wrap', async ({ page }) => {
+  await page.goto('patterns/radio-group/react/demo/');
+  const radiogroup = page.getByRole('radiogroup').first();
+  const radios = radiogroup.getByRole('radio');
+  const firstRadio = radios.first();
+  const lastRadio = radios.last();
+
+  await firstRadio.click();
+  await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
+
+  // ArrowDown moves to next and selects
+  await page.keyboard.press('ArrowDown');
+  await expect(radios.nth(1)).toBeFocused();
+  await expect(radios.nth(1)).toHaveAttribute('aria-checked', 'true');
+
+  // Test wrap from last to first
+  await lastRadio.click();
+  await page.keyboard.press('ArrowDown');
+  await expect(firstRadio).toBeFocused();
+  await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/radio-group/react/demo/');
+  await page.getByRole('radiogroup').first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="radiogroup"]')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

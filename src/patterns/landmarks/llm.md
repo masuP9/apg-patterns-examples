@@ -163,3 +163,56 @@ it('has search landmark', () => {
   expect(screen.getByRole('search')).toBeInTheDocument();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// Landmark Roles
+test('has all required landmarks', async ({ page }) => {
+  await page.goto('patterns/landmarks/react/demo/');
+  const demo = page.locator('.apg-landmark-demo');
+
+  await expect(demo.getByRole('banner')).toBeVisible();
+  await expect(demo.getByRole('navigation').first()).toBeVisible();
+  await expect(demo.getByRole('main')).toBeVisible();
+  await expect(demo.getByRole('contentinfo')).toBeVisible();
+  await expect(demo.getByRole('complementary')).toBeVisible();
+  await expect(demo.getByRole('region')).toBeVisible();
+  await expect(demo.getByRole('search')).toBeVisible();
+  await expect(demo.getByRole('form')).toBeVisible();
+});
+
+// Unique Landmarks
+test('has exactly one main, banner, and contentinfo', async ({ page }) => {
+  await page.goto('patterns/landmarks/react/demo/');
+  const demo = page.locator('.apg-landmark-demo');
+
+  await expect(demo.getByRole('main')).toHaveCount(1);
+  await expect(demo.getByRole('banner')).toHaveCount(1);
+  await expect(demo.getByRole('contentinfo')).toHaveCount(1);
+});
+
+// Labeling
+test('landmarks requiring labels have accessible names', async ({ page }) => {
+  await page.goto('patterns/landmarks/react/demo/');
+  const demo = page.locator('.apg-landmark-demo');
+
+  // region, search, form require accessible names
+  await expect(demo.getByRole('region')).toHaveAccessibleName(/.+/);
+  await expect(demo.getByRole('search')).toHaveAccessibleName(/.+/);
+  await expect(demo.getByRole('form')).toHaveAccessibleName(/.+/);
+  await expect(demo.getByRole('complementary')).toHaveAccessibleName(/.+/);
+});
+
+// Accessibility
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/landmarks/react/demo/');
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('.apg-landmark-demo')
+    .analyze();
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

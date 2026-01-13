@@ -228,3 +228,66 @@ it('handles negative min/max range', () => {
   expect(meter).toHaveAttribute('aria-valuemax', '50');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('patterns/meter/react/');
+  await page.waitForLoadState('networkidle');
+});
+
+// ARIA structure test
+test('has correct ARIA attributes', async ({ page }) => {
+  const meters = page.locator('[role="meter"]');
+  const count = await meters.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let i = 0; i < count; i++) {
+    const meter = meters.nth(i);
+
+    // Required attributes
+    const valueNow = await meter.getAttribute('aria-valuenow');
+    const valueMin = await meter.getAttribute('aria-valuemin');
+    const valueMax = await meter.getAttribute('aria-valuemax');
+
+    expect(valueNow).not.toBeNull();
+    expect(valueMin).not.toBeNull();
+    expect(valueMax).not.toBeNull();
+
+    // Value should be within range
+    expect(Number(valueNow)).toBeGreaterThanOrEqual(Number(valueMin));
+    expect(Number(valueNow)).toBeLessThanOrEqual(Number(valueMax));
+
+    // Must have accessible name
+    const ariaLabel = await meter.getAttribute('aria-label');
+    const ariaLabelledby = await meter.getAttribute('aria-labelledby');
+    expect(ariaLabel !== null || ariaLabelledby !== null).toBe(true);
+  }
+});
+
+// Non-interactive behavior test
+test('is not focusable by default', async ({ page }) => {
+  const meters = page.locator('[role="meter"]');
+  const count = await meters.count();
+
+  for (let i = 0; i < count; i++) {
+    const meter = meters.nth(i);
+    const tabindex = await meter.getAttribute('tabindex');
+    // Should not have tabindex, or if present should be -1
+    if (tabindex !== null) {
+      expect(Number(tabindex)).toBe(-1);
+    }
+  }
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.locator('[role="meter"]').first().waitFor();
+  const results = await new AxeBuilder({ page }).include('[role="meter"]').analyze();
+  expect(results.violations).toEqual([]);
+});
+```

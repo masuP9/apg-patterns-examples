@@ -414,3 +414,69 @@ export default defineConfig({
   },
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('patterns/table/react/');
+  await page.waitForLoadState('networkidle');
+});
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  const table = page.locator('[role="table"]').first();
+  await expect(table).toBeVisible();
+
+  // Check rows, columnheaders, and cells
+  const rows = table.locator('[role="row"]');
+  const headers = table.locator('[role="columnheader"]');
+  const cells = table.locator('[role="cell"]');
+
+  expect(await rows.count()).toBeGreaterThan(0);
+  expect(await headers.count()).toBeGreaterThan(0);
+  expect(await cells.count()).toBeGreaterThan(0);
+});
+
+// Visual cell spanning test
+test('colspan=2 cell has approximately 2x width of normal cell', async ({ page }) => {
+  const spanningTable = page.locator('[role="table"][aria-label*="Spanning"]');
+  await expect(spanningTable).toBeVisible();
+
+  const colspanCell = spanningTable.locator('[aria-colspan="2"]').first();
+  const normalCell = spanningTable
+    .locator('[role="rowgroup"]:last-child [role="cell"]:not([aria-colspan]):not([aria-rowspan])')
+    .first();
+
+  const colspanBox = await colspanCell.boundingBox();
+  const normalBox = await normalCell.boundingBox();
+
+  expect(colspanBox).not.toBeNull();
+  expect(normalBox).not.toBeNull();
+
+  // colspan=2 should be approximately 2x width (20% tolerance)
+  expect(colspanBox!.width).toBeGreaterThan(normalBox!.width * 1.8);
+  expect(colspanBox!.width).toBeLessThan(normalBox!.width * 2.3);
+});
+
+// Cell spanning attributes test
+test('aria-colspan and aria-rowspan attributes are present', async ({ page }) => {
+  const spanningTable = page.locator('[role="table"][aria-label*="Spanning"]');
+  await expect(spanningTable).toBeVisible();
+
+  // Verify colspan attributes exist
+  const colspanCells = spanningTable.locator('[aria-colspan]');
+  await expect(colspanCells).toHaveCount(2); // N/A (colspan=2) and Total (colspan=4)
+
+  // Verify rowspan attributes exist
+  const rowspanCells = spanningTable.locator('[aria-rowspan]');
+  await expect(rowspanCells).toHaveCount(1); // Electronics (rowspan=2)
+
+  // Verify specific values
+  await expect(spanningTable.locator('[aria-colspan="2"]')).toHaveCount(1);
+  await expect(spanningTable.locator('[aria-colspan="4"]')).toHaveCount(1);
+  await expect(spanningTable.locator('[aria-rowspan="2"]')).toHaveCount(1);
+});
+```

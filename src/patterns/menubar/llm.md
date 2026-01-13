@@ -328,3 +328,62 @@ it('all li elements have role="none"', () => {
   });
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('patterns/menubar/react/demo/');
+  await page.waitForLoadState('networkidle');
+});
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  const menubar = page.getByRole('menubar');
+  await expect(menubar).toBeVisible();
+
+  // Check aria-haspopup="menu" (not "true")
+  const fileItem = page.getByRole('menuitem', { name: 'File' });
+  const haspopup = await fileItem.getAttribute('aria-haspopup');
+  expect(haspopup).toBe('menu');
+
+  // Check all li elements have role="none"
+  const listItems = page.locator('li');
+  const count = await listItems.count();
+  for (let i = 0; i < count; i++) {
+    await expect(listItems.nth(i)).toHaveAttribute('role', 'none');
+  }
+});
+
+// Keyboard navigation test
+test('ArrowDown opens submenu and focuses first item', async ({ page }) => {
+  const fileItem = page.getByRole('menuitem', { name: 'File' });
+  await fileItem.focus();
+  await page.keyboard.press('ArrowDown');
+
+  await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
+
+  const menu = page.getByRole('menu');
+  const firstMenuItem = menu.getByRole('menuitem').first();
+  await expect(firstMenuItem).toBeFocused();
+});
+
+// Checkbox/Radio behavior test
+test('checkbox toggle keeps menu open', async ({ page }) => {
+  const viewItem = page.getByRole('menuitem', { name: 'View' });
+  await viewItem.click();
+
+  const checkbox = page.getByRole('menuitemcheckbox').first();
+  const initialChecked = await checkbox.getAttribute('aria-checked');
+  await checkbox.focus();
+  await page.keyboard.press('Space');
+
+  // Menu should still be open
+  await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+  // aria-checked should have toggled
+  const newChecked = await checkbox.getAttribute('aria-checked');
+  expect(newChecked).not.toBe(initialChecked);
+});
+```

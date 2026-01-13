@@ -27,7 +27,7 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 ### E2E テスト
 
-20/28 パターン完了（71%）
+21/28 パターン完了（75%）
 
 - [ ] Accordion
 - [ ] Dialog
@@ -36,7 +36,7 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 - [ ] Slider
 - [ ] Spinbutton
 - [ ] Tabs
-- [ ] Toolbar
+- [x] Toolbar
 - [x] Tooltip
 - [ ] Tree View
 
@@ -73,7 +73,7 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 | パターン        | 状況    | E2E | 複雑度 |
 | --------------- | ------- | --- | ------ |
-| Toolbar         | ✅ 完了 | -   | 中     |
+| Toolbar         | ✅ 完了 | ✅  | 中     |
 | Menubar         | ✅ 完了 | ✅  | 高     |
 | Grid            | ✅ 完了 | ✅  | 高     |
 | Slider          | ✅ 完了 | -   | 中     |

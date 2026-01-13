@@ -417,3 +417,92 @@ it('has no axe violations', async () => {
   expect(results).toHaveNoViolations();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/window-splitter/react/demo/');
+  await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+
+  const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+  // Check role and ARIA attributes
+  await expect(splitter).toHaveAttribute('role', 'separator');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+  await expect(splitter).toHaveAttribute('aria-valuemin', '10');
+  await expect(splitter).toHaveAttribute('aria-valuemax', '90');
+
+  // Check aria-controls references pane elements
+  const controls = await splitter.getAttribute('aria-controls');
+  expect(controls).toContain('horizontal-primary');
+  expect(controls).toContain('horizontal-secondary');
+
+  // Verify referenced elements exist
+  await expect(page.locator('#horizontal-primary')).toBeAttached();
+  await expect(page.locator('#horizontal-secondary')).toBeAttached();
+
+  // Vertical splitter has aria-orientation
+  const verticalSplitter = page.locator('[data-testid="vertical-splitter"]');
+  await expect(verticalSplitter).toHaveAttribute('aria-orientation', 'vertical');
+});
+
+// Keyboard interaction test
+test('keyboard navigation works correctly', async ({ page }) => {
+  await page.goto('patterns/window-splitter/react/demo/');
+  const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+  await splitter.focus();
+  await expect(splitter).toBeFocused();
+
+  // ArrowRight increases position
+  await page.keyboard.press('ArrowRight');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '55');
+
+  // ArrowLeft decreases position
+  await page.keyboard.press('ArrowLeft');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+
+  // Home moves to minimum
+  await page.keyboard.press('Home');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '10');
+
+  // End moves to maximum
+  await page.keyboard.press('End');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '90');
+});
+
+// Collapse/expand test
+test('Enter toggles collapse/expand', async ({ page }) => {
+  await page.goto('patterns/window-splitter/react/demo/');
+  const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+  await splitter.focus();
+  expect(await splitter.getAttribute('aria-valuenow')).toBe('50');
+
+  // Collapse
+  await page.keyboard.press('Enter');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '0');
+
+  // Expand (restores previous position)
+  await page.keyboard.press('Enter');
+  await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+});
+
+// axe-core accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/window-splitter/react/demo/');
+  const demo = page.locator('.apg-window-splitter-demo-wrapper');
+  await expect(demo).toBeVisible();
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('.apg-window-splitter-demo-wrapper')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

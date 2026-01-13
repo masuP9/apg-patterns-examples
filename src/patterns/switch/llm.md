@@ -132,3 +132,53 @@ it('has accessible name', () => {
     .toBeInTheDocument();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('has role="switch" and aria-checked attribute', async ({ page }) => {
+  await page.goto('patterns/switch/react/demo/');
+  const switches = page.locator('[role="switch"]');
+  const count = await switches.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let i = 0; i < count; i++) {
+    await expect(switches.nth(i)).toHaveAttribute('role', 'switch');
+    const ariaChecked = await switches.nth(i).getAttribute('aria-checked');
+    expect(['true', 'false']).toContain(ariaChecked);
+  }
+});
+
+// Toggle behavior test
+test('toggles aria-checked on click and Space key', async ({ page }) => {
+  await page.goto('patterns/switch/react/demo/');
+  const switchEl = page.locator('[role="switch"]').first();
+  const initialState = await switchEl.getAttribute('aria-checked');
+
+  // Click toggle
+  await switchEl.click();
+  expect(await switchEl.getAttribute('aria-checked')).not.toBe(initialState);
+
+  // Space key toggle
+  await switchEl.focus();
+  await page.keyboard.press('Space');
+  expect(await switchEl.getAttribute('aria-checked')).toBe(initialState);
+});
+
+// axe-core accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/switch/react/demo/');
+  const switches = page.locator('[role="switch"]');
+  await switches.first().waitFor();
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('[role="switch"]')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

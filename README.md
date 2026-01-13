@@ -46,7 +46,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tabs                 | ✅    | ✅  | ✅     | ✅    | -   | Complete |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Toolbar              | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tree View            | ✅    | ✅  | ✅     | ✅    | -   | Complete |
 | Treegrid             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |

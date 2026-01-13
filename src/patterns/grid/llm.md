@@ -352,3 +352,80 @@ it('columnheader cells are not focusable', () => {
   });
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// ARIA Structure
+test('has correct grid structure', async ({ page }) => {
+  await page.goto('patterns/grid/react/demo/');
+  const grid = page.getByRole('grid');
+  await expect(grid).toBeVisible();
+
+  // Verify rows and cells
+  const rows = page.getByRole('row');
+  expect(await rows.count()).toBeGreaterThan(1);
+  await expect(page.getByRole('columnheader').first()).toBeVisible();
+  await expect(page.getByRole('gridcell').first()).toBeVisible();
+});
+
+// 2D Keyboard Navigation
+test('arrow keys navigate in 2D', async ({ page }) => {
+  await page.goto('patterns/grid/react/demo/');
+  const grid = page.getByRole('grid').first();
+  const cells = grid.getByRole('gridcell');
+  const headers = grid.getByRole('columnheader');
+  const columnCount = await headers.count();
+
+  // Focus first cell
+  await cells.first().click({ position: { x: 5, y: 5 } });
+
+  // ArrowRight moves to next cell
+  await page.keyboard.press('ArrowRight');
+  await expect(cells.nth(1)).toHaveClass(/focused/);
+
+  // ArrowDown moves to next row
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowDown');
+  await expect(cells.nth(columnCount)).toHaveClass(/focused/);
+});
+
+// Roving Tabindex
+test('roving tabindex updates on navigation', async ({ page }) => {
+  await page.goto('patterns/grid/react/demo/');
+  const grid = page.getByRole('grid').first();
+  const cells = grid.getByRole('gridcell');
+  const firstCell = cells.first();
+  const secondCell = cells.nth(1);
+
+  // Initially first cell has tabindex="0"
+  await expect(firstCell).toHaveAttribute('tabindex', '0');
+  await expect(secondCell).toHaveAttribute('tabindex', '-1');
+
+  // Navigate right
+  await firstCell.click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press('ArrowRight');
+
+  // Tabindex should update
+  await expect(firstCell).toHaveAttribute('tabindex', '-1');
+  await expect(secondCell).toHaveAttribute('tabindex', '0');
+});
+
+// Tab exits grid
+test('Tab exits grid', async ({ page }) => {
+  await page.goto('patterns/grid/react/demo/');
+  const grid = page.getByRole('grid').first();
+  const cells = grid.getByRole('gridcell');
+
+  await cells.first().click({ position: { x: 5, y: 5 } });
+  await page.keyboard.press('Tab');
+
+  // Should no longer be focused on any element in the grid
+  const gridContainsFocus = await grid.evaluate((el) =>
+    el.contains(document.activeElement)
+  );
+  expect(gridContainsFocus).toBe(false);
+});
+```
