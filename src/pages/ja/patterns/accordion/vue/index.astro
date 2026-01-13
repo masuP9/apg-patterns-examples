@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import Accordion from '@patterns/accordion/Accordion.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -100,7 +101,7 @@ const disabledItems = [
       縦に積み重ねられたインタラクティブな見出しのセットで、それぞれがコンテンツのセクションを表示します。
     </p>
     <a
-      href="/patterns/accordion/llm.md"
+      href={withBase("/patterns/accordion/llm.md")}
       target="_blank"
       rel="noopener noreferrer"
       class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
@@ -317,7 +318,7 @@ const items = [
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="/patterns/accordion/llm.md" class="text-primary hover:underline">
+        <ExternalLink href={withBase("/patterns/accordion/llm.md")} class="text-primary hover:underline">
           AI 実装ガイド (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">

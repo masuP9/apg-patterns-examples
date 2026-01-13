@@ -16,9 +16,7 @@ export const GET: APIRoute = async ({ params }) => {
   const { pattern } = params;
 
   try {
-    // Note: tree-view uses 'treeview' as directory name in src/patterns/
-    const filePattern = pattern === 'tree-view' ? 'treeview' : pattern;
-    const filePath = join(process.cwd(), 'src', 'patterns', filePattern!, 'llm.md');
+    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, 'llm.md');
     const content = await readFile(filePath, 'utf-8');
 
     return new Response(content, {

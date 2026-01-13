@@ -1,4 +1,5 @@
 ---
+import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { Slider } from '@patterns/slider/Slider';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -39,7 +40,7 @@ const tocItems = [
     <h1 class="mb-4 text-3xl font-bold">Slider</h1>
     <p class="text-muted-foreground text-lg">指定された範囲内から値を選択する入力。</p>
     <a
-      href="/patterns/slider/llm.md"
+      href={withBase("/patterns/slider/llm.md")}
       target="_blank"
       rel="noopener noreferrer"
       class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
@@ -307,7 +308,7 @@ function App() {
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="/patterns/slider/llm.md" class="text-primary hover:underline">
+        <ExternalLink href={withBase("/patterns/slider/llm.md")} class="text-primary hover:underline">
           AI 実装ガイド (llm.md)
         </ExternalLink>
         <span class="text-muted-foreground text-sm">
