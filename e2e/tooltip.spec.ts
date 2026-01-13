@@ -39,7 +39,7 @@ const getDescribedByElement = (
 for (const framework of frameworks) {
   test.describe(`Tooltip (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`patterns/tooltip/${framework}/`);
+      await page.goto(`patterns/tooltip/${framework}/demo/`);
       // Wait for tooltip triggers to be available
       await getTooltipTriggers(page).first().waitFor();
     });
@@ -266,7 +266,7 @@ for (const framework of frameworks) {
 test.describe('Tooltip - Cross-framework Consistency', () => {
   test('all frameworks have tooltips', async ({ page }) => {
     for (const framework of frameworks) {
-      await page.goto(`patterns/tooltip/${framework}/`);
+      await page.goto(`patterns/tooltip/${framework}/demo/`);
       await getTooltipTriggers(page).first().waitFor();
 
       const triggers = getTooltipTriggers(page);
@@ -281,7 +281,7 @@ test.describe('Tooltip - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       // Navigate fresh for each framework to avoid state leaking
-      await page.goto(`patterns/tooltip/${framework}/`);
+      await page.goto(`patterns/tooltip/${framework}/demo/`);
       const trigger = getTooltipTriggers(page).first();
       await trigger.waitFor();
 
@@ -309,7 +309,7 @@ test.describe('Tooltip - Cross-framework Consistency', () => {
 
   test('all frameworks have consistent ARIA structure', async ({ page }) => {
     for (const framework of frameworks) {
-      await page.goto(`patterns/tooltip/${framework}/`);
+      await page.goto(`patterns/tooltip/${framework}/demo/`);
       await getTooltipTriggers(page).first().waitFor();
 
       const trigger = getTooltipTriggers(page).first();
