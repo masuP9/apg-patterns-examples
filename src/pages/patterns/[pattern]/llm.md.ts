@@ -1,24 +1,10 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { getAvailablePatterns } from '@/lib/patterns';
 
-const patterns = [
-  'accordion',
-  'alert',
-  'alert-dialog',
-  'breadcrumb',
-  'button',
-  'checkbox',
-  'dialog',
-  'disclosure',
-  'listbox',
-  'menu-button',
-  'radio-group',
-  'switch',
-  'tabs',
-  'toolbar',
-  'tooltip',
-];
+// Get pattern IDs from the centralized patterns definition
+const patterns = getAvailablePatterns().map((p) => p.id);
 
 export const getStaticPaths: GetStaticPaths = () => {
   return patterns.map((pattern) => ({
@@ -30,7 +16,9 @@ export const GET: APIRoute = async ({ params }) => {
   const { pattern } = params;
 
   try {
-    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, 'llm.md');
+    // Note: tree-view uses 'treeview' as directory name in src/patterns/
+    const filePattern = pattern === 'tree-view' ? 'treeview' : pattern;
+    const filePath = join(process.cwd(), 'src', 'patterns', filePattern!, 'llm.md');
     const content = await readFile(filePath, 'utf-8');
 
     return new Response(content, {
