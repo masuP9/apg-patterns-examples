@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte';
+  import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
   export interface TreeNode {
     id: string;
@@ -48,15 +49,15 @@
   }: TreeViewProps = $props();
 
   let instanceId = $state('');
-  let nodeRefs = new Map<string, HTMLLIElement>();
+  let nodeRefs = new SvelteMap<string, HTMLLIElement>();
   let typeAheadBuffer = $state('');
   let typeAheadTimeoutId: number | null = null;
   let selectionAnchor = $state('');
   let focusedIdRef = $state('');
 
   // Internal state
-  let internalExpandedIds = $state<Set<string>>(new Set());
-  let internalSelectedIds = $state<Set<string>>(new Set());
+  let internalExpandedIds = new SvelteSet<string>();
+  let internalSelectedIds = new SvelteSet<string>();
   let focusedId = $state('');
 
   onMount(() => {
@@ -90,7 +91,7 @@
   let allNodes = $derived(flattenTree(nodes));
 
   let nodeMap = $derived.by(() => {
-    const map = new Map<string, FlatNode>();
+    const map = new SvelteMap<string, FlatNode>();
     for (const flatNode of allNodes) {
       map.set(flatNode.node.id, flatNode);
     }
@@ -99,18 +100,18 @@
 
   // Expansion state (controlled or uncontrolled)
   let expandedIds = $derived(
-    controlledExpandedIds ? new Set(controlledExpandedIds) : internalExpandedIds
+    controlledExpandedIds ? new SvelteSet(controlledExpandedIds) : internalExpandedIds
   );
 
   // Selection state (controlled or uncontrolled)
   let selectedIds = $derived(
-    controlledSelectedIds ? new Set(controlledSelectedIds) : internalSelectedIds
+    controlledSelectedIds ? new SvelteSet(controlledSelectedIds) : internalSelectedIds
   );
 
   // Visible nodes (respecting expansion state)
   let visibleNodes = $derived.by(() => {
     const result: FlatNode[] = [];
-    const collapsedParents = new Set<string>();
+    const collapsedParents = new SvelteSet<string>();
 
     for (const flatNode of allNodes) {
       let isHidden = false;
@@ -136,7 +137,7 @@
   });
 
   let visibleIndexMap = $derived.by(() => {
-    const map = new Map<string, number>();
+    const map = new SvelteMap<string, number>();
     visibleNodes.forEach((flatNode, index) => map.set(flatNode.node.id, index));
     return map;
   });
@@ -147,7 +148,7 @@
   $effect(() => {
     if (allNodes.length > 0 && internalSelectedIds.size === 0 && internalExpandedIds.size === 0) {
       // Initialize expansion
-      internalExpandedIds = new Set(defaultExpandedIds);
+      internalExpandedIds = new SvelteSet(defaultExpandedIds);
 
       // Initialize selection (filter out disabled nodes)
       if (defaultSelectedIds.length > 0) {
@@ -156,7 +157,7 @@
           return flatNode && !flatNode.node.disabled;
         });
         if (validIds.length > 0) {
-          internalSelectedIds = new Set(validIds);
+          internalSelectedIds = new SvelteSet(validIds);
         }
       }
       // No auto-selection - user must explicitly select via Enter/Space/Click
@@ -256,7 +257,7 @@
     if (!flatNode?.hasChildren || flatNode.node.disabled) return;
     if (expandedIds.has(nodeId)) return;
 
-    const newExpanded = new Set(expandedIds);
+    const newExpanded = new SvelteSet(expandedIds);
     newExpanded.add(nodeId);
     updateExpandedIds(newExpanded);
   }
@@ -266,7 +267,7 @@
     if (!flatNode?.hasChildren || flatNode.node.disabled) return;
     if (!expandedIds.has(nodeId)) return;
 
-    const newExpanded = new Set(expandedIds);
+    const newExpanded = new SvelteSet(expandedIds);
     newExpanded.delete(nodeId);
     updateExpandedIds(newExpanded);
 
@@ -289,7 +290,7 @@
     const flatNode = nodeMap.get(nodeId);
     if (!flatNode) return;
 
-    const newExpanded = new Set(expandedIds);
+    const newExpanded = new SvelteSet(expandedIds);
     for (const fn of allNodes) {
       if (fn.parentId === flatNode.parentId && fn.hasChildren && !fn.node.disabled) {
         newExpanded.add(fn.node.id);
@@ -304,7 +305,7 @@
     if (flatNode?.node.disabled) return;
 
     if (multiselectable) {
-      const newSelected = new Set(selectedIds);
+      const newSelected = new SvelteSet(selectedIds);
       if (newSelected.has(nodeId)) {
         newSelected.delete(nodeId);
       } else {
@@ -312,7 +313,7 @@
       }
       updateSelectedIds(newSelected);
     } else {
-      updateSelectedIds(new Set([nodeId]));
+      updateSelectedIds(new SvelteSet([nodeId]));
     }
   }
 
@@ -322,7 +323,7 @@
     const start = Math.min(fromIndex, toIndex);
     const end = Math.max(fromIndex, toIndex);
 
-    const newSelected = new Set(selectedIds);
+    const newSelected = new SvelteSet(selectedIds);
     for (let i = start; i <= end; i++) {
       const flatNode = visibleNodes[i];
       if (flatNode && !flatNode.node.disabled) {
@@ -333,7 +334,7 @@
   }
 
   function selectAllVisible() {
-    const newSelected = new Set<string>();
+    const newSelected = new SvelteSet<string>();
     for (const flatNode of visibleNodes) {
       if (!flatNode.node.disabled) {
         newSelected.add(flatNode.node.id);
@@ -413,7 +414,7 @@
       selectNode(nodeId);
       selectionAnchor = nodeId;
     } else {
-      updateSelectedIds(new Set([nodeId]));
+      updateSelectedIds(new SvelteSet([nodeId]));
     }
     onActivate(nodeId);
   }
@@ -563,7 +564,7 @@
             selectNode(actualFocusedId);
             selectionAnchor = actualFocusedId;
           } else {
-            updateSelectedIds(new Set([actualFocusedId]));
+            updateSelectedIds(new SvelteSet([actualFocusedId]));
           }
           // Fire activation callback
           onActivate(actualFocusedId);
@@ -582,7 +583,7 @@
             }
           } else {
             // Single-select: Space selects and activates (same as Enter)
-            updateSelectedIds(new Set([actualFocusedId]));
+            updateSelectedIds(new SvelteSet([actualFocusedId]));
             onActivate(actualFocusedId);
           }
         }
@@ -635,7 +636,7 @@
   {@const isSelected = selectedIds.has(node.id)}
   {@const isFocused = focusedId === node.id}
   {@const labelId = `${instanceId}-label-${node.id}`}
-
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
   <li
     use:trackNodeRef={node.id}
     role="treeitem"

@@ -35,6 +35,7 @@
 
 <div class="space-y-4">
   <div>
+    <!-- svelte-ignore a11y_label_has_associated_control -->
     <label id={labelId} class="mb-2 block text-sm font-medium">
       {label}
     </label>

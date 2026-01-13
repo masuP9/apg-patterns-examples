@@ -285,6 +285,7 @@
         >
           <div class="apg-accordion-panel-content">
             {#if item.content}
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -- Content is provided by the consuming application -->
               {@html item.content}
             {/if}
           </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { untrack } from 'svelte';
 
   /**
    * APG Disclosure Pattern - Svelte Implementation
@@ -40,9 +41,9 @@
   }: DisclosureProps = $props();
 
   // Generate fallback ID if not provided (client-side only, may cause SSR mismatch)
-  const instanceId = id ?? crypto.randomUUID();
+  const instanceId = untrack(() => id) ?? crypto.randomUUID();
 
-  let expanded = $state(defaultExpanded);
+  let expanded = $state(untrack(() => defaultExpanded));
 
   const panelId = `${instanceId}-panel`;
 

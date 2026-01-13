@@ -49,5 +49,6 @@
       {triggerText}
     </button>
   {/snippet}
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -- Content is provided by the consuming application -->
   {@html contentHtml}
 </Dialog>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import { cn } from '@/lib/utils';
 
   interface SpinbuttonProps {
@@ -76,8 +77,8 @@
   let inputEl: HTMLInputElement | null = null;
   let isComposing = $state(false);
 
-  // State
-  const initialValue = clamp(roundToStep(defaultValue, step, min), min, max);
+  // State - use untrack to capture initial values only
+  const initialValue = untrack(() => clamp(roundToStep(defaultValue, step, min), min, max));
   let value = $state(initialValue);
   let inputValue = $state(String(initialValue));
 

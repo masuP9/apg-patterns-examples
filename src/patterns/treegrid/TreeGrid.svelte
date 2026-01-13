@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
+  import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+
   // =============================================================================
   // Types
   // =============================================================================
@@ -96,13 +99,13 @@
   // State
   // =============================================================================
 
-  let internalExpandedIds = $state<Set<string>>(new Set(defaultExpandedIds));
-  let internalSelectedRowIds = $state<Set<string>>(new Set(defaultSelectedRowIds));
+  let internalExpandedIds = new SvelteSet<string>(untrack(() => defaultExpandedIds));
+  let internalSelectedRowIds = new SvelteSet<string>(untrack(() => defaultSelectedRowIds));
   let focusedCellIdState = $state<string | null>(null);
   let initialized = $state(false);
 
   let treegridRef: HTMLDivElement | null = $state(null);
-  let cellRefs: Map<string, HTMLDivElement> = new Map();
+  let cellRefs: Map<string, HTMLDivElement> = new SvelteMap();
 
   // =============================================================================
   // Derived - Tree Flattening
@@ -127,7 +130,7 @@
   const allRows = $derived(flattenTree(nodes));
 
   const rowMap = $derived.by(() => {
-    const map = new Map<string, FlatRow>();
+    const map = new SvelteMap<string, FlatRow>();
     for (const flatRow of allRows) {
       map.set(flatRow.node.id, flatRow);
     }
@@ -135,15 +138,15 @@
   });
 
   const expandedIds = $derived(
-    controlledExpandedIds ? new Set(controlledExpandedIds) : internalExpandedIds
+    controlledExpandedIds ? new SvelteSet(controlledExpandedIds) : internalExpandedIds
   );
   const selectedRowIds = $derived(
-    controlledSelectedRowIds ? new Set(controlledSelectedRowIds) : internalSelectedRowIds
+    controlledSelectedRowIds ? new SvelteSet(controlledSelectedRowIds) : internalSelectedRowIds
   );
 
   const visibleRows = $derived.by(() => {
     const result: FlatRow[] = [];
-    const collapsedParents = new Set<string>();
+    const collapsedParents = new SvelteSet<string>();
 
     for (const flatRow of allRows) {
       let isHidden = false;
@@ -169,7 +172,7 @@
   });
 
   const cellPositionMap = $derived.by(() => {
-    const map = new Map<string, CellPosition>();
+    const map = new SvelteMap<string, CellPosition>();
     visibleRows.forEach((flatRow, rowIndex) => {
       flatRow.node.cells.forEach((cell, colIndex) => {
         map.set(cell.id, {
@@ -194,8 +197,8 @@
 
   $effect(() => {
     if (!initialized && nodes.length > 0) {
-      internalExpandedIds = new Set(defaultExpandedIds);
-      internalSelectedRowIds = new Set(defaultSelectedRowIds);
+      internalExpandedIds = new SvelteSet(defaultExpandedIds);
+      internalSelectedRowIds = new SvelteSet(defaultSelectedRowIds);
       initialized = true;
     }
   });
@@ -257,7 +260,7 @@
     if (!flatRow?.hasChildren || flatRow.node.disabled) return;
     if (expandedIds.has(rowId)) return;
 
-    const newExpanded = new Set(expandedIds);
+    const newExpanded = new SvelteSet(expandedIds);
     newExpanded.add(rowId);
     updateExpandedIds(newExpanded);
   }
@@ -267,7 +270,7 @@
     if (!flatRow?.hasChildren || flatRow.node.disabled) return;
     if (!expandedIds.has(rowId)) return;
 
-    const newExpanded = new Set(expandedIds);
+    const newExpanded = new SvelteSet(expandedIds);
     newExpanded.delete(rowId);
     updateExpandedIds(newExpanded);
 
@@ -306,7 +309,7 @@
     if (!selectable || rowDisabled) return;
 
     if (multiselectable) {
-      const newIds = new Set(selectedRowIds);
+      const newIds = new SvelteSet(selectedRowIds);
       if (newIds.has(rowId)) {
         newIds.delete(rowId);
       } else {
@@ -314,7 +317,7 @@
       }
       updateSelectedRowIds(newIds);
     } else {
-      const newIds = selectedRowIds.has(rowId) ? new Set<string>() : new Set([rowId]);
+      const newIds = selectedRowIds.has(rowId) ? new SvelteSet<string>() : new SvelteSet([rowId]);
       updateSelectedRowIds(newIds);
     }
   }
@@ -322,7 +325,7 @@
   function selectAllVisibleRows() {
     if (!selectable || !multiselectable) return;
 
-    const allIds = new Set<string>();
+    const allIds = new SvelteSet<string>();
     for (const flatRow of visibleRows) {
       if (!flatRow.node.disabled) {
         allIds.add(flatRow.node.id);
@@ -569,6 +572,7 @@
             </span>
           {/if}
           {#if renderCell}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -- renderCell returns sanitized HTML from the consuming application -->
             {@html renderCell(cell, flatRow.node.id, colId)}
           {:else}
             {cell.value}

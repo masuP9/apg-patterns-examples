@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
+  import { SvelteMap } from 'svelte/reactivity';
 
   // Menu item types
   export interface MenuItemBase {
@@ -78,16 +79,18 @@
   let openMenubarIndex = $state(-1);
   let openSubmenuPath = $state<string[]>([]);
   let focusedItemPath = $state<string[]>([]);
-  let checkboxStates = $state<Map<string, boolean>>(new Map());
-  let radioStates = $state<Map<string, string>>(new Map());
+  // eslint-disable-next-line svelte/valid-compile -- SvelteMap is self-reactive, no $state() needed
+  let checkboxStates = new SvelteMap<string, boolean>();
+  // eslint-disable-next-line svelte/valid-compile -- SvelteMap is self-reactive, no $state() needed
+  let radioStates = new SvelteMap<string, string>();
   let typeAheadBuffer = $state('');
   let typeAheadTimeoutId: number | null = null;
   const typeAheadTimeout = 500;
 
   // Refs
   let containerElement: HTMLUListElement;
-  let menubarItemRefs = new Map<number, HTMLSpanElement>();
-  let menuItemRefs = new Map<string, HTMLSpanElement>();
+  let menubarItemRefs = new SvelteMap<number, HTMLSpanElement>();
+  let menuItemRefs = new SvelteMap<string, HTMLSpanElement>();
 
   // Initialize checkbox/radio states
   const initStates = () => {
@@ -378,12 +381,12 @@
     } else if (item.type === 'checkbox') {
       const newChecked = !checkboxStates.get(item.id);
       checkboxStates.set(item.id, newChecked);
-      checkboxStates = new Map(checkboxStates); // trigger reactivity
+      checkboxStates = new SvelteMap(checkboxStates); // trigger reactivity
       item.onCheckedChange?.(newChecked);
       // Menu stays open
     } else if (item.type === 'radio' && radioGroupName) {
       radioStates.set(radioGroupName, item.id);
-      radioStates = new Map(radioStates); // trigger reactivity
+      radioStates = new SvelteMap(radioStates); // trigger reactivity
       // Menu stays open
     } else if (item.type === 'submenu') {
       // Open submenu and focus first item
@@ -579,7 +582,7 @@
           {#each menubarItem.items as item (item.id)}
             {#if item.type === 'separator'}
               <li role="none">
-                <hr role="separator" class="apg-menubar-separator" />
+                <hr class="apg-menubar-separator" />
               </li>
             {:else if item.type === 'radiogroup'}
               <li role="none">
@@ -660,7 +663,7 @@
                     {#each item.items as subItem (subItem.id)}
                       {#if subItem.type === 'separator'}
                         <li role="none">
-                          <hr role="separator" class="apg-menubar-separator" />
+                          <hr class="apg-menubar-separator" />
                         </li>
                       {:else if subItem.type !== 'radiogroup'}
                         <li role="none">

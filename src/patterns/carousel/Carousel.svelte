@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, untrack } from 'svelte';
 
   export interface CarouselSlide {
     /** Unique identifier for the slide */
@@ -63,7 +63,7 @@
     }
     return `carousel-${Math.random().toString(36).slice(2, 11)}`;
   };
-  let carouselId = $state(propId || '');
+  let carouselId = $state(untrack(() => propId) || '');
   let timerRef: ReturnType<typeof setInterval> | null = null;
   let animationTimeoutRef: ReturnType<typeof setTimeout> | null = null;
   let rafRef: number | null = null;
@@ -457,6 +457,7 @@
         class={`apg-carousel-slide ${isActive ? 'apg-carousel-slide--active' : ''} ${enteringClass} ${exitingClass} ${swipeClass}`.trim()}
         style={slideStyle}
       >
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -- Content is provided by the consuming application -->
         {@html slide.content}
       </div>
     {/each}
@@ -486,6 +487,7 @@
     {/if}
 
     <!-- Tablist (slide indicators) -->
+    <!-- svelte-ignore a11y_interactive_supports_focus -->
     <div
       bind:this={tablistElement}
       role="tablist"

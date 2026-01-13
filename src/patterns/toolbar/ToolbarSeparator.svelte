@@ -23,4 +23,4 @@
   role="separator"
   aria-orientation={separatorOrientation}
   class="apg-toolbar-separator {className}"
-/>
+></div>

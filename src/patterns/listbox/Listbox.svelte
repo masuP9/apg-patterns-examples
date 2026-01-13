@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
   export interface ListboxOption {
     id: string;
@@ -31,11 +32,12 @@
     class: className = '',
   }: ListboxProps = $props();
 
-  let selectedIds = $state<Set<string>>(new Set());
+  // eslint-disable-next-line svelte/no-unnecessary-state-wrap -- Reassignment needs to be reactive
+  let selectedIds = $state(new SvelteSet<string>());
   let focusedIndex = $state(0);
   let selectionAnchor = $state(0);
   let listboxElement: HTMLElement;
-  let optionRefs = new Map<string, HTMLLIElement>();
+  let optionRefs = new SvelteMap<string, HTMLLIElement>();
   let instanceId = $state('');
   let typeAheadBuffer = $state('');
   let typeAheadTimeoutId: number | null = null;
@@ -58,11 +60,11 @@
   $effect(() => {
     if (options.length > 0 && selectedIds.size === 0) {
       if (defaultSelectedIds.length > 0) {
-        selectedIds = new Set(defaultSelectedIds);
+        selectedIds = new SvelteSet(defaultSelectedIds);
       } else if (availableOptions.length > 0) {
         // Single-select mode: select first available option by default
         if (!multiselectable) {
-          selectedIds = new Set([availableOptions[0].id]);
+          selectedIds = new SvelteSet([availableOptions[0].id]);
         }
       }
 
@@ -83,7 +85,7 @@
 
   // Map of option id to index in availableOptions for O(1) lookup
   let availableIndexMap = $derived.by(() => {
-    const map = new Map<string, number>();
+    const map = new SvelteMap<string, number>();
     availableOptions.forEach(({ id }, index) => map.set(id, index));
     return map;
   });
@@ -127,7 +129,7 @@
 
   function selectOption(optionId: string) {
     if (multiselectable) {
-      const newSelected = new Set(selectedIds);
+      const newSelected = new SvelteSet(selectedIds);
       if (newSelected.has(optionId)) {
         newSelected.delete(optionId);
       } else {
@@ -135,14 +137,14 @@
       }
       updateSelection(newSelected);
     } else {
-      updateSelection(new Set([optionId]));
+      updateSelection(new SvelteSet([optionId]));
     }
   }
 
   function selectRange(fromIndex: number, toIndex: number) {
     const start = Math.min(fromIndex, toIndex);
     const end = Math.max(fromIndex, toIndex);
-    const newSelected = new Set(selectedIds);
+    const newSelected = new SvelteSet(selectedIds);
 
     for (let i = start; i <= end; i++) {
       const option = availableOptions[i];
@@ -155,7 +157,7 @@
   }
 
   function selectAll() {
-    const allIds = new Set(availableOptions.map((opt) => opt.id));
+    const allIds = new SvelteSet(availableOptions.map((opt) => opt.id));
     updateSelection(allIds);
   }
 
@@ -188,7 +190,7 @@
         // Update anchor for shift-selection
         selectionAnchor = index;
         if (!multiselectable) {
-          updateSelection(new Set([option.id]));
+          updateSelection(new SvelteSet([option.id]));
         }
         break;
       }
@@ -316,7 +318,7 @@
         if (!multiselectable) {
           const newOption = availableOptions[newIndex];
           if (newOption) {
-            updateSelection(new Set([newOption.id]));
+            updateSelection(new SvelteSet([newOption.id]));
           }
         } else {
           selectionAnchor = newIndex;
@@ -344,13 +346,12 @@
   onkeydown={handleKeyDown}
 >
   {#each options as option (option.id)}
-    {@const isSelected = selectedIds.has(option.id)}
-
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <li
       use:trackOptionRef={option.id}
       role="option"
       id="{instanceId}-option-{option.id}"
-      aria-selected={isSelected}
+      aria-selected={selectedIds.has(option.id)}
       aria-disabled={option.disabled || undefined}
       tabindex={getTabIndex(option)}
       class={getOptionClass(option)}
