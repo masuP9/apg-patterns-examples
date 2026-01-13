@@ -15,7 +15,7 @@ E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実�
 | Tooltip     | ✅        | ✅         | ✅          | 完了 |
 | Accordion   | ✅        | ✅         | ✅          | 完了 |
 | Tabs        | ✅        | ✅         | ✅          | 完了 |
-| Radio Group | ⬜        | ⬜         | ⬜          |      |
+| Radio Group | ✅        | ✅         | ✅          | 完了 |
 | Toolbar     | ⬜        | ⬜         | ⬜          |      |
 | Slider      | ⬜        | ⬜         | ⬜          |      |
 | Dialog      | ⬜        | ⬜         | ⬜          |      |
@@ -158,6 +158,27 @@ npm run test:e2e:react:pattern --pattern=button
    ```
 2. **ループナビゲーションのテスト**: 最後の要素から最初へ（またはその逆）のループ動作は、状態遷移のタイミング問題が発生しやすい。クリック→待機→キー操作の順序を守る
 3. **自動/手動アクティベーションの分離テスト**: `automatic`モードと`manual`モードで異なるテストケースを用意。手動モードではEnter/Spaceキーによるアクティベーションを検証
+
+**Radio Group実装からの学び**:
+
+1. **属性セレクタの使用**: ID に特殊文字（`-`や`:`など）が含まれる場合、`#${id}` ではなく `[id="${id}"]` 属性セレクタを使用する
+   ```typescript
+   // ❌ Svelteなどで特殊文字を含むIDが生成される場合に失敗
+   const labelElement = page.locator(`#${labelledby}`);
+
+   // ✅ 属性セレクタなら特殊文字でも安全
+   const labelElement = page.locator(`[id="${labelledby}"]`);
+   ```
+2. **クリックベースの初期フォーカス**: Tab キーでのフォーカス移動が不安定な場合、クリックで明示的にフォーカスを設定する
+   ```typescript
+   // Tabでフォーカスを移動するより、クリックで確実にフォーカス
+   await firstRadio.click();
+   await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
+
+   // その後のキーボード操作
+   await page.keyboard.press('ArrowDown');
+   ```
+3. **Roving tabindexの検証**: Radio Groupは単一のタブストップを持ち、選択された要素のみが `tabindex="0"` を持つことを検証
 
 ```typescript
 import { test, expect } from '@playwright/test';
