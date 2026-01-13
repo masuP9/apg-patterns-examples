@@ -28,14 +28,14 @@ export function SingleSelectListboxDemo() {
   return (
     <div className="space-y-4">
       <div>
-        <label id="fruit-label" className="mb-2 block text-sm font-medium">
+        <span id="fruit-label" className="mb-2 block text-sm font-medium">
           Choose a fruit:
-        </label>
+        </span>
         <Listbox
           options={fruitOptions}
           defaultSelectedIds={['apple']}
-          aria-labelledby="fruit-label"
           onSelectionChange={setSelectedIds}
+          aria-labelledby="fruit-label"
         />
       </div>
       <p className="text-muted-foreground text-sm">
@@ -51,9 +51,9 @@ export function MultiSelectListboxDemo() {
   return (
     <div className="space-y-4">
       <div>
-        <label id="color-label" className="mb-2 block text-sm font-medium">
+        <span id="color-label" className="mb-2 block text-sm font-medium">
           Choose colors (multiple):
-        </label>
+        </span>
         <Listbox
           options={colorOptions}
           multiselectable
@@ -77,9 +77,9 @@ export function HorizontalListboxDemo() {
   return (
     <div className="space-y-4">
       <div>
-        <label id="horizontal-label" className="mb-2 block text-sm font-medium">
+        <span id="horizontal-label" className="mb-2 block text-sm font-medium">
           Choose a fruit (horizontal):
-        </label>
+        </span>
         <Listbox
           options={fruitOptions.slice(0, 5)}
           orientation="horizontal"

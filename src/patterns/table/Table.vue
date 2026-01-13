@@ -61,7 +61,7 @@ interface Props {
   startColIndex?: number;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
   sortChange: [columnId: string, direction: 'ascending' | 'descending'];

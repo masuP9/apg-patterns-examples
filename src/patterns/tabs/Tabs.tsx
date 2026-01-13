@@ -162,6 +162,8 @@ export function Tabs({
 
   return (
     <div className={containerClass}>
+      {/* tablist capture child elements keydown events */}
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
       <div
         ref={tablistRef}
         role="tablist"

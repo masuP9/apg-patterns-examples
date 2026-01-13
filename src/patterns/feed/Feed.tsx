@@ -235,6 +235,8 @@ export function Feed({
   );
 
   return (
+    // disabled to allow div with role="feed" to have keyboard events for capture children elements events
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
       ref={containerRef}
       role="feed"
@@ -245,13 +247,13 @@ export function Feed({
       onKeyDown={handleKeyDown}
       {...rest}
     >
-      {articles.map((article, index) => {
-        const titleId = `${baseId}-article-${article.id}-title`;
-        const descId = article.description ? `${baseId}-article-${article.id}-desc` : undefined;
+      {articles.map(({ id, title, description, content }, index) => {
+        const titleId = `${baseId}-article-${id}-title`;
+        const descId = description ? `${baseId}-article-${id}-desc` : undefined;
 
         return (
           <article
-            key={article.id}
+            key={id}
             ref={(el) => {
               articleRefs.current[index] = el;
             }}
@@ -263,17 +265,9 @@ export function Feed({
             aria-setsize={computedSetSize}
             onFocus={() => handleArticleFocus(index)}
           >
-            <h3 id={titleId}>
-              <a
-                href="#"
-                className="apg-feed-article-title-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                {article.title}
-              </a>
-            </h3>
-            {article.description && <p id={descId}>{article.description}</p>}
-            <div className="apg-feed-article-content">{article.content}</div>
+            <h3 id={titleId}>{title}</h3>
+            {description && <p id={descId}>{description}</p>}
+            <div className="apg-feed-article-content">{content}</div>
           </article>
         );
       })}

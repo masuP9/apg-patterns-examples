@@ -218,16 +218,6 @@ export function TreeGrid({
     return columns.findIndex((col) => col.isRowHeader);
   }, [columns]);
 
-  const isAtRowHeader = useCallback(
-    (cellId: string) => {
-      const entry = cellById.get(cellId);
-      if (!entry) return false;
-      const rowHeaderColIndex = getRowHeaderColumnIndex();
-      return entry.colIndex === rowHeaderColIndex;
-    },
-    [cellById, getRowHeaderColumnIndex]
-  );
-
   // ==========================================================================
   // Focus Management
   // ==========================================================================

@@ -49,7 +49,5 @@
       {triggerText}
     </button>
   {/snippet}
-  {#snippet children()}
-    {@html contentHtml}
-  {/snippet}
+  {@html contentHtml}
 </Dialog>

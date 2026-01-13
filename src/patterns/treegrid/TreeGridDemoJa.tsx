@@ -1,10 +1,5 @@
 import { useState, useCallback } from 'react';
-import {
-  TreeGrid,
-  type TreeGridColumnDef,
-  type TreeGridNodeData,
-  type TreeGridCellData,
-} from './TreeGrid';
+import { TreeGrid, type TreeGridColumnDef, type TreeGridNodeData } from './TreeGrid';
 
 const columns: TreeGridColumnDef[] = [
   { id: 'name', header: '名前', isRowHeader: true },
@@ -108,8 +103,8 @@ export function TreeGridDemoJa() {
     setExpandedIds(ids);
   }, []);
 
-  const handleCellActivate = useCallback((cellId: string, rowId: string, colId: string) => {
-    console.log('Cell activated:', { cellId, rowId, colId });
+  const handleCellActivate = useCallback((_cellId: string, _rowId: string, _colId: string) => {
+    // Handle cell activation (e.g., navigate, open modal, etc.)
   }, []);
 
   return (

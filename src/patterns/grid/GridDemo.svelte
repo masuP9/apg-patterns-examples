@@ -63,8 +63,9 @@
     selectedIds = ids;
   }
 
-  function handleCellActivate(cellId: string, rowId: string, colId: string) {
-    console.log('Cell activated:', { cellId, rowId, colId });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function handleCellActivate(_cellId: string, _rowId: string, _colId: string) {
+    // Handle cell activation (e.g., navigate, open modal, etc.)
   }
 
   function renderCell(cell: { value: string | number }, rowId: string, colId: string) {

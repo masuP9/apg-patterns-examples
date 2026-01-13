@@ -529,7 +529,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 <ul
   bind:this={containerElement}
   role="menubar"
@@ -538,9 +537,8 @@
   aria-labelledby={ariaLabelledby}
   {...restProps}
 >
-  {#each items as menubarItem, index}
+  {#each items as menubarItem, index (menubarItem.id)}
     <li role="none">
-      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
       <span
         id="{instanceId}-menubar-{menubarItem.id}"
         use:trackMenubarItemRef={index}
@@ -570,7 +568,6 @@
           <path d="m6 9 6 6 6-6" />
         </svg>
       </span>
-      <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
       <ul
         id="{instanceId}-menu-{menubarItem.id}"
         role="menu"
@@ -579,18 +576,16 @@
         aria-hidden={openMenubarIndex !== index}
       >
         {#if openMenubarIndex === index}
-          {#each menubarItem.items as item}
+          {#each menubarItem.items as item (item.id)}
             {#if item.type === 'separator'}
               <li role="none">
                 <hr role="separator" class="apg-menubar-separator" />
               </li>
             {:else if item.type === 'radiogroup'}
               <li role="none">
-                <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
                 <ul role="group" aria-label={item.label} class="apg-menubar-group">
-                  {#each item.items as radioItem}
+                  {#each item.items as radioItem (radioItem.id)}
                     <li role="none">
-                      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
                       <span
                         use:trackMenuItemRef={radioItem.id}
                         role="menuitemradio"
@@ -610,7 +605,6 @@
               </li>
             {:else if item.type === 'checkbox'}
               <li role="none">
-                <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
                 <span
                   use:trackMenuItemRef={item.id}
                   role="menuitemcheckbox"
@@ -626,7 +620,6 @@
               </li>
             {:else if item.type === 'submenu'}
               <li role="none">
-                <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
                 <span
                   id="{instanceId}-menuitem-{item.id}"
                   use:trackMenuItemRef={item.id}
@@ -656,7 +649,6 @@
                     <path d="m9 18 6-6-6-6" />
                   </svg>
                 </span>
-                <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
                 <ul
                   id="{instanceId}-submenu-{item.id}"
                   role="menu"
@@ -665,14 +657,13 @@
                   aria-hidden={!isSubmenuExpanded(item.id)}
                 >
                   {#if isSubmenuExpanded(item.id)}
-                    {#each item.items as subItem}
+                    {#each item.items as subItem (subItem.id)}
                       {#if subItem.type === 'separator'}
                         <li role="none">
                           <hr role="separator" class="apg-menubar-separator" />
                         </li>
                       {:else if subItem.type !== 'radiogroup'}
                         <li role="none">
-                          <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
                           <span
                             use:trackMenuItemRef={subItem.id}
                             role="menuitem"
@@ -692,7 +683,6 @@
               </li>
             {:else}
               <li role="none">
-                <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
                 <span
                   use:trackMenuItemRef={item.id}
                   role="menuitem"

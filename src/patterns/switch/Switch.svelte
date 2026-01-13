@@ -14,7 +14,7 @@
     children,
     initialChecked = false,
     disabled = false,
-    onCheckedChange = (_) => {},
+    onCheckedChange = () => {},
     ...restProps
   }: SwitchProps = $props();
 

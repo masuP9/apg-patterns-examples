@@ -72,7 +72,7 @@
   let isDragging = $state(false);
 
   // State - calculate initial value inline (warnings are acceptable for uncontrolled component)
-  // eslint-disable-next-line svelte/valid-compile -- intentional capture of initial props
+
   let value = $state(clamp(roundToStep(defaultValue ?? min, step, min), min, max));
 
   // Computed

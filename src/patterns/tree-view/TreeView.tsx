@@ -658,6 +658,8 @@ export function TreeView({
       const labelId = `${instanceId}-label-${node.id}`;
 
       return (
+        // treegrid keyboard events managed at tree level
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <li
           key={node.id}
           ref={(el) => {

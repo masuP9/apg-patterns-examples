@@ -1,6 +1,6 @@
 <template>
   <div class="apg-feed-demo-wrapper">
-    <KeyboardHints />
+    <KeyboardHintsJa />
     <button
       type="button"
       class="apg-feed-demo-button"
@@ -12,7 +12,7 @@
           d="M8 2a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 2z"
         />
       </svg>
-      Add Pattern
+      パターンを追加
     </button>
 
     <div
@@ -22,7 +22,7 @@
     >
       <Feed
         :articles="articles"
-        aria-label="APG Patterns feed with infinite scroll"
+        aria-label="無限スクロール付き APG パターンフィード"
         :loading="loading"
         :set-size="hasMore ? -1 : articles.length"
         load-more-root-margin="100px"
@@ -30,9 +30,9 @@
         @load-more="loadMore"
       />
       <div v-if="loading" class="apg-feed-loading-indicator" aria-live="polite">
-        Loading more articles...
+        記事を読み込み中...
       </div>
-      <div v-if="!hasMore" class="apg-feed-end-message">You've reached the end of the feed.</div>
+      <div v-if="!hasMore" class="apg-feed-end-message">フィードの終わりです。</div>
     </div>
 
     <button
@@ -47,7 +47,7 @@
         />
         <path d="M8 7.5a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 7.5z" />
       </svg>
-      Back to top
+      トップに戻る
     </button>
   </div>
 </template>
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Feed, { type FeedArticle } from './Feed.vue';
-import KeyboardHints from './KeyboardHints.vue';
+import KeyboardHintsJa from './KeyboardHintsJa.vue';
 import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
 
 const availablePatterns = getAvailablePatterns();
@@ -64,7 +64,7 @@ const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
   description: pattern.description,
-  content: `${pattern.description}\n\nComplexity: ${pattern.complexity}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/vue/`,
+  content: `${pattern.description}\n\n複雑度: ${pattern.complexity}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/vue/`,
 });
 
 const initialArticles: FeedArticle[] = availablePatterns

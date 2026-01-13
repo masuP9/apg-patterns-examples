@@ -1,7 +1,7 @@
 ---
 import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
-import FeedDemo from '@patterns/feed/FeedDemo.svelte';
+import FeedDemoJa from '@patterns/feed/FeedDemoJa.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AccessibilityDocs from '@patterns/feed/AccessibilityDocs.ja.astro';
@@ -67,7 +67,7 @@ const tocItems = [
       <code>aria-busy="true"</code> が設定されます。読み込み完了後、<code>false</code> に戻ります。
     </p>
     <div class="border-border bg-background rounded-lg border p-6">
-      <FeedDemo client:load />
+      <FeedDemoJa client:load />
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>

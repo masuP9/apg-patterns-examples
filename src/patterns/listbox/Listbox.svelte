@@ -343,10 +343,9 @@
   class={containerClass}
   onkeydown={handleKeyDown}
 >
-  {#each options as option}
+  {#each options as option (option.id)}
     {@const isSelected = selectedIds.has(option.id)}
 
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
     <li
       use:trackOptionRef={option.id}
       role="option"

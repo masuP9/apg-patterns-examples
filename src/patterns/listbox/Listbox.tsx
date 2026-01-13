@@ -1,4 +1,4 @@
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useRef, useState, useMemo } from 'react';
 
 export interface ListboxOption {
   id: string;
@@ -163,7 +163,7 @@ export function Listbox({
       const buffer = typeAheadBuffer.current;
       const isSameChar = buffer.length > 1 && buffer.split('').every((c) => c === buffer[0]);
 
-      let searchOptions = availableOptions;
+      const searchOptions = availableOptions;
       let startIndex = focusedIndex;
 
       // If repeating same character, cycle through matches starting from next
@@ -389,6 +389,8 @@ export function Listbox({
         } ${option.disabled ? 'apg-listbox-option--disabled' : ''}`.trim();
 
         return (
+          // role option keyboard events handled by aria-activedescendant on the listbox
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <li
             key={option.id}
             ref={(el) => {

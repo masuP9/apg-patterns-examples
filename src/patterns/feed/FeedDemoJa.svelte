@@ -1,6 +1,6 @@
 <script lang="ts">
   import Feed, { type FeedArticle } from './Feed.svelte';
-  import KeyboardHints from './KeyboardHints.svelte';
+  import KeyboardHintsJa from './KeyboardHintsJa.svelte';
   import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
 
   const availablePatterns = getAvailablePatterns();
@@ -9,7 +9,7 @@
     id: `article-${pattern.id}`,
     title: `${pattern.icon} ${pattern.name}`,
     description: pattern.description,
-    content: `${pattern.description}\n\nComplexity: ${pattern.complexity}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/svelte/`,
+    content: `${pattern.description}\n\n複雑度: ${pattern.complexity}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/svelte/`,
   });
 
   const initialArticles: FeedArticle[] = availablePatterns
@@ -54,14 +54,14 @@
 </script>
 
 <div class="apg-feed-demo-wrapper">
-  <KeyboardHints />
+  <KeyboardHintsJa />
   <button type="button" class="apg-feed-demo-button" data-testid="before-feed" onclick={addArticle}>
     <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
       <path
         d="M8 2a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 2z"
       />
     </svg>
-    Add Pattern
+    パターンを追加
   </button>
 
   <div
@@ -71,7 +71,7 @@
   >
     <Feed
       {articles}
-      aria-label="APG Patterns feed with infinite scroll"
+      aria-label="無限スクロール付き APG パターンフィード"
       {loading}
       setSize={hasMore ? -1 : articles.length}
       loadMoreRootMargin="100px"
@@ -79,10 +79,10 @@
       onloadmore={loadMore}
     />
     {#if loading}
-      <div class="apg-feed-loading-indicator" aria-live="polite">Loading more articles...</div>
+      <div class="apg-feed-loading-indicator" aria-live="polite">記事を読み込み中...</div>
     {/if}
     {#if !hasMore}
-      <div class="apg-feed-end-message">You've reached the end of the feed.</div>
+      <div class="apg-feed-end-message">フィードの終わりです。</div>
     {/if}
   </div>
 
@@ -93,7 +93,7 @@
       />
       <path d="M8 7.5a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 7.5z" />
     </svg>
-    Back to top
+    トップに戻る
   </button>
 </div>
 

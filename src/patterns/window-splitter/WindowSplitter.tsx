@@ -344,6 +344,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
       )}
       style={{ '--splitter-position': `${position}%` } satisfies SplitterStyle}
     >
+      {/* role=separator as a interactive element when is focusable */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={splitterRef}
         role="separator"

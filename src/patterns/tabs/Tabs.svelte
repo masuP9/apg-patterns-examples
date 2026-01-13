@@ -155,11 +155,12 @@
   <div
     bind:this={tablistElement}
     role="tablist"
+    aria-label={label}
     aria-orientation={orientation}
     class={tablistClass}
     onkeydown={handleKeyDown}
   >
-    {#each tabs as tab}
+    {#each tabs as tab (tab.id)}
       {@const isSelected = tab.id === selectedId}
       {@const tabIndex = tab.disabled ? -1 : isSelected ? 0 : -1}
 
@@ -181,7 +182,7 @@
   </div>
 
   <div class="apg-tabpanels">
-    {#each tabs as tab}
+    {#each tabs as tab (tab.id)}
       {@const isSelected = tab.id === selectedId}
 
       <div

@@ -19,7 +19,7 @@
     children,
     initialPressed = false,
     disabled = false,
-    onToggle = (_) => {},
+    onToggle = () => {},
     pressedIndicator = '●',
     unpressedIndicator = '○',
     ...restProps

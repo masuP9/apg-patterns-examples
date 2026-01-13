@@ -7,12 +7,12 @@ const availablePatterns = getAvailablePatterns();
 const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
-  description: `Complexity: ${pattern.complexity}`,
+  description: `複雑度: ${pattern.complexity}`,
   content: (
     <>
       <p>{pattern.description}</p>
       <p>
-        <a href={`/patterns/${pattern.id}/react/`}>View {pattern.name} pattern →</a>
+        <a href={`/ja/patterns/${pattern.id}/react/`}>{pattern.name} パターンを見る →</a>
       </p>
     </>
   ),
@@ -25,32 +25,32 @@ const initialArticles: FeedArticle[] = availablePatterns
 function KeyboardHints() {
   return (
     <div className="apg-feed-keyboard-hints">
-      <div className="apg-feed-keyboard-hints-title">Keyboard Navigation</div>
+      <div className="apg-feed-keyboard-hints-title">キーボード操作</div>
       <dl className="apg-feed-keyboard-hints-list">
         <div className="apg-feed-keyboard-hint">
           <dt>
             <kbd>Page Down</kbd> / <kbd>Page Up</kbd>
           </dt>
-          <dd>Move between articles</dd>
+          <dd>記事間を移動</dd>
         </div>
         <div className="apg-feed-keyboard-hint">
           <dt>
             <kbd>Ctrl</kbd> + <kbd>End</kbd>
           </dt>
-          <dd>Move focus after feed</dd>
+          <dd>フィードの後にフォーカス移動</dd>
         </div>
         <div className="apg-feed-keyboard-hint">
           <dt>
             <kbd>Ctrl</kbd> + <kbd>Home</kbd>
           </dt>
-          <dd>Move focus before feed</dd>
+          <dd>フィードの前にフォーカス移動</dd>
         </div>
       </dl>
     </div>
   );
 }
 
-export function FeedDemo() {
+export function FeedDemoJa() {
   const [articles, setArticles] = useState<FeedArticle[]>(initialArticles);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -101,7 +101,7 @@ export function FeedDemo() {
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 2a.75.75 0 0 1 .75.75v4.5h4.5a.75.75 0 0 1 0 1.5h-4.5v4.5a.75.75 0 0 1-1.5 0v-4.5h-4.5a.75.75 0 0 1 0-1.5h4.5v-4.5A.75.75 0 0 1 8 2z" />
         </svg>
-        Add Pattern
+        パターンを追加
       </button>
       <div
         ref={scrollContainerRef}
@@ -110,7 +110,7 @@ export function FeedDemo() {
       >
         <Feed
           articles={articles}
-          aria-label="APG Patterns feed with infinite scroll"
+          aria-label="無限スクロール付き APG パターンフィード"
           loading={loading}
           setSize={hasMore ? -1 : articles.length}
           onLoadMore={loadMore}
@@ -119,12 +119,10 @@ export function FeedDemo() {
         />
         {loading && (
           <div className="apg-feed-loading-indicator" aria-live="polite">
-            Loading more articles...
+            記事を読み込み中...
           </div>
         )}
-        {!hasMore && (
-          <div className="apg-feed-end-message">You've reached the end of the feed.</div>
-        )}
+        {!hasMore && <div className="apg-feed-end-message">フィードの終わりです。</div>}
       </div>
       <button
         type="button"
@@ -136,10 +134,10 @@ export function FeedDemo() {
           <path d="M8 3.5a.75.75 0 0 1 .53.22l4 4a.75.75 0 1 1-1.06 1.06L8 5.31 4.53 8.78a.75.75 0 0 1-1.06-1.06l4-4A.75.75 0 0 1 8 3.5z" />
           <path d="M8 7.5a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 7.5z" />
         </svg>
-        Back to top
+        トップに戻る
       </button>
     </div>
   );
 }
 
-export default FeedDemo;
+export default FeedDemoJa;

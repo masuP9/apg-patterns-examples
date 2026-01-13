@@ -421,7 +421,7 @@
     onmouseenter={handleSlidesMouseEnter}
     onmouseleave={handleSlidesMouseLeave}
   >
-    {#each slides as slide, index}
+    {#each slides as slide, index (slide.id)}
       {@const isActive = index === currentSlide}
       {@const isExiting = index === exitingSlide}
       {@const isSwipeAdjacent = index === swipeAdjacentSlide}
@@ -493,7 +493,7 @@
       class="apg-carousel-tablist"
       onkeydown={handleKeyDown}
     >
-      {#each slides as slide, index}
+      {#each slides as slide, index (slide.id)}
         <button
           bind:this={tabRefs[index]}
           type="button"

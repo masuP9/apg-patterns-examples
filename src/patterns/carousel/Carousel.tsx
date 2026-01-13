@@ -521,6 +521,7 @@ export function Carousel({
         )}
 
         {/* Tablist (slide indicators) */}
+        {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- keydown handled on container; child buttons are focusable */}
         <div
           ref={tablistRef}
           role="tablist"
