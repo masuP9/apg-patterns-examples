@@ -64,7 +64,6 @@ export function GridDemo() {
     setSelectedIds(ids);
   }, []);
 
-   
   const handleCellActivate = useCallback((_cellId: string, _rowId: string, _colId: string) => {
     // Handle cell activation (e.g., navigate, open modal, etc.)
   }, []);

@@ -373,11 +373,7 @@ export default tseslint.config(
   // Config files: Node.js environment
   // ===========================================
   {
-    files: [
-      '*.config.{js,mjs,ts}',
-      'vitest.*.config.ts',
-      'playwright.config.ts',
-    ],
+    files: ['*.config.{js,mjs,ts}', 'vitest.*.config.ts', 'playwright.config.ts'],
     languageOptions: {
       globals: {
         ...globals.node,

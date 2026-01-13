@@ -359,8 +359,9 @@ export function Listbox({
     [focusOption, selectOption]
   );
 
-  const containerClass = `apg-listbox ${orientation === 'horizontal' ? 'apg-listbox--horizontal' : ''
-    } ${className}`.trim();
+  const containerClass = `apg-listbox ${
+    orientation === 'horizontal' ? 'apg-listbox--horizontal' : ''
+  } ${className}`.trim();
 
   // If no available options, listbox itself needs tabIndex for keyboard access
   const listboxTabIndex = availableOptions.length === 0 ? 0 : undefined;
@@ -383,8 +384,9 @@ export function Listbox({
         const isFocusTarget = availableIndex === focusedIndex;
         const tabIndex = option.disabled ? -1 : isFocusTarget ? 0 : -1;
 
-        const optionClass = `apg-listbox-option ${isSelected ? 'apg-listbox-option--selected' : ''
-          } ${option.disabled ? 'apg-listbox-option--disabled' : ''}`.trim();
+        const optionClass = `apg-listbox-option ${
+          isSelected ? 'apg-listbox-option--selected' : ''
+        } ${option.disabled ? 'apg-listbox-option--disabled' : ''}`.trim();
 
         return (
           // role option keyboard events handled by aria-activedescendant on the listbox

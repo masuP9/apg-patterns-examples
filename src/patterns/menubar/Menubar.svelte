@@ -539,7 +539,7 @@
 >
   {#each items as menubarItem, index (menubarItem.id)}
     <li role="none">
-            <span
+      <span
         id="{instanceId}-menubar-{menubarItem.id}"
         use:trackMenubarItemRef={index}
         role="menuitem"
@@ -568,7 +568,7 @@
           <path d="m6 9 6 6 6-6" />
         </svg>
       </span>
-            <ul
+      <ul
         id="{instanceId}-menu-{menubarItem.id}"
         role="menu"
         aria-labelledby="{instanceId}-menubar-{menubarItem.id}"
@@ -583,10 +583,10 @@
               </li>
             {:else if item.type === 'radiogroup'}
               <li role="none">
-                                <ul role="group" aria-label={item.label} class="apg-menubar-group">
+                <ul role="group" aria-label={item.label} class="apg-menubar-group">
                   {#each item.items as radioItem (radioItem.id)}
                     <li role="none">
-                                            <span
+                      <span
                         use:trackMenuItemRef={radioItem.id}
                         role="menuitemradio"
                         aria-checked={radioStates.get(item.name) === radioItem.id}
@@ -605,7 +605,7 @@
               </li>
             {:else if item.type === 'checkbox'}
               <li role="none">
-                                <span
+                <span
                   use:trackMenuItemRef={item.id}
                   role="menuitemcheckbox"
                   aria-checked={checkboxStates.get(item.id) ?? false}
@@ -620,7 +620,7 @@
               </li>
             {:else if item.type === 'submenu'}
               <li role="none">
-                                <span
+                <span
                   id="{instanceId}-menuitem-{item.id}"
                   use:trackMenuItemRef={item.id}
                   role="menuitem"
@@ -649,7 +649,7 @@
                     <path d="m9 18 6-6-6-6" />
                   </svg>
                 </span>
-                                <ul
+                <ul
                   id="{instanceId}-submenu-{item.id}"
                   role="menu"
                   aria-labelledby="{instanceId}-menuitem-{item.id}"
@@ -664,7 +664,7 @@
                         </li>
                       {:else if subItem.type !== 'radiogroup'}
                         <li role="none">
-                                                    <span
+                          <span
                             use:trackMenuItemRef={subItem.id}
                             role="menuitem"
                             aria-disabled={subItem.disabled || undefined}
@@ -683,7 +683,7 @@
               </li>
             {:else}
               <li role="none">
-                                <span
+                <span
                   use:trackMenuItemRef={item.id}
                   role="menuitem"
                   aria-disabled={item.disabled || undefined}

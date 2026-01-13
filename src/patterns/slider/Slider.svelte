@@ -72,7 +72,7 @@
   let isDragging = $state(false);
 
   // State - calculate initial value inline (warnings are acceptable for uncontrolled component)
-   
+
   let value = $state(clamp(roundToStep(defaultValue ?? min, step, min), min, max));
 
   // Computed

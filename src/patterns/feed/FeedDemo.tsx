@@ -10,13 +10,9 @@ const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   description: `Complexity: ${pattern.complexity}`,
   content: (
     <>
+      <p>{pattern.description}</p>
       <p>
-        {pattern.description}
-      </p>
-      <p>
-        <a href={`/patterns/${pattern.id}/react/`}>
-          View {pattern.name} pattern →
-        </a>
+        <a href={`/patterns/${pattern.id}/react/`}>View {pattern.name} pattern →</a>
       </p>
     </>
   ),

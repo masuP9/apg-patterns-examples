@@ -10,13 +10,9 @@ const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   description: `複雑度: ${pattern.complexity}`,
   content: (
     <>
+      <p>{pattern.description}</p>
       <p>
-        {pattern.description}
-      </p>
-      <p>
-        <a href={`/ja/patterns/${pattern.id}/react/`}>
-          {pattern.name} パターンを見る →
-        </a>
+        <a href={`/ja/patterns/${pattern.id}/react/`}>{pattern.name} パターンを見る →</a>
       </p>
     </>
   ),
@@ -126,9 +122,7 @@ export function FeedDemoJa() {
             記事を読み込み中...
           </div>
         )}
-        {!hasMore && (
-          <div className="apg-feed-end-message">フィードの終わりです。</div>
-        )}
+        {!hasMore && <div className="apg-feed-end-message">フィードの終わりです。</div>}
       </div>
       <button
         type="button"

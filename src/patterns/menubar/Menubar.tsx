@@ -580,7 +580,17 @@ export function Menubar({
         }
       }
     },
-    [getFocusableItems, getFirstFocusableItem, state.openMenubarIndex, state.openSubmenuPath, items.length, openMenubarMenu, closeAllMenus, activateMenuItem, handleTypeAhead]
+    [
+      getFocusableItems,
+      getFirstFocusableItem,
+      state.openMenubarIndex,
+      state.openSubmenuPath,
+      items.length,
+      openMenubarMenu,
+      closeAllMenus,
+      activateMenuItem,
+      handleTypeAhead,
+    ]
   );
 
   // Render menu items recursively
@@ -609,7 +619,7 @@ export function Menubar({
                   const { id: radioItemId, label: radioItemLabel, disabled } = radioItem;
                   const isChecked = radioStates.get(name) === radioItemId;
                   const isFocused =
-                    state.focusedItemPath[state.focusedItemPath.length - 1] === radioItemId
+                    state.focusedItemPath[state.focusedItemPath.length - 1] === radioItemId;
 
                   return (
                     <li key={radioItemId} role="none">

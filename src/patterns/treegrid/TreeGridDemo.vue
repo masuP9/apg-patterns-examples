@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import TreeGrid, {
-  type TreeGridColumnDef,
-  type TreeGridNodeData,
-} from './TreeGrid.vue';
+import TreeGrid, { type TreeGridColumnDef, type TreeGridNodeData } from './TreeGrid.vue';
 
 const columns: TreeGridColumnDef[] = [
   { id: 'name', header: 'Name', isRowHeader: true },

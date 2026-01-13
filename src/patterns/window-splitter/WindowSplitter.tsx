@@ -131,7 +131,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
         const container = containerRef.current;
         const sizeInPx = container
           ? (clampedPosition / 100) *
-          (isHorizontal ? container.offsetWidth : container.offsetHeight)
+            (isHorizontal ? container.offsetWidth : container.offsetHeight)
           : 0;
 
         onPositionChange?.(clampedPosition, sizeInPx);

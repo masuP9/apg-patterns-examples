@@ -649,9 +649,11 @@ export function TreeView({
         return null;
       }
 
-      const nodeClass = `apg-treeview-item ${isSelected ? 'apg-treeview-item--selected' : ''
-        } ${node.disabled ? 'apg-treeview-item--disabled' : ''} ${hasChildren ? 'apg-treeview-item--parent' : 'apg-treeview-item--leaf'
-        }`.trim();
+      const nodeClass = `apg-treeview-item ${
+        isSelected ? 'apg-treeview-item--selected' : ''
+      } ${node.disabled ? 'apg-treeview-item--disabled' : ''} ${
+        hasChildren ? 'apg-treeview-item--parent' : 'apg-treeview-item--leaf'
+      }`.trim();
 
       const labelId = `${instanceId}-label-${node.id}`;
 

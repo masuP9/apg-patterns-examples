@@ -501,7 +501,6 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
 function getCellRole(colIndex: number): 'rowheader' | 'gridcell' {
   return props.columns[colIndex]?.isRowHeader ? 'rowheader' : 'gridcell';
 }
-
 </script>
 
 <template>

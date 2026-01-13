@@ -87,7 +87,7 @@ export function Feed({
     if (!ariaLabel && !ariaLabelledby) {
       console.warn(
         'Feed: An accessible name is required. ' +
-        'Provide either aria-label or aria-labelledby prop.'
+          'Provide either aria-label or aria-labelledby prop.'
       );
     }
   }, [ariaLabel, ariaLabelledby]);
@@ -265,9 +265,7 @@ export function Feed({
             aria-setsize={computedSetSize}
             onFocus={() => handleArticleFocus(index)}
           >
-            <h3 id={titleId}>
-              {title}
-            </h3>
+            <h3 id={titleId}>{title}</h3>
             {description && <p id={descId}>{description}</p>}
             <div className="apg-feed-article-content">{content}</div>
           </article>

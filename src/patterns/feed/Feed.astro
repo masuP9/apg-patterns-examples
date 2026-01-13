@@ -101,9 +101,7 @@ const computedSetSize = setSize !== undefined ? setSize : articles.length;
             data-article-id={article.id}
             data-article-index={index.toString()}
           >
-            <h3 id={titleId}>
-              {article.title}
-            </h3>
+            <h3 id={titleId}>{article.title}</h3>
             {article.description && <p id={descId}>{article.description}</p>}
             <div class="apg-feed-article-content">{article.content}</div>
           </article>

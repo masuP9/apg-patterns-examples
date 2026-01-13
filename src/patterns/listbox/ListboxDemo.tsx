@@ -28,7 +28,9 @@ export function SingleSelectListboxDemo() {
   return (
     <div className="space-y-4">
       <div>
-        <span id="fruit-label" className="mb-2 block text-sm font-medium">Choose a fruit:</span>
+        <span id="fruit-label" className="mb-2 block text-sm font-medium">
+          Choose a fruit:
+        </span>
         <Listbox
           options={fruitOptions}
           defaultSelectedIds={['apple']}
