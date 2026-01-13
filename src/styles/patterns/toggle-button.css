@@ -8,16 +8,20 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  min-height: 44px; /* Touch target minimum size */
+  min-height: 44px;
+  /* Touch target minimum size */
   border: 2px solid var(--border);
   border-radius: 0.5rem;
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+  transition-property:
+    background-color, color, border-color, box-shadow, transform, background-image;
   user-select: none;
-  cursor: pointer;
+  transition-delay: 75ms;
 }
 
-.apg-toggle-button:focus {
+.apg-toggle-button:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 2px var(--background),
@@ -29,19 +33,8 @@
   cursor: not-allowed;
 }
 
-/* Pressed State */
-.apg-toggle-button[aria-pressed='true'] {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  border-color: var(--primary);
-}
-
-.apg-toggle-button[aria-pressed='true']:hover:not(:disabled) {
-  background-image: linear-gradient(
-    to bottom right,
-    var(--primary) 0%,
-    color-mix(in srgb, var(--primary) 90%, var(--primary-foreground)) 100%
-  );
+.apg-toggle-button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 /* Not Pressed State */
@@ -52,12 +45,108 @@
 }
 
 .apg-toggle-button[aria-pressed='false']:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--background) 95%, var(--foreground));
-  border-color: var(--foreground);
+  background-image: linear-gradient(
+    to bottom right,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 95%, var(--foreground))
+  );
 }
 
-.apg-toggle-button[aria-pressed='false']:active:not(:disabled) {
-  transform: scale(0.98);
+/* Pressed State */
+.apg-toggle-button[aria-pressed='true'] {
+  background-color: var(--primary);
+  background-image: linear-gradient(
+    to bottom right,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 75%, var(--primary-foreground)) 100%
+  );
+  color: var(--primary-foreground);
+  border-width: 0;
+  /* Adjust padding for border removal */
+  padding: calc(0.5rem + 2px) calc(1rem + 2px);
+}
+
+.apg-toggle-button[aria-pressed='true']:hover:not(:disabled) {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 55%, var(--primary-foreground)) 100%
+  );
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .apg-toggle-button {
+    border-width: 0;
+    padding: calc(0.5rem + 2px) calc(1rem + 2px);
+  }
+}
+
+.dark .apg-toggle-button {
+  border-width: 0;
+  padding: calc(0.5rem + 2px) calc(1rem + 2px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .apg-toggle-button[aria-pressed='false'] {
+    background-color: var(--primary);
+    background-image: linear-gradient(
+      to bottom right,
+      var(--primary) 0%,
+      color-mix(in srgb, var(--primary) 75%, var(--primary-foreground)) 100%
+    );
+    color: var(--primary-foreground);
+  }
+
+  .apg-toggle-button[aria-pressed='false']:hover:not(:disabled) {
+    background-image: linear-gradient(
+      to bottom right,
+      var(--primary) 0%,
+      color-mix(in srgb, var(--primary) 55%, var(--primary-foreground)) 100%
+    );
+  }
+
+  .apg-toggle-button[aria-pressed='true'] {
+    background-image: linear-gradient(
+      to top left,
+      var(--primary) 0%,
+      color-mix(in srgb, var(--primary) 75%, var(--primary-foreground)) 100%
+    );
+  }
+}
+
+.dark .apg-toggle-button[aria-pressed='false'] {
+  background-color: var(--primary);
+  background-image: linear-gradient(
+    to bottom right,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 75%, var(--primary-foreground)) 100%
+  );
+  color: var(--primary-foreground);
+}
+
+.dark .apg-toggle-button[aria-pressed='false']:hover:not(:disabled) {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 55%, var(--primary-foreground)) 100%
+  );
+}
+
+.dark .apg-toggle-button[aria-pressed='true'] {
+  background-image: linear-gradient(
+    to top left,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 75%, var(--primary-foreground)) 100%
+  );
+}
+
+.dark .apg-toggle-button[aria-pressed='true']:hover:not(:disabled) {
+  background-image: linear-gradient(
+    to top left,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 55%, var(--primary-foreground)) 100%
+  );
 }
 
 /* Toggle Button Content */
@@ -83,6 +172,9 @@
   width: 1.25rem;
   height: 1.25rem;
   fill: currentColor;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+  transition-property: fill, filter, color;
 }
 
 .apg-toggle-indicator img {
@@ -93,12 +185,7 @@
 
 .apg-toggle-button[aria-pressed='true'] .apg-toggle-indicator {
   color: #fde047;
-  transform: scale(1.1);
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1));
-}
-
-.apg-toggle-button[aria-pressed='false'] .apg-toggle-indicator {
-  color: var(--muted-foreground);
 }
 
 /* =============================================================================
@@ -117,13 +204,13 @@
     border-color: black;
   }
 
-  .apg-toggle-button--not-pressed {
+  .apg-toggle-button[aria-pressed='false'] {
     background-color: white;
     color: black;
     border-color: black;
   }
 
-  .apg-toggle-indicator--pressed {
+  .apg-toggle-button[aria-pressed='true'] .apg-toggle-indicator {
     color: #facc15;
   }
 }
@@ -140,27 +227,17 @@
   }
 }
 
-/* Focus Enhancement for Keyboard Users */
-.apg-toggle-button:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
 /* Windows High Contrast Mode */
 @media (forced-colors: active) {
-  .apg-toggle-button {
-    border: 2px solid ButtonBorder;
+  .apg-toggle-button[aria-pressed] {
+    border: 2px solid ButtonBorder !important;
     background: ButtonFace;
     color: ButtonText;
-  }
-
-  .apg-toggle-button[aria-pressed='true'] {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
+    padding: 0.5rem 1rem;
   }
 
   .apg-toggle-button:focus {
     outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }
