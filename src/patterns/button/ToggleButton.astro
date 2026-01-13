@@ -19,12 +19,6 @@ export interface Props {
 
 const { initialPressed = false, disabled = false, class: className = '' } = Astro.props;
 
-const stateClass = initialPressed ? 'apg-toggle-button--pressed' : 'apg-toggle-button--not-pressed';
-
-const indicatorClass = initialPressed
-  ? 'apg-toggle-indicator--pressed'
-  : 'apg-toggle-indicator--not-pressed';
-
 // Check if custom indicator slots are provided
 const hasPressedIndicator = Astro.slots.has('pressed-indicator');
 const hasUnpressedIndicator = Astro.slots.has('unpressed-indicator');
@@ -32,17 +26,12 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
 ---
 
 <apg-toggle-button class={className}>
-  <button
-    type="button"
-    class={`apg-toggle-button ${stateClass}`}
-    aria-pressed={initialPressed}
-    disabled={disabled}
-  >
+  <button type="button" class="apg-toggle-button" aria-pressed={initialPressed} disabled={disabled}>
     <span class="apg-toggle-button-content">
       <slot />
     </span>
     <span
-      class={`apg-toggle-indicator ${indicatorClass}`}
+      class="apg-toggle-indicator"
       aria-hidden="true"
       data-custom-indicators={hasCustomIndicators ? 'true' : undefined}
     >
@@ -104,12 +93,8 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
       const currentPressed = this.button.getAttribute('aria-pressed') === 'true';
       const newPressed = !currentPressed;
 
-      // Update aria-pressed
+      // Update aria-pressed (CSS uses [aria-pressed] selectors)
       this.button.setAttribute('aria-pressed', String(newPressed));
-
-      // Update CSS classes
-      this.button.classList.toggle('apg-toggle-button--pressed', newPressed);
-      this.button.classList.toggle('apg-toggle-button--not-pressed', !newPressed);
 
       // Update indicator
       const indicator = this.button.querySelector('.apg-toggle-indicator');
@@ -130,9 +115,6 @@ const hasCustomIndicators = hasPressedIndicator || hasUnpressedIndicator;
           // Use default text indicators
           indicator.textContent = newPressed ? '●' : '○';
         }
-
-        indicator.classList.toggle('apg-toggle-indicator--pressed', newPressed);
-        indicator.classList.toggle('apg-toggle-indicator--not-pressed', !newPressed);
       }
 
       // Dispatch custom event for external listeners
