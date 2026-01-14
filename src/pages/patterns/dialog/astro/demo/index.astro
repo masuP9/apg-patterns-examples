@@ -1,0 +1,57 @@
+---
+/**
+ * Demo-only Page: Dialog (Astro)
+ *
+ * This page renders the Dialog component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Dialog from '@patterns/dialog/Dialog.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Dialog (Astro)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Dialog Demo (Astro)</h1>
+
+    <div class="space-y-8">
+      <!-- Basic Dialog -->
+      <div>
+        <h2 class="mb-3 text-lg font-medium">Basic Dialog</h2>
+        <Dialog
+          title="Dialog Title"
+          description="This is a description of the dialog content. It provides additional context for users."
+          triggerText="Open Dialog"
+          triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+        >
+          <p class="mb-4">
+            This is the main content of the dialog. You can place any content here, such as text,
+            forms, or other components.
+          </p>
+          <p>
+            Press <kbd class="rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800">Escape</kbd> or
+            click outside to close.
+          </p>
+        </Dialog>
+      </div>
+
+      <!-- Dialog without description -->
+      <div>
+        <h2 class="mb-3 text-lg font-medium">Without Description</h2>
+        <Dialog
+          title="Simple Dialog"
+          triggerText="Open Simple Dialog"
+          triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+        >
+          <p>This dialog has no description, only a title and content.</p>
+        </Dialog>
+      </div>
+    </div>
+  </body>
+</html>
