@@ -16,9 +16,11 @@ A toggle button is a two-state button that can be either pressed or not pressed.
 
 ### States
 
-| Attribute      | Element | Values                         | Required | Change Trigger      |
-| -------------- | ------- | ------------------------------ | -------- | ------------------- |
-| `aria-pressed` | button  | `true` \| `false` \| `"mixed"` | Yes      | Click, Enter, Space |
+| Attribute      | Element | Values            | Required | Change Trigger      |
+| -------------- | ------- | ----------------- | -------- | ------------------- |
+| `aria-pressed` | button  | `true` \| `false` | Yes      | Click, Enter, Space |
+
+> Note: `aria-pressed="mixed"` is valid per WAI-ARIA spec for tri-state toggles (e.g., "Select All" when some items selected), but this implementation uses binary true/false only.
 
 ## Keyboard Support
 

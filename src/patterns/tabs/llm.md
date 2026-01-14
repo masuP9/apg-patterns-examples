@@ -18,11 +18,13 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 
 ### Properties
 
-| Attribute          | Element  | Values                         | Required | Notes                  |
-| ------------------ | -------- | ------------------------------ | -------- | ---------------------- |
-| `aria-orientation` | tablist  | `"horizontal"` \| `"vertical"` | No       | Defaults to horizontal |
-| `aria-controls`    | tab      | ID of associated panel         | Yes      | Auto-generated         |
-| `aria-labelledby`  | tabpanel | ID of associated tab           | Yes      | Auto-generated         |
+| Attribute          | Element  | Values                         | Required | Notes                                    |
+| ------------------ | -------- | ------------------------------ | -------- | ---------------------------------------- |
+| `aria-orientation` | tablist  | `"horizontal"` \| `"vertical"` | No       | Defaults to horizontal                   |
+| `aria-controls`    | tab      | ID of associated panel         | Yes*     | Set only on the selected tab             |
+| `aria-labelledby`  | tabpanel | ID of associated tab           | Yes      | Auto-generated                           |
+
+> *`aria-controls` is set only on the currently selected tab. Non-selected tabs omit this attribute to avoid referencing hidden panels.
 
 ### States
 

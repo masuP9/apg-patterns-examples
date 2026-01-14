@@ -18,11 +18,19 @@ export interface Props {
   target?: '_self' | '_blank';
   /** Whether the link is disabled */
   disabled?: boolean;
+  /** Indicates current item in a set (e.g., current page in navigation) */
+  'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | boolean;
   /** Additional CSS class */
   class?: string;
 }
 
-const { href, target, disabled = false, class: className = '' } = Astro.props;
+const {
+  href,
+  target,
+  disabled = false,
+  'aria-current': ariaCurrent,
+  class: className = '',
+} = Astro.props;
 ---
 
 <apg-link data-href={href} data-target={target}>
@@ -30,6 +38,7 @@ const { href, target, disabled = false, class: className = '' } = Astro.props;
     role="link"
     tabindex={disabled ? -1 : 0}
     aria-disabled={disabled ? 'true' : undefined}
+    aria-current={ariaCurrent || undefined}
     class={`apg-link ${className}`.trim()}
   >
     <slot />

@@ -8,6 +8,8 @@
     target?: '_self' | '_blank';
     /** Whether the link is disabled */
     disabled?: boolean;
+    /** Indicates current item in a set (e.g., current page in navigation) */
+    'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | boolean;
     /** Click handler */
     onClick?: (event: MouseEvent | KeyboardEvent) => void;
     /** Children content (string for tests, Snippet for slots) */

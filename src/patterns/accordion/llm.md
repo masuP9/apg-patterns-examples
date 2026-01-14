@@ -18,11 +18,12 @@ An accordion is a vertically stacked set of interactive headings that each revea
 
 ### Properties
 
-| Attribute         | Element | Values       | Required        | Notes                       |
-| ----------------- | ------- | ------------ | --------------- | --------------------------- |
-| `aria-level`      | heading | `2` - `6`    | Yes             | Set via `headingLevel` prop |
-| `aria-controls`   | button  | ID of panel  | Yes             | Auto-generated              |
-| `aria-labelledby` | region  | ID of button | Yes (if region) | Auto-generated              |
+| Attribute         | Element | Values       | Required        | Notes                                              |
+| ----------------- | ------- | ------------ | --------------- | -------------------------------------------------- |
+| `aria-controls`   | button  | ID of panel  | Yes             | Auto-generated                                     |
+| `aria-labelledby` | region  | ID of button | Yes (if region) | Auto-generated                                     |
+
+> Note: `aria-level` is implicit when using native heading elements (h2-h6). The `headingLevel` prop controls which heading tag is rendered, providing the level semantically without an explicit `aria-level` attribute.
 
 ### States
 

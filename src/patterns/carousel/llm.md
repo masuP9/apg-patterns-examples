@@ -185,7 +185,7 @@ isPausedByInteraction:
 ```typescript
 // Use PointerEvents for cross-device support
 let startX: number;
-const threshold = 50; // px
+const threshold = containerWidth * 0.2; // 20% of container width (responsive)
 
 onPointerDown = (e) => { startX = e.clientX; pauseRotation(); };
 onPointerUp = (e) => {
