@@ -215,3 +215,68 @@ it('traps focus within dialog', async () => {
   expect(cancelButton).toHaveFocus(); // wraps
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// Helper to open alert dialog
+const openAlertDialog = async (page) => {
+  const trigger = page.getByRole('button', { name: /open alert|delete|confirm/i }).first();
+  await trigger.click();
+  await page.waitForSelector('[role="alertdialog"]');
+};
+
+// ARIA: Has role="alertdialog" (NOT dialog)
+test('has role="alertdialog" and required aria attributes', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  await expect(alertDialog).toBeVisible();
+
+  // Should NOT have role="dialog"
+  const dialog = page.locator('[role="dialog"]');
+  await expect(dialog).toHaveCount(0);
+
+  // aria-describedby is required (unlike Dialog)
+  const describedbyId = await alertDialog.getAttribute('aria-describedby');
+  expect(describedbyId).toBeTruthy();
+});
+
+// Keyboard: Escape does NOT close by default
+test('Escape does NOT close dialog by default', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  await expect(alertDialog).toBeVisible();
+
+  await page.keyboard.press('Escape');
+
+  // Should still be visible
+  await expect(alertDialog).toBeVisible();
+});
+
+// Focus Management: Cancel button (safe action) receives initial focus
+test('focuses Cancel button on open and traps focus', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  const cancelButton = alertDialog.getByRole('button', { name: /cancel/i });
+
+  // Initial focus on Cancel (safest action)
+  await expect(cancelButton).toBeFocused();
+
+  // Tab wraps to Confirm
+  await page.keyboard.press('Tab');
+  const confirmButton = alertDialog.getByRole('button').filter({ hasNot: page.getByText(/cancel/i) });
+  await expect(confirmButton).toBeFocused();
+
+  // Tab wraps back to Cancel
+  await page.keyboard.press('Tab');
+  await expect(cancelButton).toBeFocused();
+});
+```

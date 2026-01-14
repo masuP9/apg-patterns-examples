@@ -51,7 +51,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  workers: 2,
+  // Use single worker locally to avoid flakiness from parallel execution
+  workers: isCI ? 2 : 1,
   reporter: isCI ? [['github'], ['html', { open: 'never' }]] : 'html',
   // Filter tests by framework if E2E_FRAMEWORK is set
   grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,

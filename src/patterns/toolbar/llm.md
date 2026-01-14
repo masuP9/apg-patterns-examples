@@ -156,3 +156,59 @@ it('maintains roving tabindex', async () => {
   expect(buttons[1]).toHaveAttribute('tabIndex', '0');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('toolbar has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/toolbar/react/demo/');
+
+  const toolbar = page.getByRole('toolbar');
+  await expect(toolbar).toBeVisible();
+  await expect(toolbar).toHaveAttribute('aria-label');
+  await expect(toolbar).toHaveAttribute('aria-orientation', 'horizontal');
+});
+
+// Keyboard navigation test
+test('ArrowRight moves focus to next button', async ({ page }) => {
+  await page.goto('patterns/toolbar/react/demo/');
+
+  const toolbar = page.getByRole('toolbar').first();
+  const buttons = toolbar.getByRole('button');
+
+  await buttons.first().click();
+  await expect(buttons.first()).toBeFocused();
+
+  await page.keyboard.press('ArrowRight');
+  await expect(buttons.nth(1)).toBeFocused();
+});
+
+// Toggle button test
+test('clicking toggle button changes aria-pressed', async ({ page }) => {
+  await page.goto('patterns/toolbar/react/demo/');
+
+  const buttons = page.getByRole('toolbar').first().getByRole('button');
+  const toggleButton = buttons.first();
+
+  const initialPressed = await toggleButton.getAttribute('aria-pressed');
+  await toggleButton.click();
+  const newPressed = await toggleButton.getAttribute('aria-pressed');
+
+  expect(newPressed).not.toBe(initialPressed);
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/toolbar/react/demo/');
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="toolbar"]')
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

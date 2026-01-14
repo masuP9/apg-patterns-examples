@@ -1,0 +1,33 @@
+---
+/**
+ * Demo-only Page: Menu Button (Vue) - Japanese
+ *
+ * This page renders the Menu Button component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.vue';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: メニューボタン (Vue)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Menu Button デモ</h1>
+    <div class="space-y-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">基本的なメニューボタン</h2>
+        <MenuButtonDemo client:only="vue" variant="basic" />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">無効な項目を含むメニューボタン</h2>
+        <MenuButtonDemo client:only="vue" variant="disabled-items" />
+      </section>
+    </div>
+  </body>
+</html>

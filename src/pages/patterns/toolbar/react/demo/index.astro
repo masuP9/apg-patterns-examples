@@ -1,0 +1,54 @@
+---
+/**
+ * Demo-only Page: Toolbar (React)
+ *
+ * This page renders the Toolbar component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import {
+  TextFormattingToolbarDemo,
+  VerticalToolbarDemo,
+  DisabledItemsToolbarDemo,
+  ToolbarToggleDemo,
+  ToolbarToggleDefaultDemo,
+} from '@patterns/toolbar/ToolbarToggleDemo';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Toolbar (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Text Formatting Toolbar (Horizontal)</h2>
+        <TextFormattingToolbarDemo client:load />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Vertical Toolbar</h2>
+        <VerticalToolbarDemo client:load />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">With Disabled Items</h2>
+        <DisabledItemsToolbarDemo client:load />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Controlled Toggle Buttons</h2>
+        <ToolbarToggleDemo client:load />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Default Pressed States</h2>
+        <ToolbarToggleDefaultDemo client:load />
+      </div>
+    </div>
+  </body>
+</html>

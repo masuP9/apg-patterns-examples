@@ -439,3 +439,104 @@ it('calls onValueChange on value change', async () => {
   expect(handleChange).toHaveBeenCalledWith(51);
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA Structure tests
+test('slider has required ARIA attributes', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  await page.getByRole('slider').first().waitFor();
+
+  const slider = page.getByRole('slider', { name: 'Volume' });
+
+  await expect(slider).toHaveRole('slider');
+  await expect(slider).toHaveAttribute('aria-valuenow', '50');
+  await expect(slider).toHaveAttribute('aria-valuemin', '0');
+  await expect(slider).toHaveAttribute('aria-valuemax', '100');
+  await expect(slider).toHaveAttribute('aria-valuetext', '50%');
+});
+
+// Keyboard interaction tests
+test('ArrowRight increases value by step', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  const slider = page.getByRole('slider', { name: 'Volume' });
+
+  await slider.click();
+  await expect(slider).toBeFocused();
+
+  const initialValue = await slider.getAttribute('aria-valuenow');
+  await page.keyboard.press('ArrowRight');
+
+  const newValue = await slider.getAttribute('aria-valuenow');
+  expect(Number(newValue)).toBe(Number(initialValue) + 1);
+});
+
+test('Home sets value to minimum', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  const slider = page.getByRole('slider', { name: 'Volume' });
+
+  await slider.click();
+  await page.keyboard.press('Home');
+
+  await expect(slider).toHaveAttribute('aria-valuenow', '0');
+  await expect(slider).toHaveAttribute('aria-valuetext', '0%');
+});
+
+test('End sets value to maximum', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  const slider = page.getByRole('slider', { name: 'Volume' });
+
+  await slider.click();
+  await page.keyboard.press('End');
+
+  await expect(slider).toHaveAttribute('aria-valuenow', '100');
+});
+
+// Vertical slider test
+test('vertical slider has aria-orientation', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  const slider = page.getByRole('slider', { name: 'Vertical' });
+
+  await expect(slider).toHaveAttribute('aria-orientation', 'vertical');
+});
+
+// Disabled state test
+test('disabled slider has aria-disabled and tabindex=-1', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  const slider = page.getByRole('slider', { name: 'Disabled' });
+
+  await expect(slider).toHaveAttribute('aria-disabled', 'true');
+  await expect(slider).toHaveAttribute('tabindex', '-1');
+});
+
+// Accessibility test
+test('has no axe violations', async ({ page }) => {
+  await page.goto('/patterns/slider/react/demo/');
+  await page.getByRole('slider').first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="slider"]')
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+
+// Cross-framework consistency test
+test('all frameworks have consistent ARIA', async ({ page }) => {
+  const frameworks = ['react', 'vue', 'svelte', 'astro'];
+
+  for (const framework of frameworks) {
+    await page.goto(`/patterns/slider/${framework}/demo/`);
+    await page.getByRole('slider').first().waitFor();
+
+    const slider = page.getByRole('slider', { name: 'Volume' });
+    await expect(slider).toHaveAttribute('aria-valuenow', '50');
+    await expect(slider).toHaveAttribute('aria-valuemin', '0');
+    await expect(slider).toHaveAttribute('aria-valuemax', '100');
+  }
+});
+```

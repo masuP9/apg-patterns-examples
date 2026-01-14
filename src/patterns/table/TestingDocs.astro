@@ -1,6 +1,13 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/table.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
@@ -8,6 +15,38 @@ import { ResponsiveTable } from '@/components/ui/table';
     Tests verify APG compliance for ARIA roles, table structure, and accessibility requirements.
     Since Table is a static structure, keyboard interaction tests are not applicable.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA roles (table, row, cell, columnheader, rowheader, rowgroup)</li>
+      <li>Accessible name via aria-label or aria-labelledby</li>
+      <li>Sort state attributes (aria-sort)</li>
+      <li>Virtualization attributes (aria-rowcount, aria-colcount, aria-rowindex)</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover visual rendering and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA structure validation in live browser</li>
+      <li>Sort interaction and state changes</li>
+      <li>Visual cell spanning (colspan, rowspan dimensions)</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
@@ -313,6 +352,12 @@ import { ResponsiveTable } from '@/components/ui/table';
       <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
     </li>
     <li>
+      <strong>E2E:</strong>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
+      </ExternalLink>
+    </li>
+    <li>
       <strong>Accessibility:</strong>
       <ExternalLink
         href="https://github.com/dequelabs/axe-core"
@@ -322,4 +367,18 @@ import { ResponsiveTable } from '@/components/ui/table';
       </ExternalLink>
     </li>
   </ul>
+
+  <h3 class="mb-3 text-lg font-medium">E2E Test Code</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    The following Playwright tests verify Table behavior across all four frameworks (React, Vue,
+    Svelte, Astro). Tests cover ARIA structure, sort state, virtualization attributes, and visual
+    cell spanning.
+  </p>
+  <CodeBlock
+    collapsible
+    collapsedLines={30}
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/table.spec.ts"
+  />
 </div>

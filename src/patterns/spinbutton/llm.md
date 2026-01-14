@@ -411,3 +411,63 @@ it('has no axe violations', async () => {
   expect(results).toHaveNoViolations();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+const getSpinbutton = (page: import('@playwright/test').Page) => {
+  return page.getByRole('spinbutton');
+};
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/spinbutton/react/demo/');
+  const spinbutton = getSpinbutton(page).first();
+
+  await expect(spinbutton).toHaveRole('spinbutton');
+  await expect(spinbutton).toHaveAttribute('aria-valuenow');
+  await expect(spinbutton).toHaveAttribute('aria-valuemin', '0');
+  await expect(spinbutton).toHaveAttribute('aria-valuemax', '100');
+});
+
+// Keyboard interaction test
+test('ArrowUp increases value', async ({ page }) => {
+  await page.goto('patterns/spinbutton/react/demo/');
+  const spinbutton = getSpinbutton(page).first();
+
+  await spinbutton.focus();
+  const initialValue = await spinbutton.getAttribute('aria-valuenow');
+  await page.keyboard.press('ArrowUp');
+
+  const newValue = await spinbutton.getAttribute('aria-valuenow');
+  expect(Number(newValue)).toBe(Number(initialValue) + 1);
+});
+
+// Boundary test
+test('does not exceed max value', async ({ page }) => {
+  await page.goto('patterns/spinbutton/react/demo/');
+  const spinbutton = getSpinbutton(page).first();
+
+  await spinbutton.focus();
+  await page.keyboard.press('End'); // Go to max
+  const maxValue = await spinbutton.getAttribute('aria-valuenow');
+  await page.keyboard.press('ArrowUp');
+
+  await expect(spinbutton).toHaveAttribute('aria-valuenow', maxValue);
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/spinbutton/react/demo/');
+  await getSpinbutton(page).first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('[role="spinbutton"]')
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

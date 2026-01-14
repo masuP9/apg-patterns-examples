@@ -135,3 +135,57 @@ it('sets aria-describedby when visible', async () => {
   expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('tooltip has role="tooltip" and aria-describedby linkage', async ({ page }) => {
+  await page.goto('patterns/tooltip/react/demo/');
+  const trigger = page.locator('.apg-tooltip-trigger').first();
+  const tooltip = page.locator('[role="tooltip"]').first();
+
+  // Hover to show tooltip
+  await trigger.hover();
+  await expect(tooltip).toBeVisible({ timeout: 1000 });
+  await expect(tooltip).toHaveRole('tooltip');
+
+  // Check aria-describedby linkage
+  const tooltipId = await tooltip.getAttribute('id');
+  await expect(trigger).toHaveAttribute('aria-describedby', tooltipId!);
+});
+
+// Keyboard interaction test
+test('hides tooltip on Escape key', async ({ page }) => {
+  await page.goto('patterns/tooltip/react/demo/');
+  const trigger = page.locator('.apg-tooltip-trigger').first();
+  const tooltip = page.locator('[role="tooltip"]').first();
+
+  await trigger.hover();
+  await expect(tooltip).toBeVisible({ timeout: 1000 });
+
+  await page.keyboard.press('Escape');
+  await expect(tooltip).not.toBeVisible();
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/tooltip/react/demo/');
+  const trigger = page.locator('.apg-tooltip-trigger').first();
+  const tooltip = page.locator('[role="tooltip"]').first();
+
+  // Show tooltip
+  await trigger.hover();
+  await expect(tooltip).toBeVisible({ timeout: 1000 });
+
+  const results = await new AxeBuilder({ page })
+    .include('.apg-tooltip-trigger')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

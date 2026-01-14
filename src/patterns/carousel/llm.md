@@ -273,3 +273,61 @@ describe('Carousel', () => {
   });
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+const carouselSelector = '[data-testid="carousel-manual"]';
+
+// ARIA Structure: Container has aria-roledescription="carousel"
+test('has aria-roledescription="carousel" on container', async ({ page }) => {
+  await page.goto('patterns/carousel/react/');
+  await page.locator(carouselSelector).waitFor();
+
+  const carousel = page.locator(carouselSelector);
+  await expect(carousel).toHaveAttribute('aria-roledescription', 'carousel');
+});
+
+// ARIA Structure: Each slide has aria-roledescription="slide" and aria-label
+test('has aria-roledescription="slide" and aria-label on each tabpanel', async ({ page }) => {
+  await page.goto('patterns/carousel/react/');
+
+  const carousel = page.locator(carouselSelector);
+  const panels = carousel.locator('[role="tabpanel"]');
+  const count = await panels.count();
+
+  for (let i = 0; i < count; i++) {
+    const panel = panels.nth(i);
+    await expect(panel).toHaveAttribute('aria-roledescription', 'slide');
+    const label = await panel.getAttribute('aria-label');
+    expect(label).toMatch(new RegExp(`${i + 1} of ${count}`));
+  }
+});
+
+// Keyboard: Arrow keys navigate tabs with wrapping
+test('ArrowRight/ArrowLeft navigate tabs with wrapping', async ({ page }) => {
+  await page.goto('patterns/carousel/react/');
+
+  const carousel = page.locator(carouselSelector);
+  const tabs = carousel.locator('[role="tablist"] [role="tab"]');
+  const firstTab = tabs.first();
+
+  await firstTab.click();
+  await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+
+  // ArrowRight moves to next
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(350);
+  const secondTab = tabs.nth(1);
+  await expect(secondTab).toHaveAttribute('aria-selected', 'true');
+
+  // Navigate to last, then ArrowRight wraps to first
+  const count = await tabs.count();
+  await tabs.nth(count - 1).click();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(350);
+  await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+});
+```

@@ -1,6 +1,8 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import e2eTestCode from '../../../e2e/slider.spec.ts?raw';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
@@ -280,46 +282,92 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h3 class="mb-3 text-lg font-medium">E2E Testing</h3>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-blue-500"></span>
+    Cross-framework Consistency
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks render sliders</code></td>
+          <td class="py-2">React, Vue, Svelte, Astro all render slider elements</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA attributes</code></td>
+          <td class="py-2"
+            >All frameworks have consistent aria-valuenow, aria-valuemin, aria-valuemax</td
+          >
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Keyboard navigation</code></td>
+          <td class="py-2">All frameworks support Arrow keys, Home, End keyboard navigation</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    The following is the actual E2E test file (<code>e2e/slider.spec.ts</code>).
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/slider.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
+
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for Slider
+npm run test -- slider
+
+# Run E2E tests for Slider (all frameworks)
+npm run test:e2e:pattern --pattern=slider
+
+# Run E2E tests for specific framework
+npm run test:e2e:react:pattern --pattern=slider
+npm run test:e2e:vue:pattern --pattern=slider
+npm run test:e2e:svelte:pattern --pattern=slider
+npm run test:e2e:astro:pattern --pattern=slider</code></pre>
+
   <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>React:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/react-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
       >
-        React Testing Library
-      </ExternalLink>
+      - Test runner for unit tests
     </li>
     <li>
-      <strong>Vue:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/vue-testing-library/intro/"
-        class="text-primary hover:underline"
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
       >
-        Vue Testing Library
-      </ExternalLink>
+      - Browser automation for E2E tests
     </li>
     <li>
-      <strong>Svelte:</strong>
-      <ExternalLink
-        href="https://testing-library.com/docs/svelte-testing-library/intro/"
-        class="text-primary hover:underline"
-      >
-        Svelte Testing Library
-      </ExternalLink>
-    </li>
-    <li>
-      <strong>Astro:</strong> Vitest with JSDOM for Web Component unit tests
-    </li>
-    <li>
-      <strong>Accessibility:</strong>
       <ExternalLink
         href="https://github.com/dequelabs/axe-core"
         class="text-primary hover:underline"
       >
         axe-core
       </ExternalLink>
+      - Accessibility testing engine
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
+        Testing Library
+      </ExternalLink>
+      - Framework-specific testing utilities
     </li>
   </ul>
 </div>

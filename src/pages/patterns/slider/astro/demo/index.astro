@@ -1,0 +1,50 @@
+---
+/**
+ * Demo-only Page: Slider (Astro)
+ *
+ * This page renders the Slider component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Slider from '@patterns/slider/Slider.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Slider (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col gap-8">
+      <!-- Basic slider with label -->
+      <div>
+        <Slider defaultValue={50} label="Volume" format="{value}%" />
+      </div>
+
+      <!-- Slider with custom range -->
+      <div>
+        <Slider
+          defaultValue={3}
+          min={1}
+          max={5}
+          step={1}
+          label="Rating"
+          format="{value} of {max}"
+        />
+      </div>
+
+      <!-- Vertical slider -->
+      <div>
+        <Slider defaultValue={50} label="Vertical" orientation="vertical" format="{value}%" />
+      </div>
+
+      <!-- Disabled slider -->
+      <div>
+        <Slider defaultValue={50} label="Disabled" disabled format="{value}%" />
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+---
+/**
+ * Demo-only Page: Tooltip (Svelte)
+ *
+ * This page renders the Tooltip component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import TooltipDemo from '@patterns/tooltip/TooltipDemo.svelte';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Tooltip (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <TooltipDemo client:only="svelte" />
+  </body>
+</html>

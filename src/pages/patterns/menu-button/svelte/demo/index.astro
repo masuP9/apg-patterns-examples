@@ -1,0 +1,33 @@
+---
+/**
+ * Demo-only Page: Menu Button (Svelte)
+ *
+ * This page renders the Menu Button component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.svelte';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Menu Button (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Menu Button Demo</h1>
+    <div class="space-y-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Basic Menu Button</h2>
+        <MenuButtonDemo client:load variant="basic" />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Menu Button with Disabled Items</h2>
+        <MenuButtonDemo client:load variant="disabled-items" />
+      </section>
+    </div>
+  </body>
+</html>

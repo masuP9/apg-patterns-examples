@@ -1,0 +1,124 @@
+---
+/**
+ * Demo-only Page: Toolbar (Astro)
+ *
+ * This page renders the Toolbar component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Toolbar from '@patterns/toolbar/Toolbar.astro';
+import ToolbarButton from '@patterns/toolbar/ToolbarButton.astro';
+import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
+import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Toolbar (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Text Formatting Toolbar (Horizontal)</h2>
+        <Toolbar aria-label="Text formatting">
+          <ToolbarToggleButton>Bold</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic</ToolbarToggleButton>
+          <ToolbarToggleButton>Underline</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Align Left</ToolbarButton>
+          <ToolbarButton>Center</ToolbarButton>
+          <ToolbarButton>Align Right</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Vertical Toolbar</h2>
+        <Toolbar orientation="vertical" aria-label="Actions">
+          <ToolbarButton>New</ToolbarButton>
+          <ToolbarButton>Open</ToolbarButton>
+          <ToolbarButton>Save</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Print</ToolbarButton>
+        </Toolbar>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">With Disabled Items</h2>
+        <Toolbar aria-label="Edit actions">
+          <ToolbarButton>Undo</ToolbarButton>
+          <ToolbarButton disabled>Redo</ToolbarButton>
+          <ToolbarSeparator />
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton disabled>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Controlled Toggle Buttons</h2>
+        <div class="space-y-4">
+          <Toolbar aria-label="Text formatting with state" id="toggle-demo-toolbar">
+            <ToolbarToggleButton>Bold</ToolbarToggleButton>
+            <ToolbarToggleButton>Italic</ToolbarToggleButton>
+            <ToolbarToggleButton>Underline</ToolbarToggleButton>
+          </Toolbar>
+          <div class="text-muted-foreground text-sm">
+            <p>
+              Current state: <span id="toggle-state" class="font-mono"
+                >{'{ bold: false, italic: false, underline: false }'}</span
+              >
+            </p>
+          </div>
+          <div id="toggle-sample-text" class="border-border rounded-lg border p-4">
+            Sample text with applied formatting
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Default Pressed States</h2>
+        <Toolbar aria-label="Default pressed states">
+          <ToolbarToggleButton defaultPressed>Bold (default on)</ToolbarToggleButton>
+          <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
+          <ToolbarSeparator />
+          <ToolbarToggleButton defaultPressed disabled>Disabled (pressed)</ToolbarToggleButton>
+          <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
+        </Toolbar>
+      </div>
+    </div>
+
+    <script>
+      // Handle toggle button state changes for the demo
+      const toolbar = document.getElementById('toggle-demo-toolbar');
+      const stateDisplay = document.getElementById('toggle-state');
+      const sampleText = document.getElementById('toggle-sample-text');
+
+      if (toolbar && stateDisplay && sampleText) {
+        const state = { bold: false, italic: false, underline: false };
+        const buttons = toolbar.querySelectorAll('apg-toolbar-toggle-button');
+
+        buttons.forEach((btn, index) => {
+          btn.addEventListener('pressed-change', (e) => {
+            if (!(e instanceof CustomEvent)) return;
+
+            const key = (['bold', 'italic', 'underline'] as const)[index];
+            state[key] = e.detail.pressed;
+
+            stateDisplay.textContent = JSON.stringify(state);
+            sampleText.style.fontWeight = state.bold ? 'bold' : 'normal';
+            sampleText.style.fontStyle = state.italic ? 'italic' : 'normal';
+            sampleText.style.textDecoration = state.underline ? 'underline' : 'none';
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

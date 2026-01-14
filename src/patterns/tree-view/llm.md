@@ -375,3 +375,143 @@ it('Arrow keys move focus only in single-select', async () => {
   expect(docs).toHaveAttribute('aria-selected', 'true');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// Helper to click and wait for focus (handles async focus in React)
+const clickAndWaitForFocus = async (
+  element: import('@playwright/test').Locator,
+  page: import('@playwright/test').Page
+) => {
+  // Click at the top-left area to hit the label, not children
+  await element.click({ position: { x: 10, y: 10 } });
+  await expect
+    .poll(async () => {
+      return await element.evaluate((el) => document.activeElement === el);
+    }, { timeout: 5000 })
+    .toBe(true);
+};
+
+test.describe('Tree View', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/tree-view/react/demo/');
+    await page.getByRole('tree').first().waitFor();
+  });
+
+  // ARIA Structure
+  test('has correct ARIA structure', async ({ page }) => {
+    const tree = page.getByRole('tree').first();
+    await expect(tree).toBeVisible();
+    await expect(tree).toHaveAttribute('aria-label', /.+/);
+
+    const items = tree.getByRole('treeitem');
+    const count = await items.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Parent nodes have aria-expanded
+    const parentItems = tree.locator('[role="treeitem"][aria-expanded]');
+    expect(await parentItems.count()).toBeGreaterThan(0);
+
+    // Groups exist for expanded parents
+    const groups = page.getByRole('group');
+    expect(await groups.count()).toBeGreaterThan(0);
+  });
+
+  // Keyboard Navigation
+  test('ArrowDown moves to next visible node', async ({ page }) => {
+    const tree = page.getByRole('tree').first();
+    const items = tree.getByRole('treeitem');
+    const firstItem = items.first();
+
+    await clickAndWaitForFocus(firstItem, page);
+    await page.keyboard.press('ArrowDown');
+
+    const secondItem = items.nth(1);
+    await expect(secondItem).toBeFocused();
+  });
+
+  // Expand/Collapse
+  test('ArrowRight expands closed parent', async ({ page }) => {
+    const tree = page.getByRole('tree').first();
+    const parent = tree.locator('[role="treeitem"][aria-expanded]').first();
+    const labelledby = await parent.getAttribute('aria-labelledby');
+    const stableLocator = tree.locator(`[role="treeitem"][aria-labelledby="${labelledby}"]`);
+
+    // Focus first item and navigate to parent
+    const firstItem = tree.getByRole('treeitem').first();
+    await clickAndWaitForFocus(firstItem, page);
+    await page.keyboard.press('Home');
+
+    // Ensure collapsed, then expand
+    const expanded = await stableLocator.getAttribute('aria-expanded');
+    if (expanded === 'true') {
+      await page.keyboard.press('ArrowLeft');
+    }
+    await page.keyboard.press('ArrowRight');
+    await expect(stableLocator).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  // Selection
+  test('Space selects focused node', async ({ page }) => {
+    const tree = page.getByRole('tree').first();
+    const items = tree.getByRole('treeitem');
+    const firstItem = items.first();
+
+    await clickAndWaitForFocus(firstItem, page);
+    await page.keyboard.press('ArrowDown');
+
+    const secondItem = items.nth(1);
+    await page.keyboard.press('Space');
+    await expect(secondItem).toHaveAttribute('aria-selected', 'true');
+  });
+
+  // Focus Management
+  test('focused node has tabindex="0"', async ({ page }) => {
+    const tree = page.getByRole('tree').first();
+    const items = tree.getByRole('treeitem');
+    const firstItem = items.first();
+
+    await clickAndWaitForFocus(firstItem, page);
+    await expect(firstItem).toHaveAttribute('tabindex', '0');
+
+    const secondItem = items.nth(1);
+    await expect(secondItem).toHaveAttribute('tabindex', '-1');
+  });
+
+  // Multi-select
+  test('Shift+Arrow extends selection in multi-select', async ({ page }) => {
+    const trees = page.getByRole('tree');
+    const count = await trees.count();
+
+    for (let i = 0; i < count; i++) {
+      const tree = trees.nth(i);
+      if (await tree.getAttribute('aria-multiselectable') === 'true') {
+        const items = tree.getByRole('treeitem');
+        const firstItem = items.first();
+
+        await clickAndWaitForFocus(firstItem, page);
+        await expect(firstItem).toHaveAttribute('aria-selected', 'true');
+
+        await page.keyboard.press('Shift+ArrowDown');
+        const secondItem = items.nth(1);
+        await expect(secondItem).toHaveAttribute('aria-selected', 'true');
+        await expect(firstItem).toHaveAttribute('aria-selected', 'true');
+        break;
+      }
+    }
+  });
+
+  // Accessibility
+  test('has no axe-core violations', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .include('[role="tree"]')
+      .disableRules(['color-contrast'])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+```

@@ -248,3 +248,62 @@ it('sets aria-busy during loading', () => {
   expect(screen.getByRole('feed')).toHaveAttribute('aria-busy', 'true');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA Structure
+test('has role="feed" and article elements', async ({ page }) => {
+  await page.goto('patterns/feed/react/demo/');
+  const feed = page.locator('[data-testid="feed-demo"]');
+  await expect(feed).toHaveAttribute('role', 'feed');
+
+  const articles = feed.locator('article');
+  expect(await articles.count()).toBeGreaterThan(0);
+
+  // Verify aria-posinset is sequential
+  const count = await articles.count();
+  for (let i = 0; i < count; i++) {
+    const article = articles.nth(i);
+    await expect(article).toHaveAttribute('aria-posinset', String(i + 1));
+  }
+});
+
+// Keyboard Navigation (Page Up/Down)
+test('Page Down moves focus to next article', async ({ page }) => {
+  await page.goto('patterns/feed/react/demo/');
+  const feed = page.locator('[data-testid="feed-demo"]');
+  const articles = feed.locator('article');
+  const firstArticle = articles.first();
+  const secondArticle = articles.nth(1);
+
+  await firstArticle.focus();
+  await expect(firstArticle).toBeFocused();
+
+  await page.keyboard.press('PageDown');
+  await expect(secondArticle).toBeFocused();
+});
+
+// Roving Tabindex
+test('uses roving tabindex on articles', async ({ page }) => {
+  await page.goto('patterns/feed/react/demo/');
+  const feed = page.locator('[data-testid="feed-demo"]');
+  const count = await feed.locator('article').count();
+
+  // Only one article should have tabindex="0"
+  await expect(feed.locator('article[tabindex="0"]')).toHaveCount(1);
+  await expect(feed.locator('article[tabindex="-1"]')).toHaveCount(count - 1);
+});
+
+// Accessibility
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/feed/react/demo/');
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('.apg-feed-demo-wrapper')
+    .analyze();
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

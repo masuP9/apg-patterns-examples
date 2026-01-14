@@ -1,0 +1,97 @@
+---
+/**
+ * Demo-only Page: Accordion (Vue) - Japanese
+ *
+ * This page renders the Accordion component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Accordion from '@patterns/accordion/Accordion.vue';
+
+const defaultItems = [
+  {
+    id: 'section1',
+    header: 'アコーディオンとは？',
+    content:
+      'アコーディオンは、垂直に積み重ねられたインタラクティブな見出しのセットで、それぞれがコンテンツのセクションを表示します。',
+    defaultExpanded: true,
+  },
+  {
+    id: 'section2',
+    header: 'アコーディオンを使用するタイミングは？',
+    content: 'コンテンツを折りたたみ可能なセクションに整理する必要がある場合に使用します。',
+  },
+  {
+    id: 'section3',
+    header: 'アクセシビリティの考慮事項',
+    content:
+      'アコーディオンはキーボードでアクセス可能で、展開/折りたたみ状態をスクリーンリーダーに適切に通知する必要があります。',
+  },
+];
+
+const multipleItems = [
+  {
+    id: 'multi1',
+    header: 'セクション1',
+    content:
+      'セクション1のコンテンツ。allowMultipleを有効にすると、複数のセクションを開くことができます。',
+  },
+  {
+    id: 'multi2',
+    header: 'セクション2',
+    content: 'セクション2のコンテンツ。',
+  },
+  {
+    id: 'multi3',
+    header: 'セクション3',
+    content: 'セクション3のコンテンツ。',
+  },
+];
+
+const disabledItems = [
+  {
+    id: 'dis1',
+    header: '利用可能なセクション',
+    content: 'このセクションは通常通り展開・折りたたみできます。',
+  },
+  {
+    id: 'dis2',
+    header: '無効なセクション',
+    content: 'このコンテンツはセクションが無効なためアクセスできません。',
+    disabled: true,
+  },
+  {
+    id: 'dis3',
+    header: '別の利用可能なセクション',
+    content: 'このセクションも展開できます。',
+  },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: アコーディオン (Vue)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">単一展開</h2>
+        <Accordion client:load items={defaultItems} headingLevel={3} />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">複数展開</h2>
+        <Accordion client:load items={multipleItems} allowMultiple={true} headingLevel={3} />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">無効なアイテムを含む</h2>
+        <Accordion client:load items={disabledItems} headingLevel={3} />
+      </div>
+    </div>
+  </body>
+</html>

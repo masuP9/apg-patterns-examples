@@ -18,39 +18,39 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 
 ## Component Status
 
-| Pattern              | React | Vue | Svelte | Astro | Status   |
-| -------------------- | ----- | --- | ------ | ----- | -------- |
-| Accordion            | ✅    | ✅  | ✅     | ✅    | Complete |
-| Alert                | ✅    | ✅  | ✅     | ✅    | Complete |
-| Alert Dialog         | ✅    | ✅  | ✅     | ✅    | Complete |
-| Breadcrumb           | ✅    | ✅  | ✅     | ✅    | Complete |
-| Button               | -     | -   | -      | -     | Planned  |
-| Carousel             | ✅    | ✅  | ✅     | ✅    | Complete |
-| Checkbox             | ✅    | ✅  | ✅     | ✅    | Complete |
-| Combobox             | ✅    | ✅  | ✅     | ✅    | Complete |
-| Dialog               | ✅    | ✅  | ✅     | ✅    | Complete |
-| Disclosure           | ✅    | ✅  | ✅     | ✅    | Complete |
-| Feed                 | ✅    | ✅  | ✅     | ✅    | Complete |
-| Grid                 | ✅    | ✅  | ✅     | ✅    | Complete |
-| Landmarks            | ✅    | ✅  | ✅     | ✅    | Complete |
-| Link                 | ✅    | ✅  | ✅     | ✅    | Complete |
-| Listbox              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Menubar              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Menu Button          | ✅    | ✅  | ✅     | ✅    | Complete |
-| Meter                | ✅    | ✅  | ✅     | ✅    | Complete |
-| Radio Group          | ✅    | ✅  | ✅     | ✅    | Complete |
-| Slider               | ✅    | ✅  | ✅     | ✅    | Complete |
-| Slider (Multi-Thumb) | -     | -   | -      | -     | Planned  |
-| Spinbutton           | ✅    | ✅  | ✅     | ✅    | Complete |
-| Switch               | ✅    | ✅  | ✅     | ✅    | Complete |
-| Table                | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tabs                 | ✅    | ✅  | ✅     | ✅    | Complete |
-| Toggle Button        | ✅    | ✅  | ✅     | ✅    | Complete |
-| Toolbar              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tooltip              | ✅    | ✅  | ✅     | ✅    | Complete |
-| Tree View            | ✅    | ✅  | ✅     | ✅    | Complete |
-| Treegrid             | ✅    | ✅  | ✅     | ✅    | Complete |
-| Window Splitter      | ✅    | ✅  | ✅     | ✅    | Complete |
+| Pattern              | React | Vue | Svelte | Astro | E2E | Status   |
+| -------------------- | ----- | --- | ------ | ----- | --- | -------- |
+| Accordion            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Alert                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Alert Dialog         | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Breadcrumb           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Button               | -     | -   | -      | -     | -   | Planned  |
+| Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Dialog               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Disclosure           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Feed                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Grid                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Landmarks            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Link                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Listbox              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Menubar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Menu Button          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Slider (Multi-Thumb) | -     | -   | -      | -     | -   | Planned  |
+| Spinbutton           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Table                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Tabs                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Tree View            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Treegrid             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Window Splitter      | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 
 ## Styling
 

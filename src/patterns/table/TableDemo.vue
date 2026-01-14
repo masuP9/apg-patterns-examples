@@ -98,7 +98,7 @@ function handleSortChange(columnId: string, direction: 'ascending' | 'descending
     :columns="sortableColumns"
     :rows="sortableRows"
     aria-label="Sortable User List"
-    :on-sort-change="handleSortChange"
+    @sort-change="handleSortChange"
   />
   <Table
     v-else-if="props.variant === 'rowHeader'"

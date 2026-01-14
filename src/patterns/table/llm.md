@@ -414,3 +414,102 @@ export default defineConfig({
   },
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('patterns/table/react/');
+  await page.waitForLoadState('networkidle');
+});
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  const basicTable = page.locator('[role="table"][aria-label="User List"]');
+  await expect(basicTable).toBeVisible();
+
+  // Check rows (1 header + 5 data rows)
+  const rows = basicTable.locator('[role="row"]');
+  await expect(rows).toHaveCount(6);
+
+  // Check columnheaders
+  const headers = basicTable.locator('[role="columnheader"]');
+  await expect(headers).toHaveCount(3);
+
+  // Check data cells (5 rows x 3 columns)
+  const cells = basicTable.locator('[role="cell"]');
+  await expect(cells).toHaveCount(15);
+
+  // Check rowgroups (header + body)
+  const rowgroups = basicTable.locator('[role="rowgroup"]');
+  await expect(rowgroups).toHaveCount(2);
+});
+
+// Sort state test
+test('clicking sort button changes aria-sort', async ({ page }) => {
+  const sortableTable = page.locator('[role="table"][aria-label="Sortable User List"]');
+  await expect(sortableTable).toBeVisible();
+
+  const ageHeader = sortableTable.locator('[role="columnheader"]').filter({ hasText: 'Age' });
+  const sortButton = ageHeader.locator('button');
+
+  // Initially none
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'none');
+
+  // Click to sort ascending
+  await sortButton.click();
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'ascending');
+
+  // Click again to sort descending
+  await sortButton.click();
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'descending');
+});
+
+// Virtualization test
+test('virtualized table has correct ARIA attributes', async ({ page }) => {
+  const virtualizedTable = page.locator('[role="table"][aria-label*="Virtualized"]');
+  await expect(virtualizedTable).toBeVisible();
+
+  // Check aria-rowcount and aria-colcount
+  await expect(virtualizedTable).toHaveAttribute('aria-rowcount', '100');
+  await expect(virtualizedTable).toHaveAttribute('aria-colcount', '3');
+
+  // Check aria-rowindex on data rows
+  const dataRows = virtualizedTable.locator('[role="rowgroup"]:last-child [role="row"]');
+  await expect(dataRows.nth(0)).toHaveAttribute('aria-rowindex', '5');
+  await expect(dataRows.nth(1)).toHaveAttribute('aria-rowindex', '6');
+});
+
+// Visual cell spanning test
+test('colspan=2 cell has approximately 2x width of normal cell', async ({ page }) => {
+  const spanningTable = page.locator('[role="table"][aria-label*="Spanning"]');
+  await expect(spanningTable).toBeVisible();
+
+  const colspanCell = spanningTable.locator('[aria-colspan="2"]').first();
+  const normalCell = spanningTable
+    .locator('[role="rowgroup"]:last-child [role="cell"]:not([aria-colspan]):not([aria-rowspan])')
+    .first();
+
+  const colspanBox = await colspanCell.boundingBox();
+  const normalBox = await normalCell.boundingBox();
+
+  expect(colspanBox).not.toBeNull();
+  expect(normalBox).not.toBeNull();
+
+  // colspan=2 should be approximately 2x width (20% tolerance)
+  expect(colspanBox!.width).toBeGreaterThan(normalBox!.width * 1.8);
+  expect(colspanBox!.width).toBeLessThan(normalBox!.width * 2.3);
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('[role="table"]')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

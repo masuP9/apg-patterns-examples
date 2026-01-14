@@ -55,9 +55,17 @@
   let selectionAnchor = $state('');
   let focusedIdRef = $state('');
 
-  // Internal state
+  // Internal state - using SvelteSet for fine-grained reactivity via mutations
   let internalExpandedIds = new SvelteSet<string>();
   let internalSelectedIds = new SvelteSet<string>();
+
+  // Helper function to sync SvelteSet with new values (using mutation for reactivity)
+  function syncSvelteSet<T>(target: SvelteSet<T>, source: Iterable<T>) {
+    target.clear();
+    for (const item of source) {
+      target.add(item);
+    }
+  }
   let focusedId = $state('');
 
   onMount(() => {
@@ -148,7 +156,7 @@
   $effect(() => {
     if (allNodes.length > 0 && internalSelectedIds.size === 0 && internalExpandedIds.size === 0) {
       // Initialize expansion
-      internalExpandedIds = new SvelteSet(defaultExpandedIds);
+      syncSvelteSet(internalExpandedIds, defaultExpandedIds);
 
       // Initialize selection (filter out disabled nodes)
       if (defaultSelectedIds.length > 0) {
@@ -157,7 +165,7 @@
           return flatNode && !flatNode.node.disabled;
         });
         if (validIds.length > 0) {
-          internalSelectedIds = new SvelteSet(validIds);
+          syncSvelteSet(internalSelectedIds, validIds);
         }
       }
       // No auto-selection - user must explicitly select via Enter/Space/Click
@@ -217,14 +225,14 @@
 
   function updateExpandedIds(newExpandedIds: Set<string>) {
     if (!controlledExpandedIds) {
-      internalExpandedIds = newExpandedIds;
+      syncSvelteSet(internalExpandedIds, newExpandedIds);
     }
     onExpandedChange([...newExpandedIds]);
   }
 
   function updateSelectedIds(newSelectedIds: Set<string>) {
     if (!controlledSelectedIds) {
-      internalSelectedIds = newSelectedIds;
+      syncSvelteSet(internalSelectedIds, newSelectedIds);
     }
     onSelectionChange([...newSelectedIds]);
   }

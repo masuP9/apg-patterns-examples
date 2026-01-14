@@ -117,3 +117,59 @@ it('has aria-controls referencing panel', () => {
   expect(document.getElementById(panelId!)).toBeInTheDocument();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('button has aria-controls referencing panel id', async ({ page }) => {
+  await page.goto('patterns/disclosure/react/demo/');
+  const button = page.locator('button[aria-expanded]').first();
+
+  const ariaControls = await button.getAttribute('aria-controls');
+  expect(ariaControls).not.toBeNull();
+
+  const panel = page.locator(`[id="${ariaControls}"]`);
+  await expect(panel).toBeAttached();
+});
+
+// Toggle behavior test
+test('toggles aria-expanded and panel visibility on click', async ({ page }) => {
+  await page.goto('patterns/disclosure/react/demo/');
+  const button = page.locator('button[aria-expanded]').first();
+  const panelId = await button.getAttribute('aria-controls');
+  const panel = page.locator(`[id="${panelId}"]`);
+
+  const initialState = await button.getAttribute('aria-expanded');
+  await button.click();
+  const newState = await button.getAttribute('aria-expanded');
+
+  expect(newState).not.toBe(initialState);
+
+  if (newState === 'true') {
+    await expect(panel).toBeVisible();
+  } else {
+    await expect(panel).not.toBeVisible();
+  }
+});
+
+// axe-core accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/disclosure/react/demo/');
+  const button = page.locator('button[aria-expanded]').first();
+
+  // Expand disclosure
+  if ((await button.getAttribute('aria-expanded')) === 'false') {
+    await button.click();
+  }
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('button[aria-expanded]')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

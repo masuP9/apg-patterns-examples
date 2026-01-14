@@ -1,144 +1,276 @@
 ---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/tooltip.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">Testing Overview</h3>
   <p class="text-muted-foreground mb-4">
-    The Tooltip component tests are organized into priority levels based on APG compliance
-    requirements.
+    Tests verify APG compliance for ARIA attributes, keyboard interactions, show/hide behavior, and
+    accessibility requirements. The Tooltip component uses a two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role, aria-describedby, aria-hidden)</li>
+      <li>Keyboard interaction (Escape key dismissal)</li>
+      <li>Show/hide behavior on focus and blur</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Hover interactions with delay timing</li>
+      <li>Focus/blur interactions</li>
+      <li>Escape key dismissal</li>
+      <li>ARIA structure validation in live browser</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-      High Priority: APG Core Compliance
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">APG Requirement</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">role="tooltip" exists</td>
-            <td class="py-2">Tooltip container must have tooltip role</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">aria-hidden when closed</td>
-            <td class="py-2">Hidden tooltips must not be read by AT</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">aria-describedby when visible</td>
-            <td class="py-2">Trigger must reference tooltip only when visible</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Escape key closes tooltip</td>
-            <td class="py-2">Keyboard dismissal support</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Focus shows tooltip</td>
-            <td class="py-2">Keyboard accessibility</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Blur hides tooltip</td>
-            <td class="py-2">Focus management</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG ARIA Structure (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">APG Requirement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="tooltip"</code></td>
+          <td class="py-2">Tooltip container must have tooltip role</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-hidden</code></td>
+          <td class="py-2">Hidden tooltips must have aria-hidden="true"</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-describedby</code></td>
+          <td class="py-2">Trigger references tooltip when visible</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
 
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-      Medium Priority: Accessibility Validation
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">WCAG Requirement</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">No axe violations (hidden state)</td>
-            <td class="py-2">WCAG 2.1 AA compliance</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">No axe violations (visible state)</td>
-            <td class="py-2">WCAG 2.1 AA compliance</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Tooltip is not focusable</td>
-            <td class="py-2">APG: tooltips must not receive focus</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Show/Hide Behavior (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Hover shows</code></td>
+          <td class="py-2">Shows tooltip on mouse hover after delay</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus shows</code></td>
+          <td class="py-2">Shows tooltip on keyboard focus</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Blur hides</code></td>
+          <td class="py-2">Hides tooltip on focus loss</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Mouseleave hides</code></td>
+          <td class="py-2">Hides tooltip when mouse leaves trigger</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
 
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-      Low Priority: Props &amp; Extensibility
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">Feature</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">placement prop changes position</td>
-            <td class="py-2">Positioning customization</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">disabled prop prevents display</td>
-            <td class="py-2">Disable functionality</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">delay prop controls timing</td>
-            <td class="py-2">Delay customization</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">id prop sets custom ID</td>
-            <td class="py-2">SSR/custom ID support</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">controlled open state</td>
-            <td class="py-2">External state control</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">onOpenChange callback</td>
-            <td class="py-2">State change notification</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">className inheritance</td>
-            <td class="py-2">Style customization</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: Keyboard Interaction (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escape</code></td>
+          <td class="py-2">Closes tooltip on Escape key</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Focus retention</code></td>
+          <td class="py-2">Focus remains on trigger after Escape</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Disabled State (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled no show</code></td>
+          <td class="py-2">Disabled tooltip does not show on hover</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility (Unit + E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">WCAG Requirement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations (hidden)</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations when tooltip hidden</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations (visible)</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations when tooltip visible</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: Cross-framework Consistency (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>All frameworks have tooltips</code></td>
+          <td class="py-2">React, Vue, Svelte, Astro all render tooltip elements</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Show on hover</code></td>
+          <td class="py-2">All frameworks show tooltip on hover</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">All frameworks have consistent ARIA structure</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    The following is the actual E2E test file (<code>e2e/tooltip.spec.ts</code>).
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/tooltip.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
 
   <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
   <pre
-    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run all Tooltip tests
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for Tooltip
 npm run test -- tooltip
 
-# Run tests for specific framework
-npm run test -- Tooltip.test.tsx    # React
-npm run test -- Tooltip.test.vue    # Vue
-npm run test -- Tooltip.test.svelte # Svelte</code></pre>
+# Run E2E tests for Tooltip (all frameworks)
+npm run test:e2e:pattern --pattern=tooltip
+
+# Run E2E tests for specific framework
+npm run test:e2e:react:pattern --pattern=tooltip
+npm run test:e2e:vue:pattern --pattern=tooltip
+npm run test:e2e:svelte:pattern --pattern=tooltip
+npm run test:e2e:astro:pattern --pattern=tooltip</code></pre>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner for unit tests
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities (React, Vue, Svelte)
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - Browser automation for E2E tests
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
+      >
+      - Automated accessibility testing in E2E
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
 </div>

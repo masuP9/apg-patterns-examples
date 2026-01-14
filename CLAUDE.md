@@ -291,6 +291,8 @@ Astro テンプレート内で React/Vue/Svelte の子コンポーネントを�
 ```bash
 # 開発サーバー起動
 npm run dev
+# ※ポートは自動割当（空いているポートが使用される）
+# 起動後にターミナル出力でポート番号を確認すること
 
 # ビルド
 npm run build
@@ -310,6 +312,14 @@ npm run test:astro    # Container API テスト
 # E2E テスト（Playwright）
 npm run test:e2e
 npm run test:e2e:ui   # UI モード
+
+# 特定パターンの E2E テスト
+npm run test:e2e:pattern --pattern=tabs
+npm run test:e2e:pattern --pattern=accordion
+
+# 特定フレームワーク + 特定パターン（要: npm run dev 別ターミナル）
+npm run test:e2e:react:pattern --pattern=tabs
+npm run test:e2e:vue:pattern --pattern=tabs
 
 # その他
 npm run test:watch    # ウォッチモード

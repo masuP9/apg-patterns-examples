@@ -1,0 +1,81 @@
+---
+/**
+ * Demo-only Page: Radio Group (Svelte)
+ *
+ * This page renders the RadioGroup component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import RadioGroup from '@patterns/radio-group/RadioGroup.svelte';
+
+const colorOptions = [
+  { id: 'red', label: 'Red', value: 'red' },
+  { id: 'blue', label: 'Blue', value: 'blue' },
+  { id: 'green', label: 'Green', value: 'green' },
+];
+
+const sizeOptions = [
+  { id: 'small', label: 'Small', value: 'small' },
+  { id: 'medium', label: 'Medium', value: 'medium' },
+  { id: 'large', label: 'Large', value: 'large' },
+];
+
+const planOptions = [
+  { id: 'free', label: 'Free', value: 'free' },
+  { id: 'pro', label: 'Pro', value: 'pro' },
+  { id: 'enterprise', label: 'Enterprise (Coming Soon)', value: 'enterprise', disabled: true },
+];
+
+const ratingOptions = [
+  { id: 'r1', label: '1', value: '1' },
+  { id: 'r2', label: '2', value: '2' },
+  { id: 'r3', label: '3', value: '3' },
+  { id: 'r4', label: '4', value: '4' },
+  { id: 'r5', label: '5', value: '5' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Radio Group (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Basic Radio Group</h2>
+        <RadioGroup client:load options={colorOptions} name="color" aria-label="Favorite color" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">With Default Value</h2>
+        <RadioGroup
+          client:load
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">With Disabled Option</h2>
+        <RadioGroup client:load options={planOptions} name="plan" aria-label="Subscription plan" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Horizontal Orientation</h2>
+        <RadioGroup
+          client:load
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      </div>
+    </div>
+  </body>
+</html>

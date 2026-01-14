@@ -1,0 +1,56 @@
+---
+/**
+ * Demo-only Page: Spinbutton (Astro) - Japanese
+ *
+ * This page renders the Spinbutton component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Spinbutton from '@patterns/spinbutton/Spinbutton.astro';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: スピンボタン (Astro)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Spinbutton デモ</h1>
+    <div class="space-y-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">基本的なスピンボタン</h2>
+        <div class="apg-spinbutton-demo">
+          <Spinbutton defaultValue={5} label="Quantity" />
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">範囲付きスピンボタン</h2>
+        <div class="apg-spinbutton-demo">
+          <Spinbutton
+            defaultValue={50}
+            min={0}
+            max={100}
+            step={5}
+            label="Volume"
+            format="{value}%"
+          />
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">無効なスピンボタン</h2>
+        <div class="apg-spinbutton-demo">
+          <Spinbutton defaultValue={10} min={0} max={100} label="Disabled" disabled />
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">読み取り専用スピンボタン</h2>
+        <div class="apg-spinbutton-demo">
+          <Spinbutton defaultValue={25} min={0} max={100} label="Read-only" readOnly />
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+---
+/**
+ * Demo-only Page: Tabs (Svelte)
+ *
+ * This page renders the Tabs component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import Tabs from '@patterns/tabs/Tabs.svelte';
+
+const basicTabs = [
+  { id: 'tab1', label: 'Overview', content: 'Overview content. This is the first tab panel.' },
+  { id: 'tab2', label: 'Features', content: 'Features content. This tab describes the features.' },
+  { id: 'tab3', label: 'Pricing', content: 'Pricing content. View our pricing options here.' },
+];
+
+const manualTabs = [
+  { id: 'manual1', label: 'Tab A', content: 'Content for Tab A. Manual activation mode.' },
+  { id: 'manual2', label: 'Tab B', content: 'Content for Tab B. Press Enter or Space to select.' },
+  { id: 'manual3', label: 'Tab C', content: 'Content for Tab C.' },
+];
+
+const verticalTabs = [
+  { id: 'v1', label: 'Settings', content: 'Settings panel content.' },
+  { id: 'v2', label: 'Profile', content: 'Profile panel content.' },
+  { id: 'v3', label: 'Notifications', content: 'Notifications panel content.' },
+];
+
+const disabledTabs = [
+  { id: 'd1', label: 'Active Tab', content: 'This tab is active and selectable.' },
+  { id: 'd2', label: 'Disabled Tab', content: 'This content is not visible.', disabled: true },
+  { id: 'd3', label: 'Another Tab', content: 'Another active tab content.' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Tabs (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Automatic Activation (Default)</h2>
+        <Tabs client:load tabs={basicTabs} />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Manual Activation</h2>
+        <Tabs client:load tabs={manualTabs} activationMode="manual" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">Vertical Orientation</h2>
+        <Tabs client:load tabs={verticalTabs} orientation="vertical" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">With Disabled Tab</h2>
+        <Tabs client:load tabs={disabledTabs} />
+      </div>
+    </div>
+  </body>
+</html>

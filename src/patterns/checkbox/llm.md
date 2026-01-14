@@ -257,3 +257,52 @@ it('works with wrapping label', async () => {
   expect(screen.getByRole('checkbox')).toBeChecked();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// Click interaction test
+test('toggles checked state on click', async ({ page }) => {
+  await page.goto('patterns/checkbox/react/');
+  const checkbox = page.locator('#demo-terms');
+  const control = checkbox.locator('~ .apg-checkbox-control');
+
+  await expect(checkbox).not.toBeChecked();
+  await control.click();
+  await expect(checkbox).toBeChecked();
+});
+
+// Keyboard interaction test
+test('Space key toggles checkbox when focused', async ({ page }) => {
+  await page.goto('patterns/checkbox/react/');
+  const checkbox = page.locator('#demo-terms');
+
+  await checkbox.focus();
+  await expect(checkbox).not.toBeChecked();
+
+  await page.keyboard.press('Space');
+  await expect(checkbox).toBeChecked();
+});
+
+// Indeterminate state test
+test('clears indeterminate state on click', async ({ page }) => {
+  await page.goto('patterns/checkbox/react/');
+  const checkbox = page.locator('#demo-select-all');
+  const control = checkbox.locator('~ .apg-checkbox-control');
+
+  const isIndeterminate = await checkbox.evaluate(
+    (el: HTMLInputElement) => el.indeterminate
+  );
+  expect(isIndeterminate).toBe(true);
+
+  await control.click();
+
+  const isIndeterminateAfter = await checkbox.evaluate(
+    (el: HTMLInputElement) => el.indeterminate
+  );
+  expect(isIndeterminateAfter).toBe(false);
+  await expect(checkbox).toBeChecked();
+});
+```

@@ -129,3 +129,57 @@ it('returns focus to trigger on close', async () => {
   expect(trigger).toHaveFocus();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+const getDialog = (page: import('@playwright/test').Page) => {
+  return page.getByRole('dialog');
+};
+
+const openDialog = async (page: import('@playwright/test').Page) => {
+  const trigger = page.getByRole('button', { name: /open dialog/i }).first();
+  await trigger.click();
+  await getDialog(page).waitFor({ state: 'visible' });
+  return trigger;
+};
+
+// ARIA structure test
+test('has role="dialog"', async ({ page }) => {
+  await openDialog(page);
+  const dialog = getDialog(page);
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveRole('dialog');
+});
+
+// Focus trap test
+test('traps focus within dialog', async ({ page }) => {
+  await openDialog(page);
+  const dialog = getDialog(page);
+  const focusableElements = dialog.locator(
+    'button:not([disabled]), [tabindex="0"], input:not([disabled])'
+  );
+  const count = await focusableElements.count();
+  const tabCount = Math.max(count * 3, 10);
+
+  for (let i = 0; i < tabCount; i++) {
+    await page.keyboard.press('Tab');
+  }
+
+  // Focus should still be within dialog
+  const isWithinDialog = await page.evaluate(() => {
+    const focused = document.activeElement;
+    return focused?.closest('dialog, [role="dialog"]') !== null;
+  });
+  expect(isWithinDialog).toBe(true);
+});
+
+// Focus restoration test
+test('returns focus to trigger on close', async ({ page }) => {
+  const trigger = await openDialog(page);
+  await page.keyboard.press('Escape');
+  await expect(trigger).toBeFocused();
+});
+```

@@ -264,10 +264,16 @@ import { ResponsiveTable } from '@/components/ui/table';
   <h3 class="mb-3 text-lg font-medium">テストツール</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2Eテスト（136のクロスフレームワークテスト）
+    </li>
+    <li>
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
         >Vitest</ExternalLink
       >
-      - テストランナー
+      - ユニットテストランナー
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
@@ -277,14 +283,18 @@ import { ResponsiveTable } from '@/components/ui/table';
     </li>
     <li>
       <ExternalLink
-        href="https://github.com/nickcolley/jest-axe"
-        class="text-primary hover:underline">jest-axe</ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">@axe-core/playwright</ExternalLink
       >
       - 自動アクセシビリティテスト
     </li>
   </ul>
 
   <p class="text-muted-foreground text-sm">
+    E2Eテスト: <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/e2e/menu-button.spec.ts"
+      class="text-primary hover:underline">e2e/menu-button.spec.ts</ExternalLink
+    ><br />
     詳細なドキュメントについては<ExternalLink
       href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
       class="text-primary hover:underline">testing-strategy.md</ExternalLink

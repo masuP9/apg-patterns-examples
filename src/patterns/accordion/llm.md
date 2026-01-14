@@ -148,3 +148,62 @@ it('skips disabled headers', async () => {
   expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('accordion has proper ARIA structure', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  const accordion = page.locator('.apg-accordion').first();
+  const header = accordion.locator('.apg-accordion-trigger').first();
+
+  // Wait for hydration
+  await expect(header).toHaveAttribute('aria-controls', /.+/);
+
+  // Check aria-expanded
+  const expanded = await header.getAttribute('aria-expanded');
+  expect(['true', 'false']).toContain(expanded);
+
+  // Check aria-controls references valid panel
+  const controlsId = await header.getAttribute('aria-controls');
+  const panel = page.locator(`[id="${controlsId}"]`);
+  await expect(panel).toBeAttached();
+  await expect(panel).toHaveRole('region');
+});
+
+// Keyboard navigation test
+test('arrow keys navigate between headers', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  const accordion = page.locator('.apg-accordion').first();
+  const headers = accordion.locator('.apg-accordion-trigger');
+
+  await headers.first().click();
+  await expect(headers.first()).toBeFocused();
+
+  await page.keyboard.press('ArrowDown');
+  await expect(headers.nth(1)).toBeFocused();
+
+  await page.keyboard.press('Home');
+  await expect(headers.first()).toBeFocused();
+
+  await page.keyboard.press('End');
+  await expect(headers.last()).toBeFocused();
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  await page.locator('.apg-accordion').first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('.apg-accordion')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

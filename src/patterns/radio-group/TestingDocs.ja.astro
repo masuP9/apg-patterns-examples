@@ -1,21 +1,59 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/radio-group.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    テストは、キーボード操作、ARIA属性、フォーカス管理、アクセシビリティ要件全般にわたるAPG準拠を検証します。
+    テストは、キーボード操作、ARIA属性、フォーカス管理、アクセシビリティ要件全般にわたるAPG準拠を検証します。Radio
+    Group コンポーネントは2層テスト戦略を使用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">単体テスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用して、コンポーネントのレンダリング出力を検証します。これらのテストは、正しいHTML構造とARIA属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA属性（aria-checked、aria-disabled、aria-orientation）</li>
+      <li>キーボード操作（矢印キー、Home、End、Space）</li>
+      <li>ローヴィングタブインデックスの動作</li>
+      <li>jest-axeによるアクセシビリティ</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      実際のブラウザ環境で、すべてのフレームワークにわたってコンポーネントの動作を検証します。これらのテストはインタラクションとクロスフレームワークの一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>クリック操作</li>
+      <li>ループを含む矢印キーナビゲーション</li>
+      <li>Spaceキー選択</li>
+      <li>ライブブラウザでのARIA構造検証</li>
+      <li>axe-coreアクセシビリティスキャン</li>
+      <li>クロスフレームワーク一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG ARIA 属性
+    高優先度: APG ARIA 属性（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -53,10 +91,10 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG キーボード操作
+    高優先度: APG キーボード操作（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -110,10 +148,39 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: フォーカス管理（ローヴィングタブインデックス）
+    高優先度: クリック操作（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click selects</code></td>
+          <td class="py-2">クリックでラジオを選択</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click changes</code></td>
+          <td class="py-2">別のラジオをクリックで選択変更</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled no click</code></td>
+          <td class="py-2">無効なラジオはクリックで選択されない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: フォーカス管理 - ローヴィングタブインデックス（Unit + E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -147,10 +214,10 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: フォーム統合
+    中優先度: フォーム統合（Unit）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -176,10 +243,10 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: アクセシビリティ
+    中優先度: アクセシビリティ（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -189,7 +256,7 @@ import { ResponsiveTable } from '@/components/ui/table';
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">WCAG 2.1 AA違反がない（jest-axeによる）</td>
+          <td class="py-2">WCAG 2.1 AA違反がない（jest-axe/axe-coreによる）</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>selected axe</code></td>
@@ -205,10 +272,10 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    低優先度: Props と動作
+    低優先度: クロスフレームワーク一貫性（E2E）
   </h4>
   <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
+    <table class="w-full border-collapse text-sm">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">テスト</th>
@@ -217,20 +284,50 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>onValueChange</code></td>
-          <td class="py-2">選択変更時にコールバックが発火する</td>
+          <td class="py-2 pr-4"><code>All frameworks render</code></td>
+          <td class="py-2">React、Vue、Svelte、Astroすべてがラジオグループをレンダリング</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>defaultValue</code></td>
-          <td class="py-2">defaultValueからの初期選択</td>
+          <td class="py-2 pr-4"><code>Consistent click</code></td>
+          <td class="py-2">すべてのフレームワークがクリック選択をサポート</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className</code></td>
-          <td class="py-2">カスタムクラスがコンテナに適用される</td>
+          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
+          <td class="py-2">すべてのフレームワークが一貫したARIA構造を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Consistent keyboard</code></td>
+          <td class="py-2">すべてのフレームワークがキーボードナビゲーションをサポート</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストコード例</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    以下は実際のE2Eテストファイル（<code>e2e/radio-group.spec.ts</code>）です。
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/radio-group.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
+
+  <h3 class="mb-3 text-lg font-medium">テストの実行</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Radio Groupの単体テストを実行
+npm run test -- radio-group
+
+# Radio GroupのE2Eテストを実行（全フレームワーク）
+npm run test:e2e:pattern --pattern=radio-group
+
+# 特定フレームワークのE2Eテストを実行
+npm run test:e2e:react:pattern --pattern=radio-group
+npm run test:e2e:vue:pattern --pattern=radio-group
+npm run test:e2e:svelte:pattern --pattern=radio-group
+npm run test:e2e:astro:pattern --pattern=radio-group</code></pre>
 
   <h3 class="mb-3 text-lg font-medium">テストツール</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
@@ -238,20 +335,26 @@ import { ResponsiveTable } from '@/components/ui/table';
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
         >Vitest</ExternalLink
       >
-      - Test runner
+      - 単体テスト用テストランナー
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
         >Testing Library</ExternalLink
       >
-      - Framework-specific testing utilities
+      - フレームワーク固有のテストユーティリティ（React、Vue、Svelte）
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2Eテスト用ブラウザ自動化
     </li>
     <li>
       <ExternalLink
-        href="https://github.com/nickcolley/jest-axe"
-        class="text-primary hover:underline">jest-axe</ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
       >
-      - Automated accessibility testing
+      - E2Eでの自動アクセシビリティテスト
     </li>
   </ul>
 

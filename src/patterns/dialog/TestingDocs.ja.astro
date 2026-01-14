@@ -1,13 +1,53 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/dialog.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     テストは、キーボード操作、ARIA 属性、およびアクセシビリティ要件全体にわたる APG
-    準拠を検証します。
+    準拠を検証します。Dialog コンポーネントは 2 層テスト戦略を使用しています。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用して、コンポーネントのレンダリング出力を検証します。
+      これらのテストは正しい HTML 構造と ARIA 属性を保証します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA 属性 (aria-labelledby, aria-describedby)</li>
+      <li>Escape キーでダイアログを閉じる</li>
+      <li>開閉時のフォーカス管理</li>
+      <li>jest-axe によるアクセシビリティ</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワークにわたって、実際のブラウザ環境でコンポーネントの動作を検証します。
+      これらのテストはインタラクションとクロスフレームワークの一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>モーダル動作 (showModal, backdrop)</li>
+      <li>フォーカストラップの検証</li>
+      <li>閉じた時のフォーカス復元</li>
+      <li>オーバーレイクリックで閉じる</li>
+      <li>ライブブラウザでの ARIA 構造検証</li>
+      <li>axe-core アクセシビリティスキャン</li>
+      <li>クロスフレームワーク一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
@@ -163,15 +203,36 @@ import { ResponsiveTable } from '@/components/ui/table';
       - フレームワーク固有のテストユーティリティ
     </li>
     <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - E2E テストフレームワーク
+    </li>
+    <li>
       <ExternalLink
         href="https://github.com/nickcolley/jest-axe"
         class="text-primary hover:underline">jest-axe</ExternalLink
       >
-      - 自動アクセシビリティテスト
+      - 自動アクセシビリティテスト (ユニット)
+    </li>
+    <li>
+      <ExternalLink href="https://www.deque.com/axe/" class="text-primary hover:underline"
+        >axe-core</ExternalLink
+      >
+      - 自動アクセシビリティテスト (E2E)
     </li>
   </ul>
 
-  <p class="text-muted-foreground text-sm">
+  <h3 class="mb-3 text-lg font-medium">E2E テストコード</h3>
+  <CodeBlock
+    collapsible
+    collapsedLines={5}
+    code={e2eTestCode}
+    lang="typescript"
+    title="dialog.spec.ts"
+  />
+
+  <p class="text-muted-foreground mt-6 text-sm">
     詳細なドキュメントは <ExternalLink
       href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
       class="text-primary hover:underline">testing-strategy.md</ExternalLink

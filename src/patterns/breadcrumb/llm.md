@@ -95,3 +95,49 @@ it('uses ordered list', () => {
   expect(screen.getAllByRole('listitem')).toHaveLength(3);
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// Helper to get breadcrumb navigation
+const getBreadcrumb = (page) => {
+  return page.locator('nav[aria-label*="Breadcrumb"], nav[aria-label*="breadcrumb"]').first();
+};
+
+// ARIA Structure: nav element with aria-label
+test('uses nav element with aria-label containing "Breadcrumb"', async ({ page }) => {
+  await page.goto('patterns/breadcrumb/react/demo/');
+
+  const nav = getBreadcrumb(page);
+  await expect(nav).toBeAttached();
+
+  const ariaLabel = await nav.getAttribute('aria-label');
+  expect(ariaLabel?.toLowerCase()).toContain('breadcrumb');
+});
+
+// ARIA Structure: Last item has aria-current="page"
+test('last item has aria-current="page"', async ({ page }) => {
+  await page.goto('patterns/breadcrumb/react/demo/');
+
+  const nav = getBreadcrumb(page);
+  const currentPageElement = nav.locator('[aria-current="page"]');
+  await expect(currentPageElement.first()).toBeAttached();
+});
+
+// Accessibility: No axe-core violations
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/breadcrumb/react/demo/');
+
+  const nav = getBreadcrumb(page);
+  await nav.waitFor();
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('nav[aria-label*="Breadcrumb"]')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

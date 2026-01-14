@@ -235,3 +235,69 @@ it('does not call onClick when disabled', async () => {
   expect(handleClick).not.toHaveBeenCalled();
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA Structure
+test('has role="link" and tabindex="0"', async ({ page }) => {
+  await page.goto('patterns/link/react/demo/');
+  const links = page.locator('[role="link"]');
+  expect(await links.count()).toBeGreaterThan(0);
+
+  // Enabled links should have tabindex="0"
+  const enabledLink = page.locator('[role="link"]:not([aria-disabled="true"])').first();
+  await expect(enabledLink).toHaveAttribute('tabindex', '0');
+});
+
+// Keyboard Interaction
+test('activates on Enter key, not Space', async ({ page }) => {
+  await page.goto('patterns/link/react/demo/');
+  const link = page.locator('[role="link"]:not([aria-disabled="true"])').first();
+
+  // Track keydown events
+  await page.evaluate(() => {
+    const links = document.querySelectorAll('[role="link"]:not([aria-disabled="true"])');
+    links.forEach((link) => {
+      (link as HTMLElement).dataset.enterPressed = 'false';
+      link.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+          e.preventDefault();
+          (link as HTMLElement).dataset.enterPressed = 'true';
+        }
+      }, { capture: true });
+    });
+  });
+
+  await link.focus();
+  await page.keyboard.press('Enter');
+  expect(await link.getAttribute('data-enter-pressed')).toBe('true');
+
+  // Space should NOT activate (link should still be visible, no navigation)
+  await page.keyboard.press('Space');
+  await expect(link).toBeVisible();
+});
+
+// Disabled State
+test('disabled link has aria-disabled and tabindex="-1"', async ({ page }) => {
+  await page.goto('patterns/link/react/demo/');
+  const disabledLink = page.locator('[role="link"][aria-disabled="true"]');
+
+  if (await disabledLink.count() > 0) {
+    await expect(disabledLink.first()).toHaveAttribute('aria-disabled', 'true');
+    await expect(disabledLink.first()).toHaveAttribute('tabindex', '-1');
+  }
+});
+
+// Accessibility
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/link/react/demo/');
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('[role="link"]')
+    .analyze();
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

@@ -226,3 +226,52 @@ describe('Combobox', () => {
   });
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/combobox/react/demo/');
+  const combobox = page.locator('[role="combobox"]').first();
+
+  await expect(combobox).toHaveAttribute('role', 'combobox');
+  const ariaControls = await combobox.getAttribute('aria-controls');
+  expect(ariaControls).toBeTruthy();
+
+  const listbox = page.locator(`#${ariaControls}`);
+  await expect(listbox).toHaveAttribute('role', 'listbox');
+});
+
+// Keyboard navigation test
+test('ArrowDown opens popup and focuses first option', async ({ page }) => {
+  await page.goto('patterns/combobox/react/demo/');
+  const combobox = page.locator('[role="combobox"]').first();
+
+  await combobox.click();
+  await page.keyboard.press('Escape');
+  await expect(combobox).toHaveAttribute('aria-expanded', 'false');
+
+  await page.keyboard.press('ArrowDown');
+  await expect(combobox).toHaveAttribute('aria-expanded', 'true');
+
+  const activeDescendant = await combobox.getAttribute('aria-activedescendant');
+  expect(activeDescendant).toBeTruthy();
+});
+
+// axe-core accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/combobox/react/demo/');
+  const combobox = page.locator('[role="combobox"]').first();
+  await combobox.waitFor();
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('.apg-combobox')
+    .analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
+});
+```

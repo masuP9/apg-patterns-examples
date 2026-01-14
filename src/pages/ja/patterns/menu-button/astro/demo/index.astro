@@ -1,0 +1,58 @@
+---
+/**
+ * Demo-only Page: Menu Button (Astro) - Japanese
+ *
+ * This page renders the Menu Button component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import MenuButton from '@patterns/menu-button/MenuButton.astro';
+
+const actionItems = [
+  { id: 'cut', label: 'Cut' },
+  { id: 'copy', label: 'Copy' },
+  { id: 'paste', label: 'Paste' },
+  { id: 'delete', label: 'Delete' },
+];
+
+const fileItems = [
+  { id: 'new', label: 'New File' },
+  { id: 'open', label: 'Open...' },
+  { id: 'save', label: 'Save' },
+  { id: 'save-as', label: 'Save As...' },
+  { id: 'export', label: 'Export', disabled: true },
+  { id: 'print', label: 'Print' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: メニューボタン (Astro)</title>
+  </head>
+  <body class="p-8">
+    <h1 class="mb-6 text-2xl font-bold">Menu Button デモ</h1>
+    <div class="space-y-8">
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">基本的なメニューボタン</h2>
+        <div class="space-y-4">
+          <MenuButton items={actionItems} label="Actions" />
+          <p id="basic-output" class="text-muted-foreground text-sm">最後のアクション: なし</p>
+        </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">無効な項目を含むメニューボタン</h2>
+        <div class="space-y-4">
+          <MenuButton items={fileItems} label="File" />
+          <p id="file-output" class="text-muted-foreground text-sm">最後のアクション: なし</p>
+          <p class="text-muted-foreground text-xs">
+            注: "Export" は無効で、キーボードナビゲーション時にスキップされます
+          </p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+---
+/**
+ * Demo-only Page: Radio Group (React) - 日本語
+ *
+ * This page renders the RadioGroup component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import { RadioGroup } from '@patterns/radio-group/RadioGroup';
+
+const colorOptions = [
+  { id: 'red', label: '赤', value: 'red' },
+  { id: 'blue', label: '青', value: 'blue' },
+  { id: 'green', label: '緑', value: 'green' },
+];
+
+const sizeOptions = [
+  { id: 'small', label: '小', value: 'small' },
+  { id: 'medium', label: '中', value: 'medium' },
+  { id: 'large', label: '大', value: 'large' },
+];
+
+const planOptions = [
+  { id: 'free', label: '無料', value: 'free' },
+  { id: 'pro', label: 'プロ', value: 'pro' },
+  { id: 'enterprise', label: 'エンタープライズ（近日公開）', value: 'enterprise', disabled: true },
+];
+
+const ratingOptions = [
+  { id: 'r1', label: '1', value: '1' },
+  { id: 'r2', label: '2', value: '2' },
+  { id: 'r3', label: '3', value: '3' },
+  { id: 'r4', label: '4', value: '4' },
+  { id: 'r5', label: '5', value: '5' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: ラジオグループ (React)</title>
+  </head>
+  <body class="p-8">
+    <div class="space-y-8">
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">基本的なラジオグループ</h2>
+        <RadioGroup client:load options={colorOptions} name="color" aria-label="お気に入りの色" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">デフォルト値あり</h2>
+        <RadioGroup
+          client:load
+          options={sizeOptions}
+          name="size"
+          aria-label="Tシャツのサイズ"
+          defaultValue="medium"
+        />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">無効なオプションあり</h2>
+        <RadioGroup client:load options={planOptions} name="plan" aria-label="プラン" />
+      </div>
+
+      <div>
+        <h2 class="mb-4 text-lg font-semibold">横向きレイアウト</h2>
+        <RadioGroup
+          client:load
+          options={ratingOptions}
+          name="rating"
+          aria-label="評価"
+          orientation="horizontal"
+        />
+      </div>
+    </div>
+  </body>
+</html>
