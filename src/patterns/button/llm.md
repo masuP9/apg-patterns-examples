@@ -109,3 +109,64 @@ it('has type="button"', () => {
   expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('has correct ARIA structure', async ({ page }) => {
+  await page.goto('patterns/button/react/demo/');
+
+  const button = page.locator('button[aria-pressed]').first();
+  await expect(button).toHaveRole('button');
+  await expect(button).toHaveAttribute('type', 'button');
+
+  const ariaPressed = await button.getAttribute('aria-pressed');
+  expect(['true', 'false', 'mixed']).toContain(ariaPressed);
+});
+
+// Click toggle test
+test('toggles aria-pressed on click', async ({ page }) => {
+  await page.goto('patterns/button/react/demo/');
+
+  const button = page.locator('button[aria-pressed]').first();
+  const initialState = await button.getAttribute('aria-pressed');
+
+  await button.click();
+  const newState = await button.getAttribute('aria-pressed');
+  expect(newState).not.toBe(initialState);
+
+  await button.click();
+  const finalState = await button.getAttribute('aria-pressed');
+  expect(finalState).toBe(initialState);
+});
+
+// Keyboard toggle test
+test('toggles on Space and Enter keys', async ({ page }) => {
+  await page.goto('patterns/button/react/demo/');
+
+  const button = page.locator('button[aria-pressed]').first();
+  const initialState = await button.getAttribute('aria-pressed');
+
+  await button.focus();
+  await page.keyboard.press('Space');
+  expect(await button.getAttribute('aria-pressed')).not.toBe(initialState);
+
+  await page.keyboard.press('Enter');
+  expect(await button.getAttribute('aria-pressed')).toBe(initialState);
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/button/react/demo/');
+
+  const results = await new AxeBuilder({ page })
+    .include('button[aria-pressed]')
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```
