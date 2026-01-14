@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue';
+import { computed, ref } from 'vue';
 import { cn } from '@/lib/utils';
 
 defineOptions({
@@ -143,7 +143,8 @@ const formatValueText = (val: number, formatStr: string | undefined): string => 
 
 // Refs
 const inputRef = ref<HTMLInputElement | null>(null);
-const labelId = useId();
+// Use crypto.randomUUID() for unique IDs in Astro Islands (Vue's useId() returns same value for all instances)
+const labelId = `spinbutton-label-${crypto.randomUUID().slice(0, 8)}`;
 const isComposing = ref(false);
 
 // State
