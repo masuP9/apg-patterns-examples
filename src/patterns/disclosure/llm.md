@@ -16,10 +16,11 @@ A disclosure is a button that controls visibility of a section of content. It's 
 
 ### Properties
 
-| Attribute       | Element | Values            | Required | Notes                        |
-| --------------- | ------- | ----------------- | -------- | ---------------------------- |
-| `aria-controls` | button  | ID of panel       | Yes      | Associates button with panel |
-| `aria-hidden`   | panel   | `true` \| `false` | No       | Hides from AT when collapsed |
+| Attribute       | Element | Values            | Required | Notes                                          |
+| --------------- | ------- | ----------------- | -------- | ---------------------------------------------- |
+| `aria-controls` | button  | ID of panel       | Yes      | Associates button with panel                   |
+| `aria-hidden`   | panel   | `true` \| `false` | Yes      | Hides from AT when collapsed                   |
+| `inert`         | panel   | boolean           | Yes      | Prevents focus/interaction when collapsed      |
 
 ### States
 
@@ -55,6 +56,14 @@ A disclosure is a button that controls visibility of a section of content. It's 
 ### Medium Priority: Accessibility
 
 - [ ] No axe-core violations (WCAG 2.1 AA)
+
+## Component Props
+
+| Prop               | Type                         | Default | Description                           |
+| ------------------ | ---------------------------- | ------- | ------------------------------------- |
+| `defaultExpanded`  | `boolean`                    | `false` | Initial expanded state                |
+| `disabled`         | `boolean`                    | `false` | Disables the trigger button           |
+| `onExpandedChange` | `(expanded: boolean) => void`| -       | Callback when expanded state changes  |
 
 ## Disclosure vs Accordion
 

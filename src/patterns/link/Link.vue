@@ -3,6 +3,7 @@
     role="link"
     :tabindex="props.disabled ? -1 : 0"
     :aria-disabled="props.disabled ? 'true' : undefined"
+    :aria-current="props.ariaCurrent || undefined"
     class="apg-link"
     v-bind="$attrs"
     @click="handleClick"
@@ -24,6 +25,8 @@ export interface LinkProps {
   target?: '_self' | '_blank';
   /** Whether the link is disabled */
   disabled?: boolean;
+  /** Indicates current item in a set (e.g., current page in navigation) */
+  ariaCurrent?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | boolean;
   /** Callback fired when link is activated */
   onClick?: (event: MouseEvent | KeyboardEvent) => void;
 }
@@ -32,6 +35,7 @@ const props = withDefaults(defineProps<LinkProps>(), {
   href: undefined,
   target: undefined,
   disabled: false,
+  ariaCurrent: undefined,
   onClick: undefined,
 });
 

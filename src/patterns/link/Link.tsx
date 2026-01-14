@@ -10,6 +10,8 @@ export interface LinkProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, '
   onClick?: (event: React.MouseEvent | React.KeyboardEvent) => void;
   /** Disabled state */
   disabled?: boolean;
+  /** Indicates current item in a set (e.g., current page in navigation) */
+  'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | boolean;
   /** Link content */
   children: React.ReactNode;
 }

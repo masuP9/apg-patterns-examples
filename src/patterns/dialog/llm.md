@@ -16,11 +16,13 @@ A dialog is a window overlaid on the primary content, requiring user interaction
 
 ### Properties
 
-| Attribute          | Element | Values                      | Required | Notes                            |
-| ------------------ | ------- | --------------------------- | -------- | -------------------------------- |
-| `aria-modal`       | dialog  | `true`                      | Yes      | Indicates this is a modal dialog |
-| `aria-labelledby`  | dialog  | ID reference to title       | Yes      | References the dialog title      |
-| `aria-describedby` | dialog  | ID reference to description | No       | References optional description  |
+| Attribute          | Element | Values                      | Required | Notes                                                     |
+| ------------------ | ------- | --------------------------- | -------- | --------------------------------------------------------- |
+| `aria-modal`       | dialog  | `true`                      | Yes*     | Native `<dialog>` + `showModal()` provides this implicitly |
+| `aria-labelledby`  | dialog  | ID reference to title       | Yes      | References the dialog title                               |
+| `aria-describedby` | dialog  | ID reference to description | No       | References optional description                           |
+
+> *When using native `<dialog>` element with `showModal()`, the modal behavior is implicit and `aria-modal` may be omitted.
 
 ## Keyboard Support
 
