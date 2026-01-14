@@ -28,7 +28,7 @@
 | Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Dialog               | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Dialog               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Feed                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Grid                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
@@ -36,19 +36,19 @@
 | Link                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Menubar              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Menu Button          | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Menu Button          | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | -   | 予定       |
-| Spinbutton           | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Spinbutton           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Tabs                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Tree View            | ✅    | ✅  | ✅     | ✅    | -   | 完了       |
+| Tree View            | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Treegrid             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Window Splitter      | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 

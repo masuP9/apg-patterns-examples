@@ -28,7 +28,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Dialog               | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Dialog               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Feed                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Grid                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
@@ -36,19 +36,19 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Link                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Listbox              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Menubar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Menu Button          | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Menu Button          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Slider (Multi-Thumb) | -     | -   | -      | -     | -   | Planned  |
-| Spinbutton           | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Spinbutton           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tabs                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Toggle Button        | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Toolbar              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Tooltip              | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Tree View            | ✅    | ✅  | ✅     | ✅    | -   | Complete |
+| Tree View            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Treegrid             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Window Splitter      | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 

@@ -4,9 +4,9 @@
 
 E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実装計画。
 
-**対象パターン**: ~~Accordion~~, Dialog, Menu Button, ~~Radio Group~~, ~~Slider~~, Spinbutton, ~~Tabs~~, ~~Toolbar~~, ~~Tooltip~~, Tree View
+**対象パターン**: ~~Accordion~~, ~~Dialog~~, ~~Menu Button~~, ~~Radio Group~~, ~~Slider~~, ~~Spinbutton~~, ~~Tabs~~, ~~Toolbar~~, ~~Tooltip~~, ~~Tree View~~
 
-**現状**: 22/28パターン完了（79%）→ 完了後28/28（100%）
+**現状**: 28/28パターン完了（100%）✅
 
 ### 進捗
 
@@ -18,10 +18,10 @@ E2Eテスト未実装の10パターンに対するPlaywright E2Eテストの実�
 | Radio Group | ✅        | ✅         | ✅          | ✅     | 完了 |
 | Toolbar     | ✅        | ✅         | ✅          | ✅     | 完了 |
 | Slider      | ✅        | ✅         | ✅          | ✅     | 完了 |
-| Dialog      | ⬜        | ⬜         | ⬜          | ⬜     |      |
-| Menu Button | ⬜        | ⬜         | ⬜          | ⬜     |      |
-| Spinbutton  | ⬜        | ⬜         | ⬜          | ⬜     |      |
-| Tree View   | ⬜        | ⬜         | ⬜          | ⬜     |      |
+| Dialog      | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Menu Button | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Spinbutton  | ✅        | ✅         | ✅          | ✅     | 完了 |
+| Tree View   | ✅        | ✅         | ✅          | ✅     | 完了 |
 
 ---
 
@@ -743,11 +743,14 @@ e2e/
 ### 単体実行
 
 ```bash
-# 特定パターンのみ実行
-npx playwright test e2e/menu-button.spec.ts
+# 特定パターンのみ実行（全フレームワーク、サーバー自動起動）
+npm run test:e2e:pattern --pattern=menu-button
 
-# 特定フレームワークのみ
-E2E_FRAMEWORK=react npx playwright test e2e/menu-button.spec.ts
+# 特定フレームワーク + 特定パターン（要: npm run dev 別ターミナル）
+npm run test:e2e:react:pattern --pattern=menu-button
+npm run test:e2e:vue:pattern --pattern=menu-button
+npm run test:e2e:svelte:pattern --pattern=menu-button
+npm run test:e2e:astro:pattern --pattern=menu-button
 ```
 
 ### 全体実行
