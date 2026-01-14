@@ -6,8 +6,8 @@
  * the site layout. This ensures clean E2E testing environment.
  */
 import '@/styles/global.css';
-import TreeView from '@patterns/treeview/TreeView.vue';
-import TreeViewActivationDemo from '@patterns/treeview/TreeViewActivationDemo.vue';
+import TreeView from '@patterns/tree-view/TreeView.vue';
+import TreeViewActivationDemo from '@patterns/tree-view/TreeViewActivationDemo.vue';
 
 const fileSystemNodes = [
   {
@@ -71,7 +71,7 @@ const disabledNodes = [
         <TreeViewActivationDemo
           client:load
           nodes={fileSystemNodes}
-          aria-label="File Explorer"
+          ariaLabel="File Explorer"
           defaultExpandedIds={['documents']}
         />
       </div>
@@ -80,7 +80,7 @@ const disabledNodes = [
         <TreeView
           client:load
           nodes={fileSystemNodes}
-          aria-label="Multi-select File Explorer"
+          ariaLabel="Multi-select File Explorer"
           multiselectable
           defaultExpandedIds={['documents', 'images']}
         />
@@ -90,7 +90,7 @@ const disabledNodes = [
         <TreeView
           client:load
           nodes={disabledNodes}
-          aria-label="File Explorer with Restricted Access"
+          ariaLabel="File Explorer with Restricted Access"
           defaultExpandedIds={['folder1']}
         />
       </div>
