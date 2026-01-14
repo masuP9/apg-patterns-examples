@@ -4,12 +4,12 @@ import { withBase } from '@/lib/utils';
 
 interface Props {
   pattern: string;
-  locale?: string;
+  locale?: string; // Kept for backward compatibility, but not used (llm.md is language-agnostic)
 }
 
-const { pattern, locale } = Astro.props;
-const basePath = locale ? `/${locale}` : '';
-const href = withBase(`${basePath}/patterns/${pattern}/llm.md`);
+const { pattern } = Astro.props;
+// llm.md is always at the root patterns path (not language-specific)
+const href = withBase(`/patterns/${pattern}/llm.md`);
 ---
 
 <li>

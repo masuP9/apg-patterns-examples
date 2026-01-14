@@ -1,11 +1,12 @@
 ---
-import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import MenubarDemo from '@patterns/menubar/MenubarDemo.vue';
 import AccessibilityDocs from '@patterns/menubar/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/menubar/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -29,15 +30,7 @@ const tocItems = [
       A horizontal menu bar that provides application-style navigation with dropdown menus,
       submenus, checkbox items, and radio groups.
     </p>
-    <a
-      href={withBase('/patterns/menubar/llm.md')}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
-    >
-      <span class="text-base">🤖</span>
-      AI Implementation Guide
-    </a>
+    <AiGuideBadge pattern="menubar" />
   </header>
 
   <!-- Framework Selector -->
@@ -203,17 +196,7 @@ function handleItemSelect(id: string) {
           WAI-ARIA APG: Menubar Pattern
         </ExternalLink>
       </li>
-      <li>
-        <ExternalLink
-          href={withBase('/patterns/menubar/llm.md')}
-          class="text-primary hover:underline"
-        >
-          AI Implementation Guide (llm.md)
-        </ExternalLink>
-        <span class="text-muted-foreground text-sm">
-          - ARIA specs, keyboard support, test checklist
-        </span>
-      </li>
+      <AiGuideResourceItem pattern="menubar" />
     </ul>
   </section>
 </PatternLayout>
