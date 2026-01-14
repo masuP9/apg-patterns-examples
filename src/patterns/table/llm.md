@@ -419,6 +419,7 @@ export default defineConfig({
 
 ```typescript
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('patterns/table/react/');
@@ -427,17 +428,59 @@ test.beforeEach(async ({ page }) => {
 
 // ARIA structure test
 test('has correct ARIA structure', async ({ page }) => {
-  const table = page.locator('[role="table"]').first();
-  await expect(table).toBeVisible();
+  const basicTable = page.locator('[role="table"][aria-label="User List"]');
+  await expect(basicTable).toBeVisible();
 
-  // Check rows, columnheaders, and cells
-  const rows = table.locator('[role="row"]');
-  const headers = table.locator('[role="columnheader"]');
-  const cells = table.locator('[role="cell"]');
+  // Check rows (1 header + 5 data rows)
+  const rows = basicTable.locator('[role="row"]');
+  await expect(rows).toHaveCount(6);
 
-  expect(await rows.count()).toBeGreaterThan(0);
-  expect(await headers.count()).toBeGreaterThan(0);
-  expect(await cells.count()).toBeGreaterThan(0);
+  // Check columnheaders
+  const headers = basicTable.locator('[role="columnheader"]');
+  await expect(headers).toHaveCount(3);
+
+  // Check data cells (5 rows x 3 columns)
+  const cells = basicTable.locator('[role="cell"]');
+  await expect(cells).toHaveCount(15);
+
+  // Check rowgroups (header + body)
+  const rowgroups = basicTable.locator('[role="rowgroup"]');
+  await expect(rowgroups).toHaveCount(2);
+});
+
+// Sort state test
+test('clicking sort button changes aria-sort', async ({ page }) => {
+  const sortableTable = page.locator('[role="table"][aria-label="Sortable User List"]');
+  await expect(sortableTable).toBeVisible();
+
+  const ageHeader = sortableTable.locator('[role="columnheader"]').filter({ hasText: 'Age' });
+  const sortButton = ageHeader.locator('button');
+
+  // Initially none
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'none');
+
+  // Click to sort ascending
+  await sortButton.click();
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'ascending');
+
+  // Click again to sort descending
+  await sortButton.click();
+  await expect(ageHeader).toHaveAttribute('aria-sort', 'descending');
+});
+
+// Virtualization test
+test('virtualized table has correct ARIA attributes', async ({ page }) => {
+  const virtualizedTable = page.locator('[role="table"][aria-label*="Virtualized"]');
+  await expect(virtualizedTable).toBeVisible();
+
+  // Check aria-rowcount and aria-colcount
+  await expect(virtualizedTable).toHaveAttribute('aria-rowcount', '100');
+  await expect(virtualizedTable).toHaveAttribute('aria-colcount', '3');
+
+  // Check aria-rowindex on data rows
+  const dataRows = virtualizedTable.locator('[role="rowgroup"]:last-child [role="row"]');
+  await expect(dataRows.nth(0)).toHaveAttribute('aria-rowindex', '5');
+  await expect(dataRows.nth(1)).toHaveAttribute('aria-rowindex', '6');
 });
 
 // Visual cell spanning test
@@ -461,22 +504,12 @@ test('colspan=2 cell has approximately 2x width of normal cell', async ({ page }
   expect(colspanBox!.width).toBeLessThan(normalBox!.width * 2.3);
 });
 
-// Cell spanning attributes test
-test('aria-colspan and aria-rowspan attributes are present', async ({ page }) => {
-  const spanningTable = page.locator('[role="table"][aria-label*="Spanning"]');
-  await expect(spanningTable).toBeVisible();
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .include('[role="table"]')
+    .analyze();
 
-  // Verify colspan attributes exist
-  const colspanCells = spanningTable.locator('[aria-colspan]');
-  await expect(colspanCells).toHaveCount(2); // N/A (colspan=2) and Total (colspan=4)
-
-  // Verify rowspan attributes exist
-  const rowspanCells = spanningTable.locator('[aria-rowspan]');
-  await expect(rowspanCells).toHaveCount(1); // Electronics (rowspan=2)
-
-  // Verify specific values
-  await expect(spanningTable.locator('[aria-colspan="2"]')).toHaveCount(1);
-  await expect(spanningTable.locator('[aria-colspan="4"]')).toHaveCount(1);
-  await expect(spanningTable.locator('[aria-rowspan="2"]')).toHaveCount(1);
+  expect(accessibilityScanResults.violations).toEqual([]);
 });
 ```

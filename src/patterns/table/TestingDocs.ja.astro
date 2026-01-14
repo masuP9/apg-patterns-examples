@@ -1,6 +1,13 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/table.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
@@ -8,6 +15,38 @@ import { ResponsiveTable } from '@/components/ui/table';
     テストは ARIA ロール、テーブル構造、アクセシビリティ要件についての APG 準拠を検証します。Table
     は静的な構造であるため、キーボードインタラクションのテストは該当しません。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">単体テスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用して、コンポーネントのレンダリング出力を検証します。
+      これらのテストは正しいHTML構造とARIA属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA ロール（table, row, cell, columnheader, rowheader, rowgroup）</li>
+      <li>aria-label または aria-labelledby によるアクセシブルな名前</li>
+      <li>ソート状態属性（aria-sort）</li>
+      <li>仮想化属性（aria-rowcount, aria-colcount, aria-rowindex）</li>
+      <li>jest-axe によるアクセシビリティ</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワークで実際のブラウザ環境でコンポーネントの動作を検証します。
+      これらのテストは視覚的なレンダリングとクロスフレームワークの一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ライブブラウザでの ARIA 構造検証</li>
+      <li>ソートのインタラクションと状態変化</li>
+      <li>視覚的セル結合（colspan, rowspan の寸法）</li>
+      <li>axe-core によるアクセシビリティスキャン</li>
+      <li>クロスフレームワークの一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
@@ -313,6 +352,12 @@ import { ResponsiveTable } from '@/components/ui/table';
       <strong>Astro:</strong> Web Components 単体テスト用の Vitest + JSDOM
     </li>
     <li>
+      <strong>E2E:</strong>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
+      </ExternalLink>
+    </li>
+    <li>
       <strong>アクセシビリティ:</strong>
       <ExternalLink
         href="https://github.com/dequelabs/axe-core"
@@ -322,4 +367,17 @@ import { ResponsiveTable } from '@/components/ui/table';
       </ExternalLink>
     </li>
   </ul>
+
+  <h3 class="mb-3 text-lg font-medium">E2E テストコード</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    以下の Playwright テストは、4つのフレームワーク（React、Vue、Svelte、Astro）すべてで Table
+    の動作を検証します。ARIA 構造、ソート状態、仮想化属性、視覚的セル結合をカバーしています。
+  </p>
+  <CodeBlock
+    collapsible
+    collapsedLines={30}
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/table.spec.ts"
+  />
 </div>

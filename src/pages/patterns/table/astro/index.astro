@@ -1,6 +1,7 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Table from '@patterns/table/Table.astro';
+import { SortableTableDemo } from '@patterns/table/TableDemo';
 import AccessibilityDocs from '@patterns/table/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/table/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.astro';
@@ -109,11 +110,11 @@ const spanningRows = [
     <div class="mb-8">
       <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
       <p class="text-muted-foreground mb-4 text-sm">
-        Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction. Note: Astro
-        components are static, so sorting requires page reload or client-side JavaScript.
+        Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction. This demo
+        uses a React component with <code>client:load</code> for interactive sorting.
       </p>
       <div class="border-border bg-background rounded-lg border p-6">
-        <Table columns={sortableColumns} rows={basicRows} aria-label="Sortable User List" />
+        <SortableTableDemo client:load />
       </div>
     </div>
 
