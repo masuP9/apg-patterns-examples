@@ -234,3 +234,74 @@ it('clicking outside closes menu', async () => {
   expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
 });
 ```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// Helper functions
+const getMenuButton = (page) => page.getByRole('button', { name: /actions/i }).first();
+const getMenu = (page) => page.getByRole('menu');
+const getMenuItems = (page) => page.getByRole('menuitem');
+
+const openMenu = async (page) => {
+  const button = getMenuButton(page);
+  await button.click();
+  await getMenu(page).waitFor({ state: 'visible' });
+  return button;
+};
+
+// ARIA structure tests
+test('button has correct ARIA attributes', async ({ page }) => {
+  await page.goto('/patterns/menu-button/react/demo/');
+  const button = getMenuButton(page);
+
+  await expect(button).toHaveAttribute('aria-haspopup', 'menu');
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(button).toHaveAttribute('aria-controls', /.+/);
+});
+
+// Keyboard interaction
+test('Enter opens menu and focuses first item', async ({ page }) => {
+  await page.goto('/patterns/menu-button/react/demo/');
+  const button = getMenuButton(page);
+  await button.focus();
+  await page.keyboard.press('Enter');
+
+  await expect(getMenu(page)).toBeVisible();
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  await expect(getMenuItems(page).first()).toBeFocused();
+});
+
+// Type-ahead (use trim() for frameworks with whitespace in textContent)
+test('type-ahead focuses matching item', async ({ page }) => {
+  await page.goto('/patterns/menu-button/react/demo/');
+  await openMenu(page);
+  await expect(getMenuItems(page).first()).toBeFocused();
+
+  await page.keyboard.press('p');
+
+  await expect
+    .poll(async () => {
+      const text = await page.evaluate(
+        () => document.activeElement?.textContent?.trim().toLowerCase() || ''
+      );
+      return text.startsWith('p');
+    })
+    .toBe(true);
+});
+
+// axe-core accessibility
+test('no accessibility violations', async ({ page }) => {
+  await page.goto('/patterns/menu-button/react/demo/');
+  await openMenu(page);
+
+  const results = await new AxeBuilder({ page })
+    .include('.apg-menu-button')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```
