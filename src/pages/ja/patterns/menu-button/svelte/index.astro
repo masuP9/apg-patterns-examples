@@ -1,11 +1,12 @@
 ---
-import { withBase } from '@/lib/utils';
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.svelte';
 import AccessibilityDocs from '@patterns/menu-button/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/menu-button/TestingDocs.ja.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -36,15 +37,7 @@ const tocItems = [
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">Menu Button</h1>
     <p class="text-muted-foreground text-lg">アクションまたはオプションのメニューを開くボタン。</p>
-    <a
-      href={withBase('/patterns/menu-button/llm.md')}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
-    >
-      <span class="text-base">🤖</span>
-      AI 実装ガイド
-    </a>
+    <AiGuideBadge pattern="menu-button" />
   </header>
 
   <!-- Framework Selector -->
@@ -214,17 +207,7 @@ const tocItems = [
           WAI-ARIA APG: Menu Button パターン
         </ExternalLink>
       </li>
-      <li>
-        <ExternalLink
-          href={withBase('/patterns/menu-button/llm.md')}
-          class="text-primary hover:underline"
-        >
-          AI 実装ガイド (llm.md)
-        </ExternalLink>
-        <span class="text-muted-foreground text-sm">
-          - ARIA 仕様、キーボード操作、テストチェックリスト</span
-        >
-      </li>
+      <AiGuideResourceItem pattern="menu-button" />
     </ul>
   </section>
 </PatternLayout>
