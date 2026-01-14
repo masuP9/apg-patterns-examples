@@ -38,7 +38,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-  <TreeView {nodes} aria-label={ariaLabel} {defaultExpandedIds} onActivate={handleActivate} />
+  <TreeView {nodes} {ariaLabel} {defaultExpandedIds} onActivate={handleActivate} />
   <div class="flex items-center gap-3">
     <div
       role="status"

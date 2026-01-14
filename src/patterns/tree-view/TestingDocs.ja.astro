@@ -1,14 +1,55 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/tree-view.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     テストでは、ARIA
     属性、キーボード操作、展開/折りたたみ動作、選択モデル、およびアクセシビリティ要件の APG
-    準拠を検証します。
+    準拠を検証します。Tree View コンポーネントは2層のテスト戦略を使用します。
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のテストライブラリを使用してコンポーネントのレンダリング出力を検証します。
+      これらのテストは正しい HTML 構造と ARIA 属性を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA 属性（role="tree"、role="treeitem"、role="group"）</li>
+      <li>展開状態（aria-expanded）</li>
+      <li>選択状態（aria-selected、aria-multiselectable）</li>
+      <li>無効状態（aria-disabled）</li>
+      <li>jest-axe によるアクセシビリティ</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E テスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      すべてのフレームワークで実際のブラウザ環境でコンポーネントの動作を検証します。
+      これらのテストはインタラクションとクロスフレームワークの一貫性をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>矢印キーナビゲーション（ArrowUp、ArrowDown、Home、End）</li>
+      <li>ArrowRight/ArrowLeft での展開/折りたたみ</li>
+      <li>Enter、Space、クリックでの選択</li>
+      <li>Shift+Arrow での複数選択</li>
+      <li>先行入力による文字ナビゲーション</li>
+      <li>axe-core アクセシビリティスキャン</li>
+      <li>クロスフレームワーク一貫性チェック</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
 
@@ -411,6 +452,32 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h3 class="mb-3 text-lg font-medium">テストコード例</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    以下は実際の E2E テストファイル（<code>e2e/tree-view.spec.ts</code>）です。
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/tree-view.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
+
+  <h3 class="mb-3 text-lg font-medium">テストの実行</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Tree View のユニットテストを実行
+npm run test -- treeview
+
+# Tree View の E2E テストを実行（全フレームワーク）
+npm run test:e2e:pattern --pattern=tree-view
+
+# 特定のフレームワークで E2E テストを実行
+npm run test:e2e:react:pattern --pattern=tree-view
+npm run test:e2e:vue:pattern --pattern=tree-view
+npm run test:e2e:svelte:pattern --pattern=tree-view
+npm run test:e2e:astro:pattern --pattern=tree-view</code></pre>
+
   <h3 class="mb-3 text-lg font-medium">テストツール</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
@@ -450,6 +517,12 @@ import { ResponsiveTable } from '@/components/ui/table';
         class="text-primary hover:underline"
       >
         axe-core
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>E2E:</strong>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
       </ExternalLink>
     </li>
   </ul>

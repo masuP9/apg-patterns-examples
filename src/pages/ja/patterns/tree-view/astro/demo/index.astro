@@ -1,0 +1,95 @@
+---
+/**
+ * Demo-only Page: Tree View (Astro) - Japanese
+ *
+ * This page renders the Tree View component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import TreeView from '@patterns/treeview/TreeView.astro';
+
+const fileSystemNodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+      {
+        id: 'projects',
+        label: 'Projects',
+        children: [
+          { id: 'project-a', label: 'Project A' },
+          { id: 'project-b', label: 'Project B' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    children: [
+      { id: 'vacation', label: 'vacation.jpg' },
+      { id: 'profile', label: 'profile.png' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+const disabledNodes = [
+  {
+    id: 'folder1',
+    label: 'Accessible Folder',
+    children: [
+      { id: 'file1', label: 'file1.txt' },
+      { id: 'file2', label: 'file2.txt', disabled: true },
+    ],
+  },
+  {
+    id: 'folder2',
+    label: 'Restricted Folder',
+    disabled: true,
+    children: [{ id: 'secret', label: 'secret.txt' }],
+  },
+  { id: 'public', label: 'public.txt' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: ツリービュー (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col gap-8">
+      <div>
+        <h3 class="mb-3 text-sm font-medium">単一選択</h3>
+        <TreeView
+          nodes={fileSystemNodes}
+          aria-label="ファイルエクスプローラー"
+          defaultExpandedIds={['documents']}
+        />
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-medium">複数選択</h3>
+        <TreeView
+          nodes={fileSystemNodes}
+          aria-label="複数選択ファイルエクスプローラー"
+          multiselectable
+          defaultExpandedIds={['documents', 'images']}
+        />
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-medium">無効化ノード付き</h3>
+        <TreeView
+          nodes={disabledNodes}
+          aria-label="アクセス制限付きファイルエクスプローラー"
+          defaultExpandedIds={['folder1']}
+        />
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,13 +1,55 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read actual test file at build time
+const e2eTestPath = path.join(process.cwd(), 'e2e/tree-view.spec.ts');
+const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance for ARIA attributes, keyboard interactions, expansion/collapse
-    behavior, selection models, and accessibility requirements.
+    behavior, selection models, and accessibility requirements. The Tree View component uses a
+    two-layer testing strategy.
   </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify the component's rendered output using framework-specific testing libraries. These tests
+      ensure correct HTML structure and ARIA attributes.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>ARIA attributes (role="tree", role="treeitem", role="group")</li>
+      <li>Expansion state (aria-expanded)</li>
+      <li>Selection state (aria-selected, aria-multiselectable)</li>
+      <li>Disabled state (aria-disabled)</li>
+      <li>Accessibility via jest-axe</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all frameworks. These tests
+      cover interactions and cross-framework consistency.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Arrow key navigation (ArrowUp, ArrowDown, Home, End)</li>
+      <li>Expand/collapse with ArrowRight/ArrowLeft</li>
+      <li>Selection with Enter, Space, and click</li>
+      <li>Multi-select with Shift+Arrow</li>
+      <li>Type-ahead character navigation</li>
+      <li>axe-core accessibility scanning</li>
+      <li>Cross-framework consistency checks</li>
+    </ul>
+  </div>
 
   <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
 
@@ -410,6 +452,32 @@ import { ResponsiveTable } from '@/components/ui/table';
     </table>
   </ResponsiveTable>
 
+  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    The following is the actual E2E test file (<code>e2e/tree-view.spec.ts</code>).
+  </p>
+  <CodeBlock
+    code={e2eTestCode}
+    lang="typescript"
+    title="e2e/tree-view.spec.ts"
+    collapsible
+    collapsedLines={20}
+  />
+
+  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for Tree View
+npm run test -- treeview
+
+# Run E2E tests for Tree View (all frameworks)
+npm run test:e2e:pattern --pattern=tree-view
+
+# Run E2E tests for specific framework
+npm run test:e2e:react:pattern --pattern=tree-view
+npm run test:e2e:vue:pattern --pattern=tree-view
+npm run test:e2e:svelte:pattern --pattern=tree-view
+npm run test:e2e:astro:pattern --pattern=tree-view</code></pre>
+
   <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
@@ -449,6 +517,12 @@ import { ResponsiveTable } from '@/components/ui/table';
         class="text-primary hover:underline"
       >
         axe-core
+      </ExternalLink>
+    </li>
+    <li>
+      <strong>E2E:</strong>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
       </ExternalLink>
     </li>
   </ul>
