@@ -11,7 +11,7 @@ const { class: className } = Astro.props;
 
 <div
   data-slot="theme-toggle"
-  role="group"
+  role="radiogroup"
   aria-label="Theme"
   class={cn(
     'inline-flex h-8 items-center rounded-md border border-input bg-muted p-0.5',
@@ -20,18 +20,22 @@ const { class: className } = Astro.props;
 >
   <button
     type="button"
+    role="radio"
     data-theme-value="light"
-    aria-selected="true"
-    class="theme-toggle-button aria-selected:bg-background aria-selected:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-selected:shadow-sm"
+    aria-checked="true"
+    tabindex="0"
+    class="theme-toggle-button aria-checked:bg-background aria-checked:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-checked:shadow-sm"
   >
     <Icon name="sun" class="size-4" />
     <span>Light</span>
   </button>
   <button
     type="button"
+    role="radio"
     data-theme-value="dark"
-    aria-selected="false"
-    class="theme-toggle-button aria-selected:bg-background aria-selected:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-selected:shadow-sm"
+    aria-checked="false"
+    tabindex="-1"
+    class="theme-toggle-button aria-checked:bg-background aria-checked:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-checked:shadow-sm"
   >
     <Icon name="moon" class="size-4" />
     <span>Dark</span>
@@ -44,15 +48,27 @@ const { class: className } = Astro.props;
   }
 
   /* Active theme icon color - yellow/gold for visibility */
-  .theme-toggle-button[aria-selected='true'] :global(svg) {
+  .theme-toggle-button[aria-checked='true'] :global(svg) {
     color: oklch(0.8 0.18 90);
   }
 
-  /* Forced colors mode support - use outline for selected state visibility */
+  /* Focus style - inset ring to avoid overlapping with container border */
+  .theme-toggle-button:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--foreground);
+  }
+
+  /* Forced colors mode support */
   @media (forced-colors: active) {
-    .theme-toggle-button[aria-selected='true'] {
+    .theme-toggle-button[aria-checked='true'] {
       outline: 2px solid SelectedItem;
       outline-offset: -2px;
+    }
+
+    .theme-toggle-button:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+      box-shadow: none;
     }
   }
 </style>
@@ -61,23 +77,26 @@ const { class: className } = Astro.props;
   if (!window.__themeHandlersInitialized) {
     window.__themeHandlersInitialized = true;
 
+    /**
+     * Update theme button states and roving tabindex
+     * @param {string} theme - 'light' or 'dark'
+     */
     function updateThemeButtons(theme) {
-      document.querySelectorAll('.theme-toggle-button').forEach((btn) => {
-        const isSelected = btn.getAttribute('data-theme-value') === theme;
-        btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      document.querySelectorAll('[role="radiogroup"][aria-label="Theme"]').forEach((group) => {
+        const buttons = group.querySelectorAll('.theme-toggle-button');
+        buttons.forEach((btn) => {
+          const isChecked = btn.getAttribute('data-theme-value') === theme;
+          btn.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          btn.setAttribute('tabindex', isChecked ? '0' : '-1');
+        });
       });
     }
 
-    // Initialize button states based on current theme
-    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    updateThemeButtons(currentTheme);
-
-    // Use event delegation for dynamically added buttons (e.g., in mobile menu)
-    document.addEventListener('click', (e) => {
-      const button = e.target.closest('.theme-toggle-button');
-      if (!button) return;
-
-      const newTheme = button.getAttribute('data-theme-value');
+    /**
+     * Apply theme to the document
+     * @param {string} newTheme - 'light' or 'dark'
+     */
+    function applyTheme(newTheme) {
       const element = document.documentElement;
 
       element.classList.add('no-transitions');
@@ -95,6 +114,73 @@ const { class: className } = Astro.props;
       requestAnimationFrame(() => {
         element.classList.remove('no-transitions');
       });
+    }
+
+    /**
+     * Select a radio button and apply theme
+     * @param {HTMLElement} button - The button to select
+     */
+    function selectRadio(button) {
+      const newTheme = button.getAttribute('data-theme-value');
+      applyTheme(newTheme);
+      button.focus();
+    }
+
+    /**
+     * Get sibling radio buttons in the same radiogroup
+     * @param {HTMLElement} button - Current button
+     * @returns {HTMLElement[]} Array of radio buttons
+     */
+    function getRadioButtons(button) {
+      const group = button.closest('[role="radiogroup"]');
+      if (!group) return [button];
+      return Array.from(group.querySelectorAll('.theme-toggle-button'));
+    }
+
+    /**
+     * Move focus and selection to adjacent radio
+     * @param {HTMLElement} currentButton - Currently focused button
+     * @param {number} direction - 1 for next, -1 for previous
+     */
+    function moveToRadio(currentButton, direction) {
+      const buttons = getRadioButtons(currentButton);
+      const currentIndex = buttons.indexOf(currentButton);
+      const nextIndex = (currentIndex + direction + buttons.length) % buttons.length;
+      selectRadio(buttons[nextIndex]);
+    }
+
+    // Initialize button states based on current theme
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    updateThemeButtons(currentTheme);
+
+    // Click handler - event delegation
+    document.addEventListener('click', (e) => {
+      const button = e.target.closest('.theme-toggle-button');
+      if (!button) return;
+      selectRadio(button);
+    });
+
+    // Keyboard handler - event delegation for radiogroup pattern
+    document.addEventListener('keydown', (e) => {
+      const button = e.target.closest('.theme-toggle-button');
+      if (!button) return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          moveToRadio(button, 1);
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          moveToRadio(button, -1);
+          break;
+        case ' ':
+          e.preventDefault();
+          selectRadio(button);
+          break;
+      }
     });
 
     // Update button states when sheet opens (MutationObserver for dynamic content)
