@@ -1,7 +1,7 @@
 # サイト仕様書
 
 > APG Patterns Examples - Astro リビルド
-> 最終更新: 2025-12-26
+> 最終更新: 2026-01-16
 
 ## 概要
 
@@ -502,7 +502,7 @@ function getFramework(): Framework {
 - [x] React / Vue / Svelte / Astro 統合設定
 - [x] Tailwind + shadcn/ui 設定
 - [x] 基本レイアウト作成
-- [ ] i18n 設定
+- [x] i18n 設定
 - [x] ダークモード実装
 
 ### Phase 2: コア機能 ✅ 完了
@@ -514,17 +514,22 @@ function getFramework(): Framework {
 
 ### Phase 3: コンテンツ移行 ✅ 完了
 
-- [x] ToggleButton パターン移行（React / Vue / Svelte / Astro）
-- [x] Tabs パターン移行（React / Vue / Svelte / Astro）
+全 29 パターン実装完了（React / Vue / Svelte / Astro）:
 
-### Phase 4: サイト完成
+- Toggle Button, Tabs, Accordion, Dialog, Menu Button, Disclosure, Alert
+- Checkbox, Radio Group, Switch, Listbox, Combobox, Tooltip, Breadcrumb, Link
+- Toolbar, Menubar, Grid, Slider, Spinbutton, Meter, Alert Dialog
+- Carousel, Table, Tree View, Treegrid, Feed, Window Splitter, Landmarks
+
+### Phase 4: サイト完成 ✅ 完了
 
 - [x] トップページ
-- [ ] ガイドページ
-- [ ] About ページ
-- [ ] テスト整備
-- [ ] GitHub Actions 設定
-- [ ] 動作確認・デプロイ
+- [x] ガイドページ
+- [x] About ページ
+- [x] テスト整備（Vitest + Playwright）
+- [x] GitHub Actions 設定
+- [x] 動作確認・デプロイ
+- [ ] Pagefind 検索設定
 
 ---
 
