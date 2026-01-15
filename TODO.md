@@ -1,13 +1,13 @@
 # TODO - APG Patterns Examples
 
-> 最終更新: 2026-01-13
+> 最終更新: 2026-01-16
 
 ## 現状
 
-**Astro 移行完了・全パターン実装完了**
+**Astro 移行完了・全パターン実装完了・全 E2E テスト完了**
 
 Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの移行が完了。
-28 パターン全て実装済み。
+29 パターン全て実装済み、E2E テスト完了。
 
 仕様詳細: [.internal/site-specification.md](.internal/site-specification.md)
 
@@ -27,18 +27,18 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 
 ### E2E テスト
 
-25/28 パターン完了（89%）
+29/29 パターン完了（100%）
 
 - [x] Accordion
-- [ ] Dialog
-- [ ] Menu Button
+- [x] Dialog
+- [x] Menu Button
 - [x] Radio Group
 - [x] Slider
-- [ ] Spinbutton
+- [x] Spinbutton
 - [x] Tabs
 - [x] Toolbar
 - [x] Tooltip
-- [ ] Tree View
+- [x] Tree View
 
 ---
 
@@ -51,8 +51,8 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | Toggle Button  | ✅ 完了 | ✅  | 低     |
 | Tabs           | ✅ 完了 | ✅  | 中     |
 | Accordion      | ✅ 完了 | ✅  | 中     |
-| Dialog (Modal) | ✅ 完了 | -   | 高     |
-| Menu Button    | ✅ 完了 | -   | 中     |
+| Dialog (Modal) | ✅ 完了 | ✅  | 高     |
+| Menu Button    | ✅ 完了 | ✅  | 中     |
 | Disclosure     | ✅ 完了 | ✅  | 低     |
 | Alert          | ✅ 完了 | ✅  | 低     |
 
@@ -77,12 +77,12 @@ Docusaurus + 3 Storybook 構成から Astro Islands アーキテクチャへの�
 | Menubar         | ✅ 完了 | ✅  | 高     |
 | Grid            | ✅ 完了 | ✅  | 高     |
 | Slider          | ✅ 完了 | ✅  | 中     |
-| Spinbutton      | ✅ 完了 | -   | 中     |
+| Spinbutton      | ✅ 完了 | ✅  | 中     |
 | Meter           | ✅ 完了 | ✅  | 低     |
 | Alert Dialog    | ✅ 完了 | ✅  | 中     |
 | Carousel        | ✅ 完了 | ✅  | 高     |
 | Table           | ✅ 完了 | ✅  | 中     |
-| Tree View       | ✅ 完了 | -   | 高     |
+| Tree View       | ✅ 完了 | ✅  | 高     |
 | Treegrid        | ✅ 完了 | ✅  | 高     |
 | Feed            | ✅ 完了 | ✅  | 中     |
 | Window Splitter | ✅ 完了 | ✅  | 中     |
