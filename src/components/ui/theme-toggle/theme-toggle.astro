@@ -7,16 +7,54 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
+
+const containerStyles = cn(
+  // Layout
+  'inline-flex h-8 items-center',
+  // Border
+  'rounded-md border border-input',
+  // Background
+  'bg-muted p-0.5'
+);
+
+const buttonStyles = cn(
+  // Identifier
+  'theme-toggle-button',
+  'group',
+  // Layout
+  'inline-flex items-center gap-1.5',
+  'rounded-sm py-1 pr-3 pl-2',
+  // Typography
+  'text-sm font-medium',
+  // Default state
+  'text-muted-foreground',
+  // Transitions
+  'transition-colors',
+  // Checked state
+  'aria-checked:bg-background',
+  'aria-checked:shadow-sm',
+  // Focus state
+  'focus-visible:outline-none',
+  'focus-visible:ring-inset',
+  'focus-visible:ring-2',
+  'focus-visible:ring-foreground',
+  // Forced colors: checked state
+  'forced-colors:aria-checked:outline-2',
+  'forced-colors:aria-checked:outline-[SelectedItem]',
+  'forced-colors:aria-checked:-outline-offset-2',
+  // Forced colors: focus state
+  'forced-colors:focus-visible:outline-2',
+  'forced-colors:focus-visible:outline-[Highlight]',
+  'forced-colors:focus-visible:-outline-offset-2',
+  'forced-colors:focus-visible:ring-0'
+);
 ---
 
 <div
   data-slot="theme-toggle"
   role="radiogroup"
   aria-label="Theme"
-  class={cn(
-    'inline-flex h-8 items-center rounded-md border border-input bg-muted p-0.5',
-    className
-  )}
+  class={cn(containerStyles, className)}
 >
   <button
     type="button"
@@ -24,9 +62,9 @@ const { class: className } = Astro.props;
     data-theme-value="light"
     aria-checked="true"
     tabindex="0"
-    class="theme-toggle-button aria-checked:bg-background aria-checked:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-checked:shadow-sm"
+    class={buttonStyles}
   >
-    <Icon name="sun" class="size-4" />
+    <Icon name="sun" class="size-4 group-aria-checked:[color:oklch(0.8_0.18_90)]" />
     <span>Light</span>
   </button>
   <button
@@ -35,43 +73,12 @@ const { class: className } = Astro.props;
     data-theme-value="dark"
     aria-checked="false"
     tabindex="-1"
-    class="theme-toggle-button aria-checked:bg-background aria-checked:text-foreground text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-sm font-medium transition-colors aria-checked:shadow-sm"
+    class={buttonStyles}
   >
-    <Icon name="moon" class="size-4" />
+    <Icon name="moon" class="size-4 group-aria-checked:[color:oklch(0.8_0.18_90)]" />
     <span>Dark</span>
   </button>
 </div>
-
-<style>
-  :global(html.no-transitions *) {
-    @apply !transition-none !duration-0;
-  }
-
-  /* Active theme icon color - yellow/gold for visibility */
-  .theme-toggle-button[aria-checked='true'] :global(svg) {
-    color: oklch(0.8 0.18 90);
-  }
-
-  /* Focus style - inset ring to avoid overlapping with container border */
-  .theme-toggle-button:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 2px var(--foreground);
-  }
-
-  /* Forced colors mode support */
-  @media (forced-colors: active) {
-    .theme-toggle-button[aria-checked='true'] {
-      outline: 2px solid SelectedItem;
-      outline-offset: -2px;
-    }
-
-    .theme-toggle-button:focus-visible {
-      outline: 2px solid Highlight;
-      outline-offset: -2px;
-      box-shadow: none;
-    }
-  }
-</style>
 
 <script is:inline>
   if (!window.__themeHandlersInitialized) {
