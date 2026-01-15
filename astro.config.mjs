@@ -78,8 +78,39 @@ export default defineConfig({
     mdx(),
   ],
 
+  // Optimize Shiki by limiting languages to only those used in the project
+  markdown: {
+    shikiConfig: {
+      langs: [
+        'javascript',
+        'typescript',
+        'jsx',
+        'tsx',
+        'vue',
+        'svelte',
+        'astro',
+        'html',
+        'css',
+        'bash',
+        'json',
+      ],
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          // Split framework vendor chunks for better caching and build performance
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'vue-vendor': ['vue'],
+            'svelte-vendor': ['svelte'],
+          },
+        },
+      },
+    },
   },
 
   i18n: {

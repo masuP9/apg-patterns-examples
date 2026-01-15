@@ -32,6 +32,16 @@ jobs:
       - name: Install dependencies
         run: npm ci --prefer-offline
 
+      - name: Cache Astro build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .astro
+            node_modules/.vite
+          key: astro-${{ runner.os }}-${{ hashFiles('src/**', 'astro.config.mjs') }}
+          restore-keys: |
+            astro-${{ runner.os }}-
+
       - name: Build site
         run: npm run build
         env:
