@@ -130,6 +130,22 @@ jobs:
       - name: Run ${{ matrix.framework }} unit tests
         run: ${{ matrix.script }}
 
+  # Summary job for branch protection rules
+  test:
+    runs-on: ubuntu-latest
+    needs: test-unit
+    if: always()
+    steps:
+      - name: Check unit test results
+        run: |
+          if [[ "${{ needs.test-unit.result }}" == "success" ]]; then
+            echo "All unit tests passed!"
+            exit 0
+          else
+            echo "Unit tests failed: ${{ needs.test-unit.result }}"
+            exit 1
+          fi
+
   # Setup Playwright browsers once, cache for E2E jobs
   setup-playwright:
     runs-on: ubuntu-latest
@@ -226,7 +242,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build, format, lint, test-unit, test-e2e]
+    needs: [build, format, lint, test, test-e2e]
     if: github.ref == 'refs/heads/main'
     # Elevated permissions only for deploy job
     permissions:
