@@ -78,25 +78,6 @@ export default defineConfig({
     mdx(),
   ],
 
-  // Optimize Shiki by limiting languages to only those used in the project
-  markdown: {
-    shikiConfig: {
-      langs: [
-        'javascript',
-        'typescript',
-        'jsx',
-        'tsx',
-        'vue',
-        'svelte',
-        'astro',
-        'html',
-        'css',
-        'bash',
-        'json',
-      ],
-    },
-  },
-
   vite: {
     plugins: [tailwindcss()],
     build: {
