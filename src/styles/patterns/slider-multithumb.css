@@ -1,0 +1,350 @@
+/* =============================================================================
+   MULTI-THUMB SLIDER COMPONENT STYLES
+   ============================================================================= */
+
+/* Web Components wrapper (Astro) */
+apg-slider-multithumb {
+  display: contents;
+}
+
+/* Multi-Thumb Slider Base */
+.apg-slider-multithumb {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Vertical Multi-Thumb Slider */
+.apg-slider-multithumb--vertical {
+  flex-direction: column;
+  width: auto;
+  height: 12rem;
+}
+
+/* Multi-Thumb Slider Label */
+.apg-slider-multithumb-label {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Multi-Thumb Slider Track (background) */
+.apg-slider-multithumb-track {
+  --slider-lower: 0%;
+  --slider-upper: 100%;
+  position: relative;
+  height: 0.5rem;
+  min-width: 8rem;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--primary) 25%, var(--background));
+  cursor: pointer;
+  touch-action: none;
+}
+
+.apg-slider-multithumb--vertical .apg-slider-multithumb-track {
+  width: 0.5rem;
+  height: 100%;
+  min-width: auto;
+  min-height: 8rem;
+}
+
+/* Range Indicator (filled area between thumbs) */
+.apg-slider-multithumb-range {
+  position: absolute;
+  left: var(--slider-lower);
+  width: calc(var(--slider-upper) - var(--slider-lower));
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--primary);
+  pointer-events: none;
+}
+
+.apg-slider-multithumb--vertical .apg-slider-multithumb-range {
+  left: 0;
+  bottom: var(--slider-lower);
+  width: 100%;
+  height: calc(var(--slider-upper) - var(--slider-lower));
+}
+
+/* Multi-Thumb Slider Thumb (draggable handle) */
+.apg-slider-multithumb-thumb {
+  position: absolute;
+  top: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  background: var(--background);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+  transition:
+    box-shadow 0.15s ease-out,
+    border-color 0.15s ease-out;
+  z-index: 1;
+}
+
+.apg-slider-multithumb--vertical .apg-slider-multithumb-thumb {
+  top: auto;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+/* Lower Thumb specific positioning */
+.apg-slider-multithumb-thumb--lower {
+  z-index: 2;
+}
+
+/* Upper Thumb specific positioning */
+.apg-slider-multithumb-thumb--upper {
+  z-index: 2;
+}
+
+/* Active thumb gets higher z-index */
+.apg-slider-multithumb-thumb:focus {
+  z-index: 3;
+}
+
+/* Thumb Hover State */
+.apg-slider-multithumb-thumb:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--primary) 20%, transparent);
+}
+
+/* Thumb Focus State */
+.apg-slider-multithumb-thumb:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Thumb Active State (dragging) */
+.apg-slider-multithumb-thumb:active {
+  cursor: grabbing;
+}
+
+/* =============================================================================
+   THUMB TOOLTIP
+   ============================================================================= */
+
+/* Tooltip container */
+.apg-slider-multithumb-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border-radius: 0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease-out,
+    visibility 0.15s ease-out;
+  pointer-events: none;
+}
+
+/* Tooltip arrow */
+.apg-slider-multithumb-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--primary);
+}
+
+/* Show tooltip on hover, focus, or active (dragging) */
+.apg-slider-multithumb-thumb:hover .apg-slider-multithumb-tooltip,
+.apg-slider-multithumb-thumb:focus .apg-slider-multithumb-tooltip,
+.apg-slider-multithumb-thumb:focus-visible .apg-slider-multithumb-tooltip,
+.apg-slider-multithumb-thumb:active .apg-slider-multithumb-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Vertical orientation - tooltip on the right */
+.apg-slider-multithumb--vertical .apg-slider-multithumb-tooltip {
+  bottom: auto;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-bottom: 0;
+  margin-left: 0.5rem;
+}
+
+.apg-slider-multithumb--vertical .apg-slider-multithumb-tooltip::after {
+  top: 50%;
+  left: auto;
+  right: 100%;
+  transform: translateY(-50%);
+  border: 4px solid transparent;
+  border-right-color: var(--primary);
+  border-top-color: transparent;
+}
+
+/* Multi-Thumb Slider Value Display */
+.apg-slider-multithumb-values {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+
+.apg-slider-multithumb-value {
+  min-width: 2rem;
+  text-align: center;
+}
+
+.apg-slider-multithumb-value--lower {
+  text-align: right;
+}
+
+.apg-slider-multithumb-value--upper {
+  text-align: left;
+}
+
+.apg-slider-multithumb-value-separator {
+  color: var(--muted-foreground);
+}
+
+.apg-slider-multithumb--vertical .apg-slider-multithumb-values {
+  flex-direction: column-reverse;
+}
+
+/* =============================================================================
+   DISABLED STATE
+   ============================================================================= */
+
+.apg-slider-multithumb--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.apg-slider-multithumb--disabled .apg-slider-multithumb-track {
+  cursor: not-allowed;
+}
+
+.apg-slider-multithumb--disabled .apg-slider-multithumb-thumb {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Maintain readable contrast for disabled value display */
+.apg-slider-multithumb--disabled .apg-slider-multithumb-values {
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+/* =============================================================================
+   DARK MODE
+   ============================================================================= */
+
+/* Dark mode - lighter track for better visibility */
+.dark .apg-slider-multithumb-track {
+  background: color-mix(in oklch, var(--primary) 40%, var(--background));
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .apg-slider-multithumb-track {
+    border: 2px solid var(--foreground);
+  }
+
+  .apg-slider-multithumb-range {
+    background: var(--foreground);
+  }
+
+  .apg-slider-multithumb-thumb {
+    border-width: 3px;
+    border-color: var(--foreground);
+  }
+
+  .apg-slider-multithumb-label,
+  .apg-slider-multithumb-values {
+    font-weight: 700;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .apg-slider-multithumb-thumb {
+    transition: none;
+  }
+
+  .apg-slider-multithumb-tooltip {
+    transition: none;
+  }
+}
+
+/* Windows High Contrast Mode (Forced Colors) */
+@media (forced-colors: active) {
+  .apg-slider-multithumb-track {
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-multithumb-range {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-multithumb-thumb {
+    border-color: ButtonText;
+    background: ButtonFace;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-multithumb-thumb:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .apg-slider-multithumb-label {
+    color: ButtonText;
+  }
+
+  .apg-slider-multithumb-values {
+    color: ButtonText;
+  }
+
+  .apg-slider-multithumb--disabled .apg-slider-multithumb-track {
+    border-color: GrayText;
+  }
+
+  .apg-slider-multithumb--disabled .apg-slider-multithumb-range {
+    background: GrayText;
+  }
+
+  .apg-slider-multithumb--disabled .apg-slider-multithumb-thumb {
+    border-color: GrayText;
+  }
+
+  .apg-slider-multithumb-tooltip {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  .apg-slider-multithumb-tooltip::after {
+    border-top-color: Highlight;
+  }
+
+  .apg-slider-multithumb--vertical .apg-slider-multithumb-tooltip::after {
+    border-right-color: Highlight;
+    border-top-color: transparent;
+  }
+}

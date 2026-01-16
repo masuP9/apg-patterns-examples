@@ -133,6 +133,7 @@ export function TreeGrid({
   // Computed values - Flatten tree
   // ==========================================================================
 
+  /* eslint-disable react-hooks/immutability -- Recursive function requires self-reference */
   const flattenTree = useCallback(
     (
       treeNodes: TreeGridNodeData[],
@@ -151,6 +152,7 @@ export function TreeGrid({
     },
     []
   );
+  /* eslint-enable react-hooks/immutability */
 
   const allRows = useMemo(() => flattenTree(nodes), [nodes, flattenTree]);
 

@@ -14,6 +14,7 @@
 @import './patterns/link.css';
 @import './patterns/meter.css';
 @import './patterns/slider.css';
+@import './patterns/slider-multithumb.css';
 @import './patterns/spinbutton.css';
 @import './patterns/combobox.css';
 @import './patterns/tree-view.css';

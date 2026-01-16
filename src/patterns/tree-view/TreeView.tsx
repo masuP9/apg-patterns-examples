@@ -65,6 +65,7 @@ export function TreeView({
   const instanceId = useId();
 
   // Flatten tree for easier navigation
+  /* eslint-disable react-hooks/immutability -- Recursive function requires self-reference */
   const flattenTree = useCallback(
     (treeNodes: TreeNode[], depth: number = 0, parentId: string | null = null): FlatNode[] => {
       const result: FlatNode[] = [];
@@ -79,6 +80,7 @@ export function TreeView({
     },
     []
   );
+  /* eslint-enable react-hooks/immutability */
 
   const allNodes = useMemo(() => flattenTree(nodes), [nodes, flattenTree]);
   const nodeMap = useMemo(() => {
@@ -636,6 +638,7 @@ export function TreeView({
   );
 
   // Render a node and its children recursively
+  /* eslint-disable react-hooks/immutability -- Recursive function requires self-reference */
   const renderNode = useCallback(
     (node: TreeNode, depth: number = 0): React.ReactNode => {
       const hasChildren = Boolean(node.children && node.children.length > 0);
@@ -709,6 +712,7 @@ export function TreeView({
     },
     [expandedIds, selectedIds, focusedId, visibleIndexMap, handleNodeClick, instanceId]
   );
+  /* eslint-enable react-hooks/immutability */
 
   const containerClass = `apg-treeview ${className}`.trim();
 

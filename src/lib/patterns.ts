@@ -200,6 +200,15 @@ export const PATTERNS: Pattern[] = [
     status: 'available',
   },
   {
+    id: 'slider-multithumb',
+    name: 'Slider (Multi-Thumb)',
+    description:
+      'A slider with two thumbs that allows users to select a range of values within a given range.',
+    icon: '↔️',
+    complexity: 'High',
+    status: 'available',
+  },
+  {
     id: 'spinbutton',
     name: 'Spinbutton',
     description:

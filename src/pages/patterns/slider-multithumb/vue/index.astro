@@ -1,0 +1,305 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import MultiThumbSlider from '@patterns/slider-multithumb/MultiThumbSlider.vue';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/slider-multithumb/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/slider-multithumb/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/slider-multithumb/MultiThumbSlider.vue?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Slider (Multi-Thumb) - Vue"
+  pattern="slider-multithumb"
+  framework="vue"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Slider (Multi-Thumb)</h1>
+    <p class="text-muted-foreground text-lg">
+      A slider with two thumbs that allows users to select a range of values within a given range.
+    </p>
+    <AiGuideBadge pattern="slider-multithumb" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="slider-multithumb" currentFramework="vue" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-8">
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[20, 80]}
+            label="Price Range"
+            format={'${value}'}
+            ariaLabel={['Minimum Price', 'Maximum Price']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[25, 75]}
+            label="Temperature Range"
+            format={'{value}°C'}
+            ariaLabel={['Minimum Temperature', 'Maximum Temperature']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[30, 70]}
+            min={0}
+            max={100}
+            step={5}
+            minDistance={10}
+            label="Budget Range (with minDistance)"
+            format={'${value}'}
+            ariaLabel={['Minimum Budget', 'Maximum Budget']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[40, 60]}
+            label="Disabled"
+            disabled
+            format={'{value}%'}
+            ariaLabel={['Lower Value', 'Upper Value']}
+          />
+        </div>
+      </div>
+    </div>
+    <p class="text-muted-foreground mt-4 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="vue"
+      title="MultiThumbSlider.vue"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script setup>
+import MultiThumbSlider from './MultiThumbSlider.vue';
+
+function handleValueChange(values, activeIndex) {
+  console.log('Changed:', values, 'Active thumb:', activeIndex);
+}
+
+function handleValueCommit(values) {
+  console.log('Committed:', values);
+}
+</script>
+
+<template>
+  <!-- Basic usage with visible label and ariaLabel tuple -->
+  <MultiThumbSlider
+    :default-value="[20, 80]"
+    label="Price Range"
+    :aria-label="['Minimum Price', 'Maximum Price']"
+  />
+
+  <!-- With format for display and aria-valuetext -->
+  <MultiThumbSlider
+    :default-value="[25, 75]"
+    label="Temperature"
+    format="{value}°C"
+    :aria-label="['Min Temp', 'Max Temp']"
+  />
+
+  <!-- With minDistance to prevent thumbs from getting too close -->
+  <MultiThumbSlider
+    :default-value="[30, 70]"
+    :min-distance="10"
+    label="Budget"
+    format="\${value}"
+    :aria-label="['Min Budget', 'Max Budget']"
+  />
+
+  <!-- With events -->
+  <MultiThumbSlider
+    :default-value="[20, 80]"
+    label="Range"
+    :aria-label="['Lower', 'Upper']"
+    @value-change="handleValueChange"
+    @value-commit="handleValueCommit"
+  />
+</template>`}
+      lang="vue"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[number, number]</td>
+            <td class="text-muted-foreground py-2 pr-4">[min, max]</td>
+            <td class="py-2">Initial values for the two thumbs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">Minimum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">100</td>
+            <td class="py-2">Maximum value</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">Step increment</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>minDistance</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">Minimum distance between thumbs</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the slider is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Visible label for the slider group</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Format pattern for display</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[string, string]</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Accessible labels for each thumb</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>ariaLabelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[string, string]</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">IDs of external label elements</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Payload</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>value-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(values, activeIndex)</td>
+            <td class="py-2">Emitted when any value changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>value-commit</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(values)</td>
+            <td class="py-2">Emitted when interaction ends</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider (Multi-Thumb) Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider Pattern
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="slider-multithumb" />
+    </ul>
+  </section>
+</PatternLayout>

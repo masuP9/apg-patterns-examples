@@ -1,0 +1,67 @@
+---
+/**
+ * Demo-only Page: Multi-Thumb Slider (Astro)
+ *
+ * This page renders the MultiThumbSlider component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import MultiThumbSlider from '@patterns/slider-multithumb/MultiThumbSlider.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Multi-Thumb Slider (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col gap-8">
+      <!-- Basic multi-thumb slider with label -->
+      <div data-testid="basic-slider">
+        <MultiThumbSlider
+          defaultValue={[20, 80]}
+          label="Price Range"
+          format={'${value}'}
+          aria-label-lower="Minimum Price"
+          aria-label-upper="Maximum Price"
+        />
+      </div>
+
+      <!-- Disabled slider -->
+      <div data-testid="disabled-slider">
+        <MultiThumbSlider
+          defaultValue={[30, 70]}
+          label="Disabled Range"
+          disabled={true}
+          aria-label-lower="Disabled Min"
+          aria-label-upper="Disabled Max"
+        />
+      </div>
+
+      <!-- Vertical slider -->
+      <div data-testid="vertical-slider" class="h-48">
+        <MultiThumbSlider
+          defaultValue={[25, 75]}
+          label="Vertical Range"
+          orientation="vertical"
+          aria-label-lower="Vertical Min"
+          aria-label-upper="Vertical Max"
+        />
+      </div>
+
+      <!-- Slider with minDistance -->
+      <div data-testid="min-distance-slider">
+        <MultiThumbSlider
+          defaultValue={[40, 60]}
+          label="Min Distance Range"
+          minDistance={10}
+          aria-label-lower="Distance Min"
+          aria-label-upper="Distance Max"
+        />
+      </div>
+    </div>
+  </body>
+</html>
