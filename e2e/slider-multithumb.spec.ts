@@ -17,12 +17,16 @@ const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 // Helper Functions
 // ============================================
 
+const getBasicSliderContainer = (page: import('@playwright/test').Page) => {
+  return page.getByTestId('basic-slider');
+};
+
 const getSliders = (page: import('@playwright/test').Page) => {
-  return page.getByRole('slider');
+  return getBasicSliderContainer(page).getByRole('slider');
 };
 
 const getSliderByLabel = (page: import('@playwright/test').Page, label: string) => {
-  return page.getByRole('slider', { name: label });
+  return getBasicSliderContainer(page).getByRole('slider', { name: label });
 };
 
 // ============================================

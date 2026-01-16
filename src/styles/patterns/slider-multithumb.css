@@ -238,6 +238,12 @@ apg-slider-multithumb {
   pointer-events: none;
 }
 
+/* Maintain readable contrast for disabled value display */
+.apg-slider-multithumb--disabled .apg-slider-multithumb-values {
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
 /* =============================================================================
    DARK MODE
    ============================================================================= */
