@@ -123,7 +123,7 @@ export function FeedDemo() {
           </div>
         )}
         {!hasMore && (
-          <div className="apg-feed-end-message">You've reached the end of the feed.</div>
+          <div className="apg-feed-end-message">You&apos;ve reached the end of the feed.</div>
         )}
       </div>
       <button

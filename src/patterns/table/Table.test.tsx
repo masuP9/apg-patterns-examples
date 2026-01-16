@@ -408,7 +408,15 @@ describe('Table', () => {
       const rowsWithNodes: TableRow[] = [
         {
           id: '1',
-          cells: [<a href="/alice">Alice</a>, '30', <span className="highlight">Tokyo</span>],
+          cells: [
+            <a key="name" href="/alice">
+              Alice
+            </a>,
+            '30',
+            <span key="city" className="highlight">
+              Tokyo
+            </span>,
+          ],
         },
       ];
       render(<Table columns={basicColumns} rows={rowsWithNodes} aria-label="Users" />);
