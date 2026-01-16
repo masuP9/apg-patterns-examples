@@ -80,6 +80,18 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          // Split framework vendor chunks for better caching and build performance
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'vue-vendor': ['vue'],
+            'svelte-vendor': ['svelte'],
+          },
+        },
+      },
+    },
   },
 
   i18n: {
