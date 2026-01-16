@@ -362,10 +362,8 @@ for (const framework of frameworks) {
     // ------------------------------------------
     test.describe('Accessibility', () => {
       test('has no axe-core violations', async ({ page }) => {
-        const container = getBasicSliderContainer(page);
-        const containerElement = await container.elementHandle();
         const results = await new AxeBuilder({ page })
-          .include(containerElement!)
+          .include('[data-testid="basic-slider"]')
           .exclude('[aria-hidden="true"]')
           .analyze();
 
