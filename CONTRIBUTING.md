@@ -91,8 +91,14 @@ git checkout -b feature/your-feature-name
 2. Test your changes thoroughly
 3. Run linting and formatting:
    ```bash
-   npm run lint
+   npm run lint     # Runs all checks in parallel (ESLint, TypeScript, Astro)
    npm run format
+   ```
+   For faster iteration, you can run individual checks:
+   ```bash
+   npm run lint:eslint  # ESLint only
+   npm run lint:types   # TypeScript type check only
+   npm run lint:astro   # Astro check only
    ```
 4. Ensure all tests pass:
    ```bash
