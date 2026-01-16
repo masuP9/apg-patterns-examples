@@ -1,0 +1,338 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ロール</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">ロール</th>
+          <th class="py-2 pr-4 text-left">要素</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>slider</code></td>
+          <td class="py-2 pr-4">下側のつまみ要素</td>
+          <td class="py-2">範囲の下限を選択するスライダーとして要素を識別します。</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>slider</code></td>
+          <td class="py-2 pr-4">上側のつまみ要素</td>
+          <td class="py-2">範囲の上限を選択するスライダーとして要素を識別します。</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>group</code></td>
+          <td class="py-2 pr-4">コンテナ要素</td>
+          <td class="py-2">2つのスライダーをグループ化し、共通のラベルと関連付けます。</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    各つまみは独自のARIA属性を持つ独立した <code>slider</code> 要素です。<code>group</code>
+    ロールは2つのスライダー間の意味的な関係を確立します。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA ステートとプロパティ</h3>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuenow</code>（必須）</h4>
+    <p class="text-muted-foreground mb-3">
+      各つまみの現在の数値を示します。ユーザーが値を変更すると動的に更新されます。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">Number</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">はい</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">範囲</td>
+            <td class="py-2">
+              <code>aria-valuemin</code> と <code>aria-valuemax</code> の間である必要があります
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium">
+      <code>aria-valuemin</code> / <code>aria-valuemax</code>（必須）
+    </h4>
+    <p class="text-muted-foreground mb-3">
+      <strong>動的な境界値:</strong>
+      APG仕様に従い、一方のスライダーの範囲が他方の値に依存する場合、これらの属性は動的に更新される必要があります：
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">つまみ</th>
+            <th class="py-2 pr-4 text-left">aria-valuemin</th>
+            <th class="py-2 text-left">aria-valuemax</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">下側のつまみ</td>
+            <td class="py-2 pr-4">静的（絶対最小値）</td>
+            <td class="py-2">動的（上側の値 - minDistance）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">上側のつまみ</td>
+            <td class="py-2 pr-4">動的（下側の値 + minDistance）</td>
+            <td class="py-2">静的（絶対最大値）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mb-3 text-sm">
+      このアプローチにより、支援技術ユーザーに各つまみの実際の許容範囲を正確に伝え、<kbd>Home</kbd>
+      キーと <kbd>End</kbd> キーの動作をより予測しやすくします。
+    </p>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
+    <p class="text-muted-foreground mb-3">
+      現在の値の人間が読めるテキスト代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">String</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">いいえ（値にコンテキストが必要な場合は推奨）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">例</td>
+            <td class="py-2">"$20"、"$80"、"20% - 80%"</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-orientation</code></h4>
+    <p class="text-muted-foreground mb-3">
+      スライダーの向きを指定します。垂直スライダーの場合のみ"vertical"に設定し、水平（デフォルト）の場合は省略します。
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">"horizontal" | "vertical"</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">いいえ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">デフォルト</td>
+            <td class="py-2">horizontal（暗黙的）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
+    <p class="text-muted-foreground mb-3">スライダーが無効で操作できないことを示します。</p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">型</td>
+            <td class="py-2">Boolean</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">必須</td>
+            <td class="py-2">いいえ</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">キーボードサポート</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">キー</th>
+          <th class="py-2 text-left">アクション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Tab</kbd></td>
+          <td class="py-2">つまみ間でフォーカスを移動します（下側 → 上側）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Shift + Tab</kbd></td>
+          <td class="py-2">つまみ間でフォーカスを移動します（上側 → 下側）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Right Arrow</kbd></td>
+          <td class="py-2">値を1ステップ増加させます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Up Arrow</kbd></td>
+          <td class="py-2">値を1ステップ増加させます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Left Arrow</kbd></td>
+          <td class="py-2">値を1ステップ減少させます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Down Arrow</kbd></td>
+          <td class="py-2">値を1ステップ減少させます</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Home</kbd></td>
+          <td class="py-2">つまみを許容最小値に設定します（上側のつまみでは動的）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>End</kbd></td>
+          <td class="py-2">つまみを許容最大値に設定します（下側のつまみでは動的）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Page Up</kbd></td>
+          <td class="py-2">値を大きなステップで増加させます（デフォルト: step × 10）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><kbd>Page Down</kbd></td>
+          <td class="py-2">値を大きなステップで減少させます（デフォルト: step × 10）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">衝突防止</h3>
+  <p class="text-muted-foreground mb-3">
+    マルチサムスライダーは、つまみが互いに交差しないようにします：
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>下側のつまみ</strong> - （上側の値 - minDistance）を超えることはできません
+    </li>
+    <li>
+      <strong>上側のつまみ</strong> - （下側の値 + minDistance）を下回ることはできません
+    </li>
+    <li>
+      <strong>minDistance</strong> - つまみ間の設定可能な最小間隔（デフォルト: 0）
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">アクセシブルな名前付け</h3>
+  <p class="text-muted-foreground mb-3">
+    マルチサムスライダーでは、2つのつまみを区別するために慎重なラベル付けが必要です。この実装はいくつかのアプローチをサポートしています：
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>可視グループラベル</strong> - <code>label</code>
+      プロパティを使用してスライダーグループの可視ラベルを表示
+    </li>
+    <li>
+      <code>aria-label</code>（タプル） - 各つまみに個別のラベルを提供（例：["最低価格",
+      "最高価格"]）
+    </li>
+    <li>
+      <code>aria-labelledby</code>（タプル） - 各つまみのラベルとして外部要素を参照
+    </li>
+    <li>
+      <code>getAriaLabel</code> 関数 - つまみのインデックスに基づく動的なラベル生成
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">フォーカス管理</h3>
+  <p class="text-muted-foreground mb-3">この実装のフォーカス動作：</p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>タブ順序</strong> - 両方のつまみがタブ順序に含まれます（tabindex="0"）
+    </li>
+    <li>
+      <strong>固定順序</strong> - 値に関係なく、下側のつまみが常にタブ順序で最初に来ます
+    </li>
+    <li>
+      <strong>トラッククリック</strong> - トラックをクリックすると最も近いつまみが移動し、フォーカスされます
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">ポインター操作</h3>
+  <p class="text-muted-foreground mb-3">この実装はマウスとタッチ操作をサポートしています：</p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>トラッククリック</strong> - クリックした位置に最も近いつまみを移動
+    </li>
+    <li>
+      <strong>つまみドラッグ</strong> - ドラッグ中に連続的な調整が可能
+    </li>
+    <li>
+      <strong>ポインターキャプチャ</strong> - ポインターがスライダーの外に移動しても操作を維持
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">視覚デザイン</h3>
+  <p class="text-muted-foreground mb-3">
+    この実装はアクセシブルな視覚デザインのWCAGガイドラインに従っています：
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>フォーカスインジケーター</strong> - 各つまみ要素に可視のフォーカスリング
+    </li>
+    <li>
+      <strong>範囲インジケーター</strong> - つまみ間で選択された範囲の視覚的表現
+    </li>
+    <li>
+      <strong>ホバー状態</strong> - ホバー時の視覚的フィードバック
+    </li>
+    <li>
+      <strong>無効状態</strong> - スライダーが無効な場合の明確な視覚的表示
+    </li>
+    <li>
+      <strong>強制カラーモード</strong> - Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">参考資料</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: スライダー（マルチサム）パターン
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#slider" class="text-primary hover:underline">
+        W3C ARIA: slider ロール
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#group" class="text-primary hover:underline">
+        W3C ARIA: group ロール
+      </ExternalLink>
+    </li>
+  </ul>
+</div>

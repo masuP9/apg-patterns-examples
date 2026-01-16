@@ -1,0 +1,370 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { MultiThumbSlider } from '@patterns/slider-multithumb/MultiThumbSlider';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/slider-multithumb/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/slider-multithumb/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import { useTranslation } from '@/i18n';
+import sourceCode from '@patterns/slider-multithumb/MultiThumbSlider.tsx?raw';
+import testCode from '@patterns/slider-multithumb/MultiThumbSlider.test.tsx?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+
+const usageCode =
+  `import { MultiThumbSlider } from './MultiThumbSlider';
+
+function App() {
+  return (
+    <div>
+      {/* 基本的な使用方法（可視ラベルとaria-labelタプル） */}
+      <MultiThumbSlider
+        defaultValue={[20, 80]}
+        label="価格範囲"
+        aria-label={['最小価格', '最大価格']}
+      />
+
+      {/* 表示とaria-valuetextのフォーマット */}
+      <MultiThumbSlider
+        defaultValue={[25, 75]}
+        label="温度"
+        format="` +
+  '{value}' +
+  `°C"
+        aria-label={['最小温度', '最大温度']}
+      />
+
+      {/* つまみが近づきすぎないようにminDistanceを設定 */}
+      <MultiThumbSlider
+        defaultValue={[30, 70]}
+        minDistance={10}
+        label="予算"
+        format="` +
+  '${value}' +
+  `"
+        aria-label={['最小予算', '最大予算']}
+      />
+
+      {/* カスタム範囲とステップ */}
+      <MultiThumbSlider
+        defaultValue={[200, 800]}
+        min={0}
+        max={1000}
+        step={50}
+        label="価格フィルター"
+        format="` +
+  '${value}' +
+  `"
+        aria-label={['最小価格', '最大価格']}
+      />
+
+      {/* コールバック付き */}
+      <MultiThumbSlider
+        defaultValue={[20, 80]}
+        label="範囲"
+        aria-label={['下限', '上限']}
+        onValueChange={(values, activeIndex) => {
+          console.log('変更:', values, 'アクティブなつまみ:', activeIndex);
+        }}
+        onValueCommit={(values) => {
+          console.log('確定:', values);
+        }}
+      />
+
+      {/* 外部ラベルにaria-labelledbyを使用 */}
+      <span id="min-label">最小値</span>
+      <span id="max-label">最大値</span>
+      <MultiThumbSlider
+        defaultValue={[20, 80]}
+        aria-labelledby={['min-label', 'max-label']}
+      />
+    </div>
+  );
+}`;
+---
+
+<PatternLayout
+  title="スライダー（マルチサム） - React"
+  pattern="slider-multithumb"
+  framework="react"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Slider (Multi-Thumb)</h1>
+    <p class="text-muted-foreground text-lg">
+      指定された範囲内で範囲を選択するための2つのつまみを持つスライダー。
+    </p>
+    <AiGuideBadge pattern="slider-multithumb" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="slider-multithumb" currentFramework="react" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-col gap-8">
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[20, 80]}
+            label="価格範囲"
+            format={'${value}'}
+            aria-label={['最小価格', '最大価格']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[25, 75]}
+            label="温度範囲"
+            format={'{value}°C'}
+            aria-label={['最小温度', '最大温度']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[30, 70]}
+            min={0}
+            max={100}
+            step={5}
+            minDistance={10}
+            label="予算範囲（minDistance付き）"
+            format={'${value}'}
+            aria-label={['最小予算', '最大予算']}
+          />
+        </div>
+        <div>
+          <MultiThumbSlider
+            client:load
+            defaultValue={[40, 60]}
+            label="無効化状態"
+            disabled
+            format={'{value}%'}
+            aria-label={['下限値', '上限値']}
+          />
+        </div>
+      </div>
+    </div>
+    <p class="text-muted-foreground mt-4 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="tsx"
+      title="MultiThumbSlider.tsx"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock collapsible collapsedLines={5} code={usageCode} lang="tsx" title="Example" />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>defaultValue</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[number, number]</td>
+            <td class="text-muted-foreground py-2 pr-4">[min, max]</td>
+            <td class="py-2">2つのつまみの初期値 [下限, 上限]</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>min</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">最小値（絶対値）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>max</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">100</td>
+            <td class="py-2">最大値（絶対値）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>step</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">1</td>
+            <td class="py-2">キーボードナビゲーションのステップ増分</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>largeStep</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">step × 10</td>
+            <td class="py-2">PageUp/PageDownの大きなステップ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>minDistance</code></td>
+            <td class="text-muted-foreground py-2 pr-4">number</td>
+            <td class="text-muted-foreground py-2 pr-4">0</td>
+            <td class="py-2">2つのつまみ間の最小距離</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>orientation</code></td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal' | 'vertical'</td>
+            <td class="text-muted-foreground py-2 pr-4">'horizontal'</td>
+            <td class="py-2">スライダーの向き</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">スライダーが無効化されているかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>showValues</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">true</td>
+            <td class="py-2">値のテキストを表示するかどうか</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">スライダーグループの可視ラベル</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>format</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >表示とaria-valuetextのフォーマットパターン（例："{'{value}'}%"、"${'{value}'}"）</td
+            >
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-label</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[string, string]</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">各つまみのアクセシブルなラベル [下限, 上限]</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+            <td class="text-muted-foreground py-2 pr-4">[string, string]</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">外部ラベル要素のID [下限, 上限]</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>getAriaValueText</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(value, index) =&gt; string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">aria-valuetextを動的に生成する関数</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>getAriaLabel</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(index) =&gt; string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">aria-labelを動的に生成する関数</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onValueChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(values, activeIndex) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">いずれかの値が変更されたときのコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onValueCommit</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(values) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">操作が終了したときのコールバック（ドラッグ終了、キーアップ）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      <strong>注意:</strong> 各つまみにアクセシブルな名前を提供するため、<code>aria-label</code
+      >、<code>aria-labelledby</code>、または<code>getAriaLabel</code>のいずれかが必要です。
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="tsx"
+        title="MultiThumbSlider.test.tsx"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider (Multi-Thumb) パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Slider パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="slider-multithumb" />
+    </ul>
+  </section>
+</PatternLayout>

@@ -1,0 +1,564 @@
+---
+/**
+ * APG Multi-Thumb Slider Pattern - Astro Implementation
+ *
+ * A control that allows users to select a range of values using two thumbs.
+ * Uses Web Components for interactive behavior.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/
+ */
+
+export interface Props {
+  /** Default values [lowerValue, upperValue] */
+  defaultValue?: [number, number];
+  /** Minimum value (default: 0) */
+  min?: number;
+  /** Maximum value (default: 100) */
+  max?: number;
+  /** Step increment (default: 1) */
+  step?: number;
+  /** Large step for PageUp/PageDown */
+  largeStep?: number;
+  /** Minimum distance between thumbs (default: 0) */
+  minDistance?: number;
+  /** Slider orientation */
+  orientation?: 'horizontal' | 'vertical';
+  /** Whether slider is disabled */
+  disabled?: boolean;
+  /** Show value text (default: true) */
+  showValues?: boolean;
+  /** Visible label text for the group */
+  label?: string;
+  /** Format pattern for value display (e.g., "{value}") */
+  format?: string;
+  /** Slider id */
+  id?: string;
+  /** Additional CSS class */
+  class?: string;
+  /** Accessible label for lower thumb */
+  'aria-label-lower'?: string;
+  /** Accessible label for upper thumb */
+  'aria-label-upper'?: string;
+  /** Reference to external label element for lower thumb */
+  'aria-labelledby-lower'?: string;
+  /** Reference to external label element for upper thumb */
+  'aria-labelledby-upper'?: string;
+  /** Reference to description element (shared or per thumb) */
+  'aria-describedby'?: string;
+  /** Test id */
+  'data-testid'?: string;
+}
+
+const {
+  defaultValue,
+  min = 0,
+  max = 100,
+  step = 1,
+  largeStep,
+  minDistance = 0,
+  orientation = 'horizontal',
+  disabled = false,
+  showValues = true,
+  label,
+  format,
+  id,
+  class: className = '',
+  'aria-label-lower': ariaLabelLower,
+  'aria-label-upper': ariaLabelUpper,
+  'aria-labelledby-lower': ariaLabelledbyLower,
+  'aria-labelledby-upper': ariaLabelledbyUpper,
+  'aria-describedby': ariaDescribedby,
+  'data-testid': dataTestId,
+} = Astro.props;
+
+// Utility functions
+const clamp = (val: number, minVal: number, maxVal: number): number => {
+  return Math.min(maxVal, Math.max(minVal, val));
+};
+
+const roundToStep = (val: number, stepVal: number, minVal: number): number => {
+  const steps = Math.round((val - minVal) / stepVal);
+  const result = minVal + steps * stepVal;
+  const decimalPlaces = (stepVal.toString().split('.')[1] || '').length;
+  return Number(result.toFixed(decimalPlaces));
+};
+
+// Normalize values
+const normalizeValues = (
+  values: [number, number],
+  minVal: number,
+  maxVal: number,
+  stepVal: number,
+  minDist: number
+): [number, number] => {
+  let [lower, upper] = values;
+  const effectiveMinDistance = Math.min(minDist, maxVal - minVal);
+
+  lower = roundToStep(lower, stepVal, minVal);
+  upper = roundToStep(upper, stepVal, minVal);
+
+  lower = clamp(lower, minVal, maxVal - effectiveMinDistance);
+  upper = clamp(upper, minVal + effectiveMinDistance, maxVal);
+
+  if (lower > upper - effectiveMinDistance) {
+    lower = upper - effectiveMinDistance;
+  }
+
+  return [lower, upper];
+};
+
+// Calculate initial values
+const initialValues = normalizeValues(defaultValue ?? [min, max], min, max, step, minDistance);
+
+// Calculate percentages for visual display
+const lowerPercent = max === min ? 0 : ((initialValues[0] - min) / (max - min)) * 100;
+const upperPercent = max === min ? 100 : ((initialValues[1] - min) / (max - min)) * 100;
+
+// Dynamic bounds
+const effectiveMinDistance = Math.min(minDistance, max - min);
+const lowerBoundsMax = initialValues[1] - effectiveMinDistance;
+const upperBoundsMin = initialValues[0] + effectiveMinDistance;
+
+// Format value helper
+const formatValue = (value: number, formatStr?: string): string => {
+  if (!formatStr) return String(value);
+  return formatStr
+    .replace('{value}', String(value))
+    .replace('{min}', String(min))
+    .replace('{max}', String(max));
+};
+
+// Display text
+const lowerDisplayText = formatValue(initialValues[0], format);
+const upperDisplayText = formatValue(initialValues[1], format);
+
+// Generate unique label ID
+const groupLabelId = label
+  ? `slider-multithumb-label-${Math.random().toString(36).slice(2, 9)}`
+  : undefined;
+
+const isVertical = orientation === 'vertical';
+const effectiveLargeStep = largeStep ?? step * 10;
+---
+
+<apg-slider-multithumb
+  data-min={min}
+  data-max={max}
+  data-step={step}
+  data-large-step={effectiveLargeStep}
+  data-min-distance={minDistance}
+  data-orientation={orientation}
+  data-disabled={disabled}
+  data-format={format}
+>
+  <div
+    role={label ? 'group' : undefined}
+    aria-labelledby={label ? groupLabelId : undefined}
+    class={`apg-slider-multithumb ${isVertical ? 'apg-slider-multithumb--vertical' : ''} ${disabled ? 'apg-slider-multithumb--disabled' : ''} ${className}`.trim()}
+    id={id}
+    data-testid={dataTestId}
+  >
+    {
+      label && (
+        <span id={groupLabelId} class="apg-slider-multithumb-label">
+          {label}
+        </span>
+      )
+    }
+    <div
+      class="apg-slider-multithumb-track"
+      style={`--slider-lower: ${lowerPercent}%; --slider-upper: ${upperPercent}%`}
+    >
+      <div class="apg-slider-multithumb-range" aria-hidden="true"></div>
+      <!-- Lower thumb -->
+      <div
+        role="slider"
+        tabindex={disabled ? -1 : 0}
+        aria-valuenow={initialValues[0]}
+        aria-valuemin={min}
+        aria-valuemax={lowerBoundsMax}
+        aria-valuetext={format ? formatValue(initialValues[0], format) : undefined}
+        aria-label={ariaLabelLower}
+        aria-labelledby={ariaLabelledbyLower}
+        aria-orientation={isVertical ? 'vertical' : undefined}
+        aria-disabled={disabled ? true : undefined}
+        aria-describedby={ariaDescribedby}
+        class="apg-slider-multithumb-thumb apg-slider-multithumb-thumb--lower"
+        style={isVertical ? `bottom: ${lowerPercent}%` : `left: ${lowerPercent}%`}
+        data-thumb-index="0"
+      >
+        <span class="apg-slider-multithumb-tooltip" aria-hidden="true">
+          {ariaLabelLower}
+        </span>
+      </div>
+      <!-- Upper thumb -->
+      <div
+        role="slider"
+        tabindex={disabled ? -1 : 0}
+        aria-valuenow={initialValues[1]}
+        aria-valuemin={upperBoundsMin}
+        aria-valuemax={max}
+        aria-valuetext={format ? formatValue(initialValues[1], format) : undefined}
+        aria-label={ariaLabelUpper}
+        aria-labelledby={ariaLabelledbyUpper}
+        aria-orientation={isVertical ? 'vertical' : undefined}
+        aria-disabled={disabled ? true : undefined}
+        aria-describedby={ariaDescribedby}
+        class="apg-slider-multithumb-thumb apg-slider-multithumb-thumb--upper"
+        style={isVertical ? `bottom: ${upperPercent}%` : `left: ${upperPercent}%`}
+        data-thumb-index="1"
+      >
+        <span class="apg-slider-multithumb-tooltip" aria-hidden="true">
+          {ariaLabelUpper}
+        </span>
+      </div>
+    </div>
+    {
+      showValues && (
+        <div class="apg-slider-multithumb-values" aria-hidden="true">
+          <span class="apg-slider-multithumb-value apg-slider-multithumb-value--lower">
+            {lowerDisplayText}
+          </span>
+          <span class="apg-slider-multithumb-value-separator"> - </span>
+          <span class="apg-slider-multithumb-value apg-slider-multithumb-value--upper">
+            {upperDisplayText}
+          </span>
+        </div>
+      )
+    }
+  </div>
+</apg-slider-multithumb>
+
+<script>
+  class ApgSliderMultithumb extends HTMLElement {
+    private lowerThumb: HTMLElement | null = null;
+    private upperThumb: HTMLElement | null = null;
+    private track: HTMLElement | null = null;
+    private rangeIndicator: HTMLElement | null = null;
+    private lowerValueDisplay: HTMLElement | null = null;
+    private upperValueDisplay: HTMLElement | null = null;
+    private activeThumbIndex: number | null = null;
+
+    connectedCallback() {
+      this.lowerThumb = this.querySelector('[data-thumb-index="0"]');
+      this.upperThumb = this.querySelector('[data-thumb-index="1"]');
+      this.track = this.querySelector('.apg-slider-multithumb-track');
+      this.rangeIndicator = this.querySelector('.apg-slider-multithumb-range');
+      this.lowerValueDisplay = this.querySelector('.apg-slider-multithumb-value--lower');
+      this.upperValueDisplay = this.querySelector('.apg-slider-multithumb-value--upper');
+
+      // Bind event handlers for lower thumb
+      if (this.lowerThumb) {
+        this.lowerThumb.addEventListener('keydown', this.handleKeyDown.bind(this, 0));
+        this.lowerThumb.addEventListener('pointerdown', this.handlePointerDown.bind(this, 0));
+        this.lowerThumb.addEventListener('pointermove', this.handlePointerMove.bind(this, 0));
+        this.lowerThumb.addEventListener('pointerup', this.handlePointerUp.bind(this, 0));
+      }
+
+      // Bind event handlers for upper thumb
+      if (this.upperThumb) {
+        this.upperThumb.addEventListener('keydown', this.handleKeyDown.bind(this, 1));
+        this.upperThumb.addEventListener('pointerdown', this.handlePointerDown.bind(this, 1));
+        this.upperThumb.addEventListener('pointermove', this.handlePointerMove.bind(this, 1));
+        this.upperThumb.addEventListener('pointerup', this.handlePointerUp.bind(this, 1));
+      }
+
+      // Track click
+      if (this.track) {
+        this.track.addEventListener('click', this.handleTrackClick.bind(this));
+      }
+    }
+
+    disconnectedCallback() {
+      // Note: Event listeners are automatically removed when element is removed
+    }
+
+    private get min(): number {
+      return Number(this.dataset.min) || 0;
+    }
+
+    private get max(): number {
+      return Number(this.dataset.max) || 100;
+    }
+
+    private get step(): number {
+      return Number(this.dataset.step) || 1;
+    }
+
+    private get largeStep(): number {
+      return Number(this.dataset.largeStep) || this.step * 10;
+    }
+
+    private get minDistance(): number {
+      return Number(this.dataset.minDistance) || 0;
+    }
+
+    private get effectiveMinDistance(): number {
+      return Math.min(this.minDistance, this.max - this.min);
+    }
+
+    private get isVertical(): boolean {
+      return this.dataset.orientation === 'vertical';
+    }
+
+    private get isDisabled(): boolean {
+      return this.dataset.disabled === 'true';
+    }
+
+    private get format(): string | undefined {
+      return this.dataset.format;
+    }
+
+    private formatValue(value: number): string {
+      const fmt = this.format;
+      if (!fmt) return String(value);
+      return fmt
+        .replace('{value}', String(value))
+        .replace('{min}', String(this.min))
+        .replace('{max}', String(this.max));
+    }
+
+    private getThumb(index: number): HTMLElement | null {
+      return index === 0 ? this.lowerThumb : this.upperThumb;
+    }
+
+    private getValue(index: number): number {
+      const thumb = this.getThumb(index);
+      return Number(thumb?.getAttribute('aria-valuenow')) || this.min;
+    }
+
+    private getValues(): [number, number] {
+      return [this.getValue(0), this.getValue(1)];
+    }
+
+    private getThumbBounds(index: number): { min: number; max: number } {
+      const values = this.getValues();
+      if (index === 0) {
+        return {
+          min: this.min,
+          max: values[1] - this.effectiveMinDistance,
+        };
+      } else {
+        return {
+          min: values[0] + this.effectiveMinDistance,
+          max: this.max,
+        };
+      }
+    }
+
+    private clamp(val: number, minVal: number, maxVal: number): number {
+      return Math.min(maxVal, Math.max(minVal, val));
+    }
+
+    private roundToStep(val: number): number {
+      const steps = Math.round((val - this.min) / this.step);
+      const result = this.min + steps * this.step;
+      const decimalPlaces = (this.step.toString().split('.')[1] || '').length;
+      return Number(result.toFixed(decimalPlaces));
+    }
+
+    private updateValue(index: number, newValue: number) {
+      if (this.isDisabled) return;
+
+      const thumb = this.getThumb(index);
+      if (!thumb) return;
+
+      const bounds = this.getThumbBounds(index);
+      const clampedValue = this.clamp(this.roundToStep(newValue), bounds.min, bounds.max);
+      const currentValue = this.getValue(index);
+
+      if (clampedValue === currentValue) return;
+
+      // Update ARIA
+      thumb.setAttribute('aria-valuenow', String(clampedValue));
+
+      // Update aria-valuetext if format is provided
+      const formattedValue = this.formatValue(clampedValue);
+      if (this.format) {
+        thumb.setAttribute('aria-valuetext', formattedValue);
+      }
+
+      // Update visual position
+      const percentage = ((clampedValue - this.min) / (this.max - this.min)) * 100;
+
+      if (this.isVertical) {
+        thumb.style.bottom = `${percentage}%`;
+      } else {
+        thumb.style.left = `${percentage}%`;
+      }
+
+      // Update range indicator
+      const values = this.getValues();
+      const lowerPercent = ((values[0] - this.min) / (this.max - this.min)) * 100;
+      const upperPercent = ((values[1] - this.min) / (this.max - this.min)) * 100;
+
+      if (this.track) {
+        this.track.style.setProperty('--slider-lower', `${lowerPercent}%`);
+        this.track.style.setProperty('--slider-upper', `${upperPercent}%`);
+      }
+
+      // Update value display
+      const valueDisplay = index === 0 ? this.lowerValueDisplay : this.upperValueDisplay;
+      if (valueDisplay) {
+        valueDisplay.textContent = formattedValue;
+      }
+
+      // Update dynamic bounds on the other thumb
+      this.updateOtherThumbBounds(index);
+
+      // Dispatch event
+      this.dispatchEvent(
+        new CustomEvent('valuechange', {
+          detail: { values: this.getValues(), activeThumbIndex: index },
+          bubbles: true,
+        })
+      );
+    }
+
+    private updateOtherThumbBounds(changedIndex: number) {
+      const otherIndex = changedIndex === 0 ? 1 : 0;
+      const otherThumb = this.getThumb(otherIndex);
+      if (!otherThumb) return;
+
+      const bounds = this.getThumbBounds(otherIndex);
+      otherThumb.setAttribute(
+        otherIndex === 0 ? 'aria-valuemax' : 'aria-valuemin',
+        String(otherIndex === 0 ? bounds.max : bounds.min)
+      );
+    }
+
+    private getValueFromPointer(clientX: number, clientY: number): number {
+      if (!this.track) return this.getValue(0);
+
+      const rect = this.track.getBoundingClientRect();
+
+      if (rect.width === 0 && rect.height === 0) {
+        return this.getValue(0);
+      }
+
+      let percent: number;
+
+      if (this.isVertical) {
+        if (rect.height === 0) return this.getValue(0);
+        percent = 1 - (clientY - rect.top) / rect.height;
+      } else {
+        if (rect.width === 0) return this.getValue(0);
+        percent = (clientX - rect.left) / rect.width;
+      }
+
+      return this.min + percent * (this.max - this.min);
+    }
+
+    private handleKeyDown(index: number, event: KeyboardEvent) {
+      if (this.isDisabled) return;
+
+      const bounds = this.getThumbBounds(index);
+      const currentValue = this.getValue(index);
+      let newValue = currentValue;
+
+      switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowUp':
+          newValue = currentValue + this.step;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          newValue = currentValue - this.step;
+          break;
+        case 'Home':
+          newValue = bounds.min;
+          break;
+        case 'End':
+          newValue = bounds.max;
+          break;
+        case 'PageUp':
+          newValue = currentValue + this.largeStep;
+          break;
+        case 'PageDown':
+          newValue = currentValue - this.largeStep;
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      this.updateValue(index, newValue);
+    }
+
+    private handlePointerDown(index: number, event: PointerEvent) {
+      if (this.isDisabled) return;
+
+      const thumb = this.getThumb(index);
+      if (!thumb) return;
+
+      event.preventDefault();
+
+      if (typeof thumb.setPointerCapture === 'function') {
+        thumb.setPointerCapture(event.pointerId);
+      }
+      this.activeThumbIndex = index;
+      thumb.focus();
+    }
+
+    private handlePointerMove(index: number, event: PointerEvent) {
+      const thumb = this.getThumb(index);
+      if (!thumb) return;
+
+      const hasCapture =
+        typeof thumb.hasPointerCapture === 'function'
+          ? thumb.hasPointerCapture(event.pointerId)
+          : this.activeThumbIndex === index;
+
+      if (!hasCapture) return;
+
+      const newValue = this.getValueFromPointer(event.clientX, event.clientY);
+      this.updateValue(index, newValue);
+    }
+
+    private handlePointerUp(index: number, event: PointerEvent) {
+      const thumb = this.getThumb(index);
+      if (thumb && typeof thumb.releasePointerCapture === 'function') {
+        try {
+          thumb.releasePointerCapture(event.pointerId);
+        } catch {
+          // Ignore
+        }
+      }
+      this.activeThumbIndex = null;
+
+      // Dispatch commit event
+      this.dispatchEvent(
+        new CustomEvent('valuecommit', {
+          detail: { values: this.getValues() },
+          bubbles: true,
+        })
+      );
+    }
+
+    private handleTrackClick(event: MouseEvent) {
+      if (this.isDisabled || event.target === this.lowerThumb || event.target === this.upperThumb)
+        return;
+
+      const clickValue = this.getValueFromPointer(event.clientX, event.clientY);
+      const values = this.getValues();
+
+      // Determine which thumb to move (nearest, prefer lower on tie)
+      const distToLower = Math.abs(clickValue - values[0]);
+      const distToUpper = Math.abs(clickValue - values[1]);
+      const targetIndex = distToLower <= distToUpper ? 0 : 1;
+
+      this.updateValue(targetIndex, clickValue);
+      this.getThumb(targetIndex)?.focus();
+    }
+
+    // Public method to update values programmatically
+    setValues(lowerValue: number, upperValue: number) {
+      this.updateValue(0, lowerValue);
+      this.updateValue(1, upperValue);
+    }
+  }
+
+  if (!customElements.get('apg-slider-multithumb')) {
+    customElements.define('apg-slider-multithumb', ApgSliderMultithumb);
+  }
+</script>
