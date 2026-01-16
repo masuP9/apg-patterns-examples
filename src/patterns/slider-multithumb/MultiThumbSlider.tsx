@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 // Label props: one of these required
 type ThumbLabelProps =
@@ -156,9 +156,12 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
 
   // Ref to track latest values for onValueCommit (avoids stale closure)
   const valuesRef = useRef<[number, number]>(values);
-  valuesRef.current = values;
+  useEffect(() => {
+    valuesRef.current = values;
+  }, [values]);
 
-  const thumbRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const lowerThumbRef = useRef<HTMLDivElement>(null);
+  const upperThumbRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const groupLabelId = useId();
   const isVertical = orientation === 'vertical';
@@ -166,6 +169,12 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
 
   // Active thumb during drag
   const activeThumbRef = useRef<number | null>(null);
+
+  // Helper to get thumb ref by index
+  const getThumbRef = useCallback(
+    (index: number) => (index === 0 ? lowerThumbRef : upperThumbRef),
+    []
+  );
 
   // Update values
   const updateValues = useCallback(
@@ -267,7 +276,7 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       if (disabled) return;
 
       event.preventDefault();
-      const thumb = thumbRefs[index].current;
+      const thumb = getThumbRef(index).current;
       if (!thumb) return;
 
       if (typeof thumb.setPointerCapture === 'function') {
@@ -276,12 +285,12 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       activeThumbRef.current = index;
       thumb.focus();
     },
-    [disabled, thumbRefs]
+    [disabled, getThumbRef]
   );
 
   const handleThumbPointerMove = useCallback(
     (index: number) => (event: React.PointerEvent) => {
-      const thumb = thumbRefs[index].current;
+      const thumb = getThumbRef(index).current;
       if (!thumb) return;
 
       const hasCapture =
@@ -294,12 +303,12 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       const newValue = getValueFromPointer(event.clientX, event.clientY);
       updateThumbValue(index, newValue);
     },
-    [thumbRefs, getValueFromPointer, updateThumbValue]
+    [getThumbRef, getValueFromPointer, updateThumbValue]
   );
 
   const handleThumbPointerUp = useCallback(
     (index: number) => (event: React.PointerEvent) => {
-      const thumb = thumbRefs[index].current;
+      const thumb = getThumbRef(index).current;
       if (thumb && typeof thumb.releasePointerCapture === 'function') {
         try {
           thumb.releasePointerCapture(event.pointerId);
@@ -311,7 +320,7 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       // Use ref to get latest values (avoids stale closure issue)
       onValueCommit?.(valuesRef.current);
     },
-    [thumbRefs, onValueCommit]
+    [getThumbRef, onValueCommit]
   );
 
   // Track click handler
@@ -320,7 +329,7 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       if (disabled) return;
 
       // Ignore if clicked on a thumb
-      if (event.target === thumbRefs[0].current || event.target === thumbRefs[1].current) {
+      if (event.target === lowerThumbRef.current || event.target === upperThumbRef.current) {
         return;
       }
 
@@ -332,9 +341,9 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       const activeIndex = distToLower <= distToUpper ? 0 : 1;
 
       updateThumbValue(activeIndex, clickValue);
-      thumbRefs[activeIndex].current?.focus();
+      getThumbRef(activeIndex).current?.focus();
     },
-    [disabled, thumbRefs, getValueFromPointer, values, updateThumbValue]
+    [disabled, getThumbRef, getValueFromPointer, values, updateThumbValue]
   );
 
   // Calculate percentages for positioning
@@ -412,18 +421,20 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
       <div
         ref={trackRef}
         className="apg-slider-multithumb-track"
+        /* eslint-disable @typescript-eslint/consistent-type-assertions -- CSS custom properties require type assertion */
         style={
           {
             '--slider-lower': `${lowerPercent}%`,
             '--slider-upper': `${upperPercent}%`,
           } as React.CSSProperties
         }
+        /* eslint-enable @typescript-eslint/consistent-type-assertions */
         onClick={handleTrackClick}
       >
         <div className="apg-slider-multithumb-range" aria-hidden="true" />
         {/* Lower thumb */}
         <div
-          ref={thumbRefs[0]}
+          ref={lowerThumbRef}
           role="slider"
           tabIndex={disabled ? -1 : 0}
           aria-valuenow={values[0]}
@@ -448,7 +459,7 @@ export const MultiThumbSlider: React.FC<MultiThumbSliderProps> = ({
         </div>
         {/* Upper thumb */}
         <div
-          ref={thumbRefs[1]}
+          ref={upperThumbRef}
           role="slider"
           tabIndex={disabled ? -1 : 0}
           aria-valuenow={values[1]}
