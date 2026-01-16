@@ -141,9 +141,6 @@ for (const framework of frameworks) {
       });
 
       test('cannot receive focus via keyboard', async ({ page }) => {
-        const meters = getMeters(page);
-        const count = await meters.count();
-
         // Tab through the page and check that no meter receives focus
         for (let i = 0; i < 10; i++) {
           await page.keyboard.press('Tab');
@@ -158,8 +155,6 @@ for (const framework of frameworks) {
     // 🟡 Medium Priority: Value Display
     test.describe('Value Display', () => {
       test('displays correct values for demo meters', async ({ page }) => {
-        const meters = getMeters(page);
-
         // CPU Usage meter: value=75
         const cpuMeter = page.locator('[role="meter"][aria-label*="CPU"]');
         if ((await cpuMeter.count()) > 0) {

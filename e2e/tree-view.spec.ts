@@ -41,7 +41,7 @@ const getGroups = (page: import('@playwright/test').Page) => {
  */
 const clickAndWaitForFocus = async (
   element: import('@playwright/test').Locator,
-  page: import('@playwright/test').Page
+  _page: import('@playwright/test').Page
 ) => {
   // Click at the top-left area of the element to hit the label, not children
   // Use position { x: 10, y: 10 } to click near the top-left corner
@@ -65,7 +65,7 @@ const clickAndWaitForFocus = async (
  */
 const focusWithoutClick = async (
   element: import('@playwright/test').Locator,
-  page: import('@playwright/test').Page
+  _page: import('@playwright/test').Page
 ) => {
   await element.focus();
 
@@ -337,9 +337,6 @@ for (const framework of frameworks) {
           // Navigate to find a collapsed parent using keyboard
           // Press * to collapse all siblings first (so we have collapsed parents)
           // Then we can test ArrowRight on a collapsed one
-
-          // First ensure the target is collapsed - check and collapse if needed
-          const initialExpanded = await stableLocator.getAttribute('aria-expanded');
 
           // Navigate to the parent node using keyboard
           // Use Home to go to first item, then navigate down

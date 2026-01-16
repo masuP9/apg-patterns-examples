@@ -281,8 +281,6 @@ for (const framework of frameworks) {
       test('focuses first focusable element on open', async ({ page }) => {
         await openDialog(page);
 
-        const dialog = getDialog(page);
-
         // Focus should be within dialog
         const focusedElement = page.locator(':focus');
         const isWithinDialog = await focusedElement.evaluate(

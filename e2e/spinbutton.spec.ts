@@ -34,7 +34,7 @@ const getReadOnlySpinbutton = (page: import('@playwright/test').Page) => {
 };
 
 const getIncrementButton = (
-  page: import('@playwright/test').Page,
+  _page: import('@playwright/test').Page,
   spinbutton: import('@playwright/test').Locator
 ) => {
   // Get the parent container and find increment button
@@ -45,7 +45,7 @@ const getIncrementButton = (
 };
 
 const getDecrementButton = (
-  page: import('@playwright/test').Page,
+  _page: import('@playwright/test').Page,
   spinbutton: import('@playwright/test').Locator
 ) => {
   // Get the parent container and find decrement button

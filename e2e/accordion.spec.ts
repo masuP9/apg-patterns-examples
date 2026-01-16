@@ -24,10 +24,6 @@ const getAccordionHeaders = (page: import('@playwright/test').Page) => {
   return page.locator('.apg-accordion-trigger');
 };
 
-const getAccordionPanels = (page: import('@playwright/test').Page) => {
-  return page.locator('.apg-accordion-panel');
-};
-
 // ============================================
 // Framework-specific Tests
 // ============================================
