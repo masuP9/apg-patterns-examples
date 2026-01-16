@@ -8,6 +8,25 @@ import svelte from 'eslint-plugin-svelte';
 import astro from 'eslint-plugin-astro';
 import globals from 'globals';
 
+// ===========================================
+// Shared globals definitions
+// ===========================================
+const browserGlobals = {
+  ...globals.browser,
+};
+
+const domTypeGlobals = {
+  HTMLElement: 'readonly',
+  HTMLButtonElement: 'readonly',
+  HTMLInputElement: 'readonly',
+  HTMLDialogElement: 'readonly',
+  HTMLDivElement: 'readonly',
+  KeyboardEvent: 'readonly',
+  MouseEvent: 'readonly',
+  FocusEvent: 'readonly',
+  Event: 'readonly',
+};
+
 export default tseslint.config(
   // ===========================================
   // Global ignores
@@ -24,38 +43,68 @@ export default tseslint.config(
   },
 
   // ===========================================
-  // Base: ESLint recommended
+  // Base: ESLint recommended (JS files)
   // ===========================================
   js.configs.recommended,
 
   // ===========================================
-  // TypeScript: recommended
-  // ===========================================
-  ...tseslint.configs.recommended,
-
-  // ===========================================
-  // Global settings (applied first, can be overridden)
+  // Global settings and quality rules
   // ===========================================
   {
     rules: {
       // console.log は警告（本番コードでは削除推奨）
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      // 制御文字の正規表現は許可（Astro Heading で必要）
-      'no-control-regex': 'off',
-      // 型キャストはデフォルトで許可（純粋なTS/TSXファイルでのみ禁止）
-      '@typescript-eslint/consistent-type-assertions': 'off',
+      // 基礎品質ルール
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'no-debugger': 'error',
+      // no-shadow は TypeScript ブロックで有効化（@typescript-eslint/no-shadow を使用）
     },
   },
 
   // ===========================================
-  // Browser environment globals
+  // Browser environment globals (shared base)
   // ===========================================
   {
-    files: ['src/**/*.{ts,tsx,js,jsx}'],
+    files: ['src/**/*.{ts,tsx,js,jsx,vue,svelte,astro}'],
     languageOptions: {
       globals: {
-        ...globals.browser,
+        ...browserGlobals,
       },
+    },
+  },
+
+  // ===========================================
+  // TypeScript configuration (scoped to TS/TSX only)
+  // ===========================================
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.{ts,tsx}'],
+  })),
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      // 型アサーションのベースライン設定:
+      // - 'as' スタイルを許可（angle-bracket は禁止）
+      // - オブジェクトリテラルは関数引数でのみ許可
+      // - 純粋な src ファイルでは後のブロックで 'never' に上書きされる
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'as',
+          objectLiteralTypeAssertions: 'allow-as-parameter',
+        },
+      ],
+      // 未使用変数のチェック（_ prefix は許可）
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      // シャドウイング検出（警告レベル - 変数の命名によっては許容される場合もある）
+      'no-shadow': 'off',
+      '@typescript-eslint/no-shadow': 'warn',
     },
   },
 
@@ -64,18 +113,26 @@ export default tseslint.config(
   // ===========================================
   {
     files: ['**/*.{jsx,tsx}'],
-    ...react.configs.flat.recommended,
-    ...react.configs.flat['jsx-runtime'], // React 17+ JSX transform
+    plugins: {
+      react: react,
+    },
     languageOptions: {
-      ...react.configs.flat.recommended.languageOptions,
-      globals: {
-        ...globals.browser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
     settings: {
       react: {
         version: 'detect',
       },
+    },
+    rules: {
+      ...react.configs.flat.recommended.rules,
+      ...react.configs.flat['jsx-runtime'].rules,
+      // TypeScript で型定義しているので prop-types は不要
+      'react/prop-types': 'off',
     },
   },
 
@@ -103,7 +160,6 @@ export default tseslint.config(
     rules: {
       ...jsxA11y.flatConfigs.recommended.rules,
       // Listbox コンポーネントをラベルでラップすることを許可
-      // @see https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/label-has-associated-control.md
       'jsx-a11y/label-has-associated-control': [
         'error',
         {
@@ -123,41 +179,39 @@ export default tseslint.config(
   })),
   {
     files: ['**/*.vue'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
       },
       globals: {
-        ...globals.browser,
-        // DOM types
-        HTMLElement: 'readonly',
-        HTMLButtonElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        HTMLDialogElement: 'readonly',
-        HTMLDivElement: 'readonly',
-        KeyboardEvent: 'readonly',
-        MouseEvent: 'readonly',
-        FocusEvent: 'readonly',
-        Event: 'readonly',
+        ...domTypeGlobals,
       },
     },
     rules: {
+      // 標準の no-unused-vars を無効化し、TypeScript 版を使用
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       // シングルワードのコンポーネント名を許可（APG パターンでは一般的）
       'vue/multi-word-component-names': 'off',
-      // 属性の順序は厳密にしない
-      'vue/attributes-order': 'off',
-      // 1行あたりの属性数は制限しない（Prettierが整形）
-      'vue/max-attributes-per-line': 'off',
-      // 1行要素の改行は強制しない（Prettierが整形）
-      'vue/singleline-html-element-content-newline': 'off',
-      // 属性名のハイフネーションは強制しない（React 由来のコンポーネントで camelCase が一般的）
-      'vue/attribute-hyphenation': 'off',
-      // v-html は APG デモでコンテンツ表示に必要
-      'vue/no-v-html': 'warn',
       // Prettier が整形するフォーマット関連ルールを off
+      'vue/attributes-order': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/attribute-hyphenation': 'off',
       'vue/html-closing-bracket-newline': 'off',
       'vue/html-self-closing': 'off',
       'vue/html-indent': 'off',
+      // v-html は APG デモでコンテンツ表示に必要
+      'vue/no-v-html': 'warn',
       // props のデフォルト値は必須としない（optional props パターン）
       'vue/require-default-prop': 'off',
       // Vue 3 の filter 非推奨は警告に（段階的な移行のため）
@@ -171,25 +225,27 @@ export default tseslint.config(
   ...svelte.configs['flat/recommended'],
   {
     files: ['**/*.svelte'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
       },
       globals: {
-        ...globals.browser,
-        // DOM types
-        HTMLElement: 'readonly',
-        HTMLButtonElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        HTMLDialogElement: 'readonly',
-        HTMLDivElement: 'readonly',
-        KeyboardEvent: 'readonly',
-        MouseEvent: 'readonly',
-        FocusEvent: 'readonly',
-        Event: 'readonly',
+        ...domTypeGlobals,
       },
     },
     rules: {
+      // 標準の no-unused-vars を無効化し、TypeScript 版を使用
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       // @html は APG デモでコンテンツ表示に必要
       'svelte/no-at-html-tags': 'warn',
       // 空のアロー関数はデフォルト値として許可
@@ -203,7 +259,7 @@ export default tseslint.config(
       'svelte/require-each-key': 'warn',
       // 不要な children snippet は警告のみ
       'svelte/no-useless-children-snippet': 'warn',
-      // Svelte のリアクティビティパターンで import を再代入する場合がある
+      // Svelte のリアクティビティパターンでは import を再代入する場合がある
       'no-import-assign': 'off',
     },
   },
@@ -220,47 +276,26 @@ export default tseslint.config(
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
-      globals: {
-        ...globals.browser,
-      },
     },
   },
 
   // ===========================================
-  // Svelte test files (special handling)
+  // Astro configuration (consolidated)
   // ===========================================
-  {
-    files: ['**/*.test.svelte.ts', '**/*.spec.svelte.ts'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-      },
-      globals: {
-        ...globals.node,
-      },
-    },
-    rules: {
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-    },
-  },
-
-  // ===========================================
-  // Astro configuration
-  // ===========================================
-  ...astro.configs.recommended,
+  ...astro.configs.recommended.map((config) => ({
+    ...config,
+    files: config.files || ['**/*.astro'],
+  })),
   {
     files: ['**/*.astro'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
       },
       globals: {
-        ...globals.browser,
-        // Astro/DOM globals
         alert: 'readonly',
         confirm: 'readonly',
         HTMLElement: 'readonly',
@@ -276,7 +311,8 @@ export default tseslint.config(
       // Astro の props 分割代入で発生する false positive を抑制
       'no-redeclare': 'off',
       '@typescript-eslint/no-redeclare': 'off',
-      // 未使用の import は Astro で許可
+      // 標準の no-unused-vars を無効化し、TypeScript 版を使用
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -284,24 +320,25 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
+      // 制御文字の正規表現は許可（Astro Heading で必要）
+      'no-control-regex': 'off',
     },
   },
+
   // Astro <script> tags (treated as virtual files)
+  // Note: These virtual files inherit TypeScript rules from tseslint.configs.recommended
+  // but need explicit rule overrides
   {
     files: ['**/*.astro/*.ts', '**/*.astro/*.js'],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-    },
     rules: {
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // Relax TypeScript rules in Astro script tags
     },
   },
 
   // ===========================================
-  // TypeScript-specific rules (pure TS/TSX files only)
+  // TypeScript strict rules for pure source files
+  // 純粋なソースファイル（テスト/フレームワークテンプレート除く）では
+  // 型アサーションを完全に禁止し、型安全性を最大化する
   // ===========================================
   {
     files: ['src/**/*.{ts,tsx}'],
@@ -309,31 +346,24 @@ export default tseslint.config(
       '**/*.svelte',
       '**/*.vue',
       '**/*.astro',
-      '**/*.astro/*', // Astro virtual files (script tags)
+      '**/*.astro/*',
       '**/*.test.*',
       '**/*.spec.*',
     ],
     rules: {
-      // 型キャスト（type assertion）を禁止
+      // 純粋なソースファイルでは型アサーションを完全禁止
+      // （ベースラインの 'as' スタイル許可を上書き）
       '@typescript-eslint/consistent-type-assertions': [
         'error',
         {
           assertionStyle: 'never',
         },
       ],
-      // 未使用変数のチェック（_ prefix は許可）
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
     },
   },
 
   // ===========================================
-  // Unit test files: relax some rules
+  // Test files: relax some rules (but keep basic checks)
   // ===========================================
   {
     files: [
@@ -343,10 +373,51 @@ export default tseslint.config(
       'src/**/test/**/*.ts',
       'src/**/tests/**/*.ts',
     ],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
     rules: {
       '@typescript-eslint/consistent-type-assertions': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      // 未使用変数は _ prefix で許可（完全 off ではない）
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+
+  // Svelte test files (special handling with explicit parser)
+  {
+    files: ['**/*.test.svelte.ts', '**/*.spec.svelte.ts'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 
@@ -363,9 +434,9 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/consistent-type-assertions': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      // Unused vars are errors, but underscore prefix is allowed
+      // 未使用変数は _ prefix で許可
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
@@ -404,17 +475,6 @@ export default tseslint.config(
     },
     rules: {
       'no-console': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'off',
-    },
-  },
-
-  // ===========================================
-  // Final overrides: Astro files
-  // (Must be last to override TypeScript stylistic rules)
-  // ===========================================
-  {
-    files: ['**/*.astro'],
-    rules: {
       '@typescript-eslint/consistent-type-assertions': 'off',
     },
   }

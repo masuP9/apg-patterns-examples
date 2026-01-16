@@ -36,7 +36,7 @@ export function DisabledItemsMenuButtonDemo() {
       <MenuButton items={fileItems} label="File" onItemSelect={setLastAction} />
       <p className="text-muted-foreground text-sm">Last action: {lastAction ?? 'None'}</p>
       <p className="text-muted-foreground text-xs">
-        Note: "Export" is disabled and will be skipped during keyboard navigation
+        Note: &quot;Export&quot; is disabled and will be skipped during keyboard navigation
       </p>
     </div>
   );
