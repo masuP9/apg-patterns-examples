@@ -329,7 +329,10 @@ npm run test:coverage # カバレッジ
 npm run format
 
 # リント
-npm run lint
+npm run lint            # 全チェック（並列実行）
+npm run lint:eslint     # ESLint のみ
+npm run lint:types      # TypeScript 型チェックのみ
+npm run lint:astro      # Astro チェックのみ
 ```
 
 ### コーディングスタイル規約
