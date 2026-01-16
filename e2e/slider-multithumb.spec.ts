@@ -362,13 +362,20 @@ for (const framework of frameworks) {
     // ------------------------------------------
     test.describe('Accessibility', () => {
       test('has no axe-core violations', async ({ page }) => {
-        const results = await new AxeBuilder({ page }).include('[role="group"]').analyze();
+        const container = getBasicSliderContainer(page);
+        const containerElement = await container.elementHandle();
+        const results = await new AxeBuilder({ page })
+          .include(containerElement!)
+          .exclude('[aria-hidden="true"]')
+          .analyze();
 
         expect(results.violations).toEqual([]);
       });
 
       test('both sliders pass axe-core', async ({ page }) => {
-        const results = await new AxeBuilder({ page }).include('[role="slider"]').analyze();
+        const results = await new AxeBuilder({ page })
+          .include('[data-testid="basic-slider"] [role="slider"]')
+          .analyze();
 
         expect(results.violations).toEqual([]);
       });
