@@ -26,7 +26,7 @@ const getTooltip = (page: import('@playwright/test').Page) => {
 // In React/Vue/Astro: the wrapper span has aria-describedby
 // In Svelte: the button inside has aria-describedby (passed via slot props)
 const getDescribedByElement = (
-  page: import('@playwright/test').Page,
+  _page: import('@playwright/test').Page,
   framework: string,
   trigger: import('@playwright/test').Locator
 ) => {
@@ -167,7 +167,6 @@ for (const framework of frameworks) {
     test.describe('APG: Keyboard Interaction', () => {
       test('hides tooltip on Escape key', async ({ page }) => {
         const trigger = getTooltipTriggers(page).first();
-        const focusable = trigger.locator('button, a, [tabindex="0"]').first();
         const tooltip = getTooltip(page).first();
 
         // Show tooltip via hover (more reliable than focus for this test)

@@ -32,12 +32,6 @@ const getSelectedOptions = (listbox: import('@playwright/test').Locator) => {
   return listbox.locator('[role="option"][aria-selected="true"]');
 };
 
-// Helper to focus the first available option
-const focusFirstOption = async (listbox: import('@playwright/test').Locator) => {
-  const firstOption = listbox.locator('[role="option"][tabindex="0"]');
-  await firstOption.focus();
-};
-
 for (const framework of frameworks) {
   test.describe(`Listbox (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
@@ -156,7 +150,6 @@ for (const framework of frameworks) {
         const listbox = getListboxByIndex(page, 0);
         const options = getAvailableOptions(listbox);
         const firstOption = options.first();
-        const thirdOption = options.nth(2);
 
         await firstOption.focus();
         await page.keyboard.press('ArrowDown');
@@ -187,7 +180,6 @@ for (const framework of frameworks) {
         await lastOption.focus();
         await page.keyboard.press('End'); // Ensure we're at the end
 
-        const lastOptionId = await lastOption.getAttribute('id');
         await page.keyboard.press('ArrowDown');
 
         // Should still be on last option
@@ -393,7 +385,6 @@ for (const framework of frameworks) {
         const firstOption = options.first();
 
         await firstOption.focus();
-        const initialId = await firstOption.getAttribute('id');
 
         await page.keyboard.press('ArrowDown');
         // Should still be on first option

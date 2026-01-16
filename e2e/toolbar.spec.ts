@@ -311,7 +311,6 @@ for (const framework of frameworks) {
         const toolbar = getToolbar(page).nth(2);
         const buttons = toolbar.getByRole('button');
         const undoButton = buttons.filter({ hasText: 'Undo' });
-        const cutButton = buttons.filter({ hasText: 'Cut' });
 
         await undoButton.click();
         await expect(undoButton).toBeFocused();

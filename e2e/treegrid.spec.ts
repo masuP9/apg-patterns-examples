@@ -23,7 +23,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 /**
  * Helper to check if a cell or a focusable element within it is focused.
  */
-async function expectCellOrChildFocused(page: Page, cell: Locator): Promise<void> {
+async function expectCellOrChildFocused(_page: Page, cell: Locator): Promise<void> {
   const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
   if (cellIsFocused) {
     await expect(cell).toBeFocused();
@@ -51,7 +51,7 @@ async function expectCellOrChildFocused(page: Page, cell: Locator): Promise<void
 /**
  * Helper to focus a cell, handling cells that contain links/buttons.
  */
-async function focusCell(page: Page, cell: Locator): Promise<void> {
+async function focusCell(_page: Page, cell: Locator): Promise<void> {
   await cell.click({ position: { x: 5, y: 5 } });
 }
 

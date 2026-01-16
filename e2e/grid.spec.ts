@@ -20,7 +20,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
  * Helper to check if a cell or a focusable element within it is focused.
  * Per APG: when cell contains a single widget, focus should be on the widget.
  */
-async function expectCellOrChildFocused(page: Page, cell: Locator): Promise<void> {
+async function expectCellOrChildFocused(_page: Page, cell: Locator): Promise<void> {
   // Check if cell itself is focused
   const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
   if (cellIsFocused) {
@@ -52,7 +52,7 @@ async function expectCellOrChildFocused(page: Page, cell: Locator): Promise<void
 /**
  * Helper to focus a cell, handling cells that contain links/buttons.
  */
-async function focusCell(page: Page, cell: Locator): Promise<void> {
+async function focusCell(_page: Page, cell: Locator): Promise<void> {
   // Click on the cell directly (not on any link inside)
   await cell.click({ position: { x: 5, y: 5 } });
 }
@@ -408,7 +408,6 @@ for (const framework of frameworks) {
       test('focus returns to last focused cell on re-entry', async ({ page }) => {
         const grid = page.getByRole('grid').first();
         const cells = grid.getByRole('gridcell');
-        const firstCell = cells.first();
         const secondCell = cells.nth(1);
 
         // Focus second cell

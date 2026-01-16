@@ -24,10 +24,6 @@ const getRadios = (page: import('@playwright/test').Page) => {
   return page.getByRole('radio');
 };
 
-const getRadioByName = (page: import('@playwright/test').Page, name: string) => {
-  return page.getByRole('radio', { name });
-};
-
 // ============================================
 // Framework-specific Tests
 // ============================================

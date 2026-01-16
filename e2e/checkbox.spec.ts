@@ -237,7 +237,7 @@ for (const framework of frameworks) {
       test('disabled checkbox is not focusable via tab', async ({ page }) => {
         // Focus on the element before disabled checkbox
         const { checkbox: selectAll } = getCheckbox(page, 'demo-select-all');
-        const { checkbox: disabled } = getCheckbox(page, 'demo-disabled');
+        getCheckbox(page, 'demo-disabled'); // Verify disabled checkbox exists
 
         await selectAll.focus();
         await expect(selectAll).toBeFocused();

@@ -135,9 +135,6 @@ for (const framework of frameworks) {
           await firstLink.focus();
           await expect(firstLink).toBeFocused();
 
-          // Get href before navigation
-          const href = await firstLink.getAttribute('href');
-
           // Press Enter should navigate (in a real scenario)
           // For testing, we just verify the link is activatable
           await expect(firstLink).toHaveAttribute('href');

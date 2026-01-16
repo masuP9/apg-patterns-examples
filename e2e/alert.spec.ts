@@ -188,7 +188,6 @@ for (const framework of frameworks) {
     // 🟡 Medium Priority: Tab Navigation
     test.describe('Tab Navigation', () => {
       test('alert container cannot receive focus via Tab', async ({ page }) => {
-        const alert = getAlert(page);
         const { info } = getTriggerButtons(page);
 
         // Show alert
@@ -197,7 +196,6 @@ for (const framework of frameworks) {
         // Tab through the page multiple times
         for (let i = 0; i < 10; i++) {
           await page.keyboard.press('Tab');
-          const focusedElement = await page.evaluate(() => document.activeElement);
           // If we're inside the alert, it should only be on interactive elements (buttons)
           const isFocusOnAlertContainer = await page.evaluate(() => {
             const activeEl = document.activeElement;
@@ -242,7 +240,7 @@ for (const framework of frameworks) {
         const buttons = getTriggerButtons(page);
 
         // Test each variant
-        for (const [variant, button] of Object.entries(buttons)) {
+        for (const [_variant, button] of Object.entries(buttons)) {
           await button.click();
           // Alert should be visible and have content
           await expect(alert).toBeVisible();

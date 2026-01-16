@@ -196,10 +196,6 @@ for (const framework of frameworks) {
 
         await expect(getMenu(page)).toBeVisible();
 
-        // Get all enabled menu items (exclude disabled)
-        const items = getMenuItems(page);
-        const count = await items.count();
-
         // Find the last enabled item by checking focus
         const focusedItem = page.locator(':focus');
         await expect(focusedItem).toHaveRole('menuitem');
@@ -224,7 +220,6 @@ for (const framework of frameworks) {
 
       test('ArrowDown wraps from last to first', async ({ page }) => {
         await openMenu(page);
-        const items = getMenuItems(page);
 
         // Focus the last enabled item
         // For basic menu, just navigate to end
