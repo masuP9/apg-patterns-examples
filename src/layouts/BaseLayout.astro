@@ -10,6 +10,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
+import { PatternSearch } from '@/components/ui/pattern-search';
 import { ThemeToggle, ThemeProvider } from '@/components/ui/theme-toggle';
 
 const GITHUB_URL = 'https://github.com/masuP9/apg-patterns-examples';
@@ -110,6 +111,11 @@ const navLinks = [
         </NavigationMenuList>
       </NavigationMenu>
       <HeaderActions class="@max-lg:hidden">
+        <PatternSearch
+          client:load
+          className="w-64"
+          placeholder={locale === 'ja' ? 'パターンを検索...' : 'Search patterns...'}
+        />
         <LanguageSwitcher locale={locale} />
         <Button
           variant="ghost"
@@ -127,6 +133,13 @@ const navLinks = [
           <MenuIcon class="size-5" />
         </SheetTrigger>
         <SheetContent class="overflow-y-auto px-4 py-12">
+          <div class="mb-4">
+            <PatternSearch
+              client:load
+              className="w-full"
+              placeholder={locale === 'ja' ? 'パターンを検索...' : 'Search patterns...'}
+            />
+          </div>
           <SidebarMenu>
             {
               navLinks.map((link) => (
