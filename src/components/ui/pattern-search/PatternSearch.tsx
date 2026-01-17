@@ -8,6 +8,7 @@ import {
 import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
 import { getPatternDescription } from '@/i18n/patterns';
 import type { KeyboardEvent, ReactElement } from 'react';
+import { Search } from 'lucide-react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 export interface PatternSearchProps {
@@ -309,6 +310,10 @@ export function PatternSearch({
         {label}
       </label>
       <div className="relative">
+        <Search
+          className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
+          aria-hidden="true"
+        />
         <input
           ref={inputRef}
           id={inputId}
@@ -316,7 +321,7 @@ export function PatternSearch({
           role="combobox"
           className={cn(
             'bg-muted/50 border-input placeholder:text-muted-foreground focus-visible:ring-ring',
-            'flex h-9 w-full rounded-md border px-3 py-2 text-sm',
+            'flex h-9 w-full rounded-md border py-2 pr-3 pl-9 text-sm',
             'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
             'disabled:cursor-not-allowed disabled:opacity-50'
           )}
@@ -343,7 +348,7 @@ export function PatternSearch({
       {/* Empty state - outside listbox for valid ARIA structure */}
       {isOpen && flatPatterns.length === 0 && (
         <div
-          className="bg-popover text-popover-foreground absolute z-50 mt-1 w-full rounded-md border p-1 shadow-md"
+          className="bg-popover text-popover-foreground absolute z-50 mt-1 w-full rounded-md border p-1 shadow-md sm:min-w-80"
           role="status"
           aria-live="polite"
         >
@@ -358,7 +363,7 @@ export function PatternSearch({
         role="listbox"
         aria-labelledby={labelId}
         className={cn(
-          'bg-popover text-popover-foreground absolute z-50 mt-1 max-h-80 w-full overflow-auto rounded-md border p-1 shadow-md',
+          'bg-popover text-popover-foreground absolute z-50 mt-1 max-h-80 w-full overflow-auto rounded-md border p-1 shadow-md sm:min-w-80',
           (!isOpen || flatPatterns.length === 0) && 'hidden'
         )}
       >
