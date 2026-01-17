@@ -3,8 +3,10 @@ import {
   buildPatternUrl,
   getLocaleFromDocument,
   getPreferredFramework,
+  type Locale,
 } from '@/lib/pattern-search';
 import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+import { getPatternDescription } from '@/i18n/patterns';
 import type { KeyboardEvent, ReactElement } from 'react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
@@ -31,6 +33,7 @@ export function PatternSearch({
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [locale] = useState<Locale>(() => getLocaleFromDocument());
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
@@ -90,12 +93,14 @@ export function PatternSearch({
   }, [activeIndex, flatPatterns, getOptionId]);
 
   // Navigate to pattern
-  const navigateToPattern = useCallback((pattern: Pattern) => {
-    const framework = getPreferredFramework();
-    const locale = getLocaleFromDocument();
-    const url = buildPatternUrl(pattern.id, framework, locale);
-    window.location.assign(url);
-  }, []);
+  const navigateToPattern = useCallback(
+    (pattern: Pattern) => {
+      const framework = getPreferredFramework();
+      const url = buildPatternUrl(pattern.id, framework, locale);
+      window.location.assign(url);
+    },
+    [locale]
+  );
 
   // Open popup
   const openPopup = useCallback(() => {
@@ -393,22 +398,9 @@ export function PatternSearch({
                       <div className="flex-1 overflow-hidden">
                         <div className="font-medium">{pattern.name}</div>
                         <div className="text-muted-foreground line-clamp-1 text-xs">
-                          {pattern.description}
+                          {getPatternDescription(pattern.id, pattern.description, locale)}
                         </div>
                       </div>
-                      <span
-                        className={cn(
-                          'mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium',
-                          pattern.complexity === 'Low' &&
-                            'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                          pattern.complexity === 'Medium' &&
-                            'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-                          pattern.complexity === 'High' &&
-                            'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                        )}
-                      >
-                        {pattern.complexity}
-                      </span>
                     </li>
                   );
                 })}
