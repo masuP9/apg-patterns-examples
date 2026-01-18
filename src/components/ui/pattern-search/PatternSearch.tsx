@@ -35,6 +35,7 @@ export function PatternSearch({
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [locale] = useState<Locale>(() => getLocaleFromDocument());
+  const [isMac, setIsMac] = useState(true); // Default to Mac to avoid hydration mismatch
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
@@ -304,6 +305,14 @@ export function PatternSearch({
     }
   }, [activeIndex, flatPatterns.length]);
 
+  // Detect platform for keyboard shortcut display
+  useEffect(() => {
+    const platform = navigator.platform?.toLowerCase() ?? '';
+    const userAgent = navigator.userAgent?.toLowerCase() ?? '';
+    const isMacPlatform = platform.includes('mac') || userAgent.includes('macintosh');
+    setIsMac(isMacPlatform);
+  }, []);
+
   return (
     <div ref={containerRef} className={cn('pattern-search relative', className)}>
       <label id={labelId} htmlFor={inputId} className="sr-only">
@@ -320,7 +329,7 @@ export function PatternSearch({
           type="text"
           role="combobox"
           className={cn(
-            'bg-muted/50 border-input placeholder:text-muted-foreground focus-visible:ring-ring',
+            'bg-background border-input placeholder:text-muted-foreground focus-visible:ring-ring',
             'flex h-9 w-full rounded-md border py-2 pr-3 pl-9 text-sm',
             'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
             'disabled:cursor-not-allowed disabled:opacity-50'
@@ -339,10 +348,17 @@ export function PatternSearch({
         <kbd
           className={cn(
             'pointer-events-none absolute top-1/2 right-2 -translate-y-1/2',
-            'bg-muted text-muted-foreground hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium select-none sm:flex'
+            'bg-muted text-muted-foreground hidden h-5 items-center gap-0.5 rounded border px-1.5 font-mono text-[10px] font-medium select-none sm:flex'
           )}
         >
-          <span className="text-xs">⌘</span>K
+          {isMac ? (
+            <>
+              <span className="text-xs">⌘</span>
+              <span>K</span>
+            </>
+          ) : (
+            <span>Ctrl+K</span>
+          )}
         </kbd>
       </div>
       {/* Empty state - outside listbox for valid ARIA structure */}
