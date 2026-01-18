@@ -329,7 +329,7 @@ export function PatternSearch({
           type="text"
           role="combobox"
           className={cn(
-            'bg-background border-input placeholder:text-muted-foreground focus-visible:ring-ring',
+            'bg-background border-input placeholder:text-muted-foreground focus-visible:ring-foreground',
             'flex h-9 w-full rounded-md border py-2 pr-3 pl-9 text-sm',
             'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
             'disabled:cursor-not-allowed disabled:opacity-50'

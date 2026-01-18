@@ -10,7 +10,7 @@ const { class: className } = Astro.props;
 
 const containerStyles = cn(
   // Layout
-  'inline-flex h-8 items-center',
+  'inline-flex h-9 items-center',
   // Border
   'rounded-md border border-input',
   // Background
@@ -35,8 +35,8 @@ const buttonStyles = cn(
   'aria-checked:shadow-sm',
   // Focus state
   'focus-visible:outline-none',
-  'focus-visible:ring-inset',
   'focus-visible:ring-2',
+  'focus-visible:ring-offset-2',
   'focus-visible:ring-foreground',
   // Forced colors: checked state
   'forced-colors:aria-checked:outline-2',
