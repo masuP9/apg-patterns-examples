@@ -30,6 +30,7 @@ const alternateLanguageName = languages[alternateLocale];
   class:list={[
     'inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm transition-colors',
     'text-muted-foreground hover:text-foreground hover:bg-muted',
+    'focus-visible:ring-foreground focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
     Astro.props.class,
   ]}
   aria-label={`Switch to ${alternateLanguageName}`}
