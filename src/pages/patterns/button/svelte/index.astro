@@ -1,20 +1,22 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import Heading from '@/components/ui/Heading.astro';
-import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.svelte';
+import Button from '@patterns/button/Button.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/button/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/button/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
-import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
-import testCode from '@patterns/button/ToggleButton.test.svelte.ts?raw';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/button/Button.svelte?raw';
+import testCode from '@patterns/button/Button.test.svelte.ts?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
   { id: 'accessibility-features', text: 'Accessibility Features' },
   { id: 'source-code', text: 'Source Code' },
   { id: 'usage', text: 'Usage' },
@@ -24,16 +26,11 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout
-  title="Toggle Button - Svelte"
-  pattern="button"
-  framework="svelte"
-  tocItems={tocItems}
->
+<PatternLayout title="Button - Svelte" pattern="button" framework="svelte" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <h1 class="mb-4 text-3xl font-bold">Button</h1>
     <p class="text-muted-foreground text-lg">
-      A two-state button that can be either "pressed" or "not pressed".
+      An element that enables users to trigger an action or event using role="button".
     </p>
     <AiGuideBadge pattern="button" />
   </header>
@@ -45,11 +42,22 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
-      <ToggleButtonDemo client:load />
+      <div class="flex flex-wrap gap-4">
+        <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+        <Button client:load disabled onClick={() => alert('This should not fire!')}>
+          Disabled Button
+        </Button>
+      </div>
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
     </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
   </section>
 
   <!-- Accessibility Section -->
@@ -66,7 +74,7 @@ const tocItems = [
       collapsedLines={5}
       code={sourceCode}
       lang="svelte"
-      title="ToggleButton.svelte"
+      title="Button.svelte"
     />
   </section>
 
@@ -77,21 +85,23 @@ const tocItems = [
       collapsible
       collapsedLines={5}
       code={`<script>
-  import ToggleButton from './ToggleButton.svelte';
+  import Button from './Button.svelte';
 
-  function handleToggle(pressed) {
-    console.log('Muted:', pressed);
+  function handleClick() {
+    console.log('Clicked!');
   }
 </script>
 
-<ToggleButton
-  initialPressed={false}
-  onToggle={handleToggle}
-  pressedIndicator="🔇"
-  unpressedIndicator="🔊"
->
-  Mute
-</ToggleButton>`}
+<!-- Basic button -->
+<Button onClick={handleClick}>Click me</Button>
+
+<!-- Disabled button -->
+<Button disabled>Disabled</Button>
+
+<!-- With aria-label for icon buttons -->
+<Button onClick={handleSettings} aria-label="Settings">
+  <SettingsIcon />
+</Button>`}
       lang="svelte"
       title="Example"
     />
@@ -112,38 +122,25 @@ const tocItems = [
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="py-2 pr-4"><code>onClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(event) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Click/Space/Enter event handler</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Initial pressed state</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>onToggle</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(pressed: boolean) =&gt; void</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when state changes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>pressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">"●"</td>
-            <td class="py-2">Custom indicator for pressed state</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">"○"</td>
-            <td class="py-2">Custom indicator for unpressed state</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>children</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Button label (slot content)</td>
+            <td class="py-2">Whether the button is disabled</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      All other props are spread to the underlying <code>&lt;span&gt;</code> element via <code
+        >$$restProps</code
+      >.
+    </p>
   </section>
 
   <!-- Testing Section -->
@@ -156,7 +153,7 @@ const tocItems = [
         collapsedLines={5}
         code={testCode}
         lang="typescript"
-        title="ToggleButton.test.svelte.ts"
+        title="Button.test.svelte.ts"
       />
     </div>
   </section>
@@ -171,6 +168,14 @@ const tocItems = [
           class="text-primary hover:underline"
         >
           WAI-ARIA APG: Button Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;button&gt; element
         </ExternalLink>
       </li>
       <AiGuideResourceItem pattern="button" />

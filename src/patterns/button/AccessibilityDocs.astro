@@ -4,24 +4,41 @@ import { ResponsiveTable } from '@/components/ui/table';
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
-  <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <code>button</code> - Indicates a widget that triggers an action when activated<br />
-      <ExternalLink
-        href="https://w3c.github.io/aria/#button"
-        class="text-primary text-sm hover:underline"
-      >
-        WAI-ARIA button role
-      </ExternalLink>
-    </li>
-  </ul>
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>button</code></td>
+          <td class="py-2 pr-4">
+            <code>&lt;button&gt;</code> or element with <code>role="button"</code>
+          </td>
+          <td class="py-2">
+            Identifies the element as a button widget. Native <code>&lt;button&gt;</code> has this role
+            implicitly.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    This implementation uses <code>&lt;span role="button"&gt;</code> for educational purposes. For production
+    use, prefer native <code>&lt;button&gt;</code> elements.
+  </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+
   <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-pressed</code></h4>
+    <h4 class="mb-2 font-medium"><code>tabindex</code></h4>
     <p class="text-muted-foreground mb-3">
-      Indicates the current pressed state of the toggle button.
+      Makes the custom button element focusable via keyboard navigation.
     </p>
     <ResponsiveTable class="mb-2">
       <table class="w-full border-collapse">
@@ -29,34 +46,80 @@ import { ResponsiveTable } from '@/components/ui/table';
           <tr class="border-border border-b">
             <td class="w-32 py-2 pr-4 font-medium">Values</td>
             <td class="py-2">
-              <code>true</code> | <code>false</code>
-              <span class="text-muted-foreground ml-2 text-sm"
-                >(tri-state buttons may also use <code>"mixed"</code>)</span
-              >
+              <code>0</code> (focusable) | <code>-1</code> (not focusable)
             </td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes (for toggle buttons)</td>
+            <td class="py-2">Yes (for custom implementations)</td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2"><code>initialPressed</code> prop (default: <code>false</code>)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Click, Enter, Space</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
+            <td class="py-2 pr-4 font-medium">Native HTML</td>
             <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-pressed"
-                class="text-primary hover:underline"
-              >
-                aria-pressed
-              </ExternalLink>
+              <code>&lt;button&gt;</code> is focusable by default
             </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Disabled State</td>
+            <td class="py-2">Set to <code>-1</code> to remove from tab order</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
+    <p class="text-muted-foreground mb-3">
+      Indicates the button is not interactive and cannot be activated.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">
+              <code>true</code> | <code>false</code> (or omitted)
+            </td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only when disabled)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Effect</td>
+            <td class="py-2">Prevents activation via click, Space, or Enter key</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Note</td>
+            <td class="py-2">
+              Native <code>&lt;button disabled&gt;</code> automatically handles this
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </div>
+
+  <div class="mb-6">
+    <h4 class="mb-2 font-medium"><code>aria-label</code> (Optional)</h4>
+    <p class="text-muted-foreground mb-3">
+      Provides an accessible name for icon-only buttons or when visible text is insufficient.
+    </p>
+    <ResponsiveTable class="mb-2">
+      <table class="w-full border-collapse">
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="w-32 py-2 pr-4 font-medium">Values</td>
+            <td class="py-2">Text string describing the button's action</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2">No (only for icon-only buttons)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4 font-medium">Use Case</td>
+            <td class="py-2">Icon buttons, buttons with unclear text content</td>
           </tr>
         </tbody>
       </table>
@@ -77,15 +140,95 @@ import { ResponsiveTable } from '@/components/ui/table';
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
           >
-          <td class="py-2">Toggle the button state</td>
+          <td class="py-2">Activate the button</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
           >
-          <td class="py-2">Toggle the button state</td>
+          <td class="py-2">Activate the button</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Move focus to the next focusable element</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift + Tab</kbd></td
+          >
+          <td class="py-2">Move focus to the previous focusable element</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>Important:</strong> Both Space and Enter keys activate buttons. This differs from links, which
+    only respond to Enter. Custom implementations must call <code>event.preventDefault()</code> on Space
+    to prevent page scrolling.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <p class="text-muted-foreground mb-3">
+    Buttons must have an accessible name. This can be provided through:
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Text content (recommended)</strong> - The visible text inside the button
+    </li>
+    <li>
+      <code>aria-label</code> - Provides an invisible label for icon-only buttons
+    </li>
+    <li>
+      <code>aria-labelledby</code> - References an external element as the label
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Styles</h3>
+  <p class="text-muted-foreground mb-3">This implementation provides clear focus indicators:</p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <strong>Focus ring</strong> - Visible outline when focused via keyboard
+    </li>
+    <li>
+      <strong>Cursor style</strong> - Pointer cursor to indicate interactivity
+    </li>
+    <li>
+      <strong>Disabled appearance</strong> - Reduced opacity and not-allowed cursor when disabled
+    </li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Button vs Toggle Button</h3>
+  <p class="text-muted-foreground mb-3">
+    This pattern is for simple action buttons. For buttons that toggle between pressed and unpressed
+    states, see the <a href="/patterns/toggle-button/react/" class="text-primary hover:underline"
+      >Toggle Button pattern</a
+    > which uses <code>aria-pressed</code>.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <ul class="list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink
+        href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"
+        class="text-primary hover:underline"
+      >
+        WAI-ARIA APG: Button Pattern
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink
+        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+        class="text-primary hover:underline"
+      >
+        MDN: &lt;button&gt; element
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href="https://w3c.github.io/aria/#button" class="text-primary hover:underline">
+        W3C ARIA: button role
+      </ExternalLink>
+    </li>
+  </ul>
 </div>

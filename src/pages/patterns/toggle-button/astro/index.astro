@@ -1,0 +1,231 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import Heading from '@/components/ui/Heading.astro';
+import ToggleButton from '@patterns/toggle-button/ToggleButton.astro';
+import Icon from '@/components/ui/icon/icon.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/toggle-button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/toggle-button/TestingDocs.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import sourceCode from '@patterns/toggle-button/ToggleButton.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Toggle Button - Astro"
+  pattern="toggle-button"
+  framework="astro"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <p class="text-muted-foreground text-lg">
+      A two-state button that can be either "pressed" or "not pressed".
+    </p>
+    <AiGuideBadge pattern="toggle-button" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="toggle-button" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <div class="flex flex-wrap gap-4">
+        <ToggleButton>
+          <Icon name="volume-off" slot="pressed-indicator" />
+          <Icon name="volume-2" slot="unpressed-indicator" />
+          Mute
+        </ToggleButton>
+        <ToggleButton initialPressed={true}>
+          <Icon name="moon" slot="pressed-indicator" />
+          <Icon name="sun" slot="unpressed-indicator" />
+          Dark Mode
+        </ToggleButton>
+        <ToggleButton disabled>
+          <Icon name="bell-off" slot="pressed-indicator" />
+          <Icon name="bell" slot="unpressed-indicator" />
+          Notifications
+        </ToggleButton>
+      </div>
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="ToggleButton.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import ToggleButton from './ToggleButton.astro';
+import Icon from './Icon.astro';
+---
+
+<ToggleButton>
+  <Icon name="volume-off" slot="pressed-indicator" />
+  <Icon name="volume-2" slot="unpressed-indicator" />
+  Mute
+</ToggleButton>
+
+<script>
+  // Listen for toggle events
+  document.querySelector('apg-toggle-button')?.addEventListener('toggle', (e) => {
+    console.log('Muted:', e.detail.pressed);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Initial pressed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Whether the button is disabled</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>class</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string</td>
+            <td class="text-muted-foreground py-2 pr-4">""</td>
+            <td class="py-2">Additional CSS class</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Slots</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Slot</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>default</code></td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Button label content</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pressed-indicator</code></td>
+            <td class="text-muted-foreground py-2 pr-4">"●"</td>
+            <td class="py-2">Custom indicator for pressed state</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>unpressed-indicator</code></td>
+            <td class="text-muted-foreground py-2 pr-4">"○"</td>
+            <td class="py-2">Custom indicator for unpressed state</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>toggle</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{'{ pressed: boolean }'}</td>
+            <td class="py-2">Fired when the toggle state changes</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      This component uses a Web Component (<code>&lt;apg-toggle-button&gt;</code>) for client-side
+      interactivity.
+    </p>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Button Pattern
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="toggle-button" />
+    </ul>
+  </section>
+</PatternLayout>

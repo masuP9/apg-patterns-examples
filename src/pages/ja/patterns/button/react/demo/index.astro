@@ -1,16 +1,12 @@
 ---
 /**
- * Demo-only Page: ToggleButtonDemo (React)
+ * Demo-only Page: Button (React) - Japanese
  *
- * This page renders the ToggleButtonDemo components in isolation without
+ * This page renders the Button component in isolation without
  * the site layout. This ensures clean E2E testing environment.
- *
- * Used for:
- * - E2E testing with correct focus management
- * - Standalone demo viewing
  */
 import '@/styles/global.css';
-import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/button/ToggleButtonDemo';
+import { Button } from '@patterns/button/Button';
 ---
 
 <!doctype html>
@@ -19,13 +15,14 @@ import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/button/Togg
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>デモ: Toggle Button (React)</title>
+    <title>デモ: ボタン (React)</title>
   </head>
   <body class="p-8">
     <div class="flex flex-wrap gap-4">
-      <MuteDemo client:load />
-      <DarkModeDemo client:load />
-      <NotificationsDemo client:load />
+      <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+      <Button client:load disabled onClick={() => alert('This should not fire!')}>
+        Disabled Button
+      </Button>
     </div>
   </body>
 </html>

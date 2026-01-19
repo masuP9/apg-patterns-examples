@@ -1,17 +1,18 @@
 ---
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
-import Heading from '@/components/ui/Heading.astro';
-import ToggleButton from '@patterns/button/ToggleButton.astro';
-import Icon from '@/components/ui/icon/icon.astro';
+import Button from '@patterns/button/Button.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/button/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/button/NativeHtmlNotice.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
-import sourceCode from '@patterns/button/ToggleButton.astro?raw';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/button/Button.astro?raw';
+import testCode from '@patterns/button/Button.test.astro.ts?raw';
 import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
@@ -19,6 +20,7 @@ const t = useTranslation(locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
   { id: 'accessibility-features', text: t('pattern.accessibility') },
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
@@ -29,16 +31,16 @@ const tocItems = [
 ---
 
 <PatternLayout
-  title="Toggle Button - Astro"
+  title="ボタン - Astro"
   pattern="button"
   framework="astro"
   tocItems={tocItems}
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <h1 class="mb-4 text-3xl font-bold">Button</h1>
     <p class="text-muted-foreground text-lg">
-      「押されている」または「押されていない」の2つの状態を持つボタン。
+      role="button" を使用してアクションやイベントをトリガーする要素。
     </p>
     <AiGuideBadge pattern="button" />
   </header>
@@ -51,26 +53,19 @@ const tocItems = [
     <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-wrap gap-4">
-        <ToggleButton>
-          <Icon name="volume-off" slot="pressed-indicator" />
-          <Icon name="volume-2" slot="unpressed-indicator" />
-          Mute
-        </ToggleButton>
-        <ToggleButton initialPressed={true}>
-          <Icon name="moon" slot="pressed-indicator" />
-          <Icon name="sun" slot="unpressed-indicator" />
-          Dark Mode
-        </ToggleButton>
-        <ToggleButton disabled>
-          <Icon name="bell-off" slot="pressed-indicator" />
-          <Icon name="bell" slot="unpressed-indicator" />
-          Notifications
-        </ToggleButton>
+        <Button>Click me</Button>
+        <Button disabled>Disabled Button</Button>
       </div>
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
     </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
   </section>
 
   <!-- Accessibility Section -->
@@ -86,13 +81,7 @@ const tocItems = [
     <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
       >{t('pattern.sourceCode')}</Heading
     >
-    <CodeBlock
-      collapsible
-      collapsedLines={5}
-      code={sourceCode}
-      lang="astro"
-      title="ToggleButton.astro"
-    />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="astro" title="Button.astro" />
   </section>
 
   <!-- Usage Section -->
@@ -102,33 +91,38 @@ const tocItems = [
       collapsible
       collapsedLines={5}
       code={`---
-import ToggleButton from './ToggleButton.astro';
-import Icon from './Icon.astro';
+import Button from './Button.astro';
 ---
 
-<ToggleButton>
-  <Icon name="volume-off" slot="pressed-indicator" />
-  <Icon name="volume-2" slot="unpressed-indicator" />
-  Mute
-</ToggleButton>
+<!-- 基本的なボタン -->
+<Button>Click me</Button>
+
+<!-- 無効なボタン -->
+<Button disabled>Disabled</Button>
+
+<!-- アイコンボタン用のaria-label -->
+<Button aria-label="Settings">
+  <SettingsIcon />
+</Button>
+
+<!-- カスタムイベントリスナー (JavaScript) -->
+<Button id="my-button">Interactive Button</Button>
 
 <script>
-  // Listen for toggle events
-  document.querySelector('apg-toggle-button')?.addEventListener('toggle', (e) => {
-    console.log('Muted:', e.detail.pressed);
-  });
+  document.getElementById('my-button')
+    ?.addEventListener('button-activate', (e) => {
+      console.log('Button activated');
+    });
 </script>`}
       lang="astro"
-      title="使用例"
+      title="Example"
     />
   </section>
 
   <!-- API Section -->
   <section class="mb-12">
     <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
-
-    <h3 class="mb-3 text-lg font-medium">プロパティ</h3>
-    <ResponsiveTable class="mb-6">
+    <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-border border-b">
@@ -140,12 +134,6 @@ import Icon from './Icon.astro';
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
-            <td class="text-muted-foreground py-2 pr-4">boolean</td>
-            <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">初期の押下状態</td>
-          </tr>
-          <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
@@ -154,44 +142,14 @@ import Icon from './Icon.astro';
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>class</code></td>
             <td class="text-muted-foreground py-2 pr-4">string</td>
-            <td class="text-muted-foreground py-2 pr-4">""</td>
-            <td class="py-2">追加のCSSクラス</td>
+            <td class="text-muted-foreground py-2 pr-4">''</td>
+            <td class="py-2">追加の CSS クラス</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
 
-    <h3 class="mb-3 text-lg font-medium">スロット</h3>
-    <ResponsiveTable class="mb-6">
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">スロット</th>
-            <th class="py-2 pr-4 text-left">デフォルト</th>
-            <th class="py-2 text-left">説明</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>default</code></td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">ボタンラベルのコンテンツ</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>pressed-indicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">"●"</td>
-            <td class="py-2">押下状態のカスタムインジケーター</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>unpressed-indicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">"○"</td>
-            <td class="py-2">非押下状態のカスタムインジケーター</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-
-    <h3 class="mb-3 text-lg font-medium">カスタムイベント</h3>
+    <h3 class="mt-6 mb-2 font-medium">カスタムイベント</h3>
     <ResponsiveTable>
       <table class="w-full border-collapse">
         <thead>
@@ -203,18 +161,15 @@ import Icon from './Icon.astro';
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>toggle</code></td>
-            <td class="text-muted-foreground py-2 pr-4">{'{ pressed: boolean }'}</td>
-            <td class="py-2">トグル状態が変更されたときに発火</td>
+            <td class="py-2 pr-4"><code>button-activate</code></td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2"
+              >ボタンがアクティブ化されたとき（クリック、Space、または Enter）に発火</td
+            >
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
-    <p class="text-muted-foreground mt-4 text-sm">
-      このコンポーネントは、クライアントサイドのインタラクティビティのためにWeb Component（<code
-        >&lt;apg-toggle-button&gt;</code
-      >）を使用しています。
-    </p>
   </section>
 
   <!-- Testing Section -->
@@ -223,6 +178,15 @@ import Icon from './Icon.astro';
       >{t('pattern.testing')}</Heading
     >
     <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="Button.test.astro.ts"
+      />
+    </div>
   </section>
 
   <!-- Resources -->
@@ -237,6 +201,14 @@ import Icon from './Icon.astro';
           class="text-primary hover:underline"
         >
           WAI-ARIA APG: Button パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;button&gt; element
         </ExternalLink>
       </li>
       <AiGuideResourceItem pattern="button" />

@@ -1,0 +1,44 @@
+---
+/**
+ * Demo-only Page: ToggleButton (Astro)
+ *
+ * This page renders the ToggleButton component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ *
+ * Used for:
+ * - E2E testing with correct focus management
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import ToggleButton from '@patterns/toggle-button/ToggleButton.astro';
+import Icon from '@/components/ui/icon/icon.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Toggle Button (Astro)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-wrap gap-4">
+      <ToggleButton>
+        <Icon name="volume-off" slot="pressed-indicator" />
+        <Icon name="volume-2" slot="unpressed-indicator" />
+        Mute
+      </ToggleButton>
+      <ToggleButton initialPressed={true}>
+        <Icon name="moon" slot="pressed-indicator" />
+        <Icon name="sun" slot="unpressed-indicator" />
+        Dark Mode
+      </ToggleButton>
+      <ToggleButton disabled>
+        <Icon name="bell-off" slot="pressed-indicator" />
+        <Icon name="bell" slot="unpressed-indicator" />
+        Notifications
+      </ToggleButton>
+    </div>
+  </body>
+</html>

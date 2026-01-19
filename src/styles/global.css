@@ -12,6 +12,7 @@
 @import './patterns/checkbox.css';
 @import './patterns/radio-group.css';
 @import './patterns/link.css';
+@import './patterns/button.css';
 @import './patterns/meter.css';
 @import './patterns/slider.css';
 @import './patterns/slider-multithumb.css';

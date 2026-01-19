@@ -1,16 +1,9 @@
 ---
 /**
- * Demo-only Page: ToggleButtonDemo (Svelte)
- *
- * This page renders the ToggleButtonDemo component in isolation without
- * the site layout. This ensures clean E2E testing environment.
- *
- * Used for:
- * - E2E testing with correct focus management
- * - Standalone demo viewing
+ * Demo-only Page: Button (Svelte) - Japanese
  */
 import '@/styles/global.css';
-import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.svelte';
+import Button from '@patterns/button/Button.svelte';
 ---
 
 <!doctype html>
@@ -19,9 +12,14 @@ import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.svelte';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>デモ: Toggle Button (Svelte)</title>
+    <title>デモ: ボタン (Svelte)</title>
   </head>
   <body class="p-8">
-    <ToggleButtonDemo client:load />
+    <div class="flex flex-wrap gap-4">
+      <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+      <Button client:load disabled onClick={() => alert('This should not fire!')}>
+        Disabled Button
+      </Button>
+    </div>
   </body>
 </html>

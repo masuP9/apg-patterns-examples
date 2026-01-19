@@ -1,0 +1,90 @@
+---
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="border-primary mb-8 rounded-lg border-2 p-4">
+  <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
+    <span aria-hidden="true">⚠️</span> Use Native HTML First
+  </h2>
+  <p class="mb-4">
+    <strong class="text-red-700 dark:text-red-400"
+      >Before using this custom component, consider using native <code>&lt;button&gt;</code> elements.</strong
+    >
+    They provide built-in accessibility, keyboard support, form integration, and work without JavaScript.
+  </p>
+  <div class="bg-muted mb-4 rounded-md p-3">
+    <pre
+      class="m-0 overflow-x-auto text-sm"><code>&lt;button type="button" onclick="handleClick()"&gt;Click me&lt;/button&gt;
+
+&lt;!-- For form submission --&gt;
+&lt;button type="submit"&gt;Submit&lt;/button&gt;
+
+&lt;!-- Disabled state --&gt;
+&lt;button type="button" disabled&gt;Disabled&lt;/button&gt;</code></pre>
+  </div>
+  <p class="mb-4 text-sm">
+    Use custom <code>role="button"</code> implementations only for educational purposes or when you must
+    make a non-button element (e.g., <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>) behave
+    like a button due to legacy constraints.
+  </p>
+
+  <ResponsiveTable>
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Feature</th>
+          <th class="py-2 pr-4 text-left">Native <code>&lt;button&gt;</code></th>
+          <th class="py-2 text-left">Custom <code>role="button"</code></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Keyboard activation (Space/Enter)</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2">Requires JavaScript</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Focus management</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
+          <td class="py-2">Requires tabindex</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled</code> attribute</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2">Requires aria-disabled + JS</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Form submission</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>type</code> attribute</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">submit/button/reset</b></td
+          >
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Works without JavaScript</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Yes</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">No</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Screen reader announcement</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
+          <td class="py-2">Requires ARIA</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">Space key scroll prevention</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
+          <td class="py-2">Requires preventDefault()</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mt-3 text-xs">
+    This custom implementation is provided for educational purposes to demonstrate APG patterns. In
+    production, always prefer native <code>&lt;button&gt;</code> elements.
+  </p>
+</div>

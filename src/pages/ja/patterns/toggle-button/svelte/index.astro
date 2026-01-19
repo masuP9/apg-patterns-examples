@@ -1,0 +1,192 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import Heading from '@/components/ui/Heading.astro';
+import ToggleButtonDemo from '@patterns/toggle-button/ToggleButtonDemo.svelte';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import AccessibilityDocs from '@patterns/toggle-button/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/toggle-button/TestingDocs.ja.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import sourceCode from '@patterns/toggle-button/ToggleButton.svelte?raw';
+import testCode from '@patterns/toggle-button/ToggleButton.test.svelte.ts?raw';
+import { useTranslation } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Toggle Button - Svelte"
+  pattern="toggle-button"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <p class="text-muted-foreground text-lg">
+      「押されている」または「押されていない」の2つの状態を持つボタン。
+    </p>
+    <AiGuideBadge pattern="toggle-button" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="toggle-button" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <ToggleButtonDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
+      >{t('pattern.accessibility')}</Heading
+    >
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
+      >{t('pattern.sourceCode')}</Heading
+    >
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="ToggleButton.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script>
+  import ToggleButton from './ToggleButton.svelte';
+
+  function handleToggle(pressed) {
+    console.log('Muted:', pressed);
+  }
+</script>
+
+<ToggleButton
+  initialPressed={false}
+  onToggle={handleToggle}
+  pressedIndicator="🔇"
+  unpressedIndicator="🔊"
+>
+  Mute
+</ToggleButton>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">初期の押下状態</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onToggle</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(pressed: boolean) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">状態変更時のコールバック</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>pressedIndicator</code></td>
+            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
+            <td class="text-muted-foreground py-2 pr-4">"●"</td>
+            <td class="py-2">押下状態のカスタムインジケーター</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
+            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
+            <td class="text-muted-foreground py-2 pr-4">"○"</td>
+            <td class="py-2">非押下状態のカスタムインジケーター</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>children</code></td>
+            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">ボタンのラベル（スロットコンテンツ）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
+      >{t('pattern.testing')}</Heading
+    >
+    <TestingDocs />
+    <div class="mt-6">
+      <CodeBlock
+        collapsible
+        collapsedLines={5}
+        code={testCode}
+        lang="typescript"
+        title="ToggleButton.test.svelte.ts"
+      />
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold"
+      >{t('pattern.resources')}</Heading
+    >
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Button パターン
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="toggle-button" />
+    </ul>
+  </section>
+</PatternLayout>

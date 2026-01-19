@@ -1,0 +1,131 @@
+---
+/**
+ * APG Button Pattern - Astro Implementation
+ *
+ * A custom button using role="button" on a non-button element.
+ * Uses Web Components for enhanced interactivity.
+ *
+ * Note: This is a custom implementation for educational purposes.
+ * For production use, prefer native <button> elements.
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/button/
+ */
+
+export interface Props {
+  /** Whether the button is disabled */
+  disabled?: boolean;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const { disabled = false, class: className = '' } = Astro.props;
+---
+
+<apg-button>
+  <span
+    role="button"
+    tabindex={disabled ? -1 : 0}
+    aria-disabled={disabled ? 'true' : undefined}
+    class={`apg-button ${className}`.trim()}
+  >
+    <slot />
+  </span>
+</apg-button>
+
+<script>
+  class ApgButton extends HTMLElement {
+    private spanElement: HTMLSpanElement | null = null;
+    private rafId: number | null = null;
+    // Track if Space was pressed on this element (for keyup activation)
+    private spacePressed = false;
+
+    connectedCallback() {
+      this.rafId = requestAnimationFrame(() => this.initialize());
+    }
+
+    private initialize() {
+      this.rafId = null;
+      this.spanElement = this.querySelector('span[role="button"]');
+
+      if (!this.spanElement) {
+        console.warn('apg-button: span element not found');
+        return;
+      }
+
+      this.spanElement.addEventListener('click', this.handleClick);
+      this.spanElement.addEventListener('keydown', this.handleKeyDown);
+      this.spanElement.addEventListener('keyup', this.handleKeyUp);
+    }
+
+    disconnectedCallback() {
+      if (this.rafId !== null) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+      this.spanElement?.removeEventListener('click', this.handleClick);
+      this.spanElement?.removeEventListener('keydown', this.handleKeyDown);
+      this.spanElement?.removeEventListener('keyup', this.handleKeyUp);
+      this.spanElement = null;
+    }
+
+    private isDisabled(): boolean {
+      return this.spanElement?.getAttribute('aria-disabled') === 'true';
+    }
+
+    private handleClick = (event: MouseEvent) => {
+      if (this.isDisabled()) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('button-activate', {
+          bubbles: true,
+        })
+      );
+    };
+
+    private handleKeyDown = (event: KeyboardEvent) => {
+      // Ignore if composing (IME input) or already handled
+      if (event.isComposing || event.defaultPrevented) {
+        return;
+      }
+
+      if (this.isDisabled()) {
+        return;
+      }
+
+      // Space: prevent scroll on keydown, activate on keyup (native button behavior)
+      if (event.key === ' ') {
+        event.preventDefault();
+        this.spacePressed = true;
+        return;
+      }
+
+      // Enter: activate on keydown (native button behavior)
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        this.spanElement?.click();
+      }
+    };
+
+    private handleKeyUp = (event: KeyboardEvent) => {
+      // Space: activate on keyup if Space was pressed on this element
+      if (event.key === ' ' && this.spacePressed) {
+        this.spacePressed = false;
+
+        if (this.isDisabled()) {
+          return;
+        }
+
+        event.preventDefault();
+        this.spanElement?.click();
+      }
+    };
+  }
+
+  if (!customElements.get('apg-button')) {
+    customElements.define('apg-button', ApgButton);
+  }
+</script>
