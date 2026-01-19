@@ -1,7 +1,11 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Heading from '@/components/ui/Heading.astro';
-import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/toggle-button/ToggleButtonDemo';
+import {
+  MuteDemo,
+  DarkModeDemo,
+  NotificationsDemo,
+} from '@patterns/toggle-button/ToggleButtonDemo';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
@@ -24,7 +28,12 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Toggle Button - React" pattern="toggle-button" framework="react" tocItems={tocItems}>
+<PatternLayout
+  title="Toggle Button - React"
+  pattern="toggle-button"
+  framework="react"
+  tocItems={tocItems}
+>
   <header class="mb-8">
     <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
     <p class="text-muted-foreground text-lg">
