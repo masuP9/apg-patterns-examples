@@ -28,6 +28,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
+| Data Grid            | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Dialog               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Feed                 | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
@@ -40,7 +41,7 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
-| Slider (Multi-Thumb) | -     | -   | -      | -     | -   | Planned  |
+| Slider (Multi-Thumb) | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Spinbutton           | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | Complete |
