@@ -21,7 +21,7 @@ function getSortIndicator(direction?: SortDirection): string {
 function getAriaReadonly(
   gridEditable: boolean,
   cellReadonly: boolean | undefined,
-  cellEditable: boolean
+  cellEditable: boolean | undefined
 ): 'true' | 'false' | undefined {
   if (!gridEditable) return undefined;
   if (cellReadonly === true) return 'true';
@@ -950,14 +950,12 @@ const initialFocusedId = getInitialFocusedId();
       header.dataset.sortDirection = nextDirection;
       header.setAttribute('aria-sort', nextDirection);
 
-      // Add sort indicator
-      if (nextDirection !== 'none') {
-        const indicator = document.createElement('span');
-        indicator.className = 'sort-indicator';
-        indicator.setAttribute('aria-hidden', 'true');
-        indicator.textContent = nextDirection === 'ascending' ? '▲' : '▼';
-        header.appendChild(indicator);
-      }
+      // Add sort indicator (always add since nextDirection is 'ascending' or 'descending')
+      const indicator = document.createElement('span');
+      indicator.className = 'sort-indicator';
+      indicator.setAttribute('aria-hidden', 'true');
+      indicator.textContent = nextDirection === 'ascending' ? '▲' : '▼';
+      header.appendChild(indicator);
 
       this.dispatchEvent(
         new CustomEvent('sort', {

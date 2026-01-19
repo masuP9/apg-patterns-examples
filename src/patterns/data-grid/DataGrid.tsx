@@ -741,7 +741,7 @@ export function DataGrid({
       if (!pos) return;
 
       const { colIndex } = pos;
-      const { key, ctrlKey, shiftKey } = event;
+      const { key, ctrlKey } = event;
 
       let handled = true;
 
@@ -1305,9 +1305,9 @@ export function DataGrid({
   const showMultiselectable = rowMultiselectable || multiselectable;
 
   // CSS variable for grid column count
-  const gridStyle = {
+  const gridStyle: Record<string, string | number> = {
     '--apg-data-grid-columns': columns.length,
-  } as React.CSSProperties;
+  };
 
   return (
     <div
@@ -1552,7 +1552,10 @@ export function DataGrid({
                         }}
                         onBlur={(e) => {
                           // Check if focus is moving to listbox
-                          if (listboxRef.current?.contains(e.relatedTarget as Node)) {
+                          if (
+                            e.relatedTarget instanceof Node &&
+                            listboxRef.current?.contains(e.relatedTarget)
+                          ) {
                             return;
                           }
                           setComboboxExpanded(false);
