@@ -28,6 +28,7 @@
 | Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
+| Data Grid            | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Dialog               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Disclosure           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Feed                 | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
@@ -40,7 +41,7 @@
 | Meter                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Radio Group          | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Slider               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Slider (Multi-Thumb) | -     | -   | -      | -     | -   | 予定       |
+| Slider (Multi-Thumb) | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Spinbutton           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Switch               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Table                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
