@@ -123,28 +123,6 @@ function handleEditEnd(cellId: string, value: string, cancelled: boolean) {
 
 <template>
   <div class="apg-data-grid-demo">
-    <div class="apg-data-grid-demo__description">
-      <p>
-        <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds, Ctrl+Home/End
-        for grid bounds.
-      </p>
-      <p>
-        <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle
-        sort direction.
-      </p>
-      <p v-if="rowSelectable">
-        <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
-      </p>
-      <p v-if="enableRangeSelection">
-        <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
-      </p>
-      <p v-if="editable">
-        <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated by
-        pen icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown. Escape
-        to cancel.
-      </p>
-    </div>
-
     <div class="apg-data-grid-demo__controls">
       <label class="flex items-center gap-2">
         <input v-model="rowSelectable" type="checkbox" />
@@ -197,6 +175,28 @@ function handleEditEnd(cellId: string, value: string, cancelled: boolean) {
 
     <div v-if="rangeSelectedIds.length > 0" class="apg-data-grid-demo__selection-info">
       <strong>Range selected cells:</strong> {{ rangeSelectedIds.join(', ') }}
+    </div>
+
+    <div class="apg-data-grid-demo__description">
+      <p>
+        <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds, Ctrl+Home/End
+        for grid bounds.
+      </p>
+      <p>
+        <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle
+        sort direction.
+      </p>
+      <p v-if="rowSelectable">
+        <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
+      </p>
+      <p v-if="enableRangeSelection">
+        <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
+      </p>
+      <p v-if="editable">
+        <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated by
+        pen icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown. Escape
+        to cancel.
+      </p>
     </div>
   </div>
 </template>

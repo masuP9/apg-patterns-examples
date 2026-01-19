@@ -147,32 +147,6 @@
 </script>
 
 <div class="apg-data-grid-demo">
-  <div class="apg-data-grid-demo__description">
-    <p>
-      <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds, Ctrl+Home/End for
-      grid bounds.
-    </p>
-    <p>
-      <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle sort direction.
-    </p>
-    {#if rowSelectable}
-      <p>
-        <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
-      </p>
-    {/if}
-    {#if enableRangeSelection}
-      <p>
-        <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
-      </p>
-    {/if}
-    {#if editable}
-      <p>
-        <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated by pen
-        icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown. Escape to cancel.
-      </p>
-    {/if}
-  </div>
-
   <div class="apg-data-grid-demo__controls">
     <label class="flex items-center gap-2">
       <input type="checkbox" bind:checked={rowSelectable} />
@@ -225,4 +199,30 @@
       {rangeSelectedIds.join(', ')}
     </div>
   {/if}
+
+  <div class="apg-data-grid-demo__description">
+    <p>
+      <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds, Ctrl+Home/End for
+      grid bounds.
+    </p>
+    <p>
+      <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle sort direction.
+    </p>
+    {#if rowSelectable}
+      <p>
+        <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
+      </p>
+    {/if}
+    {#if enableRangeSelection}
+      <p>
+        <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
+      </p>
+    {/if}
+    {#if editable}
+      <p>
+        <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated by pen
+        icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown. Escape to cancel.
+      </p>
+    {/if}
+  </div>
 </div>

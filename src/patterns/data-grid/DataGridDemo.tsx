@@ -163,34 +163,6 @@ export function DataGridDemo() {
 
   return (
     <div className="apg-data-grid-demo">
-      <div className="apg-data-grid-demo__description">
-        <p>
-          <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds,
-          Ctrl+Home/End for grid bounds.
-        </p>
-        <p>
-          <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle
-          sort direction.
-        </p>
-        {rowSelectable && (
-          <p>
-            <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
-          </p>
-        )}
-        {enableRangeSelection && (
-          <p>
-            <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
-          </p>
-        )}
-        {editable && (
-          <p>
-            <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated
-            by pen icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown.
-            Escape to cancel.
-          </p>
-        )}
-      </div>
-
       <div className="apg-data-grid-demo__controls">
         <label className="flex items-center gap-2">
           <input
@@ -257,6 +229,34 @@ export function DataGridDemo() {
           <strong>Range selected cells:</strong> {rangeSelectedIds.join(', ')}
         </div>
       )}
+
+      <div className="apg-data-grid-demo__description">
+        <p>
+          <strong>Navigation:</strong> Arrow keys to navigate, Home/End for row bounds,
+          Ctrl+Home/End for grid bounds.
+        </p>
+        <p>
+          <strong>Sorting:</strong> Click or press Enter/Space on a sortable column header to cycle
+          sort direction.
+        </p>
+        {rowSelectable && (
+          <p>
+            <strong>Row Selection:</strong> Click checkboxes or press Space to select/deselect rows.
+          </p>
+        )}
+        {enableRangeSelection && (
+          <p>
+            <strong>Range Selection:</strong> Hold Shift and use arrow keys to extend selection.
+          </p>
+        )}
+        {editable && (
+          <p>
+            <strong>Editing:</strong> Press Enter or F2 on an editable cell (Role/Status, indicated
+            by pen icon) to edit. Role uses combobox with autocomplete, Status uses select dropdown.
+            Escape to cancel.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
