@@ -1,0 +1,200 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
+    requirements. The Toggle Button component uses a two-layer testing strategy.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component rendering and interactions using framework-specific Testing Library
+      utilities. These tests ensure correct component behavior in isolation.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML structure and element hierarchy</li>
+      <li>Initial attribute values (aria-pressed, type)</li>
+      <li>Click event handling and state toggling</li>
+      <li>CSS class application</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      Verify component behavior in a real browser environment across all four frameworks. These
+      tests cover interactions that require full browser context.
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>Keyboard interactions (Space, Enter)</li>
+      <li>aria-pressed state toggling</li>
+      <li>Disabled state behavior</li>
+      <li>Focus management and Tab navigation</li>
+      <li>Cross-framework consistency</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG Keyboard Interaction (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Space key toggles</code></td>
+          <td class="py-2">Pressing Space toggles the button state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enter key toggles</code></td>
+          <td class="py-2">Pressing Enter toggles the button state</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab navigation</code></td>
+          <td class="py-2">Tab key moves focus between buttons</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
+          <td class="py-2">Disabled buttons are skipped in Tab order</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    High Priority: APG ARIA Attributes (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="button"</code></td>
+          <td class="py-2">Has implicit button role (via <code>&lt;button&gt;</code>)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-pressed initial</code></td>
+          <td class="py-2">Initial state is <code>aria-pressed="false"</code></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-pressed toggle</code></td>
+          <td class="py-2">Click changes <code>aria-pressed</code> to <code>true</code></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>type="button"</code></td>
+          <td class="py-2">Explicit button type prevents form submission</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>disabled state</code></td>
+          <td class="py-2">Disabled buttons don't change state on click</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    Medium Priority: Accessibility (E2E)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>accessible name</code></td>
+          <td class="py-2">Button has an accessible name from content</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    Low Priority: HTML Attribute Inheritance (Unit)
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Test</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>className merge</code></td>
+          <td class="py-2">Custom classes are merged with component classes</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>data-* attributes</code></td>
+          <td class="py-2">Custom data attributes are passed through</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
+        >Vitest</ExternalLink
+      >
+      - Test runner for unit tests
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
+        >Testing Library</ExternalLink
+      >
+      - Framework-specific testing utilities (React, Vue, Svelte)
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
+        >Playwright</ExternalLink
+      >
+      - Browser automation for E2E tests
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline">axe-core/playwright</ExternalLink
+      >
+      - Automated accessibility testing in E2E
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    See <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline">testing-strategy.md</ExternalLink
+    > for full documentation.
+  </p>
+</div>

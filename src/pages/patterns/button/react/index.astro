@@ -1,20 +1,22 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import Heading from '@/components/ui/Heading.astro';
-import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/button/ToggleButtonDemo';
+import { Button } from '@patterns/button/Button';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/button/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/button/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
-import sourceCode from '@patterns/button/ToggleButton.tsx?raw';
-import testCode from '@patterns/button/ToggleButton.test.tsx?raw';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/button/Button.tsx?raw';
+import testCode from '@patterns/button/Button.test.tsx?raw';
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
+  { id: 'native-html', text: 'Native HTML' },
   { id: 'accessibility-features', text: 'Accessibility Features' },
   { id: 'source-code', text: 'Source Code' },
   { id: 'usage', text: 'Usage' },
@@ -24,11 +26,11 @@ const tocItems = [
 ];
 ---
 
-<PatternLayout title="Toggle Button - React" pattern="button" framework="react" tocItems={tocItems}>
+<PatternLayout title="Button - React" pattern="button" framework="react" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <h1 class="mb-4 text-3xl font-bold">Button</h1>
     <p class="text-muted-foreground text-lg">
-      A two-state button that can be either "pressed" or "not pressed".
+      An element that enables users to trigger an action or event using role="button".
     </p>
     <AiGuideBadge pattern="button" />
   </header>
@@ -41,14 +43,21 @@ const tocItems = [
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-wrap gap-4">
-        <MuteDemo client:load />
-        <DarkModeDemo client:load />
-        <NotificationsDemo client:load />
+        <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+        <Button client:load disabled onClick={() => alert('This should not fire!')}>
+          Disabled Button
+        </Button>
       </div>
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
     </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
+    <NativeHtmlNotice />
   </section>
 
   <!-- Accessibility Section -->
@@ -60,13 +69,7 @@ const tocItems = [
   <!-- Source Code Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-    <CodeBlock
-      collapsible
-      collapsedLines={5}
-      code={sourceCode}
-      lang="tsx"
-      title="ToggleButton.tsx"
-    />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Button.tsx" />
   </section>
 
   <!-- Usage Section -->
@@ -75,19 +78,26 @@ const tocItems = [
     <CodeBlock
       collapsible
       collapsedLines={5}
-      code={`import { ToggleButton } from './ToggleButton';
-import { Volume2, VolumeOff } from 'lucide-react';
+      code={`import { Button } from './Button';
 
 function App() {
   return (
-    <ToggleButton
-      initialPressed={false}
-      onPressedChange={(pressed) => console.log('Muted:', pressed)}
-      pressedIndicator={<VolumeOff size={20} />}
-      unpressedIndicator={<Volume2 size={20} />}
-    >
-      Mute
-    </ToggleButton>
+    <div>
+      {/* Basic button */}
+      <Button onClick={() => console.log('Clicked!')}>
+        Click me
+      </Button>
+
+      {/* Disabled button */}
+      <Button disabled onClick={() => alert('Should not fire')}>
+        Disabled
+      </Button>
+
+      {/* With aria-label for icon buttons */}
+      <Button onClick={handleSettings} aria-label="Settings">
+        <SettingsIcon />
+      </Button>
+    </div>
   );
 }`}
       lang="tsx"
@@ -110,40 +120,28 @@ function App() {
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="py-2 pr-4"><code>onClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(event) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">Click/Space/Enter event handler</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">Initial pressed state</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>onPressedChange</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(pressed: boolean) =&gt; void</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Callback when state changes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>pressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">"●"</td>
-            <td class="py-2">Custom indicator for pressed state</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">"○"</td>
-            <td class="py-2">Custom indicator for unpressed state</td>
+            <td class="py-2">Whether the button is disabled</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>children</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">Button label</td>
+            <td class="py-2">Button content</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      All other props are passed to the underlying <code>&lt;button&gt;</code> element.
+      All other props are passed to the underlying <code>&lt;span&gt;</code> element.
     </p>
   </section>
 
@@ -157,7 +155,7 @@ function App() {
         collapsedLines={5}
         code={testCode}
         lang="tsx"
-        title="ToggleButton.test.tsx"
+        title="Button.test.tsx"
       />
     </div>
   </section>
@@ -172,6 +170,14 @@ function App() {
           class="text-primary hover:underline"
         >
           WAI-ARIA APG: Button Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;button&gt; element
         </ExternalLink>
       </li>
       <AiGuideResourceItem pattern="button" />

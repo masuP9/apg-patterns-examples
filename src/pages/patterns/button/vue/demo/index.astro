@@ -1,16 +1,12 @@
 ---
 /**
- * Demo-only Page: ToggleButtonDemo (Vue)
+ * Demo-only Page: Button (Vue)
  *
- * This page renders the ToggleButtonDemo component in isolation without
+ * This page renders the Button component in isolation without
  * the site layout. This ensures clean E2E testing environment.
- *
- * Used for:
- * - E2E testing with correct focus management
- * - Standalone demo viewing
  */
 import '@/styles/global.css';
-import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.vue';
+import Button from '@patterns/button/Button.vue';
 ---
 
 <!doctype html>
@@ -19,9 +15,12 @@ import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.vue';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Demo: Toggle Button (Vue)</title>
+    <title>Demo: Button (Vue)</title>
   </head>
   <body class="p-8">
-    <ToggleButtonDemo client:load />
+    <div class="flex flex-wrap gap-4">
+      <Button client:load>Click me</Button>
+      <Button client:load disabled>Disabled Button</Button>
+    </div>
   </body>
 </html>

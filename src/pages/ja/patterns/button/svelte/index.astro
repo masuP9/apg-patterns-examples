@@ -1,17 +1,18 @@
 ---
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
-import Heading from '@/components/ui/Heading.astro';
-import ToggleButtonDemo from '@patterns/button/ToggleButtonDemo.svelte';
+import Button from '@patterns/button/Button.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/button/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/button/NativeHtmlNotice.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
-import sourceCode from '@patterns/button/ToggleButton.svelte?raw';
-import testCode from '@patterns/button/ToggleButton.test.svelte.ts?raw';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/button/Button.svelte?raw';
+import testCode from '@patterns/button/Button.test.svelte.ts?raw';
 import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
@@ -19,6 +20,7 @@ const t = useTranslation(locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
   { id: 'accessibility-features', text: t('pattern.accessibility') },
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
@@ -29,16 +31,16 @@ const tocItems = [
 ---
 
 <PatternLayout
-  title="Toggle Button - Svelte"
+  title="ボタン - Svelte"
   pattern="button"
   framework="svelte"
   tocItems={tocItems}
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <h1 class="mb-4 text-3xl font-bold">Button</h1>
     <p class="text-muted-foreground text-lg">
-      「押されている」または「押されていない」の2つの状態を持つボタン。
+      role="button" を使用してアクションやイベントをトリガーする要素。
     </p>
     <AiGuideBadge pattern="button" />
   </header>
@@ -50,11 +52,22 @@ const tocItems = [
   <section class="mb-12">
     <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
-      <ToggleButtonDemo client:load />
+      <div class="flex flex-wrap gap-4">
+        <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+        <Button client:load disabled onClick={() => alert('This should not fire!')}>
+          Disabled Button
+        </Button>
+      </div>
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
     </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
   </section>
 
   <!-- Accessibility Section -->
@@ -75,7 +88,7 @@ const tocItems = [
       collapsedLines={5}
       code={sourceCode}
       lang="svelte"
-      title="ToggleButton.svelte"
+      title="Button.svelte"
     />
   </section>
 
@@ -86,23 +99,25 @@ const tocItems = [
       collapsible
       collapsedLines={5}
       code={`<script>
-  import ToggleButton from './ToggleButton.svelte';
+  import Button from './Button.svelte';
 
-  function handleToggle(pressed) {
-    console.log('Muted:', pressed);
+  function handleClick() {
+    console.log('Clicked!');
   }
 </script>
 
-<ToggleButton
-  initialPressed={false}
-  onToggle={handleToggle}
-  pressedIndicator="🔇"
-  unpressedIndicator="🔊"
->
-  Mute
-</ToggleButton>`}
+<!-- 基本的なボタン -->
+<Button onClick={handleClick}>Click me</Button>
+
+<!-- 無効なボタン -->
+<Button disabled>Disabled</Button>
+
+<!-- アイコンボタン用のaria-label -->
+<Button onClick={handleSettings} aria-label="Settings">
+  <SettingsIcon />
+</Button>`}
       lang="svelte"
-      title="使用例"
+      title="Example"
     />
   </section>
 
@@ -121,38 +136,23 @@ const tocItems = [
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="py-2 pr-4"><code>onClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(event) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">クリック/Space/Enterイベントハンドラ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">初期の押下状態</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>onToggle</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(pressed: boolean) =&gt; void</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">状態変更時のコールバック</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>pressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">"●"</td>
-            <td class="py-2">押下状態のカスタムインジケーター</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">"○"</td>
-            <td class="py-2">非押下状態のカスタムインジケーター</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>children</code></td>
-            <td class="text-muted-foreground py-2 pr-4">Snippet | string</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">ボタンのラベル（スロットコンテンツ）</td>
+            <td class="py-2">ボタンが無効かどうか</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
+    <p class="text-muted-foreground mt-4 text-sm">
+      その他のプロパティは、<code>$$restProps</code> を介して内部の <code>&lt;span&gt;</code> 要素に渡されます。
+    </p>
   </section>
 
   <!-- Testing Section -->
@@ -167,7 +167,7 @@ const tocItems = [
         collapsedLines={5}
         code={testCode}
         lang="typescript"
-        title="ToggleButton.test.svelte.ts"
+        title="Button.test.svelte.ts"
       />
     </div>
   </section>
@@ -184,6 +184,14 @@ const tocItems = [
           class="text-primary hover:underline"
         >
           WAI-ARIA APG: Button パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;button&gt; element
         </ExternalLink>
       </li>
       <AiGuideResourceItem pattern="button" />

@@ -66,8 +66,17 @@ export const PATTERNS: Pattern[] = [
     id: 'button',
     name: 'Button',
     description:
-      'A widget that enables users to trigger an action or event, such as submitting a form or toggling a state.',
+      'An element with role="button" that enables users to trigger an action. Demonstrates why native <button> is recommended.',
     icon: '🔘',
+    complexity: 'Low',
+    status: 'available',
+  },
+  {
+    id: 'toggle-button',
+    name: 'Toggle Button',
+    description:
+      'A two-state button that can be either pressed or not pressed, using aria-pressed to communicate state.',
+    icon: '🔀',
     complexity: 'Low',
     status: 'available',
   },

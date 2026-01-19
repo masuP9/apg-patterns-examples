@@ -1,24 +1,26 @@
 ---
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
-import Heading from '@/components/ui/Heading.astro';
-import { MuteDemo, DarkModeDemo, NotificationsDemo } from '@patterns/button/ToggleButtonDemo';
+import { Button } from '@patterns/button/Button';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/button/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/button/TestingDocs.ja.astro';
+import NativeHtmlNotice from '@patterns/button/NativeHtmlNotice.ja.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
-import sourceCode from '@patterns/button/ToggleButton.tsx?raw';
-import testCode from '@patterns/button/ToggleButton.test.tsx?raw';
-import { useTranslation, getPatternName } from '@/i18n';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/button/Button.tsx?raw';
+import testCode from '@patterns/button/Button.test.tsx?raw';
+import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
+  { id: 'native-html', text: 'ネイティブ HTML' },
   { id: 'accessibility-features', text: t('pattern.accessibility') },
   { id: 'source-code', text: t('pattern.sourceCode') },
   { id: 'usage', text: t('pattern.usage') },
@@ -29,16 +31,16 @@ const tocItems = [
 ---
 
 <PatternLayout
-  title={`${getPatternName('button', 'Toggle Button', locale)} - React`}
+  title="ボタン - React"
   pattern="button"
   framework="react"
   tocItems={tocItems}
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toggle Button</h1>
+    <h1 class="mb-4 text-3xl font-bold">Button</h1>
     <p class="text-muted-foreground text-lg">
-      「押されている」または「押されていない」の2つの状態を持つボタン。
+      role="button" を使用してアクションやイベントをトリガーする要素。
     </p>
     <AiGuideBadge pattern="button" />
   </header>
@@ -51,14 +53,21 @@ const tocItems = [
     <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
     <div class="border-border bg-background rounded-lg border p-6">
       <div class="flex flex-wrap gap-4">
-        <MuteDemo client:load />
-        <DarkModeDemo client:load />
-        <NotificationsDemo client:load />
+        <Button client:load onClick={() => alert('Clicked!')}>Click me</Button>
+        <Button client:load disabled onClick={() => alert('This should not fire!')}>
+          Disabled Button
+        </Button>
       </div>
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
     </p>
+  </section>
+
+  <!-- Native HTML Section -->
+  <section class="mb-12">
+    <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
+    <NativeHtmlNotice />
   </section>
 
   <!-- Accessibility Section -->
@@ -74,13 +83,7 @@ const tocItems = [
     <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold"
       >{t('pattern.sourceCode')}</Heading
     >
-    <CodeBlock
-      collapsible
-      collapsedLines={5}
-      code={sourceCode}
-      lang="tsx"
-      title="ToggleButton.tsx"
-    />
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="Button.tsx" />
   </section>
 
   <!-- Usage Section -->
@@ -89,23 +92,30 @@ const tocItems = [
     <CodeBlock
       collapsible
       collapsedLines={5}
-      code={`import { ToggleButton } from './ToggleButton';
-import { Volume2, VolumeOff } from 'lucide-react';
+      code={`import { Button } from './Button';
 
 function App() {
   return (
-    <ToggleButton
-      initialPressed={false}
-      onPressedChange={(pressed) => console.log('Muted:', pressed)}
-      pressedIndicator={<VolumeOff size={20} />}
-      unpressedIndicator={<Volume2 size={20} />}
-    >
-      Mute
-    </ToggleButton>
+    <div>
+      {/* 基本的なボタン */}
+      <Button onClick={() => console.log('Clicked!')}>
+        Click me
+      </Button>
+
+      {/* 無効なボタン */}
+      <Button disabled onClick={() => alert('Should not fire')}>
+        Disabled
+      </Button>
+
+      {/* アイコンボタン用のaria-label */}
+      <Button onClick={handleSettings} aria-label="Settings">
+        <SettingsIcon />
+      </Button>
+    </div>
   );
 }`}
       lang="tsx"
-      title="使用例"
+      title="Example"
     />
   </section>
 
@@ -124,40 +134,28 @@ function App() {
         </thead>
         <tbody>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>initialPressed</code></td>
+            <td class="py-2 pr-4"><code>onClick</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(event) =&gt; void</td>
+            <td class="text-muted-foreground py-2 pr-4">-</td>
+            <td class="py-2">クリック/Space/Enterイベントハンドラ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>disabled</code></td>
             <td class="text-muted-foreground py-2 pr-4">boolean</td>
             <td class="text-muted-foreground py-2 pr-4">false</td>
-            <td class="py-2">初期の押下状態</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>onPressedChange</code></td>
-            <td class="text-muted-foreground py-2 pr-4">(pressed: boolean) =&gt; void</td>
-            <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">状態変更時のコールバック</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>pressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">"●"</td>
-            <td class="py-2">押下状態のカスタムインジケーター</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4"><code>unpressedIndicator</code></td>
-            <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
-            <td class="text-muted-foreground py-2 pr-4">"○"</td>
-            <td class="py-2">非押下状態のカスタムインジケーター</td>
+            <td class="py-2">ボタンが無効かどうか</td>
           </tr>
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>children</code></td>
             <td class="text-muted-foreground py-2 pr-4">ReactNode</td>
             <td class="text-muted-foreground py-2 pr-4">-</td>
-            <td class="py-2">ボタンのラベル</td>
+            <td class="py-2">ボタンのコンテンツ</td>
           </tr>
         </tbody>
       </table>
     </ResponsiveTable>
     <p class="text-muted-foreground mt-4 text-sm">
-      その他のプロパティは、内部の <code>&lt;button&gt;</code> 要素に渡されます。
+      その他のプロパティは、内部の <code>&lt;span&gt;</code> 要素に渡されます。
     </p>
   </section>
 
@@ -173,7 +171,7 @@ function App() {
         collapsedLines={5}
         code={testCode}
         lang="tsx"
-        title="ToggleButton.test.tsx"
+        title="Button.test.tsx"
       />
     </div>
   </section>
@@ -190,6 +188,14 @@ function App() {
           class="text-primary hover:underline"
         >
           WAI-ARIA APG: Button パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"
+          class="text-primary hover:underline"
+        >
+          MDN: &lt;button&gt; element
         </ExternalLink>
       </li>
       <AiGuideResourceItem pattern="button" />

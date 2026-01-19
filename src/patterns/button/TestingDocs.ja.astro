@@ -5,37 +5,37 @@ import { ResponsiveTable } from '@/components/ui/table';
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    テストは、キーボード操作、ARIA属性、アクセシビリティ要件の観点からAPG準拠を検証します。Toggle
-    Buttonコンポーネントは2層テスト戦略を採用しています。
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件全体にわたってAPG準拠を検証します。
+    Buttonコンポーネントは2層のテスト戦略を採用しています。
   </p>
 
   <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">ユニットテスト (Testing Library)</h4>
+    <h4 class="mb-2 font-medium">ユニットテスト（Testing Library）</h4>
     <p class="text-muted-foreground mb-2 text-sm">
-      フレームワーク固有のTesting
-      Libraryユーティリティを使用してコンポーネントのレンダリングとインタラクションを検証します。分離された環境で正しいコンポーネント動作を確認できます。
+      フレームワーク固有のテストライブラリを使用してコンポーネントのレンダリング出力を検証します。これらのテストは正しいHTML構造とARIA属性を確認します。
     </p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>HTML構造と要素の階層</li>
-      <li>初期属性値（aria-pressed、type）</li>
-      <li>クリックイベント処理と状態切り替え</li>
-      <li>CSSクラスの適用</li>
+      <li>ARIA属性（role="button"、tabindex）</li>
+      <li>キーボード操作（SpaceキーとEnterキーでのアクティブ化）</li>
+      <li>無効状態の処理</li>
+      <li>jest-axeによるアクセシビリティ検証</li>
     </ul>
   </div>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2Eテスト (Playwright)</h4>
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
     <p class="text-muted-foreground mb-2 text-sm">
-      4つのフレームワーク全体で実際のブラウザ環境でのコンポーネント動作を検証します。フルブラウザコンテキストが必要なインタラクションをカバーします。
+      すべてのフレームワークで実際のブラウザ環境でコンポーネントの動作を検証します。これらのテストはインタラクションとフレームワーク間の一貫性をカバーします。
     </p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>キーボード操作（Space、Enter）</li>
-      <li>aria-pressed状態の切り替え</li>
-      <li>無効状態の動作</li>
-      <li>フォーカス管理とTabナビゲーション</li>
-      <li>クロスフレームワーク一貫性</li>
+      <li>ライブブラウザでのARIA構造</li>
+      <li>キーボードでのアクティブ化（SpaceキーとEnterキー）</li>
+      <li>クリック操作の動作</li>
+      <li>無効状態のインタラクション</li>
+      <li>axe-coreによるアクセシビリティスキャン</li>
+      <li>フレームワーク間の一貫性チェック</li>
     </ul>
   </div>
 
@@ -43,7 +43,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG キーボード操作（E2E）
+    高優先度: APGキーボード操作（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -55,28 +55,41 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space キーでトグル</code></td>
-          <td class="py-2">Spaceキーを押すとボタンの状態が切り替わる</td>
+          <td class="py-2 pr-4"><code>Space key</code></td>
+          <td class="py-2">ボタンをアクティブ化</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter キーでトグル</code></td>
-          <td class="py-2">Enterキーを押すとボタンの状態が切り替わる</td>
+          <td class="py-2 pr-4"><code>Enter key</code></td>
+          <td class="py-2">ボタンをアクティブ化</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab ナビゲーション</code></td>
-          <td class="py-2">Tabキーでボタン間のフォーカスを移動する</td>
+          <td class="py-2 pr-4"><code>Space preventDefault</code></td>
+          <td class="py-2">Spaceキー押下時のページスクロールを防止</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>無効時の Tab スキップ</code></td>
-          <td class="py-2">無効化されたボタンはTabの順序でスキップされる</td>
+          <td class="py-2 pr-4"><code>IME composing</code></td>
+          <td class="py-2">IME入力中はSpace/Enterキーを無視</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Tab navigation</code></td>
+          <td class="py-2">Tabキーでボタン間のフォーカスを移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
+          <td class="py-2">無効なボタンはTabオーダーでスキップされる</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <strong>重要:</strong> SpaceキーとEnterキーの両方がボタンをアクティブ化します。これはEnterキーのみに応答するリンクとは異なります。
+    カスタム実装では、ページスクロールを防止するためにSpaceキーで <code>event.preventDefault()</code
+    > を呼び出す必要があります。
+  </p>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    高優先度: APG ARIA 属性（E2E）
+    高優先度: ARIA属性（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -89,23 +102,56 @@ import { ResponsiveTable } from '@/components/ui/table';
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="button"</code></td>
-          <td class="py-2">暗黙的なbuttonロールを持つ（<code>&lt;button&gt;</code> 要素経由）</td>
+          <td class="py-2">要素がbuttonロールを持つ</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-pressed 初期値</code></td>
-          <td class="py-2">初期状態は <code>aria-pressed="false"</code></td>
+          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
+          <td class="py-2">要素がキーボードでフォーカス可能</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-pressed トグル</code></td>
-          <td class="py-2">クリックで <code>aria-pressed</code> が <code>true</code> に変わる</td>
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2">無効時に "true" に設定</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>type="button"</code></td>
-          <td class="py-2">明示的なbutton typeがフォーム送信を防ぐ</td>
+          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
+          <td class="py-2">無効時にTabオーダーから除外するために設定</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>無効状態</code></td>
-          <td class="py-2">無効化されたボタンはクリックで状態が変わらない</td>
+          <td class="py-2 pr-4"><code>Accessible name</code></td>
+          <td class="py-2">テキストコンテンツ、aria-label、またはaria-labelledbyから名前を取得</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    高優先度: クリック動作（Unit + E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Click activation</code></td>
+          <td class="py-2">クリックでボタンがアクティブ化される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled click</code></td>
+          <td class="py-2">無効なボタンはクリックイベントを無視</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Space</code></td>
+          <td class="py-2">無効なボタンはSpaceキーを無視</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Disabled Enter</code></td>
+          <td class="py-2">無効なボタンはEnterキーを無視</td>
         </tr>
       </tbody>
     </table>
@@ -113,7 +159,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    中優先度: アクセシビリティ（E2E）
+    中優先度: アクセシビリティ（Unit + E2E）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -125,12 +171,16 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe 違反</code></td>
-          <td class="py-2">WCAG 2.1 AA違反がない（jest-axe経由）</td>
+          <td class="py-2 pr-4"><code>axe violations</code></td>
+          <td class="py-2">WCAG 2.1 AAの違反がない（jest-axeによる）</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>アクセシブル名</code></td>
-          <td class="py-2">ボタンがコンテンツからアクセシブルな名前を持つ</td>
+          <td class="py-2 pr-4"><code>disabled axe</code></td>
+          <td class="py-2">無効状態での違反がない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label axe</code></td>
+          <td class="py-2">aria-label使用時の違反がない</td>
         </tr>
       </tbody>
     </table>
@@ -138,7 +188,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    低優先度: HTML属性の継承（Unit）
+    低優先度: プロパティ & 属性（Unit）
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
@@ -150,12 +200,45 @@ import { ResponsiveTable } from '@/components/ui/table';
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className マージ</code></td>
-          <td class="py-2">カスタムクラスがコンポーネントのクラスとマージされる</td>
+          <td class="py-2 pr-4"><code>className</code></td>
+          <td class="py-2">カスタムクラスが適用される</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>data-* 属性</code></td>
+          <td class="py-2 pr-4"><code>data-* attributes</code></td>
           <td class="py-2">カスタムdata属性が渡される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>children</code></td>
+          <td class="py-2">子コンテンツがレンダリングされる</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+    低優先度: フレームワーク間の一貫性（E2E）
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>すべてのフレームワークにボタンがある</code></td>
+          <td class="py-2">React、Vue、Svelte、Astroすべてがカスタムボタン要素をレンダリング</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>同じボタン数</code></td>
+          <td class="py-2">すべてのフレームワークで同じ数のボタンをレンダリング</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>一貫したARIA</code></td>
+          <td class="py-2">すべてのフレームワークで一貫したARIA構造</td>
         </tr>
       </tbody>
     </table>
@@ -191,7 +274,7 @@ import { ResponsiveTable } from '@/components/ui/table';
   </ul>
 
   <p class="text-muted-foreground text-sm">
-    詳細は <ExternalLink
+    詳細なドキュメントは <ExternalLink
       href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
       class="text-primary hover:underline">testing-strategy.md</ExternalLink
     > を参照してください。

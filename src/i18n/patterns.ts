@@ -37,7 +37,12 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     button: {
       name: 'ボタン',
       description:
-        'フォームの送信や状態のトグルなど、アクションやイベントをトリガーするウィジェット。',
+        'role="button" を持つ要素で、アクションをトリガーするウィジェット。ネイティブ <button> を推奨する理由を示します。',
+    },
+    'toggle-button': {
+      name: 'トグルボタン',
+      description:
+        '押された状態と押されていない状態の2状態を持つボタン。aria-pressed で状態を伝えます。',
     },
     carousel: {
       name: 'カルーセル',
