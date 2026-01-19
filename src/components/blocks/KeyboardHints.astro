@@ -1,0 +1,139 @@
+---
+/**
+ * Reusable Keyboard Hints component
+ * Displays keyboard shortcuts in organized sections
+ *
+ * Usage:
+ * <KeyboardHints
+ *   title="Keyboard Navigation"
+ *   sections={[
+ *     {
+ *       title: "Navigation",
+ *       hints: [
+ *         { keys: ["↑", "↓"], description: "Move between items" },
+ *         { keys: ["Home"], description: "First item" },
+ *       ]
+ *     }
+ *   ]}
+ * />
+ */
+
+export interface KeyboardHint {
+  keys: string[];
+  description: string;
+}
+
+export interface KeyboardSection {
+  title: string;
+  hints: KeyboardHint[];
+}
+
+export interface Props {
+  title: string;
+  sections: KeyboardSection[];
+  class?: string;
+}
+
+const { title, sections, class: className } = Astro.props;
+---
+
+<div class:list={['keyboard-hints', className]}>
+  <div class="keyboard-hints-title">{title}</div>
+
+  {
+    sections.map((section) => (
+      <div class="keyboard-section">
+        <div class="keyboard-section-title">{section.title}</div>
+        <dl class="keyboard-hints-list">
+          {section.hints.map((hint) => (
+            <div class="keyboard-hint">
+              <dt>
+                {hint.keys.map((key, i) => (
+                  <>
+                    <kbd>{key}</kbd>
+                    {i < hint.keys.length - 1 && ' '}
+                  </>
+                ))}
+              </dt>
+              <dd>{hint.description}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .keyboard-hints {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .keyboard-hints-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--foreground);
+    font-size: 0.875rem;
+  }
+
+  .keyboard-section {
+    margin-bottom: 0.75rem;
+  }
+
+  .keyboard-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .keyboard-section-title {
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+  }
+
+  .keyboard-hints-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1.25rem;
+    margin: 0;
+  }
+
+  .keyboard-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .keyboard-hint dt {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .keyboard-hint dd {
+    margin: 0;
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
+  }
+
+  .keyboard-hints kbd {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--foreground);
+    background: var(--background);
+    border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 15%, transparent);
+  }
+</style>
