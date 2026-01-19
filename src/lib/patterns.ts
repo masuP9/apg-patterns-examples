@@ -287,7 +287,7 @@ export const PATTERNS: Pattern[] = [
       'An advanced grid for displaying and manipulating tabular data with sorting, filtering, and row selection.',
     icon: '📋',
     complexity: 'High',
-    status: 'planned',
+    status: 'available',
   },
   {
     id: 'editable-grid',

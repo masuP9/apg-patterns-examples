@@ -1,0 +1,543 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <h3 class="mb-3 text-lg font-medium">When to Use Data Grid</h3>
+  <p class="text-muted-foreground mb-4">
+    Data Grid extends the basic <code>grid</code> role with spreadsheet-like features. Use Data Grid when
+    you need:
+  </p>
+  <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+    <li><strong>Sorting:</strong> Column headers that sort data on click/keyboard</li>
+    <li><strong>Row Selection:</strong> Checkbox-based selection of entire rows</li>
+    <li><strong>Range Selection:</strong> Shift+Arrow to select multiple cells</li>
+    <li>
+      <strong>Cell Editing:</strong> In-place editing with Enter/F2 to start, Escape to cancel
+    </li>
+  </ul>
+  <p class="text-muted-foreground mb-6">
+    For simple static tables, use native <code>&lt;table&gt;</code> elements. For interactive grids without
+    these features, use the basic <code>grid</code> pattern.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Role</th>
+          <th class="py-2 pr-4 text-left">Target Element</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>grid</code></td>
+          <td class="py-2 pr-4">Container</td>
+          <td class="py-2">The grid container (composite widget)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>row</code></td>
+          <td class="py-2 pr-4">Row container</td>
+          <td class="py-2">Groups cells horizontally</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>columnheader</code></td>
+          <td class="py-2 pr-4">Header cells</td>
+          <td class="py-2">Column headers (focusable when sortable)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>rowheader</code></td>
+          <td class="py-2 pr-4">Row header cell</td>
+          <td class="py-2">Row headers (optional)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>gridcell</code></td>
+          <td class="py-2 pr-4">Data cells</td>
+          <td class="py-2">Interactive cells (focusable, may be editable)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    <ExternalLink
+      href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
+      class="text-primary hover:underline"
+    >
+      APG Data Grids Examples
+    </ExternalLink>
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Grid Container)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="grid"</code></td>
+          <td class="py-2 pr-4">-</td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Identifies the container as a grid</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-label</code></td>
+          <td class="py-2 pr-4">String</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Accessible name for the grid</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
+          <td class="py-2 pr-4">ID reference</td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Alternative to aria-label</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Present when multi-select (row or cell) is enabled</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-readonly</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Present when entire grid is read-only</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowcount</code></td>
+          <td class="py-2 pr-4">Number (1-based)</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Total rows for virtualization</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colcount</code></td>
+          <td class="py-2 pr-4">Number (1-based)</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Total columns for virtualization</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Column Headers)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-sort</code></td>
+          <td class="py-2 pr-4"
+            ><code>ascending</code> | <code>descending</code> | <code>none</code> | <code
+              >other</code
+            ></td
+          >
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Current sort direction (only on sortable headers)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex</code></td>
+          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Roving tabindex (only on sortable headers)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">* Only required for sortable column headers.</p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Rows)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">Yes*</td>
+          <td class="py-2">Row selection state (when rowSelectable)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Indicates the row is disabled</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowindex</code></td>
+          <td class="py-2 pr-4">Number (1-based)</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Row position for virtualization</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">* Only required when row selection is enabled.</p>
+
+  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Grid Cells)</h3>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Attribute</th>
+          <th class="py-2 pr-4 text-left">Values</th>
+          <th class="py-2 pr-4 text-left">Required</th>
+          <th class="py-2 text-left">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>tabindex</code></td>
+          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
+          <td class="py-2 pr-4">Yes</td>
+          <td class="py-2">Roving tabindex for focus management</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">No*</td>
+          <td class="py-2">Cell selection state (when cell selectable)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-readonly</code></td>
+          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
+          <td class="py-2 pr-4">No*</td>
+          <td class="py-2">Cell editability (when grid is editable)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-disabled</code></td>
+          <td class="py-2 pr-4"><code>true</code></td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Indicates the cell is disabled</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colindex</code></td>
+          <td class="py-2 pr-4">Number (1-based)</td>
+          <td class="py-2 pr-4">No</td>
+          <td class="py-2">Column position for virtualization</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+  <p class="text-muted-foreground mb-6 text-sm">
+    * When selection/editing is supported, ALL gridcells should have the corresponding attribute.
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+
+  <h4 class="mb-2 font-medium">2D Navigation</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
+          >
+          <td class="py-2">Move focus one cell right</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
+          >
+          <td class="py-2">Move focus one cell left</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
+          >
+          <td class="py-2">Move focus one row down (from header to first data row)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+          >
+          <td class="py-2">Move focus one row up (from first row to header if sortable)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Move focus to first cell in row</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Move focus to last cell in row</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">Move focus to first cell in grid</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">Move focus to last cell in grid</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageDown</kbd></td
+          >
+          <td class="py-2">Move focus down by page size</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageUp</kbd></td
+          >
+          <td class="py-2">Move focus up by page size</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Sorting (Column Headers)</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Cycle sort direction (none → ascending → descending → ascending)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Cycle sort direction</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Range Selection</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection downward</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection upward</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection rightward</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection leftward</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection to row start</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
+            ></td
+          >
+          <td class="py-2">Extend selection to row end</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd
+            > + <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
+          >
+          <td class="py-2">Extend selection to grid start</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd
+            > + <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
+          >
+          <td class="py-2">Extend selection to grid end</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Cell Editing</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
+          >
+          <td class="py-2">Enter edit mode (on editable cell) or commit edit (in edit mode)</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">F2</kbd></td
+          >
+          <td class="py-2">Enter edit mode</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
+          >
+          <td class="py-2">Cancel edit and restore original value</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
+          >
+          <td class="py-2">Commit edit (in edit mode)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 font-medium">Selection & Activation</h4>
+  <ResponsiveTable class="mb-4">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">Key</th>
+          <th class="py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
+          >
+          <td class="py-2">Select/deselect focused cell or toggle row checkbox</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
+            ></td
+          >
+          <td class="py-2">Select all cells (when multiselectable)</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <p class="text-muted-foreground mb-4">
+    This component uses <strong>roving tabindex</strong> for focus management:
+  </p>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Only one element has <code>tabindex="0"</code> (current focus position)</li>
+    <li>All other focusable elements have <code>tabindex="-1"</code></li>
+    <li>Grid is a single Tab stop (Tab enters grid, Shift+Tab exits)</li>
+    <li>
+      <strong>Sortable column headers</strong> participate in roving tabindex (non-sortable headers are
+      not focusable)
+    </li>
+    <li>Arrow Up from first data row moves to sortable header at same column</li>
+    <li>Arrow Down from header moves to first data row at same column</li>
+    <li>
+      <strong>Edit mode:</strong> Focus moves to input field, grid navigation is disabled until edit ends
+    </li>
+    <li>Focus memory: last focused element is remembered when leaving and re-entering the grid</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Row Selection Behavior</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Row selection checkboxes are placed in a dedicated column (gridcell)</li>
+    <li>Each row checkbox has an accessible label (e.g., "Select row user1")</li>
+    <li>
+      When <code>rowMultiselectable</code> is true, a "Select all" checkbox appears in the header
+    </li>
+    <li>Select all checkbox shows indeterminate state when some (but not all) rows are selected</li>
+    <li>Row selection state is reflected via <code>aria-selected</code> on the row element</li>
+  </ul>
+
+  <h3 class="mb-3 text-lg font-medium">Edit Mode Behavior</h3>
+  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+    <li>Only cells with <code>editable: true</code> can enter edit mode</li>
+    <li>Cells with <code>readonly: true</code> cannot be edited even if editable</li>
+    <li>Grid-level <code>readonly</code> prop disables all editing</li>
+    <li><code>aria-readonly</code> on cells indicates editability to screen readers</li>
+    <li>When editing, focus is on the input field inside the cell</li>
+    <li>Grid keyboard navigation (arrows, Home, End) is suppressed during edit mode</li>
+    <li>On edit end (Enter, Tab, blur), focus returns to the cell</li>
+    <li>On cancel (Escape), original value is restored</li>
+  </ul>
+</div>

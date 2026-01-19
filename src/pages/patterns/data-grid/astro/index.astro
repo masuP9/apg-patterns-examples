@@ -1,0 +1,345 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import DataGrid from '@patterns/data-grid/DataGrid.astro';
+import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/data-grid/DataGrid.astro?raw';
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'data-grid-vs-grid', text: 'Data Grid vs Grid' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+
+// Demo data
+const columns = [
+  { id: 'name', header: 'Name', sortable: true, sortDirection: 'ascending' as const },
+  { id: 'email', header: 'Email', sortable: true },
+  { id: 'department', header: 'Department', sortable: true },
+];
+
+const rows = [
+  {
+    id: 'row1',
+    cells: [
+      { id: 'row1-name', value: 'Alice Johnson', editable: true },
+      { id: 'row1-email', value: 'alice@example.com', editable: true },
+      { id: 'row1-dept', value: 'Engineering' },
+    ],
+  },
+  {
+    id: 'row2',
+    cells: [
+      { id: 'row2-name', value: 'Bob Smith', editable: true },
+      { id: 'row2-email', value: 'bob@example.com', editable: true },
+      { id: 'row2-dept', value: 'Marketing' },
+    ],
+  },
+  {
+    id: 'row3',
+    cells: [
+      { id: 'row3-name', value: 'Carol Williams', editable: true },
+      { id: 'row3-email', value: 'carol@example.com', editable: true },
+      { id: 'row3-dept', value: 'Sales' },
+    ],
+  },
+];
+---
+
+<PatternLayout title="Data Grid - Astro" pattern="data-grid" framework="astro" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Data Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      An advanced interactive data grid with sorting, row selection, range selection, and cell
+      editing capabilities.
+    </p>
+    <AiGuideBadge pattern="data-grid" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="data-grid" currentFramework="astro" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <p class="text-muted-foreground mb-4 text-sm">
+      Click column headers to sort. Use checkboxes for row selection. Navigate with arrow keys and
+      use Shift+Arrow for range selection. Double-click or press Enter/F2 on editable cells to edit.
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        ariaLabel="Employee list"
+        rowSelectable
+        rowMultiselectable
+        enableRangeSelection
+        editable
+      />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+  </section>
+
+  <!-- Data Grid vs Grid Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Data Grid vs Grid</Heading>
+    <p class="text-muted-foreground mb-4">
+      Data Grid extends the basic Grid pattern with additional features for data manipulation.
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Feature</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Data Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">2D Navigation</td>
+            <td class="py-2 pr-4">Yes</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Cell Selection</td>
+            <td class="py-2 pr-4">Yes</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Column Sorting</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (aria-sort)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Row Selection</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (checkbox)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Range Selection</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (Shift+Arrow)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Cell Editing</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (Enter/F2)</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="astro"
+      title="DataGrid.astro"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`---
+import DataGrid from './DataGrid.astro';
+
+const columns = [
+  { id: 'name', header: 'Name', sortable: true, sortDirection: 'ascending' },
+  { id: 'email', header: 'Email', sortable: true },
+  { id: 'role', header: 'Role', sortable: true },
+];
+
+const rows = [
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-name', value: 'Alice Johnson', editable: true },
+      { id: 'user1-email', value: 'alice@example.com', editable: true },
+      { id: 'user1-role', value: 'Admin' },
+    ],
+  },
+];
+---
+
+<!-- Basic Data Grid -->
+<DataGrid
+  columns={columns}
+  rows={rows}
+  ariaLabel="User list"
+/>
+
+<!-- With row selection -->
+<DataGrid
+  columns={columns}
+  rows={rows}
+  ariaLabel="User list"
+  rowSelectable
+  rowMultiselectable
+/>
+
+<!-- With range selection and editing -->
+<DataGrid
+  columns={columns}
+  rows={rows}
+  ariaLabel="User list"
+  enableRangeSelection
+  editable
+/>
+
+<!-- Listen to events via custom events -->
+<script>
+  document.querySelector('apg-data-grid').addEventListener('datagrid:sort', (e) => {
+    console.log('Sort:', e.detail);
+  });
+  document.querySelector('apg-data-grid').addEventListener('datagrid:rowselect', (e) => {
+    console.log('Row selection:', e.detail);
+  });
+  document.querySelector('apg-data-grid').addEventListener('datagrid:editend', (e) => {
+    console.log('Edit end:', e.detail);
+  });
+</script>`}
+      lang="astro"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Column definitions</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Row data</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rowSelectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable row selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enableRangeSelection</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable range selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>editable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable cell editing</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Custom Events</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Event</th>
+            <th class="py-2 pr-4 text-left">Detail</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>datagrid:sort</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{`{ columnId, direction }`}</td>
+            <td class="py-2">Fired when a column is sorted</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>datagrid:rowselect</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{`{ rowIds }`}</td>
+            <td class="py-2">Fired when row selection changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>datagrid:editend</code></td>
+            <td class="text-muted-foreground py-2 pr-4">{`{ cellId, value, cancelled }`}</td>
+            <td class="py-2">Fired when cell editing ends</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid Examples
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="data-grid" />
+    </ul>
+  </section>
+</PatternLayout>

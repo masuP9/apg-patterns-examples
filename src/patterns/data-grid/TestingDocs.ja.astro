@@ -1,0 +1,419 @@
+---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+---
+
+<div class="prose dark:prose-invert max-w-none">
+  <p class="text-muted-foreground mb-4">
+    テストは、キーボード操作、ARIA属性、アクセシビリティ要件についてAPG準拠を検証します。 Data
+    Gridコンポーネントは、基本的なGridテスト戦略を拡張し、ソート、行選択、範囲選択、セル編集の追加テストを含みます。
+  </p>
+
+  <h3 class="mb-3 text-lg font-medium">テスト戦略</h3>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">ユニットテスト（Testing Library）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      フレームワーク固有のTesting
+      Libraryユーティリティを使用して、コンポーネントのレンダリングと操作を検証します。
+      これらのテストは、分離された環境でのコンポーネントの正しい動作を確認します。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>HTML構造と要素階層（grid、row、gridcell）</li>
+      <li>初期属性値（role、aria-label、tabindex、aria-sort）</li>
+      <li>選択状態の変化（行とセルのaria-selected）</li>
+      <li>編集モード状態（aria-readonly）</li>
+      <li>ソート方向の更新（aria-sort）</li>
+      <li>CSSクラスの適用</li>
+    </ul>
+  </div>
+
+  <div class="bg-muted/50 mb-6 rounded-lg p-4">
+    <h4 class="mb-2 font-medium">E2Eテスト（Playwright）</h4>
+    <p class="text-muted-foreground mb-2 text-sm">
+      実際のブラウザ環境で、4つのフレームワークすべてについてコンポーネントの動作を検証します。
+      これらのテストは、完全なブラウザコンテキストを必要とする操作をカバーします。
+    </p>
+    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+      <li>2Dキーボードナビゲーション（矢印キー）</li>
+      <li>ヘッダーナビゲーションとソート</li>
+      <li>Shift+矢印キーでの範囲選択</li>
+      <li>セル編集ワークフロー（Enter、F2、Escape）</li>
+      <li>チェックボックスでの行選択</li>
+      <li>ヘッダーとセル間のフォーカス管理</li>
+      <li>クロスフレームワークの一貫性</li>
+    </ul>
+  </div>
+
+  <h3 class="mb-3 text-lg font-medium">テストカテゴリ</h3>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: APG ARIA属性
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="grid"</code></td>
+          <td class="py-2">コンテナがgridロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="row"</code></td>
+          <td class="py-2">すべての行がrowロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="gridcell"</code></td>
+          <td class="py-2">データセルがgridcellロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>role="columnheader"</code></td>
+          <td class="py-2">ヘッダーセルがcolumnheaderロールを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-sort</code></td>
+          <td class="py-2">ソート可能ヘッダーがaria-sortを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-sort更新</code></td>
+          <td class="py-2">ソートアクションでaria-sortが更新される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>行のaria-selected</code></td>
+          <td class="py-2">rowSelectable時に行がaria-selectedを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>グリッドのaria-readonly</code></td>
+          <td class="py-2">readonly prop時にグリッドがaria-readonlyを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>セルのaria-readonly</code></td>
+          <td class="py-2">編集可否に基づきセルがaria-readonlyを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
+          <td class="py-2">行またはセルの複数選択が有効な場合に存在</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: ソート
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ヘッダーでEnter</code></td>
+          <td class="py-2">ソート可能ヘッダーでEnterがソートをトリガー</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ヘッダーでSpace</code></td>
+          <td class="py-2">ソート可能ヘッダーでSpaceがソートをトリガー</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ソートサイクル</code></td>
+          <td class="py-2">ソートがサイクル: none → ascending → descending → ascending</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ソート不可ヘッダー</code></td>
+          <td class="py-2">ソート不可ヘッダーはEnter/Spaceに応答しない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: 範囲選択
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+↓</code></td>
+          <td class="py-2">選択範囲を下に拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+↑</code></td>
+          <td class="py-2">選択範囲を上に拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+Home</code></td>
+          <td class="py-2">選択範囲を行の先頭まで拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Shift+End</code></td>
+          <td class="py-2">選択範囲を行の末尾まで拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+Shift+Home</code></td>
+          <td class="py-2">選択範囲をグリッドの先頭まで拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Ctrl+Shift+End</code></td>
+          <td class="py-2">選択範囲をグリッドの末尾まで拡張</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>選択アンカー</code></td>
+          <td class="py-2">最初の選択時に選択アンカーが設定される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: 行選択
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>チェックボックス切り替え</code></td>
+          <td class="py-2">チェックボックスクリックで行選択を切り替え</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-selected</code></td>
+          <td class="py-2">行要素のaria-selectedが更新される</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>コールバック発火</code></td>
+          <td class="py-2">onRowSelectionChangeコールバックが発火</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>すべて選択</code></td>
+          <td class="py-2">すべて選択チェックボックスが全行を選択/選択解除</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>不定状態</code></td>
+          <td class="py-2">一部選択時にすべて選択が不定状態を表示</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: セル編集
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Enterで編集開始</code></td>
+          <td class="py-2">編集可能セルでEnterが編集モードに入る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>F2で編集開始</code></td>
+          <td class="py-2">編集可能セルでF2が編集モードに入る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Escapeでキャンセル</code></td>
+          <td class="py-2">Escapeが編集をキャンセルして元の値を復元</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ナビゲーション無効</code></td>
+          <td class="py-2">編集モード中はグリッドナビゲーションが無効</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>入力フィールドにフォーカス</code></td>
+          <td class="py-2">編集開始時にフォーカスが入力フィールドに移動</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>フォーカス復帰</code></td>
+          <td class="py-2">編集終了時にフォーカスがセルに戻る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onEditStart</code></td>
+          <td class="py-2">編集モード開始時にonEditStartコールバックが発火</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>onEditEnd</code></td>
+          <td class="py-2">編集モード終了時にonEditEndコールバックが発火</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>読み取り専用セル</code></td>
+          <td class="py-2">読み取り専用セルは編集モードに入らない</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+    優先度高: フォーカス管理
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ソート可能ヘッダーがフォーカス可能</code></td>
+          <td class="py-2">ソート可能ヘッダーがtabindexを持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ソート不可がフォーカス不可</code></td>
+          <td class="py-2">ソート不可ヘッダーはtabindexを持たない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>最初がtabindex=0</code></td>
+          <td class="py-2">最初のフォーカス可能要素がtabindex="0"を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ヘッダーからデータへ</code></td>
+          <td class="py-2">ヘッダーからの↓が最初のデータ行に入る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>データからヘッダーへ</code></td>
+          <td class="py-2">最初の行からの↑がソート可能ヘッダーに入る</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>Roving tabindex</code></td>
+          <td class="py-2">Roving tabindexが正しく更新される</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    優先度中: 仮想化サポート
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowcount</code></td>
+          <td class="py-2">totalRows提供時に存在（1-based）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colcount</code></td>
+          <td class="py-2">totalColumns提供時に存在（1-based）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-rowindex</code></td>
+          <td class="py-2">仮想化時に行に存在（1-based）</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>aria-colindex</code></td>
+          <td class="py-2">仮想化時にセルに存在（1-based）</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h4 class="mb-2 flex items-center gap-2 font-medium">
+    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
+    優先度中: アクセシビリティ
+  </h4>
+  <ResponsiveTable class="mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-border border-b">
+          <th class="py-2 pr-4 text-left">テスト</th>
+          <th class="py-2 text-left">説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>axe-core</code></td>
+          <td class="py-2">アクセシビリティ違反がない</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>ソートインジケーター</code></td>
+          <td class="py-2">ソートインジケーターがアクセシブル名を持つ</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4"><code>チェックボックスラベル</code></td>
+          <td class="py-2">チェックボックスがアクセシブルなラベルを持つ</td>
+        </tr>
+      </tbody>
+    </table>
+  </ResponsiveTable>
+
+  <h3 class="mb-3 text-lg font-medium">テストツール</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    <li>
+      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">
+        Vitest
+      </ExternalLink>
+      - ユニットテスト用テストランナー
+    </li>
+    <li>
+      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
+        Testing Library
+      </ExternalLink>
+      - フレームワーク固有のテストユーティリティ（React、Vue、Svelte）
+    </li>
+    <li>
+      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
+        Playwright
+      </ExternalLink>
+      - E2Eテスト用ブラウザ自動化
+    </li>
+    <li>
+      <ExternalLink
+        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
+        class="text-primary hover:underline"
+      >
+        axe-core/playwright
+      </ExternalLink>
+      - E2Eでの自動アクセシビリティテスト
+    </li>
+  </ul>
+
+  <p class="text-muted-foreground text-sm">
+    詳細は
+    <ExternalLink
+      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      class="text-primary hover:underline"
+    >
+      testing-strategy.md
+    </ExternalLink>
+    を参照してください。
+  </p>
+</div>

@@ -1,0 +1,305 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import DataGridDemo from '@patterns/data-grid/DataGridDemo.svelte';
+import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/data-grid/TestingDocs.ja.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/data-grid/DataGrid.svelte?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'data-grid-vs-grid', text: 'Data Grid vs Grid' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Data Grid - Svelte"
+  pattern="data-grid"
+  framework="svelte"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Data Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      ソート、行選択、範囲選択、セル編集機能を備えた高度なインタラクティブデータグリッド。
+    </p>
+    <AiGuideBadge pattern="data-grid" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="data-grid" currentFramework="svelte" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <p class="text-muted-foreground mb-4 text-sm">
+      列ヘッダーをクリックでソート。チェックボックスで行選択。矢印キーで移動、Shift+矢印で範囲選択。編集可能なセルでダブルクリックまたはEnter/F2で編集開始。
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DataGridDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Data Grid vs Grid Section -->
+  <section class="mb-12">
+    <Heading level={2} id="data-grid-vs-grid" class="mb-4 text-xl font-semibold"
+      >Data Grid vs Grid</Heading
+    >
+    <p class="text-muted-foreground mb-4">
+      Data Grid は基本的な Grid パターンを拡張し、データ操作のための追加機能を提供します。
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">機能</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Data Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">2Dナビゲーション</td>
+            <td class="py-2 pr-4">あり</td>
+            <td class="py-2">あり</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">セル選択</td>
+            <td class="py-2 pr-4">あり</td>
+            <td class="py-2">あり</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">列ソート</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（aria-sort）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">行選択</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（チェックボックス）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">範囲選択</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（Shift+矢印）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">セル編集</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（Enter/F2）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="DataGrid.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+import DataGrid from './DataGrid.svelte';
+import type { DataGridColumnDef, DataGridRowData, SortDirection } from './DataGrid.svelte';
+
+let columns: DataGridColumnDef[] = $state([
+  { id: 'name', header: '名前', sortable: true },
+  { id: 'email', header: 'メール', sortable: true },
+  { id: 'role', header: '役割', sortable: true },
+]);
+
+let rows: DataGridRowData[] = $state([
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-name', value: '田中太郎', editable: true },
+      { id: 'user1-email', value: 'tanaka@example.com', editable: true },
+      { id: 'user1-role', value: '管理者' },
+    ],
+  },
+]);
+
+let selectedRowIds: string[] = $state([]);
+
+function handleSort(columnId: string, direction: SortDirection) {
+  columns = columns.map(col => ({
+    ...col,
+    sortDirection: col.id === columnId ? direction : 'none'
+  }));
+}
+</script>
+
+<DataGrid
+  {columns}
+  {rows}
+  ariaLabel="ユーザー一覧"
+  rowSelectable
+  rowMultiselectable
+  {selectedRowIds}
+  onSort={handleSort}
+  onRowSelectionChange={(ids) => selectedRowIds = ids}
+  onEditEnd={(cellId, value, cancelled) => console.log({ cellId, value, cancelled })}
+/>`}
+      lang="svelte"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">行データ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rowSelectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">行選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enableRangeSelection</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">範囲選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>editable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">セル編集を有効化</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">コールバック</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">コールバック</th>
+            <th class="py-2 pr-4 text-left">シグネチャ</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSort</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(columnId, direction) =&gt; void</td>
+            <td class="py-2">列がソートされた時に呼ばれる</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onRowSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="py-2">行選択が変更された時に呼ばれる</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onEditEnd</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(cellId, value, cancelled) =&gt; void</td>
+            <td class="py-2">セル編集が終了した時に呼ばれる</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid 例
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="data-grid" locale={locale} />
+    </ul>
+  </section>
+</PatternLayout>

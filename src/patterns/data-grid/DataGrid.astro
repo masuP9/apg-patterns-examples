@@ -1,0 +1,1599 @@
+---
+// =============================================================================
+// Types
+// =============================================================================
+
+export type SortDirection = 'ascending' | 'descending' | 'none' | 'other';
+export type EditType = 'text' | 'select' | 'combobox';
+
+// =============================================================================
+// Helper Functions
+// =============================================================================
+
+/** Get sort indicator character based on sort direction */
+function getSortIndicator(direction?: SortDirection): string {
+  if (direction === 'ascending') return '▲';
+  if (direction === 'descending') return '▼';
+  return '⇅';
+}
+
+/** Get aria-readonly value for a cell in editable grid */
+function getAriaReadonly(
+  gridEditable: boolean,
+  cellReadonly: boolean | undefined,
+  cellEditable: boolean
+): 'true' | 'false' | undefined {
+  if (!gridEditable) return undefined;
+  if (cellReadonly === true) return 'true';
+  if (cellEditable) return 'false';
+  return 'true'; // Non-editable cell in editable grid
+}
+
+/** Get aria-selected value for a cell */
+function getAriaSelected(
+  isSelectable: boolean,
+  isRowSelectable: boolean,
+  isSelected: boolean
+): 'true' | 'false' | undefined {
+  if (!isSelectable) return undefined;
+  if (isRowSelectable) return undefined; // Row selection takes precedence
+  return isSelected ? 'true' : 'false';
+}
+
+export interface DataGridCellData {
+  id: string;
+  value: string | number;
+  disabled?: boolean;
+  colspan?: number;
+  rowspan?: number;
+  editable?: boolean;
+  readonly?: boolean;
+}
+
+export interface DataGridColumnDef {
+  id: string;
+  header: string;
+  sortable?: boolean;
+  sortDirection?: SortDirection;
+  colspan?: number;
+  isRowLabel?: boolean; // This column provides accessible labels for row checkboxes
+  editable?: boolean; // Column-level editable flag
+  editType?: EditType; // Type of editor: text, select, or combobox
+  options?: string[]; // Options for select/combobox
+}
+
+export interface DataGridRowData {
+  id: string;
+  cells: DataGridCellData[];
+  hasRowHeader?: boolean;
+  disabled?: boolean;
+}
+
+interface Props {
+  columns: DataGridColumnDef[];
+  rows: DataGridRowData[];
+  ariaLabel?: string;
+  ariaLabelledby?: string;
+  // Row Selection
+  rowSelectable?: boolean;
+  rowMultiselectable?: boolean;
+  defaultSelectedRowIds?: string[];
+  // Cell Editing
+  editable?: boolean;
+  readonly?: boolean;
+  // Range Selection
+  enableRangeSelection?: boolean;
+  // Cell selection
+  selectable?: boolean;
+  multiselectable?: boolean;
+  defaultSelectedIds?: string[];
+  defaultFocusedId?: string;
+  // Virtualization
+  totalColumns?: number;
+  totalRows?: number;
+  startRowIndex?: number;
+  startColIndex?: number;
+  // Behavior
+  wrapNavigation?: boolean;
+  enablePageNavigation?: boolean;
+  pageSize?: number;
+  class?: string;
+  renderCell?: (cell: DataGridCellData, rowId: string, colId: string) => string;
+}
+
+// =============================================================================
+// Props
+// =============================================================================
+
+const {
+  columns,
+  rows,
+  ariaLabel,
+  ariaLabelledby,
+  // Row Selection
+  rowSelectable = false,
+  rowMultiselectable = false,
+  defaultSelectedRowIds = [],
+  // Cell Editing
+  editable = false,
+  readonly = false,
+  // Range Selection
+  enableRangeSelection = false,
+  // Cell selection
+  selectable = false,
+  multiselectable = false,
+  defaultSelectedIds = [],
+  defaultFocusedId,
+  // Virtualization
+  totalColumns,
+  totalRows,
+  startRowIndex = 1,
+  startColIndex = 1,
+  // Behavior
+  wrapNavigation = false,
+  enablePageNavigation = false,
+  pageSize = 5,
+  class: className,
+  renderCell,
+} = Astro.props;
+
+// Determine aria-multiselectable
+const ariaMultiselectable =
+  (rowSelectable && rowMultiselectable) || (selectable && multiselectable);
+
+// Determine if we need checkbox column
+const hasCheckboxColumn = rowSelectable;
+
+// Find the column that provides row labels (for aria-labelledby on row checkboxes)
+// Priority: 1. Column with isRowLabel: true, 2. First column (fallback)
+const rowLabelColumn = columns.find((col) => col.isRowLabel) ?? columns[0];
+
+// Calculate effective column count
+const effectiveColCount = hasCheckboxColumn ? columns.length + 1 : columns.length;
+
+// Determine initial focused cell based on row selection mode
+// rowMultiselectable: header checkbox cell is first (Select all rows)
+// rowSelectable only: first row's checkbox cell
+// Otherwise: first data cell
+// Note: Sortable headers are focusable via arrow navigation but not the initial Tab stop
+const getInitialFocusedId = () => {
+  if (defaultFocusedId) return defaultFocusedId;
+  if (rowSelectable && rowMultiselectable) return 'header-checkbox';
+  if (rowSelectable) return rows[0] ? `checkbox-${rows[0].id}` : null;
+  return rows[0]?.cells[0]?.id ?? null;
+};
+const initialFocusedId = getInitialFocusedId();
+---
+
+<apg-data-grid
+  class={`apg-data-grid ${className ?? ''}`}
+  style={`--apg-data-grid-columns: ${columns.length}`}
+  data-wrap-navigation={wrapNavigation}
+  data-enable-page-navigation={enablePageNavigation}
+  data-page-size={pageSize}
+  data-selectable={selectable}
+  data-multiselectable={multiselectable}
+  data-row-selectable={rowSelectable}
+  data-row-multiselectable={rowMultiselectable}
+  data-editable={editable}
+  data-readonly={readonly}
+  data-enable-range-selection={enableRangeSelection}
+>
+  <div
+    role="grid"
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
+    aria-multiselectable={ariaMultiselectable ? 'true' : undefined}
+    aria-readonly={readonly ? 'true' : undefined}
+    aria-rowcount={totalRows}
+    aria-colcount={totalColumns ?? effectiveColCount}
+  >
+    {/* Header Row */}
+    <div role="row" aria-rowindex={totalRows ? 1 : undefined}>
+      {
+        hasCheckboxColumn &&
+          (() => {
+            const isHeaderCheckboxFocused = initialFocusedId === 'header-checkbox';
+            return (
+              <div
+                role="columnheader"
+                class={`apg-data-grid-header apg-data-grid-checkbox-cell ${isHeaderCheckboxFocused ? 'focused' : ''}`}
+                tabindex={rowMultiselectable ? (isHeaderCheckboxFocused ? 0 : -1) : undefined}
+                aria-colindex={totalColumns ? startColIndex : undefined}
+                data-cell-id="header-checkbox"
+                data-header-checkbox="true"
+              >
+                {rowMultiselectable && (
+                  <input
+                    type="checkbox"
+                    tabindex={-1}
+                    aria-label="Select all rows"
+                    data-select-all="true"
+                  />
+                )}
+              </div>
+            );
+          })()
+      }
+      {
+        columns.map((col, colIndex) => {
+          const headerId = `header-${col.id}`;
+          const isFocused = initialFocusedId === headerId;
+          const ariaColIndex = totalColumns
+            ? startColIndex + colIndex + (hasCheckboxColumn ? 1 : 0)
+            : undefined;
+
+          return (
+            <div
+              role="columnheader"
+              class={`apg-data-grid-header ${col.sortable ? 'sortable' : ''} ${isFocused ? 'focused' : ''}`}
+              tabindex={col.sortable ? (isFocused ? 0 : -1) : undefined}
+              aria-sort={col.sortable ? (col.sortDirection ?? 'none') : undefined}
+              aria-colindex={ariaColIndex}
+              aria-colspan={col.colspan}
+              data-header-id={headerId}
+              data-col-id={col.id}
+              data-col-index={colIndex}
+              data-sortable={col.sortable ? 'true' : undefined}
+              data-sort-direction={col.sortDirection}
+            >
+              {col.header}
+              {col.sortable && (
+                <span
+                  class={`sort-indicator ${!col.sortDirection || col.sortDirection === 'none' ? 'unsorted' : ''}`}
+                  aria-hidden="true"
+                >
+                  {getSortIndicator(col.sortDirection)}
+                </span>
+              )}
+            </div>
+          );
+        })
+      }
+    </div>
+
+    {/* Data Rows */}
+    {
+      rows.map((row, rowIndex) => {
+        const isRowSelected = defaultSelectedRowIds.includes(row.id);
+
+        return (
+          <div
+            role="row"
+            aria-rowindex={totalRows ? startRowIndex + rowIndex + 1 : undefined}
+            aria-selected={rowSelectable ? (isRowSelected ? 'true' : 'false') : undefined}
+            aria-disabled={row.disabled ? 'true' : undefined}
+            data-row-id={row.id}
+            data-row-index={rowIndex}
+          >
+            {hasCheckboxColumn &&
+              (() => {
+                const checkboxCellId = `checkbox-${row.id}`;
+                const isCheckboxFocused = initialFocusedId === checkboxCellId;
+                return (
+                  <div
+                    role="gridcell"
+                    class={`apg-data-grid-cell apg-data-grid-checkbox-cell ${isCheckboxFocused ? 'focused' : ''}`}
+                    tabindex={isCheckboxFocused ? 0 : -1}
+                    aria-colindex={totalColumns ? startColIndex : undefined}
+                    data-checkbox-cell="true"
+                    data-checkbox-id={checkboxCellId}
+                    data-row-id={row.id}
+                    data-row-index={rowIndex}
+                  >
+                    <input
+                      type="checkbox"
+                      tabindex={-1}
+                      checked={isRowSelected}
+                      disabled={row.disabled}
+                      aria-labelledby={
+                        rowLabelColumn ? `cell-${row.id}-${rowLabelColumn.id}` : undefined
+                      }
+                      data-row-checkbox="true"
+                      data-row-id={row.id}
+                    />
+                  </div>
+                );
+              })()}
+            {row.cells.map((cell, colIndex) => {
+              const isRowHeader = row.hasRowHeader && colIndex === 0;
+              const isFocused = cell.id === initialFocusedId;
+              const isSelected = defaultSelectedIds.includes(cell.id);
+              const colId = columns[colIndex]?.id ?? '';
+              const isDisabled = cell.disabled || row.disabled;
+              const cellEditable =
+                editable && cell.editable && !cell.readonly && !readonly && !isDisabled;
+              const ariaColIndex = totalColumns
+                ? startColIndex + colIndex + (hasCheckboxColumn ? 1 : 0)
+                : undefined;
+              const isLabelColumn = rowLabelColumn && colId === rowLabelColumn.id;
+
+              return (
+                <div
+                  id={isLabelColumn ? `cell-${row.id}-${colId}` : undefined}
+                  role={isRowHeader ? 'rowheader' : 'gridcell'}
+                  tabindex={isFocused ? 0 : -1}
+                  aria-selected={getAriaSelected(selectable, rowSelectable, isSelected)}
+                  aria-disabled={isDisabled ? 'true' : undefined}
+                  aria-readonly={getAriaReadonly(editable, cell.readonly, cellEditable)}
+                  aria-colindex={ariaColIndex}
+                  aria-colspan={cell.colspan}
+                  aria-rowspan={cell.rowspan}
+                  data-cell-id={cell.id}
+                  data-row-id={row.id}
+                  data-col-id={colId}
+                  data-row-index={rowIndex}
+                  data-col-index={colIndex}
+                  data-disabled={isDisabled ? 'true' : undefined}
+                  data-editable={cellEditable ? 'true' : undefined}
+                  class={`apg-data-grid-cell ${isFocused ? 'focused' : ''} ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                >
+                  {renderCell ? (
+                    <Fragment set:html={renderCell(cell, row.id, colId)} />
+                  ) : (
+                    cell.value
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })
+    }
+  </div>
+</apg-data-grid>
+
+<script>
+  class ApgDataGrid extends HTMLElement {
+    private focusedId: string | null = null;
+    private selectedIds: Set<string> = new Set();
+    private selectedRowIds: Set<string> = new Set();
+    private anchorCellId: string | null = null;
+    private isEditing = false;
+    private editingCellId: string | null = null;
+    private editValue = '';
+    private originalEditValue = '';
+    private isEndingEdit = false;
+
+    // Options
+    private wrapNavigation = false;
+    private enablePageNavigation = false;
+    private pageSize = 5;
+    private selectable = false;
+    private multiselectable = false;
+    private rowSelectable = false;
+    private rowMultiselectable = false;
+    private editable = false;
+    private readonly = false;
+    private enableRangeSelection = false;
+
+    connectedCallback() {
+      // Load options from data attributes
+      this.wrapNavigation = this.dataset.wrapNavigation === 'true';
+      this.enablePageNavigation = this.dataset.enablePageNavigation === 'true';
+      this.pageSize = parseInt(this.dataset.pageSize || '5', 10);
+      this.selectable = this.dataset.selectable === 'true';
+      this.multiselectable = this.dataset.multiselectable === 'true';
+      this.rowSelectable = this.dataset.rowSelectable === 'true';
+      this.rowMultiselectable = this.dataset.rowMultiselectable === 'true';
+      this.editable = this.dataset.editable === 'true';
+      this.readonly = this.dataset.readonly === 'true';
+      this.enableRangeSelection = this.dataset.enableRangeSelection === 'true';
+
+      // Find initial focused element (header or cell)
+      const focusedEl = this.querySelector<HTMLElement>('[tabindex="0"]');
+      this.focusedId = focusedEl?.dataset.headerId ?? focusedEl?.dataset.cellId ?? null;
+
+      // Load initial selected ids
+      this.querySelectorAll<HTMLElement>('[aria-selected="true"]').forEach((el) => {
+        const cellId = el.dataset.cellId;
+        if (cellId) this.selectedIds.add(cellId);
+      });
+
+      // Load initial selected row ids
+      this.querySelectorAll<HTMLElement>('[role="row"][aria-selected="true"]').forEach((el) => {
+        const rowId = el.dataset.rowId;
+        if (rowId) this.selectedRowIds.add(rowId);
+      });
+
+      // Set tabindex="-1" on all focusable elements inside grid cells
+      this.querySelectorAll<HTMLElement>(
+        '[role="gridcell"] a[href], [role="gridcell"] button:not([data-row-checkbox]), [role="rowheader"] a[href], [role="rowheader"] button'
+      ).forEach((el) => {
+        el.setAttribute('tabindex', '-1');
+      });
+
+      // Add event listeners to sortable headers
+      this.querySelectorAll<HTMLElement>('[role="columnheader"][data-sortable="true"]').forEach(
+        (header) => {
+          header.addEventListener('keydown', this.handleHeaderKeyDown.bind(this) as EventListener);
+          header.addEventListener('click', this.handleHeaderClick.bind(this) as EventListener);
+          header.addEventListener('focusin', this.handleHeaderFocus.bind(this) as EventListener);
+        }
+      );
+
+      // Add event listeners to all cells
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          if (cell.dataset.checkboxCell !== 'true') {
+            cell.addEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+            cell.addEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+            cell.addEventListener(
+              'dblclick',
+              this.handleCellDoubleClick.bind(this) as EventListener
+            );
+          }
+        }
+      );
+
+      // Add event listeners to checkbox cells (for keyboard navigation)
+      this.querySelectorAll<HTMLElement>('[data-checkbox-cell="true"]').forEach((cell) => {
+        cell.addEventListener(
+          'keydown',
+          this.handleCheckboxCellKeyDown.bind(this) as EventListener
+        );
+        cell.addEventListener('focusin', this.handleCheckboxCellFocus.bind(this) as EventListener);
+        cell.addEventListener('click', this.handleCheckboxCellClick.bind(this) as EventListener);
+      });
+
+      // Add event listeners to row checkboxes
+      this.querySelectorAll<HTMLInputElement>('[data-row-checkbox="true"]').forEach((checkbox) => {
+        checkbox.addEventListener(
+          'change',
+          this.handleRowCheckboxChange.bind(this) as EventListener
+        );
+      });
+
+      // Add event listener to header checkbox cell (Select all)
+      const headerCheckboxCell = this.querySelector<HTMLElement>('[data-header-checkbox="true"]');
+      if (headerCheckboxCell) {
+        headerCheckboxCell.addEventListener(
+          'keydown',
+          this.handleHeaderCheckboxKeyDown.bind(this) as EventListener
+        );
+        headerCheckboxCell.addEventListener(
+          'focusin',
+          this.handleHeaderCheckboxFocus.bind(this) as EventListener
+        );
+      }
+
+      // Add event listener to select all checkbox
+      const selectAllCheckbox = this.querySelector<HTMLInputElement>('[data-select-all="true"]');
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener(
+          'change',
+          this.handleSelectAllChange.bind(this) as EventListener
+        );
+        this.updateSelectAllState();
+      }
+    }
+
+    disconnectedCallback() {
+      this.querySelectorAll<HTMLElement>('[role="columnheader"][data-sortable="true"]').forEach(
+        (header) => {
+          header.removeEventListener(
+            'keydown',
+            this.handleHeaderKeyDown.bind(this) as EventListener
+          );
+          header.removeEventListener('click', this.handleHeaderClick.bind(this) as EventListener);
+          header.removeEventListener('focusin', this.handleHeaderFocus.bind(this) as EventListener);
+        }
+      );
+
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          cell.removeEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
+          cell.removeEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+        }
+      );
+
+      this.querySelectorAll<HTMLElement>('[data-checkbox-cell="true"]').forEach((cell) => {
+        cell.removeEventListener(
+          'keydown',
+          this.handleCheckboxCellKeyDown.bind(this) as EventListener
+        );
+        cell.removeEventListener(
+          'focusin',
+          this.handleCheckboxCellFocus.bind(this) as EventListener
+        );
+        cell.removeEventListener('click', this.handleCheckboxCellClick.bind(this) as EventListener);
+      });
+
+      this.querySelectorAll<HTMLInputElement>('[data-row-checkbox="true"]').forEach((checkbox) => {
+        checkbox.removeEventListener(
+          'change',
+          this.handleRowCheckboxChange.bind(this) as EventListener
+        );
+      });
+
+      // Remove header checkbox cell listeners
+      const headerCheckboxCell = this.querySelector<HTMLElement>('[data-header-checkbox="true"]');
+      if (headerCheckboxCell) {
+        headerCheckboxCell.removeEventListener(
+          'keydown',
+          this.handleHeaderCheckboxKeyDown.bind(this) as EventListener
+        );
+        headerCheckboxCell.removeEventListener(
+          'focusin',
+          this.handleHeaderCheckboxFocus.bind(this) as EventListener
+        );
+      }
+
+      const selectAllCheckbox = this.querySelector<HTMLInputElement>('[data-select-all="true"]');
+      if (selectAllCheckbox) {
+        selectAllCheckbox.removeEventListener(
+          'change',
+          this.handleSelectAllChange.bind(this) as EventListener
+        );
+      }
+    }
+
+    // =============================================================================
+    // Helper methods
+    // =============================================================================
+
+    private getDataRows(): HTMLElement[] {
+      return Array.from(this.querySelectorAll<HTMLElement>('[role="row"]')).slice(1);
+    }
+
+    private getColumnCount(): number {
+      const headers = this.querySelectorAll('[role="columnheader"]');
+      // Count data columns (exclude checkbox column header)
+      const dataColumnCount = Array.from(headers).filter(
+        (h) => !(h as HTMLElement).classList.contains('apg-data-grid-checkbox-cell')
+      ).length;
+      // Include checkbox column if rowSelectable
+      return this.rowSelectable ? dataColumnCount + 1 : dataColumnCount;
+    }
+
+    private getDataColumnCount(): number {
+      const headers = this.querySelectorAll('[role="columnheader"]');
+      return Array.from(headers).filter(
+        (h) => !(h as HTMLElement).classList.contains('apg-data-grid-checkbox-cell')
+      ).length;
+    }
+
+    private getSortableHeaders(): HTMLElement[] {
+      return Array.from(
+        this.querySelectorAll<HTMLElement>('[role="columnheader"][data-sortable="true"]')
+      );
+    }
+
+    private getCellAt(rowIndex: number, colIndex: number): HTMLElement | null {
+      const rows = this.getDataRows();
+      const row = rows[rowIndex];
+      if (!row) return null;
+      // Get only data cells (exclude checkbox cells)
+      const cells = Array.from(
+        row.querySelectorAll('[role="gridcell"], [role="rowheader"]')
+      ).filter((c) => (c as HTMLElement).dataset.checkboxCell !== 'true');
+      return cells[colIndex] as HTMLElement | null;
+    }
+
+    private focusElement(el: HTMLElement, id: string) {
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== el) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      el.setAttribute('tabindex', '0');
+      el.classList.add('focused');
+      el.focus();
+      this.focusedId = id;
+    }
+
+    private focusCell(cell: HTMLElement) {
+      const cellId = cell.dataset.cellId ?? null;
+      if (!cellId) return;
+
+      const focusableChild = cell.querySelector<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableChild) {
+        focusableChild.setAttribute('tabindex', '-1');
+        const currentFocused = this.querySelector('[tabindex="0"]');
+        if (currentFocused && currentFocused !== cell) {
+          currentFocused.setAttribute('tabindex', '-1');
+          currentFocused.classList.remove('focused');
+        }
+        cell.setAttribute('tabindex', '0');
+        cell.classList.add('focused');
+        focusableChild.focus();
+        this.focusedId = cellId;
+      } else {
+        this.focusElement(cell, cellId);
+      }
+    }
+
+    private focusHeader(header: HTMLElement) {
+      const headerId = header.dataset.headerId ?? null;
+      if (!headerId) return;
+      this.focusElement(header, headerId);
+    }
+
+    private focusCheckboxCell(cell: HTMLElement) {
+      const checkboxId = cell.dataset.checkboxId ?? null;
+      if (!checkboxId) return;
+      this.focusElement(cell, checkboxId);
+    }
+
+    private getCheckboxCellAt(rowIndex: number): HTMLElement | null {
+      const rows = this.getDataRows();
+      const row = rows[rowIndex];
+      if (!row) return null;
+      return row.querySelector<HTMLElement>('[data-checkbox-cell="true"]');
+    }
+
+    private handleCheckboxCellFocus(event: Event) {
+      const cell = event.currentTarget as HTMLElement;
+      const checkboxId = cell.dataset.checkboxId;
+      if (!checkboxId) return;
+
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== cell) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      this.focusedId = checkboxId;
+    }
+
+    private handleHeaderCheckboxFocus(event: Event) {
+      const cell = event.currentTarget as HTMLElement;
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== cell) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      this.focusedId = 'header-checkbox';
+    }
+
+    private handleHeaderCheckboxKeyDown(event: KeyboardEvent) {
+      const cell = event.currentTarget as HTMLElement;
+      const { key, ctrlKey } = event;
+      let handled = true;
+
+      switch (key) {
+        case 'ArrowRight': {
+          // Move to first sortable header or first data cell
+          const sortableHeaders = this.getSortableHeaders();
+          if (sortableHeaders.length > 0) {
+            this.focusHeader(sortableHeaders[0]);
+          } else {
+            const firstCell = this.getCellAt(0, 0);
+            if (firstCell) {
+              this.focusCell(firstCell);
+            }
+          }
+          break;
+        }
+        case 'ArrowLeft':
+          // Already at leftmost position, do nothing
+          handled = false;
+          break;
+        case 'ArrowDown': {
+          // Move to first row checkbox cell
+          const firstCheckboxCell = this.getCheckboxCellAt(0);
+          if (firstCheckboxCell) {
+            this.focusCheckboxCell(firstCheckboxCell);
+          }
+          break;
+        }
+        case 'ArrowUp':
+          // Already at topmost position, do nothing
+          handled = false;
+          break;
+        case 'Home':
+          if (ctrlKey) {
+            // Already at first position
+            handled = false;
+          }
+          break;
+        case 'End': {
+          if (ctrlKey) {
+            // Move to last cell in grid
+            const rowCount = this.getDataRows().length;
+            const dataColCount = this.getDataColumnCount();
+            const lastCell = this.getCellAt(rowCount - 1, dataColCount - 1);
+            if (lastCell) {
+              this.focusCell(lastCell);
+            }
+          } else {
+            // Move to last header in row
+            const sortableHeaders = this.getSortableHeaders();
+            if (sortableHeaders.length > 0) {
+              this.focusHeader(sortableHeaders[sortableHeaders.length - 1]);
+            }
+          }
+          break;
+        }
+        case ' ':
+        case 'Enter': {
+          // Toggle select all checkbox
+          const selectAllCheckbox = cell.querySelector<HTMLInputElement>(
+            '[data-select-all="true"]'
+          );
+          if (selectAllCheckbox) {
+            selectAllCheckbox.checked = !selectAllCheckbox.checked;
+            selectAllCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+
+    private handleCheckboxCellClick(event: MouseEvent) {
+      const cell = event.currentTarget as HTMLElement;
+      // Focus the cell after the checkbox change is processed
+      requestAnimationFrame(() => {
+        cell.focus();
+        const checkboxId = cell.dataset.checkboxId;
+        if (checkboxId) {
+          this.focusedId = checkboxId;
+        }
+      });
+    }
+
+    private handleCheckboxCellKeyDown(event: KeyboardEvent) {
+      const cell = event.currentTarget as HTMLElement;
+      const { key, ctrlKey } = event;
+      const rowIndex = parseInt(cell.dataset.rowIndex || '0', 10);
+      const rowId = cell.dataset.rowId ?? '';
+      let handled = true;
+
+      switch (key) {
+        case 'ArrowRight': {
+          // Move to first data cell in the same row
+          const firstDataCell = this.getCellAt(rowIndex, 0);
+          if (firstDataCell) {
+            this.focusCell(firstDataCell);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          // Already at leftmost position, do nothing
+          handled = false;
+          break;
+        }
+        case 'ArrowDown': {
+          // Move to checkbox cell in next row
+          const nextCheckboxCell = this.getCheckboxCellAt(rowIndex + 1);
+          if (nextCheckboxCell) {
+            this.focusCheckboxCell(nextCheckboxCell);
+          }
+          break;
+        }
+        case 'ArrowUp': {
+          // Move to checkbox cell in previous row
+          if (rowIndex > 0) {
+            const prevCheckboxCell = this.getCheckboxCellAt(rowIndex - 1);
+            if (prevCheckboxCell) {
+              this.focusCheckboxCell(prevCheckboxCell);
+            }
+          }
+          break;
+        }
+        case 'Home': {
+          if (ctrlKey) {
+            // Move to first checkbox cell
+            const firstCheckboxCell = this.getCheckboxCellAt(0);
+            if (firstCheckboxCell) {
+              this.focusCheckboxCell(firstCheckboxCell);
+            }
+          }
+          // Home without ctrl - already at start of row
+          break;
+        }
+        case 'End': {
+          if (ctrlKey) {
+            // Move to last cell in grid
+            const rowCount = this.getDataRows().length;
+            const dataColCount = this.getDataColumnCount();
+            const lastCell = this.getCellAt(rowCount - 1, dataColCount - 1);
+            if (lastCell) {
+              this.focusCell(lastCell);
+            }
+          } else {
+            // Move to last cell in current row
+            const dataColCount = this.getDataColumnCount();
+            const lastCell = this.getCellAt(rowIndex, dataColCount - 1);
+            if (lastCell) {
+              this.focusCell(lastCell);
+            }
+          }
+          break;
+        }
+        case ' ':
+        case 'Enter': {
+          // Toggle row selection
+          const row = cell.closest('[role="row"]') as HTMLElement;
+          if (row && rowId) {
+            this.toggleRowSelection(rowId, row);
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+
+    private handleFocus(event: Event) {
+      const cell = event.currentTarget as HTMLElement;
+      const cellId = cell.dataset.cellId;
+      if (!cellId) return;
+
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== cell) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      cell.setAttribute('tabindex', '0');
+      cell.classList.add('focused');
+      this.focusedId = cellId;
+    }
+
+    private handleHeaderFocus(event: Event) {
+      const header = event.currentTarget as HTMLElement;
+      const headerId = header.dataset.headerId;
+      if (!headerId) return;
+
+      const currentFocused = this.querySelector('[tabindex="0"]');
+      if (currentFocused && currentFocused !== header) {
+        currentFocused.setAttribute('tabindex', '-1');
+        currentFocused.classList.remove('focused');
+      }
+      header.setAttribute('tabindex', '0');
+      header.classList.add('focused');
+      this.focusedId = headerId;
+    }
+
+    private findNextCell(
+      rowIndex: number,
+      colIndex: number,
+      direction: 'right' | 'left' | 'up' | 'down'
+    ): HTMLElement | null {
+      const colCount = this.getColumnCount();
+      const rowCount = this.getDataRows().length;
+
+      let newRow = rowIndex;
+      let newCol = colIndex;
+
+      switch (direction) {
+        case 'right':
+          newCol++;
+          if (newCol >= colCount) {
+            if (this.wrapNavigation) {
+              newCol = 0;
+              newRow++;
+            } else {
+              return null;
+            }
+          }
+          break;
+        case 'left':
+          newCol--;
+          if (newCol < 0) {
+            if (this.wrapNavigation) {
+              newCol = colCount - 1;
+              newRow--;
+            } else {
+              return null;
+            }
+          }
+          break;
+        case 'down':
+          newRow++;
+          break;
+        case 'up':
+          newRow--;
+          break;
+      }
+
+      if (newRow < 0 || newRow >= rowCount) return null;
+
+      const cell = this.getCellAt(newRow, newCol);
+      if (!cell) return null;
+
+      if (cell.dataset.disabled === 'true') {
+        return this.findNextCell(newRow, newCol, direction);
+      }
+
+      return cell;
+    }
+
+    // =============================================================================
+    // Sorting
+    // =============================================================================
+
+    private cycleSort(header: HTMLElement) {
+      const colId = header.dataset.colId;
+      const currentDirection = header.dataset.sortDirection || 'none';
+
+      let nextDirection: SortDirection;
+      switch (currentDirection) {
+        case 'none':
+          nextDirection = 'ascending';
+          break;
+        case 'ascending':
+          nextDirection = 'descending';
+          break;
+        case 'descending':
+          nextDirection = 'ascending';
+          break;
+        default:
+          nextDirection = 'ascending';
+      }
+
+      // Update all headers to none, then set this one
+      this.getSortableHeaders().forEach((h) => {
+        h.dataset.sortDirection = 'none';
+        h.setAttribute('aria-sort', 'none');
+        const indicator = h.querySelector('.sort-indicator');
+        if (indicator) indicator.remove();
+      });
+
+      header.dataset.sortDirection = nextDirection;
+      header.setAttribute('aria-sort', nextDirection);
+
+      // Add sort indicator
+      if (nextDirection !== 'none') {
+        const indicator = document.createElement('span');
+        indicator.className = 'sort-indicator';
+        indicator.setAttribute('aria-hidden', 'true');
+        indicator.textContent = nextDirection === 'ascending' ? '▲' : '▼';
+        header.appendChild(indicator);
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('sort', {
+          detail: { columnId: colId, direction: nextDirection },
+        })
+      );
+    }
+
+    private handleHeaderClick(event: Event) {
+      const header = event.currentTarget as HTMLElement;
+      this.cycleSort(header);
+    }
+
+    private handleHeaderKeyDown(event: KeyboardEvent) {
+      const header = event.currentTarget as HTMLElement;
+      const { key } = event;
+      const colIndex = parseInt(header.dataset.colIndex || '0', 10);
+      let handled = true;
+
+      switch (key) {
+        case 'Enter':
+        case ' ':
+          this.cycleSort(header);
+          break;
+        case 'ArrowDown': {
+          const firstCell = this.getCellAt(0, colIndex);
+          if (firstCell) this.focusCell(firstCell);
+          break;
+        }
+        case 'ArrowRight': {
+          const headers = this.getSortableHeaders();
+          const currentIndex = headers.indexOf(header);
+          if (currentIndex < headers.length - 1) {
+            this.focusHeader(headers[currentIndex + 1]);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          const headers = this.getSortableHeaders();
+          const currentIndex = headers.indexOf(header);
+          if (currentIndex > 0) {
+            this.focusHeader(headers[currentIndex - 1]);
+          }
+          break;
+        }
+        case 'Home': {
+          const headers = this.getSortableHeaders();
+          if (headers.length > 0) {
+            this.focusHeader(headers[0]);
+          }
+          break;
+        }
+        case 'End': {
+          const headers = this.getSortableHeaders();
+          if (headers.length > 0) {
+            this.focusHeader(headers[headers.length - 1]);
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+
+    // =============================================================================
+    // Row Selection
+    // =============================================================================
+
+    private toggleRowSelection(rowId: string, row: HTMLElement) {
+      if (row.getAttribute('aria-disabled') === 'true') return;
+
+      const checkbox = row.querySelector<HTMLInputElement>(
+        `[data-row-checkbox="true"][data-row-id="${rowId}"]`
+      );
+
+      if (this.rowMultiselectable) {
+        if (this.selectedRowIds.has(rowId)) {
+          this.selectedRowIds.delete(rowId);
+          row.setAttribute('aria-selected', 'false');
+          if (checkbox) checkbox.checked = false;
+        } else {
+          this.selectedRowIds.add(rowId);
+          row.setAttribute('aria-selected', 'true');
+          if (checkbox) checkbox.checked = true;
+        }
+      } else {
+        // Clear previous selection
+        this.getDataRows().forEach((r) => {
+          r.setAttribute('aria-selected', 'false');
+          const cb = r.querySelector<HTMLInputElement>('[data-row-checkbox="true"]');
+          if (cb) cb.checked = false;
+        });
+        this.selectedRowIds.clear();
+
+        this.selectedRowIds.add(rowId);
+        row.setAttribute('aria-selected', 'true');
+        if (checkbox) checkbox.checked = true;
+      }
+
+      this.updateSelectAllState();
+
+      this.dispatchEvent(
+        new CustomEvent('row-selection-change', {
+          detail: { selectedRowIds: Array.from(this.selectedRowIds) },
+        })
+      );
+    }
+
+    private handleRowCheckboxChange(event: Event) {
+      const checkbox = event.target as HTMLInputElement;
+      const rowId = checkbox.dataset.rowId;
+      if (!rowId) return;
+
+      const row = checkbox.closest('[role="row"]') as HTMLElement;
+      if (!row) return;
+
+      // Prevent default toggle since toggleRowSelection handles it
+      checkbox.checked = this.selectedRowIds.has(rowId);
+      this.toggleRowSelection(rowId, row);
+    }
+
+    private handleSelectAllChange(event: Event) {
+      const checkbox = event.target as HTMLInputElement;
+      const rows = this.getDataRows();
+
+      if (checkbox.checked) {
+        // Select all
+        rows.forEach((row) => {
+          if (row.getAttribute('aria-disabled') !== 'true') {
+            const rowId = row.dataset.rowId;
+            if (rowId) {
+              this.selectedRowIds.add(rowId);
+              row.setAttribute('aria-selected', 'true');
+              const cb = row.querySelector<HTMLInputElement>('[data-row-checkbox="true"]');
+              if (cb) cb.checked = true;
+            }
+          }
+        });
+      } else {
+        // Deselect all
+        rows.forEach((row) => {
+          row.setAttribute('aria-selected', 'false');
+          const cb = row.querySelector<HTMLInputElement>('[data-row-checkbox="true"]');
+          if (cb) cb.checked = false;
+        });
+        this.selectedRowIds.clear();
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('row-selection-change', {
+          detail: { selectedRowIds: Array.from(this.selectedRowIds) },
+        })
+      );
+    }
+
+    private updateSelectAllState() {
+      const selectAllCheckbox = this.querySelector<HTMLInputElement>('[data-select-all="true"]');
+      if (!selectAllCheckbox) return;
+
+      const rows = this.getDataRows().filter((r) => r.getAttribute('aria-disabled') !== 'true');
+      const selectedCount = rows.filter((r) =>
+        this.selectedRowIds.has(r.dataset.rowId ?? '')
+      ).length;
+
+      if (selectedCount === 0) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+      } else if (selectedCount === rows.length) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false;
+      } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true;
+      }
+    }
+
+    // =============================================================================
+    // Cell Selection
+    // =============================================================================
+
+    private toggleCellSelection(cell: HTMLElement) {
+      if (!this.selectable) return;
+      if (cell.dataset.disabled === 'true') return;
+
+      const cellId = cell.dataset.cellId;
+      if (!cellId) return;
+
+      if (this.multiselectable) {
+        if (this.selectedIds.has(cellId)) {
+          this.selectedIds.delete(cellId);
+          cell.setAttribute('aria-selected', 'false');
+          cell.classList.remove('selected');
+        } else {
+          this.selectedIds.add(cellId);
+          cell.setAttribute('aria-selected', 'true');
+          cell.classList.add('selected');
+        }
+      } else {
+        this.querySelectorAll('[aria-selected="true"]').forEach((el) => {
+          el.setAttribute('aria-selected', 'false');
+          el.classList.remove('selected');
+        });
+        this.selectedIds.clear();
+
+        this.selectedIds.add(cellId);
+        cell.setAttribute('aria-selected', 'true');
+        cell.classList.add('selected');
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedIds: Array.from(this.selectedIds) },
+        })
+      );
+    }
+
+    private selectAllCells() {
+      if (!this.selectable || !this.multiselectable) return;
+
+      this.querySelectorAll<HTMLElement>('[role="gridcell"], [role="rowheader"]').forEach(
+        (cell) => {
+          if (cell.dataset.disabled !== 'true' && cell.dataset.checkboxCell !== 'true') {
+            const cellId = cell.dataset.cellId;
+            if (cellId) {
+              this.selectedIds.add(cellId);
+              cell.setAttribute('aria-selected', 'true');
+              cell.classList.add('selected');
+            }
+          }
+        }
+      );
+
+      this.dispatchEvent(
+        new CustomEvent('selection-change', {
+          detail: { selectedIds: Array.from(this.selectedIds) },
+        })
+      );
+    }
+
+    // =============================================================================
+    // Range Selection
+    // =============================================================================
+
+    private getCellPosition(cellId: string): { rowIndex: number; colIndex: number } | null {
+      const cell = this.querySelector<HTMLElement>(`[data-cell-id="${cellId}"]`);
+      if (!cell) return null;
+      return {
+        rowIndex: parseInt(cell.dataset.rowIndex || '0', 10),
+        colIndex: parseInt(cell.dataset.colIndex || '0', 10),
+      };
+    }
+
+    private getCellsInRange(startCellId: string, endCellId: string): string[] {
+      const startPos = this.getCellPosition(startCellId);
+      const endPos = this.getCellPosition(endCellId);
+      if (!startPos || !endPos) return [];
+
+      const minRow = Math.min(startPos.rowIndex, endPos.rowIndex);
+      const maxRow = Math.max(startPos.rowIndex, endPos.rowIndex);
+      const minCol = Math.min(startPos.colIndex, endPos.colIndex);
+      const maxCol = Math.max(startPos.colIndex, endPos.colIndex);
+
+      const cellIds: string[] = [];
+      for (let r = minRow; r <= maxRow; r++) {
+        for (let c = minCol; c <= maxCol; c++) {
+          const cell = this.getCellAt(r, c);
+          if (cell && cell.dataset.cellId) {
+            cellIds.push(cell.dataset.cellId);
+          }
+        }
+      }
+      return cellIds;
+    }
+
+    private extendRangeSelection(currentCellId: string, newFocusId: string) {
+      if (!this.enableRangeSelection) return;
+
+      const anchor = this.anchorCellId ?? currentCellId;
+      if (!this.anchorCellId) {
+        this.anchorCellId = currentCellId;
+      }
+
+      const cellIds = this.getCellsInRange(anchor, newFocusId);
+      this.dispatchEvent(
+        new CustomEvent('range-select', {
+          detail: { cellIds },
+        })
+      );
+    }
+
+    private clearRangeSelection() {
+      this.anchorCellId = null;
+      this.dispatchEvent(
+        new CustomEvent('range-select', {
+          detail: { cellIds: [] },
+        })
+      );
+    }
+
+    // =============================================================================
+    // Cell Editing
+    // =============================================================================
+
+    private handleCellDoubleClick(event: Event) {
+      const cell = event.currentTarget as HTMLElement;
+      if (cell.dataset.editable === 'true') {
+        this.startEdit(cell);
+      }
+    }
+
+    private startEdit(cell: HTMLElement) {
+      if (!this.editable || this.readonly) return;
+      if (cell.dataset.editable !== 'true') return;
+
+      const cellId = cell.dataset.cellId;
+      const rowId = cell.dataset.rowId;
+      const colId = cell.dataset.colId;
+      if (!cellId) return;
+
+      const currentValue = cell.textContent?.trim() ?? '';
+      this.editValue = currentValue;
+      this.originalEditValue = currentValue;
+      this.editingCellId = cellId;
+      this.isEditing = true;
+
+      // Create input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'apg-data-grid-input';
+      input.value = currentValue;
+
+      input.addEventListener('keydown', (e) => this.handleEditKeyDown(e, cellId));
+      input.addEventListener('blur', () => this.handleEditBlur(cellId));
+      input.addEventListener('input', (e) => {
+        this.editValue = (e.target as HTMLInputElement).value;
+        this.dispatchEvent(
+          new CustomEvent('cell-value-change', {
+            detail: { cellId, value: this.editValue },
+          })
+        );
+      });
+
+      // Store original content and replace with input
+      cell.dataset.originalContent = cell.innerHTML;
+      cell.innerHTML = '';
+      cell.appendChild(input);
+      cell.classList.add('editing');
+
+      input.focus();
+      input.select();
+
+      this.dispatchEvent(
+        new CustomEvent('edit-start', {
+          detail: { cellId, rowId, colId },
+        })
+      );
+    }
+
+    private endEdit(cellId: string, cancelled: boolean) {
+      if (this.isEndingEdit) return;
+      if (this.editingCellId !== cellId) return;
+
+      this.isEndingEdit = true;
+
+      const cell = this.querySelector<HTMLElement>(`[data-cell-id="${cellId}"]`);
+      if (!cell) {
+        this.isEndingEdit = false;
+        return;
+      }
+
+      const finalValue = cancelled ? this.originalEditValue : this.editValue;
+
+      // Restore cell content
+      cell.innerHTML = finalValue;
+      cell.classList.remove('editing');
+
+      this.dispatchEvent(
+        new CustomEvent('edit-end', {
+          detail: { cellId, value: finalValue, cancelled },
+        })
+      );
+
+      this.editingCellId = null;
+      this.editValue = '';
+      this.originalEditValue = '';
+      this.isEditing = false;
+
+      // Return focus to cell
+      setTimeout(() => {
+        this.focusCell(cell);
+        this.isEndingEdit = false;
+      }, 0);
+    }
+
+    private handleEditKeyDown(event: KeyboardEvent, cellId: string) {
+      const { key } = event;
+
+      if (key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.endEdit(cellId, true);
+      } else if (key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.endEdit(cellId, false);
+      } else if (key === 'Tab') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.endEdit(cellId, false);
+      }
+    }
+
+    private handleEditBlur(cellId: string) {
+      if (this.isEndingEdit) return;
+      this.endEdit(cellId, false);
+    }
+
+    // =============================================================================
+    // Cell KeyDown
+    // =============================================================================
+
+    private handleKeyDown(event: KeyboardEvent) {
+      if (this.isEditing) return;
+
+      const cell = event.currentTarget as HTMLElement;
+      const { key, ctrlKey, shiftKey } = event;
+      const rowIndex = parseInt(cell.dataset.rowIndex || '0', 10);
+      const colIndex = parseInt(cell.dataset.colIndex || '0', 10);
+      const cellId = cell.dataset.cellId ?? '';
+      const rowId = cell.dataset.rowId ?? '';
+      const colId = cell.dataset.colId ?? '';
+
+      let handled = true;
+
+      switch (key) {
+        case 'ArrowRight': {
+          const next = this.findNextCell(rowIndex, colIndex, 'right');
+          if (next) {
+            if (shiftKey && this.enableRangeSelection) {
+              this.extendRangeSelection(cellId, next.dataset.cellId ?? '');
+            } else {
+              this.clearRangeSelection();
+            }
+            this.focusCell(next);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          // Check if at first data cell and should go to checkbox
+          if (colIndex === 0 && this.rowSelectable) {
+            this.clearRangeSelection();
+            const checkboxCell = this.getCheckboxCellAt(rowIndex);
+            if (checkboxCell) {
+              this.focusCheckboxCell(checkboxCell);
+            }
+          } else {
+            const next = this.findNextCell(rowIndex, colIndex, 'left');
+            if (next) {
+              if (shiftKey && this.enableRangeSelection) {
+                this.extendRangeSelection(cellId, next.dataset.cellId ?? '');
+              } else {
+                this.clearRangeSelection();
+              }
+              this.focusCell(next);
+            }
+          }
+          break;
+        }
+        case 'ArrowDown': {
+          const next = this.findNextCell(rowIndex, colIndex, 'down');
+          if (next) {
+            if (shiftKey && this.enableRangeSelection) {
+              this.extendRangeSelection(cellId, next.dataset.cellId ?? '');
+            } else {
+              this.clearRangeSelection();
+            }
+            this.focusCell(next);
+          }
+          break;
+        }
+        case 'ArrowUp': {
+          if (rowIndex === 0) {
+            // Try to move to sortable header
+            const headers = this.getSortableHeaders();
+            const header = headers.find(
+              (h) => parseInt(h.dataset.colIndex || '0', 10) === colIndex
+            );
+            if (header) {
+              this.clearRangeSelection();
+              this.focusHeader(header);
+              break;
+            }
+          }
+          const next = this.findNextCell(rowIndex, colIndex, 'up');
+          if (next) {
+            if (shiftKey && this.enableRangeSelection) {
+              this.extendRangeSelection(cellId, next.dataset.cellId ?? '');
+            } else {
+              this.clearRangeSelection();
+            }
+            this.focusCell(next);
+          }
+          break;
+        }
+        case 'Home': {
+          if (ctrlKey && shiftKey && this.enableRangeSelection) {
+            const firstCell = this.getCellAt(0, 0);
+            if (firstCell) {
+              this.extendRangeSelection(cellId, firstCell.dataset.cellId ?? '');
+              this.focusCell(firstCell);
+            }
+          } else if (shiftKey && this.enableRangeSelection) {
+            const firstInRow = this.getCellAt(rowIndex, 0);
+            if (firstInRow) {
+              this.extendRangeSelection(cellId, firstInRow.dataset.cellId ?? '');
+              this.focusCell(firstInRow);
+            }
+          } else if (ctrlKey) {
+            this.clearRangeSelection();
+            // Go to first cell in grid (checkbox if rowSelectable)
+            if (this.rowSelectable) {
+              const firstCheckbox = this.getCheckboxCellAt(0);
+              if (firstCheckbox) this.focusCheckboxCell(firstCheckbox);
+            } else {
+              const firstCell = this.getCellAt(0, 0);
+              if (firstCell) this.focusCell(firstCell);
+            }
+          } else {
+            this.clearRangeSelection();
+            // Go to first cell in row (checkbox if rowSelectable)
+            if (this.rowSelectable) {
+              const checkboxCell = this.getCheckboxCellAt(rowIndex);
+              if (checkboxCell) this.focusCheckboxCell(checkboxCell);
+            } else {
+              const firstInRow = this.getCellAt(rowIndex, 0);
+              if (firstInRow) this.focusCell(firstInRow);
+            }
+          }
+          break;
+        }
+        case 'End': {
+          const dataColCount = this.getDataColumnCount();
+          const rowCount = this.getDataRows().length;
+          if (ctrlKey && shiftKey && this.enableRangeSelection) {
+            const lastCell = this.getCellAt(rowCount - 1, dataColCount - 1);
+            if (lastCell) {
+              this.extendRangeSelection(cellId, lastCell.dataset.cellId ?? '');
+              this.focusCell(lastCell);
+            }
+          } else if (shiftKey && this.enableRangeSelection) {
+            const lastInRow = this.getCellAt(rowIndex, dataColCount - 1);
+            if (lastInRow) {
+              this.extendRangeSelection(cellId, lastInRow.dataset.cellId ?? '');
+              this.focusCell(lastInRow);
+            }
+          } else if (ctrlKey) {
+            this.clearRangeSelection();
+            const lastCell = this.getCellAt(rowCount - 1, dataColCount - 1);
+            if (lastCell) this.focusCell(lastCell);
+          } else {
+            this.clearRangeSelection();
+            const lastInRow = this.getCellAt(rowIndex, dataColCount - 1);
+            if (lastInRow) this.focusCell(lastInRow);
+          }
+          break;
+        }
+        case 'PageDown': {
+          if (this.enablePageNavigation) {
+            this.clearRangeSelection();
+            const rowCount = this.getDataRows().length;
+            const targetRow = Math.min(rowIndex + this.pageSize, rowCount - 1);
+            const targetCell = this.getCellAt(targetRow, colIndex);
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case 'PageUp': {
+          if (this.enablePageNavigation) {
+            this.clearRangeSelection();
+            const targetRow = Math.max(rowIndex - this.pageSize, 0);
+            const targetCell = this.getCellAt(targetRow, colIndex);
+            if (targetCell) this.focusCell(targetCell);
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        case ' ': {
+          this.toggleCellSelection(cell);
+          break;
+        }
+        case 'Enter': {
+          if (this.editable && cell.dataset.editable === 'true' && !this.readonly) {
+            this.startEdit(cell);
+          } else if (cell.dataset.disabled !== 'true') {
+            this.dispatchEvent(
+              new CustomEvent('cell-activate', {
+                detail: { cellId, rowId, colId },
+              })
+            );
+          }
+          break;
+        }
+        case 'F2': {
+          if (this.editable && cell.dataset.editable === 'true' && !this.readonly) {
+            this.startEdit(cell);
+          }
+          break;
+        }
+        case 'a': {
+          if (ctrlKey) {
+            this.selectAllCells();
+          } else {
+            handled = false;
+          }
+          break;
+        }
+        default:
+          handled = false;
+      }
+
+      if (handled) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  }
+
+  type SortDirection = 'ascending' | 'descending' | 'none' | 'other';
+
+  customElements.define('apg-data-grid', ApgDataGrid);
+</script>

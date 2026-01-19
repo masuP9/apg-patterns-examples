@@ -1,0 +1,61 @@
+---
+/**
+ * Demo-only Page: DataGrid (Astro) - Japanese
+ */
+import '@/styles/global.css';
+import DataGrid from '@patterns/data-grid/DataGrid.astro';
+
+const columns = [
+  { id: 'name', header: '名前', sortable: true, sortDirection: 'ascending' as const },
+  { id: 'email', header: 'メール', sortable: true },
+  { id: 'department', header: '部署', sortable: true },
+];
+
+const rows = [
+  {
+    id: 'row1',
+    cells: [
+      { id: 'row1-name', value: '田中太郎', editable: true },
+      { id: 'row1-email', value: 'tanaka@example.com', editable: true },
+      { id: 'row1-dept', value: 'エンジニアリング' },
+    ],
+  },
+  {
+    id: 'row2',
+    cells: [
+      { id: 'row2-name', value: '鈴木花子', editable: true },
+      { id: 'row2-email', value: 'suzuki@example.com', editable: true },
+      { id: 'row2-dept', value: 'マーケティング' },
+    ],
+  },
+  {
+    id: 'row3',
+    cells: [
+      { id: 'row3-name', value: '佐藤次郎', editable: true },
+      { id: 'row3-email', value: 'sato@example.com', editable: true },
+      { id: 'row3-dept', value: '営業' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>デモ: Data Grid (Astro)</title>
+  </head>
+  <body>
+    <DataGrid
+      columns={columns}
+      rows={rows}
+      ariaLabel="従業員一覧"
+      rowSelectable
+      rowMultiselectable
+      enableRangeSelection
+      editable
+    />
+  </body>
+</html>
