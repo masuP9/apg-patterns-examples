@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, expect, it, vi } from 'vitest';
@@ -1256,9 +1256,18 @@ describe('DataGrid', () => {
       const editableCell = screen.getByRole('gridcell', { name: 'Alice' });
       editableCell.focus();
       await user.keyboard('{Enter}');
+
+      // Wait for edit mode to be active
+      await waitFor(() => {
+        expect(screen.getByRole('textbox')).toBeInTheDocument();
+      });
+
       await user.keyboard('{Escape}');
 
-      expect(editableCell).toHaveFocus();
+      // Wait for focus to return to cell
+      await waitFor(() => {
+        expect(editableCell).toHaveFocus();
+      });
     });
 
     it('onEditStart callback fires when entering edit mode', async () => {

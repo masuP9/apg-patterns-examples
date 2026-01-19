@@ -1413,7 +1413,7 @@ export function DataGrid({
           <div
             key={row.id}
             role="row"
-            aria-rowindex={totalRows ? startRowIndex + rowIndex + 1 : undefined}
+            aria-rowindex={totalRows ? startRowIndex + rowIndex : undefined}
             aria-selected={rowSelectable ? (isRowSelected ? 'true' : 'false') : undefined}
             aria-disabled={isRowDisabled ? 'true' : undefined}
           >
