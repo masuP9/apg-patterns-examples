@@ -3,6 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import DataGridDemo from '@patterns/data-grid/DataGridDemo.svelte';
 import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
+import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
@@ -11,6 +12,39 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/data-grid/DataGrid.svelte?raw';
+
+const keyboardHintsSections = [
+  {
+    title: 'Navigation',
+    hints: [
+      { keys: ['↑', '↓', '←', '→'], description: 'Move between cells' },
+      { keys: ['Home', '/', 'End'], description: 'First / last cell in row' },
+      { keys: ['Ctrl', '+', 'Home'], description: 'First cell in grid' },
+      { keys: ['Ctrl', '+', 'End'], description: 'Last cell in grid' },
+      { keys: ['Page Up', '/', 'Page Down'], description: 'Jump by page' },
+    ],
+  },
+  {
+    title: 'Sorting',
+    hints: [{ keys: ['Enter', '/', 'Space'], description: 'Sort column (on header)' }],
+  },
+  {
+    title: 'Selection',
+    hints: [
+      { keys: ['Space'], description: 'Toggle row selection (on checkbox)' },
+      { keys: ['Shift', '+', 'Arrow'], description: 'Extend cell selection' },
+      { keys: ['Ctrl', '+', 'A'], description: 'Select all cells' },
+    ],
+  },
+  {
+    title: 'Editing',
+    hints: [
+      { keys: ['Enter', '/', 'F2'], description: 'Start editing cell' },
+      { keys: ['Escape'], description: 'Cancel editing' },
+      { keys: ['Tab'], description: 'Move within cell widgets' },
+    ],
+  },
+];
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -45,16 +79,13 @@ const tocItems = [
   <!-- Demo Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
-    <p class="text-muted-foreground mb-4 text-sm">
-      Click column headers to sort. Use checkboxes for row selection. Navigate with arrow keys and
-      use Shift+Arrow for range selection. Double-click or press Enter/F2 on editable cells to edit.
-    </p>
     <div class="border-border bg-background rounded-lg border p-6">
       <DataGridDemo client:load />
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
     </p>
+    <KeyboardHints title="Keyboard Navigation" sections={keyboardHintsSections} class="mt-4" />
   </section>
 
   <!-- Data Grid vs Grid Section -->

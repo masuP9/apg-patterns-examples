@@ -4,6 +4,7 @@ import { useTranslation } from '@/i18n';
 import { DataGridDemo } from '@patterns/data-grid/DataGridDemo';
 import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/data-grid/TestingDocs.ja.astro';
+import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
@@ -15,6 +16,39 @@ import sourceCode from '@patterns/data-grid/DataGrid.tsx?raw';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+
+const keyboardHintsSections = [
+  {
+    title: 'ナビゲーション',
+    hints: [
+      { keys: ['↑', '↓', '←', '→'], description: 'セル間を移動' },
+      { keys: ['Home', '/', 'End'], description: '行の最初 / 最後のセルへ' },
+      { keys: ['Ctrl', '+', 'Home'], description: 'グリッド先頭のセルへ' },
+      { keys: ['Ctrl', '+', 'End'], description: 'グリッド末尾のセルへ' },
+      { keys: ['Page Up', '/', 'Page Down'], description: 'ページ単位でジャンプ' },
+    ],
+  },
+  {
+    title: 'ソート',
+    hints: [{ keys: ['Enter', '/', 'Space'], description: '列をソート（ヘッダー上で）' }],
+  },
+  {
+    title: '選択',
+    hints: [
+      { keys: ['Space'], description: '行選択をトグル（チェックボックス上で）' },
+      { keys: ['Shift', '+', '矢印'], description: 'セル選択を拡張' },
+      { keys: ['Ctrl', '+', 'A'], description: '全セルを選択' },
+    ],
+  },
+  {
+    title: '編集',
+    hints: [
+      { keys: ['Enter', '/', 'F2'], description: 'セル編集を開始' },
+      { keys: ['Escape'], description: '編集をキャンセル' },
+      { keys: ['Tab'], description: 'セル内ウィジェット間を移動' },
+    ],
+  },
+];
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -49,15 +83,13 @@ const tocItems = [
   <!-- Demo Section -->
   <section class="mb-12">
     <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
-    <p class="text-muted-foreground mb-4 text-sm">
-      列ヘッダーをクリックでソート。チェックボックスで行選択。矢印キーで移動、Shift+矢印で範囲選択。編集可能なセルでダブルクリックまたはEnter/F2で編集開始。
-    </p>
     <div class="border-border bg-background rounded-lg border p-6">
       <DataGridDemo client:load />
     </div>
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
     </p>
+    <KeyboardHints title="キーボード操作" sections={keyboardHintsSections} class="mt-4" />
   </section>
 
   <!-- Data Grid vs Grid Section -->
