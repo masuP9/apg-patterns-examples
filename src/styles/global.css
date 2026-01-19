@@ -26,6 +26,7 @@
 @import './patterns/window-splitter.css';
 @import './patterns/grid.css';
 @import './patterns/treegrid.css';
+@import './patterns/data-grid.css';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));

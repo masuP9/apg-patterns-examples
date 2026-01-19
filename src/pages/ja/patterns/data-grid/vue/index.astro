@@ -1,0 +1,334 @@
+---
+import PatternLayout from '../../../../../layouts/PatternLayout.astro';
+import { useTranslation } from '@/i18n';
+import DataGridDemo from '@patterns/data-grid/DataGridDemo.vue';
+import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.ja.astro';
+import TestingDocs from '@patterns/data-grid/TestingDocs.ja.astro';
+import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/data-grid/DataGrid.vue?raw';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const keyboardHintsSections = [
+  {
+    title: 'ナビゲーション',
+    hints: [
+      { keys: ['↑', '↓', '←', '→'], description: 'セル間を移動' },
+      { keys: ['Home', '/', 'End'], description: '行の最初 / 最後のセルへ' },
+      { keys: ['Ctrl', '+', 'Home'], description: 'グリッド先頭のセルへ' },
+      { keys: ['Ctrl', '+', 'End'], description: 'グリッド末尾のセルへ' },
+      { keys: ['Page Up', '/', 'Page Down'], description: 'ページ単位でジャンプ' },
+    ],
+  },
+  {
+    title: 'ソート',
+    hints: [{ keys: ['Enter', '/', 'Space'], description: '列をソート（ヘッダー上で）' }],
+  },
+  {
+    title: '選択',
+    hints: [
+      { keys: ['Space'], description: '行選択をトグル（チェックボックス上で）' },
+      { keys: ['Shift', '+', '矢印'], description: 'セル選択を拡張' },
+      { keys: ['Ctrl', '+', 'A'], description: '全セルを選択' },
+    ],
+  },
+  {
+    title: '編集',
+    hints: [
+      { keys: ['Enter', '/', 'F2'], description: 'セル編集を開始' },
+      { keys: ['Escape'], description: '編集をキャンセル' },
+      { keys: ['Tab'], description: 'セル内ウィジェット間を移動' },
+    ],
+  },
+];
+
+const tocItems = [
+  { id: 'demo', text: t('pattern.demo') },
+  { id: 'data-grid-vs-grid', text: 'Data Grid vs Grid' },
+  { id: 'accessibility-features', text: t('pattern.accessibility') },
+  { id: 'source-code', text: t('pattern.sourceCode') },
+  { id: 'usage', text: t('pattern.usage') },
+  { id: 'api', text: t('pattern.api') },
+  { id: 'testing', text: t('pattern.testing') },
+  { id: 'resources', text: t('pattern.resources') },
+];
+---
+
+<PatternLayout
+  title="Data Grid - Vue"
+  pattern="data-grid"
+  framework="vue"
+  tocItems={tocItems}
+  locale={locale}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Data Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      ソート、行選択、範囲選択、セル編集機能を備えた高度なインタラクティブデータグリッド。
+    </p>
+    <AiGuideBadge pattern="data-grid" locale={locale} />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="data-grid" currentFramework="vue" locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DataGridDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+    <KeyboardHints title="キーボード操作" sections={keyboardHintsSections} class="mt-4" />
+  </section>
+
+  <!-- Data Grid vs Grid Section -->
+  <section class="mb-12">
+    <Heading level={2} id="data-grid-vs-grid" class="mb-4 text-xl font-semibold"
+      >Data Grid vs Grid</Heading
+    >
+    <p class="text-muted-foreground mb-4">
+      Data Grid は基本的な Grid パターンを拡張し、データ操作のための追加機能を提供します。
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">機能</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Data Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">2Dナビゲーション</td>
+            <td class="py-2 pr-4">あり</td>
+            <td class="py-2">あり</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">セル選択</td>
+            <td class="py-2 pr-4">あり</td>
+            <td class="py-2">あり</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">列ソート</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（aria-sort）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">行選択</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（チェックボックス）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">範囲選択</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（Shift+矢印）</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">セル編集</td>
+            <td class="py-2 pr-4">なし</td>
+            <td class="py-2">あり（Enter/F2）</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="vue" title="DataGrid.vue" />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">{t('pattern.usage')}</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script setup lang="ts">
+import { ref } from 'vue';
+import DataGrid from './DataGrid.vue';
+import type { DataGridColumnDef, DataGridRowData, SortDirection } from './DataGrid.vue';
+
+const columns = ref<DataGridColumnDef[]>([
+  { id: 'name', header: '名前', sortable: true },
+  { id: 'email', header: 'メール', sortable: true },
+  { id: 'role', header: '役割', sortable: true },
+]);
+
+const rows = ref<DataGridRowData[]>([
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-name', value: '田中太郎', editable: true },
+      { id: 'user1-email', value: 'tanaka@example.com', editable: true },
+      { id: 'user1-role', value: '管理者' },
+    ],
+  },
+]);
+
+const selectedRowIds = ref<string[]>([]);
+
+function handleSort(columnId: string, direction: SortDirection) {
+  columns.value = columns.value.map(col => ({
+    ...col,
+    sortDirection: col.id === columnId ? direction : 'none'
+  }));
+}
+</script>
+
+<template>
+  <DataGrid
+    :columns="columns"
+    :rows="rows"
+    aria-label="ユーザー一覧"
+    row-selectable
+    row-multiselectable
+    :selected-row-ids="selectedRowIds"
+    @sort="handleSort"
+    @row-selection-change="(ids) => selectedRowIds = ids"
+    @edit-end="(cellId, value, cancelled) => console.log({ cellId, value, cancelled })"
+  />
+</template>`}
+      lang="vue"
+      title="使用例"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">列定義</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">必須</td>
+            <td class="py-2">行データ</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>row-selectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">行選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enable-range-selection</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">範囲選択を有効化</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>editable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">セル編集を有効化</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">イベント</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">イベント</th>
+            <th class="py-2 pr-4 text-left">ペイロード</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>sort</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(columnId, direction)</td>
+            <td class="py-2">列がソートされた時に発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>row-selection-change</code></td>
+            <td class="text-muted-foreground py-2 pr-4">string[]</td>
+            <td class="py-2">行選択が変更された時に発火</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>edit-end</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(cellId, value, cancelled)</td>
+            <td class="py-2">セル編集が終了した時に発火</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid パターン
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid 例
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="data-grid" locale={locale} />
+    </ul>
+  </section>
+</PatternLayout>

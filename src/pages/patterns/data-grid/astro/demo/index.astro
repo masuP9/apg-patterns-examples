@@ -1,0 +1,61 @@
+---
+/**
+ * Demo-only Page: DataGrid (Astro)
+ */
+import '@/styles/global.css';
+import DataGrid from '@patterns/data-grid/DataGrid.astro';
+
+const columns = [
+  { id: 'name', header: 'Name', sortable: true, sortDirection: 'ascending' as const },
+  { id: 'email', header: 'Email', sortable: true },
+  { id: 'department', header: 'Department', sortable: true },
+];
+
+const rows = [
+  {
+    id: 'row1',
+    cells: [
+      { id: 'row1-name', value: 'Alice Johnson', editable: true },
+      { id: 'row1-email', value: 'alice@example.com', editable: true },
+      { id: 'row1-dept', value: 'Engineering' },
+    ],
+  },
+  {
+    id: 'row2',
+    cells: [
+      { id: 'row2-name', value: 'Bob Smith', editable: true },
+      { id: 'row2-email', value: 'bob@example.com', editable: true },
+      { id: 'row2-dept', value: 'Marketing' },
+    ],
+  },
+  {
+    id: 'row3',
+    cells: [
+      { id: 'row3-name', value: 'Carol Williams', editable: true },
+      { id: 'row3-email', value: 'carol@example.com', editable: true },
+      { id: 'row3-dept', value: 'Sales' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Data Grid (Astro)</title>
+  </head>
+  <body>
+    <DataGrid
+      columns={columns}
+      rows={rows}
+      ariaLabel="Employee list"
+      rowSelectable
+      rowMultiselectable
+      enableRangeSelection
+      editable
+    />
+  </body>
+</html>

@@ -1,0 +1,323 @@
+---
+import PatternLayout from '../../../../layouts/PatternLayout.astro';
+import DataGridDemo from '@patterns/data-grid/DataGridDemo.svelte';
+import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
+import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import sourceCode from '@patterns/data-grid/DataGrid.svelte?raw';
+
+const keyboardHintsSections = [
+  {
+    title: 'Navigation',
+    hints: [
+      { keys: ['↑', '↓', '←', '→'], description: 'Move between cells' },
+      { keys: ['Home', '/', 'End'], description: 'First / last cell in row' },
+      { keys: ['Ctrl', '+', 'Home'], description: 'First cell in grid' },
+      { keys: ['Ctrl', '+', 'End'], description: 'Last cell in grid' },
+      { keys: ['Page Up', '/', 'Page Down'], description: 'Jump by page' },
+    ],
+  },
+  {
+    title: 'Sorting',
+    hints: [{ keys: ['Enter', '/', 'Space'], description: 'Sort column (on header)' }],
+  },
+  {
+    title: 'Selection',
+    hints: [
+      { keys: ['Space'], description: 'Toggle row selection (on checkbox)' },
+      { keys: ['Shift', '+', 'Arrow'], description: 'Extend cell selection' },
+      { keys: ['Ctrl', '+', 'A'], description: 'Select all cells' },
+    ],
+  },
+  {
+    title: 'Editing',
+    hints: [
+      { keys: ['Enter', '/', 'F2'], description: 'Start editing cell' },
+      { keys: ['Escape'], description: 'Cancel editing' },
+      { keys: ['Tab'], description: 'Move within cell widgets' },
+    ],
+  },
+];
+
+const tocItems = [
+  { id: 'demo', text: 'Demo' },
+  { id: 'data-grid-vs-grid', text: 'Data Grid vs Grid' },
+  { id: 'accessibility-features', text: 'Accessibility Features' },
+  { id: 'source-code', text: 'Source Code' },
+  { id: 'usage', text: 'Usage' },
+  { id: 'api', text: 'API' },
+  { id: 'testing', text: 'Testing' },
+  { id: 'resources', text: 'Resources' },
+];
+---
+
+<PatternLayout
+  title="Data Grid - Svelte"
+  pattern="data-grid"
+  framework="svelte"
+  tocItems={tocItems}
+>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Data Grid</h1>
+    <p class="text-muted-foreground text-lg">
+      An advanced interactive data grid with sorting, row selection, range selection, and cell
+      editing capabilities.
+    </p>
+    <AiGuideBadge pattern="data-grid" />
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern="data-grid" currentFramework="svelte" />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DataGridDemo client:load />
+    </div>
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+    </p>
+    <KeyboardHints title="Keyboard Navigation" sections={keyboardHintsSections} class="mt-4" />
+  </section>
+
+  <!-- Data Grid vs Grid Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Data Grid vs Grid</Heading>
+    <p class="text-muted-foreground mb-4">
+      Data Grid extends the basic Grid pattern with additional features for data manipulation.
+    </p>
+    <ResponsiveTable class="mb-4">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Feature</th>
+            <th class="py-2 pr-4 text-left">Grid</th>
+            <th class="py-2 text-left">Data Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">2D Navigation</td>
+            <td class="py-2 pr-4">Yes</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Cell Selection</td>
+            <td class="py-2 pr-4">Yes</td>
+            <td class="py-2">Yes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Column Sorting</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (aria-sort)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Row Selection</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (checkbox)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Range Selection</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (Shift+Arrow)</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4">Cell Editing</td>
+            <td class="py-2 pr-4">No</td>
+            <td class="py-2">Yes (Enter/F2)</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
+    <AccessibilityDocs />
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang="svelte"
+      title="DataGrid.svelte"
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={`<script lang="ts">
+import DataGrid from './DataGrid.svelte';
+import type { DataGridColumnDef, DataGridRowData, SortDirection } from './DataGrid.svelte';
+
+let columns: DataGridColumnDef[] = $state([
+  { id: 'name', header: 'Name', sortable: true },
+  { id: 'email', header: 'Email', sortable: true },
+  { id: 'role', header: 'Role', sortable: true },
+]);
+
+let rows: DataGridRowData[] = $state([
+  {
+    id: 'user1',
+    cells: [
+      { id: 'user1-name', value: 'Alice Johnson', editable: true },
+      { id: 'user1-email', value: 'alice@example.com', editable: true },
+      { id: 'user1-role', value: 'Admin' },
+    ],
+  },
+]);
+
+let selectedRowIds: string[] = $state([]);
+
+function handleSort(columnId: string, direction: SortDirection) {
+  columns = columns.map(col => ({
+    ...col,
+    sortDirection: col.id === columnId ? direction : 'none'
+  }));
+}
+</script>
+
+<DataGrid
+  {columns}
+  {rows}
+  ariaLabel="User list"
+  rowSelectable
+  rowMultiselectable
+  {selectedRowIds}
+  onSort={handleSort}
+  onRowSelectionChange={(ids) => selectedRowIds = ids}
+  onEditEnd={(cellId, value, cancelled) => console.log({ cellId, value, cancelled })}
+/>`}
+      lang="svelte"
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
+
+    <h3 class="mb-3 text-lg font-medium">Props</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Prop</th>
+            <th class="py-2 pr-4 text-left">Type</th>
+            <th class="py-2 pr-4 text-left">Default</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>columns</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridColumnDef[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Column definitions</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rows</code></td>
+            <td class="text-muted-foreground py-2 pr-4">DataGridRowData[]</td>
+            <td class="text-muted-foreground py-2 pr-4">required</td>
+            <td class="py-2">Row data</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>rowSelectable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable row selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>enableRangeSelection</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable range selection</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>editable</code></td>
+            <td class="text-muted-foreground py-2 pr-4">boolean</td>
+            <td class="text-muted-foreground py-2 pr-4">false</td>
+            <td class="py-2">Enable cell editing</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    <h3 class="mb-3 text-lg font-medium">Callbacks</h3>
+    <ResponsiveTable class="mb-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">Callback</th>
+            <th class="py-2 pr-4 text-left">Signature</th>
+            <th class="py-2 text-left">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onSort</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(columnId, direction) =&gt; void</td>
+            <td class="py-2">Called when a column is sorted</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onRowSelectionChange</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(ids: string[]) =&gt; void</td>
+            <td class="py-2">Called when row selection changes</td>
+          </tr>
+          <tr class="border-border border-b">
+            <td class="py-2 pr-4"><code>onEditEnd</code></td>
+            <td class="text-muted-foreground py-2 pr-4">(cellId, value, cancelled) =&gt; void</td>
+            <td class="py-2">Called when cell editing ends</td>
+          </tr>
+        </tbody>
+      </table>
+    </ResponsiveTable>
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
+    <TestingDocs />
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Grid Pattern
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG: Data Grid Examples
+        </ExternalLink>
+      </li>
+      <AiGuideResourceItem pattern="data-grid" />
+    </ul>
+  </section>
+</PatternLayout>
