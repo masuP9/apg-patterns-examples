@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import WindowSplitterDemo from '@patterns/window-splitter/WindowSplitterDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/window-splitter/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/window-splitter/TestingDocs.astro';
@@ -31,12 +31,14 @@ const tocItems = [
   tocItems={tocItems}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Window Splitter</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Window Splitter</h1>
+      <AiGuideActions pattern="window-splitter" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A movable separator between two panes that allows users to resize the relative size of each
       pane. Used in IDEs, file browsers, and resizable layouts.
     </p>
-    <AiGuideBadge pattern="window-splitter" />
   </header>
 
   <!-- Framework Selector -->

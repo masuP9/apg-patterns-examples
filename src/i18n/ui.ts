@@ -78,6 +78,14 @@ export const ui = {
     '404.title': 'Page Not Found',
     '404.description': 'The page you are looking for does not exist.',
     '404.backHome': 'Back to Home',
+
+    // AI Guide Actions
+    'ai.downloadMarkdown': 'Download Markdown',
+    'ai.copyToClipboard': 'Copy to Clipboard',
+    'ai.copyOpenChatGPT': 'Copy & Open ChatGPT',
+    'ai.copyOpenClaude': 'Copy & Open Claude',
+    'ai.copied': 'Copied!',
+    'ai.moreActions': 'More actions',
   },
   ja: {
     // Navigation
@@ -141,6 +149,14 @@ export const ui = {
     '404.title': 'ページが見つかりません',
     '404.description': 'お探しのページは存在しません。',
     '404.backHome': 'ホームに戻る',
+
+    // AI Guide Actions
+    'ai.downloadMarkdown': 'Markdown をダウンロード',
+    'ai.copyToClipboard': 'クリップボードにコピー',
+    'ai.copyOpenChatGPT': 'コピーして ChatGPT を開く',
+    'ai.copyOpenClaude': 'コピーして Claude を開く',
+    'ai.copied': 'コピーしました！',
+    'ai.moreActions': 'その他の操作',
   },
 } as const;
 

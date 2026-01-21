@@ -6,7 +6,7 @@ import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/grid/TestingDocs.ja.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -35,11 +35,13 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Grid</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Grid</h1>
+      <AiGuideActions pattern="grid" locale={locale} />
+    </div>
     <p class="text-muted-foreground text-lg">
       キーボードナビゲーション、セル選択、アクティベーションを備えたインタラクティブな2Dデータグリッド。
     </p>
-    <AiGuideBadge pattern="grid" locale={locale} />
   </header>
 
   <FrameworkTabs pattern="grid" currentFramework="svelte" locale={locale} />

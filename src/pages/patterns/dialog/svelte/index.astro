@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import DialogDemo from '@patterns/dialog/DialogDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/dialog/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -26,11 +26,13 @@ const tocItems = [
 
 <PatternLayout title="Dialog - Svelte" pattern="dialog" framework="svelte" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Dialog (Modal)</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Dialog (Modal)</h1>
+      <AiGuideActions pattern="dialog" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A window overlaid on the primary window, rendering the content underneath inert.
     </p>
-    <AiGuideBadge pattern="dialog" />
   </header>
 
   <!-- Framework Selector -->

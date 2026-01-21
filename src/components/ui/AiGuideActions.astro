@@ -1,0 +1,279 @@
+---
+import { withBase } from '@/lib/utils';
+import { type Locale, getLocaleFromUrl, useTranslation } from '@/i18n';
+import DownloadIcon from 'lucide-static/icons/download.svg';
+import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
+
+interface Props {
+  pattern: string;
+  locale?: Locale;
+  class?: string;
+}
+
+const { pattern, class: className } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslation(locale);
+
+const llmMdUrl = withBase(`/patterns/${pattern}/llm.md`);
+---
+
+<div
+  class:list={['ai-guide-actions relative inline-flex', className]}
+  data-pattern={pattern}
+  data-llm-url={llmMdUrl}
+>
+  <div
+    class="button-group inline-flex items-center rounded-md border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+  >
+    <button
+      type="button"
+      class="download-btn inline-flex items-center gap-1.5 rounded-l-md px-3 py-1.5 text-sm text-blue-700 transition-colors hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-blue-300 dark:hover:bg-blue-900"
+      data-action="download"
+    >
+      <DownloadIcon class="relative -top-px size-4" aria-hidden="true" />
+      <span>{t('ai.downloadMarkdown')}</span>
+    </button>
+
+    <span class="separator h-6 w-px bg-blue-200 dark:bg-blue-700" aria-hidden="true"></span>
+
+    <details class="dropdown relative">
+      <summary
+        class="dropdown-trigger inline-flex size-8 items-center justify-center rounded-r-md text-blue-700 transition-colors hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-blue-300 dark:hover:bg-blue-900"
+        aria-label={t('ai.moreActions')}
+        aria-haspopup="menu"
+      >
+        <ChevronDownIcon class="size-4 transition-transform duration-200" aria-hidden="true" />
+      </summary>
+      <div
+        class="dropdown-menu border-border bg-background absolute right-0 z-10 mt-1 w-64 rounded-lg border shadow-lg"
+        role="menu"
+      >
+        <button
+          type="button"
+          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 rounded-t-lg px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          role="menuitem"
+          data-action="copy"
+        >
+          <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">📋</span>
+          <span>{t('ai.copyToClipboard')}</span>
+        </button>
+        <button
+          type="button"
+          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          role="menuitem"
+          data-action="chatgpt"
+        >
+          <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">💬</span>
+          <span>{t('ai.copyOpenChatGPT')}</span>
+        </button>
+        <button
+          type="button"
+          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 rounded-b-lg px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          role="menuitem"
+          data-action="claude"
+        >
+          <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">🤖</span>
+          <span>{t('ai.copyOpenClaude')}</span>
+        </button>
+      </div>
+    </details>
+  </div>
+
+  <span
+    class="copied-feedback pointer-events-none absolute top-full left-1/2 z-20 mt-2 -translate-x-1/2 rounded-md bg-black px-3 py-1.5 text-sm whitespace-nowrap text-white opacity-0 shadow-lg transition-opacity duration-200"
+    aria-live="polite"></span>
+</div>
+
+<style>
+  .dropdown summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .dropdown[open] summary .size-4 {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-menu {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+
+  .dropdown[open] .dropdown-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    animation: dropdown-in 0.15s ease-out;
+  }
+
+  @keyframes dropdown-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script define:vars={{ copiedText: t('ai.copied') }}>
+  function initAiGuideActions() {
+    document.querySelectorAll('.ai-guide-actions').forEach((container) => {
+      const pattern = container.dataset.pattern;
+      const llmUrl = container.dataset.llmUrl;
+      const feedback = container.querySelector('.copied-feedback');
+      const dropdown = container.querySelector('details.dropdown');
+
+      // Show copied feedback toast
+      function showCopiedFeedback() {
+        if (feedback) {
+          feedback.textContent = copiedText;
+          feedback.classList.add('opacity-100');
+          feedback.classList.remove('opacity-0');
+          setTimeout(() => {
+            feedback.classList.remove('opacity-100');
+            feedback.classList.add('opacity-0');
+            // Clear text after fade out
+            setTimeout(() => {
+              feedback.textContent = '';
+            }, 200);
+          }, 2000);
+        }
+      }
+
+      // Download button handler
+      const downloadBtn = container.querySelector('[data-action="download"]');
+      downloadBtn?.addEventListener('click', async () => {
+        try {
+          const response = await fetch(llmUrl);
+          const content = await response.text();
+
+          const blob = new Blob([content], { type: 'text/markdown' });
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${pattern}-ai-guide.md`;
+          a.click();
+
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('Failed to download:', error);
+        }
+      });
+
+      // Copy & Open handlers
+      async function handleCopyAndOpen(service) {
+        try {
+          const response = await fetch(llmUrl);
+          const content = await response.text();
+
+          await navigator.clipboard.writeText(content);
+
+          // Show feedback
+          showCopiedFeedback();
+
+          // Open service in new tab
+          const url = service === 'chatgpt' ? 'https://chat.openai.com/' : 'https://claude.ai/';
+          window.open(url, '_blank');
+
+          // Close dropdown
+          dropdown?.removeAttribute('open');
+        } catch (error) {
+          console.error('Failed to copy:', error);
+        }
+      }
+
+      // Copy only handler
+      container.querySelector('[data-action="copy"]')?.addEventListener('click', async () => {
+        try {
+          const response = await fetch(llmUrl);
+          const content = await response.text();
+
+          await navigator.clipboard.writeText(content);
+
+          // Show feedback
+          showCopiedFeedback();
+
+          // Close dropdown
+          dropdown?.removeAttribute('open');
+        } catch (error) {
+          console.error('Failed to copy:', error);
+        }
+      });
+
+      container.querySelector('[data-action="chatgpt"]')?.addEventListener('click', () => {
+        handleCopyAndOpen('chatgpt');
+      });
+
+      container.querySelector('[data-action="claude"]')?.addEventListener('click', () => {
+        handleCopyAndOpen('claude');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (dropdown?.hasAttribute('open') && !dropdown.contains(e.target)) {
+          dropdown.removeAttribute('open');
+        }
+      });
+
+      // Keyboard navigation for dropdown
+      container.addEventListener('keydown', (e) => {
+        // Close dropdown when pressing Escape
+        if (e.key === 'Escape' && dropdown?.hasAttribute('open')) {
+          dropdown.removeAttribute('open');
+          const summary = dropdown.querySelector('summary');
+          summary?.focus();
+          e.preventDefault();
+          return;
+        }
+
+        // Arrow key navigation within dropdown
+        if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && dropdown?.hasAttribute('open')) {
+          const buttons = Array.from(dropdown.querySelectorAll('[role="menuitem"]'));
+          if (buttons.length === 0) return;
+
+          const currentIndex = buttons.findIndex((btn) => btn === document.activeElement);
+
+          let nextIndex;
+          if (e.key === 'ArrowDown') {
+            nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % buttons.length;
+          } else {
+            nextIndex =
+              currentIndex < 0
+                ? buttons.length - 1
+                : (currentIndex - 1 + buttons.length) % buttons.length;
+          }
+
+          buttons[nextIndex]?.focus();
+          e.preventDefault();
+        }
+      });
+    });
+  }
+
+  // Initialize on page load
+  initAiGuideActions();
+
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:after-swap', initAiGuideActions);
+</script>

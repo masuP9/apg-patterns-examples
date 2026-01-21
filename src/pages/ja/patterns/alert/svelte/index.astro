@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import AlertDemo from '@patterns/alert/AlertDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/alert/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/alert/TestingDocs.ja.astro';
@@ -35,11 +35,13 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Alert</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Alert</h1>
+      <AiGuideActions pattern="alert" />
+    </div>
     <p class="text-muted-foreground text-lg">
       ユーザーのタスクを中断することなく、ユーザーの注意を引くように簡潔で重要なメッセージを表示する要素。
     </p>
-    <AiGuideBadge pattern="alert" />
   </header>
 
   <!-- Framework Selector -->

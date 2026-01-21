@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Spinbutton from '@patterns/spinbutton/Spinbutton.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/spinbutton/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/spinbutton/TestingDocs.astro';
@@ -33,12 +33,14 @@ const tocItems = [
   tocItems={tocItems}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Spinbutton</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Spinbutton</h1>
+      <AiGuideActions pattern="spinbutton" />
+    </div>
     <p class="text-muted-foreground text-lg">
       An input widget that allows users to select a value from a discrete set or range by using
       increment/decrement buttons, arrow keys, or typing directly.
     </p>
-    <AiGuideBadge pattern="spinbutton" />
   </header>
 
   <!-- Framework Selector -->

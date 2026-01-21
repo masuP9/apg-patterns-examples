@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import Tabs from '@patterns/tabs/Tabs.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/tabs/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/tabs/TestingDocs.ja.astro';
@@ -67,11 +67,13 @@ const verticalTabs = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Tabs</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Tabs</h1>
+      <AiGuideActions pattern="tabs" />
+    </div>
     <p class="text-muted-foreground text-lg">
       タブパネルと呼ばれるコンテンツの層状セクションのセットで、一度に1つのパネルを表示します。
     </p>
-    <AiGuideBadge pattern="tabs" />
   </header>
 
   <!-- Framework Selector -->

@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import AlertDialog from '@patterns/alert-dialog/AlertDialog.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/alert-dialog/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -31,12 +31,14 @@ const tocItems = [
   tocItems={tocItems}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Alert Dialog</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Alert Dialog</h1>
+      <AiGuideActions pattern="alert-dialog" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A modal dialog that interrupts the user's workflow to communicate an important message and
       require a response.
     </p>
-    <AiGuideBadge pattern="alert-dialog" />
   </header>
 
   <!-- Framework Selector -->

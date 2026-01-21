@@ -7,7 +7,7 @@ import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
 import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/toolbar/TestingDocs.ja.astro';
@@ -41,11 +41,13 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toolbar</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Toolbar</h1>
+      <AiGuideActions pattern="toolbar" />
+    </div>
     <p class="text-muted-foreground text-lg">
       ボタン、トグルボタン、その他の入力要素などのコントロールセットをグループ化するためのコンテナ。
     </p>
-    <AiGuideBadge pattern="toolbar" />
   </header>
 
   <!-- Framework Selector -->
