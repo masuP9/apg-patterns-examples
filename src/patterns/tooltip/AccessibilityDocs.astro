@@ -171,6 +171,6 @@ function displayRequired(required: boolean | { en: string; ja: string }): string
     }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    {data.visualDesign?.map((item) => <li set:html={t(item)} />)}
+    {Array.isArray(data.visualDesign) && data.visualDesign.map((item) => <li set:html={t(item)} />)}
   </ul>
 </div>

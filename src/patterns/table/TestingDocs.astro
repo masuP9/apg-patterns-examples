@@ -116,11 +116,12 @@ const titles = sectionTitles[locale];
             </tbody>
           </table>
         </ResponsiveTable>
-        {category.title.en === 'Visual Cell Spanning (Browser Tests)' && (
-          <p class="text-muted-foreground mb-6 text-sm">
-            <strong>{locale === 'en' ? 'Note:' : '注意:'}</strong> {titles.visualSpanningNote}
-          </p>
-        )}
+        {typeof category.title !== 'string' &&
+          category.title.en === 'Visual Cell Spanning (Browser Tests)' && (
+            <p class="text-muted-foreground mb-6 text-sm">
+              <strong>{locale === 'en' ? 'Note:' : '注意:'}</strong> {titles.visualSpanningNote}
+            </p>
+          )}
       </>
     ))
   }

@@ -85,7 +85,7 @@ const data = toggleButtonAccessibilityData;
               </tr>
               <tr class="border-border border-b">
                 <td class="py-2 pr-4 font-medium">{h('changeTrigger')}</td>
-                <td class="py-2">{t(state.changeTrigger)}</td>
+                <td class="py-2">{state.changeTrigger ? t(state.changeTrigger) : ''}</td>
               </tr>
               <tr class="border-border border-b">
                 <td class="py-2 pr-4 font-medium">{h('reference')}</td>

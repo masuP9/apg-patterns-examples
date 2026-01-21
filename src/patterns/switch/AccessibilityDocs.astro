@@ -108,12 +108,14 @@ const titles = sectionTitles[locale];
                   <tr class="border-border border-b">
                     <td class="w-32 py-2 pr-4 font-medium">{titles.values}</td>
                     <td class="py-2">
-                      {state.values.split(' | ').map((v, i, arr) => (
-                        <>
-                          <code>{v.trim()}</code>
-                          {i < arr.length - 1 && ' | '}
-                        </>
-                      ))}
+                      {t(state.values)
+                        .split(' | ')
+                        .map((v: string, i: number, arr: string[]) => (
+                          <>
+                            <code>{v.trim()}</code>
+                            {i < arr.length - 1 && ' | '}
+                          </>
+                        ))}
                     </td>
                   </tr>
                   <tr class="border-border border-b">

@@ -201,29 +201,30 @@ const h = createTableHeaderTranslator(locale);
               </tr>
             </thead>
             <tbody>
-              {section.shortcuts.map((shortcut) => (
-                <tr class="border-border border-b">
-                  <td class="py-2 pr-4">
-                    {shortcut.key.includes('+') ? (
-                      <>
-                        {shortcut.key.split(' + ').map((k, i, arr) => (
-                          <>
-                            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                              {k.trim()}
-                            </kbd>
-                            {i < arr.length - 1 && ' + '}
-                          </>
-                        ))}
-                      </>
-                    ) : (
-                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                        {shortcut.key}
-                      </kbd>
-                    )}
-                  </td>
-                  <td class="py-2">{t(shortcut.action)}</td>
-                </tr>
-              ))}
+              {section.shortcuts.map((shortcut) => {
+                const keyText = t(shortcut.key);
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      {keyText.includes('+') ? (
+                        <>
+                          {keyText.split(' + ').map((k: string, i: number, arr: string[]) => (
+                            <>
+                              <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                                {k.trim()}
+                              </kbd>
+                              {i < arr.length - 1 && ' + '}
+                            </>
+                          ))}
+                        </>
+                      ) : (
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{keyText}</kbd>
+                      )}
+                    </td>
+                    <td class="py-2">{t(shortcut.action)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </ResponsiveTable>

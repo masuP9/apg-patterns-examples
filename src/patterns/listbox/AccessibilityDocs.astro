@@ -164,46 +164,44 @@ const data = listboxAccessibilityData;
               </tr>
             </thead>
             <tbody>
-              {section.shortcuts.map((shortcut) => (
-                <tr class="border-border border-b">
-                  <td class="py-2 pr-4">
-                    {shortcut.key.includes(' / ') ? (
-                      <>
-                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                          {shortcut.key.split(' / ')[0]}
-                        </kbd>{' '}
-                        /{' '}
-                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                          {shortcut.key.split(' / ')[1]}
-                        </kbd>
-                      </>
-                    ) : shortcut.key.includes(' + ') ? (
-                      <>
-                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                          {shortcut.key.split(' + ')[0]}
-                        </kbd>{' '}
-                        +{' '}
-                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                          {shortcut.key.split(' + ')[1]}
-                        </kbd>
-                      </>
-                    ) : shortcut.key === 'Type character' || shortcut.key === 'Arrow keys' ? (
-                      locale === 'ja' && shortcut.key === 'Type character' ? (
-                        '文字入力'
-                      ) : locale === 'ja' && shortcut.key === 'Arrow keys' ? (
-                        '矢印キー'
+              {section.shortcuts.map((shortcut) => {
+                const keyText = t(shortcut.key);
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      {keyText.includes(' / ') ? (
+                        <>
+                          <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                            {keyText.split(' / ')[0]}
+                          </kbd>{' '}
+                          /{' '}
+                          <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                            {keyText.split(' / ')[1]}
+                          </kbd>
+                        </>
+                      ) : keyText.includes(' + ') ? (
+                        <>
+                          <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                            {keyText.split(' + ')[0]}
+                          </kbd>{' '}
+                          +{' '}
+                          <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                            {keyText.split(' + ')[1]}
+                          </kbd>
+                        </>
+                      ) : keyText === 'Type character' ||
+                        keyText === 'Arrow keys' ||
+                        keyText === '文字入力' ||
+                        keyText === '矢印キー' ? (
+                        keyText
                       ) : (
-                        shortcut.key
-                      )
-                    ) : (
-                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
-                        {shortcut.key}
-                      </kbd>
-                    )}
-                  </td>
-                  <td class="py-2">{t(shortcut.action)}</td>
-                </tr>
-              ))}
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{keyText}</kbd>
+                      )}
+                    </td>
+                    <td class="py-2">{t(shortcut.action)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </ResponsiveTable>
