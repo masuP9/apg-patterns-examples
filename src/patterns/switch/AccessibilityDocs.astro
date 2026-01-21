@@ -1,154 +1,215 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { switchAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const { roles, states, keyboardSupport, references, additionalNotes, implementationNotesData } =
+  switchAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Section titles
+const sectionTitles = {
+  en: {
+    accessibleNaming: 'Accessible Naming',
+    accessibleNamingDesc: 'Switches must have an accessible name. This can be provided through:',
+    visibleLabel: 'Visible label (recommended)',
+    visibleLabelDesc: "The switch's child content provides the accessible name",
+    ariaLabelDesc: 'Provides an invisible label for the switch',
+    ariaLabelledbyDesc: 'References an external element as the label',
+    visualDesign: 'Visual Design',
+    visualDesignDesc:
+      'This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state:',
+    thumbPosition: 'Thumb position',
+    thumbPositionDesc: 'Left = off, Right = on',
+    checkmarkIcon: 'Checkmark icon',
+    checkmarkIconDesc: 'Visible only when the switch is on',
+    forcedColors: 'Forced colors mode',
+    forcedColorsDesc: 'Uses system colors for accessibility in Windows High Contrast Mode',
+    values: 'Values',
+    required: 'Required',
+    default: 'Default',
+    changeTrigger: 'Change Trigger',
+    reference: 'Reference',
+    requiredForSwitch: 'Yes (for switch role)',
+    notRequiredOnlyDisabled: 'No (only when disabled)',
+    initialCheckedProp: 'initialChecked prop (default: false)',
+  },
+  ja: {
+    accessibleNaming: 'アクセシブルな名前',
+    accessibleNamingDesc: 'スイッチにはアクセシブルな名前が必要です。以下の方法で提供できます：',
+    visibleLabel: '表示されるラベル（推奨）',
+    visibleLabelDesc: 'スイッチの子要素のコンテンツがアクセシブルな名前を提供',
+    ariaLabelDesc: 'スイッチに非表示のラベルを提供',
+    ariaLabelledbyDesc: '外部要素をラベルとして参照',
+    visualDesign: 'ビジュアルデザイン',
+    visualDesignDesc:
+      'この実装は、色のみに依存せず状態を示すことでWCAG 1.4.1（色の使用）に準拠しています：',
+    thumbPosition: 'つまみの位置',
+    thumbPositionDesc: '左 = オフ、右 = オン',
+    checkmarkIcon: 'チェックマークアイコン',
+    checkmarkIconDesc: 'スイッチがオンの時のみ表示',
+    forcedColors: '強制カラーモード',
+    forcedColorsDesc: 'Windowsハイコントラストモードでのアクセシビリティのためシステムカラーを使用',
+    values: '値',
+    required: '必須',
+    default: 'デフォルト',
+    changeTrigger: '変更トリガー',
+    reference: 'リファレンス',
+    requiredForSwitch: 'はい（switchロールの場合）',
+    notRequiredOnlyDisabled: 'いいえ（無効化時のみ）',
+    initialCheckedProp: 'initialChecked プロパティ（デフォルト: false）',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <code>switch</code> - An input widget that allows users to choose one of two values: on or off<br
-      />
-      <ExternalLink
-        href="https://w3c.github.io/aria/#switch"
-        class="text-primary text-sm hover:underline"
-      >
-        WAI-ARIA switch role
-      </ExternalLink>
-    </li>
+    {
+      roles.map((role) => (
+        <li>
+          <code>{role.name}</code> - {t(role.description)}
+          <br />
+          {references && references.length > 0 && (
+            <ExternalLink href={references[0].url} class="text-primary text-sm hover:underline">
+              {references[0].title}
+            </ExternalLink>
+          )}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-checked</code></h4>
-    <p class="text-muted-foreground mb-3">Indicates the current checked state of the switch.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>true</code> | <code>false</code>
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes (for switch role)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2"><code>initialChecked</code> prop (default: <code>false</code>)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Click, Enter, Space</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-checked"
-                class="text-primary hover:underline"
-              >
-                aria-checked
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+        {states.map((state, index) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>{state.attribute}</code>
+            </h4>
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{titles.values}</td>
+                    <td class="py-2">
+                      {state.values.split(' | ').map((v, i, arr) => (
+                        <>
+                          <code>{v.trim()}</code>
+                          {i < arr.length - 1 && ' | '}
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{titles.required}</td>
+                    <td class="py-2">
+                      {state.required ? titles.requiredForSwitch : titles.notRequiredOnlyDisabled}
+                    </td>
+                  </tr>
+                  {index === 0 && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{titles.default}</td>
+                      <td class="py-2">
+                        <code>initialChecked</code>{' '}
+                        {locale === 'en' ? 'prop (default: ' : 'プロパティ（デフォルト: '}
+                        <code>false</code>)
+                      </td>
+                    </tr>
+                  )}
+                  {state.changeTrigger && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{titles.changeTrigger}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
+                    </tr>
+                  )}
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{titles.reference}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </div>
+        ))}
+      </>
+    )
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
-    <p class="text-muted-foreground mb-3">Indicates the switch is perceivable but disabled.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>true</code> | <code>undefined</code>
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No (only when disabled)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-disabled"
-                class="text-primary hover:underline"
-              >
-                aria-disabled
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Toggle the switch state (on/off)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Toggle the switch state (on/off)</td>
-        </tr>
+        {
+          keyboardSupport?.map((shortcut) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
+              </td>
+              <td class="py-2">{t(shortcut.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.accessibleNaming}</h3>
   <p class="text-muted-foreground mb-3">
-    Switches must have an accessible name. This can be provided through:
+    {titles.accessibleNamingDesc}
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Visible label (recommended)</strong> - The switch's child content provides the accessible
-      name
+      <strong>{titles.visibleLabel}</strong> - {titles.visibleLabelDesc}
     </li>
     <li>
-      <code>aria-label</code> - Provides an invisible label for the switch
+      <code>aria-label</code> - {titles.ariaLabelDesc}
     </li>
     <li>
-      <code>aria-labelledby</code> - References an external element as the label
+      <code>aria-labelledby</code> - {titles.ariaLabelledbyDesc}
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.visualDesign}</h3>
   <p class="text-muted-foreground mb-3">
-    This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate
-    state:
+    {titles.visualDesignDesc}
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Thumb position</strong> - Left = off, Right = on
+      <strong>{titles.thumbPosition}</strong> - {titles.thumbPositionDesc}
     </li>
     <li>
-      <strong>Checkmark icon</strong> - Visible only when the switch is on
+      <strong>{titles.checkmarkIcon}</strong> - {titles.checkmarkIconDesc}
     </li>
     <li>
-      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
-      Mode
+      <strong>{titles.forcedColors}</strong> - {titles.forcedColorsDesc}
     </li>
   </ul>
 </div>

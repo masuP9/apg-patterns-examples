@@ -1,142 +1,208 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { disclosureAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const { roles, properties, states, keyboardSupport, additionalNotes, references } =
+  disclosureAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>button</code></td>
-          <td class="py-2 pr-4">Trigger element</td>
-          <td class="py-2"
-            >Interactive element that toggles panel visibility (use native <code
-              >&lt;button&gt;</code
-            >)</td
-          >
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2" set:html={t(role.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')} />
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink
-      href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/"
-      class="text-primary hover:underline"
-    >
-      WAI-ARIA Disclosure Pattern
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2 pr-4">button</td>
-          <td class="py-2 pr-4">ID reference to panel</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Associates the button with the panel it controls</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-hidden</code></td>
-          <td class="py-2 pr-4">panel</td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Hides panel from assistive technology when collapsed</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    properties && properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.map((prop) => {
+                const values = t(prop.values);
+                const notes = prop.notes ? t(prop.notes) : '';
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-expanded</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates whether the disclosure panel is expanded or collapsed.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">button element</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2"><code>true</code> | <code>false</code></td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Click, Enter, Space</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-expanded"
-                class="text-primary hover:underline"
-              >
-                aria-expanded
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{prop.attribute}</code>
+                    </td>
+                    <td class="py-2 pr-4">{t(prop.element)}</td>
+                    <td class="py-2 pr-4">
+                      {values.includes('|') ? (
+                        <Fragment>
+                          {values.split(' | ').map((v, i, arr) => (
+                            <>
+                              <code>{v.trim()}</code>
+                              {i < arr.length - 1 && ' | '}
+                            </>
+                          ))}
+                        </Fragment>
+                      ) : (
+                        values
+                      )}
+                    </td>
+                    <td class="py-2 pr-4">{prop.required ? h('value.yes') : h('value.no')}</td>
+                    <td class="py-2">{notes}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+        {states.map((state) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>{state.attribute}</code>
+            </h4>
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{h('table.target')}</td>
+                    <td class="py-2">{t(state.element)}</td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
+                    <td class="py-2">
+                      {state.values.split(' | ').map((v, i, arr) => (
+                        <>
+                          <code>{v.trim()}</code>
+                          {i < arr.length - 1 && ' | '}
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                    <td class="py-2">{state.required ? h('value.yes') : h('value.no')}</td>
+                  </tr>
+                  {state.changeTrigger && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.changeTrigger')}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
+                    </tr>
+                  )}
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.reference')}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </div>
+        ))}
+      </>
+    )
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Move focus to the disclosure button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd> / <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd
-            ></td
-          >
-          <td class="py-2">Toggle the visibility of the disclosure panel</td>
-        </tr>
+        {
+          keyboardSupport?.map((shortcut) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                {shortcut.key.includes('/') || shortcut.key.includes('+') ? (
+                  <Fragment>
+                    {shortcut.key.split(/\s*[\/+]\s*/).map((k, i, arr) => (
+                      <>
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k.trim()}</kbd>
+                        {i < arr.length - 1 && (shortcut.key.includes('+') ? ' + ' : ' / ')}
+                      </>
+                    ))}
+                  </Fragment>
+                ) : (
+                  <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
+                )}
+              </td>
+              <td class="py-2">{t(shortcut.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground text-sm">
-    Disclosure uses native <code>&lt;button&gt;</code> element behavior for keyboard interaction. No additional
-    keyboard handlers are required.
-  </p>
+  {
+    additionalNotes && additionalNotes.length > 0 && (
+      <p
+        class="text-muted-foreground text-sm"
+        set:html={t(additionalNotes[0]).replace(/<([^>]+)>/g, '&lt;$1&gt;')}
+      />
+    )
+  }
 </div>

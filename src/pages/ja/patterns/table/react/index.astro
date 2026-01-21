@@ -8,9 +8,9 @@ import {
   VirtualizedTableDemo,
   SpanningCellsTableDemo,
 } from '@patterns/table/TableDemo';
-import AccessibilityDocs from '@patterns/table/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/table/TestingDocs.ja.astro';
-import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.ja.astro';
+import AccessibilityDocs from '@patterns/table/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/table/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -122,7 +122,7 @@ const tocItems = [
   <!-- Native HTML Section -->
   <section class="mb-12">
     <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">ネイティブ HTML</Heading>
-    <NativeHtmlNotice />
+    <NativeHtmlNotice locale="ja" />
   </section>
 
   <!-- Accessibility Section -->
@@ -130,7 +130,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -290,7 +290,7 @@ interface TableRow {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
     <div class="mt-6">
       <CodeBlock collapsible collapsedLines={5} code={testCode} lang="tsx" title="Table.test.tsx" />
     </div>

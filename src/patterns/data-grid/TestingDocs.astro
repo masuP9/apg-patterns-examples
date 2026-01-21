@@ -1,104 +1,306 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { dataGridAccessibilityData } from './accessibility-data';
+import { createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = dataGridAccessibilityData;
+const h = createTableHeaderTranslator(locale);
+
+// Embedded translations
+const translations = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Data Grid component extends the basic Grid testing strategy with additional tests for sorting, row selection, range selection, and cell editing.',
+    testingStrategy: 'Testing Strategy',
+    unitTestsTitle: 'Unit Tests (Testing Library)',
+    unitTestsDesc:
+      'Verify component rendering and interactions using framework-specific Testing Library utilities. These tests ensure correct component behavior in isolation.',
+    unitTestsList: [
+      'HTML structure and element hierarchy (grid, row, gridcell)',
+      'Initial attribute values (role, aria-label, tabindex, aria-sort)',
+      'Selection state changes (aria-selected on rows and cells)',
+      'Edit mode state (aria-readonly)',
+      'Sort direction updates (aria-sort)',
+      'CSS class application',
+    ],
+    e2eTestsTitle: 'E2E Tests (Playwright)',
+    e2eTestsDesc:
+      'Verify component behavior in a real browser environment across all four frameworks. These tests cover interactions that require full browser context.',
+    e2eTestsList: [
+      '2D keyboard navigation (Arrow keys)',
+      'Header navigation and sorting',
+      'Range selection with Shift+Arrow',
+      'Cell editing workflow (Enter, F2, Escape)',
+      'Row selection with checkboxes',
+      'Focus management between headers and cells',
+      'Cross-framework consistency',
+    ],
+    testCategories: 'Test Categories',
+    highPriorityAria: 'High Priority: APG ARIA Attributes',
+    highPrioritySorting: 'High Priority: Sorting',
+    highPriorityRangeSelection: 'High Priority: Range Selection',
+    highPriorityRowSelection: 'High Priority: Row Selection',
+    highPriorityCellEditing: 'High Priority: Cell Editing',
+    highPriorityFocus: 'High Priority: Focus Management',
+    mediumPriorityVirtualization: 'Medium Priority: Virtualization Support',
+    mediumPriorityAccessibility: 'Medium Priority: Accessibility',
+    testingTools: 'Testing Tools',
+    seeDocumentation: 'See',
+    forFullDocumentation: 'for full documentation.',
+    testColumn: 'Test',
+    descColumn: 'Description',
+    // ARIA tests
+    gridRole: 'Container has grid role',
+    rowRole: 'All rows have row role',
+    gridcellRole: 'Data cells have gridcell role',
+    columnheaderRole: 'Header cells have columnheader role',
+    ariaSortPresent: 'Sortable headers have aria-sort',
+    ariaSortUpdates: 'aria-sort updates on sort action',
+    ariaSelectedRows: 'Rows have aria-selected when rowSelectable',
+    ariaReadonlyGrid: 'Grid has aria-readonly when readonly prop',
+    ariaReadonlyCells: 'Cells have aria-readonly based on editability',
+    ariaMultiselectable: 'Present when row or cell multi-select enabled',
+    // Sorting tests
+    enterOnHeader: 'Enter on sortable header triggers sort',
+    spaceOnHeader: 'Space on sortable header triggers sort',
+    sortCycle: 'Sort cycles: none \u2192 ascending \u2192 descending \u2192 ascending',
+    nonSortableHeaders: 'Non-sortable headers do not respond to Enter/Space',
+    // Range selection
+    shiftArrowDown: 'Extends selection downward',
+    shiftArrowUp: 'Extends selection upward',
+    shiftHome: 'Extends selection to row start',
+    shiftEnd: 'Extends selection to row end',
+    ctrlShiftHome: 'Extends selection to grid start',
+    ctrlShiftEnd: 'Extends selection to grid end',
+    selectionAnchor: 'Selection anchor is set on first selection',
+    // Row selection
+    checkboxToggle: 'Checkbox click toggles row selection',
+    ariaSelectedUpdate: 'aria-selected updates on row element',
+    callbackFires: 'onRowSelectionChange callback fires',
+    selectAll: 'Select all checkbox selects/deselects all rows',
+    indeterminate: 'Select all shows indeterminate when some selected',
+    // Cell editing
+    enterStartsEdit: 'Enter on editable cell enters edit mode',
+    f2StartsEdit: 'F2 on editable cell enters edit mode',
+    escapeCancels: 'Escape cancels edit and restores original value',
+    navigationDisabled: 'Grid navigation disabled during edit mode',
+    focusOnInput: 'Focus moves to input field on edit start',
+    focusReturns: 'Focus returns to cell on edit end',
+    onEditStartCallback: 'onEditStart callback fires when entering edit mode',
+    onEditEndCallback: 'onEditEnd callback fires when exiting edit mode',
+    readonlyCell: 'Readonly cell does not enter edit mode',
+    // Focus management
+    sortableHeadersFocusable: 'Sortable headers have tabindex',
+    nonSortableNotFocusable: 'Non-sortable headers have no tabindex',
+    firstHasTabindex0: 'First focusable element has tabindex="0"',
+    headerToData: 'ArrowDown from header enters first data row',
+    dataToHeader: 'ArrowUp from first row enters sortable header',
+    rovingTabindex: 'Roving tabindex updates correctly',
+    // Virtualization
+    ariaRowcount: 'Present when totalRows provided (1-based)',
+    ariaColcount: 'Present when totalColumns provided (1-based)',
+    ariaRowindex: 'Present on rows when virtualizing (1-based)',
+    ariaColindex: 'Present on cells when virtualizing (1-based)',
+    // Accessibility
+    axeCore: 'No accessibility violations',
+    sortIndicators: 'Sort indicators have accessible names',
+    checkboxLabels: 'Checkboxes have accessible labels',
+    // Tools
+    vitestDesc: 'Test runner for unit tests',
+    testingLibraryDesc: 'Framework-specific testing utilities (React, Vue, Svelte)',
+    playwrightDesc: 'Browser automation for E2E tests',
+    axeCorePlaywrightDesc: 'Automated accessibility testing in E2E',
+  },
+  ja: {
+    intro:
+      'テストは、キーボード操作、ARIA属性、アクセシビリティ要件全体のAPG準拠を検証します。データグリッドコンポーネントは、基本的なグリッドテスト戦略をソート、行選択、範囲選択、セル編集の追加テストで拡張しています。',
+    testingStrategy: 'テスト戦略',
+    unitTestsTitle: 'ユニットテスト（Testing Library）',
+    unitTestsDesc:
+      'フレームワーク固有のTesting Libraryユーティリティを使用して、コンポーネントのレンダリングとインタラクションを検証します。これらのテストは、分離された状態での正しいコンポーネントの動作を確認します。',
+    unitTestsList: [
+      'HTML構造と要素階層（grid、row、gridcell）',
+      '初期属性値（role、aria-label、tabindex、aria-sort）',
+      '選択状態の変更（行とセルのaria-selected）',
+      '編集モード状態（aria-readonly）',
+      'ソート方向の更新（aria-sort）',
+      'CSSクラスの適用',
+    ],
+    e2eTestsTitle: 'E2Eテスト（Playwright）',
+    e2eTestsDesc:
+      '4つのフレームワークすべてにわたって実際のブラウザ環境でコンポーネントの動作を検証します。これらのテストは、完全なブラウザコンテキストを必要とするインタラクションをカバーします。',
+    e2eTestsList: [
+      '2Dキーボードナビゲーション（矢印キー）',
+      'ヘッダーナビゲーションとソート',
+      'Shift+矢印による範囲選択',
+      'セル編集ワークフロー（Enter、F2、Escape）',
+      'チェックボックスによる行選択',
+      'ヘッダーとセル間のフォーカス管理',
+      'フレームワーク間の一貫性',
+    ],
+    testCategories: 'テストカテゴリ',
+    highPriorityAria: '高優先度: APG ARIA属性',
+    highPrioritySorting: '高優先度: ソート',
+    highPriorityRangeSelection: '高優先度: 範囲選択',
+    highPriorityRowSelection: '高優先度: 行選択',
+    highPriorityCellEditing: '高優先度: セル編集',
+    highPriorityFocus: '高優先度: フォーカス管理',
+    mediumPriorityVirtualization: '中優先度: 仮想化サポート',
+    mediumPriorityAccessibility: '中優先度: アクセシビリティ',
+    testingTools: 'テストツール',
+    seeDocumentation: '',
+    forFullDocumentation: 'を参照して完全なドキュメントをご覧ください。',
+    testColumn: 'テスト',
+    descColumn: '説明',
+    // ARIA tests
+    gridRole: 'コンテナにgridロールがある',
+    rowRole: 'すべての行にrowロールがある',
+    gridcellRole: 'データセルにgridcellロールがある',
+    columnheaderRole: 'ヘッダーセルにcolumnheaderロールがある',
+    ariaSortPresent: 'ソート可能なヘッダーにaria-sortがある',
+    ariaSortUpdates: 'ソートアクションでaria-sortが更新される',
+    ariaSelectedRows: 'rowSelectableの場合、行にaria-selectedがある',
+    ariaReadonlyGrid: 'readonlyプロップの場合、グリッドにaria-readonlyがある',
+    ariaReadonlyCells: '編集可能性に基づいてセルにaria-readonlyがある',
+    ariaMultiselectable: '行またはセルのマルチセレクトが有効な場合に存在',
+    // Sorting tests
+    enterOnHeader: 'ソート可能なヘッダーでEnterがソートをトリガー',
+    spaceOnHeader: 'ソート可能なヘッダーでSpaceがソートをトリガー',
+    sortCycle: 'ソート循環: none → ascending → descending → ascending',
+    nonSortableHeaders: 'ソート不可のヘッダーはEnter/Spaceに応答しない',
+    // Range selection
+    shiftArrowDown: '選択を下に拡張',
+    shiftArrowUp: '選択を上に拡張',
+    shiftHome: '選択を行の先頭まで拡張',
+    shiftEnd: '選択を行の末尾まで拡張',
+    ctrlShiftHome: '選択をグリッドの先頭まで拡張',
+    ctrlShiftEnd: '選択をグリッドの末尾まで拡張',
+    selectionAnchor: '最初の選択時に選択アンカーが設定される',
+    // Row selection
+    checkboxToggle: 'チェックボックスのクリックで行選択を切り替え',
+    ariaSelectedUpdate: '行要素でaria-selectedが更新される',
+    callbackFires: 'onRowSelectionChangeコールバックが発火',
+    selectAll: '全選択チェックボックスがすべての行を選択/解除',
+    indeterminate: '一部選択時に全選択が不確定状態を表示',
+    // Cell editing
+    enterStartsEdit: '編集可能なセルでEnterが編集モードに入る',
+    f2StartsEdit: '編集可能なセルでF2が編集モードに入る',
+    escapeCancels: 'Escapeが編集をキャンセルして元の値を復元',
+    navigationDisabled: '編集モード中はグリッドナビゲーションが無効',
+    focusOnInput: '編集開始時にフォーカスが入力フィールドに移動',
+    focusReturns: '編集終了時にフォーカスがセルに戻る',
+    onEditStartCallback: '編集モードに入るときにonEditStartコールバックが発火',
+    onEditEndCallback: '編集モードを終了するときにonEditEndコールバックが発火',
+    readonlyCell: '読み取り専用セルは編集モードに入らない',
+    // Focus management
+    sortableHeadersFocusable: 'ソート可能なヘッダーにtabindexがある',
+    nonSortableNotFocusable: 'ソート不可のヘッダーにtabindexがない',
+    firstHasTabindex0: '最初のフォーカス可能な要素にtabindex="0"がある',
+    headerToData: 'ヘッダーからArrowDownで最初のデータ行に入る',
+    dataToHeader: '最初の行からArrowUpでソート可能なヘッダーに入る',
+    rovingTabindex: 'ローヴィングタブインデックスが正しく更新される',
+    // Virtualization
+    ariaRowcount: 'totalRows提供時に存在（1ベース）',
+    ariaColcount: 'totalColumns提供時に存在（1ベース）',
+    ariaRowindex: '仮想化時に行に存在（1ベース）',
+    ariaColindex: '仮想化時にセルに存在（1ベース）',
+    // Accessibility
+    axeCore: 'アクセシビリティ違反なし',
+    sortIndicators: 'ソートインジケーターにアクセシブルな名前がある',
+    checkboxLabels: 'チェックボックスにアクセシブルなラベルがある',
+    // Tools
+    vitestDesc: 'ユニットテスト用テストランナー',
+    testingLibraryDesc: 'フレームワーク固有のテストユーティリティ（React、Vue、Svelte）',
+    playwrightDesc: 'E2Eテスト用ブラウザ自動化',
+    axeCorePlaywrightDesc: 'E2Eでの自動アクセシビリティテスト',
+  },
+};
+
+const text = translations[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Data Grid component extends the basic Grid testing strategy with additional
-    tests for sorting, row selection, range selection, and cell editing.
-  </p>
+  <p class="text-muted-foreground mb-4">{text.intro}</p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.testingStrategy}</h3>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component rendering and interactions using framework-specific Testing Library
-      utilities. These tests ensure correct component behavior in isolation.
-    </p>
+    <h4 class="mb-2 font-medium">{text.unitTestsTitle}</h4>
+    <p class="text-muted-foreground mb-2 text-sm">{text.unitTestsDesc}</p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>HTML structure and element hierarchy (grid, row, gridcell)</li>
-      <li>Initial attribute values (role, aria-label, tabindex, aria-sort)</li>
-      <li>Selection state changes (aria-selected on rows and cells)</li>
-      <li>Edit mode state (aria-readonly)</li>
-      <li>Sort direction updates (aria-sort)</li>
-      <li>CSS class application</li>
+      {text.unitTestsList.map((item) => <li>{item}</li>)}
     </ul>
   </div>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all four frameworks. These
-      tests cover interactions that require full browser context.
-    </p>
+    <h4 class="mb-2 font-medium">{text.e2eTestsTitle}</h4>
+    <p class="text-muted-foreground mb-2 text-sm">{text.e2eTestsDesc}</p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>2D keyboard navigation (Arrow keys)</li>
-      <li>Header navigation and sorting</li>
-      <li>Range selection with Shift+Arrow</li>
-      <li>Cell editing workflow (Enter, F2, Escape)</li>
-      <li>Row selection with checkboxes</li>
-      <li>Focus management between headers and cells</li>
-      <li>Cross-framework consistency</li>
+      {text.e2eTestsList.map((item) => <li>{item}</li>)}
     </ul>
   </div>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.testCategories}</h3>
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes
+    {text.highPriorityAria}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="grid"</code></td>
-          <td class="py-2">Container has grid role</td>
+          <td class="py-2">{text.gridRole}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="row"</code></td>
-          <td class="py-2">All rows have row role</td>
+          <td class="py-2">{text.rowRole}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="gridcell"</code></td>
-          <td class="py-2">Data cells have gridcell role</td>
+          <td class="py-2">{text.gridcellRole}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="columnheader"</code></td>
-          <td class="py-2">Header cells have columnheader role</td>
+          <td class="py-2">{text.columnheaderRole}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-sort</code></td>
-          <td class="py-2">Sortable headers have aria-sort</td>
+          <td class="py-2">{text.ariaSortPresent}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-sort updates</code></td>
-          <td class="py-2">aria-sort updates on sort action</td>
+          <td class="py-2">{text.ariaSortUpdates}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-selected on rows</code></td>
-          <td class="py-2">Rows have aria-selected when rowSelectable</td>
+          <td class="py-2">{text.ariaSelectedRows}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-readonly on grid</code></td>
-          <td class="py-2">Grid has aria-readonly when readonly prop</td>
+          <td class="py-2">{text.ariaReadonlyGrid}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-readonly on cells</code></td>
-          <td class="py-2">Cells have aria-readonly based on editability</td>
+          <td class="py-2">{text.ariaReadonlyCells}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
-          <td class="py-2">Present when row or cell multi-select enabled</td>
+          <td class="py-2">{text.ariaMultiselectable}</td>
         </tr>
       </tbody>
     </table>
@@ -106,32 +308,32 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Sorting
+    {text.highPrioritySorting}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Enter on header</code></td>
-          <td class="py-2">Enter on sortable header triggers sort</td>
+          <td class="py-2">{text.enterOnHeader}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Space on header</code></td>
-          <td class="py-2">Space on sortable header triggers sort</td>
+          <td class="py-2">{text.spaceOnHeader}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Sort cycle</code></td>
-          <td class="py-2">Sort cycles: none → ascending → descending → ascending</td>
+          <td class="py-2">{text.sortCycle}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Non-sortable headers</code></td>
-          <td class="py-2">Non-sortable headers do not respond to Enter/Space</td>
+          <td class="py-2">{text.nonSortableHeaders}</td>
         </tr>
       </tbody>
     </table>
@@ -139,44 +341,44 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Range Selection
+    {text.highPriorityRangeSelection}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Shift+ArrowDown</code></td>
-          <td class="py-2">Extends selection downward</td>
+          <td class="py-2">{text.shiftArrowDown}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Shift+ArrowUp</code></td>
-          <td class="py-2">Extends selection upward</td>
+          <td class="py-2">{text.shiftArrowUp}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Shift+Home</code></td>
-          <td class="py-2">Extends selection to row start</td>
+          <td class="py-2">{text.shiftHome}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Shift+End</code></td>
-          <td class="py-2">Extends selection to row end</td>
+          <td class="py-2">{text.shiftEnd}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Ctrl+Shift+Home</code></td>
-          <td class="py-2">Extends selection to grid start</td>
+          <td class="py-2">{text.ctrlShiftHome}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Ctrl+Shift+End</code></td>
-          <td class="py-2">Extends selection to grid end</td>
+          <td class="py-2">{text.ctrlShiftEnd}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Selection anchor</code></td>
-          <td class="py-2">Selection anchor is set on first selection</td>
+          <td class="py-2">{text.selectionAnchor}</td>
         </tr>
       </tbody>
     </table>
@@ -184,36 +386,36 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Row Selection
+    {text.highPriorityRowSelection}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Checkbox toggle</code></td>
-          <td class="py-2">Checkbox click toggles row selection</td>
+          <td class="py-2">{text.checkboxToggle}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-selected</code></td>
-          <td class="py-2">aria-selected updates on row element</td>
+          <td class="py-2">{text.ariaSelectedUpdate}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Callback fires</code></td>
-          <td class="py-2">onRowSelectionChange callback fires</td>
+          <td class="py-2">{text.callbackFires}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Select all</code></td>
-          <td class="py-2">Select all checkbox selects/deselects all rows</td>
+          <td class="py-2">{text.selectAll}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Indeterminate</code></td>
-          <td class="py-2">Select all shows indeterminate when some selected</td>
+          <td class="py-2">{text.indeterminate}</td>
         </tr>
       </tbody>
     </table>
@@ -221,52 +423,52 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Cell Editing
+    {text.highPriorityCellEditing}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Enter starts edit</code></td>
-          <td class="py-2">Enter on editable cell enters edit mode</td>
+          <td class="py-2">{text.enterStartsEdit}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>F2 starts edit</code></td>
-          <td class="py-2">F2 on editable cell enters edit mode</td>
+          <td class="py-2">{text.f2StartsEdit}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Escape cancels</code></td>
-          <td class="py-2">Escape cancels edit and restores original value</td>
+          <td class="py-2">{text.escapeCancels}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Navigation disabled</code></td>
-          <td class="py-2">Grid navigation disabled during edit mode</td>
+          <td class="py-2">{text.navigationDisabled}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Focus on input</code></td>
-          <td class="py-2">Focus moves to input field on edit start</td>
+          <td class="py-2">{text.focusOnInput}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Focus returns</code></td>
-          <td class="py-2">Focus returns to cell on edit end</td>
+          <td class="py-2">{text.focusReturns}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>onEditStart</code></td>
-          <td class="py-2">onEditStart callback fires when entering edit mode</td>
+          <td class="py-2">{text.onEditStartCallback}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>onEditEnd</code></td>
-          <td class="py-2">onEditEnd callback fires when exiting edit mode</td>
+          <td class="py-2">{text.onEditEndCallback}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Readonly cell</code></td>
-          <td class="py-2">Readonly cell does not enter edit mode</td>
+          <td class="py-2">{text.readonlyCell}</td>
         </tr>
       </tbody>
     </table>
@@ -274,40 +476,40 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management
+    {text.highPriorityFocus}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Sortable headers focusable</code></td>
-          <td class="py-2">Sortable headers have tabindex</td>
+          <td class="py-2">{text.sortableHeadersFocusable}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Non-sortable not focusable</code></td>
-          <td class="py-2">Non-sortable headers have no tabindex</td>
+          <td class="py-2">{text.nonSortableNotFocusable}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>First has tabindex=0</code></td>
-          <td class="py-2">First focusable element has tabindex="0"</td>
+          <td class="py-2">{text.firstHasTabindex0}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Header to data</code></td>
-          <td class="py-2">ArrowDown from header enters first data row</td>
+          <td class="py-2">{text.headerToData}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Data to header</code></td>
-          <td class="py-2">ArrowUp from first row enters sortable header</td>
+          <td class="py-2">{text.dataToHeader}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Roving tabindex</code></td>
-          <td class="py-2">Roving tabindex updates correctly</td>
+          <td class="py-2">{text.rovingTabindex}</td>
         </tr>
       </tbody>
     </table>
@@ -315,32 +517,32 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Virtualization Support
+    {text.mediumPriorityVirtualization}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-rowcount</code></td>
-          <td class="py-2">Present when totalRows provided (1-based)</td>
+          <td class="py-2">{text.ariaRowcount}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-colcount</code></td>
-          <td class="py-2">Present when totalColumns provided (1-based)</td>
+          <td class="py-2">{text.ariaColcount}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-rowindex</code></td>
-          <td class="py-2">Present on rows when virtualizing (1-based)</td>
+          <td class="py-2">{text.ariaRowindex}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-colindex</code></td>
-          <td class="py-2">Present on cells when virtualizing (1-based)</td>
+          <td class="py-2">{text.ariaColindex}</td>
         </tr>
       </tbody>
     </table>
@@ -348,52 +550,52 @@ import { ResponsiveTable } from '@/components/ui/table';
 
   <h4 class="mb-2 flex items-center gap-2 font-medium">
     <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
+    {text.mediumPriorityAccessibility}
   </h4>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{text.testColumn}</th>
+          <th class="py-2 text-left">{text.descColumn}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>axe-core</code></td>
-          <td class="py-2">No accessibility violations</td>
+          <td class="py-2">{text.axeCore}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Sort indicators</code></td>
-          <td class="py-2">Sort indicators have accessible names</td>
+          <td class="py-2">{text.sortIndicators}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>Checkbox labels</code></td>
-          <td class="py-2">Checkboxes have accessible labels</td>
+          <td class="py-2">{text.checkboxLabels}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
       <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">
         Vitest
       </ExternalLink>
-      - Test runner for unit tests
+      - {text.vitestDesc}
     </li>
     <li>
       <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
         Testing Library
       </ExternalLink>
-      - Framework-specific testing utilities (React, Vue, Svelte)
+      - {text.testingLibraryDesc}
     </li>
     <li>
       <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
         Playwright
       </ExternalLink>
-      - Browser automation for E2E tests
+      - {text.playwrightDesc}
     </li>
     <li>
       <ExternalLink
@@ -402,18 +604,18 @@ import { ResponsiveTable } from '@/components/ui/table';
       >
         axe-core/playwright
       </ExternalLink>
-      - Automated accessibility testing in E2E
+      - {text.axeCorePlaywrightDesc}
     </li>
   </ul>
 
   <p class="text-muted-foreground text-sm">
-    See
+    {text.seeDocumentation}
     <ExternalLink
       href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
       class="text-primary hover:underline"
     >
       testing-strategy.md
     </ExternalLink>
-    for full documentation.
+    {text.forFullDocumentation}
   </p>
 </div>

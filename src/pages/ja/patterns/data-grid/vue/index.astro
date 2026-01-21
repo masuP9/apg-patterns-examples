@@ -2,8 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import DataGridDemo from '@patterns/data-grid/DataGridDemo.vue';
-import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/data-grid/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
 import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -152,7 +152,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
       {t('pattern.accessibility')}
     </Heading>
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -305,7 +305,7 @@ function handleSort(columnId: string, direction: SortDirection) {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
       {t('pattern.testing')}
     </Heading>
-    <TestingDocs />
+    <TestingDocs locale="ja" />
   </section>
 
   <!-- Resources -->

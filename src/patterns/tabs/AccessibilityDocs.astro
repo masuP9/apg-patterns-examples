@@ -2,19 +2,39 @@
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { tabsAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
 
-const { roles, properties, states, keyboardSections, references } = tabsAccessibilityData;
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  properties,
+  states,
+  keyboardSections,
+  focusManagement,
+  implementationNotesData,
+  references,
+} = tabsAccessibilityData;
+
+// Create localization function - now directly reads from LocalizedField values
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
@@ -24,8 +44,8 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
               <td class="py-2 pr-4">
                 <code>{role.name}</code>
               </td>
-              <td class="py-2 pr-4">{role.element}</td>
-              <td class="py-2">{role.description}</td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
             </tr>
           ))
         }
@@ -45,43 +65,48 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
   {
     properties && properties.length > 0 && (
       <>
-        <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
         <ResponsiveTable class="mb-6">
           <table class="w-full border-collapse">
             <thead>
               <tr class="border-border border-b">
-                <th class="py-2 pr-4 text-left">Attribute</th>
-                <th class="py-2 pr-4 text-left">Target</th>
-                <th class="py-2 pr-4 text-left">Values</th>
-                <th class="py-2 pr-4 text-left">Required</th>
-                <th class="py-2 text-left">Configuration</th>
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.configuration')}</th>
               </tr>
             </thead>
             <tbody>
-              {properties.map((prop) => (
-                <tr class="border-border border-b">
-                  <td class="py-2 pr-4">
-                    <code>{prop.attribute}</code>
-                  </td>
-                  <td class="py-2 pr-4">{prop.element}</td>
-                  <td class="py-2 pr-4">
-                    {prop.values.includes('|') ? (
-                      <Fragment>
-                        {prop.values.split(' | ').map((v, i, arr) => (
-                          <>
-                            <code>{v.trim()}</code>
-                            {i < arr.length - 1 && ' | '}
-                          </>
-                        ))}
-                      </Fragment>
-                    ) : (
-                      prop.values
-                    )}
-                  </td>
-                  <td class="py-2 pr-4">{prop.required ? 'Yes' : 'No'}</td>
-                  <td class="py-2">{prop.notes || ''}</td>
-                </tr>
-              ))}
+              {properties.map((prop) => {
+                const values = t(prop.values);
+                const notes = prop.notes ? t(prop.notes) : '';
+
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{prop.attribute}</code>
+                    </td>
+                    <td class="py-2 pr-4">{prop.element}</td>
+                    <td class="py-2 pr-4">
+                      {values.includes('|') ? (
+                        <Fragment>
+                          {values.split(' | ').map((v, i, arr) => (
+                            <>
+                              <code>{v.trim()}</code>
+                              {i < arr.length - 1 && ' | '}
+                            </>
+                          ))}
+                        </Fragment>
+                      ) : (
+                        values
+                      )}
+                    </td>
+                    <td class="py-2 pr-4">{prop.required ? h('value.yes') : h('value.no')}</td>
+                    <td class="py-2">{notes}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </ResponsiveTable>
@@ -92,22 +117,21 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
   {
     states && states.length > 0 && (
       <>
-        <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
         {states.map((state) => (
           <div class="mb-6">
             <h4 class="mb-2 font-medium">
               <code>{state.attribute}</code>
             </h4>
-            <p class="text-muted-foreground mb-3">Indicates the currently active tab.</p>
             <ResponsiveTable class="mb-2">
               <table class="w-full border-collapse">
                 <tbody>
                   <tr class="border-border border-b">
-                    <td class="w-32 py-2 pr-4 font-medium">Target</td>
-                    <td class="py-2">{state.element}</td>
+                    <td class="w-32 py-2 pr-4 font-medium">{h('table.target')}</td>
+                    <td class="py-2">{t(state.element)}</td>
                   </tr>
                   <tr class="border-border border-b">
-                    <td class="py-2 pr-4 font-medium">Values</td>
+                    <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
                     <td class="py-2">
                       {state.values.split(' | ').map((v, i, arr) => (
                         <>
@@ -118,18 +142,18 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
                     </td>
                   </tr>
                   <tr class="border-border border-b">
-                    <td class="py-2 pr-4 font-medium">Required</td>
-                    <td class="py-2">{state.required ? 'Yes' : 'No'}</td>
+                    <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                    <td class="py-2">{state.required ? h('value.yes') : h('value.no')}</td>
                   </tr>
                   {state.changeTrigger && (
                     <tr class="border-border border-b">
-                      <td class="py-2 pr-4 font-medium">Change Trigger</td>
-                      <td class="py-2">{state.changeTrigger}</td>
+                      <td class="py-2 pr-4 font-medium">{h('table.changeTrigger')}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
                     </tr>
                   )}
                   {state.reference && (
                     <tr class="border-border border-b">
-                      <td class="py-2 pr-4 font-medium">Reference</td>
+                      <td class="py-2 pr-4 font-medium">{h('table.reference')}</td>
                       <td class="py-2">
                         <ExternalLink href={state.reference} class="text-primary hover:underline">
                           {state.attribute}
@@ -146,13 +170,13 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
     )
   }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
@@ -176,7 +200,7 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
                     <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
                   )}
                 </td>
-                <td class="py-2">{shortcut.action}</td>
+                <td class="py-2">{t(shortcut.action)}</td>
               </tr>
             ))
           )
@@ -184,4 +208,58 @@ const { roles, properties, states, keyboardSections, references } = tabsAccessib
       </tbody>
     </table>
   </ResponsiveTable>
+
+  {
+    focusManagement && focusManagement.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
+        <ul class="text-muted-foreground mb-6 list-disc space-y-1 pl-6">
+          {focusManagement.map((rule) => (
+            <li>
+              <strong>{t(rule.event)}:</strong> {t(rule.behavior)}
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    implementationNotesData && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.implementationNotes')}</h3>
+
+        {implementationNotesData.activationModes && (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">{h('section.activationModes')}</h4>
+            {implementationNotesData.activationModes.map((mode) => (
+              <div class="bg-muted/50 mb-4 rounded-lg p-4">
+                <h5 class="mb-2 font-medium">{t(mode.title)}</h5>
+                <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+                  {mode.points.map((point) => (
+                    <li>{t(point)}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {implementationNotesData.structure && (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">{h('section.structure')}</h4>
+            <pre
+              class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"
+              set:html={`<code>${implementationNotesData.structure.diagram}</code>`}
+            />
+            {implementationNotesData.structure.caption && (
+              <p class="text-muted-foreground mt-2 text-sm">
+                {t(implementationNotesData.structure.caption)}
+              </p>
+            )}
+          </div>
+        )}
+      </>
+    )
+  }
 </div>

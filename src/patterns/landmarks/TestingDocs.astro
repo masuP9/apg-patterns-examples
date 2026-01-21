@@ -1,236 +1,156 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { landmarksAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = landmarksAccessibilityData;
+const testing = data.testing!;
+
+// Priority colors
+const priorityColors: Record<string, string> = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Localized labels
+const labels = {
+  testingStrategy: locale === 'ja' ? 'テスト戦略' : 'Testing Strategy',
+  testCategories: locale === 'ja' ? 'テストカテゴリ' : 'Test Categories',
+  testingTools: locale === 'ja' ? 'テストツール' : 'Testing Tools',
+  checklist: locale === 'ja' ? 'チェックリスト（手動検証）' : 'Checklist (Manual Verification)',
+  seeFullDocs: locale === 'ja' ? '詳細は' : 'See',
+  forFullDocs: locale === 'ja' ? 'を参照してください。' : 'for full documentation.',
+  test: locale === 'ja' ? 'テスト' : 'Test',
+  description: locale === 'ja' ? '説明' : 'Description',
+  intro:
+    locale === 'ja'
+      ? 'テストでは、8つのランドマークロールがすべて存在し、適切にラベル付けされ、APGの制約に従っていることを確認します。ランドマークは静的な構造要素であるため、テストはインタラクションよりもHTML構造に焦点を当てています。'
+      : 'Tests verify that all 8 landmark roles are present, properly labeled, and follow APG constraints. Since landmarks are static structural elements, testing focuses on HTML structure rather than interaction.',
+  manualNote:
+    locale === 'ja'
+      ? 'これらの推奨事項は手動または専用ツールで検証するのが最適です：'
+      : 'These recommendations are best verified manually or with specialized tools:',
+};
+
+// Priority labels
+const priorityLabels: Record<string, Record<string, string>> = {
+  high: { en: 'High Priority:', ja: '高優先度:' },
+  medium: { en: 'Medium Priority:', ja: '中優先度:' },
+  low: { en: 'Low Priority:', ja: '低優先度:' },
+};
+
+// Manual checklist items
+const manualChecklist = [
+  {
+    en: 'All content is within landmarks (recommended but not required)',
+    ja: 'すべてのコンテンツがランドマーク内にある（推奨だが必須ではない）',
+  },
+  {
+    en: 'Total landmarks <= 7 (too many can be overwhelming)',
+    ja: 'ランドマークの総数が7以下（多すぎると煩雑になる）',
+  },
+  {
+    en: 'Screen reader navigation works correctly (NVDA D key, VoiceOver rotor)',
+    ja: 'スクリーンリーダーナビゲーションが正しく動作する（NVDA D キー、VoiceOver ローター）',
+  },
+];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify that all 8 landmark roles are present, properly labeled, and follow APG
-    constraints. Since landmarks are static structural elements, testing focuses on HTML structure
-    rather than interaction.
+    {labels.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.testingStrategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Container API / Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's HTML output and landmark structure. These tests ensure correct
-      rendering without requiring a browser.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>All 8 landmark roles are present</li>
-      <li>Semantic HTML elements are used</li>
-      <li>Proper labeling (aria-label/aria-labelledby)</li>
-      <li>Constraint validation (one main, one banner, etc.)</li>
-    </ul>
-  </div>
+  {
+    testing.strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify landmark structure in a real browser environment and run accessibility audits.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Landmark roles are exposed correctly</li>
-      <li>axe-core accessibility audit</li>
-      <li>Cross-framework consistency</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{labels.testCategories}</h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    testing.categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {priorityLabels[category.priority][locale]} {t(category.title)}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{labels.test}</th>
+                <th class="py-2 text-left">{labels.description}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Landmark Structure
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>banner landmark</code></td>
-          <td class="py-2">Has header element with banner role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>navigation landmark</code></td>
-          <td class="py-2">Has nav element(s) with navigation role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>main landmark</code></td>
-          <td class="py-2">Has main element with main role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>contentinfo landmark</code></td>
-          <td class="py-2">Has footer element with contentinfo role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>complementary landmark</code></td>
-          <td class="py-2">Has aside element with complementary role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>region landmark</code></td>
-          <td class="py-2">Has section with aria-labelledby (region role)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>search landmark</code></td>
-          <td class="py-2">Has form with role="search"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>form landmark</code></td>
-          <td class="py-2">Has form with aria-label (form role)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>exactly one main</code></td>
-          <td class="py-2">Only one main landmark exists</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>exactly one banner</code></td>
-          <td class="py-2">Only one banner landmark exists</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>exactly one contentinfo</code></td>
-          <td class="py-2">Only one contentinfo landmark exists</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Landmark Labeling
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>navigation labels</code></td>
-          <td class="py-2">Multiple navigations have unique aria-labels</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>region label</code></td>
-          <td class="py-2">Region has aria-label or aria-labelledby</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>form label</code></td>
-          <td class="py-2">Form landmark has aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>search label</code></td>
-          <td class="py-2">Search landmark has aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>complementary label</code></td>
-          <td class="py-2">Complementary landmark has aria-label</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe-core audit</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Props & Structure
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className prop</code></td>
-          <td class="py-2">Custom className is applied to container</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>showLabels prop</code></td>
-          <td class="py-2">Landmark labels are visible when enabled</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>semantic HTML</code></td>
-          <td class="py-2">Uses header, nav, main, footer, aside, section elements</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Checklist (Manual Verification)</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.checklist}</h3>
   <p class="text-muted-foreground mb-4">
-    These recommendations are best verified manually or with specialized tools:
+    {labels.manualNote}
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>All content is within landmarks (recommended but not required)</li>
-    <li>Total landmarks ≤ 7 (too many can be overwhelming)</li>
-    <li>Screen reader navigation works correctly (NVDA D key, VoiceOver rotor)</li>
+    {manualChecklist.map((item) => <li>{item[locale]}</li>)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://docs.astro.build/en/reference/container-reference/"
-        class="text-primary hover:underline">Astro Container API</ExternalLink
-      >
-      - Server-side component rendering for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink href="https://www.deque.com/axe/" class="text-primary hover:underline"
-        >axe-core</ExternalLink
-      >
-      - Accessibility testing engine
-    </li>
+    {
+      testing.tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          - {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    testing.documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {labels.seeFullDocs}{' '}
+        <ExternalLink href={testing.documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {labels.forFullDocs}
+      </p>
+    )
+  }
 </div>

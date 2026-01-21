@@ -4,273 +4,161 @@ import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import { tooltipAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const data = tooltipAccessibilityData.testing!;
 
 // Read actual test file at build time
-const e2eTestPath = path.join(process.cwd(), 'e2e/tooltip.spec.ts');
+const e2eTestPath = path.join(process.cwd(), data.e2eTestFile || 'e2e/tooltip.spec.ts');
 const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
+
+// Helper to get priority badge color
+function getPriorityColor(priority: string): string {
+  switch (priority) {
+    case 'high':
+      return 'bg-red-500';
+    case 'medium':
+      return 'bg-yellow-500';
+    case 'low':
+      return 'bg-green-500';
+    default:
+      return 'bg-gray-500';
+  }
+}
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance for ARIA attributes, keyboard interactions, show/hide behavior, and
-    accessibility requirements. The Tooltip component uses a two-layer testing strategy.
+    {t(data.strategies[0].description)}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'テスト戦略' : 'Testing Strategy'}
+  </h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's rendered output using framework-specific testing libraries. These tests
-      ensure correct HTML structure and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA attributes (role, aria-describedby, aria-hidden)</li>
-      <li>Keyboard interaction (Escape key dismissal)</li>
-      <li>Show/hide behavior on focus and blur</li>
-      <li>Accessibility via jest-axe</li>
-    </ul>
-  </div>
+  {
+    data.strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all frameworks. These tests
-      cover interactions and cross-framework consistency.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Hover interactions with delay timing</li>
-      <li>Focus/blur interactions</li>
-      <li>Escape key dismissal</li>
-      <li>ARIA structure validation in live browser</li>
-      <li>axe-core accessibility scanning</li>
-      <li>Cross-framework consistency checks</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'テストカテゴリ' : 'Test Categories'}
+  </h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    data.categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span
+            class={`inline-block h-3 w-3 rounded-full ${getPriorityColor(category.priority)}`}
+          />
+          {t(category.title)} ({category.testType})
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'ja' ? 'テスト' : 'Test'}</th>
+                <th class="py-2 text-left">
+                  {category.priority === 'high'
+                    ? locale === 'ja'
+                      ? 'APG要件'
+                      : 'APG Requirement'
+                    : category.priority === 'medium'
+                      ? locale === 'ja'
+                        ? 'WCAG要件'
+                        : 'WCAG Requirement'
+                      : locale === 'ja'
+                        ? '説明'
+                        : 'Description'}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Structure (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">APG Requirement</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="tooltip"</code></td>
-          <td class="py-2">Tooltip container must have tooltip role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-hidden</code></td>
-          <td class="py-2">Hidden tooltips must have aria-hidden="true"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-describedby</code></td>
-          <td class="py-2">Trigger references tooltip when visible</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Show/Hide Behavior (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Behavior</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Hover shows</code></td>
-          <td class="py-2">Shows tooltip on mouse hover after delay</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus shows</code></td>
-          <td class="py-2">Shows tooltip on keyboard focus</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Blur hides</code></td>
-          <td class="py-2">Hides tooltip on focus loss</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Mouseleave hides</code></td>
-          <td class="py-2">Hides tooltip when mouse leaves trigger</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Keyboard Interaction (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Behavior</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Escape</code></td>
-          <td class="py-2">Closes tooltip on Escape key</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus retention</code></td>
-          <td class="py-2">Focus remains on trigger after Escape</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Disabled State (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Behavior</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled no show</code></td>
-          <td class="py-2">Disabled tooltip does not show on hover</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">WCAG Requirement</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations (hidden)</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations when tooltip hidden</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations (visible)</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations when tooltip visible</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Cross-framework Consistency (E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>All frameworks have tooltips</code></td>
-          <td class="py-2">React, Vue, Svelte, Astro all render tooltip elements</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Show on hover</code></td>
-          <td class="py-2">All frameworks show tooltip on hover</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
-          <td class="py-2">All frameworks have consistent ARIA structure</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'テストコード例' : 'Example Test Code'}
+  </h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    The following is the actual E2E test file (<code>e2e/tooltip.spec.ts</code>).
+    {
+      locale === 'ja'
+        ? `以下は実際のE2Eテストファイル（${data.e2eTestFile}）です。`
+        : `The following is the actual E2E test file (${data.e2eTestFile}).`
+    }
   </p>
   <CodeBlock
     code={e2eTestCode}
     lang="typescript"
-    title="e2e/tooltip.spec.ts"
+    title={data.e2eTestFile}
     collapsible
     collapsedLines={20}
   />
 
-  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'テストの実行' : 'Running Tests'}
+  </h3>
   <pre
-    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for Tooltip
-npm run test -- tooltip
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{data.commands.map((cmd) => {
+      const comment = t(cmd.comment);
+      return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+    }).join('\n\n')}</code></pre>
 
-# Run E2E tests for Tooltip (all frameworks)
-npm run test:e2e:pattern --pattern=tooltip
-
-# Run E2E tests for specific framework
-npm run test:e2e:react:pattern --pattern=tooltip
-npm run test:e2e:vue:pattern --pattern=tooltip
-npm run test:e2e:svelte:pattern --pattern=tooltip
-npm run test:e2e:astro:pattern --pattern=tooltip</code></pre>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'テストツール' : 'Testing Tools'}
+  </h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      data.tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>{' '}
+          - {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    data.documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {locale === 'ja' ? '完全なドキュメントは ' : 'See '}
+        <ExternalLink href={data.documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>
+        {locale === 'ja' ? ' を参照してください。' : ' for full documentation.'}
+      </p>
+    )
+  }
 </div>

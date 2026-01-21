@@ -5,9 +5,9 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/radio-group/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/radio-group/TestingDocs.ja.astro';
-import NativeHtmlNotice from '@patterns/radio-group/NativeHtmlNotice.ja.astro';
+import AccessibilityDocs from '@patterns/radio-group/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/radio-group/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/radio-group/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -143,7 +143,7 @@ const ratingOptions = [
   <!-- Native HTML Section -->
   <section class="mb-12">
     <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">Native HTML</Heading>
-    <NativeHtmlNotice />
+    <NativeHtmlNotice locale="ja" />
   </section>
 
   <!-- Accessibility Section -->
@@ -151,7 +151,7 @@ const ratingOptions = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -301,7 +301,7 @@ const handleChange = (value) => {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
   </section>
 
   <!-- Resources -->

@@ -1,152 +1,151 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { dialogAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const { roles, properties, focusManagement, keyboardSupport, references, additionalNotes } =
+  dialogAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>dialog</code></td>
-          <td class="py-2 pr-4">Dialog container</td>
-          <td class="py-2">Indicates the element is a dialog window</td>
-        </tr>
+        {
+          roles?.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink href="https://w3c.github.io/aria/#dialog" class="text-primary hover:underline">
-      WAI-ARIA dialog role
-    </ExternalLink>
-  </p>
+  {
+    references && references[0] && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-modal</code></td>
-          <td class="py-2 pr-4">dialog</td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates this is a modal dialog</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">dialog</td>
-          <td class="py-2 pr-4">ID reference to title element</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the dialog title</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-describedby</code></td>
-          <td class="py-2 pr-4">dialog</td>
-          <td class="py-2 pr-4">ID reference to description</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">References optional description text</td>
-        </tr>
+        {
+          properties?.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">{t(prop.element)}</td>
+              <td class="py-2 pr-4">{t(prop.values)}</td>
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? h('value.yes')
+                    : h('value.no')
+                  : t(prop.required)}
+              </td>
+              <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Event</th>
-          <th class="py-2 text-left">Behavior</th>
+          <th class="py-2 pr-4 text-left">{h('table.event')}</th>
+          <th class="py-2 text-left">{h('table.behavior')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Dialog opens</td>
-          <td class="py-2">Focus moves to first focusable element inside the dialog</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Dialog closes</td>
-          <td class="py-2">Focus returns to the element that triggered the dialog</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Focus trap</td>
-          <td class="py-2"
-            >Tab/Shift+Tab cycles through focusable elements within the dialog only</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Background</td>
-          <td class="py-2">Content outside dialog is made inert (not focusable or interactive)</td>
-        </tr>
+        {
+          focusManagement?.map((rule) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{t(rule.event)}</td>
+              <td class="py-2">{t(rule.behavior)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2"
-            >Move focus to next focusable element within dialog. When focus is on the last element,
-            moves to first.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd
-            ></td
-          >
-          <td class="py-2"
-            >Move focus to previous focusable element within dialog. When focus is on the first
-            element, moves to last.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
-          >
-          <td class="py-2">Close the dialog and return focus to trigger element</td>
-        </tr>
+        {
+          keyboardSupport?.map((shortcut) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                {t(shortcut.key)
+                  .split(' + ')
+                  .map((k, i, arr) => (
+                    <>
+                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k}</kbd>
+                      {i < arr.length - 1 && ' + '}
+                    </>
+                  ))}
+              </td>
+              <td class="py-2">{t(shortcut.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Additional Notes</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.additionalNotes')}</h3>
   <ul class="text-muted-foreground list-disc space-y-2 pl-6">
-    <li>
-      The dialog title is required for accessibility and should clearly describe the purpose of the
-      dialog
-    </li>
-    <li>Page scrolling is disabled while the dialog is open</li>
-    <li>Clicking the overlay (background) closes the dialog by default</li>
-    <li>The close button has an accessible label for screen readers</li>
+    {additionalNotes?.map((note) => <li>{t(note)}</li>)}
   </ul>
 </div>

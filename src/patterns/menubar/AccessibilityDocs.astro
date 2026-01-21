@@ -1,60 +1,139 @@
 ---
+import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { menubarAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = menubarAccessibilityData;
+const t = localize(locale);
+const th = createTableHeaderTranslator(locale);
+
+const translations = {
+  en: {
+    menubarItemsTitle: 'WAI-ARIA Properties (Menubar Items)',
+    menuSubmenuTitle: 'WAI-ARIA Properties (Menu/Submenu)',
+    menubarItemNote: '* Only for items with a submenu',
+    menuSubmenuNote: '** Either aria-labelledby or aria-label is required for an accessible name',
+    differencesTitle: 'Differences from Menu-Button',
+    hiddenStateTitle: 'Hidden State',
+    hiddenStateDesc: 'When closed, the menu uses aria-hidden="true" with CSS to:',
+    openStateDesc: 'When open, the menu has aria-hidden="false" with visibility: visible.',
+  },
+  ja: {
+    menubarItemsTitle: 'WAI-ARIA プロパティ（メニューバーアイテム）',
+    menuSubmenuTitle: 'WAI-ARIA プロパティ（メニュー/サブメニュー）',
+    menubarItemNote: '* サブメニューを持つアイテムのみ',
+    menuSubmenuNote:
+      '** aria-labelledbyまたはaria-labelのいずれかがアクセシブルな名前のために必須です',
+    differencesTitle: 'Menu-Button との違い',
+    hiddenStateTitle: '非表示状態',
+    hiddenStateDesc: '閉じているとき、メニューはaria-hidden="true"とCSSを使用して以下を実現します:',
+    openStateDesc: '開いているとき、メニューはaria-hidden="false"とvisibility: visibleになります。',
+  },
+};
+
+const tt = translations[locale];
+
+// Split properties into menubar items and menu/submenu
+const menubarItemProps =
+  data.properties?.filter(
+    (p) => p.attribute === 'aria-haspopup' || p.attribute === 'aria-expanded'
+  ) ?? [];
+
+const menuSubmenuProps =
+  data.properties?.filter(
+    (p) => p.attribute !== 'aria-haspopup' && p.attribute !== 'aria-expanded'
+  ) ?? [];
+
+// Comparison table data
+const comparisonData = {
+  en: [
+    {
+      feature: 'Top-level structure',
+      menuButton: '<button> trigger',
+      menubar: '<ul role="menubar"> (always visible)',
+    },
+    { feature: 'Horizontal navigation', menuButton: 'None', menubar: '←/→ between menubar items' },
+    { feature: 'Hover behavior', menuButton: 'None', menubar: 'Auto-switch when menu is open' },
+    {
+      feature: '<li> role',
+      menuButton: 'Not always specified',
+      menubar: 'role="none" required for all',
+    },
+  ],
+  ja: [
+    {
+      feature: 'トップレベル構造',
+      menuButton: '<button>トリガー',
+      menubar: '<ul role="menubar">（常に表示）',
+    },
+    { feature: '水平ナビゲーション', menuButton: 'なし', menubar: 'メニューバーアイテム間で←/→' },
+    {
+      feature: 'ホバー動作',
+      menuButton: 'なし',
+      menubar: 'メニューが開いているときに自動切り替え',
+    },
+    {
+      feature: '<li>のロール',
+      menuButton: '常に指定されるとは限らない',
+      menubar: 'すべてにrole="none"が必須',
+    },
+  ],
+};
+
+// Hidden state bullet points
+const hiddenStateBullets = {
+  en: [
+    'Hide the menu from screen readers (aria-hidden)',
+    'Hide the menu visually (visibility: hidden)',
+    'Prevent pointer interaction (pointer-events: none)',
+    'Enable smooth CSS animations on open/close',
+  ],
+  ja: [
+    'スクリーンリーダーからメニューを隠す（aria-hidden）',
+    '視覚的にメニューを隠す（visibility: hidden）',
+    'ポインター操作を防ぐ（pointer-events: none）',
+    '開閉時のスムーズなCSSアニメーションを可能にする',
+  ],
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <!-- WAI-ARIA Roles -->
+  <h3 class="mb-3 text-lg font-medium">{th('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{th('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.element')}</th>
+          <th class="py-2 text-left">{th('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menubar</code></td>
-          <td class="py-2 pr-4">Horizontal container (<code>&lt;ul&gt;</code>)</td>
-          <td class="py-2">Top-level menu bar, always visible</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menu</code></td>
-          <td class="py-2 pr-4">Vertical container (<code>&lt;ul&gt;</code>)</td>
-          <td class="py-2">Dropdown menu or submenu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menuitem</code></td>
-          <td class="py-2 pr-4">Item (<code>&lt;span&gt;</code>)</td>
-          <td class="py-2">Standard action item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menuitemcheckbox</code></td>
-          <td class="py-2 pr-4">Checkbox item</td>
-          <td class="py-2">Toggleable option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menuitemradio</code></td>
-          <td class="py-2 pr-4">Radio item</td>
-          <td class="py-2">Exclusive option in a group</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>separator</code></td>
-          <td class="py-2 pr-4">Divider (<code>&lt;hr&gt;</code>)</td>
-          <td class="py-2">Visual separator (not focusable)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>group</code></td>
-          <td class="py-2 pr-4">Group container</td>
-          <td class="py-2">Groups radio items with a label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>none</code></td>
-          <td class="py-2 pr-4"><code>&lt;li&gt;</code> elements</td>
-          <td class="py-2">Hides list semantics from screen readers</td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td
+                class="py-2 pr-4"
+                set:html={t(role.element)
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/&lt;(\w+)&gt;/g, '<code>&lt;$1&gt;</code>')}
+              />
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
@@ -64,291 +143,210 @@ import { ResponsiveTable } from '@/components/ui/table';
     </ExternalLink>
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Menubar Items)</h3>
+  <!-- WAI-ARIA Properties (Menubar Items) -->
+  <h3 class="mb-3 text-lg font-medium">{tt.menubarItemsTitle}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{th('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.required')}</th>
+          <th class="py-2 text-left">{th('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-haspopup</code></td>
-          <td class="py-2 pr-4"><code>"menu"</code></td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2"
-            >Indicates the item opens a menu (use <code>"menu"</code>, not <code>"true"</code>)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Indicates whether the menu is open</td>
-        </tr>
+        {
+          menubarItemProps.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td
+                class="py-2 pr-4"
+                set:html={t(prop.values)
+                  .replace(/\|/g, ' | ')
+                  .replace(/(\w+)/g, '<code>$1</code>')
+                  .replace(
+                    /<code>"<\/code><code>menu<\/code><code>"<\/code>/g,
+                    '<code>"menu"</code>'
+                  )}
+              />
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? th('value.yes')
+                    : th('value.no')
+                  : t(prop.required)}
+              </td>
+              <td
+                class="py-2"
+                set:html={t(prop.notes ?? '')
+                  .replace(/(<code>.*?<\/code>)/g, '$1')
+                  .replace(/"([^"]+)"/g, '<code>"$1"</code>')}
+              />
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">* Only for items with a submenu</p>
+  <p class="text-muted-foreground mb-6 text-sm">{tt.menubarItemNote}</p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Menu/Submenu)</h3>
+  <!-- WAI-ARIA Properties (Menu/Submenu) -->
+  <h3 class="mb-3 text-lg font-medium">{tt.menuSubmenuTitle}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{th('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.target')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.required')}</th>
+          <th class="py-2 text-left">{th('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">menu</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes**</td>
-          <td class="py-2">References the parent menuitem</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">menubar/menu</td>
-          <td class="py-2 pr-4">String</td>
-          <td class="py-2 pr-4">Yes**</td>
-          <td class="py-2">Provides an accessible name</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-checked</code></td>
-          <td class="py-2 pr-4">checkbox/radio</td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates checked state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4">menuitem</td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the item is disabled</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-hidden</code></td>
-          <td class="py-2 pr-4">menu/submenu</td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Hides menu from screen readers when closed</td>
-        </tr>
+        {
+          menuSubmenuProps.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">{t(prop.element)}</td>
+              <td
+                class="py-2 pr-4"
+                set:html={t(prop.values)
+                  .split(' | ')
+                  .map((v) => `<code>${v}</code>`)
+                  .join(' | ')}
+              />
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? th('value.yes')
+                    : th('value.no')
+                  : t(prop.required)}
+              </td>
+              <td class="py-2">{t(prop.notes ?? '')}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    ** Either <code>aria-labelledby</code> or <code>aria-label</code> is required for an accessible name
+    {tt.menuSubmenuNote}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <h4 class="mb-2 font-medium">Menubar Navigation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Right Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to next menubar item (wraps to first)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Left Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to previous menubar item (wraps to last)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Open submenu and focus first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Open submenu and focus last item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> /
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Open submenu and focus first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first menubar item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last menubar item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Close all menus and move focus out</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <!-- Keyboard Support -->
+  <h3 class="mb-3 text-lg font-medium">{th('section.keyboardSupport')}</h3>
+  {
+    data.keyboardSections?.map((section) => (
+      <>
+        {section.title && <h4 class="mb-2 font-medium">{t(section.title)}</h4>}
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.key')}</th>
+                <th class="py-2 text-left">{th('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.shortcuts.map((shortcut) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    {t(shortcut.key)
+                      .split(' / ')
+                      .map((k, i) => (
+                        <>
+                          {i > 0 && ' / '}
+                          <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k}</kbd>
+                        </>
+                      ))}
+                  </td>
+                  <td class="py-2">{t(shortcut.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 font-medium">Menu/Submenu Navigation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to next item (wraps to first)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to previous item (wraps to last)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Right Arrow</kbd></td
-          >
-          <td class="py-2"
-            >Open submenu if present, or move to next menubar item's menu (in top-level menu)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Left Arrow</kbd></td
-          >
-          <td class="py-2"
-            >Close submenu and return to parent, or move to previous menubar item's menu (in
-            top-level menu)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> /
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2"
-            >Activate item and close menu; for checkbox/radio, toggle state and keep menu open</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
-          >
-          <td class="py-2"
-            >Close menu and return focus to parent (menubar item or parent menuitem)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Type character</td>
-          <td class="py-2">Type-ahead: focus item starting with typed character(s)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <!-- Focus Management -->
+  <h3 class="mb-3 text-lg font-medium">{th('section.focusManagement')}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses the <strong>Roving Tabindex</strong> pattern for focus management:
+    {
+      locale === 'ja'
+        ? 'このコンポーネントは、フォーカス管理に<strong>Roving Tabindex</strong>パターンを使用します:'
+        : 'This component uses the <strong>Roving Tabindex</strong> pattern for focus management:'
+    }
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only one menubar item has <code>tabindex="0"</code> at a time</li>
-    <li>Other items have <code>tabindex="-1"</code></li>
-    <li>Arrow keys move focus between items with wrapping</li>
-    <li>Disabled items are focusable but not activatable (per APG recommendation)</li>
-    <li>Separators are not focusable</li>
-    <li>Focus returns to invoker when menu closes</li>
+    {
+      data.focusManagement?.map((rule) => (
+        <li
+          set:html={t(rule.behavior)
+            .replace(/tabindex="(-?\d+)"/g, '<code>tabindex="$1"</code>')
+            .replace(/tabindex="-1"/g, '<code>tabindex="-1"</code>')}
+        />
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Differences from Menu-Button</h3>
+  <!-- Differences from Menu-Button -->
+  <h3 class="mb-3 text-lg font-medium">{tt.differencesTitle}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Feature</th>
+          <th class="py-2 pr-4 text-left">{locale === 'ja' ? '機能' : 'Feature'}</th>
           <th class="py-2 pr-4 text-left">Menu-Button</th>
           <th class="py-2 text-left">Menubar</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Top-level structure</td>
-          <td class="py-2 pr-4"><code>&lt;button&gt;</code> trigger</td>
-          <td class="py-2"><code>&lt;ul role="menubar"&gt;</code> (always visible)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Horizontal navigation</td>
-          <td class="py-2 pr-4">None</td>
-          <td class="py-2"><code>←</code>/<code>→</code> between menubar items</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Hover behavior</td>
-          <td class="py-2 pr-4">None</td>
-          <td class="py-2">Auto-switch when menu is open</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;li&gt;</code> role</td>
-          <td class="py-2 pr-4">Not always specified</td>
-          <td class="py-2"><code>role="none"</code> required for all</td>
-        </tr>
+        {
+          comparisonData[locale].map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{row.feature}</td>
+              <td
+                class="py-2 pr-4"
+                set:html={row.menuButton.replace(/<(\w+)>/g, '<code>&lt;$1&gt;</code>')}
+              />
+              <td
+                class="py-2"
+                set:html={row.menubar
+                  .replace(/<([^>]+)>/g, '<code>&lt;$1&gt;</code>')
+                  .replace(/←\/→/g, '<code>←</code>/<code>→</code>')}
+              />
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Hidden State</h3>
+  <!-- Hidden State -->
+  <h3 class="mb-3 text-lg font-medium">{tt.hiddenStateTitle}</h3>
   <p class="text-muted-foreground mb-4">
-    When closed, the menu uses <code>aria-hidden="true"</code> with CSS to:
+    {tt.hiddenStateDesc}
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Hide the menu from screen readers (<code>aria-hidden</code>)</li>
-    <li>Hide the menu visually (<code>visibility: hidden</code>)</li>
-    <li>Prevent pointer interaction (<code>pointer-events: none</code>)</li>
-    <li>Enable smooth CSS animations on open/close</li>
+    {
+      hiddenStateBullets[locale].map((bullet) => (
+        <li set:html={bullet.replace(/([a-z-]+: [a-z]+|aria-hidden)/g, '<code>$1</code>')} />
+      ))
+    }
   </ul>
-  <p class="text-muted-foreground mb-4">
-    When open, the menu has <code>aria-hidden="false"</code> with <code>visibility: visible</code>.
-  </p>
+  <p
+    class="text-muted-foreground mb-4"
+    set:html={tt.openStateDesc.replace(
+      /(aria-hidden="false"|visibility: visible)/g,
+      '<code>$1</code>'
+    )}
+  />
 </div>

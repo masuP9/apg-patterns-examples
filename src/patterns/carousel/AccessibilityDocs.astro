@@ -1,300 +1,240 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { carouselAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const { roles, properties, states, keyboardSupport, focusManagement, additionalNotes, references } =
+  carouselAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Section titles for auto-rotation behavior
+const autoRotationTitle = {
+  en: 'Auto-Rotation Behavior',
+  ja: '自動回転の動作',
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>region</code></td>
-          <td class="py-2 pr-4">Container (section)</td>
-          <td class="py-2">Landmark region for the carousel</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>group</code></td>
-          <td class="py-2 pr-4">Slides container</td>
-          <td class="py-2">Groups all slides together</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tablist</code></td>
-          <td class="py-2 pr-4">Tab container</td>
-          <td class="py-2">Container for slide indicator tabs</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tab</code></td>
-          <td class="py-2 pr-4">Each tab button</td>
-          <td class="py-2">Individual slide indicator</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabpanel</code></td>
-          <td class="py-2 pr-4">Each slide</td>
-          <td class="py-2">Individual slide content area</td>
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink
-      href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/"
-      class="text-primary hover:underline"
-    >
-      WAI-ARIA APG Carousel Pattern
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {locale === 'ja' ? 'WAI-ARIA APG Carousel パターン' : references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-roledescription</code></td>
-          <td class="py-2 pr-4">Container</td>
-          <td class="py-2 pr-4"><code>"carousel"</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Announces "carousel" to screen readers</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-roledescription</code></td>
-          <td class="py-2 pr-4">Each slide (tabpanel)</td>
-          <td class="py-2 pr-4"><code>"slide"</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Announces "slide" instead of "tabpanel"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">Container</td>
-          <td class="py-2 pr-4">Text</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Describes the carousel purpose</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">Each slide (tabpanel)</td>
-          <td class="py-2 pr-4"><code>"N of M"</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Slide position (e.g., "1 of 5")</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2 pr-4">Tab, Prev/Next buttons</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References controlled element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">Each slide (tabpanel)</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References associated tab</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-atomic</code></td>
-          <td class="py-2 pr-4">Slides container</td>
-          <td class="py-2 pr-4"><code>"false"</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Only announce changed content</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    properties && properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.map((prop) => {
+                const notes = prop.notes ? t(prop.notes) : '';
+                const values = t(prop.values);
+                const requiredText =
+                  typeof prop.required === 'boolean'
+                    ? prop.required
+                      ? h('value.yes')
+                      : h('value.no')
+                    : t(prop.required);
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{prop.attribute}</code>
+                    </td>
+                    <td class="py-2 pr-4">{t(prop.element)}</td>
+                    <td class="py-2 pr-4">
+                      {values.startsWith('"') ? <code>{values}</code> : values}
+                    </td>
+                    <td class="py-2 pr-4">{requiredText}</td>
+                    <td class="py-2">{notes}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-selected</code></h4>
-    <p class="text-muted-foreground mb-3">Indicates the currently selected slide indicator tab.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">Tab element</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2"><code>true</code> | <code>false</code></td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Tab click, Arrow keys, Prev/Next buttons, Auto-rotation</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-selected"
-                class="text-primary hover:underline"
-              >
-                aria-selected
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+        {states.map((state) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>{state.attribute}</code>
+            </h4>
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{h('table.target')}</td>
+                    <td class="py-2">{t(state.element)}</td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
+                    <td class="py-2">
+                      {state.values.split(' | ').map((v, i, arr) => (
+                        <>
+                          <code>{v.trim()}</code>
+                          {i < arr.length - 1 && ' | '}
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                    <td class="py-2">{state.required ? h('value.yes') : h('value.no')}</td>
+                  </tr>
+                  {state.changeTrigger && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.changeTrigger')}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
+                    </tr>
+                  )}
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.reference')}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </div>
+        ))}
+        {additionalNotes && additionalNotes.length > 0 && (
+          <p class="text-muted-foreground mt-2 text-sm">
+            <strong>{locale === 'ja' ? '注意:' : 'Note:'}</strong> {t(additionalNotes[0])}
+          </p>
+        )}
+      </>
+    )
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-live</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Dynamically controls screen reader announcements based on rotation state.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">Slides container</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>"off"</code> (auto-rotating) | <code>"polite"</code> (manual/paused)
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes (when auto-rotation enabled)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Play/Pause click, Focus in/out, Mouse hover</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-live"
-                class="text-primary hover:underline"
-              >
-                aria-live
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-    <p class="text-muted-foreground mt-2 text-sm">
-      <strong>Note:</strong> Set to <code>"off"</code> during auto-rotation to prevent interrupting users.
-      Changes to <code>"polite"</code> when rotation stops, allowing slide changes to be announced.
-    </p>
-  </div>
+  {
+    keyboardSupport && keyboardSupport.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+                <th class="py-2 text-left">{h('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {keyboardSupport.map((shortcut) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    {shortcut.key.includes('/') || shortcut.key.includes('+') ? (
+                      <Fragment>
+                        {shortcut.key.split(/\s*[\/+]\s*/).map((k, i, arr) => (
+                          <>
+                            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                              {k.trim()}
+                            </kbd>
+                            {i < arr.length - 1 && (shortcut.key.includes('+') ? ' + ' : ' / ')}
+                          </>
+                        ))}
+                      </Fragment>
+                    ) : (
+                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                        {shortcut.key}
+                      </kbd>
+                    )}
+                  </td>
+                  <td class="py-2">{t(shortcut.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd>
-          </td>
-          <td class="py-2">Navigate between controls (Play/Pause, tablist, Prev/Next)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Right</kbd>
-          </td>
-          <td class="py-2">Move to next slide indicator tab (loops to first)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Left</kbd>
-          </td>
-          <td class="py-2">Move to previous slide indicator tab (loops to last)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd>
-          </td>
-          <td class="py-2">Move focus to first slide indicator tab</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd>
-          </td>
-          <td class="py-2">Move focus to last slide indicator tab</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd>
-            /
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd>
-          </td>
-          <td class="py-2">Activate focused tab or button</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Auto-Rotation Behavior</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Trigger</th>
-          <th class="py-2 text-left">Behavior</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Keyboard focus enters carousel</td>
-          <td class="py-2">Rotation pauses temporarily, aria-live changes to "polite"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Keyboard focus leaves carousel</td>
-          <td class="py-2">Rotation resumes (if auto-rotate mode is on)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Mouse hovers over slides</td>
-          <td class="py-2">Rotation pauses temporarily</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Mouse leaves slides</td>
-          <td class="py-2">Rotation resumes (if auto-rotate mode is on)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Pause button clicked</td>
-          <td class="py-2">Turns off auto-rotate mode, button shows play icon</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Play button clicked</td>
-          <td class="py-2">Turns on auto-rotate mode and starts rotation immediately</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">prefers-reduced-motion: reduce</td>
-          <td class="py-2">Auto-rotation disabled by default</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    focusManagement && focusManagement.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{autoRotationTitle[locale]}</h3>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'ja' ? 'トリガー' : 'Trigger'}</th>
+                <th class="py-2 text-left">{h('table.behavior')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {focusManagement.slice(2).map((rule) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{t(rule.event)}</td>
+                  <td class="py-2">{t(rule.behavior)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 </div>

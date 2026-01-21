@@ -1,17 +1,91 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import { meterAccessibilityData } from './accessibility-data';
+import { createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const h = createTableHeaderTranslator(locale);
+const data = meterAccessibilityData;
+
+const translations = {
+  en: {
+    title: 'Use Native HTML First',
+    warning:
+      'Before using this custom component, consider using native <code>&lt;meter&gt;</code> elements.',
+    description:
+      'They provide built-in semantics, work without JavaScript, and require no ARIA attributes.',
+    usage:
+      'Use custom implementations only when you need custom styling that native elements cannot provide, or when you need programmatic control over the visual appearance.',
+    note: 'The native <code>&lt;meter&gt;</code> element supports <code>low</code>, <code>high</code>, and <code>optimum</code> attributes for automatic color changes based on value thresholds. This functionality requires manual implementation in custom components.',
+    useCase: 'Use Case',
+    nativeHtml: 'Native HTML',
+    customImpl: 'Custom Implementation',
+    // Table values
+    basicValue: 'Basic value display',
+    recommended: 'Recommended',
+    notNeeded: 'Not needed',
+    jsDisabled: 'JavaScript disabled support',
+    worksNatively: 'Works natively',
+    requiresFallback: 'Requires fallback',
+    thresholds: 'low/high/optimum thresholds',
+    builtIn: 'Built-in support',
+    manualImpl: 'Manual implementation',
+    customStyling: 'Custom styling',
+    limited: 'Limited (browser-dependent)',
+    fullControl: 'Full control',
+    crossBrowser: 'Consistent cross-browser appearance',
+    variesByBrowser: 'Varies by browser',
+    consistent: 'Consistent',
+    dynamicUpdates: 'Dynamic value updates',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    warning:
+      'このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;meter&gt;</code> 要素の使用を検討してください。',
+    description:
+      'ネイティブ要素は組み込みのセマンティクスを提供し、JavaScript なしで動作し、ARIA 属性を必要としません。',
+    usage:
+      'カスタム実装は、ネイティブ要素では提供できないカスタムスタイリングが必要な場合、または視覚的な外観をプログラムで制御する必要がある場合にのみ使用してください。',
+    note: 'ネイティブの <code>&lt;meter&gt;</code> 要素は、値のしきい値に基づいて自動的に色を変更するための <code>low</code>、<code>high</code>、<code>optimum</code> 属性をサポートしています。この機能はカスタムコンポーネントでは手動実装が必要です。',
+    useCase: 'ユースケース',
+    nativeHtml: 'ネイティブ HTML',
+    customImpl: 'カスタム実装',
+    // Table values
+    basicValue: '基本的な値の表示',
+    recommended: '推奨',
+    notNeeded: '不要',
+    jsDisabled: 'JavaScript 無効時のサポート',
+    worksNatively: 'ネイティブで動作',
+    requiresFallback: 'フォールバックが必要',
+    thresholds: 'low/high/optimum しきい値',
+    builtIn: '組み込みサポート',
+    manualImpl: '手動実装',
+    customStyling: 'カスタムスタイリング',
+    limited: '制限あり（ブラウザ依存）',
+    fullControl: '完全に制御可能',
+    crossBrowser: 'クロスブラウザでの一貫した外観',
+    variesByBrowser: 'ブラウザによって異なる',
+    consistent: '一貫性あり',
+    dynamicUpdates: '動的な値の更新',
+  },
+};
+
+const t = translations[locale];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">⚠️</span>
+    {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code>&lt;meter&gt;</code>
-      elements.</strong
-    >
-    They provide built-in semantics, work without JavaScript, and require no ARIA attributes.
+    <strong class="text-red-700 dark:text-red-400" set:html={t.warning} />
+    {t.description}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -19,60 +93,57 @@ import { ResponsiveTable } from '@/components/ui/table';
 &lt;meter id="battery" value="75" min="0" max="100"&gt;75%&lt;/meter&gt;</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    Use custom implementations only when you need custom styling that native elements cannot
-    provide, or when you need programmatic control over the visual appearance.
+    {t.usage}
   </p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Use Case</th>
-          <th class="py-2 pr-4 text-left">Native HTML</th>
-          <th class="py-2 text-left">Custom Implementation</th>
+          <th class="py-2 pr-4 text-left">{t.useCase}</th>
+          <th class="py-2 pr-4 text-left">{t.nativeHtml}</th>
+          <th class="py-2 text-left">{t.customImpl}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Basic value display</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
-          <td class="py-2">Not needed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JavaScript disabled support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
-          >
-          <td class="py-2">Requires fallback</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">low/high/optimum thresholds</td>
+          <td class="py-2 pr-4">{t.basicValue}</td>
           <td class="py-2 pr-4"
-            ><b class="text-green-700 dark:text-green-400">Built-in support</b></td
+            ><b class="text-green-700 dark:text-green-400">{t.recommended}</b></td
           >
-          <td class="py-2">Manual implementation</td>
+          <td class="py-2">{t.notNeeded}</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Custom styling</td>
-          <td class="py-2 pr-4">Limited (browser-dependent)</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Consistent cross-browser appearance</td>
-          <td class="py-2 pr-4">Varies by browser</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Consistent</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Dynamic value updates</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
+          <td class="py-2 pr-4">{t.jsDisabled}</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">{t.worksNatively}</b></td
           >
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
+          <td class="py-2">{t.requiresFallback}</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">{t.thresholds}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.builtIn}</b></td>
+          <td class="py-2">{t.manualImpl}</td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">{t.customStyling}</td>
+          <td class="py-2 pr-4">{t.limited}</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">{t.fullControl}</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">{t.crossBrowser}</td>
+          <td class="py-2 pr-4">{t.variesByBrowser}</td>
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">{t.consistent}</b></td>
+        </tr>
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4">{t.dynamicUpdates}</td>
+          <td class="py-2 pr-4"
+            ><b class="text-green-700 dark:text-green-400">{t.worksNatively}</b></td
+          >
+          <td class="py-2"><b class="text-green-700 dark:text-green-400">{t.fullControl}</b></td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs">
-    The native <code>&lt;meter&gt;</code> element supports <code>low</code>, <code>high</code>, and
-    <code>optimum</code> attributes for automatic color changes based on value thresholds. This functionality
-    requires manual implementation in custom components.
-  </p>
+  <p class="text-muted-foreground mt-3 text-xs" set:html={t.note} />
 </div>

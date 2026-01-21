@@ -1,90 +1,127 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { toggleButtonAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = toggleButtonAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('roles')}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <code>button</code> - Indicates a widget that triggers an action when activated<br />
-      <ExternalLink
-        href="https://w3c.github.io/aria/#button"
-        class="text-primary text-sm hover:underline"
-      >
-        WAI-ARIA button role
-      </ExternalLink>
-    </li>
+    {
+      data.roles.map((role) => (
+        <li>
+          <code>{role.name}</code> - {t(role.description)}
+          <br />
+          {data.references?.[0] && (
+            <ExternalLink
+              href={data.references[0].url}
+              class="text-primary text-sm hover:underline"
+            >
+              WAI-ARIA {role.name} {locale === 'ja' ? 'ロール' : 'role'}
+            </ExternalLink>
+          )}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-pressed</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current pressed state of the toggle button.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>true</code> | <code>false</code>
-              <span class="text-muted-foreground ml-2 text-sm"
-                >(tri-state buttons may also use <code>"mixed"</code>)</span
-              >
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes (for toggle buttons)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2"><code>initialPressed</code> prop (default: <code>false</code>)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Click, Enter, Space</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-pressed"
-                class="text-primary hover:underline"
-              >
-                aria-pressed
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{h('states')}</h3>
+  {
+    data.states?.map((state) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{state.attribute}</code>
+        </h4>
+        <p class="text-muted-foreground mb-3">
+          {locale === 'ja'
+            ? 'トグルボタンの現在の押下状態を示します。'
+            : 'Indicates the current pressed state of the toggle button.'}
+        </p>
+        <ResponsiveTable class="mb-2">
+          <table class="w-full border-collapse">
+            <tbody>
+              <tr class="border-border border-b">
+                <td class="w-32 py-2 pr-4 font-medium">{h('values')}</td>
+                <td class="py-2">
+                  <code>true</code> | <code>false</code>
+                  <span class="text-muted-foreground ml-2 text-sm">
+                    (
+                    {locale === 'ja'
+                      ? '3状態ボタンでは "mixed" も使用可能'
+                      : 'tri-state buttons may also use "mixed"'}
+                    )
+                  </span>
+                </td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('required')}</td>
+                <td class="py-2">
+                  {state.required
+                    ? locale === 'ja'
+                      ? 'はい（トグルボタンの場合）'
+                      : 'Yes (for toggle buttons)'
+                    : locale === 'ja'
+                      ? 'いいえ'
+                      : 'No'}
+                </td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('default')}</td>
+                <td class="py-2">
+                  <code>initialPressed</code> {locale === 'ja' ? 'プロパティ' : 'prop'} (
+                  {locale === 'ja' ? 'デフォルト' : 'default'}: <code>false</code>)
+                </td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('changeTrigger')}</td>
+                <td class="py-2">{t(state.changeTrigger)}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('reference')}</td>
+                <td class="py-2">
+                  <ExternalLink href={state.reference || ''} class="text-primary hover:underline">
+                    {state.attribute}
+                  </ExternalLink>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </div>
+    ))
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('keyboard')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('key')}</th>
+          <th class="py-2 text-left">{h('action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Toggle the button state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Toggle the button state</td>
-        </tr>
+        {
+          data.keyboardSupport?.map((kb) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{kb.key}</kbd>
+              </td>
+              <td class="py-2">{t(kb.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>

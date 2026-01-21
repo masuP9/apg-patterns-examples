@@ -6,8 +6,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/toggle-button/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/toggle-button/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/toggle-button/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/toggle-button/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import sourceCode from '@patterns/toggle-button/ToggleButton.vue?raw';
@@ -64,7 +64,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -213,7 +213,7 @@ const handleToggle = (pressed) => {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
     <div class="mt-6">
       <CodeBlock
         collapsible

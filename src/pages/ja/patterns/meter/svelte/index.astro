@@ -5,9 +5,9 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/meter/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/meter/TestingDocs.ja.astro';
-import NativeHtmlNotice from '@patterns/meter/NativeHtmlNotice.ja.astro';
+import AccessibilityDocs from '@patterns/meter/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/meter/TestingDocs.astro';
+import NativeHtmlNotice from '@patterns/meter/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -72,7 +72,7 @@ const tocItems = [
   <!-- Native HTML Section -->
   <section class="mb-12">
     <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">Native HTML</Heading>
-    <NativeHtmlNotice />
+    <NativeHtmlNotice locale="ja" />
   </section>
 
   <!-- Accessibility Section -->
@@ -80,7 +80,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -221,7 +221,7 @@ const tocItems = [
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
     <div class="mt-6">
       <CodeBlock
         collapsible

@@ -1,271 +1,348 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { feedAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  properties,
+  states,
+  keyboardSupport,
+  focusManagement,
+  additionalNotes,
+  references,
+  structureNote,
+  keyboardDocNote,
+} = feedAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>feed</code></td>
-          <td class="py-2 pr-4">Container element</td>
-          <td class="py-2">A dynamic list of articles where scrolling may add/remove content</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>article</code></td>
-          <td class="py-2 pr-4">Each article element</td>
-          <td class="py-2">Independent content item within the feed</td>
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink
-      href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
-      class="text-primary hover:underline"
-    >
-      WAI-ARIA APG Feed Pattern
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <div
-    class="border-primary bg-primary/5 mb-6 rounded-md border-l-4 p-4"
-    role="note"
-    aria-labelledby="note-heading"
-  >
-    <p id="note-heading" class="mb-2 font-medium">Note: Feed is a Structure, Not a Widget</p>
-    <p class="text-muted-foreground text-sm">
-      Unlike widget patterns (e.g., Listbox, Menu), the feed pattern is a <strong>structure</strong
-      >. This means assistive technologies can use their default reading mode when navigating feed
-      content. The feed role enables users to navigate articles using Page Up/Down while still
-      allowing natural reading within each article.
-    </p>
-  </div>
+  {
+    structureNote && (
+      <div
+        class="border-primary bg-primary/5 mb-6 rounded-md border-l-4 p-4"
+        role="note"
+        aria-labelledby="note-heading"
+      >
+        <p id="note-heading" class="mb-2 font-medium">
+          {locale === 'en'
+            ? 'Note: Feed is a Structure, Not a Widget'
+            : '注意: Feed はウィジェットではなくストラクチャー'}
+        </p>
+        <p class="text-muted-foreground text-sm">
+          {locale === 'en' ? (
+            <>
+              Unlike widget patterns (e.g., Listbox, Menu), the feed pattern is a{' '}
+              <strong>structure</strong>. This means assistive technologies can use their default
+              reading mode when navigating feed content. The feed role enables users to navigate
+              articles using Page Up/Down while still allowing natural reading within each article.
+            </>
+          ) : (
+            <>
+              ウィジェットパターン（例: Listbox、Menu）とは異なり、Feed パターンは
+              <strong>ストラクチャー</strong>
+              です。これは支援技術がフィードコンテンツをナビゲートする際にデフォルトの読み上げモードを使用できることを意味します。Feed
+              ロールにより、ユーザーは Page Up/Down
+              で記事間を移動しながら、各記事内では自然な読み上げが可能になります。
+            </>
+          )}
+        </p>
+      </div>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
-  <ResponsiveTable class="mb-6">
+  {
+    properties && properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.map((prop) => {
+                const values = t(prop.values);
+                const notes = prop.notes ? t(prop.notes) : '';
+
+                // Determine required text
+                let requiredText = prop.required ? h('value.yes') : h('value.no');
+                if (notes.includes('conditional') || notes.includes('条件付き')) {
+                  requiredText =
+                    locale === 'en'
+                      ? notes.replace(/[^(]*\((.*)\).*/, '$1') || 'Conditional*'
+                      : '条件付き*';
+                }
+
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{prop.attribute}</code>
+                    </td>
+                    <td class="py-2 pr-4">{t(prop.element)}</td>
+                    <td class="py-2 pr-4">{values}</td>
+                    <td class="py-2 pr-4">{requiredText}</td>
+                    <td class="py-2">{notes.replace(/\s*\(.*\)/, '')}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+        {additionalNotes && additionalNotes[0] && (
+          <p class="text-muted-foreground mb-6 text-sm">{t(additionalNotes[0])}</p>
+        )}
+      </>
+    )
+  }
+
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+        {states.map((state) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>{state.attribute}</code>
+            </h4>
+            {state.description && <p class="text-muted-foreground mb-3">{t(state.description)}</p>}
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{h('table.target')}</td>
+                    <td class="py-2">{t(state.element)}</td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
+                    <td class="py-2">
+                      {state.values.split(' | ').map((v, i, arr) => (
+                        <>
+                          <code>{v.trim()}</code>
+                          {i < arr.length - 1 && ' | '}
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                    <td class="py-2">
+                      {locale === 'en'
+                        ? 'Conditional (when loading occurs)'
+                        : '条件付き（読み込みが発生する場合）'}
+                    </td>
+                  </tr>
+                  {state.changeTrigger && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.changeTrigger')}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
+                    </tr>
+                  )}
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('table.reference')}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+            {additionalNotes && additionalNotes[2] && (
+              <p class="text-muted-foreground mt-2 text-sm">
+                <strong>{locale === 'en' ? 'Note:' : '注意:'}</strong> {t(additionalNotes[2])}
+              </p>
+            )}
+          </div>
+        ))}
+      </>
+    )
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+  <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">Feed container</td>
-          <td class="py-2 pr-4">Text</td>
-          <td class="py-2 pr-4">Conditional*</td>
-          <td class="py-2">Accessible name for the feed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">Feed container</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Conditional*</td>
-          <td class="py-2">References visible heading for the feed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">Each article</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the article title element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-describedby</code></td>
-          <td class="py-2 pr-4">Each article</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Recommended</td>
-          <td class="py-2">References the article description or content</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-posinset</code></td>
-          <td class="py-2 pr-4">Each article</td>
-          <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Position of article in the feed (starts at 1)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-setsize</code></td>
-          <td class="py-2 pr-4">Each article</td>
-          <td class="py-2 pr-4">Number or -1</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Total articles in feed, or -1 if unknown</td>
-        </tr>
+        {
+          keyboardSupport?.map((shortcut) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                {shortcut.key.includes('+') ? (
+                  <>
+                    {shortcut.key.split(' + ').map((k, i, arr) => (
+                      <>
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k.trim()}</kbd>
+                        {i < arr.length - 1 && ' + '}
+                      </>
+                    ))}
+                  </>
+                ) : (
+                  <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
+                )}
+              </td>
+              <td class="py-2">{t(shortcut.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required on the feed container.
-    Use <code>aria-labelledby</code> when a visible heading exists.
-  </p>
+  {
+    additionalNotes && additionalNotes[1] && (
+      <p class="text-muted-foreground mb-4 text-sm">
+        <strong>
+          {locale === 'en'
+            ? 'Why Page Up/Down instead of Arrow keys?'
+            : 'なぜ矢印キーではなく Page Up/Down なのか？'}
+        </strong>{' '}
+        {locale === 'en'
+          ? 'Feeds contain long-form content like articles. Using Page Up/Down allows users to navigate between articles while Arrow keys remain available for reading within articles.'
+          : 'フィードには記事のような長文コンテンツが含まれます。Page Up/Down を使用することで、ユーザーは記事間を移動でき、矢印キーは記事内の読み上げに使用できます。'}
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-busy</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates when the feed is loading new content. Screen readers will wait to announce changes
-      until loading completes.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">Feed container</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2"><code>true</code> | <code>false</code></td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Conditional (when loading occurs)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Loading starts (true), loading completes (false)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
+  {
+    keyboardDocNote && (
+      <div
+        class="mb-6 rounded-md border-l-4 border-amber-500 bg-amber-500/5 p-4"
+        role="note"
+        aria-labelledby="keyboard-docs-note"
+      >
+        <p id="keyboard-docs-note" class="mb-2 font-medium">
+          {locale === 'en'
+            ? 'Important: Keyboard Documentation'
+            : '重要: キーボード操作のドキュメント'}
+        </p>
+        <p class="text-muted-foreground text-sm">
+          {locale === 'en' ? (
+            <>
+              The Feed pattern uses Page Up/Down for navigation, which differs from common widget
+              patterns that use Arrow keys. As the{' '}
               <ExternalLink
-                href="https://w3c.github.io/aria/#aria-busy"
+                href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
                 class="text-primary hover:underline"
               >
-                aria-busy
+                APG specification
+              </ExternalLink>{' '}
+              notes:{' '}
+              <em>
+                "Due to the lack of convention, providing easily discoverable keyboard interface
+                documentation is especially important."
+              </em>{' '}
+              Always display keyboard hints near the feed to help users discover these navigation
+              options.
+            </>
+          ) : (
+            <>
+              Feed パターンは Page Up/Down
+              でナビゲートしますが、これは矢印キーを使用する一般的なウィジェットパターンとは異なります。
+              <ExternalLink
+                href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
+                class="text-primary hover:underline"
+              >
+                APG 仕様
               </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-    <p class="text-muted-foreground mt-2 text-sm">
-      <strong>Note:</strong> Set to <code>true</code> when adding multiple articles to prevent premature
-      announcements. Set to <code>false</code> after all DOM updates are complete.
-    </p>
-  </div>
+              には次のように記載されています:{' '}
+              <em>
+                「慣習がないため、簡単に発見できるキーボードインターフェースのドキュメントを提供することが特に重要です。」
+              </em>
+              ユーザーがこれらのナビゲーションオプションを発見できるよう、フィードの近くにキーボード操作のヒントを常に表示してください。
+            </>
+          )}
+        </p>
+      </div>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Page Down</kbd>
-          </td>
-          <td class="py-2">Move focus to next article in the feed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Page Up</kbd>
-          </td>
-          <td class="py-2">Move focus to previous article in the feed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd>
-            +
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd>
-          </td>
-          <td class="py-2">Move focus to first focusable element after the feed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd>
-            +
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd>
-          </td>
-          <td class="py-2">Move focus to first focusable element before the feed</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-4 text-sm">
-    <strong>Why Page Up/Down instead of Arrow keys?</strong> Feeds contain long-form content like articles.
-    Using Page Up/Down allows users to navigate between articles while Arrow keys remain available for
-    reading within articles.
-  </p>
-
-  <div
-    class="mb-6 rounded-md border-l-4 border-amber-500 bg-amber-500/5 p-4"
-    role="note"
-    aria-labelledby="keyboard-docs-note"
-  >
-    <p id="keyboard-docs-note" class="mb-2 font-medium">Important: Keyboard Documentation</p>
-    <p class="text-muted-foreground text-sm">
-      The Feed pattern uses Page Up/Down for navigation, which differs from common widget patterns
-      that use Arrow keys. As the
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/"
-        class="text-primary hover:underline"
-      >
-        APG specification
-      </ExternalLink>
-      notes: <em
-        >"Due to the lack of convention, providing easily discoverable keyboard interface
-        documentation is especially important."</em
-      >
-      Always display keyboard hints near the feed to help users discover these navigation options.
-    </p>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Behavior</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Roving tabindex</td>
-          <td class="py-2">
-            Only one article has <code>tabindex="0"</code>, others have <code>tabindex="-1"</code>
-          </td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Initial focus</td>
-          <td class="py-2">First article has <code>tabindex="0"</code> by default</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Focus tracking</td>
-          <td class="py-2">
-            <code>tabindex</code> updates as focus moves between articles
-          </td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">No wrap</td>
-          <td class="py-2">Focus does not wrap from first to last article or vice versa</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Content inside articles</td>
-          <td class="py-2">Interactive elements inside articles remain keyboard accessible</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    focusManagement && focusManagement.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.event')}</th>
+                <th class="py-2 text-left">{h('table.behavior')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {focusManagement.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{t(item.event)}</td>
+                  <td
+                    class="py-2"
+                    set:html={t(item.behavior).replace(/<([^>]+)>/g, '&lt;$1&gt;')}
+                  />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 </div>

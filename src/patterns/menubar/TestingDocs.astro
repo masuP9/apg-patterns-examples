@@ -1,431 +1,141 @@
 ---
+import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { menubarAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = menubarAccessibilityData;
+const t = localize(locale);
+const th = createTableHeaderTranslator(locale);
+
+const testing = data.testing;
+
+const translations = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Menubar component uses a two-layer testing strategy.',
+    strategyTitle: 'Testing Strategy',
+    categoriesTitle: 'Test Categories',
+    toolsTitle: 'Testing Tools',
+    docLink: 'See',
+    docLinkText: 'testing-strategy.md',
+    docLinkSuffix: 'for full documentation.',
+  },
+  ja: {
+    intro:
+      'テストは、キーボード操作、ARIA属性、アクセシビリティ要件全体でAPG準拠を検証します。Menubarコンポーネントは2層テスト戦略を使用しています。',
+    strategyTitle: 'テスト戦略',
+    categoriesTitle: 'テストカテゴリ',
+    toolsTitle: 'テストツール',
+    docLink: '詳細は',
+    docLinkText: 'testing-strategy.md',
+    docLinkSuffix: 'を参照してください。',
+  },
+};
+
+const tt = translations[locale];
+
+const priorityColors: Record<string, string> = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+const priorityLabels: Record<string, Record<string, string>> = {
+  en: { high: 'High Priority', medium: 'Medium Priority', low: 'Low Priority' },
+  ja: { high: '高優先度', medium: '中優先度', low: '低優先度' },
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Menubar component uses a two-layer testing strategy.
+    {tt.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{tt.strategyTitle}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component rendering and interactions using framework-specific Testing Library
-      utilities. These tests ensure correct component behavior in isolation.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>HTML structure and element hierarchy</li>
-      <li>Initial attribute values (role, aria-haspopup, aria-expanded)</li>
-      <li>Click event handling</li>
-      <li>CSS class application</li>
-    </ul>
-  </div>
+  {
+    testing?.strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all four frameworks. These
-      tests cover interactions that require full browser context.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Keyboard navigation (Arrow keys, Enter, Space, Escape, Tab)</li>
-      <li>Submenu opening and closing</li>
-      <li>Menubar horizontal navigation</li>
-      <li>Checkbox and radio item toggling</li>
-      <li>Hover-based menu switching</li>
-      <li>Type-ahead search</li>
-      <li>Focus management and roving tabindex</li>
-      <li>Cross-framework consistency</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{tt.categoriesTitle}</h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    testing?.categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {priorityLabels[locale][category.priority]}: {t(category.title)}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'ja' ? 'テスト' : 'Test'}</th>
+                <th class="py-2 text-left">{th('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td
+                    class="py-2"
+                    set:html={t(item.description)
+                      .replace(/<code>([^<]+)<\/code>/g, '<code>$1</code>')
+                      .replace(/"([^"]+)"/g, '<code>$1</code>')}
+                  />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="menubar"</code></td>
-          <td class="py-2">Container has menubar role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="menu"</code></td>
-          <td class="py-2">Dropdown has menu role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="menuitem"</code></td>
-          <td class="py-2">Items have menuitem role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="menuitemcheckbox"</code></td>
-          <td class="py-2">Checkbox items have correct role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="menuitemradio"</code></td>
-          <td class="py-2">Radio items have correct role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="separator"</code></td>
-          <td class="py-2">Dividers have separator role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="group"</code></td>
-          <td class="py-2">Radio groups have group role with aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="none"</code></td>
-          <td class="py-2">All li elements have role="none"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-haspopup</code></td>
-          <td class="py-2">Items with submenu have <code>aria-haspopup="menu"</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2">Items with submenu reflect open state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2">Submenu references parent menuitem</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-checked</code></td>
-          <td class="py-2">Checkbox/radio items have correct checked state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-hidden</code></td>
-          <td class="py-2"
-            >Menu has <code>aria-hidden="true"</code> when closed, <code>"false"</code> when open</td
-          >
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction - Menubar
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight</code></td>
-          <td class="py-2">Moves focus to next menubar item (wraps)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowLeft</code></td>
-          <td class="py-2">Moves focus to previous menubar item (wraps)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowDown</code></td>
-          <td class="py-2">Opens submenu and focuses first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowUp</code></td>
-          <td class="py-2">Opens submenu and focuses last item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter/Space</code></td>
-          <td class="py-2">Opens submenu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home</code></td>
-          <td class="py-2">Moves focus to first menubar item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>End</code></td>
-          <td class="py-2">Moves focus to last menubar item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab</code></td>
-          <td class="py-2">Closes all menus, moves focus out</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction - Menu
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowDown</code></td>
-          <td class="py-2">Moves focus to next item (wraps)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowUp</code></td>
-          <td class="py-2">Moves focus to previous item (wraps)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight</code></td>
-          <td class="py-2">Opens submenu if present, or moves to next menubar menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowLeft</code></td>
-          <td class="py-2">Closes submenu, or moves to previous menubar menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter/Space</code></td>
-          <td class="py-2">Activates item and closes menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Escape</code></td>
-          <td class="py-2">Closes menu, returns focus to parent</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home/End</code></td>
-          <td class="py-2">Moves focus to first/last item</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Checkbox and Radio Items
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Checkbox toggle</code></td>
-          <td class="py-2">Space/Enter toggles checkbox</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Checkbox keeps open</code></td>
-          <td class="py-2">Toggle does not close menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-checked update</code></td>
-          <td class="py-2">aria-checked updates on toggle</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Radio select</code></td>
-          <td class="py-2">Space/Enter selects radio</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Radio keeps open</code></td>
-          <td class="py-2">Selection does not close menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Exclusive selection</code></td>
-          <td class="py-2">Only one radio in group can be checked</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management (Roving Tabindex)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabIndex=0</code></td>
-          <td class="py-2">First menubar item has tabIndex=0</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabIndex=-1</code></td>
-          <td class="py-2">Other items have tabIndex=-1</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Separator</code></td>
-          <td class="py-2">Separator is not focusable</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled items</code></td>
-          <td class="py-2">Disabled items are focusable but not activatable</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Type-Ahead Search
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Character match</code></td>
-          <td class="py-2">Focuses item starting with typed character</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Wrap around</code></td>
-          <td class="py-2">Search wraps from end to beginning</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Skip separator</code></td>
-          <td class="py-2">Skips separator during search</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Skip disabled</code></td>
-          <td class="py-2">Skips disabled items during search</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Buffer reset</code></td>
-          <td class="py-2">Buffer resets after 500ms</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Pointer Interaction
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click open</code></td>
-          <td class="py-2">Click menubar item opens menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click toggle</code></td>
-          <td class="py-2">Click menubar item again closes menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Hover switch</code></td>
-          <td class="py-2">Hover on another menubar item switches menu (when open)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Item click</code></td>
-          <td class="py-2">Click menuitem activates and closes menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click outside</code></td>
-          <td class="py-2">Click outside closes menu</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe closed</code></td>
-          <td class="py-2">No violations when menubar is closed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe menu open</code></td>
-          <td class="py-2">No violations with menu open</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe submenu open</code></td>
-          <td class="py-2">No violations with submenu open</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{tt.toolsTitle}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">
-        Vitest
-      </ExternalLink>
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
-        Testing Library
-      </ExternalLink>
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
-        Playwright
-      </ExternalLink>
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline"
-      >
-        axe-core/playwright
-      </ExternalLink>
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      testing?.tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
   <p class="text-muted-foreground text-sm">
-    See
+    {tt.docLink}
     <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
+      href={testing?.documentationLink ??
+        'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md'}
       class="text-primary hover:underline"
     >
-      testing-strategy.md
+      {tt.docLinkText}
     </ExternalLink>
-    for full documentation.
+    {tt.docLinkSuffix}
   </p>
 </div>

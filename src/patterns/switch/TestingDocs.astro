@@ -1,241 +1,216 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import { switchAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const testing = switchAccessibilityData.testing;
+if (!testing) {
+  throw new Error('Testing data not found in accessibility-data.ts');
+}
+
+const { strategies, categories, e2eTestFile, commands, tools, documentationLink } = testing;
+
+// Read actual test file at build time
+const e2eTestCode = e2eTestFile
+  ? (() => {
+      try {
+        return fs.readFileSync(path.join(process.cwd(), e2eTestFile), 'utf-8');
+      } catch {
+        return '';
+      }
+    })()
+  : '';
+
+// Localization helper
+const t = localize(locale);
+
+// Priority colors
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Switch component uses a two-layer testing strategy.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    exampleTestCode: 'Example Test Code',
+    exampleTestCodeDesc: 'The following is the actual E2E test file',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    seeFullDocs: 'See',
+    forFullDocs: 'for full documentation.',
+    test: 'Test',
+    description: 'Description',
+    highPriority: 'High Priority',
+    mediumPriority: 'Medium Priority',
+    lowPriority: 'Low Priority',
+  },
+  ja: {
+    intro:
+      'テストは、キーボードインタラクション、ARIA属性、アクセシビリティ要件全体でAPG準拠を検証します。Switchコンポーネントは2層のテスト戦略を採用しています。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    exampleTestCode: 'テストコード例',
+    exampleTestCodeDesc: '以下は実際のE2Eテストファイルです',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    seeFullDocs: '完全なドキュメントは',
+    forFullDocs: 'を参照してください。',
+    test: 'テスト',
+    description: '説明',
+    highPriority: '高優先度',
+    mediumPriority: '中優先度',
+    lowPriority: '低優先度',
+  },
+};
+
+const titles = sectionTitles[locale];
+
+const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
+  if (locale === 'ja') {
+    return priority === 'high' ? '高優先度' : priority === 'medium' ? '中優先度' : '低優先度';
+  }
+  return priority === 'high'
+    ? 'High Priority'
+    : priority === 'medium'
+      ? 'Medium Priority'
+      : 'Low Priority';
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Switch component uses a two-layer testing strategy.
+    {titles.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingStrategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's rendered output using framework-specific testing libraries. These tests
-      ensure correct HTML structure and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA attributes (role="switch", aria-checked)</li>
-      <li>Keyboard interaction (Space, Enter)</li>
-      <li>Disabled state handling</li>
-      <li>Accessibility via jest-axe</li>
-    </ul>
-  </div>
+  {
+    strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all frameworks. These tests
-      cover interactions and cross-framework consistency.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Click and keyboard toggle behavior</li>
-      <li>ARIA structure in live browser</li>
-      <li>Disabled state interactions</li>
-      <li>axe-core accessibility scanning</li>
-      <li>Cross-framework consistency checks</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{titles.testCategories}</h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {getPriorityLabel(category.priority)}: {t(category.title)}
+          {locale === 'ja' ? '（' : ' ('}
+          {category.testType}
+          {locale === 'ja' ? '）' : ')'}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{titles.test}</th>
+                <th class="py-2 text-left">{titles.description}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space key</code></td>
-          <td class="py-2">Toggles the switch state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter key</code></td>
-          <td class="py-2">Toggles the switch state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab navigation</code></td>
-          <td class="py-2">Tab moves focus between switches</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
-          <td class="py-2">Disabled switches are skipped in Tab order</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled key ignore</code></td>
-          <td class="py-2">Disabled switches ignore key presses</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    e2eTestCode && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.exampleTestCode}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {titles.exampleTestCodeDesc} (<code>{e2eTestFile}</code>).
+        </p>
+        <CodeBlock
+          code={e2eTestCode}
+          lang="typescript"
+          title={e2eTestFile}
+          collapsible
+          collapsedLines={20}
+        />
+      </>
+    )
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="switch"</code></td>
-          <td class="py-2">Element has switch role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-checked initial</code></td>
-          <td class="py-2">Initial state is <code>aria-checked="false"</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-checked toggle</code></td>
-          <td class="py-2">Click changes <code>aria-checked</code> value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>type="button"</code></td>
-          <td class="py-2">Explicit button type prevents form submission</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2">Disabled switches have aria-disabled="true"</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    commands && commands.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.runningTests}</h3>
+        <pre class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800">
+          <code>
+            {commands
+              .map((cmd) => {
+                const comment = t(cmd.comment);
+                return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+              })
+              .join('\n\n')}
+          </code>
+        </pre>
+      </>
+    )
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Accessible name (children)</code></td>
-          <td class="py-2">Switch has name from children content</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2">Accessible name via aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2">Accessible name via external element</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: HTML Attribute Inheritance (Unit)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className merge</code></td>
-          <td class="py-2">Custom classes are merged with component classes</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>data-* attributes</code></td>
-          <td class="py-2">Custom data attributes are passed through</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Cross-framework Consistency (E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>All frameworks have switch</code></td>
-          <td class="py-2">React, Vue, Svelte, Astro all render switch elements</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Toggle on click</code></td>
-          <td class="py-2">All frameworks toggle correctly on click</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
-          <td class="py-2">All frameworks have consistent ARIA structure</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {titles.seeFullDocs}{' '}
+        <ExternalLink href={documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {titles.forFullDocs}
+      </p>
+    )
+  }
 </div>

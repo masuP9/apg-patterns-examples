@@ -1,16 +1,93 @@
 ---
+import type { Locale } from '@/i18n';
 import { ResponsiveTable } from '@/components/ui/table';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const translations = {
+  en: {
+    title: 'Use Native HTML First',
+    warning:
+      'Before using this custom component, consider using native <code>&lt;button&gt;</code> elements.',
+    description:
+      'They provide built-in accessibility, keyboard support, form integration, and work without JavaScript.',
+    usage:
+      'Use custom <code>role="button"</code> implementations only for educational purposes or when you must make a non-button element (e.g., <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>) behave like a button due to legacy constraints.',
+    note: 'This custom implementation is provided for educational purposes to demonstrate APG patterns. In production, always prefer native <code>&lt;button&gt;</code> elements.',
+    feature: 'Feature',
+    nativeHtml: 'Native <button>',
+    customImpl: 'Custom role="button"',
+    // Table values
+    keyboardActivation: 'Keyboard activation (Space/Enter)',
+    builtIn: 'Built-in',
+    requiresJs: 'Requires JavaScript',
+    focusManagement: 'Focus management',
+    automatic: 'Automatic',
+    requiresTabindex: 'Requires tabindex',
+    disabledAttr: 'disabled attribute',
+    requiresAria: 'Requires aria-disabled + JS',
+    formSubmission: 'Form submission',
+    notSupported: 'Not supported',
+    typeAttr: 'type attribute',
+    typeValues: 'submit/button/reset',
+    worksNoJs: 'Works without JavaScript',
+    yes: 'Yes',
+    no: 'No',
+    screenReader: 'Screen reader announcement',
+    requiresAriaAttr: 'Requires ARIA',
+    spaceScroll: 'Space key scroll prevention',
+    requiresPreventDefault: 'Requires preventDefault()',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    warning:
+      'このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;button&gt;</code> 要素の使用を検討してください。',
+    description:
+      'ネイティブ要素は組み込みのアクセシビリティ、キーボードサポート、フォーム連携を提供し、JavaScript なしで動作します。',
+    usage:
+      'カスタムの <code>role="button"</code> 実装は、教育目的のみ、またはレガシーの制約により非ボタン要素（<code>&lt;div&gt;</code>、<code>&lt;span&gt;</code> など）をボタンとして動作させる必要がある場合にのみ使用してください。',
+    note: 'このカスタム実装は、APG パターンを実証するための教育目的で提供されています。本番環境では、常にネイティブの <code>&lt;button&gt;</code> 要素を優先してください。',
+    feature: '機能',
+    nativeHtml: 'ネイティブ <button>',
+    customImpl: 'カスタム role="button"',
+    // Table values
+    keyboardActivation: 'キーボード操作（Space/Enter）',
+    builtIn: '組み込み',
+    requiresJs: 'JavaScript が必要',
+    focusManagement: 'フォーカス管理',
+    automatic: '自動',
+    requiresTabindex: 'tabindex が必要',
+    disabledAttr: 'disabled 属性',
+    requiresAria: 'aria-disabled + JS が必要',
+    formSubmission: 'フォーム送信',
+    notSupported: 'サポートなし',
+    typeAttr: 'type 属性',
+    typeValues: 'submit/button/reset',
+    worksNoJs: 'JavaScript なしでの動作',
+    yes: '動作する',
+    no: '動作しない',
+    screenReader: 'スクリーンリーダーの読み上げ',
+    requiresAriaAttr: 'ARIA が必要',
+    spaceScroll: 'Space キーでのスクロール防止',
+    requiresPreventDefault: 'preventDefault() が必要',
+  },
+};
+
+const t = translations[locale];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">&#9888;&#65039;</span>
+    {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code>&lt;button&gt;</code> elements.</strong
-    >
-    They provide built-in accessibility, keyboard support, form integration, and work without JavaScript.
+    <strong class="text-red-700 dark:text-red-400" set:html={t.warning} />
+    {t.description}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -22,69 +99,67 @@ import { ResponsiveTable } from '@/components/ui/table';
 &lt;!-- Disabled state --&gt;
 &lt;button type="button" disabled&gt;Disabled&lt;/button&gt;</code></pre>
   </div>
-  <p class="mb-4 text-sm">
-    Use custom <code>role="button"</code> implementations only for educational purposes or when you must
-    make a non-button element (e.g., <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>) behave
-    like a button due to legacy constraints.
-  </p>
+  <p class="mb-4 text-sm" set:html={t.usage} />
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Feature</th>
-          <th class="py-2 pr-4 text-left">Native <code>&lt;button&gt;</code></th>
-          <th class="py-2 text-left">Custom <code>role="button"</code></th>
+          <th class="py-2 pr-4 text-left">{t.feature}</th>
+          <th class="py-2 pr-4 text-left" set:html={t.nativeHtml} />
+          <th class="py-2 text-left" set:html={t.customImpl} />
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Keyboard activation (Space/Enter)</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Requires JavaScript</td>
+          <td class="py-2 pr-4">{t.keyboardActivation}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.builtIn}</b></td>
+          <td class="py-2">{t.requiresJs}</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Focus management</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Requires tabindex</td>
+          <td class="py-2 pr-4">{t.focusManagement}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.automatic}</b></td>
+          <td class="py-2">{t.requiresTabindex}</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>disabled</code> attribute</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Requires aria-disabled + JS</td>
+          <td class="py-2 pr-4">
+            <code>disabled</code>
+            {locale === 'ja' ? ' 属性' : ' attribute'}
+          </td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.builtIn}</b></td>
+          <td class="py-2">{t.requiresAria}</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Form submission</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+          <td class="py-2 pr-4">{t.formSubmission}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.builtIn}</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">{t.notSupported}</b></td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>type</code> attribute</td>
-          <td class="py-2 pr-4"
-            ><b class="text-green-700 dark:text-green-400">submit/button/reset</b></td
+          <td class="py-2 pr-4">
+            <code>type</code>
+            {locale === 'ja' ? ' 属性' : ' attribute'}
+          </td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.typeValues}</b></td
           >
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">{t.notSupported}</b></td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Works without JavaScript</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Yes</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">No</b></td>
+          <td class="py-2 pr-4">{t.worksNoJs}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.yes}</b></td>
+          <td class="py-2"><b class="text-red-700 dark:text-red-400">{t.no}</b></td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Screen reader announcement</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Requires ARIA</td>
+          <td class="py-2 pr-4">{t.screenReader}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.automatic}</b></td>
+          <td class="py-2">{t.requiresAriaAttr}</td>
         </tr>
         <tr class="border-border border-b">
-          <td class="py-2 pr-4">Space key scroll prevention</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Requires preventDefault()</td>
+          <td class="py-2 pr-4">{t.spaceScroll}</td>
+          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">{t.automatic}</b></td>
+          <td class="py-2">{t.requiresPreventDefault}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs">
-    This custom implementation is provided for educational purposes to demonstrate APG patterns. In
-    production, always prefer native <code>&lt;button&gt;</code> elements.
-  </p>
+  <p class="text-muted-foreground mt-3 text-xs" set:html={t.note} />
 </div>

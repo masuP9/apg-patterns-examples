@@ -1,208 +1,197 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { windowSplitterAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = windowSplitterAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>separator</code></td>
-          <td class="py-2 pr-4">Splitter element</td>
-          <td class="py-2">Focusable separator that controls pane size</td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
     <ExternalLink href="https://w3c.github.io/aria/#separator" class="text-primary hover:underline">
-      WAI-ARIA separator role
+      {locale === 'ja' ? 'WAI-ARIA separator ロール' : 'WAI-ARIA separator role'}
     </ExternalLink>
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">0-100</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Primary pane size as percentage</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuemin</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">number</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Minimum value (default: 10)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuemax</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">number</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Maximum value (default: 90)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">ID reference(s)</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Primary pane ID (+ secondary pane ID optional)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">string</td>
-          <td class="py-2 pr-4">Conditional</td>
-          <td class="py-2">Accessible name (required if no aria-labelledby)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Conditional</td>
-          <td class="py-2">Reference to visible label element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-orientation</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4"><code>"horizontal"</code> | <code>"vertical"</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Default: horizontal (left-right split)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4">separator</td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Disabled state</td>
-        </tr>
+        {
+          data.properties?.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">{t(prop.element)}</td>
+              <td class="py-2 pr-4">{t(prop.values)}</td>
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? h('value.yes')
+                    : h('value.no')
+                  : t(prop.required)}
+              </td>
+              <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    <strong>Note:</strong>
-    <code>aria-readonly</code> is NOT valid for <code>role="separator"</code>. Readonly behavior
-    must be enforced via JavaScript only.
+    <strong>{locale === 'ja' ? '注意:' : 'Note:'}</strong>
+    {
+      locale === 'ja' ? (
+        <>
+          <code>aria-readonly</code>は<code>role="separator"</code>
+          には有効ではありません。読み取り専用の動作はJavaScriptのみで強制する必要があります。
+        </>
+      ) : (
+        <>
+          <code>aria-readonly</code> is NOT valid for <code>role="separator"</code>. Readonly
+          behavior must be enforced via JavaScript only.
+        </>
+      )
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuenow</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Current position of the splitter as a percentage (0-100).
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">separator element</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">0-100 (0 = collapsed, 50 = half, 100 = fully expanded)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Change Trigger</td>
-            <td class="py-2">Arrow keys, Home/End, Enter (collapse/expand), pointer drag</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-valuenow"
-                class="text-primary hover:underline"
-              >
-                aria-valuenow
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+  {
+    data.states?.map((state) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{state.attribute}</code>
+        </h4>
+        <p class="text-muted-foreground mb-3">
+          {locale === 'ja'
+            ? 'スプリッターの現在位置をパーセンテージ（0-100）で示します。'
+            : 'Current position of the splitter as a percentage (0-100).'}
+        </p>
+        <ResponsiveTable class="mb-2">
+          <table class="w-full border-collapse">
+            <tbody>
+              <tr class="border-border border-b">
+                <td class="w-32 py-2 pr-4 font-medium">{h('table.target')}</td>
+                <td class="py-2">{t(state.element)}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
+                <td class="py-2">{t(state.values)}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                <td class="py-2">{state.required ? h('value.yes') : h('value.no')}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('table.changeTrigger')}</td>
+                <td class="py-2">{state.changeTrigger ? t(state.changeTrigger) : ''}</td>
+              </tr>
+              {state.reference && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{h('table.reference')}</td>
+                  <td class="py-2">
+                    <ExternalLink href={state.reference} class="text-primary hover:underline">
+                      {state.attribute}
+                    </ExternalLink>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </div>
+    ))
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Right</kbd> /
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Left</kbd>
-          </td>
-          <td class="py-2">Move horizontal splitter (increase/decrease)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Up</kbd> /
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow Down</kbd>
-          </td>
-          <td class="py-2">Move vertical splitter (increase/decrease)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> +
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Arrow</kbd>
-          </td>
-          <td class="py-2">Move by large step (default: 10%)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd>
-          </td>
-          <td class="py-2">Move to minimum position</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd>
-          </td>
-          <td class="py-2">Move to maximum position</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">
-            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd>
-          </td>
-          <td class="py-2">Toggle collapse/expand primary pane</td>
-        </tr>
+        {
+          data.keyboardSupport?.map((item) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                {item.key
+                  .toString()
+                  .split(' / ')
+                  .map((key, index) => (
+                    <>
+                      {index > 0 && ' / '}
+                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{key}</kbd>
+                    </>
+                  ))}
+              </td>
+              <td class="py-2">{t(item.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground text-sm">
-    <strong>Note:</strong> Arrow keys are direction-restricted based on orientation. Horizontal splitters
-    only respond to Left/Right, vertical splitters only to Up/Down. In RTL mode, ArrowLeft increases and
-    ArrowRight decreases for horizontal splitters.
+    <strong>{locale === 'ja' ? '注意:' : 'Note:'}</strong>
+    {
+      locale === 'ja' ? (
+        <>
+          矢印キーは向きに基づいて方向が制限されます。水平スプリッターはLeft/Rightのみに、垂直スプリッターはUp/Downのみに応答します。RTLモードでは、水平スプリッターでArrowLeftが増加、ArrowRightが減少になります。
+        </>
+      ) : (
+        <>
+          Arrow keys are direction-restricted based on orientation. Horizontal splitters only
+          respond to Left/Right, vertical splitters only to Up/Down. In RTL mode, ArrowLeft
+          increases and ArrowRight decreases for horizontal splitters.
+        </>
+      )
+    }
   </p>
 </div>

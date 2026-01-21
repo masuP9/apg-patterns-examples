@@ -1,16 +1,94 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import { linkAccessibilityData } from './accessibility-data';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = linkAccessibilityData;
+
+// Localized comparison table data
+const comparisonTableData = [
+  {
+    feature: { en: 'Ctrl/Cmd + Click (new tab)', ja: 'Ctrl/Cmd + クリック（新しいタブ）' },
+    native: { en: 'Built-in', ja: '組み込み' },
+    custom: { en: 'Not supported', ja: 'サポートなし' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'Right-click context menu', ja: '右クリックコンテキストメニュー' },
+    native: { en: 'Full menu', ja: '完全なメニュー' },
+    custom: { en: 'Limited', ja: '制限あり' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'Copy link address', ja: 'リンクアドレスのコピー' },
+    native: { en: 'Built-in', ja: '組み込み' },
+    custom: { en: 'Not supported', ja: 'サポートなし' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'Drag to bookmarks', ja: 'ブックマークへのドラッグ' },
+    native: { en: 'Built-in', ja: '組み込み' },
+    custom: { en: 'Not supported', ja: 'サポートなし' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'SEO recognition', ja: 'SEO 認識' },
+    native: { en: 'Crawled', ja: 'クロール対象' },
+    custom: { en: 'May be ignored', ja: '無視される可能性' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'Works without JavaScript', ja: 'JavaScript なしでの動作' },
+    native: { en: 'Yes', ja: '動作する' },
+    custom: { en: 'No', ja: '動作しない' },
+    nativeGood: true,
+    customBad: true,
+  },
+  {
+    feature: { en: 'Screen reader announcement', ja: 'スクリーンリーダーの読み上げ' },
+    native: { en: 'Automatic', ja: '自動' },
+    custom: { en: 'Requires ARIA', ja: 'ARIA が必要' },
+    nativeGood: true,
+    customBad: false,
+  },
+  {
+    feature: { en: 'Focus management', ja: 'フォーカス管理' },
+    native: { en: 'Automatic', ja: '自動' },
+    custom: { en: 'Requires tabindex', ja: 'tabindex が必要' },
+    nativeGood: true,
+    customBad: false,
+  },
+];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">⚠️</span>
+    {locale === 'ja' ? 'ネイティブ HTML を優先' : 'Use Native HTML First'}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code>&lt;a href&gt;</code> elements.</strong
-    >
-    They provide built-in accessibility, full browser functionality, SEO benefits, and work without JavaScript.
+    <strong class="text-red-700 dark:text-red-400">
+      {
+        locale === 'ja'
+          ? 'このカスタムコンポーネントを使用する前に、ネイティブの <a href> 要素の使用を検討してください。'
+          : 'Before using this custom component, consider using native <a href> elements.'
+      }
+    </strong>
+    {
+      locale === 'ja'
+        ? 'ネイティブ要素は組み込みのアクセシビリティ、完全なブラウザ機能、SEO の利点を提供し、JavaScript なしで動作します。'
+        : 'They provide built-in accessibility, full browser functionality, SEO benefits, and work without JavaScript.'
+    }
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -22,65 +100,56 @@ import { ResponsiveTable } from '@/components/ui/table';
 &lt;/a&gt;</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    Use custom <code>role="link"</code> implementations only for educational purposes or when you need
-    complex JavaScript-driven navigation with SPA routing.
+    {
+      locale === 'ja'
+        ? 'カスタムの role="link" 実装は、教育目的のみ、または SPA ルーティングを使用した複雑な JavaScript 駆動のナビゲーションが必要な場合にのみ使用してください。'
+        : 'Use custom role="link" implementations only for educational purposes or when you need complex JavaScript-driven navigation with SPA routing.'
+    }
   </p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Feature</th>
-          <th class="py-2 pr-4 text-left">Native <code>&lt;a href&gt;</code></th>
-          <th class="py-2 text-left">Custom <code>role="link"</code></th>
+          <th class="py-2 pr-4 text-left">{locale === 'ja' ? '機能' : 'Feature'}</th>
+          <th class="py-2 pr-4 text-left"
+            >{locale === 'ja' ? 'ネイティブ' : 'Native'} <code>&lt;a href&gt;</code></th
+          >
+          <th class="py-2 text-left"
+            >{locale === 'ja' ? 'カスタム' : 'Custom'} <code>role="link"</code></th
+          >
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Ctrl/Cmd + Click (new tab)</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Right-click context menu</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Full menu</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Limited</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Copy link address</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Drag to bookmarks</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">Not supported</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">SEO recognition</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Crawled</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">May be ignored</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Works without JavaScript</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Yes</b></td>
-          <td class="py-2"><b class="text-red-700 dark:text-red-400">No</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Screen reader announcement</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Requires ARIA</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Focus management</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Requires tabindex</td>
-        </tr>
+        {
+          comparisonTableData.map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{locale === 'ja' ? row.feature.ja : row.feature.en}</td>
+              <td class="py-2 pr-4">
+                <b class={row.nativeGood ? 'text-green-700 dark:text-green-400' : ''}>
+                  {locale === 'ja' ? row.native.ja : row.native.en}
+                </b>
+              </td>
+              <td class="py-2">
+                {row.customBad ? (
+                  <b class="text-red-700 dark:text-red-400">
+                    {locale === 'ja' ? row.custom.ja : row.custom.en}
+                  </b>
+                ) : (
+                  <span>{locale === 'ja' ? row.custom.ja : row.custom.en}</span>
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mt-3 text-xs">
-    This custom implementation is provided for educational purposes to demonstrate APG patterns. In
-    production, always prefer native <code>&lt;a href&gt;</code> elements.
+    {
+      locale === 'ja'
+        ? 'このカスタム実装は、APG パターンを実証するための教育目的で提供されています。本番環境では、常にネイティブの <a href> 要素を優先してください。'
+        : 'This custom implementation is provided for educational purposes to demonstrate APG patterns. In production, always prefer native <a href> elements.'
+    }
   </p>
 </div>

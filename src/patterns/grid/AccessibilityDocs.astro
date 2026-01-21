@@ -1,294 +1,278 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { gridAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  properties,
+  states,
+  keyboardSections,
+  focusManagement,
+  additionalNotes,
+  nativeHtmlConsiderations,
+  references,
+} = gridAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">Native HTML vs Grid Role</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'en' ? 'Native HTML vs Grid Role' : 'ネイティブHTMLとGridロール'}
+  </h3>
   <p class="text-muted-foreground mb-4">
-    The <code>grid</code> role creates an interactive data grid with 2D keyboard navigation. For static
-    data tables, use native <code>&lt;table&gt;</code> elements instead. Use <code>grid</code> when:
+    {
+      locale === 'en' ? (
+        <>
+          The <code>grid</code> role creates an interactive data grid with 2D keyboard navigation.
+          For static data tables, use native <code>&lt;table&gt;</code> elements instead. Use{' '}
+          <code>grid</code> when:
+        </>
+      ) : (
+        <>
+          <code>grid</code>
+          ロールは、2Dキーボードナビゲーションを備えたインタラクティブなデータグリッドを作成します。静的なデータテーブルには、代わりにネイティブの
+          <code>&lt;table&gt;</code>要素を使用してください。<code>grid</code>
+          は以下の場合に使用します：
+        </>
+      )
+    }
   </p>
   <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-    <li>Cells are focusable and interactive (editable, selectable, or contain widgets)</li>
-    <li>2D arrow key navigation is needed between cells</li>
-    <li>The interface is similar to a spreadsheet or data grid</li>
+    {nativeHtmlConsiderations?.map((item) => <li>{t(item.useCase)}</li>)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>grid</code></td>
-          <td class="py-2 pr-4">Container</td>
-          <td class="py-2">The grid container (composite widget)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>row</code></td>
-          <td class="py-2 pr-4">Row container</td>
-          <td class="py-2">Groups cells horizontally</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>columnheader</code></td>
-          <td class="py-2 pr-4">Header cells</td>
-          <td class="py-2">Column headers (not focusable in this implementation)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>rowheader</code></td>
-          <td class="py-2 pr-4">Row header cell</td>
-          <td class="py-2">Row headers (optional)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>gridcell</code></td>
-          <td class="py-2 pr-4">Data cells</td>
-          <td class="py-2">Interactive cells (focusable)</td>
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink href="https://w3c.github.io/aria/#grid" class="text-primary hover:underline">
-      WAI-ARIA grid role
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Grid Container)</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {
+      locale === 'en'
+        ? 'WAI-ARIA Properties (Grid Container)'
+        : 'WAI-ARIA プロパティ（グリッドコンテナ）'
+    }
+  </h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="grid"</code></td>
-          <td class="py-2 pr-4">-</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Identifies the container as a grid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">String</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Accessible name for the grid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Alternative to aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Only present for multi-select mode</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-rowcount</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total rows (for virtualization)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-colcount</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total columns (for virtualization)</td>
-        </tr>
+        {
+          properties?.map((prop) => {
+            let requiredText: string;
+            if (typeof prop.required === 'boolean') {
+              requiredText = prop.required ? h('value.yes') : h('value.no');
+            } else {
+              const localizedReq = t(prop.required);
+              requiredText = localizedReq.includes('*')
+                ? locale === 'en'
+                  ? 'Yes*'
+                  : 'はい*'
+                : localizedReq;
+            }
+
+            return (
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4">
+                  <code>{prop.attribute}</code>
+                </td>
+                <td class="py-2 pr-4">{t(prop.values)}</td>
+                <td class="py-2 pr-4">{requiredText}</td>
+                <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+              </tr>
+            );
+          })
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required.
-  </p>
+  {
+    additionalNotes && additionalNotes[0] && (
+      <p class="text-muted-foreground mb-6 text-sm">* {t(additionalNotes[0])}</p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Grid Cells)</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'en' ? 'WAI-ARIA States (Grid Cells)' : 'WAI-ARIA ステート（グリッドセル）'}
+  </h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex</code></td>
-          <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Roving tabindex for focus management</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-selected</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No*</td>
-          <td class="py-2">Present when grid supports selection</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the cell is disabled</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-rowindex</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Row position (for virtualization)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-colindex</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Column position (for virtualization)</td>
-        </tr>
+        {
+          states?.map((state) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{state.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">
+                {t(state.values)
+                  .split(' | ')
+                  .map((v, i, arr) => (
+                    <>
+                      <code>{v.trim()}</code>
+                      {i < arr.length - 1 && ' | '}
+                    </>
+                  ))}
+              </td>
+              <td class="py-2 pr-4">{state.required ? h('value.yes') : `${h('value.no')}*`}</td>
+              <td class="py-2">{state.changeTrigger ? t(state.changeTrigger) : ''}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    * When selection is supported, ALL gridcells should have <code>aria-selected</code>.
+    {
+      locale === 'en'
+        ? '* When selection is supported, ALL gridcells should have aria-selected.'
+        : '* 選択をサポートする場合、すべてのgridcellにaria-selectedが必要です。'
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <h4 class="mb-2 font-medium">2D Navigation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
-          >
-          <td class="py-2">Move focus one cell right</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
-          >
-          <td class="py-2">Move focus one cell left</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
-          >
-          <td class="py-2">Move focus one row down</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
-          >
-          <td class="py-2">Move focus one row up</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
-            ></td
-          >
-          <td class="py-2">Move focus to first cell in grid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
-            ></td
-          >
-          <td class="py-2">Move focus to last cell in grid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageDown</kbd></td
-          >
-          <td class="py-2">Move focus down by page size (default 5)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageUp</kbd></td
-          >
-          <td class="py-2">Move focus up by page size (default 5)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+  {
+    keyboardSections?.map((section) => (
+      <>
+        <h4 class="mb-2 font-medium">{t(section.title || '')}</h4>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+                <th class="py-2 text-left">{h('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.shortcuts.map((shortcut) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    {shortcut.key.includes('+') ? (
+                      <>
+                        {shortcut.key.split(' + ').map((k, i, arr) => (
+                          <>
+                            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                              {k.trim()}
+                            </kbd>
+                            {i < arr.length - 1 && ' + '}
+                          </>
+                        ))}
+                      </>
+                    ) : (
+                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                        {shortcut.key}
+                      </kbd>
+                    )}
+                  </td>
+                  <td class="py-2">{t(shortcut.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 font-medium">Selection & Activation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Select/deselect focused cell (when selectable)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activate focused cell (trigger onCellActivate)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses <strong>roving tabindex</strong> for focus management:
+    {
+      locale === 'en' ? (
+        <>
+          This component uses <strong>roving tabindex</strong> for focus management:
+        </>
+      ) : (
+        <>
+          このコンポーネントはフォーカス管理に<strong>roving tabindex</strong>を使用します：
+        </>
+      )
+    }
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only one cell has <code>tabindex="0"</code> (the focused cell)</li>
-    <li>All other cells have <code>tabindex="-1"</code></li>
-    <li>Grid is a single Tab stop (Tab enters grid, Shift+Tab exits)</li>
-    <li>
-      <strong>Header cells (columnheader)</strong> are NOT focusable (no sort functionality in this implementation)
-    </li>
-    <li>Only gridcells in the data rows are included in keyboard navigation</li>
-    <li>Focus memory: last focused cell is remembered when leaving and re-entering the grid</li>
+    {focusManagement?.map((item) => <li set:html={t(item.behavior)} />)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Disabled Cells</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'en' ? 'Disabled Cells' : '無効化セル'}
+  </h3>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Have <code>aria-disabled="true"</code></li>
-    <li>Are focusable (included in keyboard navigation)</li>
-    <li>Cannot be selected or activated</li>
-    <li>Visually distinct (e.g., grayed out)</li>
+    {
+      locale === 'en' ? (
+        <>
+          <li>
+            Have <code>aria-disabled="true"</code>
+          </li>
+          <li>Are focusable (included in keyboard navigation)</li>
+          <li>Cannot be selected or activated</li>
+          <li>Visually distinct (e.g., grayed out)</li>
+        </>
+      ) : (
+        <>
+          <li>
+            <code>aria-disabled="true"</code>を持つ
+          </li>
+          <li>フォーカス可能（キーボードナビゲーションに含まれる）</li>
+          <li>選択またはアクティベートできない</li>
+          <li>視覚的に区別される（例：グレーアウト）</li>
+        </>
+      )
+    }
   </ul>
 </div>

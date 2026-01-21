@@ -1,82 +1,99 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import { sliderAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const data = sliderAccessibilityData;
+const considerations = data.nativeHtmlConsiderations;
+const comparisonRows = data.nativeVsCustom || [];
+const footnote = data.nativeHtmlFootnote;
+
+// Type guard for single NativeHtmlConsideration object
+const nativeHtml = considerations && !Array.isArray(considerations) ? considerations : undefined;
+
+const translations = {
+  en: {
+    title: 'Use Native HTML First',
+    useCase: 'Use Case',
+    nativeHtml: 'Native HTML',
+    customImpl: 'Custom Implementation',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    useCase: 'ユースケース',
+    nativeHtml: 'ネイティブ HTML',
+    customImpl: 'カスタム実装',
+  },
+};
+
+const tr = translations[locale];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">⚠️</span>
+    {tr.title}
   </h2>
-  <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code
-        >&lt;input type="range"&gt;</code
-      >
-      elements.</strong
-    >
-    They provide built-in keyboard support, work without JavaScript, and have native accessibility support.
-  </p>
-  <div class="bg-muted mb-4 rounded-md p-3">
-    <pre
-      class="m-0 overflow-x-auto text-sm"><code>&lt;label for="volume"&gt;Volume&lt;/label&gt;
-&lt;input type="range" id="volume" min="0" max="100" value="50"&gt;</code></pre>
-  </div>
-  <p class="mb-4 text-sm">
-    Use custom implementations only when you need custom styling that native elements cannot
-    provide, or when you require specific visual feedback during interactions.
-  </p>
+  {
+    nativeHtml?.recommendation && (
+      <p class="mb-4">
+        <strong class="text-red-700 dark:text-red-400" set:html={t(nativeHtml.recommendation)} />
+      </p>
+    )
+  }
+  {
+    nativeHtml?.codeExample && (
+      <div class="bg-muted mb-4 rounded-md p-3">
+        <pre class="m-0 overflow-x-auto text-sm">
+          <code>{nativeHtml.codeExample}</code>
+        </pre>
+      </div>
+    )
+  }
+  {nativeHtml?.benefits && <p class="mb-4 text-sm">{t(nativeHtml.benefits)}</p>}
 
-  <ResponsiveTable>
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Use Case</th>
-          <th class="py-2 pr-4 text-left">Native HTML</th>
-          <th class="py-2 text-left">Custom Implementation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Basic value selection</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
-          <td class="py-2">Not needed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Keyboard support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Manual implementation</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JavaScript disabled support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
-          >
-          <td class="py-2">Requires fallback</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Form integration</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Manual implementation</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Custom styling</td>
-          <td class="py-2 pr-4">Limited (pseudo-elements)</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Consistent cross-browser appearance</td>
-          <td class="py-2 pr-4">Varies significantly</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Consistent</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Vertical orientation</td>
-          <td class="py-2 pr-4">Limited browser support</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs">
-    Note: Native <code>&lt;input type="range"&gt;</code> styling is notoriously inconsistent across browsers.
-    Styling requires vendor-specific pseudo-elements (<code>::-webkit-slider-thumb</code>,
-    <code>::-moz-range-thumb</code>, etc.) which can be complex to maintain.
-  </p>
+  {
+    comparisonRows.length > 0 && (
+      <ResponsiveTable>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-border border-b">
+              <th class="py-2 pr-4 text-left">{tr.useCase}</th>
+              <th class="py-2 pr-4 text-left">{tr.nativeHtml}</th>
+              <th class="py-2 text-left">{tr.customImpl}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparisonRows.map((row) => (
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4">{t(row.useCase || '')}</td>
+                <td class="py-2 pr-4">
+                  {row.nativeRecommended ? (
+                    <b class="text-green-700 dark:text-green-400">{t(row.native)}</b>
+                  ) : (
+                    t(row.native)
+                  )}
+                </td>
+                <td class="py-2">
+                  {!row.nativeRecommended ? (
+                    <b class="text-green-700 dark:text-green-400">{t(row.custom)}</b>
+                  ) : (
+                    t(row.custom)
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </ResponsiveTable>
+    )
+  }
+  {footnote && <p class="text-muted-foreground mt-3 text-xs" set:html={t(footnote)} />}
 </div>

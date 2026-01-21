@@ -1,63 +1,283 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { dataGridAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = dataGridAccessibilityData;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Embedded translations for detailed sections
+const translations = {
+  en: {
+    whenToUse: 'When to Use Data Grid',
+    whenToUseDesc:
+      'Data Grid extends the basic grid role with spreadsheet-like features. Use Data Grid when you need:',
+    sorting: 'Sorting:',
+    sortingDesc: 'Column headers that sort data on click/keyboard',
+    rowSelection: 'Row Selection:',
+    rowSelectionDesc: 'Checkbox-based selection of entire rows',
+    rangeSelection: 'Range Selection:',
+    rangeSelectionDesc: 'Shift+Arrow to select multiple cells',
+    cellEditing: 'Cell Editing:',
+    cellEditingDesc: 'In-place editing with Enter/F2 to start, Escape to cancel',
+    simpleTableNote:
+      'For simple static tables, use native <table> elements. For interactive grids without these features, use the basic grid pattern.',
+    apgExamples: 'APG Data Grids Examples',
+    gridContainerProps: 'WAI-ARIA Properties (Grid Container)',
+    columnHeaderStates: 'WAI-ARIA States (Column Headers)',
+    rowStates: 'WAI-ARIA States (Rows)',
+    gridCellStates: 'WAI-ARIA States (Grid Cells)',
+    navigation2D: '2D Navigation',
+    sortingHeaders: 'Sorting (Column Headers)',
+    rangeSelectionKeys: 'Range Selection',
+    cellEditingKeys: 'Cell Editing',
+    selectionActivation: 'Selection & Activation',
+    focusManagementTitle: 'Focus Management',
+    focusManagementDesc: 'This component uses roving tabindex for focus management:',
+    focusPoint1: 'Only one element has tabindex="0" (current focus position)',
+    focusPoint2: 'All other focusable elements have tabindex="-1"',
+    focusPoint3: 'Grid is a single Tab stop (Tab enters grid, Shift+Tab exits)',
+    focusPoint4:
+      'Sortable column headers participate in roving tabindex (non-sortable headers are not focusable)',
+    focusPoint5: 'Arrow Up from first data row moves to sortable header at same column',
+    focusPoint6: 'Arrow Down from header moves to first data row at same column',
+    focusPoint7:
+      'Edit mode: Focus moves to input field, grid navigation is disabled until edit ends',
+    focusPoint8:
+      'Focus memory: last focused element is remembered when leaving and re-entering the grid',
+    rowSelectionBehavior: 'Row Selection Behavior',
+    rowSelectionPoint1: 'Row selection checkboxes are placed in a dedicated column (gridcell)',
+    rowSelectionPoint2: 'Each row checkbox has an accessible label (e.g., "Select row user1")',
+    rowSelectionPoint3:
+      'When rowMultiselectable is true, a "Select all" checkbox appears in the header',
+    rowSelectionPoint4:
+      'Select all checkbox shows indeterminate state when some (but not all) rows are selected',
+    rowSelectionPoint5: 'Row selection state is reflected via aria-selected on the row element',
+    editModeBehavior: 'Edit Mode Behavior',
+    editModePoint1: 'Only cells with editable: true can enter edit mode',
+    editModePoint2: 'Cells with readonly: true cannot be edited even if editable',
+    editModePoint3: 'Grid-level readonly prop disables all editing',
+    editModePoint4: 'aria-readonly on cells indicates editability to screen readers',
+    editModePoint5: 'When editing, focus is on the input field inside the cell',
+    editModePoint6: 'Grid keyboard navigation (arrows, Home, End) is suppressed during edit mode',
+    editModePoint7: 'On edit end (Enter, Tab, blur), focus returns to the cell',
+    editModePoint8: 'On cancel (Escape), original value is restored',
+    yes: 'Yes',
+    no: 'No',
+    moveRight: 'Move focus one cell right',
+    moveLeft: 'Move focus one cell left',
+    moveDown: 'Move focus one row down (from header to first data row)',
+    moveUp: 'Move focus one row up (from first row to header if sortable)',
+    moveRowStart: 'Move focus to first cell in row',
+    moveRowEnd: 'Move focus to last cell in row',
+    moveGridStart: 'Move focus to first cell in grid',
+    moveGridEnd: 'Move focus to last cell in grid',
+    movePageDown: 'Move focus down by page size',
+    movePageUp: 'Move focus up by page size',
+    cycleSortEnter:
+      'Cycle sort direction (none \u2192 ascending \u2192 descending \u2192 ascending)',
+    cycleSortSpace: 'Cycle sort direction',
+    extendDown: 'Extend selection downward',
+    extendUp: 'Extend selection upward',
+    extendRight: 'Extend selection rightward',
+    extendLeft: 'Extend selection leftward',
+    extendRowStart: 'Extend selection to row start',
+    extendRowEnd: 'Extend selection to row end',
+    extendGridStart: 'Extend selection to grid start',
+    extendGridEnd: 'Extend selection to grid end',
+    enterEdit: 'Enter edit mode (on editable cell) or commit edit (in edit mode)',
+    f2Edit: 'Enter edit mode',
+    escapeEdit: 'Cancel edit and restore original value',
+    tabCommit: 'Commit edit (in edit mode)',
+    spaceSelect: 'Select/deselect focused cell or toggle row checkbox',
+    selectAll: 'Select all cells (when multiselectable)',
+    eitherRequired: '* Either aria-label or aria-labelledby is required.',
+    onlySortable: '* Only required for sortable column headers.',
+    onlyRowSelectable: '* Only required when row selection is enabled.',
+    whenSelectionNote:
+      '* When selection/editing is supported, ALL gridcells should have the corresponding attribute.',
+    // Grid container properties
+    gridRole: 'Identifies the container as a grid',
+    ariaLabelDesc: 'Accessible name for the grid',
+    ariaLabelledbyDesc: 'Alternative to aria-label',
+    ariaMultiselectableDesc: 'Present when multi-select (row or cell) is enabled',
+    ariaReadonlyDesc: 'Present when entire grid is read-only',
+    ariaRowcountDesc: 'Total rows for virtualization',
+    ariaColcountDesc: 'Total columns for virtualization',
+    // Column header states
+    ariaSortDesc: 'Current sort direction (only on sortable headers)',
+    tabindexColHeader: 'Roving tabindex (only on sortable headers)',
+    // Row states
+    ariaSelectedRow: 'Row selection state (when rowSelectable)',
+    ariaDisabledRow: 'Indicates the row is disabled',
+    ariaRowindexDesc: 'Row position for virtualization',
+    // Grid cell states
+    tabindexCell: 'Roving tabindex for focus management',
+    ariaSelectedCell: 'Cell selection state (when cell selectable)',
+    ariaReadonlyCell: 'Cell editability (when grid is editable)',
+    ariaDisabledCell: 'Indicates the cell is disabled',
+    ariaColindexDesc: 'Column position for virtualization',
+  },
+  ja: {
+    whenToUse: 'データグリッドを使用するタイミング',
+    whenToUseDesc:
+      'データグリッドは、基本的なgridロールをスプレッドシートのような機能で拡張します。次の機能が必要な場合に使用します：',
+    sorting: 'ソート：',
+    sortingDesc: 'クリック/キーボードでデータをソートする列ヘッダー',
+    rowSelection: '行選択：',
+    rowSelectionDesc: 'チェックボックスベースの行全体の選択',
+    rangeSelection: '範囲選択：',
+    rangeSelectionDesc: 'Shift+矢印で複数のセルを選択',
+    cellEditing: 'セル編集：',
+    cellEditingDesc: 'Enter/F2で編集を開始、Escapeでキャンセルするインプレース編集',
+    simpleTableNote:
+      '単純な静的テーブルには、ネイティブの<table>要素を使用してください。これらの機能を持たないインタラクティブなグリッドには、基本的なgridパターンを使用してください。',
+    apgExamples: 'APG データグリッドの例',
+    gridContainerProps: 'WAI-ARIA プロパティ（グリッドコンテナ）',
+    columnHeaderStates: 'WAI-ARIA ステート（列ヘッダー）',
+    rowStates: 'WAI-ARIA ステート（行）',
+    gridCellStates: 'WAI-ARIA ステート（グリッドセル）',
+    navigation2D: '2Dナビゲーション',
+    sortingHeaders: 'ソート（列ヘッダー）',
+    rangeSelectionKeys: '範囲選択',
+    cellEditingKeys: 'セル編集',
+    selectionActivation: '選択とアクティベーション',
+    focusManagementTitle: 'フォーカス管理',
+    focusManagementDesc:
+      'このコンポーネントはローヴィングタブインデックスをフォーカス管理に使用します：',
+    focusPoint1: 'tabindex="0"を持つ要素は1つだけ（現在のフォーカス位置）',
+    focusPoint2: '他のすべてのフォーカス可能な要素はtabindex="-1"',
+    focusPoint3: 'グリッドは単一のタブストップ（Tabでグリッドに入り、Shift+Tabで出る）',
+    focusPoint4:
+      'ソート可能な列ヘッダーはローヴィングタブインデックスに参加（ソート不可のヘッダーはフォーカス不可）',
+    focusPoint5: '最初のデータ行からの上矢印は同じ列のソート可能なヘッダーに移動',
+    focusPoint6: 'ヘッダーからの下矢印は同じ列の最初のデータ行に移動',
+    focusPoint7:
+      '編集モード：フォーカスは入力フィールドに移動、編集が終了するまでグリッドナビゲーションは無効',
+    focusPoint8: 'フォーカスメモリ：グリッドを離れて再び入るときに最後にフォーカスされた要素を記憶',
+    rowSelectionBehavior: '行選択の動作',
+    rowSelectionPoint1: '行選択チェックボックスは専用の列（gridcell）に配置',
+    rowSelectionPoint2:
+      '各行のチェックボックスにはアクセシブルなラベルがある（例："Select row user1"）',
+    rowSelectionPoint3:
+      'rowMultiselectableがtrueの場合、ヘッダーに「全て選択」チェックボックスが表示',
+    rowSelectionPoint4:
+      '一部（すべてではない）の行が選択されている場合、「全て選択」チェックボックスは不確定状態を表示',
+    rowSelectionPoint5: '行の選択状態は行要素のaria-selectedで反映',
+    editModeBehavior: '編集モードの動作',
+    editModePoint1: 'editable: trueのセルのみが編集モードに入れる',
+    editModePoint2: 'readonly: trueのセルは編集可能でも編集できない',
+    editModePoint3: 'グリッドレベルのreadonlyプロップはすべての編集を無効化',
+    editModePoint4: 'セルのaria-readonlyはスクリーンリーダーに編集可能性を示す',
+    editModePoint5: '編集中、フォーカスはセル内の入力フィールドにある',
+    editModePoint6: '編集モード中はグリッドキーボードナビゲーション（矢印、Home、End）は抑制',
+    editModePoint7: '編集終了時（Enter、Tab、blur）、フォーカスはセルに戻る',
+    editModePoint8: 'キャンセル時（Escape）、元の値が復元される',
+    yes: 'はい',
+    no: 'いいえ',
+    moveRight: 'フォーカスを右に1セル移動',
+    moveLeft: 'フォーカスを左に1セル移動',
+    moveDown: 'フォーカスを1行下に移動（ヘッダーから最初のデータ行へ）',
+    moveUp: 'フォーカスを1行上に移動（最初の行からソート可能な場合ヘッダーへ）',
+    moveRowStart: 'フォーカスを行の最初のセルに移動',
+    moveRowEnd: 'フォーカスを行の最後のセルに移動',
+    moveGridStart: 'フォーカスをグリッドの最初のセルに移動',
+    moveGridEnd: 'フォーカスをグリッドの最後のセルに移動',
+    movePageDown: 'フォーカスをページサイズ分下に移動',
+    movePageUp: 'フォーカスをページサイズ分上に移動',
+    cycleSortEnter: 'ソート方向を循環（なし → 昇順 → 降順 → 昇順）',
+    cycleSortSpace: 'ソート方向を循環',
+    extendDown: '選択を下に拡張',
+    extendUp: '選択を上に拡張',
+    extendRight: '選択を右に拡張',
+    extendLeft: '選択を左に拡張',
+    extendRowStart: '選択を行の先頭まで拡張',
+    extendRowEnd: '選択を行の末尾まで拡張',
+    extendGridStart: '選択をグリッドの先頭まで拡張',
+    extendGridEnd: '選択をグリッドの末尾まで拡張',
+    enterEdit: '編集モードに入る（編集可能なセル）または編集をコミット（編集モード中）',
+    f2Edit: '編集モードに入る',
+    escapeEdit: '編集をキャンセルして元の値を復元',
+    tabCommit: '編集をコミット（編集モード中）',
+    spaceSelect: 'フォーカスされたセルを選択/解除または行チェックボックスを切り替え',
+    selectAll: 'すべてのセルを選択（マルチセレクト可能な場合）',
+    eitherRequired: '* aria-labelまたはaria-labelledbyのいずれかが必須です。',
+    onlySortable: '* ソート可能な列ヘッダーにのみ必須です。',
+    onlyRowSelectable: '* 行選択が有効な場合にのみ必須です。',
+    whenSelectionNote:
+      '* 選択/編集がサポートされている場合、すべてのgridcellに対応する属性が必要です。',
+    // Grid container properties
+    gridRole: 'コンテナをグリッドとして識別',
+    ariaLabelDesc: 'グリッドのアクセシブルな名前',
+    ariaLabelledbyDesc: 'aria-labelの代替',
+    ariaMultiselectableDesc: 'マルチセレクト（行またはセル）が有効な場合に存在',
+    ariaReadonlyDesc: 'グリッド全体が読み取り専用の場合に存在',
+    ariaRowcountDesc: '仮想化のための総行数',
+    ariaColcountDesc: '仮想化のための総列数',
+    // Column header states
+    ariaSortDesc: '現在のソート方向（ソート可能なヘッダーのみ）',
+    tabindexColHeader: 'ローヴィングタブインデックス（ソート可能なヘッダーのみ）',
+    // Row states
+    ariaSelectedRow: '行選択状態（rowSelectableの場合）',
+    ariaDisabledRow: '行が無効であることを示す',
+    ariaRowindexDesc: '仮想化のための行位置',
+    // Grid cell states
+    tabindexCell: 'フォーカス管理のためのローヴィングタブインデックス',
+    ariaSelectedCell: 'セル選択状態（セル選択可能な場合）',
+    ariaReadonlyCell: 'セルの編集可能性（グリッドが編集可能な場合）',
+    ariaDisabledCell: 'セルが無効であることを示す',
+    ariaColindexDesc: '仮想化のための列位置',
+  },
+};
+
+const text = translations[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">When to Use Data Grid</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.whenToUse}</h3>
   <p class="text-muted-foreground mb-4">
-    Data Grid extends the basic <code>grid</code> role with spreadsheet-like features. Use Data Grid when
-    you need:
+    <Fragment set:html={text.whenToUseDesc} />
   </p>
   <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-    <li><strong>Sorting:</strong> Column headers that sort data on click/keyboard</li>
-    <li><strong>Row Selection:</strong> Checkbox-based selection of entire rows</li>
-    <li><strong>Range Selection:</strong> Shift+Arrow to select multiple cells</li>
-    <li>
-      <strong>Cell Editing:</strong> In-place editing with Enter/F2 to start, Escape to cancel
-    </li>
+    <li><strong>{text.sorting}</strong> {text.sortingDesc}</li>
+    <li><strong>{text.rowSelection}</strong> {text.rowSelectionDesc}</li>
+    <li><strong>{text.rangeSelection}</strong> {text.rangeSelectionDesc}</li>
+    <li><strong>{text.cellEditing}</strong> {text.cellEditingDesc}</li>
   </ul>
   <p class="text-muted-foreground mb-6">
-    For simple static tables, use native <code>&lt;table&gt;</code> elements. For interactive grids without
-    these features, use the basic <code>grid</code> pattern.
+    <Fragment set:html={text.simpleTableNote} />
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>grid</code></td>
-          <td class="py-2 pr-4">Container</td>
-          <td class="py-2">The grid container (composite widget)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>row</code></td>
-          <td class="py-2 pr-4">Row container</td>
-          <td class="py-2">Groups cells horizontally</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>columnheader</code></td>
-          <td class="py-2 pr-4">Header cells</td>
-          <td class="py-2">Column headers (focusable when sortable)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>rowheader</code></td>
-          <td class="py-2 pr-4">Row header cell</td>
-          <td class="py-2">Row headers (optional)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>gridcell</code></td>
-          <td class="py-2 pr-4">Data cells</td>
-          <td class="py-2">Interactive cells (focusable, may be editable)</td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
@@ -66,80 +286,78 @@ import { ResponsiveTable } from '@/components/ui/table';
       href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/examples/data-grids/"
       class="text-primary hover:underline"
     >
-      APG Data Grids Examples
+      {text.apgExamples}
     </ExternalLink>
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Grid Container)</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.gridContainerProps}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>role="grid"</code></td>
           <td class="py-2 pr-4">-</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Identifies the container as a grid</td>
+          <td class="py-2 pr-4">{text.yes}</td>
+          <td class="py-2">{text.gridRole}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-label</code></td>
           <td class="py-2 pr-4">String</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Accessible name for the grid</td>
+          <td class="py-2 pr-4">{text.yes}*</td>
+          <td class="py-2">{text.ariaLabelDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-labelledby</code></td>
           <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Alternative to aria-label</td>
+          <td class="py-2 pr-4">{text.yes}*</td>
+          <td class="py-2">{text.ariaLabelledbyDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
           <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Present when multi-select (row or cell) is enabled</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaMultiselectableDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-readonly</code></td>
           <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Present when entire grid is read-only</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaReadonlyDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-rowcount</code></td>
           <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total rows for virtualization</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaRowcountDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-colcount</code></td>
           <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total columns for virtualization</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaColcountDesc}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required.
-  </p>
+  <p class="text-muted-foreground mb-6 text-sm">{text.eitherRequired}</p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Column Headers)</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.columnHeaderStates}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
@@ -150,151 +368,149 @@ import { ResponsiveTable } from '@/components/ui/table';
               >other</code
             ></td
           >
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Current sort direction (only on sortable headers)</td>
+          <td class="py-2 pr-4">{text.yes}*</td>
+          <td class="py-2">{text.ariaSortDesc}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>tabindex</code></td>
           <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Roving tabindex (only on sortable headers)</td>
+          <td class="py-2 pr-4">{text.yes}*</td>
+          <td class="py-2">{text.tabindexColHeader}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">* Only required for sortable column headers.</p>
+  <p class="text-muted-foreground mb-6 text-sm">{text.onlySortable}</p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Rows)</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.rowStates}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-selected</code></td>
           <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Row selection state (when rowSelectable)</td>
+          <td class="py-2 pr-4">{text.yes}*</td>
+          <td class="py-2">{text.ariaSelectedRow}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-disabled</code></td>
           <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the row is disabled</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaDisabledRow}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-rowindex</code></td>
           <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Row position for virtualization</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaRowindexDesc}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">* Only required when row selection is enabled.</p>
+  <p class="text-muted-foreground mb-6 text-sm">{text.onlyRowSelectable}</p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Grid Cells)</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.gridCellStates}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>tabindex</code></td>
           <td class="py-2 pr-4"><code>0</code> | <code>-1</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Roving tabindex for focus management</td>
+          <td class="py-2 pr-4">{text.yes}</td>
+          <td class="py-2">{text.tabindexCell}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-selected</code></td>
           <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No*</td>
-          <td class="py-2">Cell selection state (when cell selectable)</td>
+          <td class="py-2 pr-4">{text.no}*</td>
+          <td class="py-2">{text.ariaSelectedCell}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-readonly</code></td>
           <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No*</td>
-          <td class="py-2">Cell editability (when grid is editable)</td>
+          <td class="py-2 pr-4">{text.no}*</td>
+          <td class="py-2">{text.ariaReadonlyCell}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-disabled</code></td>
           <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the cell is disabled</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaDisabledCell}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"><code>aria-colindex</code></td>
           <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Column position for virtualization</td>
+          <td class="py-2 pr-4">{text.no}</td>
+          <td class="py-2">{text.ariaColindexDesc}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * When selection/editing is supported, ALL gridcells should have the corresponding attribute.
-  </p>
+  <p class="text-muted-foreground mb-6 text-sm">{text.whenSelectionNote}</p>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
 
-  <h4 class="mb-2 font-medium">2D Navigation</h4>
+  <h4 class="mb-2 font-medium">{text.navigation2D}</h4>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&rarr;</kbd></td
           >
-          <td class="py-2">Move focus one cell right</td>
+          <td class="py-2">{text.moveRight}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&larr;</kbd></td
           >
-          <td class="py-2">Move focus one cell left</td>
+          <td class="py-2">{text.moveLeft}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&darr;</kbd></td
           >
-          <td class="py-2">Move focus one row down (from header to first data row)</td>
+          <td class="py-2">{text.moveDown}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
+            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&uarr;</kbd></td
           >
-          <td class="py-2">Move focus one row up (from first row to header if sortable)</td>
+          <td class="py-2">{text.moveUp}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
           >
-          <td class="py-2">Move focus to first cell in row</td>
+          <td class="py-2">{text.moveRowStart}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
           >
-          <td class="py-2">Move focus to last cell in row</td>
+          <td class="py-2">{text.moveRowEnd}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -302,7 +518,7 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
             ></td
           >
-          <td class="py-2">Move focus to first cell in grid</td>
+          <td class="py-2">{text.moveGridStart}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -310,31 +526,31 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
             ></td
           >
-          <td class="py-2">Move focus to last cell in grid</td>
+          <td class="py-2">{text.moveGridEnd}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageDown</kbd></td
           >
-          <td class="py-2">Move focus down by page size</td>
+          <td class="py-2">{text.movePageDown}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">PageUp</kbd></td
           >
-          <td class="py-2">Move focus up by page size</td>
+          <td class="py-2">{text.movePageUp}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h4 class="mb-2 font-medium">Sorting (Column Headers)</h4>
+  <h4 class="mb-2 font-medium">{text.sortingHeaders}</h4>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
@@ -342,59 +558,59 @@ import { ResponsiveTable } from '@/components/ui/table';
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
           >
-          <td class="py-2">Cycle sort direction (none → ascending → descending → ascending)</td>
+          <td class="py-2">{text.cycleSortEnter}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
           >
-          <td class="py-2">Cycle sort direction</td>
+          <td class="py-2">{text.cycleSortSpace}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h4 class="mb-2 font-medium">Range Selection</h4>
+  <h4 class="mb-2 font-medium">{text.rangeSelectionKeys}</h4>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&darr;</kbd
             ></td
           >
-          <td class="py-2">Extend selection downward</td>
+          <td class="py-2">{text.extendDown}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&uarr;</kbd
             ></td
           >
-          <td class="py-2">Extend selection upward</td>
+          <td class="py-2">{text.extendUp}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&rarr;</kbd
             ></td
           >
-          <td class="py-2">Extend selection rightward</td>
+          <td class="py-2">{text.extendRight}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd
+              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">&larr;</kbd
             ></td
           >
-          <td class="py-2">Extend selection leftward</td>
+          <td class="py-2">{text.extendLeft}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -402,7 +618,7 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
             ></td
           >
-          <td class="py-2">Extend selection to row start</td>
+          <td class="py-2">{text.extendRowStart}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -410,7 +626,7 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
             ></td
           >
-          <td class="py-2">Extend selection to row end</td>
+          <td class="py-2">{text.extendRowEnd}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -418,7 +634,7 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd
             > + <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
           >
-          <td class="py-2">Extend selection to grid start</td>
+          <td class="py-2">{text.extendGridStart}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -426,19 +642,19 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd
             > + <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
           >
-          <td class="py-2">Extend selection to grid end</td>
+          <td class="py-2">{text.extendGridEnd}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h4 class="mb-2 font-medium">Cell Editing</h4>
+  <h4 class="mb-2 font-medium">{text.cellEditingKeys}</h4>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
@@ -446,37 +662,37 @@ import { ResponsiveTable } from '@/components/ui/table';
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
           >
-          <td class="py-2">Enter edit mode (on editable cell) or commit edit (in edit mode)</td>
+          <td class="py-2">{text.enterEdit}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">F2</kbd></td
           >
-          <td class="py-2">Enter edit mode</td>
+          <td class="py-2">{text.f2Edit}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
           >
-          <td class="py-2">Cancel edit and restore original value</td>
+          <td class="py-2">{text.escapeEdit}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
           >
-          <td class="py-2">Commit edit (in edit mode)</td>
+          <td class="py-2">{text.tabCommit}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h4 class="mb-2 font-medium">Selection & Activation</h4>
+  <h4 class="mb-2 font-medium">{text.selectionActivation}</h4>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
@@ -484,7 +700,7 @@ import { ResponsiveTable } from '@/components/ui/table';
           <td class="py-2 pr-4"
             ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
           >
-          <td class="py-2">Select/deselect focused cell or toggle row checkbox</td>
+          <td class="py-2">{text.spaceSelect}</td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4"
@@ -492,52 +708,45 @@ import { ResponsiveTable } from '@/components/ui/table';
               class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
             ></td
           >
-          <td class="py-2">Select all cells (when multiselectable)</td>
+          <td class="py-2">{text.selectAll}</td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.focusManagementTitle}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses <strong>roving tabindex</strong> for focus management:
+    {text.focusManagementDesc}
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only one element has <code>tabindex="0"</code> (current focus position)</li>
-    <li>All other focusable elements have <code>tabindex="-1"</code></li>
-    <li>Grid is a single Tab stop (Tab enters grid, Shift+Tab exits)</li>
-    <li>
-      <strong>Sortable column headers</strong> participate in roving tabindex (non-sortable headers are
-      not focusable)
-    </li>
-    <li>Arrow Up from first data row moves to sortable header at same column</li>
-    <li>Arrow Down from header moves to first data row at same column</li>
-    <li>
-      <strong>Edit mode:</strong> Focus moves to input field, grid navigation is disabled until edit ends
-    </li>
-    <li>Focus memory: last focused element is remembered when leaving and re-entering the grid</li>
+    <li>{text.focusPoint1}</li>
+    <li>{text.focusPoint2}</li>
+    <li>{text.focusPoint3}</li>
+    <li><strong>{text.focusPoint4}</strong></li>
+    <li>{text.focusPoint5}</li>
+    <li>{text.focusPoint6}</li>
+    <li><strong>{text.focusPoint7}</strong></li>
+    <li>{text.focusPoint8}</li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Row Selection Behavior</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.rowSelectionBehavior}</h3>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Row selection checkboxes are placed in a dedicated column (gridcell)</li>
-    <li>Each row checkbox has an accessible label (e.g., "Select row user1")</li>
-    <li>
-      When <code>rowMultiselectable</code> is true, a "Select all" checkbox appears in the header
-    </li>
-    <li>Select all checkbox shows indeterminate state when some (but not all) rows are selected</li>
-    <li>Row selection state is reflected via <code>aria-selected</code> on the row element</li>
+    <li>{text.rowSelectionPoint1}</li>
+    <li>{text.rowSelectionPoint2}</li>
+    <li>{text.rowSelectionPoint3}</li>
+    <li>{text.rowSelectionPoint4}</li>
+    <li>{text.rowSelectionPoint5}</li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Edit Mode Behavior</h3>
+  <h3 class="mb-3 text-lg font-medium">{text.editModeBehavior}</h3>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only cells with <code>editable: true</code> can enter edit mode</li>
-    <li>Cells with <code>readonly: true</code> cannot be edited even if editable</li>
-    <li>Grid-level <code>readonly</code> prop disables all editing</li>
-    <li><code>aria-readonly</code> on cells indicates editability to screen readers</li>
-    <li>When editing, focus is on the input field inside the cell</li>
-    <li>Grid keyboard navigation (arrows, Home, End) is suppressed during edit mode</li>
-    <li>On edit end (Enter, Tab, blur), focus returns to the cell</li>
-    <li>On cancel (Escape), original value is restored</li>
+    <li>{text.editModePoint1}</li>
+    <li>{text.editModePoint2}</li>
+    <li>{text.editModePoint3}</li>
+    <li>{text.editModePoint4}</li>
+    <li>{text.editModePoint5}</li>
+    <li>{text.editModePoint6}</li>
+    <li>{text.editModePoint7}</li>
+    <li>{text.editModePoint8}</li>
   </ul>
 </div>

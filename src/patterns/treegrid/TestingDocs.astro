@@ -1,365 +1,235 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import { treegridAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const testing = treegridAccessibilityData.testing;
+if (!testing) {
+  throw new Error('Testing data not found in accessibility-data.ts');
+}
+
+const { strategies, categories, e2eTestFile, commands, tools, documentationLink } = testing;
+
+// Read actual test file at build time
+const e2eTestCode = e2eTestFile
+  ? (() => {
+      try {
+        return fs.readFileSync(path.join(process.cwd(), e2eTestFile), 'utf-8');
+      } catch {
+        return '';
+      }
+    })()
+  : '';
+
+// Localization helper
+const t = localize(locale);
+
+// Priority colors
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The TreeGrid component combines Grid and TreeView testing strategies.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    exampleTestCode: 'Example Test Code',
+    exampleTestCodeDesc: 'The following is the actual E2E test file',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    seeFullDocs: 'See',
+    forFullDocs: 'for full documentation.',
+    test: 'Test',
+    description: 'Description',
+    keyDifferenceFromGrid: 'Key Difference from Grid',
+    keyDifferences: [
+      'Selection target: TreeGrid selects rows (aria-selected on row), Grid selects cells',
+      'Arrow behavior at rowheader: ArrowRight/Left do tree operations, not cell navigation',
+      'Hierarchy: Must test aria-level values and parent/child relationships',
+      'Hidden rows: Must skip collapsed children during navigation',
+    ],
+  },
+  ja: {
+    intro:
+      'テストは、キーボードインタラクション、ARIA属性、アクセシビリティ要件全体でAPG準拠を検証します。TreeGridコンポーネントはGridとTreeViewのテスト戦略を組み合わせています。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    exampleTestCode: 'テストコード例',
+    exampleTestCodeDesc: '以下は実際のE2Eテストファイルです',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    seeFullDocs: '完全なドキュメントは',
+    forFullDocs: 'を参照してください。',
+    test: 'テスト',
+    description: '説明',
+    keyDifferenceFromGrid: 'Gridとの主な違い',
+    keyDifferences: [
+      '選択対象: TreeGridは行を選択（rowのaria-selected）、Gridはセルを選択',
+      'rowheaderでの矢印の動作: ArrowRight/Leftはツリー操作を行い、セルナビゲーションは行わない',
+      '階層: aria-levelの値と親子関係をテストする必要がある',
+      '非表示行: ナビゲーション中に折りたたまれた子をスキップする必要がある',
+    ],
+  },
+};
+
+const titles = sectionTitles[locale];
+
+const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
+  if (locale === 'ja') {
+    return priority === 'high' ? '高優先度' : priority === 'medium' ? '中優先度' : '低優先度';
+  }
+  return priority === 'high'
+    ? 'High Priority'
+    : priority === 'medium'
+      ? 'Medium Priority'
+      : 'Low Priority';
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The TreeGrid component combines Grid and TreeView testing strategies.
+    {titles.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingStrategy}</h3>
 
+  {
+    strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{titles.testCategories}</h3>
+
+  {
+    categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {getPriorityLabel(category.priority)}: {t(category.title)}
+          {locale === 'ja' ? '（' : ' ('}
+          {category.testType}
+          {locale === 'ja' ? '）' : ')'}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{titles.test}</th>
+                <th class="py-2 text-left">{titles.description}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
+
+  {
+    e2eTestCode && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.exampleTestCode}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {titles.exampleTestCodeDesc} (<code>{e2eTestFile}</code>).
+        </p>
+        <CodeBlock
+          code={e2eTestCode}
+          lang="typescript"
+          title={e2eTestFile}
+          collapsible
+          collapsedLines={20}
+        />
+      </>
+    )
+  }
+
+  {
+    commands && commands.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.runningTests}</h3>
+        <pre class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800">
+          <code>
+            {commands
+              .map((cmd) => {
+                const comment = t(cmd.comment);
+                return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+              })
+              .join('\n\n')}
+          </code>
+        </pre>
+      </>
+    )
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{titles.keyDifferenceFromGrid}</h3>
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component rendering and interactions using framework-specific Testing Library
-      utilities. These tests ensure correct component behavior in isolation.
-    </p>
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>HTML structure and element hierarchy (treegrid, row, rowheader, gridcell)</li>
-      <li>Initial attribute values (role, aria-label, aria-level, aria-expanded)</li>
-      <li>Selection state changes (aria-selected on rows)</li>
-      <li>Hierarchy depth indicators (aria-level)</li>
-      <li>CSS class application</li>
+      {
+        titles.keyDifferences.map((diff) => (
+          <li set:html={diff.replace(/(\w+-\w+)/g, '<em>$1</em>')} />
+        ))
+      }
     </ul>
   </div>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all four frameworks. These
-      tests cover interactions that require full browser context.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>2D keyboard navigation (Arrow keys)</li>
-      <li>Tree operations at rowheader (ArrowRight/Left for expand/collapse)</li>
-      <li>Extended navigation (Home, End, Ctrl+Home, Ctrl+End)</li>
-      <li>Row selection with Space</li>
-      <li>Focus management and roving tabindex</li>
-      <li>Hidden row handling (collapsed children)</li>
-      <li>Cross-framework consistency</li>
-    </ul>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="treegrid"</code></td>
-          <td class="py-2">Container has treegrid role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="row"</code></td>
-          <td class="py-2">All rows have row role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="rowheader"</code></td>
-          <td class="py-2">First cell in row has rowheader role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="gridcell"</code></td>
-          <td class="py-2">Other cells have gridcell role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="columnheader"</code></td>
-          <td class="py-2">Header cells have columnheader role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2">TreeGrid has accessible name via aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-level</code></td>
-          <td class="py-2">All rows have aria-level (1-based depth)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2">Parent rows have aria-expanded (true/false)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-selected on row</code></td>
-          <td class="py-2">Selection on row element (not cell)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
-          <td class="py-2">Present when multi-selection is enabled</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Tree Operations (at Rowheader)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight expands</code></td>
-          <td class="py-2">Expands collapsed parent row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight to child</code></td>
-          <td class="py-2">Moves to first child when already expanded</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowLeft collapses</code></td>
-          <td class="py-2">Collapses expanded parent row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowLeft to parent</code></td>
-          <td class="py-2">Moves to parent row when collapsed or leaf</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter activates only</code></td>
-          <td class="py-2">Enter does NOT expand/collapse (unlike Tree)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Children hidden</code></td>
-          <td class="py-2">Child rows hidden when parent collapsed</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: 2D Keyboard Navigation
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight (non-rowheader)</code></td>
-          <td class="py-2">Moves focus one cell right</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowLeft (non-rowheader)</code></td>
-          <td class="py-2">Moves focus one cell left</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowDown</code></td>
-          <td class="py-2">Moves focus to next visible row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowUp</code></td>
-          <td class="py-2">Moves focus to previous visible row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Skip hidden rows</code></td>
-          <td class="py-2">ArrowDown/Up skips collapsed children</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Extended Navigation
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home</code></td>
-          <td class="py-2">Moves focus to first cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>End</code></td>
-          <td class="py-2">Moves focus to last cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Ctrl+Home</code></td>
-          <td class="py-2">Moves focus to first cell in first visible row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Ctrl+End</code></td>
-          <td class="py-2">Moves focus to last cell in last visible row</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management (Roving Tabindex)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
-          <td class="py-2">First focusable cell has tabindex="0"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
-          <td class="py-2">Other cells have tabindex="-1"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Headers not focusable</code></td>
-          <td class="py-2">columnheader cells have no tabindex</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab exits treegrid</code></td>
-          <td class="py-2">Tab moves focus out of treegrid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus update</code></td>
-          <td class="py-2">Focused cell updates tabindex on navigation</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Row Selection
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space toggles row</code></td>
-          <td class="py-2">Space toggles row selection (not cell)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Single select</code></td>
-          <td class="py-2">Single selection clears previous on Space</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Multi select</code></td>
-          <td class="py-2">Multi-selection allows multiple rows</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter activates cell</code></td>
-          <td class="py-2">Enter triggers cell activation</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe-core</code></td>
-          <td class="py-2">No accessibility violations</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Key Difference from Grid</h3>
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>
-        <strong>Selection target:</strong> TreeGrid selects <em>rows</em> (aria-selected on row), Grid
-        selects <em>cells</em>
-      </li>
-      <li>
-        <strong>Arrow behavior at rowheader:</strong> ArrowRight/Left do tree operations, not cell navigation
-      </li>
-      <li>
-        <strong>Hierarchy:</strong> Must test aria-level values and parent/child relationships
-      </li>
-      <li><strong>Hidden rows:</strong> Must skip collapsed children during navigation</li>
-    </ul>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline">
-        Vitest
-      </ExternalLink>
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
-        Testing Library
-      </ExternalLink>
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline">
-        Playwright
-      </ExternalLink>
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline"
-      >
-        axe-core/playwright
-      </ExternalLink>
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See
-    <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline"
-    >
-      testing-strategy.md
-    </ExternalLink>
-    for full documentation.
-  </p>
+  {
+    documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {titles.seeFullDocs}{' '}
+        <ExternalLink href={documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {titles.forFullDocs}
+      </p>
+    )
+  }
 </div>

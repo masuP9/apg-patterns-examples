@@ -1,357 +1,396 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { sliderMultithumbAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = sliderMultithumbAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>slider</code></td>
-          <td class="py-2 pr-4">Lower thumb element</td>
-          <td class="py-2">
-            Identifies the element as a slider for selecting the lower bound of the range.
-          </td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>slider</code></td>
-          <td class="py-2 pr-4">Upper thumb element</td>
-          <td class="py-2">
-            Identifies the element as a slider for selecting the upper bound of the range.
-          </td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>group</code></td>
-          <td class="py-2 pr-4">Container element</td>
-          <td class="py-2">
-            Groups the two sliders together and associates them with a common label.
-          </td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    Each thumb is an independent <code>slider</code> element with its own ARIA attributes. The <code
-      >group</code
-    > role establishes the semantic relationship between the two sliders.
+    {
+      locale === 'ja' ? (
+        <>
+          各つまみは独自のARIA属性を持つ独立した <code>slider</code> 要素です。
+          <code>group</code> ロールが2つのスライダー間のセマンティックな関係を確立します。
+        </>
+      ) : (
+        <>
+          Each thumb is an independent <code>slider</code> element with its own ARIA attributes. The{' '}
+          <code>group</code> role establishes the semantic relationship between the two sliders.
+        </>
+      )
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States and Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuenow</code> (Required)</h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current numeric value of each thumb. Updated dynamically as the user changes the
-      value.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Range</td>
-            <td class="py-2">
-              Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.properties?.map((prop) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{prop.attribute}</code>
+          {typeof prop.required === 'boolean' && prop.required && (
+            <span class="ml-2 text-sm text-red-500">({locale === 'ja' ? '必須' : 'Required'})</span>
+          )}
+        </h4>
+        {prop.attribute === 'aria-valuenow' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? '各つまみの現在の数値を示します。ユーザーが値を変更すると動的に更新されます。'
+              : 'Indicates the current numeric value of each thumb. Updated dynamically as the user changes the value.'}
+          </p>
+        )}
+        {prop.attribute === 'aria-valuemin' && (
+          <>
+            <p class="text-muted-foreground mb-3">
+              {locale === 'ja' ? (
+                <>
+                  <strong>動的な境界:</strong>{' '}
+                  APG仕様に従い、一方のスライダーの範囲が他方の値に依存する場合、これらの属性は動的に更新する必要があります:
+                </>
+              ) : (
+                <>
+                  <strong>Dynamic bounds:</strong> Per the APG specification, when the range of one
+                  slider depends on the value of another, these attributes must update dynamically:
+                </>
+              )}
+            </p>
+            <ResponsiveTable class="mb-4">
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="border-border border-b">
+                    <th class="py-2 pr-4 text-left">{locale === 'ja' ? 'つまみ' : 'Thumb'}</th>
+                    <th class="py-2 pr-4 text-left">aria-valuemin</th>
+                    <th class="py-2 text-left">aria-valuemax</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">{locale === 'ja' ? '下限つまみ' : 'Lower thumb'}</td>
+                    <td class="py-2 pr-4">
+                      {locale === 'ja' ? '静的（絶対最小値）' : 'Static (absolute min)'}
+                    </td>
+                    <td class="py-2">
+                      {locale === 'ja'
+                        ? '動的（上限値 - minDistance）'
+                        : 'Dynamic (upper value - minDistance)'}
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">{locale === 'ja' ? '上限つまみ' : 'Upper thumb'}</td>
+                    <td class="py-2 pr-4">
+                      {locale === 'ja'
+                        ? '動的（下限値 + minDistance）'
+                        : 'Dynamic (lower value + minDistance)'}
+                    </td>
+                    <td class="py-2">
+                      {locale === 'ja' ? '静的（絶対最大値）' : 'Static (absolute max)'}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ResponsiveTable>
+            <p class="text-muted-foreground mb-3 text-sm">
+              {locale === 'ja'
+                ? 'このアプローチにより、支援技術ユーザーに各つまみの実際の許容範囲を正しく伝えることができ、HomeキーとEndキーの動作の予測可能性が向上します。'
+                : 'This approach correctly communicates to assistive technology users the actual allowed range for each thumb at any given moment, which enables better predictability of Home and End key behaviors.'}
+            </p>
+          </>
+        )}
+        {prop.attribute === 'aria-valuemax' && null}
+        {prop.attribute === 'aria-valuetext' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? '現在の値の人間が読めるテキスト代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。'
+              : "Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning."}
+          </p>
+        )}
+        {prop.attribute === 'aria-orientation' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーの向きを指定します。垂直スライダーの場合のみ "vertical" に設定します。水平の場合は省略します（デフォルト）。'
+              : 'Specifies the orientation of the slider. Only set to "vertical" for vertical sliders; omit for horizontal (default).'}
+          </p>
+        )}
+        {prop.attribute === 'aria-disabled' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーが無効でインタラクティブではないことを示します。'
+              : 'Indicates that the slider is disabled and not interactive.'}
+          </p>
+        )}
+        {prop.attribute !== 'aria-valuemin' && prop.attribute !== 'aria-valuemax' && (
+          <ResponsiveTable class="mb-2">
+            <table class="w-full border-collapse">
+              <tbody>
+                <tr class="border-border border-b">
+                  <td class="w-32 py-2 pr-4 font-medium">{locale === 'ja' ? '型' : 'Type'}</td>
+                  <td class="py-2">{t(prop.values)}</td>
+                </tr>
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                  <td class="py-2">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? h('value.yes')
+                        : h('value.no')
+                      : t(prop.required)}
+                  </td>
+                </tr>
+                {prop.attribute === 'aria-valuetext' && (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '例' : 'Example'}</td>
+                    <td class="py-2">"$20", "$80", "20% - 80%"</td>
+                  </tr>
+                )}
+                {prop.attribute === 'aria-valuenow' && (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '範囲' : 'Range'}</td>
+                    <td class="py-2">
+                      {locale === 'ja' ? (
+                        <>
+                          <code>aria-valuemin</code> と <code>aria-valuemax</code>{' '}
+                          の間である必要があります
+                        </>
+                      ) : (
+                        <>
+                          Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                )}
+                {prop.attribute === 'aria-orientation' && (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">
+                      {locale === 'ja' ? 'デフォルト' : 'Default'}
+                    </td>
+                    <td class="py-2">
+                      {locale === 'ja' ? 'horizontal（暗黙的）' : 'horizontal (implicit)'}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </ResponsiveTable>
+        )}
+      </div>
+    ))
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium">
-      <code>aria-valuemin</code> / <code>aria-valuemax</code> (Required)
-    </h4>
-    <p class="text-muted-foreground mb-3">
-      <strong>Dynamic bounds:</strong> Per the APG specification, when the range of one slider depends
-      on the value of another, these attributes must update dynamically:
-    </p>
-    <ResponsiveTable class="mb-4">
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Thumb</th>
-            <th class="py-2 pr-4 text-left">aria-valuemin</th>
-            <th class="py-2 text-left">aria-valuemax</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Lower thumb</td>
-            <td class="py-2 pr-4">Static (absolute min)</td>
-            <td class="py-2">Dynamic (upper value - minDistance)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Upper thumb</td>
-            <td class="py-2 pr-4">Dynamic (lower value + minDistance)</td>
-            <td class="py-2">Static (absolute max)</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-    <p class="text-muted-foreground mb-3 text-sm">
-      This approach correctly communicates to assistive technology users the actual allowed range
-      for each thumb at any given moment, which enables better predictability of <kbd>Home</kbd> and
-      <kbd>End</kbd> key behaviors.
-    </p>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Provides a human-readable text alternative for the current value. Use when the numeric value
-      alone doesn't convey sufficient meaning.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">String</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No (recommended when value needs context)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Example</td>
-            <td class="py-2">"$20", "$80", "20% - 80%"</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-orientation</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Specifies the orientation of the slider. Only set to "vertical" for vertical sliders; omit for
-      horizontal (default).
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">"horizontal" | "vertical"</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">horizontal (implicit)</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates that the slider is disabled and not interactive.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Boolean</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Tab</kbd></td>
-          <td class="py-2">Moves focus between thumbs (lower → upper)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Shift + Tab</kbd></td>
-          <td class="py-2">Moves focus between thumbs (upper → lower)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Right Arrow</kbd></td>
-          <td class="py-2">Increases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Up Arrow</kbd></td>
-          <td class="py-2">Increases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Left Arrow</kbd></td>
-          <td class="py-2">Decreases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Down Arrow</kbd></td>
-          <td class="py-2">Decreases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Home</kbd></td>
-          <td class="py-2">Sets the thumb to its minimum allowed value (dynamic for upper thumb)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>End</kbd></td>
-          <td class="py-2">Sets the thumb to its maximum allowed value (dynamic for lower thumb)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Page Up</kbd></td>
-          <td class="py-2">Increases the value by a large step (default: step × 10)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Page Down</kbd></td>
-          <td class="py-2">Decreases the value by a large step (default: step × 10)</td>
-        </tr>
+        {
+          data.keyboardSupport?.map((item) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd>{typeof item.key === 'string' ? item.key : t(item.key)}</kbd>
+              </td>
+              <td class="py-2">{t(item.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Collision Prevention</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? '衝突防止' : 'Collision Prevention'}
+  </h3>
   <p class="text-muted-foreground mb-3">
-    The multi-thumb slider ensures that the thumbs cannot cross each other:
+    {
+      locale === 'ja'
+        ? 'マルチサムスライダーは、つまみが互いに交差しないようにします:'
+        : 'The multi-thumb slider ensures that the thumbs cannot cross each other:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Lower thumb</strong> - Cannot exceed (upper value - minDistance)
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>下限つまみ</strong> - （上限値 - minDistance）を超えられない
+          </>
+        ) : (
+          <>
+            <strong>Lower thumb</strong> - Cannot exceed (upper value - minDistance)
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Upper thumb</strong> - Cannot go below (lower value + minDistance)
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>上限つまみ</strong> - （下限値 + minDistance）を下回れない
+          </>
+        ) : (
+          <>
+            <strong>Upper thumb</strong> - Cannot go below (lower value + minDistance)
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>minDistance</strong> - Configurable minimum gap between thumbs (default: 0)
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>minDistance</strong> - つまみ間の設定可能な最小ギャップ（デフォルト: 0）
+          </>
+        ) : (
+          <>
+            <strong>minDistance</strong> - Configurable minimum gap between thumbs (default: 0)
+          </>
+        )
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.accessibleNaming')}</h3>
   <p class="text-muted-foreground mb-3">
-    Multi-thumb sliders require careful labeling to distinguish between the two thumbs. This
-    implementation supports several approaches:
+    {
+      locale === 'ja'
+        ? 'マルチサムスライダーでは、2つのつまみを区別するために慎重なラベル付けが必要です。この実装は以下のアプローチをサポートしています:'
+        : 'Multi-thumb sliders require careful labeling to distinguish between the two thumbs. This implementation supports several approaches:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Visible group label</strong> - Using the <code>label</code> prop to display a visible label
-      for the slider group
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>表示されるグループラベル</strong> - <code>label</code>{' '}
+            プロパティを使用してスライダーグループの表示ラベルを提供
+          </>
+        ) : (
+          <>
+            <strong>Visible group label</strong> - Using the <code>label</code> prop to display a
+            visible label for the slider group
+          </>
+        )
+      }
     </li>
     <li>
-      <code>aria-label</code> (tuple) - Provides individual labels for each thumb, e.g., ["Minimum Price",
-      "Maximum Price"]
+      <code>aria-label</code>
+      {
+        locale === 'ja'
+          ? '（タプル）- 各つまみに個別のラベルを提供（例: ["最小価格", "最大価格"]）'
+          : ' (tuple) - Provides individual labels for each thumb, e.g., ["Minimum Price", "Maximum Price"]'
+      }
     </li>
     <li>
-      <code>aria-labelledby</code> (tuple) - References external elements as labels for each thumb
+      <code>aria-labelledby</code>
+      {
+        locale === 'ja'
+          ? '（タプル）- 外部要素を各つまみのラベルとして参照'
+          : ' (tuple) - References external elements as labels for each thumb'
+      }
     </li>
     <li>
-      <code>getAriaLabel</code> function - Dynamic label generation based on thumb index
+      <code>getAriaLabel</code>
+      {
+        locale === 'ja'
+          ? ' 関数 - つまみのインデックスに基づいた動的なラベル生成'
+          : ' function - Dynamic label generation based on thumb index'
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
-  <p class="text-muted-foreground mb-3">Focus behavior in this implementation:</p>
-  <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Tab order</strong> - Both thumbs are in the tab order (tabindex="0")
-    </li>
-    <li>
-      <strong>Constant order</strong> - Lower thumb always comes first in tab order, regardless of values
-    </li>
-    <li>
-      <strong>Track click</strong> - Clicking the track moves the nearest thumb and focuses it
-    </li>
-  </ul>
-
-  <h3 class="mb-3 text-lg font-medium">Pointer Interaction</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <p class="text-muted-foreground mb-3">
-    This implementation supports mouse and touch interaction:
+    {locale === 'ja' ? 'この実装でのフォーカス動作:' : 'Focus behavior in this implementation:'}
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Click on track</strong> - Moves the nearest thumb to the clicked position
-    </li>
-    <li>
-      <strong>Drag thumb</strong> - Allows continuous adjustment while dragging
-    </li>
-    <li>
-      <strong>Pointer capture</strong> - Maintains interaction even when pointer moves outside the slider
-    </li>
+    {
+      data.focusManagement?.map((rule) => (
+        <li>
+          <strong>{t(rule.event)}</strong> - {t(rule.behavior)}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'ポインター操作' : 'Pointer Interaction'}
+  </h3>
   <p class="text-muted-foreground mb-3">
-    This implementation follows WCAG guidelines for accessible visual design:
+    {
+      locale === 'ja'
+        ? 'この実装はマウスとタッチ操作をサポートしています:'
+        : 'This implementation supports mouse and touch interaction:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Focus indicator</strong> - Visible focus ring on each thumb element
-    </li>
-    <li>
-      <strong>Range indicator</strong> - Visual representation of the selected range between thumbs
-    </li>
-    <li>
-      <strong>Hover states</strong> - Visual feedback on hover
-    </li>
-    <li>
-      <strong>Disabled state</strong> - Clear visual indication when slider is disabled
-    </li>
-    <li>
-      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
-      Mode
-    </li>
+    {data.mousePointerBehavior?.map((item) => <li>{t(item)}</li>)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
-  <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Slider (Multi-Thumb) Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#slider" class="text-primary hover:underline">
-        W3C ARIA: slider role
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#group" class="text-primary hover:underline">
-        W3C ARIA: group role
-      </ExternalLink>
-    </li>
+  <h3 class="mb-3 text-lg font-medium">{h('section.visualDesign')}</h3>
+  <p class="text-muted-foreground mb-3">
+    {
+      locale === 'ja'
+        ? 'この実装は、アクセシブルなビジュアルデザインのためのWCAGガイドラインに従っています:'
+        : 'This implementation follows WCAG guidelines for accessible visual design:'
+    }
+  </p>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    {Array.isArray(data.visualDesign) && data.visualDesign.map((item) => <li>{t(item)}</li>)}
   </ul>
+
+  <h3 class="mb-3 text-lg font-medium">{h('section.references')}</h3>
+  {
+    data.references && (
+      <ul class="list-disc space-y-2 pl-6">
+        {data.references.map((ref) => (
+          <li>
+            <ExternalLink href={ref.url} class="text-primary hover:underline">
+              {ref.title}
+            </ExternalLink>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </div>

@@ -1,284 +1,147 @@
 ---
+import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { buttonAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const testing = buttonAccessibilityData.testing;
+const t = localize(locale);
+const th = createTableHeaderTranslator(locale);
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Button component uses a two-layer testing strategy.',
+    strategy: 'Testing Strategy',
+    categories: 'Test Categories',
+    tools: 'Testing Tools',
+    docLink: 'for full documentation.',
+  },
+  ja: {
+    intro:
+      'テストは、キーボード操作、ARIA属性、アクセシビリティ要件全体にわたってAPG準拠を検証します。Buttonコンポーネントは2層のテスト戦略を採用しています。',
+    strategy: 'テスト戦略',
+    categories: 'テストカテゴリ',
+    tools: 'テストツール',
+    docLink: 'を参照してください。',
+  },
+};
+
+const titles = sectionTitles[locale];
+
+// Priority colors
+const priorityColors: Record<string, string> = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Priority labels
+const priorityLabels: Record<string, Record<string, string>> = {
+  en: { high: 'High Priority', medium: 'Medium Priority', low: 'Low Priority' },
+  ja: { high: '高優先度', medium: '中優先度', low: '低優先度' },
+};
 ---
 
-<div class="prose dark:prose-invert max-w-none">
-  <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Button component uses a two-layer testing strategy.
-  </p>
+{
+  testing && (
+    <div class="prose dark:prose-invert max-w-none">
+      <p class="text-muted-foreground mb-4">{titles.intro}</p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+      <h3 class="mb-3 text-lg font-medium">{titles.strategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's rendered output using framework-specific testing libraries. These tests
-      ensure correct HTML structure and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA attributes (role="button", tabindex)</li>
-      <li>Keyboard interaction (Space and Enter key activation)</li>
-      <li>Disabled state handling</li>
-      <li>Accessibility via jest-axe</li>
-    </ul>
-  </div>
+      {testing.strategies.map((strategy) => (
+        <div class="bg-muted/50 mb-6 rounded-lg p-4">
+          <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+          <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+          <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+            {strategy.areas.map((area) => (
+              <li>{t(area)}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all frameworks. These tests
-      cover interactions and cross-framework consistency.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA structure in live browser</li>
-      <li>Keyboard activation (Space and Enter key)</li>
-      <li>Click interaction behavior</li>
-      <li>Disabled state interactions</li>
-      <li>axe-core accessibility scanning</li>
-      <li>Cross-framework consistency checks</li>
-    </ul>
-  </div>
+      {/* Additional note about Space and Enter */}
+      <p class="text-muted-foreground mb-6 text-sm">
+        {locale === 'ja' ? (
+          <>
+            <strong>重要:</strong>{' '}
+            SpaceキーとEnterキーの両方がボタンをアクティブ化します。これはEnterキーのみに応答するリンクとは異なります。
+            カスタム実装では、ページスクロールを防止するためにSpaceキーで{' '}
+            <code>event.preventDefault()</code> を呼び出す必要があります。
+          </>
+        ) : (
+          <>
+            <strong>Important:</strong> Both Space and Enter keys activate buttons. This differs
+            from links, which only respond to Enter. Custom implementations must call{' '}
+            <code>event.preventDefault()</code> on Space to prevent page scrolling.
+          </>
+        )}
+      </p>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+      <h3 class="mb-3 text-lg font-medium">{titles.categories}</h3>
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space key</code></td>
-          <td class="py-2">Activates the button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter key</code></td>
-          <td class="py-2">Activates the button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space preventDefault</code></td>
-          <td class="py-2">Prevents page scrolling when Space is pressed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>IME composing</code></td>
-          <td class="py-2">Ignores Space/Enter during IME input</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab navigation</code></td>
-          <td class="py-2">Tab moves focus between buttons</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
-          <td class="py-2">Disabled buttons are skipped in Tab order</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <strong>Important:</strong> Both Space and Enter keys activate buttons. This differs from links, which
-    only respond to Enter. Custom implementations must call <code>event.preventDefault()</code> on Space
-    to prevent page scrolling.
-  </p>
+      {testing.categories.map((category) => (
+        <>
+          <h4 class="mb-2 flex items-center gap-2 font-medium">
+            <span
+              class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`}
+            />
+            {priorityLabels[locale][category.priority]}: {t(category.title)}
+          </h4>
+          <ResponsiveTable class="mb-6">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="border-border border-b">
+                  <th class="py-2 pr-4 text-left">{locale === 'ja' ? 'テスト' : 'Test'}</th>
+                  <th class="py-2 text-left">{th('table.description')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {category.items.map((item) => (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{item.name}</code>
+                    </td>
+                    <td class="py-2" set:html={t(item.description)} />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTable>
+        </>
+      ))}
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: ARIA Attributes (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="button"</code></td>
-          <td class="py-2">Element has button role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
-          <td class="py-2">Element is focusable via keyboard</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2">Set to "true" when disabled</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
-          <td class="py-2">Set when disabled to remove from Tab order</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Accessible name</code></td>
-          <td class="py-2">Name from text content, aria-label, or aria-labelledby</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+      <h3 class="mb-3 text-lg font-medium">{titles.tools}</h3>
+      <ul class="mb-6 list-disc space-y-2 pl-6">
+        {testing.tools.map((tool) => (
+          <li>
+            <ExternalLink href={tool.url} class="text-primary hover:underline">
+              {tool.name}
+            </ExternalLink>
+            {' - '}
+            {t(tool.description)}
+          </li>
+        ))}
+      </ul>
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Click Behavior (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click activation</code></td>
-          <td class="py-2">Click activates the button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled click</code></td>
-          <td class="py-2">Disabled buttons ignore click events</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled Space</code></td>
-          <td class="py-2">Disabled buttons ignore Space key</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled Enter</code></td>
-          <td class="py-2">Disabled buttons ignore Enter key</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>disabled axe</code></td>
-          <td class="py-2">No violations in disabled state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label axe</code></td>
-          <td class="py-2">No violations with aria-label</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Props & Attributes (Unit)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>className</code></td>
-          <td class="py-2">Custom classes are applied</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>data-* attributes</code></td>
-          <td class="py-2">Custom data attributes are passed through</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>children</code></td>
-          <td class="py-2">Child content is rendered</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Cross-framework Consistency (E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>All frameworks have buttons</code></td>
-          <td class="py-2">React, Vue, Svelte, Astro all render custom button elements</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Same button count</code></td>
-          <td class="py-2">All frameworks render the same number of buttons</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
-          <td class="py-2">All frameworks have consistent ARIA structure</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
-  <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
-  </ul>
-
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
-</div>
+      {testing.documentationLink && (
+        <p class="text-muted-foreground text-sm">
+          {locale === 'ja' ? '詳細なドキュメントは' : 'See '}
+          <ExternalLink href={testing.documentationLink} class="text-primary hover:underline">
+            testing-strategy.md
+          </ExternalLink>
+          {titles.docLink}
+        </p>
+      )}
+    </div>
+  )
+}
