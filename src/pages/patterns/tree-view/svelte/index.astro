@@ -4,7 +4,7 @@ import TreeView from '@patterns/tree-view/TreeView.svelte';
 import TreeViewActivationDemo from '@patterns/tree-view/TreeViewActivationDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/tree-view/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/tree-view/TestingDocs.astro';
@@ -77,12 +77,14 @@ const disabledNodes = [
   tocItems={tocItems}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Tree View</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Tree View</h1>
+      <AiGuideActions pattern="tree-view" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A hierarchical list where items with children can be expanded or collapsed. Common uses
       include file browsers, navigation menus, and organizational charts.
     </p>
-    <AiGuideBadge pattern="tree-view" />
   </header>
 
   <!-- Framework Selector -->

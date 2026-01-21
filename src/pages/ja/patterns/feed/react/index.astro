@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { FeedDemoJa } from '@patterns/feed/FeedDemoJa';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/feed/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/feed/TestingDocs.ja.astro';
@@ -36,12 +36,14 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Feed</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Feed</h1>
+      <AiGuideActions pattern="feed" />
+    </div>
     <p class="text-muted-foreground text-lg">
       スクロールに応じて新しいコンテンツが追加される記事リストで、Page Up/Down
       キーで記事間をナビゲートできます。
     </p>
-    <AiGuideBadge pattern="feed" />
   </header>
 
   <!-- Framework Selector -->

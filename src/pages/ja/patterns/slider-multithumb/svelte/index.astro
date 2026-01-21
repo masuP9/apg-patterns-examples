@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import MultiThumbSlider from '@patterns/slider-multithumb/MultiThumbSlider.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/slider-multithumb/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/slider-multithumb/TestingDocs.ja.astro';
@@ -85,11 +85,13 @@ function handleValueCommit(values) {
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Slider (Multi-Thumb)</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Slider (Multi-Thumb)</h1>
+      <AiGuideActions pattern="slider-multithumb" />
+    </div>
     <p class="text-muted-foreground text-lg">
       指定された範囲内で範囲を選択するための2つのつまみを持つスライダー。
     </p>
-    <AiGuideBadge pattern="slider-multithumb" />
   </header>
 
   <!-- Framework Selector -->

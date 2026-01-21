@@ -49,7 +49,7 @@ const tocItems = [
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/{pattern}/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/{pattern}/TestingDocs.astro';
@@ -104,11 +104,13 @@ import NativeHtmlNotice from '@patterns/{pattern}/NativeHtmlNotice.astro';
 
 ```astro
 <header class="mb-8">
-  <h1 class="mb-4 text-3xl font-bold">{Pattern Name}</h1>
+  <div class="mb-4 flex flex-wrap items-center gap-4">
+    <h1 class="text-3xl font-bold">{Pattern Name}</h1>
+    <AiGuideActions pattern="{pattern}" />
+  </div>
   <p class="text-muted-foreground text-lg">
     {Short description}
   </p>
-  <AiGuideBadge pattern="{pattern}" />
 </header>
 ```
 
@@ -266,7 +268,7 @@ import NativeHtmlNotice from '@patterns/{pattern}/NativeHtmlNotice.astro';
 ### ページ構成
 - [ ] tocItems が正しい順序になっている
 - [ ] 全セクションの ID が命名規則に従っている
-- [ ] ヘッダーに `AiGuideBadge` がある
+- [ ] ヘッダーに `AiGuideActions` がある
 - [ ] Testing セクションにテストコードブロックがある
 - [ ] Resources に `AiGuideResourceItem` がある
 

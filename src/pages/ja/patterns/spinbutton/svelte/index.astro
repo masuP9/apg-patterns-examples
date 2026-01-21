@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import Spinbutton from '@patterns/spinbutton/Spinbutton.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/spinbutton/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/spinbutton/TestingDocs.ja.astro';
@@ -34,11 +34,13 @@ const tocItems = [
   locale="ja"
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">スピンボタン</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">スピンボタン</h1>
+      <AiGuideActions pattern="spinbutton" />
+    </div>
     <p class="text-muted-foreground text-lg">
       増減ボタン、矢印キー、または直接入力を使用して、離散的なセットまたは範囲から値を選択できる入力ウィジェットです。
     </p>
-    <AiGuideBadge pattern="spinbutton" />
   </header>
 
   <!-- Framework Selector -->

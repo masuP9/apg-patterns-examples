@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import Disclosure from '@patterns/disclosure/Disclosure.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/disclosure/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/disclosure/TestingDocs.ja.astro';
@@ -37,9 +37,11 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Disclosure</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Disclosure</h1>
+      <AiGuideActions pattern="disclosure" />
+    </div>
     <p class="text-muted-foreground text-lg">コンテンツセクションの表示を制御するボタン。</p>
-    <AiGuideBadge pattern="disclosure" />
   </header>
 
   <!-- Framework Selector -->

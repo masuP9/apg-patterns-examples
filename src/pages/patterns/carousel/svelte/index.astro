@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import CarouselDemo from '@patterns/carousel/CarouselDemo.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/carousel/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/carousel/TestingDocs.astro';
@@ -28,12 +28,14 @@ const tocItems = [
 
 <PatternLayout title="Carousel - Svelte" pattern="carousel" framework="svelte" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Carousel</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Carousel</h1>
+      <AiGuideActions pattern="carousel" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A rotating set of content items (slides) displayed one at a time with controls to navigate
       between them.
     </p>
-    <AiGuideBadge pattern="carousel" />
   </header>
 
   <!-- Framework Selector -->

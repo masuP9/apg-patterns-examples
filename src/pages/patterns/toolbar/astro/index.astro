@@ -6,7 +6,7 @@ import ToolbarToggleButton from '@patterns/toolbar/ToolbarToggleButton.astro';
 import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/toolbar/TestingDocs.astro';
@@ -31,12 +31,14 @@ const tocItems = [
 
 <PatternLayout title="Toolbar - Astro" pattern="toolbar" framework="astro" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Toolbar</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Toolbar</h1>
+      <AiGuideActions pattern="toolbar" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A container for grouping a set of controls, such as buttons, toggle buttons, or other input
       elements.
     </p>
-    <AiGuideBadge pattern="toolbar" />
   </header>
 
   <!-- Framework Selector -->

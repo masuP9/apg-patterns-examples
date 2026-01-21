@@ -3,7 +3,7 @@ import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import Combobox from '@patterns/combobox/Combobox.svelte';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/combobox/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/combobox/TestingDocs.ja.astro';
@@ -59,11 +59,13 @@ const countryOptions = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Combobox</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Combobox</h1>
+      <AiGuideActions pattern="combobox" locale={locale} />
+    </div>
     <p class="text-muted-foreground text-lg">
       リストオートコンプリート機能を持つ編集可能なコンボボックス。ユーザーは入力してオプションをフィルタリングしたり、キーボードやマウスでポップアップリストボックスから選択したりできます。
     </p>
-    <AiGuideBadge pattern="combobox" locale={locale} />
   </header>
 
   <!-- Framework Selector -->

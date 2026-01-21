@@ -6,7 +6,7 @@ import AccessibilityDocs from '@patterns/treegrid/AccessibilityDocs.ja.astro';
 import TestingDocs from '@patterns/treegrid/TestingDocs.ja.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -36,11 +36,13 @@ const tocItems = [
   locale={locale}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">TreeGrid</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">TreeGrid</h1>
+      <AiGuideActions pattern="treegrid" locale={locale} />
+    </div>
     <p class="text-muted-foreground text-lg">
       Gridの2Dナビゲーションと、TreeViewの展開可能な行を組み合わせた階層データグリッド。
     </p>
-    <AiGuideBadge pattern="treegrid" locale={locale} />
   </header>
 
   <!-- Framework Selector -->

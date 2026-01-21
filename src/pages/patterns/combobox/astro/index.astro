@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Combobox from '@patterns/combobox/Combobox.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/combobox/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/combobox/TestingDocs.astro';
@@ -48,12 +48,14 @@ const countryOptions = [
 
 <PatternLayout title="Combobox - Astro" pattern="combobox" framework="astro" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Combobox</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Combobox</h1>
+      <AiGuideActions pattern="combobox" />
+    </div>
     <p class="text-muted-foreground text-lg">
       An editable combobox with list autocomplete. Users can type to filter options or select from a
       popup listbox using keyboard or mouse.
     </p>
-    <AiGuideBadge pattern="combobox" />
   </header>
 
   <!-- Framework Selector -->

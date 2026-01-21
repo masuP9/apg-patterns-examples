@@ -5,7 +5,7 @@ import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -45,11 +45,13 @@ const colorOptions = [
 
 <PatternLayout title="Listbox - Svelte" pattern="listbox" framework="svelte" tocItems={tocItems}>
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Listbox</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Listbox</h1>
+      <AiGuideActions pattern="listbox" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A widget that allows the user to select one or more items from a list of choices.
     </p>
-    <AiGuideBadge pattern="listbox" />
   </header>
 
   <!-- Framework Selector -->

@@ -3,7 +3,7 @@ import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import MultiThumbSlider from '@patterns/slider-multithumb/MultiThumbSlider.vue';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideBadge from '@/components/ui/AiGuideBadge.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
 import AccessibilityDocs from '@patterns/slider-multithumb/AccessibilityDocs.astro';
 import TestingDocs from '@patterns/slider-multithumb/TestingDocs.astro';
@@ -30,11 +30,13 @@ const tocItems = [
   tocItems={tocItems}
 >
   <header class="mb-8">
-    <h1 class="mb-4 text-3xl font-bold">Slider (Multi-Thumb)</h1>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">Slider (Multi-Thumb)</h1>
+      <AiGuideActions pattern="slider-multithumb" />
+    </div>
     <p class="text-muted-foreground text-lg">
       A slider with two thumbs that allows users to select a range of values within a given range.
     </p>
-    <AiGuideBadge pattern="slider-multithumb" />
   </header>
 
   <!-- Framework Selector -->
