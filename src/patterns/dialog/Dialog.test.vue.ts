@@ -119,9 +119,12 @@ describe('Dialog (Vue)', () => {
       await user.click(screen.getByRole('button', { name: 'Open Dialog' }));
 
       // ダイアログ内の最初のフォーカス可能要素（Close ボタン）にフォーカス
-      await vi.waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Close dialog' })).toHaveFocus();
-      });
+      await vi.waitFor(
+        () => {
+          expect(screen.getByRole('button', { name: 'Close dialog' })).toHaveFocus();
+        },
+        { timeout: 1000 }
+      );
     });
 
     it('閉じた時にトリガーにフォーカス復元', async () => {
@@ -133,12 +136,13 @@ describe('Dialog (Vue)', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');
-      await vi.waitFor(() => {
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      });
-      await vi.waitFor(() => {
-        expect(trigger).toHaveFocus();
-      });
+      await vi.waitFor(
+        () => {
+          expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+          expect(trigger).toHaveFocus();
+        },
+        { timeout: 1000 }
+      );
     });
 
     // Note: フォーカストラップはネイティブ <dialog> 要素の showModal() が処理する。
