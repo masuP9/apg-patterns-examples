@@ -1,6 +1,6 @@
 # Toggle Button Pattern - AI Implementation Guide
 
-> APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/button/
+> APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/button/#toggle-button
 
 ## Overview
 
@@ -120,7 +120,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 // ARIA structure test
 test('has correct ARIA structure', async ({ page }) => {
-  await page.goto('patterns/button/react/demo/');
+  await page.goto('patterns/toggle-button/react/demo/');
 
   const button = page.locator('button[aria-pressed]').first();
   await expect(button).toHaveRole('button');
@@ -132,7 +132,7 @@ test('has correct ARIA structure', async ({ page }) => {
 
 // Click toggle test
 test('toggles aria-pressed on click', async ({ page }) => {
-  await page.goto('patterns/button/react/demo/');
+  await page.goto('patterns/toggle-button/react/demo/');
 
   const button = page.locator('button[aria-pressed]').first();
   const initialState = await button.getAttribute('aria-pressed');
@@ -148,7 +148,7 @@ test('toggles aria-pressed on click', async ({ page }) => {
 
 // Keyboard toggle test
 test('toggles on Space and Enter keys', async ({ page }) => {
-  await page.goto('patterns/button/react/demo/');
+  await page.goto('patterns/toggle-button/react/demo/');
 
   const button = page.locator('button[aria-pressed]').first();
   const initialState = await button.getAttribute('aria-pressed');
@@ -163,7 +163,7 @@ test('toggles on Space and Enter keys', async ({ page }) => {
 
 // Accessibility test
 test('has no axe-core violations', async ({ page }) => {
-  await page.goto('patterns/button/react/demo/');
+  await page.goto('patterns/toggle-button/react/demo/');
 
   const results = await new AxeBuilder({ page })
     .include('button[aria-pressed]')
