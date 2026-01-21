@@ -134,6 +134,9 @@ describe('Dialog (Vue)', () => {
 
       await user.keyboard('{Escape}');
       await vi.waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+      await vi.waitFor(() => {
         expect(trigger).toHaveFocus();
       });
     });
