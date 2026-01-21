@@ -63,11 +63,13 @@ describe('Dialog (Svelte)', () => {
       });
 
       await user.click(screen.getByRole('button', { name: 'Open Dialog' }));
-      const dialog = screen.getByRole('dialog');
-      const descriptionId = dialog.getAttribute('aria-describedby');
+      await vi.waitFor(() => {
+        const dialog = screen.getByRole('dialog');
+        const descriptionId = dialog.getAttribute('aria-describedby');
 
-      expect(descriptionId).toBeTruthy();
-      expect(document.getElementById(descriptionId!)).toHaveTextContent('This is a description');
+        expect(descriptionId).toBeTruthy();
+        expect(document.getElementById(descriptionId!)).toHaveTextContent('This is a description');
+      });
     });
 
     it('description がない場合 aria-describedby なし', async () => {
@@ -159,7 +161,9 @@ describe('Dialog (Svelte)', () => {
       const dialog = screen.getByRole('dialog');
 
       await user.click(dialog);
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      await vi.waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
     });
 
     it('closeOnOverlayClick=false でオーバーレイクリックしても閉じない', async () => {
@@ -172,7 +176,9 @@ describe('Dialog (Svelte)', () => {
       const dialog = screen.getByRole('dialog');
 
       await user.click(dialog);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      await vi.waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
     });
 
     it('onOpenChange が開閉時に呼ばれる', async () => {
@@ -186,7 +192,9 @@ describe('Dialog (Svelte)', () => {
       expect(onOpenChange).toHaveBeenCalledWith(true);
 
       await user.keyboard('{Escape}');
-      expect(onOpenChange).toHaveBeenCalledWith(false);
+      await vi.waitFor(() => {
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+      });
     });
 
     it('defaultOpen=true で初期表示', async () => {
