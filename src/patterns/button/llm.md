@@ -81,9 +81,10 @@ A button is an interactive element that performs a single action when activated.
 
 ### High Priority: Keyboard
 
-- [ ] Space key activates button (fires onClick)
-- [ ] Space key does NOT scroll page (preventDefault)
-- [ ] Enter key activates button (fires onClick)
+- [ ] Space key activates button on keyup (fires onClick)
+- [ ] Space keydown does NOT scroll page (preventDefault)
+- [ ] Enter key activates button on keydown (fires onClick)
+- [ ] Space only activates if pressed on the element (track spacePressed state)
 - [ ] Ignores keydown when `event.isComposing === true` (IME)
 - [ ] Ignores keydown when `event.defaultPrevented === true`
 
@@ -112,13 +113,15 @@ A button is an interactive element that performs a single action when activated.
 
 ### Common Pitfalls
 
-1. **Space key scrolls page**: Must call `event.preventDefault()` when Space is pressed.
+1. **Space key timing**: Space must activate on `keyup`, not `keydown` (native button behavior). Track `spacePressed` state to ensure Space was pressed on this element.
 
-2. **IME input**: Check `event.isComposing` to avoid triggering during IME composition.
+2. **Space key scrolls page**: Must call `event.preventDefault()` on keydown when Space is pressed.
 
-3. **Disabled state**: Use both `aria-disabled="true"` AND `tabindex="-1"`. Prevent click/keydown handlers.
+3. **IME input**: Check `event.isComposing` to avoid triggering during IME composition.
 
-4. **Form submission**: Custom buttons cannot submit forms. Use native `<button type="submit">`.
+4. **Disabled state**: Use both `aria-disabled="true"` AND `tabindex="-1"`. Call `stopPropagation()` to prevent event bubbling.
+
+5. **Form submission**: Custom buttons cannot submit forms. Use native `<button type="submit">`.
 
 ### Structure (Custom Implementation)
 
@@ -134,17 +137,36 @@ A button is an interactive element that performs a single action when activated.
 
 ### Keyboard Handler
 
+**Important**: Space activates on `keyup`, Enter activates on `keydown` (matches native `<button>` behavior).
+
 ```typescript
+let spacePressed = false;
+
 const handleKeyDown = (event: KeyboardEvent) => {
   // Ignore during IME composition
   if (event.isComposing || event.defaultPrevented) return;
-
-  // Ignore if disabled
   if (disabled) return;
 
-  if (event.key === ' ' || event.key === 'Enter') {
-    event.preventDefault(); // Prevent Space from scrolling
-    onClick?.(event);
+  // Space: prevent scroll, activate on keyup
+  if (event.key === ' ') {
+    event.preventDefault();
+    spacePressed = true;
+    return;
+  }
+
+  // Enter: activate on keydown
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    element.click();
+  }
+};
+
+const handleKeyUp = (event: KeyboardEvent) => {
+  if (event.key === ' ' && spacePressed) {
+    spacePressed = false;
+    if (disabled) return;
+    event.preventDefault();
+    element.click();
   }
 };
 ```

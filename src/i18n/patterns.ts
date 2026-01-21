@@ -58,6 +58,11 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
       name: 'コンボボックス',
       description: 'ユーザーがコレクションから値を選択できるポップアップを持つ入力ウィジェット。',
     },
+    'data-grid': {
+      name: 'データグリッド',
+      description:
+        'ソート、フィルタリング、行選択機能を備えた表形式データの表示・操作のための高度なグリッド。',
+    },
     dialog: {
       name: 'ダイアログ（モーダル）',
       description:
@@ -110,6 +115,11 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
     slider: {
       name: 'スライダー',
       description: '指定された範囲内から値を選択する入力。',
+    },
+    'slider-multithumb': {
+      name: 'スライダー（マルチサム）',
+      description:
+        '2つのサムを持つスライダーで、ユーザーが指定された範囲内から値の範囲を選択できます。',
     },
     spinbutton: {
       name: 'スピンボタン',
