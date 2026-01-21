@@ -24,7 +24,7 @@
 | Alert                | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Alert Dialog         | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Breadcrumb           | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
-| Button               | -     | -   | -      | -     | -   | 予定       |
+| Button               | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Carousel             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Checkbox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
 | Combobox             | ✅    | ✅  | ✅     | ✅    | ✅  | 完了       |
