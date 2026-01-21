@@ -197,7 +197,7 @@ const data = sliderAccessibilityData;
       </thead>
       <tbody>
         {
-          data.keyboardSupport.map((item) => (
+          data.keyboardSupport?.map((item) => (
             <tr class="border-border border-b">
               <td class="py-2 pr-4">
                 <kbd>{item.key}</kbd>

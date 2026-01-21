@@ -18,9 +18,16 @@ const {
   keyboardSections,
   focusManagement,
   additionalNotes,
-  nativeHtmlConsiderations,
+  nativeHtmlConsiderations: rawNativeHtml,
   references,
 } = gridAccessibilityData;
+
+// Normalize nativeHtmlConsiderations to array
+const nativeHtmlConsiderations = Array.isArray(rawNativeHtml)
+  ? rawNativeHtml
+  : rawNativeHtml
+    ? [rawNativeHtml]
+    : [];
 
 // Create localization function
 const t = localize(locale);
@@ -50,7 +57,7 @@ const h = createTableHeaderTranslator(locale);
     }
   </p>
   <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-    {nativeHtmlConsiderations?.map((item) => <li>{t(item.useCase)}</li>)}
+    {nativeHtmlConsiderations?.map((item) => <li>{item.useCase ? t(item.useCase) : ''}</li>)}
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>

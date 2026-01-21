@@ -1,15 +1,15 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
 import { spinbuttonAccessibilityData } from './accessibility-data';
-import { createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import { localize } from '@/lib/pattern-data/i18n';
 
 interface Props {
   locale?: Locale;
 }
 
 const { locale = 'en' } = Astro.props;
-const h = createTableHeaderTranslator(locale);
+const t = localize(locale);
 const data = spinbuttonAccessibilityData;
 
 // Native vs Custom translations
@@ -128,30 +128,35 @@ const content = sectionContent[locale];
       </thead>
       <tbody>
         {
-          data.nativeVsCustom?.map((row) => (
-            <tr class="border-border border-b">
-              <td class="py-2 pr-4">{tr(row.feature)}</td>
-              <td class="py-2 pr-4">
-                {row.native === 'Recommended' ||
-                row.native === 'Works natively' ||
-                row.native === 'Native support' ? (
-                  <b class="text-green-700 dark:text-green-400">{tr(row.native)}</b>
-                ) : (
-                  tr(row.native)
-                )}
-              </td>
-              <td class="py-2">
-                {row.custom === 'Full control' ||
-                row.custom === 'Consistent' ||
-                row.custom === 'PageUp/PageDown support' ||
-                row.custom === 'Explicit undefined support' ? (
-                  <b class="text-green-700 dark:text-green-400">{tr(row.custom)}</b>
-                ) : (
-                  tr(row.custom)
-                )}
-              </td>
-            </tr>
-          ))
+          data.nativeVsCustom?.map((row) => {
+            const feature = row.feature ? tr(t(row.feature)) : '';
+            const native = row.native ? tr(t(row.native)) : '';
+            const custom = row.custom ? tr(t(row.custom)) : '';
+            return (
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4">{feature}</td>
+                <td class="py-2 pr-4">
+                  {native === 'Recommended' ||
+                  native === 'Works natively' ||
+                  native === 'Native support' ? (
+                    <b class="text-green-700 dark:text-green-400">{native}</b>
+                  ) : (
+                    native
+                  )}
+                </td>
+                <td class="py-2">
+                  {custom === 'Full control' ||
+                  custom === 'Consistent' ||
+                  custom === 'PageUp/PageDown support' ||
+                  custom === 'Explicit undefined support' ? (
+                    <b class="text-green-700 dark:text-green-400">{custom}</b>
+                  ) : (
+                    custom
+                  )}
+                </td>
+              </tr>
+            );
+          })
         }
       </tbody>
     </table>

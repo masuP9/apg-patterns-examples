@@ -82,7 +82,7 @@ const h = createTableHeaderTranslator(locale);
 
   <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
   {
-    states.map((state) => (
+    states?.map((state) => (
       <div class="mb-6">
         <h4 class="mb-2 font-medium">
           <code>{state.attribute}</code>
@@ -182,10 +182,14 @@ const h = createTableHeaderTranslator(locale);
   {
     accessibleNaming && (
       <>
-        <h3 class="mb-3 text-lg font-medium">{t(accessibleNaming.title)}</h3>
-        <p class="text-muted-foreground mb-3">{t(accessibleNaming.description)}</p>
+        <h3 class="mb-3 text-lg font-medium">
+          {accessibleNaming.title ? t(accessibleNaming.title) : ''}
+        </h3>
+        <p class="text-muted-foreground mb-3">
+          {accessibleNaming.description ? t(accessibleNaming.description) : ''}
+        </p>
         <ul class="mb-6 list-disc space-y-2 pl-6">
-          {accessibleNaming.methods.map((method) => (
+          {accessibleNaming.methods?.map((method) => (
             <li>
               <strong>{t(method.method)}</strong>
               {method.description && <> - {t(method.description)}</>}
@@ -197,12 +201,14 @@ const h = createTableHeaderTranslator(locale);
   }
 
   {
-    visualDesign && (
+    visualDesign && !Array.isArray(visualDesign) && (
       <>
-        <h3 class="mb-3 text-lg font-medium">{t(visualDesign.title)}</h3>
-        <p class="text-muted-foreground mb-3">{t(visualDesign.description)}</p>
+        <h3 class="mb-3 text-lg font-medium">{visualDesign.title ? t(visualDesign.title) : ''}</h3>
+        <p class="text-muted-foreground mb-3">
+          {visualDesign.description ? t(visualDesign.description) : ''}
+        </p>
         <ul class="mb-6 list-disc space-y-2 pl-6">
-          {visualDesign.stateIndicators.map((indicator) => (
+          {visualDesign.stateIndicators?.map((indicator) => (
             <li>
               <strong>{t(indicator.state)}</strong> - {t(indicator.indicator)}
             </li>

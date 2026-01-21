@@ -124,7 +124,8 @@ const titles = sectionTitles[locale];
             </tbody>
           </table>
         </ResponsiveTable>
-        {category.title.en === 'Keyboard Interaction' &&
+        {typeof category.title !== 'string' &&
+          category.title.en === 'Keyboard Interaction' &&
           additionalNotes &&
           additionalNotes.length > 0 && (
             <p class="text-muted-foreground mb-6 text-sm">

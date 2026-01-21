@@ -15,7 +15,7 @@ const h = createTableHeaderTranslator(locale);
 const data = comboboxAccessibilityData;
 
 // Group keyboard support by section
-const keyboardBySection = data.keyboardSupport.reduce(
+const keyboardBySection = (data.keyboardSupport || []).reduce(
   (acc, key) => {
     const section = t(key.section || '');
     if (!acc[section]) acc[section] = [];
@@ -82,10 +82,10 @@ const labels = {
 };
 
 // Split properties into input vs listbox/options
-const inputProperties = data.properties.filter(
+const inputProperties = (data.properties || []).filter(
   (p) => p.element === 'input' || p.attribute === 'role="combobox"'
 );
-const listboxProperties = data.properties.filter(
+const listboxProperties = (data.properties || []).filter(
   (p) => p.element === 'option' || p.element === 'listbox' || typeof p.element === 'object'
 );
 ---
@@ -214,7 +214,7 @@ const listboxProperties = data.properties.filter(
               </tr>
             </thead>
             <tbody>
-              {keys.map((key) => (
+              {keys?.map((key) => (
                 <tr class="border-border border-b">
                   <td class="py-2 pr-4">
                     {typeof key.key === 'string' ? (
@@ -242,7 +242,7 @@ const listboxProperties = data.properties.filter(
     }
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    {data.focusManagement.map((rule) => <li>{t(rule.behavior)}</li>)}
+    {data.focusManagement?.map((rule) => <li>{t(rule.behavior)}</li>)}
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">{labels.autocompleteModes}</h3>

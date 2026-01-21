@@ -189,7 +189,7 @@ const data = meterAccessibilityData;
     }
   </p>
   {
-    data.visualDesign && (
+    data.visualDesign && Array.isArray(data.visualDesign) && (
       <ul class="mb-6 list-disc space-y-2 pl-6">
         {data.visualDesign.map((item) => {
           const text = t(item);

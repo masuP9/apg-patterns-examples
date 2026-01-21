@@ -163,7 +163,9 @@ const titles = sectionTitles[locale];
             </tbody>
           </table>
         </ResponsiveTable>
-        <p class="text-muted-foreground mt-2 text-sm">{t(screenReaderTesting.verificationNote)}</p>
+        <p class="text-muted-foreground mt-2 text-sm">
+          {screenReaderTesting.verificationNote ? t(screenReaderTesting.verificationNote) : ''}
+        </p>
       </>
     )
   }

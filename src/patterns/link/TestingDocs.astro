@@ -87,7 +87,10 @@ const priorityLabels = {
   }
 
   {
-    testing.categories.some((c) => c.priority === 'high' && c.title.en?.includes('Keyboard')) && (
+    testing.categories.some(
+      (c) =>
+        c.priority === 'high' && typeof c.title !== 'string' && c.title.en?.includes('Keyboard')
+    ) && (
       <p class="text-muted-foreground mb-6 text-sm">
         {locale === 'ja' ? (
           <>

@@ -2,12 +2,14 @@
 import { ResponsiveTable } from '@/components/ui/table';
 import { disclosureAccessibilityData } from './accessibility-data';
 import type { Locale } from '@/i18n';
+import { localize } from '@/lib/pattern-data/i18n';
 
 interface Props {
   locale?: Locale;
 }
 
 const { locale = 'en' } = Astro.props;
+const t = localize(locale);
 
 const { nativeVsCustom } = disclosureAccessibilityData;
 
@@ -125,25 +127,30 @@ const isGoodValue = (value: string): boolean => {
             </tr>
           </thead>
           <tbody>
-            {nativeVsCustom.map((row) => (
-              <tr class="border-border border-b">
-                <td class="py-2 pr-4">{translateUseCase(row.feature)}</td>
-                <td class="py-2 pr-4">
-                  {isGoodValue(row.native) ? (
-                    <b class="text-green-700 dark:text-green-400">{translateValue(row.native)}</b>
-                  ) : (
-                    translateValue(row.native)
-                  )}
-                </td>
-                <td class="py-2">
-                  {isGoodValue(row.custom) ? (
-                    <b class="text-green-700 dark:text-green-400">{translateValue(row.custom)}</b>
-                  ) : (
-                    translateValue(row.custom)
-                  )}
-                </td>
-              </tr>
-            ))}
+            {nativeVsCustom.map((row) => {
+              const feature = row.feature ? t(row.feature) : '';
+              const native = row.native ? t(row.native) : '';
+              const custom = row.custom ? t(row.custom) : '';
+              return (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{translateUseCase(feature)}</td>
+                  <td class="py-2 pr-4">
+                    {isGoodValue(native) ? (
+                      <b class="text-green-700 dark:text-green-400">{translateValue(native)}</b>
+                    ) : (
+                      translateValue(native)
+                    )}
+                  </td>
+                  <td class="py-2">
+                    {isGoodValue(custom) ? (
+                      <b class="text-green-700 dark:text-green-400">{translateValue(custom)}</b>
+                    ) : (
+                      translateValue(custom)
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </ResponsiveTable>

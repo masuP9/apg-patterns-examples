@@ -10,10 +10,16 @@ interface Props {
 
 const { locale = 'en' } = Astro.props;
 
-const { nativeHtmlConsiderations, nativeVsCustom, nativeHtmlFootnote } = checkboxAccessibilityData;
-if (!nativeHtmlConsiderations || !nativeVsCustom) {
+const {
+  nativeHtmlConsiderations: rawNativeHtml,
+  nativeVsCustom,
+  nativeHtmlFootnote,
+} = checkboxAccessibilityData;
+if (!rawNativeHtml || !nativeVsCustom) {
   throw new Error('Native HTML data not found in accessibility-data.ts');
 }
+// Handle both single object and array
+const nativeHtmlConsiderations = Array.isArray(rawNativeHtml) ? rawNativeHtml[0] : rawNativeHtml;
 
 const t = localize(locale);
 
@@ -42,16 +48,18 @@ const titles = sectionTitles[locale];
   </h2>
   <p class="mb-4">
     <strong class="text-red-700 dark:text-red-400"
-      >{t(nativeHtmlConsiderations.recommendation)}</strong
+      >{
+        nativeHtmlConsiderations?.recommendation ? t(nativeHtmlConsiderations.recommendation) : ''
+      }</strong
     >
-    {t(nativeHtmlConsiderations.benefits)}
+    {nativeHtmlConsiderations?.benefits ? t(nativeHtmlConsiderations.benefits) : ''}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
-      class="m-0 overflow-x-auto text-sm"><code>{nativeHtmlConsiderations.codeExample}</code></pre>
+      class="m-0 overflow-x-auto text-sm"><code>{nativeHtmlConsiderations?.codeExample || ''}</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    {t(nativeHtmlConsiderations.customUseCases)}
+    {nativeHtmlConsiderations?.customUseCases ? t(nativeHtmlConsiderations.customUseCases) : ''}
   </p>
 
   <ResponsiveTable>
@@ -67,7 +75,7 @@ const titles = sectionTitles[locale];
         {
           nativeVsCustom.map((row) => (
             <tr class="border-border border-b">
-              <td class="py-2 pr-4">{t(row.useCase)}</td>
+              <td class="py-2 pr-4">{row.useCase ? t(row.useCase) : ''}</td>
               <td class="py-2 pr-4">
                 {row.nativeRecommended ? (
                   <b class="text-green-700 dark:text-green-400">{t(row.native)}</b>

@@ -158,7 +158,9 @@ const h = createTableHeaderTranslator(locale);
             <h4 class="mb-2 font-medium">
               <code>{state.attribute}</code>
             </h4>
-            {state.description && <p class="text-muted-foreground mb-3">{t(state.description)}</p>}
+            {(state as any).description && (
+              <p class="text-muted-foreground mb-3">{t((state as any).description)}</p>
+            )}
             <ResponsiveTable class="mb-2">
               <table class="w-full border-collapse">
                 <tbody>
