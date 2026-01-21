@@ -179,6 +179,50 @@ html.no-transitions * {
   h3[id] {
     scroll-margin-top: 5rem;
   }
+
+  /* =============================================================================
+     TYPOGRAPHY ENHANCEMENTS
+     Global settings for improved text rendering and CJK support
+     ============================================================================= */
+
+  /* 1. overflow-wrap: 長い単語の折り返し */
+  :where(:root) {
+    overflow-wrap: break-word;
+  }
+
+  /* 2. text-autospace: 日本語と英数字間の自動スペースを無効化 */
+  :where(:root) {
+    text-autospace: no-autospace;
+  }
+
+  /* 3. 英語タイポグラフィ */
+  :lang(en) {
+    font-kerning: normal;
+    hanging-punctuation: first allow-end last;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6, p):lang(en) {
+    text-wrap: pretty;
+  }
+
+  /* 4. 日本語タイポグラフィ */
+  :lang(ja) {
+    font-kerning: none;
+    hanging-punctuation: last allow-end;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6, caption):lang(ja) {
+    word-break: auto-phrase;
+    font-kerning: normal;
+    font-feature-settings: 'palt';
+  }
+
+  /* 5. センターテキスト: 英語のみバランス
+     日本語では text-wrap: balance が文字単位で改行位置を調整し、
+     意味の区切りと関係ない位置で改行が発生するため無効化 */
+  :where(.text-center):lang(en) {
+    text-wrap: balance;
+  }
 }
 
 /* Skip link for accessibility */
