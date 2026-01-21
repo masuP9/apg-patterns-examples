@@ -125,7 +125,9 @@ describe('Dialog', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');
-      expect(trigger).toHaveFocus();
+      await vi.waitFor(() => {
+        expect(trigger).toHaveFocus();
+      });
     });
 
     // Note: Focus trap is handled by native <dialog> element's showModal().

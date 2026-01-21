@@ -133,7 +133,9 @@ describe('Dialog (Vue)', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');
-      expect(trigger).toHaveFocus();
+      await vi.waitFor(() => {
+        expect(trigger).toHaveFocus();
+      });
     });
 
     // Note: フォーカストラップはネイティブ <dialog> 要素の showModal() が処理する。
