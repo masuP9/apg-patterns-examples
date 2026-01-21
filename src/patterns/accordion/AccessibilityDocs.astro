@@ -189,7 +189,7 @@ const h = createTableHeaderTranslator(locale);
               <td class="py-2 pr-4">
                 {shortcut.key.includes('/') || shortcut.key.includes('+') ? (
                   <Fragment>
-                    {shortcut.key.split(/\s*[\/+]\s*/).map((k, i, arr) => (
+                    {shortcut.key.split(/\s*[/+]\s*/).map((k, i, arr) => (
                       <>
                         <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k.trim()}</kbd>
                         {i < arr.length - 1 && (shortcut.key.includes('+') ? ' + ' : ' / ')}

@@ -7,8 +7,7 @@
  */
 
 import type { Locale } from '@/i18n';
-import type { LocalizedField, LocalizedText, PatternTranslations } from './types';
-import { isLocalizedText } from './types';
+import type { LocalizedField, PatternTranslations } from './types';
 
 /**
  * Get localized text from a LocalizedField value
