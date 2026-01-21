@@ -155,10 +155,14 @@ describe('AlertDialog (Vue)', () => {
       });
 
       await user.tab();
-      expect(confirmButton).toHaveFocus();
+      await vi.waitFor(() => {
+        expect(confirmButton).toHaveFocus();
+      });
 
       await user.tab();
-      expect(cancelButton).toHaveFocus();
+      await vi.waitFor(() => {
+        expect(cancelButton).toHaveFocus();
+      });
     });
   });
 

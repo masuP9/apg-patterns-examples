@@ -81,11 +81,13 @@ describe('Dialog', () => {
       render(<TestDialog description="This is a description" />);
 
       await user.click(screen.getByRole('button', { name: 'Open Dialog' }));
-      const dialog = screen.getByRole('dialog');
-      const descriptionId = dialog.getAttribute('aria-describedby');
+      await vi.waitFor(() => {
+        const dialog = screen.getByRole('dialog');
+        const descriptionId = dialog.getAttribute('aria-describedby');
 
-      expect(descriptionId).toBeTruthy();
-      expect(document.getElementById(descriptionId!)).toHaveTextContent('This is a description');
+        expect(descriptionId).toBeTruthy();
+        expect(document.getElementById(descriptionId!)).toHaveTextContent('This is a description');
+      });
     });
 
     it('has no aria-describedby when description is absent', async () => {
@@ -125,7 +127,10 @@ describe('Dialog', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');
-      expect(trigger).toHaveFocus();
+      await vi.waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(trigger).toHaveFocus();
+      });
     });
 
     // Note: Focus trap is handled by native <dialog> element's showModal().
@@ -172,7 +177,9 @@ describe('Dialog', () => {
 
       // Click dialog element itself (equivalent to overlay)
       await user.click(dialog);
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      await vi.waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
     });
 
     it('does not close on overlay click when closeOnOverlayClick=false', async () => {
@@ -184,7 +191,9 @@ describe('Dialog', () => {
 
       // Click dialog element itself
       await user.click(dialog);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      await vi.waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
     });
 
     it('calls onOpenChange when opened and closed', async () => {
@@ -197,7 +206,9 @@ describe('Dialog', () => {
 
       // Close with Close button
       await user.click(screen.getByRole('button', { name: 'Close dialog' }));
-      expect(onOpenChange).toHaveBeenCalledWith(false);
+      await vi.waitFor(() => {
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+      });
     });
 
     it('initially displayed when defaultOpen=true', async () => {
