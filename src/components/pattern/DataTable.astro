@@ -21,16 +21,31 @@ export interface Column<T> {
   class?: string;
 }
 
-interface Props<T extends Record<string, unknown>> {
+// Use a simple non-generic interface for Astro template compatibility
+interface SimpleColumn {
+  key: string;
+  header: string;
+  code?: boolean;
+  kbd?: boolean;
+  class?: string;
+}
+
+interface Props {
   /** Data array to render */
-  data: T[];
+  data: Record<string, unknown>[];
   /** Column definitions */
-  columns: Column<T>[];
+  columns: SimpleColumn[];
   /** Optional: additional class for the table */
   class?: string;
 }
 
 const { data, columns, class: className } = Astro.props;
+
+// Pre-process columns with indices for template
+const columnsWithMeta = columns.map((col: SimpleColumn, index: number) => ({
+  ...col,
+  isLast: index >= columns.length - 1,
+}));
 ---
 
 <ResponsiveTable class={className}>
@@ -38,10 +53,8 @@ const { data, columns, class: className } = Astro.props;
     <thead>
       <tr class="border-border border-b">
         {
-          columns.map((col, index) => (
-            <th
-              class:list={['py-2 text-left', index < columns.length - 1 ? 'pr-4' : '', col.class]}
-            >
+          columnsWithMeta.map((col) => (
+            <th class:list={['py-2 text-left', col.isLast ? '' : 'pr-4', col.class]}>
               {col.header}
             </th>
           ))
@@ -52,9 +65,9 @@ const { data, columns, class: className } = Astro.props;
       {
         data.map((row) => (
           <tr class="border-border border-b">
-            {columns.map((col, index) => {
+            {columnsWithMeta.map((col) => {
               const value = row[col.key];
-              const cellClass = ['py-2', index < columns.length - 1 ? 'pr-4' : '', col.class];
+              const cellClass = ['py-2', col.isLast ? '' : 'pr-4', col.class];
 
               return (
                 <td class:list={cellClass}>
