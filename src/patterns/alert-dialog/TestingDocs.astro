@@ -124,21 +124,11 @@ const priorityLabels: Record<string, Record<string, string>> = {
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">{titles.running}</h3>
-
-  {
-    testing.commands.map((cmd) => (
-      <div class="bg-muted/50 mb-4 rounded-lg p-4">
-        <pre class="text-muted-foreground overflow-x-auto text-sm">
-          <code>
-            {'# '}
-            {t(cmd.comment)}
-            {'\n'}
-            {cmd.command}
-          </code>
-        </pre>
-      </div>
-    ))
-  }
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{testing.commands.map((cmd) => {
+    const comment = t(cmd.comment);
+    return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+  }).join('\n\n')}</code></pre>
 
   {
     testing.documentationLink && (
