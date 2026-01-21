@@ -10,67 +10,52 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 
 ### Roles
 
-| Role       | Element      | Description                |
-| ---------- | ------------ | -------------------------- |
-| `tablist`  | Container    | Container for tab elements |
-| `tab`      | Tab button   | Individual tab element     |
-| `tabpanel` | Content area | Content panel for each tab |
+| Role | Element | Description |
+| --- | --- | --- |
+| `tablist` | Container | Container for tab elements |
+| `tab` | Each tab | Individual tab element |
+| `tabpanel` | Panel | Content area for each tab |
 
 ### Properties
 
-| Attribute          | Element  | Values                         | Required | Notes                                    |
-| ------------------ | -------- | ------------------------------ | -------- | ---------------------------------------- |
-| `aria-orientation` | tablist  | `"horizontal"` \| `"vertical"` | No       | Defaults to horizontal                   |
-| `aria-controls`    | tab      | ID of associated panel         | Yes*     | Set only on the selected tab             |
-| `aria-labelledby`  | tabpanel | ID of associated tab           | Yes      | Auto-generated                           |
-
-> *`aria-controls` is set only on the currently selected tab. Non-selected tabs omit this attribute to avoid referencing hidden panels.
+| Attribute | Element | Values | Required | Notes |
+| --- | --- | --- | --- | --- |
+| `aria-orientation` | tablist | `"horizontal"` \| `"vertical"` | No | orientation prop |
+| `aria-controls` | tab | ID reference to associated panel | Yes | Auto-generated |
+| `aria-labelledby` | tabpanel | ID reference to associated tab | Yes | Auto-generated |
 
 ### States
 
-| Attribute       | Element | Values            | Required | Change Trigger                                          |
-| --------------- | ------- | ----------------- | -------- | ------------------------------------------------------- |
-| `aria-selected` | tab     | `true` \| `false` | Yes      | Tab click, Arrow keys (automatic), Enter/Space (manual) |
+| Attribute | Element | Values | Required | Change Trigger |
+| --- | --- | --- | --- | --- |
+| `aria-selected` | tab element | `true` \| `false` | Yes | Tab click, Arrow keys (automatic), Enter/Space (manual) |
 
 ## Keyboard Support
 
 ### Horizontal Orientation
 
-| Key               | Action                                |
-| ----------------- | ------------------------------------- |
-| `Tab`             | Move focus into/out of the tablist    |
-| `ArrowRight`      | Move to next tab (loops at end)       |
-| `ArrowLeft`       | Move to previous tab (loops at start) |
-| `Home`            | Move to first tab                     |
-| `End`             | Move to last tab                      |
-| `Enter` / `Space` | Activate tab (manual mode only)       |
+| Key | Action |
+| --- | --- |
+| `Tab` | Move focus into/out of the tablist |
+| `ArrowRight` | Move to next tab (loops at end) |
+| `ArrowLeft` | Move to previous tab (loops at start) |
+| `Home` | Move to first tab |
+| `End` | Move to last tab |
+| `Enter / Space` | Activate tab (manual mode only) |
 
 ### Vertical Orientation
 
-| Key         | Action                                |
-| ----------- | ------------------------------------- |
-| `ArrowDown` | Move to next tab (loops at end)       |
-| `ArrowUp`   | Move to previous tab (loops at start) |
+| Key | Action |
+| --- | --- |
+| `ArrowDown` | Move to next tab (loops at end) |
+| `ArrowUp` | Move to previous tab (loops at start) |
 
-## Focus Management (Roving Tabindex)
+## Focus Management
 
-- Selected/focused tab: `tabIndex="0"`
-- Other tabs: `tabIndex="-1"`
-- Tabpanel: `tabIndex="0"` (focusable)
-- Disabled tabs are skipped during keyboard navigation
-
-## Activation Modes
-
-### Automatic (default)
-
-- Arrow keys move focus AND select tab
-- Panel content changes immediately
-
-### Manual
-
-- Arrow keys move focus only
-- Enter/Space required to select tab
-- Panel content changes on explicit activation
+- Selected/focused tab: tabIndex="0"
+- Other tabs: tabIndex="-1"
+- Tabpanel: tabIndex="0" (focusable)
+- Disabled tabs: Skipped during keyboard navigation
 
 ## Test Checklist
 
@@ -89,20 +74,20 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 
 ### High Priority: ARIA
 
-- [ ] Container has `role="tablist"`
-- [ ] Each tab has `role="tab"`
-- [ ] Panel has `role="tabpanel"`
-- [ ] Selected tab has `aria-selected="true"`
-- [ ] Non-selected tabs have `aria-selected="false"`
-- [ ] Tab `aria-controls` matches panel `id`
-- [ ] Panel `aria-labelledby` matches tab `id`
-- [ ] `aria-orientation` reflects orientation prop
+- [ ] Container has role="tablist"
+- [ ] Each tab has role="tab"
+- [ ] Panel has role="tabpanel"
+- [ ] Selected tab has aria-selected="true"
+- [ ] Non-selected tabs have aria-selected="false"
+- [ ] Tab aria-controls matches panel id
+- [ ] Panel aria-labelledby matches tab id
+- [ ] aria-orientation reflects orientation prop
 
 ### High Priority: Focus Management
 
-- [ ] Only selected/focused tab has `tabIndex="0"`
-- [ ] Other tabs have `tabIndex="-1"`
-- [ ] Tabpanel is focusable (`tabIndex="0"`)
+- [ ] Only selected/focused tab has tabIndex="0"
+- [ ] Other tabs have tabIndex="-1"
+- [ ] Tabpanel is focusable (tabIndex="0")
 
 ### Medium Priority: Accessibility
 
@@ -110,8 +95,22 @@ Tabs are a set of layered sections of content, known as tab panels, that display
 
 ## Implementation Notes
 
+## Activation Modes
+
+### Automatic (default)
+
+- Arrow keys move focus AND select tab
+- Panel content changes immediately
+
+### Manual
+
+- Arrow keys move focus only
+- Enter/Space required to select tab
+- Panel content changes on explicit activation
+
+## Structure
+
 ```
-Structure:
 ┌─────────────────────────────────────────┐
 │ [Tab 1] [Tab 2] [Tab 3]   ← tablist     │
 ├─────────────────────────────────────────┤
