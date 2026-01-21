@@ -81,7 +81,7 @@ None (open/close managed by DOM)
 
 - [ ] Focus moves to Cancel button on open (safest action)
 - [ ] Focus is trapped within dialog
-- [ ] Focus returns to trigger on close
+- [ ] Focus returns to trigger on close (**E2E only** - jsdom limitation with `showModal()`)
 - [ ] Background content is inert
 
 ### Medium Priority: Accessibility
@@ -144,6 +144,8 @@ interface AlertDialogProps {
 ```
 
 ## Example Test Code (React + Testing Library)
+
+> **Note**: Focus restore after dialog close is unreliable in jsdom due to `showModal()` limitations. These tests are covered by Playwright E2E tests instead. See: `e2e/alert-dialog.spec.ts`
 
 ```typescript
 import { render, screen } from '@testing-library/react';

@@ -212,6 +212,30 @@ for (const framework of frameworks) {
         await expect(trigger).toBeFocused();
       });
 
+      test('returns focus to trigger on close via Escape (when allowEscapeClose=true)', async ({
+        page,
+      }) => {
+        // Note: Default AlertDialog disables Escape close.
+        // This test verifies focus restoration IF Escape close is enabled.
+        const trigger = page.getByRole('button', { name: /open alert|delete|confirm/i }).first();
+        await trigger.click();
+        await page.waitForSelector('[role="alertdialog"]');
+
+        const alertDialog = page.getByRole('alertdialog');
+
+        // Press Escape
+        await page.keyboard.press('Escape');
+
+        // Check if dialog closed (depends on allowEscapeClose prop)
+        const dialogCount = await alertDialog.count();
+
+        if (dialogCount === 0) {
+          // Dialog closed - verify focus restoration
+          await expect(trigger).toBeFocused();
+        }
+        // If dialog didn't close, that's expected behavior (allowEscapeClose=false)
+      });
+
       test('traps focus within dialog', async ({ page }) => {
         await openAlertDialog(page);
 

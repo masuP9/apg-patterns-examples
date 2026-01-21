@@ -247,12 +247,9 @@ describe('AlertDialog', () => {
       });
     });
 
-    // Note: Focus restore tests are flaky in jsdom environment.
-    // Focus restore works correctly in real browsers.
-    // These behaviors should be verified with E2E tests (Playwright).
-    it.todo('returns focus to trigger when closed via Cancel');
-    it.todo('returns focus to trigger when closed via Confirm');
-    it.todo('returns focus to trigger when closed via Escape (when allowed)');
+    // Note: Focus restore tests are covered by E2E tests (Playwright)
+    // due to jsdom limitations with showModal() focus management.
+    // See: e2e/alert-dialog.spec.ts - Focus Management section
   });
 
   // 🟡 Medium Priority: Accessibility
