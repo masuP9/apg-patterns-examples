@@ -16,8 +16,8 @@ export const GET: APIRoute = async ({ params }) => {
   const { pattern } = params;
 
   try {
-    // Read from {pattern}.md (e.g., alert-dialog.md) instead of llm.md
-    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, `${pattern}.md`);
+    // Read from {pattern}.ja.md (e.g., alert-dialog.ja.md) for Japanese locale
+    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, `${pattern}.ja.md`);
     const content = await readFile(filePath, 'utf-8');
 
     return new Response(content, {
