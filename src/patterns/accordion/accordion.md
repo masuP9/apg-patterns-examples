@@ -1,0 +1,208 @@
+# Accordion Pattern - AI Implementation Guide
+
+> APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
+
+## Overview
+
+An accordion is a vertically stacked set of interactive headings that each reveal an associated section of content.
+
+## ARIA Requirements
+
+### Roles
+
+| Role | Element | Description |
+| --- | --- | --- |
+| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button |
+| `button` | Header trigger | Interactive element that toggles panel visibility |
+| `region` | Panel (optional) | Content area associated with header (omit for 6+ panels) |
+
+### Properties
+
+| Attribute | Element | Values | Required | Notes |
+| --- | --- | --- | --- | --- |
+| `aria-level` | heading | 2 - 6 | Yes | headingLevel prop |
+| `aria-controls` | button | ID reference to associated panel | Yes | Auto-generated |
+| `aria-labelledby` | [object Object] | ID reference to header button | Yes | Auto-generated |
+
+### States
+
+| Attribute | Element | Values | Required | Change Trigger |
+| --- | --- | --- | --- | --- |
+| `aria-expanded` | button element | `true` \| `false` | Yes | Click, Enter, Space |
+| `aria-disabled` | button element | `true` \| `false` | No | Only when disabled |
+
+## Keyboard Support
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Move focus to the next focusable element |
+| `Space / Enter` | Toggle the expansion of the focused accordion header |
+| `Arrow Down` | Move focus to the next accordion header (optional) |
+| `Arrow Up` | Move focus to the previous accordion header (optional) |
+| `Home` | Move focus to the first accordion header (optional) |
+| `End` | Move focus to the last accordion header (optional) |
+
+## Focus Management
+
+- Header buttons: Focusable via their button elements
+- Arrow keys: Navigate between headers (skip disabled)
+- Edges: Focus does not wrap at edges
+
+## Test Checklist
+
+### High Priority: Keyboard
+
+- [ ] Enter/Space toggles panel expansion
+- [ ] ArrowDown moves to next header
+- [ ] ArrowUp moves to previous header
+- [ ] Home moves to first header
+- [ ] End moves to last header
+- [ ] Disabled headers are skipped
+
+### High Priority: ARIA
+
+- [ ] Button has aria-expanded matching panel state
+- [ ] Button has aria-controls referencing panel id
+- [ ] Panel (if region) has aria-labelledby referencing button
+- [ ] 6 or fewer panels have role="region"
+- [ ] 7+ panels omit role="region"
+- [ ] Disabled items have aria-disabled="true"
+
+### High Priority: Focus Management
+
+- [ ] Focus stays on header after toggle
+- [ ] Arrow keys skip disabled headers
+
+### Medium Priority: Accessibility
+
+- [ ] No axe-core violations (WCAG 2.1 AA)
+- [ ] Proper heading level hierarchy
+
+## Implementation Notes
+
+## Structure
+
+```
+┌─────────────────────────────────────┐
+│ [▼] Section 1                       │  ← button (aria-expanded="true")
+├─────────────────────────────────────┤
+│ Panel 1 content...                  │  ← region (aria-labelledby)
+├─────────────────────────────────────┤
+│ [▶] Section 2                       │  ← button (aria-expanded="false")
+├─────────────────────────────────────┤
+│ [▶] Section 3                       │  ← button (aria-expanded="false")
+└─────────────────────────────────────┘
+
+ID Relationships:
+- Button: id="header-1", aria-controls="panel-1"
+- Panel: id="panel-1", aria-labelledby="header-1"
+
+Region Role Rule:
+- ≤6 panels: use role="region" on panels
+- >6 panels: omit role="region" (too many landmarks)
+```
+
+## Example Test Code (React + Testing Library)
+
+```typescript
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+// Toggle test
+it('toggles panel on Enter/Space', async () => {
+  const user = userEvent.setup();
+  render(<Accordion items={items} />);
+
+  const header = screen.getByRole('button', { name: 'Section 1' });
+  expect(header).toHaveAttribute('aria-expanded', 'false');
+
+  await user.click(header);
+  expect(header).toHaveAttribute('aria-expanded', 'true');
+});
+
+// Arrow navigation test
+it('ArrowDown moves to next header', async () => {
+  const user = userEvent.setup();
+  render(<Accordion items={items} />);
+
+  const header1 = screen.getByRole('button', { name: 'Section 1' });
+  header1.focus();
+
+  await user.keyboard('{ArrowDown}');
+
+  const header2 = screen.getByRole('button', { name: 'Section 2' });
+  expect(header2).toHaveFocus();
+});
+
+// Skip disabled
+it('skips disabled headers', async () => {
+  const user = userEvent.setup();
+  render(<Accordion items={itemsWithDisabled} />);
+
+  const header1 = screen.getByRole('button', { name: 'Section 1' });
+  header1.focus();
+
+  await user.keyboard('{ArrowDown}');
+  // Section 2 is disabled, should skip to Section 3
+  expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
+});
+```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// ARIA structure test
+test('accordion has proper ARIA structure', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  const accordion = page.locator('.apg-accordion').first();
+  const header = accordion.locator('.apg-accordion-trigger').first();
+
+  // Wait for hydration
+  await expect(header).toHaveAttribute('aria-controls', /.+/);
+
+  // Check aria-expanded
+  const expanded = await header.getAttribute('aria-expanded');
+  expect(['true', 'false']).toContain(expanded);
+
+  // Check aria-controls references valid panel
+  const controlsId = await header.getAttribute('aria-controls');
+  const panel = page.locator(`[id="${controlsId}"]`);
+  await expect(panel).toBeAttached();
+  await expect(panel).toHaveRole('region');
+});
+
+// Keyboard navigation test
+test('arrow keys navigate between headers', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  const accordion = page.locator('.apg-accordion').first();
+  const headers = accordion.locator('.apg-accordion-trigger');
+
+  await headers.first().click();
+  await expect(headers.first()).toBeFocused();
+
+  await page.keyboard.press('ArrowDown');
+  await expect(headers.nth(1)).toBeFocused();
+
+  await page.keyboard.press('Home');
+  await expect(headers.first()).toBeFocused();
+
+  await page.keyboard.press('End');
+  await expect(headers.last()).toBeFocused();
+});
+
+// Accessibility test
+test('has no axe-core violations', async ({ page }) => {
+  await page.goto('patterns/accordion/react/demo/');
+  await page.locator('.apg-accordion').first().waitFor();
+
+  const results = await new AxeBuilder({ page })
+    .include('.apg-accordion')
+    .disableRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
+});
+```

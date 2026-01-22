@@ -1,0 +1,91 @@
+---
+/**
+ * DataTable - Generic data-driven table component for accessibility documentation
+ *
+ * Renders tabular data from typed arrays with consistent styling.
+ * Used by AccessibilityDocs.astro components.
+ */
+
+import { ResponsiveTable } from '@/components/ui/table';
+
+export interface Column<T> {
+  /** Column key (property name in data object) */
+  key: keyof T;
+  /** Column header text */
+  header: string;
+  /** Optional: render cell as code */
+  code?: boolean;
+  /** Optional: render cell as keyboard key */
+  kbd?: boolean;
+  /** Optional: custom class for this column */
+  class?: string;
+}
+
+// Use a simple non-generic interface for Astro template compatibility
+interface SimpleColumn {
+  key: string;
+  header: string;
+  code?: boolean;
+  kbd?: boolean;
+  class?: string;
+}
+
+interface Props {
+  /** Data array to render */
+  data: Record<string, unknown>[];
+  /** Column definitions */
+  columns: SimpleColumn[];
+  /** Optional: additional class for the table */
+  class?: string;
+}
+
+const { data, columns, class: className } = Astro.props;
+
+// Pre-process columns with indices for template
+const columnsWithMeta = columns.map((col: SimpleColumn, index: number) => ({
+  ...col,
+  isLast: index >= columns.length - 1,
+}));
+---
+
+<ResponsiveTable class={className}>
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="border-border border-b">
+        {
+          columnsWithMeta.map((col) => (
+            <th class:list={['py-2 text-left', col.isLast ? '' : 'pr-4', col.class]}>
+              {col.header}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        data.map((row) => (
+          <tr class="border-border border-b">
+            {columnsWithMeta.map((col) => {
+              const value = row[col.key];
+              const cellClass = ['py-2', col.isLast ? '' : 'pr-4', col.class];
+
+              return (
+                <td class:list={cellClass}>
+                  {col.code ? (
+                    <code>{String(value)}</code>
+                  ) : col.kbd ? (
+                    <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                      {String(value)}
+                    </kbd>
+                  ) : (
+                    String(value)
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</ResponsiveTable>

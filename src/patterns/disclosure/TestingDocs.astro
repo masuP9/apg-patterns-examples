@@ -1,221 +1,166 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { disclosureAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const testing = disclosureAccessibilityData.testing;
+if (!testing) {
+  throw new Error('Testing data not found in accessibility-data.ts');
+}
+
+const { strategies, categories, commands, tools, documentationLink } = testing;
+
+// Localization helper
+const t = localize(locale);
+
+// Priority colors
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Disclosure component uses E2E tests across all four frameworks.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    seeFullDocs: 'See',
+    forFullDocs: 'for full documentation.',
+  },
+  ja: {
+    intro:
+      'テストは、キーボード操作、ARIA属性、アクセシビリティ要件の観点からAPG準拠を検証します。Disclosureコンポーネントは4つのフレームワーク全体でE2Eテストを使用しています。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    seeFullDocs: '詳細は',
+    forFullDocs: 'を参照してください。',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Disclosure component uses E2E tests across all four frameworks.
+    {titles.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingStrategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all four frameworks. These
-      tests cover interactions that require full browser context.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Keyboard interactions (Space, Enter)</li>
-      <li>aria-expanded state toggling</li>
-      <li>aria-controls panel association</li>
-      <li>Panel visibility synchronization</li>
-      <li>Disabled state behavior</li>
-      <li>Focus management and Tab navigation</li>
-      <li>Cross-framework consistency</li>
-    </ul>
-  </div>
+  {
+    strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testCategories}</h3>
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Structure
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>button element</code></td>
-          <td class="py-2">Trigger is a semantic <code>&lt;button&gt;</code> element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2">Button has <code>aria-expanded</code> attribute</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2">Button references panel ID via <code>aria-controls</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>accessible name</code></td>
-          <td class="py-2">Button has an accessible name from content or aria-label</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {locale === 'en' ? (
+            <>
+              {category.priority === 'high'
+                ? 'High Priority'
+                : category.priority === 'medium'
+                  ? 'Medium Priority'
+                  : 'Low Priority'}
+              : {t(category.title)} ({category.testType})
+            </>
+          ) : (
+            <>
+              {category.priority === 'high'
+                ? '高優先度'
+                : category.priority === 'medium'
+                  ? '中優先度'
+                  : '低優先度'}
+              : {t(category.title)}（{category.testType}）
+            </>
+          )}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'en' ? 'Test' : 'テスト'}</th>
+                <th class="py-2 text-left">{locale === 'en' ? 'Description' : '説明'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td
+                    class="py-2"
+                    set:html={t(item.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')}
+                  />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Space key toggles</code></td>
-          <td class="py-2">Pressing Space toggles the disclosure state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter key toggles</code></td>
-          <td class="py-2">Pressing Enter toggles the disclosure state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab navigation</code></td>
-          <td class="py-2">Tab key moves focus to disclosure button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled Tab skip</code></td>
-          <td class="py-2">Disabled disclosures are skipped in Tab order</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <h3 class="mb-3 text-lg font-medium">{titles.runningTests}</h3>
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{commands.map((cmd) => {
+    const comment = t(cmd.comment);
+    return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+  }).join('\n\n')}</code></pre>
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: State Synchronization
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded toggle</code></td>
-          <td class="py-2">Click changes <code>aria-expanded</code> value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>panel visibility</code></td>
-          <td class="py-2">Panel visibility matches <code>aria-expanded</code> state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>collapsed hidden</code></td>
-          <td class="py-2">Panel content is hidden when collapsed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>expanded visible</code></td>
-          <td class="py-2">Panel content is visible when expanded</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Disabled State
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>disabled attribute</code></td>
-          <td class="py-2">Disabled disclosure has <code>disabled</code> attribute</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>click blocked</code></td>
-          <td class="py-2">Disabled disclosure doesn't toggle on click</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>keyboard blocked</code></td>
-          <td class="py-2">Disabled disclosure doesn't toggle on keyboard</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe (collapsed)</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations in collapsed state</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe (expanded)</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations in expanded state</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {titles.seeFullDocs}{' '}
+        <ExternalLink href={documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {titles.forFullDocs}
+      </p>
+    )
+  }
 </div>

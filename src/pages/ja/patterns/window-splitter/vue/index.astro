@@ -5,8 +5,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/window-splitter/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/window-splitter/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/window-splitter/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/window-splitter/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -70,7 +70,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -215,7 +215,7 @@ function handlePositionChange(position: number, sizeInPx: number) {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
     <div class="mt-6">
       <CodeBlock
         collapsible

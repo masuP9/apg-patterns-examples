@@ -4,359 +4,190 @@ import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import { tabsAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const testing = tabsAccessibilityData.testing;
+if (!testing) {
+  throw new Error('Testing data not found in accessibility-data.ts');
+}
+
+const { strategies, categories, e2eTestFile, commands, tools, documentationLink } = testing;
 
 // Read actual test file at build time
-const e2eTestPath = path.join(process.cwd(), 'e2e/tabs.spec.ts');
-const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
+const e2eTestCode = e2eTestFile
+  ? fs.readFileSync(path.join(process.cwd(), e2eTestFile), 'utf-8')
+  : '';
+
+// Localization helper
+const t = localize(locale);
+
+// Priority colors
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility requirements. The Tabs component uses a two-layer testing strategy.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    exampleTestCode: 'Example Test Code',
+    exampleTestCodeDesc: 'The following is the actual E2E test file',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    seeFullDocs: 'See',
+    forFullDocs: 'for full documentation.',
+  },
+  ja: {
+    intro:
+      'テストは、キーボード操作、ARIA属性、アクセシビリティ要件全体にわたってAPG準拠を検証します。Tabsコンポーネントは2層のテスト戦略を使用しています。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    exampleTestCode: 'テストコード例',
+    exampleTestCodeDesc: '以下は実際のE2Eテストファイルです',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    seeFullDocs: '詳細なドキュメントについては、',
+    forFullDocs: 'を参照してください。',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across keyboard interaction, ARIA attributes, and accessibility
-    requirements. The Tabs component uses a two-layer testing strategy.
+    {titles.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingStrategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's rendered output using framework-specific testing libraries. These tests
-      ensure correct HTML structure and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA attributes (aria-selected, aria-controls, aria-labelledby)</li>
-      <li>Keyboard interaction (Arrow keys, Home, End)</li>
-      <li>Roving tabindex behavior</li>
-      <li>Accessibility via jest-axe</li>
-    </ul>
-  </div>
+  {
+    strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all frameworks. These tests
-      cover interactions and cross-framework consistency.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Click interactions</li>
-      <li>Arrow key navigation with looping</li>
-      <li>Automatic and manual activation modes</li>
-      <li>ARIA structure validation in live browser</li>
-      <li>axe-core accessibility scanning</li>
-      <li>Cross-framework consistency checks</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{titles.testCategories}</h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {locale === 'en' ? (
+            <>
+              {category.priority === 'high'
+                ? 'High Priority'
+                : category.priority === 'medium'
+                  ? 'Medium Priority'
+                  : 'Low Priority'}
+              : {t(category.title)} ({category.testType})
+            </>
+          ) : (
+            <>
+              {category.priority === 'high'
+                ? '高優先度'
+                : category.priority === 'medium'
+                  ? '中優先度'
+                  : '低優先度'}
+              : {t(category.title)}（{category.testType}）
+            </>
+          )}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'en' ? 'Test' : 'テスト'}</th>
+                <th class="py-2 text-left">{locale === 'en' ? 'Description' : '説明'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG Keyboard Interaction (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight/Left</code></td>
-          <td class="py-2">Moves focus between tabs (horizontal)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowDown/Up</code></td>
-          <td class="py-2">Moves focus between tabs (vertical orientation)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home/End</code></td>
-          <td class="py-2">Moves focus to first/last tab</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Loop navigation</code></td>
-          <td class="py-2">Arrow keys loop from last to first and vice versa</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled skip</code></td>
-          <td class="py-2">Skips disabled tabs during navigation</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Automatic activation</code></td>
-          <td class="py-2">Tab panel changes on focus (default mode)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Manual activation</code></td>
-          <td class="py-2">Enter/Space required to activate tab</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    e2eTestCode && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.exampleTestCode}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {titles.exampleTestCodeDesc} (<code>{e2eTestFile}</code>).
+        </p>
+        <CodeBlock
+          code={e2eTestCode}
+          lang="typescript"
+          title={e2eTestFile}
+          collapsible
+          collapsedLines={20}
+        />
+      </>
+    )
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: APG ARIA Attributes (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="tablist"</code></td>
-          <td class="py-2">Container has tablist role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="tab"</code></td>
-          <td class="py-2">Each tab button has tab role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="tabpanel"</code></td>
-          <td class="py-2">Content panel has tabpanel role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-selected</code></td>
-          <td class="py-2">Selected tab has <code>aria-selected="true"</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2">Tab references its panel via aria-controls</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2">Panel references its tab via aria-labelledby</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-orientation</code></td>
-          <td class="py-2">Reflects horizontal/vertical orientation</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Click Interaction (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click selects</code></td>
-          <td class="py-2">Clicking tab selects it</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click shows panel</code></td>
-          <td class="py-2">Clicking tab shows corresponding panel</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Click hides others</code></td>
-          <td class="py-2">Clicking tab hides other panels</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management - Roving Tabindex (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabIndex=0</code></td>
-          <td class="py-2">Selected tab has tabIndex=0</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabIndex=-1</code></td>
-          <td class="py-2">Non-selected tabs have tabIndex=-1</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Panel focusable</code></td>
-          <td class="py-2">Panel has tabIndex=0 for focus</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Vertical Orientation (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowDown moves next</code></td>
-          <td class="py-2">ArrowDown moves to next tab in vertical mode</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowUp moves prev</code></td>
-          <td class="py-2">ArrowUp moves to previous tab in vertical mode</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Disabled State (E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled no click</code></td>
-          <td class="py-2">Clicking disabled tab does not select it</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Navigation skips</code></td>
-          <td class="py-2">Arrow key navigation skips disabled tabs</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility (Unit + E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations (via jest-axe/axe-core)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-    Low Priority: Cross-framework Consistency (E2E)
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>All frameworks render</code></td>
-          <td class="py-2">React, Vue, Svelte, Astro all render tabs</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Consistent click</code></td>
-          <td class="py-2">All frameworks support click to select</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Consistent ARIA</code></td>
-          <td class="py-2">All frameworks have consistent ARIA structure</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
-  <p class="text-muted-foreground mb-4 text-sm">
-    The following is the actual E2E test file (<code>e2e/tabs.spec.ts</code>).
-  </p>
-  <CodeBlock
-    code={e2eTestCode}
-    lang="typescript"
-    title="e2e/tabs.spec.ts"
-    collapsible
-    collapsedLines={20}
-  />
-
-  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.runningTests}</h3>
   <pre
-    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for Tabs
-npm run test -- tabs
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{commands.map((cmd) => {
+    const comment = t(cmd.comment);
+    return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+  }).join('\n\n')}</code></pre>
 
-# Run E2E tests for Tabs (all frameworks)
-npm run test:e2e:pattern --pattern=tabs
-
-# Run E2E tests for specific framework
-npm run test:e2e:react:pattern --pattern=tabs
-npm run test:e2e:vue:pattern --pattern=tabs
-npm run test:e2e:svelte:pattern --pattern=tabs
-npm run test:e2e:astro:pattern --pattern=tabs</code></pre>
-
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {titles.seeFullDocs}{' '}
+        <ExternalLink href={documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {titles.forFullDocs}
+      </p>
+    )
+  }
 </div>

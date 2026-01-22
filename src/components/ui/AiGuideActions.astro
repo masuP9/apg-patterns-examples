@@ -14,7 +14,10 @@ const { pattern, class: className } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-const llmMdUrl = withBase(`/patterns/${pattern}/llm.md`);
+// Use locale-aware URL: /ja/patterns/{pattern}/llm.md for Japanese, /patterns/{pattern}/llm.md for English
+const llmMdUrl = withBase(
+  locale === 'ja' ? `/ja/patterns/${pattern}/llm.md` : `/patterns/${pattern}/llm.md`
+);
 ---
 
 <div

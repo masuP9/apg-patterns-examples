@@ -1,215 +1,267 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { linkAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = linkAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <h3 class="mb-3 text-lg font-medium">{locale === 'ja' ? 'WAI-ARIA ロール' : 'WAI-ARIA Role'}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('role')}</th>
+          <th class="py-2 pr-4 text-left">{h('element')}</th>
+          <th class="py-2 text-left">{h('description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>link</code></td>
-          <td class="py-2 pr-4">
-            <code>&lt;a href&gt;</code> or element with <code>role="link"</code>
-          </td>
-          <td class="py-2">
-            Identifies the element as a hyperlink. Native <code>&lt;a href&gt;</code> has this role implicitly.
-          </td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    This implementation uses <code>&lt;span role="link"&gt;</code> for educational purposes. For production
-    use, prefer native <code>&lt;a href&gt;</code> elements.
+    {
+      locale === 'ja'
+        ? 'この実装は教育目的で <span role="link"> を使用しています。本番環境では、ネイティブの <a href> 要素を優先してください。'
+        : 'This implementation uses <span role="link"> for educational purposes. For production use, prefer native <a href> elements.'
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'WAI-ARIA プロパティ' : 'WAI-ARIA Properties'}
+  </h3>
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>tabindex</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Makes the custom link element focusable via keyboard navigation.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>0</code> (focusable) | <code>-1</code> (not focusable)
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes (for custom implementations)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Native HTML</td>
-            <td class="py-2">
-              <code>&lt;a href&gt;</code> is focusable by default
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Disabled State</td>
-            <td class="py-2">Set to <code>-1</code> to remove from tab order</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.properties?.map((prop) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{prop.attribute}</code>
+        </h4>
+        {prop.notes && <p class="text-muted-foreground mb-3">{t(prop.notes)}</p>}
+        <ResponsiveTable class="mb-2">
+          <table class="w-full border-collapse">
+            <tbody>
+              <tr class="border-border border-b">
+                <td class="w-32 py-2 pr-4 font-medium">{h('values')}</td>
+                <td class="py-2">
+                  <code>{prop.values}</code>
+                </td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('required')}</td>
+                <td class="py-2">
+                  {prop.required
+                    ? locale === 'ja'
+                      ? 'はい (カスタム実装の場合)'
+                      : 'Yes (for custom implementations)'
+                    : locale === 'ja'
+                      ? 'いいえ'
+                      : 'No'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </div>
+    ))
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the link is not interactive and cannot be activated.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>true</code> | <code>false</code> (or omitted)
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No (only when disabled)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Effect</td>
-            <td class="py-2">Prevents activation via click or Enter key</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.states && data.states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">
+          {locale === 'ja' ? 'WAI-ARIA ステート' : 'WAI-ARIA States'}
+        </h3>
+        {data.states.map((state) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>{state.attribute}</code>
+            </h4>
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{h('values')}</td>
+                    <td class="py-2">
+                      <code>{state.values}</code>
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{h('required')}</td>
+                    <td class="py-2">
+                      {state.required
+                        ? locale === 'ja'
+                          ? 'はい'
+                          : 'Yes'
+                        : locale === 'ja'
+                          ? 'いいえ (無効時のみ)'
+                          : 'No (only when disabled)'}
+                    </td>
+                  </tr>
+                  {state.changeTrigger && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('changeTrigger')}</td>
+                      <td class="py-2">{t(state.changeTrigger)}</td>
+                    </tr>
+                  )}
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{h('reference')}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </div>
+        ))}
+      </>
+    )
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-current</code> (Optional)</h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current item within a set (e.g., current page in navigation).
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">
-              <code>page</code> | <code>step</code> | <code>location</code> | <code>date</code> |
-              <code>time</code> | <code>true</code>
-            </td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Use Case</td>
-            <td class="py-2">Navigation menus, breadcrumbs, pagination</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('keyboard')}</h3>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('key')}</th>
+          <th class="py-2 text-left">{h('action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activate the link and navigate to the target resource</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Move focus to the next focusable element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift + Tab</kbd></td
-          >
-          <td class="py-2">Move focus to the previous focusable element</td>
-        </tr>
+        {
+          data.keyboardSupport?.map((kb) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{kb.key}</kbd>
+              </td>
+              <td class="py-2">{t(kb.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    <strong>Important:</strong> Unlike buttons, the Space key does <strong>not</strong> activate links.
-    This is a key distinction between the <code>link</code> and <code>button</code> roles.
+    {
+      locale === 'ja' ? (
+        <>
+          <strong>重要:</strong> ボタンとは異なり、Spaceキーはリンクをアクティブ化
+          <strong>しません</strong>。これは <code>link</code> ロールと <code>button</code>{' '}
+          ロールの重要な違いです。
+        </>
+      ) : (
+        <>
+          <strong>Important:</strong> Unlike buttons, the Space key does <strong>not</strong>{' '}
+          activate links. This is a key distinction between the <code>link</code> and{' '}
+          <code>button</code> roles.
+        </>
+      )
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'アクセシブルな名前' : 'Accessible Naming'}
+  </h3>
   <p class="text-muted-foreground mb-3">
-    Links must have an accessible name. This can be provided through:
+    {
+      locale === 'ja'
+        ? 'リンクにはアクセシブルな名前が必要です。次の方法で提供できます：'
+        : 'Links must have an accessible name. This can be provided through:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Text content (recommended)</strong> - The visible text inside the link
+      <strong
+        >{locale === 'ja' ? 'テキストコンテンツ（推奨）' : 'Text content (recommended)'}</strong
+      > - {locale === 'ja' ? 'リンク内の表示テキスト' : 'The visible text inside the link'}
     </li>
     <li>
-      <code>aria-label</code> - Provides an invisible label for the link
+      <code>aria-label</code> - {
+        locale === 'ja'
+          ? 'リンクに対する非表示のラベルを提供'
+          : 'Provides an invisible label for the link'
+      }
     </li>
     <li>
-      <code>aria-labelledby</code> - References an external element as the label
+      <code>aria-labelledby</code> - {
+        locale === 'ja'
+          ? '外部要素をラベルとして参照'
+          : 'References an external element as the label'
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Focus Styles</h3>
-  <p class="text-muted-foreground mb-3">This implementation provides clear focus indicators:</p>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'フォーカススタイル' : 'Focus Styles'}
+  </h3>
+  <p class="text-muted-foreground mb-3">
+    {
+      locale === 'ja'
+        ? 'この実装は明確なフォーカスインジケーターを提供します：'
+        : 'This implementation provides clear focus indicators:'
+    }
+  </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Focus ring</strong> - Visible outline when focused via keyboard
+      <strong>{locale === 'ja' ? 'フォーカスリング' : 'Focus ring'}</strong> - {
+        locale === 'ja'
+          ? 'キーボードでフォーカスされた際に表示されるアウトライン'
+          : 'Visible outline when focused via keyboard'
+      }
     </li>
     <li>
-      <strong>Cursor style</strong> - Pointer cursor to indicate interactivity
+      <strong>{locale === 'ja' ? 'カーソルスタイル' : 'Cursor style'}</strong> - {
+        locale === 'ja'
+          ? 'インタラクティブであることを示すポインターカーソル'
+          : 'Pointer cursor to indicate interactivity'
+      }
     </li>
     <li>
-      <strong>Disabled appearance</strong> - Reduced opacity and not-allowed cursor when disabled
+      <strong>{locale === 'ja' ? '無効時の外観' : 'Disabled appearance'}</strong> - {
+        locale === 'ja'
+          ? '無効時は不透明度を下げ、not-allowedカーソルを表示'
+          : 'Reduced opacity and not-allowed cursor when disabled'
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <h3 class="mb-3 text-lg font-medium">{locale === 'ja' ? '参考資料' : 'References'}</h3>
   <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/link/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Link Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a"
-        class="text-primary hover:underline"
-      >
-        MDN: &lt;a&gt; element
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#link" class="text-primary hover:underline">
-        W3C ARIA: link role
-      </ExternalLink>
-    </li>
+    {
+      data.references?.map((ref) => (
+        <li>
+          <ExternalLink href={ref.url} class="text-primary hover:underline">
+            {ref.title}
+          </ExternalLink>
+        </li>
+      ))
+    }
   </ul>
 </div>

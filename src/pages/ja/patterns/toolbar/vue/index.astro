@@ -9,7 +9,7 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.ja.astro';
+import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
@@ -17,7 +17,7 @@ import toolbarSource from '@patterns/toolbar/Toolbar.vue?raw';
 import buttonSource from '@patterns/toolbar/ToolbarButton.vue?raw';
 import toggleSource from '@patterns/toolbar/ToolbarToggleButton.vue?raw';
 import separatorSource from '@patterns/toolbar/ToolbarSeparator.vue?raw';
-import TestingDocs from '@patterns/toolbar/TestingDocs.ja.astro';
+import TestingDocs from '@patterns/toolbar/TestingDocs.astro';
 import testCode from '@patterns/toolbar/Toolbar.test.vue.ts?raw';
 import { useTranslation } from '@/i18n';
 
@@ -122,7 +122,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -246,7 +246,7 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.vue'
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
     <div class="mt-6">
       <CodeBlock
         collapsible

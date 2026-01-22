@@ -1,35 +1,118 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { comboboxAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = comboboxAccessibilityData;
+
+// Group keyboard support by section
+const keyboardBySection = (data.keyboardSupport || []).reduce(
+  (acc, key) => {
+    const section = t(key.section || '');
+    if (!acc[section]) acc[section] = [];
+    acc[section].push(key);
+    return acc;
+  },
+  {} as Record<string, typeof data.keyboardSupport>
+);
+
+// Autocomplete modes
+const autocompleteModes = [
+  {
+    mode: 'list',
+    behavior: {
+      en: 'Options are filtered based on input value (default)',
+      ja: 'オプションは入力値に基づいてフィルタリングされる（デフォルト）',
+    },
+  },
+  {
+    mode: 'none',
+    behavior: {
+      en: 'All options shown regardless of input value',
+      ja: '入力値に関係なくすべてのオプションを表示',
+    },
+  },
+  {
+    mode: 'both',
+    behavior: {
+      en: 'Options filtered and first match auto-completed in input',
+      ja: 'オプションをフィルタリングし、最初の一致を入力にオートコンプリート',
+    },
+  },
+];
+
+// Translations
+const labels = {
+  ariaPropertiesInput:
+    locale === 'ja' ? 'WAI-ARIA プロパティ（Input）' : 'WAI-ARIA Properties (Input)',
+  ariaPropertiesListbox:
+    locale === 'ja'
+      ? 'WAI-ARIA プロパティ（Listbox & Options）'
+      : 'WAI-ARIA Properties (Listbox & Options)',
+  autocompleteModes: locale === 'ja' ? 'オートコンプリートモード' : 'Autocomplete Modes',
+  hiddenState: locale === 'ja' ? '非表示状態' : 'Hidden State',
+  mode: locale === 'ja' ? 'モード' : 'Mode',
+  behavior: locale === 'ja' ? '動作' : 'Behavior',
+  target: locale === 'ja' ? '対象' : 'Target',
+  hiddenDescription:
+    locale === 'ja'
+      ? '閉じている時、リストボックスは <code>hidden</code> 属性を使用して：'
+      : 'When closed, the listbox uses the <code>hidden</code> attribute to:',
+  hiddenPoints:
+    locale === 'ja'
+      ? [
+          'ポップアップを視覚的に非表示にする',
+          'ポップアップをアクセシビリティツリーから削除する',
+          'リストボックス要素は DOM に残り、<code>aria-controls</code> の参照が有効なまま',
+        ]
+      : [
+          'Hide the popup from visual display',
+          'Remove the popup from the accessibility tree',
+          'The listbox element remains in the DOM so <code>aria-controls</code> reference is valid',
+        ],
+};
+
+// Split properties into input vs listbox/options
+const inputProperties = (data.properties || []).filter(
+  (p) => p.element === 'input' || p.attribute === 'role="combobox"'
+);
+const listboxProperties = (data.properties || []).filter(
+  (p) => p.element === 'option' || p.element === 'listbox' || typeof p.element === 'object'
+);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>combobox</code></td>
-          <td class="py-2 pr-4">Input (<code>&lt;input&gt;</code>)</td>
-          <td class="py-2">The text input element that users type into</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>listbox</code></td>
-          <td class="py-2 pr-4">Popup (<code>&lt;ul&gt;</code>)</td>
-          <td class="py-2">The popup containing selectable options</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>option</code></td>
-          <td class="py-2 pr-4">Each item (<code>&lt;li&gt;</code>)</td>
-          <td class="py-2">An individual selectable option</td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
@@ -39,246 +122,156 @@ import { ResponsiveTable } from '@/components/ui/table';
     </ExternalLink>
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Input)</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.ariaPropertiesInput}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="combobox"</code></td>
-          <td class="py-2 pr-4">-</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Identifies the input as a combobox</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the listbox popup (even when closed)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates whether the popup is open</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-autocomplete</code></td>
-          <td class="py-2 pr-4"><code>list</code> | <code>none</code> | <code>both</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Describes the autocomplete behavior</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-activedescendant</code></td>
-          <td class="py-2 pr-4">ID reference | empty</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the currently focused option in the popup</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">References the label element</td>
-        </tr>
+        {
+          inputProperties.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">{prop.values}</td>
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? locale === 'ja'
+                      ? 'はい'
+                      : 'Yes'
+                    : locale === 'ja'
+                      ? 'いいえ'
+                      : 'No'
+                  : t(prop.required)}
+              </td>
+              <td class="py-2">{t(prop.notes || '')}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Listbox & Options)</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.ariaPropertiesListbox}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+          <th class="py-2 pr-4 text-left">{labels.target}</th>
+          <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">listbox</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the label element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-selected</code></td>
-          <td class="py-2 pr-4">option</td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates the currently focused option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4">option</td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the option is disabled</td>
-        </tr>
+        {
+          listboxProperties.map((prop) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{prop.attribute}</code>
+              </td>
+              <td class="py-2 pr-4">{t(prop.element)}</td>
+              <td class="py-2 pr-4">{prop.values}</td>
+              <td class="py-2 pr-4">
+                {typeof prop.required === 'boolean'
+                  ? prop.required
+                    ? locale === 'ja'
+                      ? 'はい'
+                      : 'Yes'
+                    : locale === 'ja'
+                      ? 'いいえ'
+                      : 'No'
+                  : t(prop.required)}
+              </td>
+              <td class="py-2">{t(prop.notes || '')}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <h4 class="mb-2 font-medium">Input (Popup Closed)</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Open popup and focus first option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Open popup and focus last option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Alt</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd
-            ></td
-          >
-          <td class="py-2">Open popup without changing focus position</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Type characters</td>
-          <td class="py-2">Filter options and open popup</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+  {
+    Object.entries(keyboardBySection).map(([section, keys]) => (
+      <>
+        <h4 class="mb-2 font-medium">{section}</h4>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+                <th class="py-2 text-left">{h('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {keys?.map((key) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    {typeof key.key === 'string' ? (
+                      <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{key.key}</kbd>
+                    ) : (
+                      t(key.key)
+                    )}
+                  </td>
+                  <td class="py-2">{t(key.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 font-medium">Input (Popup Open)</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to next enabled option (no wrap)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to previous enabled option (no wrap)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first enabled option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last enabled option</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Select focused option and close popup</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
-          >
-          <td class="py-2">Close popup and restore previous input value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Alt</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd
-            ></td
-          >
-          <td class="py-2">Select focused option and close popup</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Close popup and move to next focusable element</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses <strong>aria-activedescendant</strong> for virtual focus management:
+    {
+      locale === 'ja'
+        ? 'このコンポーネントは仮想フォーカス管理に aria-activedescendant を使用します：'
+        : 'This component uses aria-activedescendant for virtual focus management:'
+    }
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>DOM focus remains on the input at all times</li>
-    <li><code>aria-activedescendant</code> references the visually focused option</li>
-    <li>Arrow keys update <code>aria-activedescendant</code> without moving DOM focus</li>
-    <li>Disabled options are skipped during navigation</li>
-    <li>
-      <code>aria-activedescendant</code> is cleared when the popup closes or filter results are empty
-    </li>
+    {data.focusManagement?.map((rule) => <li>{t(rule.behavior)}</li>)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Autocomplete Modes</h3>
+  <h3 class="mb-3 text-lg font-medium">{labels.autocompleteModes}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Mode</th>
-          <th class="py-2 text-left">Behavior</th>
+          <th class="py-2 pr-4 text-left">{labels.mode}</th>
+          <th class="py-2 text-left">{labels.behavior}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>list</code></td>
-          <td class="py-2">Options are filtered based on input value (default)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>none</code></td>
-          <td class="py-2">All options shown regardless of input value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>both</code></td>
-          <td class="py-2">Options filtered and first match auto-completed in input</td>
-        </tr>
+        {
+          autocompleteModes.map((mode) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{mode.mode}</code>
+              </td>
+              <td class="py-2">{mode.behavior[locale]}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Hidden State</h3>
-  <p class="text-muted-foreground mb-4">
-    When closed, the listbox uses the <code>hidden</code> attribute to:
-  </p>
+  <h3 class="mb-3 text-lg font-medium">{labels.hiddenState}</h3>
+  <p class="text-muted-foreground mb-4" set:html={labels.hiddenDescription} />
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Hide the popup from visual display</li>
-    <li>Remove the popup from the accessibility tree</li>
-    <li>The listbox element remains in the DOM so <code>aria-controls</code> reference is valid</li>
+    {labels.hiddenPoints.map((point) => <li set:html={point} />)}
   </ul>
 </div>

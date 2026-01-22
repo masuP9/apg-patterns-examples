@@ -1,200 +1,224 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { meterAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = meterAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>meter</code></td>
-          <td class="py-2 pr-4">Container element</td>
-          <td class="py-2">
-            Identifies the element as a meter displaying a scalar value within a known range.
-          </td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    The <code>meter</code> role is used for graphical displays of numeric values within a defined range.
-    It is not interactive and should not receive focus by default.
-  </p>
+  {
+    data.additionalNotes && data.additionalNotes.length > 1 && (
+      <p class="text-muted-foreground mb-6 text-sm">{t(data.additionalNotes[1])}</p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuenow</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current numeric value of the meter. Required for all meter implementations.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Range</td>
-            <td class="py-2">
-              Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.properties?.map((prop) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{prop.attribute}</code>
+        </h4>
+        {prop.notes && <p class="text-muted-foreground mb-3">{t(prop.notes)}</p>}
+        <ResponsiveTable class="mb-2">
+          <table class="w-full border-collapse">
+            <tbody>
+              <tr class="border-border border-b">
+                <td class="w-32 py-2 pr-4 font-medium">{locale === 'ja' ? '型' : 'Type'}</td>
+                <td class="py-2">{t(prop.values)}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                <td class="py-2">
+                  {typeof prop.required === 'boolean'
+                    ? prop.required
+                      ? h('value.yes')
+                      : h('value.no')
+                    : t(prop.required)}
+                </td>
+              </tr>
+              {prop.attribute === 'aria-valuemin' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">
+                    {locale === 'ja' ? 'デフォルト' : 'Default'}
+                  </td>
+                  <td class="py-2">0</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuemax' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">
+                    {locale === 'ja' ? 'デフォルト' : 'Default'}
+                  </td>
+                  <td class="py-2">100</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuetext' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '例' : 'Example'}</td>
+                  <td class="py-2">"75% complete", "3 out of 4 GB used"</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuenow' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '範囲' : 'Range'}</td>
+                  <td class="py-2">
+                    {locale === 'ja' ? (
+                      <>
+                        <code>aria-valuemin</code> と <code>aria-valuemax</code>{' '}
+                        の間である必要があります
+                      </>
+                    ) : (
+                      <>
+                        Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </div>
+    ))
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuemin</code></h4>
-    <p class="text-muted-foreground mb-3">Specifies the minimum allowed value for the meter.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuemax</code></h4>
-    <p class="text-muted-foreground mb-3">Specifies the maximum allowed value for the meter.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">100</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Provides a human-readable text alternative for the current value. Use when the numeric value
-      alone doesn't convey sufficient meaning.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">String</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No (recommended when value needs context)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Example</td>
-            <td class="py-2">"75% complete", "3 out of 4 GB used"</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <p class="text-muted-foreground mb-6">
-    <strong>Not applicable.</strong> The meter pattern is a display-only element and is not interactive.
-    It should not receive keyboard focus unless explicitly made focusable for specific use cases.
+    {
+      locale === 'ja' ? (
+        <>
+          <strong>該当なし。</strong>{' '}
+          メーターパターンは表示専用の要素であり、インタラクティブではありません。
+          特定のユースケースのために明示的にフォーカス可能にされない限り、キーボードフォーカスを受け取るべきではありません。
+        </>
+      ) : (
+        <>
+          <strong>Not applicable.</strong> The meter pattern is a display-only element and is not
+          interactive. It should not receive keyboard focus unless explicitly made focusable for
+          specific use cases.
+        </>
+      )
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.accessibleNaming')}</h3>
   <p class="text-muted-foreground mb-3">
-    Meters must have an accessible name. This can be provided through:
+    {
+      locale === 'ja'
+        ? 'メーターはアクセシブルな名前を持つ必要があります。これは以下の方法で提供できます:'
+        : 'Meters must have an accessible name. This can be provided through:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Visible label</strong> - Using the <code>label</code> prop to display a visible label
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>表示されるラベル</strong> - <code>label</code>{' '}
+            プロパティを使用して表示されるラベルを提供
+          </>
+        ) : (
+          <>
+            <strong>Visible label</strong> - Using the <code>label</code> prop to display a visible
+            label
+          </>
+        )
+      }
     </li>
     <li>
-      <code>aria-label</code> - Provides an invisible label for the meter
+      <code>aria-label</code> -
+      {
+        locale === 'ja'
+          ? 'メーターに見えないラベルを提供'
+          : 'Provides an invisible label for the meter'
+      }
     </li>
     <li>
-      <code>aria-labelledby</code> - References an external element as the label
+      <code>aria-labelledby</code> -
+      {
+        locale === 'ja'
+          ? '外部要素をラベルとして参照'
+          : 'References an external element as the label'
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.visualDesign')}</h3>
   <p class="text-muted-foreground mb-3">
-    This implementation follows WCAG guidelines for accessible visual design:
+    {
+      locale === 'ja'
+        ? 'この実装は、アクセシブルなビジュアルデザインのためのWCAGガイドラインに従っています:'
+        : 'This implementation follows WCAG guidelines for accessible visual design:'
+    }
   </p>
-  <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Visual fill bar</strong> - Proportionally represents the current value
-    </li>
-    <li>
-      <strong>Numeric display</strong> - Optional text showing the current value
-    </li>
-    <li>
-      <strong>Visible label</strong> - Optional label identifying the meter's purpose
-    </li>
-    <li>
-      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
-      Mode
-    </li>
-  </ul>
+  {
+    data.visualDesign && Array.isArray(data.visualDesign) && (
+      <ul class="mb-6 list-disc space-y-2 pl-6">
+        {data.visualDesign.map((item) => {
+          const text = t(item);
+          const dashIndex = text.indexOf(' - ');
+          if (dashIndex > -1) {
+            return (
+              <li>
+                <strong>{text.substring(0, dashIndex)}</strong> - {text.substring(dashIndex + 3)}
+              </li>
+            );
+          }
+          return <li>{text}</li>;
+        })}
+      </ul>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
-  <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Meter Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter"
-        class="text-primary hover:underline"
-      >
-        MDN: &lt;meter&gt; element
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#meter" class="text-primary hover:underline">
-        W3C ARIA: meter role
-      </ExternalLink>
-    </li>
-  </ul>
+  <h3 class="mb-3 text-lg font-medium">{h('section.references')}</h3>
+  {
+    data.references && (
+      <ul class="list-disc space-y-2 pl-6">
+        {data.references.map((ref) => (
+          <li>
+            <ExternalLink href={ref.url} class="text-primary hover:underline">
+              {ref.title}
+            </ExternalLink>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </div>

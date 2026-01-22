@@ -1,72 +1,100 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import { checkboxAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  nativeHtmlConsiderations: rawNativeHtml,
+  nativeVsCustom,
+  nativeHtmlFootnote,
+} = checkboxAccessibilityData;
+if (!rawNativeHtml || !nativeVsCustom) {
+  throw new Error('Native HTML data not found in accessibility-data.ts');
+}
+// Handle both single object and array
+const nativeHtmlConsiderations = Array.isArray(rawNativeHtml) ? rawNativeHtml[0] : rawNativeHtml;
+
+const t = localize(locale);
+
+const sectionTitles = {
+  en: {
+    title: 'Use Native HTML First',
+    useCase: 'Use Case',
+    nativeHtml: 'Native HTML',
+    customImpl: 'Custom Implementation',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    useCase: 'ユースケース',
+    nativeHtml: 'ネイティブ HTML',
+    customImpl: 'カスタム実装',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">⚠️</span>
+    {titles.title}
   </h2>
   <p class="mb-4">
     <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code
-        >&lt;input type="checkbox"&gt;</code
-      > elements.</strong
+      >{
+        nativeHtmlConsiderations?.recommendation ? t(nativeHtmlConsiderations.recommendation) : ''
+      }</strong
     >
-    They provide built-in accessibility, work without JavaScript, and require no ARIA attributes.
+    {nativeHtmlConsiderations?.benefits ? t(nativeHtmlConsiderations.benefits) : ''}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
-      class="m-0 overflow-x-auto text-sm"><code>&lt;label&gt;
-  &lt;input type="checkbox" name="agree" /&gt;
-  I agree to the terms
-&lt;/label&gt;</code></pre>
+      class="m-0 overflow-x-auto text-sm"><code>{nativeHtmlConsiderations?.codeExample || ''}</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    Use custom implementations only when you need custom styling that native elements cannot
-    provide, or complex indeterminate state management for checkbox groups.
+    {nativeHtmlConsiderations?.customUseCases ? t(nativeHtmlConsiderations.customUseCases) : ''}
   </p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Use Case</th>
-          <th class="py-2 pr-4 text-left">Native HTML</th>
-          <th class="py-2 text-left">Custom Implementation</th>
+          <th class="py-2 pr-4 text-left">{titles.useCase}</th>
+          <th class="py-2 pr-4 text-left">{titles.nativeHtml}</th>
+          <th class="py-2 text-left">{titles.customImpl}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Basic form input</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
-          <td class="py-2">Not needed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JavaScript disabled support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
-          >
-          <td class="py-2">Requires fallback</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Indeterminate (mixed) state</td>
-          <td class="py-2 pr-4">JS property only*</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Custom styling</td>
-          <td class="py-2 pr-4">Limited (browser-dependent)</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Form submission</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Requires hidden input</td>
-        </tr>
+        {
+          nativeVsCustom.map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{row.useCase ? t(row.useCase) : ''}</td>
+              <td class="py-2 pr-4">
+                {row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{t(row.native)}</b>
+                ) : (
+                  t(row.native)
+                )}
+              </td>
+              <td class="py-2">
+                {!row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{t(row.custom)}</b>
+                ) : (
+                  t(row.custom)
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs">
-    *Native <code>indeterminate</code> is a JavaScript property, not an HTML attribute. It cannot be set
-    declaratively.
-  </p>
+  {nativeHtmlFootnote && <p class="text-muted-foreground mt-3 text-xs">{t(nativeHtmlFootnote)}</p>}
 </div>

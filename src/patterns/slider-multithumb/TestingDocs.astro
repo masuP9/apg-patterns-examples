@@ -2,278 +2,115 @@
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
+import { sliderMultithumbAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
 import e2eTestCode from '../../../e2e/slider-multithumb.spec.ts?raw';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const data = sliderMultithumbAccessibilityData.testing!;
+
+const translations = {
+  en: {
+    intro:
+      'Tests verify APG compliance for ARIA attributes, keyboard interactions, collision prevention, and accessibility requirements for multi-thumb sliders.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    e2eTesting: 'E2E Testing',
+    exampleTestCode: 'Example Test Code',
+    exampleTestCodeDescription:
+      'The following is the actual E2E test file (<code>e2e/slider-multithumb.spec.ts</code>).',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    documentation: 'See',
+    documentationText: 'for full documentation.',
+    priorityHigh: 'High Priority',
+    priorityMedium: 'Medium Priority',
+    priorityLow: 'Low Priority',
+    test: 'Test',
+    description: 'Description',
+  },
+  ja: {
+    intro:
+      'テストは、ARIA属性、キーボードインタラクション、衝突防止、マルチサムスライダーのアクセシビリティ要件のAPG準拠を検証します。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    e2eTesting: 'E2Eテスト',
+    exampleTestCode: 'テストコード例',
+    exampleTestCodeDescription:
+      '以下は実際のE2Eテストファイル（<code>e2e/slider-multithumb.spec.ts</code>）です。',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    documentation: '完全なドキュメントについては',
+    documentationText: 'を参照してください。',
+    priorityHigh: '高優先度',
+    priorityMedium: '中優先度',
+    priorityLow: '低優先度',
+    test: 'テスト',
+    description: '説明',
+  },
+};
+
+const tr = translations[locale];
+
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+const priorityLabels = {
+  high: tr.priorityHigh,
+  medium: tr.priorityMedium,
+  low: tr.priorityLow,
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance for ARIA attributes, keyboard interactions, collision prevention,
-    and accessibility requirements for multi-thumb sliders.
+    {tr.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  <h3 class="mb-3 text-lg font-medium">{tr.testCategories}</h3>
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: ARIA Structure
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>two slider elements</code></td>
-          <td class="py-2">Container has exactly two elements with role="slider"</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="group"</code></td>
-          <td class="py-2">Sliders are contained in a group with aria-labelledby</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
-          <td class="py-2">Both thumbs have correct initial values</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>static aria-valuemin</code></td>
-          <td class="py-2">Lower thumb has static min (absolute minimum)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>static aria-valuemax</code></td>
-          <td class="py-2">Upper thumb has static max (absolute maximum)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>dynamic aria-valuemax</code></td>
-          <td class="py-2">Lower thumb's max depends on upper thumb's value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>dynamic aria-valuemin</code></td>
-          <td class="py-2">Upper thumb's min depends on lower thumb's value</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    data.categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {priorityLabels[category.priority]}: {t(category.title)}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{tr.test}</th>
+                <th class="py-2 text-left">{tr.description}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Dynamic Bounds Update
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>lower → upper bound</code></td>
-          <td class="py-2">Moving lower thumb updates upper thumb's aria-valuemin</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>upper → lower bound</code></td>
-          <td class="py-2">Moving upper thumb updates lower thumb's aria-valuemax</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Keyboard Interaction
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Arrow Right/Up</code></td>
-          <td class="py-2">Increases value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Arrow Left/Down</code></td>
-          <td class="py-2">Decreases value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home (lower)</code></td>
-          <td class="py-2">Sets lower thumb to absolute minimum</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>End (lower)</code></td>
-          <td class="py-2">Sets lower thumb to dynamic maximum (upper - minDistance)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home (upper)</code></td>
-          <td class="py-2">Sets upper thumb to dynamic minimum (lower + minDistance)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>End (upper)</code></td>
-          <td class="py-2">Sets upper thumb to absolute maximum</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Page Up/Down</code></td>
-          <td class="py-2">Increases/decreases value by large step</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Collision Prevention
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>lower cannot exceed upper</code></td>
-          <td class="py-2">Lower thumb stops at (upper - minDistance)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>upper cannot go below lower</code></td>
-          <td class="py-2">Upper thumb stops at (lower + minDistance)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>rapid key presses</code></td>
-          <td class="py-2">Thumbs do not cross when rapidly pressing arrow keys</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Tab order</code></td>
-          <td class="py-2">Tab moves from lower to upper thumb</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Shift+Tab order</code></td>
-          <td class="py-2">Shift+Tab moves from upper to lower thumb</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
-          <td class="py-2">Both thumbs have tabindex="0" (always in tab order)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: aria-valuetext Updates
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>lower thumb update</code></td>
-          <td class="py-2">aria-valuetext updates when lower thumb value changes</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>upper thumb update</code></td>
-          <td class="py-2">aria-valuetext updates when upper thumb value changes</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations (container)</code></td>
-          <td class="py-2">No accessibility violations on the container</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations (sliders)</code></td>
-          <td class="py-2">No accessibility violations on each slider element</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">E2E Testing</h3>
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-blue-500"></span>
-    Cross-framework Consistency
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>render two sliders</code></td>
-          <td class="py-2">All frameworks render exactly two slider elements</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>consistent initial values</code></td>
-          <td class="py-2">All frameworks have identical initial aria-valuenow values</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>keyboard navigation</code></td>
-          <td class="py-2">All frameworks support identical keyboard navigation</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>collision prevention</code></td>
-          <td class="py-2">All frameworks prevent thumb crossing</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Example Test Code</h3>
-  <p class="text-muted-foreground mb-4 text-sm">
-    The following is the actual E2E test file (<code>e2e/slider-multithumb.spec.ts</code>).
-  </p>
+  <h3 class="mb-3 text-lg font-medium">{tr.exampleTestCode}</h3>
+  <p class="text-muted-foreground mb-4 text-sm" set:html={tr.exampleTestCodeDescription} />
   <CodeBlock
     code={e2eTestCode}
     lang="typescript"
@@ -282,9 +119,9 @@ import e2eTestCode from '../../../e2e/slider-multithumb.spec.ts?raw';
     collapsedLines={20}
   />
 
-  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
+  <h3 class="mb-3 text-lg font-medium">{tr.runningTests}</h3>
   <pre
-    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run unit tests for MultiThumbSlider
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{`# Run unit tests for MultiThumbSlider
 npm run test -- MultiThumbSlider
 
 # Run E2E tests for MultiThumbSlider (all frameworks)
@@ -294,36 +131,19 @@ npm run test:e2e:pattern --pattern=slider-multithumb
 npm run test:e2e:react:pattern --pattern=slider-multithumb
 npm run test:e2e:vue:pattern --pattern=slider-multithumb
 npm run test:e2e:svelte:pattern --pattern=slider-multithumb
-npm run test:e2e:astro:pattern --pattern=slider-multithumb</code></pre>
+npm run test:e2e:astro:pattern --pattern=slider-multithumb`}</code></pre>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mb-3 text-lg font-medium">{tr.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core"
-        class="text-primary hover:underline"
-      >
-        axe-core
-      </ExternalLink>
-      - Accessibility testing engine
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline">
-        Testing Library
-      </ExternalLink>
-      - Framework-specific testing utilities
-    </li>
+    {
+      data.tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          - {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 </div>

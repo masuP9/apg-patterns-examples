@@ -1,277 +1,206 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { alertAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const testing = alertAccessibilityData.testing;
+if (!testing) {
+  throw new Error('Testing data not found in accessibility-data.ts');
+}
+
+const { strategies, categories, screenReaderTesting, commands, tools, documentationLink } = testing;
+
+const t = localize(locale);
+
+// Priority colors
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+// Section titles
+const sectionTitles = {
+  en: {
+    intro:
+      'Tests verify APG compliance for live region behavior, ARIA attributes, and accessibility requirements. The Alert component uses a two-layer testing strategy.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    screenReaderTesting: 'Screen Reader Testing',
+    runningTests: 'Running Tests',
+    testingTools: 'Testing Tools',
+    seeFullDocs: 'See',
+    forFullDocs: 'for full documentation.',
+  },
+  ja: {
+    intro:
+      'テストは、ライブリージョンの動作、ARIA属性、アクセシビリティ要件全体にわたってAPG準拠を検証します。Alertコンポーネントは2層のテスト戦略を採用しています。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    screenReaderTesting: 'スクリーンリーダーテスト',
+    runningTests: 'テストの実行',
+    testingTools: 'テストツール',
+    seeFullDocs: '詳細なドキュメントについては、',
+    forFullDocs: 'を参照してください。',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance for live region behavior, ARIA attributes, and accessibility
-    requirements. The Alert component uses a two-layer testing strategy.
+    {titles.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.testingStrategy}</h3>
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's rendered output using framework-specific testing libraries. These tests
-      ensure correct HTML structure and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA attributes (role="alert")</li>
-      <li>Live region container persistence in DOM</li>
-      <li>Dismiss button accessibility</li>
-      <li>Accessibility via jest-axe</li>
-    </ul>
-  </div>
+  {
+    strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
 
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment across all frameworks. These tests
-      cover interactions and cross-framework consistency.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA structure in live browser</li>
-      <li>Focus management (alert does NOT steal focus)</li>
-      <li>Dismiss button keyboard interactions</li>
-      <li>Tab navigation behavior</li>
-      <li>axe-core accessibility scanning</li>
-      <li>Cross-framework consistency checks</li>
-    </ul>
-  </div>
+  <h3 class="mb-3 text-lg font-medium">{titles.testCategories}</h3>
 
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
+  {
+    categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {locale === 'en' ? (
+            <>
+              {category.priority === 'high'
+                ? 'High Priority'
+                : category.priority === 'medium'
+                  ? 'Medium Priority'
+                  : 'Low Priority'}
+              : {t(category.title)} ({category.testType})
+            </>
+          ) : (
+            <>
+              {category.priority === 'high'
+                ? '高優先度'
+                : category.priority === 'medium'
+                  ? '中優先度'
+                  : '低優先度'}
+              : {t(category.title)}（{category.testType}）
+            </>
+          )}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{locale === 'en' ? 'Test' : 'テスト'}</th>
+                <th class="py-2 text-left">
+                  {locale === 'en'
+                    ? category.priority === 'high'
+                      ? 'APG Requirement'
+                      : category.priority === 'medium'
+                        ? 'WCAG Requirement'
+                        : 'Feature'
+                    : category.priority === 'high'
+                      ? 'APG 要件'
+                      : category.priority === 'medium'
+                        ? 'WCAG 要件'
+                        : '機能'}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{item.name}</td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-      High Priority: APG Core Compliance (Unit + E2E)
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">APG Requirement</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">role="alert" exists</td>
-            <td class="py-2">Alert container must have alert role</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Container always in DOM</td>
-            <td class="py-2">Live region must not be dynamically added/removed</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Same container on message change</td>
-            <td class="py-2">Container element identity preserved during updates</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Focus unchanged after alert</td>
-            <td class="py-2">Alert must not move keyboard focus</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Alert not focusable</td>
-            <td class="py-2">Alert container must not have tabindex</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    screenReaderTesting && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.screenReaderTesting}</h3>
+        <p class="text-muted-foreground mb-4">{t(screenReaderTesting.description)}</p>
+        <ResponsiveTable>
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">
+                  {locale === 'en' ? 'Screen Reader' : 'スクリーンリーダー'}
+                </th>
+                <th class="py-2 text-left">{locale === 'en' ? 'Platform' : 'プラットフォーム'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {screenReaderTesting.platforms.map((platform) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{platform.name}</td>
+                  <td class="py-2">{platform.platform}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+        <p class="text-muted-foreground mt-2 text-sm">
+          {screenReaderTesting.verificationNote ? t(screenReaderTesting.verificationNote) : ''}
+        </p>
+      </>
+    )
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-      Medium Priority: Accessibility Validation (Unit + E2E)
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">WCAG Requirement</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">No axe violations (with message)</td>
-            <td class="py-2">WCAG 2.1 AA compliance</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">No axe violations (empty)</td>
-            <td class="py-2">WCAG 2.1 AA compliance</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">No axe violations (dismissible)</td>
-            <td class="py-2">WCAG 2.1 AA compliance</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Dismiss button accessible name</td>
-            <td class="py-2">Button has aria-label</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Dismiss button type="button"</td>
-            <td class="py-2">Prevents form submission</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-      Low Priority: Props &amp; Extensibility (Unit)
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">Feature</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">variant prop changes styling</td>
-            <td class="py-2">Visual customization</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">id prop sets custom ID</td>
-            <td class="py-2">SSR support</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">className inheritance</td>
-            <td class="py-2">Style customization</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">children for complex content</td>
-            <td class="py-2">Content flexibility</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">onDismiss callback fires</td>
-            <td class="py-2">Event handling</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 flex items-center gap-2 font-medium">
-      <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
-      Low Priority: Cross-framework Consistency (E2E)
-    </h4>
-    <ResponsiveTable>
-      <table class="w-full border-collapse text-sm">
-        <thead>
-          <tr class="border-border border-b">
-            <th class="py-2 pr-4 text-left">Test</th>
-            <th class="py-2 text-left">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">All frameworks have alert</td>
-            <td class="py-2">React, Vue, Svelte, Astro all render alert element</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Same trigger buttons</td>
-            <td class="py-2">All frameworks have consistent trigger buttons</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4">Show alert on click</td>
-            <td class="py-2">All frameworks show alert when button is clicked</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Screen Reader Testing</h3>
-  <p class="text-muted-foreground mb-4">
-    Automated tests verify DOM structure, but manual testing with screen readers is essential for
-    validating actual announcement behavior:
-  </p>
-  <ResponsiveTable>
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Screen Reader</th>
-          <th class="py-2 text-left">Platform</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">VoiceOver</td>
-          <td class="py-2">macOS / iOS</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">NVDA</td>
-          <td class="py-2">Windows</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JAWS</td>
-          <td class="py-2">Windows</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">TalkBack</td>
-          <td class="py-2">Android</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mt-2 text-sm">
-    Verify that message changes trigger immediate announcement and that existing content on page
-    load is NOT announced.
-  </p>
-
-  <h3 class="mt-6 mb-3 text-lg font-medium">Testing Tools</h3>
+  <h3 class="mt-6 mb-3 text-lg font-medium">{titles.testingTools}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink href="https://vitest.dev/" class="text-primary hover:underline"
-        >Vitest</ExternalLink
-      >
-      - Test runner for unit tests
-    </li>
-    <li>
-      <ExternalLink href="https://testing-library.com/" class="text-primary hover:underline"
-        >Testing Library</ExternalLink
-      >
-      - Framework-specific testing utilities (React, Vue, Svelte)
-    </li>
-    <li>
-      <ExternalLink href="https://playwright.dev/" class="text-primary hover:underline"
-        >Playwright</ExternalLink
-      >
-      - Browser automation for E2E tests
-    </li>
-    <li>
-      <ExternalLink
-        href="https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright"
-        class="text-primary hover:underline">axe-core/playwright</ExternalLink
-      >
-      - Automated accessibility testing in E2E
-    </li>
+    {
+      tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          {' - '}
+          {t(tool.description)}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mt-6 mb-3 text-lg font-medium">Running Tests</h3>
+  <h3 class="mt-6 mb-3 text-lg font-medium">{titles.runningTests}</h3>
   <pre
-    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code># Run all Alert tests
-npm run test -- alert
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{commands.map((cmd) => {
+    const comment = t(cmd.comment);
+    return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+  }).join('\n\n')}</code></pre>
 
-# Run tests for specific framework
-npm run test -- Alert.test.tsx    # React
-npm run test -- Alert.test.vue    # Vue
-npm run test -- Alert.test.svelte # Svelte</code></pre>
-
-  <p class="text-muted-foreground text-sm">
-    See <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline">testing-strategy.md</ExternalLink
-    > for full documentation.
-  </p>
+  {
+    documentationLink && (
+      <p class="text-muted-foreground text-sm">
+        {titles.seeFullDocs}{' '}
+        <ExternalLink href={documentationLink} class="text-primary hover:underline">
+          testing-strategy.md
+        </ExternalLink>{' '}
+        {titles.forFullDocs}
+      </p>
+    )
+  }
 </div>

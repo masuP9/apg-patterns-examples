@@ -16,7 +16,8 @@ export const GET: APIRoute = async ({ params }) => {
   const { pattern } = params;
 
   try {
-    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, 'llm.md');
+    // Read from {pattern}.md (e.g., alert-dialog.md) instead of llm.md
+    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, `${pattern}.md`);
     const content = await readFile(filePath, 'utf-8');
 
     return new Response(content, {

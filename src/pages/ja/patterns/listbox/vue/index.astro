@@ -1,8 +1,8 @@
 ---
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import ListboxDemo from '@patterns/listbox/ListboxDemo.vue';
-import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/listbox/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -129,7 +129,7 @@ const colorOptions = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -251,7 +251,7 @@ const handleSelectionChange = (ids) => {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold"
       >{t('pattern.testing')}</Heading
     >
-    <TestingDocs />
+    <TestingDocs locale="ja" />
   </section>
 
   <!-- Resources -->

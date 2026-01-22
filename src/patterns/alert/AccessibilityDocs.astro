@@ -1,238 +1,355 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { alertAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  implicitProperties,
+  keyboardSupport,
+  keyboardDocNote,
+  focusManagement,
+  additionalNotes,
+  implementationNotesData,
+  references,
+  criticalImplementationNotes,
+} = alertAccessibilityData;
+
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Section titles
+const sectionTitles = {
+  en: {
+    criticalNote: 'Critical Implementation Note',
+    ariaRoles: 'WAI-ARIA Roles',
+    implicitProperties: 'Implicit ARIA Properties',
+    implicitPropertiesDesc:
+      'The role="alert" implicitly sets the following ARIA properties. You do NOT need to add these manually:',
+    keyboardSupport: 'Keyboard Support',
+    keyboardSupportIntro:
+      'If the alert includes a dismiss button, the button follows standard button keyboard interaction:',
+    focusManagement: 'Focus Management',
+    guidelines: 'Important Guidelines',
+    noAutoDismissal: 'No Auto-Dismissal',
+    noAutoDismissalDesc:
+      'Alerts should NOT disappear automatically. Per WCAG 2.2.3 No Timing, users need sufficient time to read content. If auto-dismissal is required:',
+    alertFrequency: 'Alert Frequency',
+    alertFrequencyDesc:
+      'Excessive alerts can inhibit usability, especially for users with visual or cognitive disabilities (WCAG 2.2.4 Interruptions). Use alerts sparingly for truly important messages.',
+    alertVsDialog: 'Alert vs Alert Dialog',
+    useAlert: 'Use Alert when:',
+    useAlertDialog: 'Use Alert Dialog (role="alertdialog") when:',
+    alertDialogNote:
+      'role="alertdialog" requires focus management and keyboard handling (Escape to close, focus trapping). Only use it when modal interruption is appropriate.',
+    screenReaderBehavior: 'Screen Reader Behavior',
+    references: 'References',
+  },
+  ja: {
+    criticalNote: '重要な実装上の注意',
+    ariaRoles: 'WAI-ARIA ロール',
+    implicitProperties: '暗黙的な ARIA プロパティ',
+    implicitPropertiesDesc:
+      'role="alert" は以下の ARIA プロパティを暗黙的に設定します。これらを手動で追加する必要はありません：',
+    keyboardSupport: 'キーボードサポート',
+    keyboardSupportIntro:
+      'アラートに閉じるボタンが含まれる場合、ボタンは標準的なボタンのキーボード操作に従います：',
+    focusManagement: 'フォーカス管理',
+    guidelines: '重要なガイドライン',
+    noAutoDismissal: '自動非表示の禁止',
+    noAutoDismissalDesc:
+      'アラートは自動的に消えてはいけません。WCAG 2.2.3 制限時間なしに従い、ユーザーがコンテンツを読むのに十分な時間が必要です。自動非表示が必要な場合：',
+    alertFrequency: 'アラートの頻度',
+    alertFrequencyDesc:
+      '過度なアラートは、特に視覚障がいや認知障がいを持つユーザーにとって使いやすさを損なう可能性があります（WCAG 2.2.4 割り込み）。本当に重要なメッセージのためだけにアラートを使用してください。',
+    alertVsDialog: 'Alert vs Alert Dialog',
+    useAlert: 'Alert を使用する場合：',
+    useAlertDialog: 'Alert Dialog (role="alertdialog") を使用する場合：',
+    alertDialogNote:
+      'role="alertdialog" にはフォーカス管理とキーボード処理（Escapeで閉じる、フォーカストラップ）が必要です。モーダルな中断が適切な場合にのみ使用してください。',
+    screenReaderBehavior: 'スクリーンリーダーの動作',
+    references: '参考資料',
+  },
+};
+
+const titles = sectionTitles[locale];
+
+// Auto-dismissal points
+const autoDismissalPoints = {
+  en: [
+    'Provide user control to pause/extend the display time',
+    'Ensure sufficient display duration (minimum 5 seconds + reading time)',
+    'Consider if the content is truly non-essential',
+  ],
+  ja: [
+    '表示時間を一時停止・延長するためのユーザーコントロールを提供する',
+    '十分な表示時間を確保する（最低5秒 + 読む時間）',
+    'コンテンツが本当に必須でないかを検討する',
+  ],
+};
+
+// Screen reader behaviors
+const screenReaderBehaviors = {
+  en: [
+    {
+      title: 'Immediate announcement',
+      desc: 'When alert content changes, screen readers interrupt current reading to announce the alert (aria-live="assertive").',
+    },
+    {
+      title: 'Full content announced',
+      desc: 'The entire alert content is read, not just the changed portion (aria-atomic="true").',
+    },
+    {
+      title: 'Initial content not announced',
+      desc: 'Alerts that exist when the page loads are NOT automatically announced. Only dynamic changes trigger announcements.',
+    },
+  ],
+  ja: [
+    {
+      title: '即座のアナウンス',
+      desc: 'アラートのコンテンツが変更されると、スクリーンリーダーは現在の読み上げを中断してアラートをアナウンスします（aria-live="assertive"）。',
+    },
+    {
+      title: '完全なコンテンツのアナウンス',
+      desc: '変更された部分だけでなく、アラート全体のコンテンツが読み上げられます（aria-atomic="true"）。',
+    },
+    {
+      title: '初期コンテンツはアナウンスされない',
+      desc: 'ページ読み込み時に存在するアラートは自動的にアナウンスされません。動的な変更のみがアナウンスをトリガーします。',
+    },
+  ],
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <div
-    class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20"
-  >
-    <h3 class="mt-0 mb-2 text-lg font-semibold text-red-800 dark:text-red-200">
-      Critical Implementation Note
-    </h3>
-    <p class="mb-2 text-sm text-red-800 dark:text-red-200">
-      <strong
-        >The live region container (<code>role="alert"</code>) must exist in the DOM from page load.</strong
-      >
-      Do NOT dynamically add/remove the container itself. Only the content inside the container should
-      change dynamically.
-    </p>
-    <div class="text-sm text-red-700 dark:text-red-300">
-      <pre
-        class="mb-2 overflow-x-auto rounded-md bg-red-100 p-3 dark:bg-red-900/40"><code>{`// Incorrect: Dynamically adding live region
+  {
+    criticalImplementationNotes && criticalImplementationNotes.length > 0 && (
+      <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
+        <h3 class="mt-0 mb-2 text-lg font-semibold text-red-800 dark:text-red-200">
+          {titles.criticalNote}
+        </h3>
+        <p class="mb-2 text-sm text-red-800 dark:text-red-200">
+          <strong>{t(criticalImplementationNotes[0])}</strong>
+        </p>
+        <div class="text-sm text-red-700 dark:text-red-300">
+          <pre class="mb-2 overflow-x-auto rounded-md bg-red-100 p-3 dark:bg-red-900/40">
+            <code>{`// ${locale === 'en' ? 'Incorrect: Dynamically adding live region' : '誤り: ライブリージョンを動的に追加'}
 {showAlert && <div role="alert">Message</div>}
 
-// Correct: Live region always exists, content changes
+// ${locale === 'en' ? 'Correct: Live region always exists, content changes' : '正しい: ライブリージョンは常に存在し、コンテンツを変更'}
 <div role="alert">
   {message && <span>{message}</span>}
-</div>`}</code></pre>
-      <p class="mt-2">
-        Screen readers detect changes to live regions by observing DOM mutations inside them. If the
-        live region itself is added dynamically, some screen readers may not announce the content
-        reliably.
-      </p>
-    </div>
-  </div>
+</div>`}</code>
+          </pre>
+          {additionalNotes && additionalNotes.length > 0 && (
+            <p class="mt-2">{t(additionalNotes[0])}</p>
+          )}
+        </div>
+      </div>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.ariaRoles}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <code>alert</code> - An element that displays a brief, important message that attracts the user's
-      attention without interrupting their task<br />
-      <ExternalLink
-        href="https://w3c.github.io/aria/#alert"
-        class="text-primary text-sm hover:underline"
-      >
-        WAI-ARIA alert role
-      </ExternalLink>
-    </li>
+    {
+      roles.map((role) => (
+        <li>
+          <code>{role.name}</code> - {t(role.description)}
+          <br />
+          <ExternalLink
+            href="https://w3c.github.io/aria/#alert"
+            class="text-primary text-sm hover:underline"
+          >
+            WAI-ARIA alert role
+          </ExternalLink>
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Implicit ARIA Properties</h3>
-  <p class="text-muted-foreground mb-4">
-    The <code>role="alert"</code> implicitly sets the following ARIA properties. You do NOT need to add
-    these manually:
-  </p>
+  {
+    implicitProperties && implicitProperties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.implicitProperties}</h3>
+        <p class="text-muted-foreground mb-4">{titles.implicitPropertiesDesc}</p>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.property')}</th>
+                <th class="py-2 pr-4 text-left">
+                  {locale === 'en' ? 'Implicit Value' : '暗黙的な値'}
+                </th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {implicitProperties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">
+                    <code>{prop.implicitValue}</code>
+                  </td>
+                  <td class="py-2">{t(prop.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{titles.keyboardSupport}</h3>
+  {
+    keyboardDocNote && (
+      <div class="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          <strong>{t(keyboardDocNote)}</strong>
+        </p>
+      </div>
+    )
+  }
+
+  <p class="text-muted-foreground mb-4">{titles.keyboardSupportIntro}</p>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Property</th>
-          <th class="py-2 pr-4 text-left">Implicit Value</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-live</code></td>
-          <td class="py-2 pr-4"><code>assertive</code></td>
-          <td class="py-2">Interrupts screen reader to announce immediately</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-atomic</code></td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2">Announces entire alert content, not just changed parts</td>
-        </tr>
+        {
+          keyboardSupport?.map((shortcut) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
+              </td>
+              <td class="py-2">{t(shortcut.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <div
-    class="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20"
-  >
-    <p class="text-sm text-blue-800 dark:text-blue-200">
-      <strong>Alerts require no keyboard interaction.</strong> They are designed to inform users without
-      interrupting their workflow. The alert content is automatically announced by screen readers when
-      it changes.
-    </p>
-  </div>
-
-  <p class="text-muted-foreground mb-4">
-    If the alert includes a dismiss button, the button follows standard button keyboard interaction:
-  </p>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activates the dismiss button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Activates the dismiss button</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.focusManagement}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Alert must NOT move focus</strong> - Alerts are non-modal and should not interrupt user
-      workflow by stealing focus.
-    </li>
-    <li>
-      <strong>Alert container is not focusable</strong> - The alert element should not have <code
-        >tabindex</code
-      > or receive keyboard focus.
-    </li>
-    <li>
-      <strong>Dismiss button is focusable</strong> - If present, the dismiss button can be reached via
-      Tab navigation.
-    </li>
+    {
+      focusManagement?.map((rule) => (
+        <li>
+          <strong>{t(rule.event)}</strong> - {t(rule.behavior)}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Important Guidelines</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.guidelines}</h3>
 
   <div class="mb-4">
-    <h4 class="mb-2 font-medium">No Auto-Dismissal</h4>
+    <h4 class="mb-2 font-medium">{titles.noAutoDismissal}</h4>
     <p class="text-muted-foreground mb-2">
-      Alerts should NOT disappear automatically. Per
+      {titles.noAutoDismissalDesc.split('WCAG 2.2.3')[0]}
       <ExternalLink
         href="https://www.w3.org/WAI/WCAG21/Understanding/no-timing.html"
         class="text-primary hover:underline"
       >
-        WCAG 2.2.3 No Timing
-      </ExternalLink>, users need sufficient time to read content. If auto-dismissal is required:
+        WCAG 2.2.3 {locale === 'en' ? 'No Timing' : '制限時間なし'}
+      </ExternalLink>
+      {
+        locale === 'en'
+          ? ', users need sufficient time to read content. If auto-dismissal is required:'
+          : 'に従い、ユーザーがコンテンツを読むのに十分な時間が必要です。自動非表示が必要な場合：'
+      }
     </p>
     <ul class="text-muted-foreground list-disc pl-6">
-      <li>Provide user control to pause/extend the display time</li>
-      <li>Ensure sufficient display duration (minimum 5 seconds + reading time)</li>
-      <li>Consider if the content is truly non-essential</li>
+      {autoDismissalPoints[locale].map((point) => <li>{point}</li>)}
     </ul>
   </div>
 
   <div class="mb-4">
-    <h4 class="mb-2 font-medium">Alert Frequency</h4>
+    <h4 class="mb-2 font-medium">{titles.alertFrequency}</h4>
     <p class="text-muted-foreground mb-2">
-      Excessive alerts can inhibit usability, especially for users with visual or cognitive
-      disabilities (<ExternalLink
+      {
+        locale === 'en'
+          ? 'Excessive alerts can inhibit usability, especially for users with visual or cognitive disabilities ('
+          : '過度なアラートは、特に視覚障がいや認知障がいを持つユーザーにとって使いやすさを損なう可能性があります（'
+      }
+      <ExternalLink
         href="https://www.w3.org/WAI/WCAG21/Understanding/interruptions.html"
         class="text-primary hover:underline"
       >
-        WCAG 2.2.4 Interruptions
-      </ExternalLink>). Use alerts sparingly for truly important messages.
+        WCAG 2.2.4 {locale === 'en' ? 'Interruptions' : '割り込み'}
+      </ExternalLink>
+      {
+        locale === 'en'
+          ? '). Use alerts sparingly for truly important messages.'
+          : '）。本当に重要なメッセージのためだけにアラートを使用してください。'
+      }
     </p>
   </div>
 
   <div class="mb-6">
-    <h4 class="mb-2 font-medium">Alert vs Alert Dialog</h4>
-    <p class="text-muted-foreground mb-2">
-      Use <strong>Alert</strong> when:
-    </p>
+    <h4 class="mb-2 font-medium">{titles.alertVsDialog}</h4>
+    <p class="text-muted-foreground mb-2">{titles.useAlert}</p>
     <ul class="text-muted-foreground mb-2 list-disc pl-6">
-      <li>The message is informational and doesn't require user action</li>
-      <li>User workflow should NOT be interrupted</li>
-      <li>Focus should remain on the current task</li>
+      {
+        implementationNotesData?.alertVsAlertDialog?.alert.points.map((point) => (
+          <li>{t(point)}</li>
+        ))
+      }
     </ul>
-    <p class="text-muted-foreground mb-2">
-      Use <strong>Alert Dialog</strong> (<code>role="alertdialog"</code>) when:
-    </p>
+    <p class="text-muted-foreground mb-2">{titles.useAlertDialog}</p>
     <ul class="text-muted-foreground list-disc pl-6">
-      <li>The message requires immediate user response</li>
-      <li>User must acknowledge or take action before continuing</li>
-      <li>Focus should move to the dialog (modal behavior)</li>
+      {
+        implementationNotesData?.alertVsAlertDialog?.alertDialog.points.map((point) => (
+          <li>{t(point)}</li>
+        ))
+      }
     </ul>
     <div
       class="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20"
     >
       <p class="text-sm text-amber-800 dark:text-amber-200">
-        <strong>Note:</strong>
-        <code>role="alertdialog"</code> requires focus management and keyboard handling (Escape to close,
-        focus trapping). Only use it when modal interruption is appropriate.
+        <strong>{locale === 'en' ? 'Note:' : '注意：'}</strong>
+        {titles.alertDialogNote}
       </p>
     </div>
   </div>
 
-  <h3 class="mb-3 text-lg font-medium">Screen Reader Behavior</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.screenReaderBehavior}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Immediate announcement</strong> - When alert content changes, screen readers interrupt current
-      reading to announce the alert (<code>aria-live="assertive"</code>).
-    </li>
-    <li>
-      <strong>Full content announced</strong> - The entire alert content is read, not just the changed
-      portion (<code>aria-atomic="true"</code>).
-    </li>
-    <li>
-      <strong>Initial content not announced</strong> - Alerts that exist when the page loads are NOT automatically
-      announced. Only dynamic changes trigger announcements.
-    </li>
+    {
+      screenReaderBehaviors[locale].map((behavior) => (
+        <li>
+          <strong>{behavior.title}</strong> - {behavior.desc}
+        </li>
+      ))
+    }
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.references}</h3>
   <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Alert Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#alert" class="text-primary hover:underline">
-        WAI-ARIA: alert role
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Alert Dialog Pattern
-      </ExternalLink>
-    </li>
+    {
+      references?.map((ref) => (
+        <li>
+          <ExternalLink href={ref.url} class="text-primary hover:underline">
+            {ref.title}
+          </ExternalLink>
+        </li>
+      ))
+    }
   </ul>
 </div>

@@ -1,235 +1,228 @@
 ---
+import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { alertDialogAccessibilityData, dialogVsAlertDialogDifferences } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = alertDialogAccessibilityData;
+const t = localize(locale);
+const th = createTableHeaderTranslator(locale);
+
+// Section title for "Differences from Dialog"
+const differencesTitle = locale === 'ja' ? 'Dialog との違い' : 'Differences from Dialog';
+const notesTitle = locale === 'ja' ? '補足事項' : 'Additional Notes';
+
+// Get comparison data
+const comparison = dialogVsAlertDialogDifferences[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <!-- WAI-ARIA Roles -->
+  <h3 class="mb-3 text-lg font-medium">{th('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{th('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.element')}</th>
+          <th class="py-2 text-left">{th('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>alertdialog</code></td>
-          <td class="py-2 pr-4">Dialog container</td>
-          <td class="py-2"
-            >A type of dialog that interrupts the user's workflow to communicate an important
-            message and require a response. May trigger system alert sounds in assistive
-            technologies.</td
-          >
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink
-      href="https://w3c.github.io/aria/#alertdialog"
-      class="text-primary hover:underline">WAI-ARIA alertdialog role</ExternalLink
-    >
-  </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  {
+    data.references && data.references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={data.references[0].url} class="text-primary hover:underline">
+          {data.references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
+
+  <!-- WAI-ARIA Properties -->
+  {
+    data.properties && data.properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.ariaProperties')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.required')}</th>
+                <th class="py-2 text-left">{th('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.properties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{t(prop.element)}</td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.values === 'string' && prop.values.startsWith('<code>') ? (
+                      <code>{prop.values.replace(/<\/?code>/g, '')}</code>
+                    ) : (
+                      t(prop.values)
+                    )}
+                  </td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? th('value.yes')
+                        : th('value.no')
+                      : t(prop.required)}
+                  </td>
+                  <td class="py-2">{prop.notes && t(prop.notes)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <!-- Focus Management -->
+  {
+    data.focusManagement && data.focusManagement.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.focusManagement')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.event')}</th>
+                <th class="py-2 text-left">{th('table.behavior')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.focusManagement.map((rule) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">{t(rule.event)}</td>
+                  <td class="py-2">{t(rule.behavior)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <!-- Keyboard Support -->
+  {
+    data.keyboardSupport && data.keyboardSupport.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.keyboardSupport')}</h3>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.key')}</th>
+                <th class="py-2 text-left">{th('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.keyboardSupport.map((shortcut) => {
+                const keyText = t(shortcut.key);
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      {keyText.includes(' + ') ? (
+                        keyText.split(' + ').map((k: string, i: number) => (
+                          <>
+                            {i > 0 && ' + '}
+                            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{k}</kbd>
+                          </>
+                        ))
+                      ) : (
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{keyText}</kbd>
+                      )}
+                    </td>
+                    <td class="py-2">{t(shortcut.action)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <!-- Differences from Dialog -->
+  <h3 class="mb-3 text-lg font-medium">{differencesTitle}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{comparison.header.feature}</th>
+          <th class="py-2 pr-4 text-left">{comparison.header.dialog}</th>
+          <th class="py-2 text-left">{comparison.header.alertDialog}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-modal</code></td>
-          <td class="py-2 pr-4">alertdialog</td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">Implicit</td>
-          <td class="py-2"
-            >Provided automatically by <code>showModal()</code>. No explicit attribute needed when
-            using native <code>&lt;dialog&gt;</code> element.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">alertdialog</td>
-          <td class="py-2 pr-4">ID reference to title element</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">References the alert dialog title</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-describedby</code></td>
-          <td class="py-2 pr-4">alertdialog</td>
-          <td class="py-2 pr-4">ID reference to message</td>
-          <td class="py-2 pr-4">Yes (required)</td>
-          <td class="py-2"
-            >References the alert message. Unlike regular Dialog, this is required for Alert Dialog
-            as the message is central to the user's understanding of what action is being confirmed.</td
-          >
-        </tr>
+        {
+          comparison.rows.map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{row.feature}</td>
+              <td class="py-2 pr-4">
+                {row.dialog === 'dialog' || row.dialog === 'alertdialog' ? (
+                  <code>{row.dialog}</code>
+                ) : (
+                  row.dialog
+                )}
+              </td>
+              <td class="py-2">
+                {row.alertDialog === 'dialog' || row.alertDialog === 'alertdialog' ? (
+                  <code>{row.alertDialog}</code>
+                ) : (
+                  row.alertDialog
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Event</th>
-          <th class="py-2 text-left">Behavior</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Dialog opens</td>
-          <td class="py-2"
-            >Focus moves to the Cancel button (safest action). This differs from regular Dialog
-            which focuses the first focusable element.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Dialog closes</td>
-          <td class="py-2">Focus returns to the element that triggered the dialog</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Focus trap</td>
-          <td class="py-2"
-            >Tab/Shift+Tab cycles through focusable elements within the dialog only</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Background</td>
-          <td class="py-2">Content outside dialog is made inert (not focusable or interactive)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2"
-            >Move focus to next focusable element within dialog. When focus is on the last element,
-            moves to first.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Shift</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd
-            ></td
-          >
-          <td class="py-2"
-            >Move focus to previous focusable element within dialog. When focus is on the first
-            element, moves to last.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
-          >
-          <td class="py-2"
-            >Disabled by default. Unlike regular Dialog, Alert Dialog prevents Escape key closure to
-            ensure users explicitly respond to the alert. Can be enabled via
-            <code>allowEscapeClose</code> prop for non-critical alerts.</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activates the focused button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Activates the focused button</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Differences from Dialog</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Feature</th>
-          <th class="py-2 pr-4 text-left">Dialog</th>
-          <th class="py-2 text-left">Alert Dialog</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Role</td>
-          <td class="py-2 pr-4"><code>dialog</code></td>
-          <td class="py-2"><code>alertdialog</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Message (<code>aria-describedby</code>)</td>
-          <td class="py-2 pr-4">Optional</td>
-          <td class="py-2">Required</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Escape key</td>
-          <td class="py-2 pr-4">Enabled by default</td>
-          <td class="py-2">Disabled by default</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Initial focus</td>
-          <td class="py-2 pr-4">First focusable element</td>
-          <td class="py-2">Cancel button (safest action)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Close button</td>
-          <td class="py-2 pr-4">Yes (×)</td>
-          <td class="py-2">No (explicit response required)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Overlay click</td>
-          <td class="py-2 pr-4">Closes dialog</td>
-          <td class="py-2">Does not close (explicit response required)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Additional Notes</h3>
-  <ul class="text-muted-foreground list-disc space-y-2 pl-6">
-    <li>
-      Alert Dialog is for critical messages that require user acknowledgment or a decision. For
-      general content, use regular Dialog.
-    </li>
-    <li>
-      The <code>alertdialog</code> role may cause assistive technologies to announce the dialog more urgently
-      or with an alert sound.
-    </li>
-    <li>
-      Both title and message are required to provide complete context for the user's decision.
-    </li>
-    <li>The Cancel button should always be the safest choice (no destructive action).</li>
-    <li>
-      Consider using the <code>danger</code> variant for destructive actions to provide visual distinction.
-    </li>
-  </ul>
+  <!-- Additional Notes -->
+  {
+    data.additionalNotes && data.additionalNotes.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{notesTitle}</h3>
+        <ul class="text-muted-foreground list-disc space-y-2 pl-6">
+          {data.additionalNotes.map((note) => (
+            <li set:html={t(note)} />
+          ))}
+        </ul>
+      </>
+    )
+  }
 </div>

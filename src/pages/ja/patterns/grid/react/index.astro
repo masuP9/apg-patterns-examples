@@ -2,8 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import { GridDemo } from '@patterns/grid/GridDemo';
-import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/grid/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/grid/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -115,7 +115,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
       {t('pattern.accessibility')}
     </Heading>
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -298,7 +298,7 @@ interface GridRowData {
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
       {t('pattern.testing')}
     </Heading>
-    <TestingDocs />
+    <TestingDocs locale="ja" />
   </section>
 
   <!-- Resources -->

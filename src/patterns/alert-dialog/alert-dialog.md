@@ -1,0 +1,238 @@
+# Alert Dialog Pattern - AI Implementation Guide
+
+> APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/
+
+## Overview
+
+An alert dialog is a modal dialog that interrupts the user's workflow to communicate an important message and require a response. Unlike regular dialogs, it uses role="alertdialog" which may trigger system alert sounds in assistive technologies.
+
+## ARIA Requirements
+
+### Roles
+
+| Role | Element | Description |
+| --- | --- | --- |
+| `alertdialog` | Dialog container | A type of dialog that interrupts the user's workflow to communicate an important message and require a response. May trigger system alert sounds in assistive technologies. |
+
+### Properties
+
+| Attribute | Element | Values | Required | Notes |
+| --- | --- | --- | --- | --- |
+| `aria-modal` | alertdialog | true | Yes | Provided automatically by showModal(). No explicit attribute needed when using native <dialog> element. |
+| `aria-labelledby` | alertdialog | ID reference to title element | Yes | References the alert dialog title |
+| `aria-describedby` | alertdialog | ID reference to message | Yes | References the alert message. Unlike regular Dialog, this is required for Alert Dialog as the message is central to the user's understanding of what action is being confirmed. |
+
+## Keyboard Support
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Move focus to next focusable element within dialog. When focus is on the last element, moves to first. |
+| `Shift + Tab` | Move focus to previous focusable element within dialog. When focus is on the first element, moves to last. |
+| `Escape` | Disabled by default. Unlike regular Dialog, Alert Dialog prevents Escape key closure to ensure users explicitly respond to the alert. Can be enabled via allowEscapeClose prop for non-critical alerts. |
+| `Enter` | Activates the focused button |
+| `Space` | Activates the focused button |
+
+## Focus Management
+
+- Dialog opens: Focus moves to the Cancel button (safest action). This differs from regular Dialog which focuses the first focusable element.
+- Dialog closes: Focus returns to the element that triggered the dialog
+- Focus trap: Tab/Shift+Tab cycles through focusable elements within the dialog only
+- Background: Content outside dialog is made inert (not focusable or interactive)
+
+## Test Checklist
+
+### High Priority: ARIA
+
+- [ ] Container has role="alertdialog" (NOT dialog)
+- [ ] Is modal (opened via showModal(), confirmed by ::backdrop existence)
+- [ ] Has aria-labelledby referencing title element
+- [ ] Has aria-describedby referencing message element (required)
+- [ ] Title element id matches aria-labelledby value
+- [ ] Message element id matches aria-describedby value
+
+### High Priority: Keyboard
+
+- [ ] Tab moves to next focusable element
+- [ ] Shift+Tab moves to previous focusable element
+- [ ] Tab wraps from last to first element
+- [ ] Shift+Tab wraps from first to last element
+- [ ] Escape does NOT close when allowEscapeClose=false
+- [ ] Escape closes when allowEscapeClose=true
+- [ ] Enter activates focused button
+- [ ] Space activates focused button
+
+### High Priority: Focus Management
+
+- [ ] Focus moves to Cancel button on open (safest action)
+- [ ] Focus is trapped within dialog
+- [ ] Focus returns to trigger on close (E2E only - jsdom limitation)
+- [ ] Background content is inert
+
+### Medium Priority: Accessibility
+
+- [ ] No axe-core violations (WCAG 2.1 AA)
+
+## Implementation Notes
+
+Structure (uses native <dialog> element):
+┌─────────────────────────────────────────────────┐
+│ <dialog role="alertdialog">                     │
+│   aria-labelledby="title-id"                    │
+│   aria-describedby="message-id"                 │
+│ ┌─────────────────────────────────────────────┐ │
+│ │ <h2 id="title-id">Confirm Delete</h2>       │ │
+│ ├─────────────────────────────────────────────┤ │
+│ │ <p id="message-id">                         │ │
+│ │   This action cannot be undone.             │ │
+│ │ </p>                                        │ │
+│ ├─────────────────────────────────────────────┤ │
+│ │ [Cancel] ← initial focus    [Delete]        │ │
+│ └─────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────┘
+
+Key Implementation Points:
+- Uses native <dialog> element with showModal() for modal behavior
+- showModal() provides: backdrop, focus trap, inert background
+- NO explicit aria-modal needed (showModal() handles it implicitly)
+- NO close button (×) by default
+- Cancel button receives initial focus (safest action)
+- Escape disabled by default (allowEscapeClose=false)
+- aria-describedby is REQUIRED (message prop required)
+
+## Example Test Code (React + Testing Library)
+
+```typescript
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+// Role check (NOT dialog)
+it('has role="alertdialog"', () => {
+  render(<AlertDialog title="Confirm" message="Are you sure?" open />);
+  expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+});
+
+// aria-describedby is required
+it('has aria-describedby referencing message', () => {
+  render(<AlertDialog title="Confirm" message="Are you sure?" open />);
+  const dialog = screen.getByRole('alertdialog');
+  expect(dialog).toHaveAttribute('aria-describedby');
+  const messageId = dialog.getAttribute('aria-describedby');
+  expect(document.getElementById(messageId!)).toHaveTextContent('Are you sure?');
+});
+
+// Initial focus on cancel (safe action)
+it('focuses cancel button on open', async () => {
+  render(<AlertDialog title="Confirm" message="Delete?" open />);
+  const cancelButton = screen.getByRole('button', { name: /cancel/i });
+  expect(cancelButton).toHaveFocus();
+});
+
+// Escape disabled by default
+it('does NOT close on Escape by default', async () => {
+  const onCancel = vi.fn();
+  const user = userEvent.setup();
+  render(<AlertDialog title="Confirm" message="Delete?" open onCancel={onCancel} />);
+
+  await user.keyboard('{Escape}');
+  expect(onCancel).not.toHaveBeenCalled();
+  expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+});
+
+// Escape closes when allowed
+it('closes on Escape when allowEscapeClose=true', async () => {
+  const onCancel = vi.fn();
+  const user = userEvent.setup();
+  render(
+    <AlertDialog
+      title="Info"
+      message="Note this."
+      open
+      allowEscapeClose
+      onCancel={onCancel}
+    />
+  );
+
+  await user.keyboard('{Escape}');
+  expect(onCancel).toHaveBeenCalled();
+});
+
+// Focus trap
+it('traps focus within dialog', async () => {
+  const user = userEvent.setup();
+  render(<AlertDialog title="Confirm" message="Delete?" open />);
+
+  const cancelButton = screen.getByRole('button', { name: /cancel/i });
+  const confirmButton = screen.getByRole('button', { name: /ok|confirm|delete/i });
+
+  expect(cancelButton).toHaveFocus();
+  await user.tab();
+  expect(confirmButton).toHaveFocus();
+  await user.tab();
+  expect(cancelButton).toHaveFocus(); // wraps
+});
+```
+
+## Example E2E Test Code (Playwright)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+// Helper to open alert dialog
+const openAlertDialog = async (page) => {
+  const trigger = page.getByRole('button', { name: /open alert|delete|confirm/i }).first();
+  await trigger.click();
+  await page.waitForSelector('[role="alertdialog"]');
+};
+
+// ARIA: Has role="alertdialog" (NOT dialog)
+test('has role="alertdialog" and required aria attributes', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  await expect(alertDialog).toBeVisible();
+
+  // Should NOT have role="dialog"
+  const dialog = page.locator('[role="dialog"]');
+  await expect(dialog).toHaveCount(0);
+
+  // aria-describedby is required (unlike Dialog)
+  const describedbyId = await alertDialog.getAttribute('aria-describedby');
+  expect(describedbyId).toBeTruthy();
+});
+
+// Keyboard: Escape does NOT close by default
+test('Escape does NOT close dialog by default', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  await expect(alertDialog).toBeVisible();
+
+  await page.keyboard.press('Escape');
+
+  // Should still be visible
+  await expect(alertDialog).toBeVisible();
+});
+
+// Focus Management: Cancel button (safe action) receives initial focus
+test('focuses Cancel button on open and traps focus', async ({ page }) => {
+  await page.goto('patterns/alert-dialog/react/demo/');
+  await openAlertDialog(page);
+
+  const alertDialog = page.getByRole('alertdialog');
+  const cancelButton = alertDialog.getByRole('button', { name: /cancel/i });
+
+  // Initial focus on Cancel (safest action)
+  await expect(cancelButton).toBeFocused();
+
+  // Tab wraps to Confirm
+  await page.keyboard.press('Tab');
+  const confirmButton = alertDialog.getByRole('button').filter({ hasNot: page.getByText(/cancel/i) });
+  await expect(confirmButton).toBeFocused();
+
+  // Tab wraps back to Cancel
+  await page.keyboard.press('Tab');
+  await expect(cancelButton).toBeFocused();
+});
+```

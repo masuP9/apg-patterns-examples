@@ -1,136 +1,183 @@
 ---
+import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { breadcrumbAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const data = breadcrumbAccessibilityData;
+const t = localize(locale);
+const th = createTableHeaderTranslator(locale);
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <!-- WAI-ARIA Roles -->
+  <h3 class="mb-3 text-lg font-medium">{th('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{th('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{th('table.element')}</th>
+          <th class="py-2 text-left">{th('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>navigation</code></td>
-          <td class="py-2 pr-4"><code>&lt;nav&gt;</code> element</td>
-          <td class="py-2"
-            >Provides a navigation landmark for assistive technology (implicit role of <code
-              >&lt;nav&gt;</code
-            >)</td
-          >
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink
-      href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/"
-      class="text-primary hover:underline"
-    >
-      WAI-ARIA Breadcrumb Pattern
-    </ExternalLink>
-  </p>
-
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4"><code>&lt;nav&gt;</code></td>
-          <td class="py-2 pr-4">"Breadcrumb" (or localized)</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Labels the navigation landmark for screen readers</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-current</code></td>
-          <td class="py-2 pr-4">Current page element</td>
-          <td class="py-2 pr-4"><code>"page"</code></td>
-          <td class="py-2 pr-4">Yes (on last item)</td>
-          <td class="py-2">Identifies the current page within the breadcrumb trail</td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2" set:html={t(role.description)} />
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States</h3>
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-current="page"</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current page location within the breadcrumb navigation.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Target</td>
-            <td class="py-2">Last item in the breadcrumb (current page)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Values</td>
-            <td class="py-2"><code>"page"</code></td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Reference</td>
-            <td class="py-2">
-              <ExternalLink
-                href="https://w3c.github.io/aria/#aria-current"
-                class="text-primary hover:underline"
-              >
-                aria-current
-              </ExternalLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.references && data.references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={data.references[0].url} class="text-primary hover:underline">
+          {data.references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Move focus between breadcrumb links</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activate the focused link</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground text-sm">
-    Breadcrumb uses native <code>&lt;a&gt;</code> element behavior for keyboard interaction. No additional
-    keyboard handlers are required.
-  </p>
+  <!-- WAI-ARIA Properties -->
+  {
+    data.properties && data.properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.ariaProperties')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{th('table.required')}</th>
+                <th class="py-2 text-left">{th('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.properties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{t(prop.element)}</td>
+                  <td class="py-2 pr-4">{t(prop.values)}</td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? th('value.yes')
+                        : th('value.no')
+                      : t(prop.required)}
+                  </td>
+                  <td class="py-2">{prop.notes && t(prop.notes)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <!-- WAI-ARIA States -->
+  {
+    data.states && data.states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.ariaStates')}</h3>
+        {data.states.map((state) => (
+          <div class="mb-6">
+            <h4 class="mb-2 font-medium">
+              <code>
+                {state.attribute}="{state.values}"
+              </code>
+            </h4>
+            {state.changeTrigger && (
+              <p class="text-muted-foreground mb-3">{t(state.changeTrigger)}</p>
+            )}
+            <ResponsiveTable class="mb-2">
+              <table class="w-full border-collapse">
+                <tbody>
+                  <tr class="border-border border-b">
+                    <td class="w-32 py-2 pr-4 font-medium">{th('table.target')}</td>
+                    <td class="py-2">{t(state.element)}</td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{th('table.values')}</td>
+                    <td class="py-2">
+                      <code>{state.values}</code>
+                    </td>
+                  </tr>
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4 font-medium">{th('table.required')}</td>
+                    <td class="py-2">{state.required ? th('value.yes') : th('value.no')}</td>
+                  </tr>
+                  {state.reference && (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4 font-medium">{th('table.reference')}</td>
+                      <td class="py-2">
+                        <ExternalLink href={state.reference} class="text-primary hover:underline">
+                          {state.attribute}
+                        </ExternalLink>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </div>
+        ))}
+      </>
+    )
+  }
+
+  <!-- Keyboard Support -->
+  {
+    data.keyboardSupport && data.keyboardSupport.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{th('section.keyboardSupport')}</h3>
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{th('table.key')}</th>
+                <th class="py-2 text-left">{th('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.keyboardSupport.map((shortcut) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{shortcut.key}</kbd>
+                  </td>
+                  <td class="py-2">{t(shortcut.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
+
+  <!-- Additional Notes -->
+  {
+    data.additionalNotes && data.additionalNotes.length > 0 && (
+      <p class="text-muted-foreground text-sm" set:html={t(data.additionalNotes[0])} />
+    )
+  }
 </div>

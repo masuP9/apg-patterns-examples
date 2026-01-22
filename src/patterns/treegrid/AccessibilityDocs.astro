@@ -1,333 +1,282 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { treegridAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  properties,
+  states,
+  keyboardSections,
+  focusManagement,
+  additionalNotes,
+  references,
+} = treegridAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Section titles
+const sectionTitles = {
+  en: {
+    treegridVsGrid: 'TreeGrid vs Grid',
+    keyDifferencesFromGrid: 'Key Differences from Grid',
+    treegridVsGridNote:
+      "The treegrid role combines Grid's 2D keyboard navigation with TreeView's hierarchical expand/collapse functionality. Key differences from Grid:",
+    propertyFootnote: '* Either aria-label or aria-labelledby is required.',
+    stateFootnoteExpanded:
+      '* Only parent rows (with children) have aria-expanded. Leaf rows do NOT have this attribute.',
+    stateFootnoteSelected: '** When selection is supported, ALL rows should have aria-selected.',
+    treeOpsNote:
+      'Important: Arrow keys at non-rowheader cells only move focus, they do NOT expand/collapse.',
+    selectionDiff: 'Selection: Row selection (aria-selected on row) vs Cell selection in Grid',
+    arrowKeysDiff: 'Arrow keys at rowheader: Expand/collapse tree vs Move focus in Grid',
+    enterKeyDiff: 'Enter key: Cell activation only (never expands/collapses)',
+    hierarchyDiff: 'Hierarchy: aria-level and aria-expanded required on rows',
+    navigationDiff: 'Navigation: Collapsed children are skipped in navigation',
+  },
+  ja: {
+    treegridVsGrid: 'TreeGrid vs Grid',
+    keyDifferencesFromGrid: 'Gridとの主な違い',
+    treegridVsGridNote:
+      'treegridロールは、Gridの2Dキーボードナビゲーションと、TreeViewの階層展開/折りたたみ機能を組み合わせています。Gridとの主な違い:',
+    propertyFootnote: '* aria-labelまたはaria-labelledbyのいずれかが必須です。',
+    stateFootnoteExpanded:
+      '* 親行（子を持つ行）のみにaria-expandedがあります。リーフ行にはこの属性はありません。',
+    stateFootnoteSelected: '** 選択がサポートされている場合、すべての行にaria-selectedが必要です。',
+    treeOpsNote:
+      '重要: 非rowheaderセルでの矢印キーはフォーカスの移動のみで、展開/折りたたみは行いません。',
+    selectionDiff: '選択: 行選択（rowのaria-selected）vs Gridのセル選択',
+    arrowKeysDiff: 'rowheaderでの矢印キー: ツリーの展開/折りたたみ vs Gridのフォーカス移動',
+    enterKeyDiff: 'Enterキー: セルのアクティベーションのみ（展開/折りたたみはしない）',
+    hierarchyDiff: '階層: 行にaria-levelとaria-expandedが必須',
+    navigationDiff: 'ナビゲーション: 折りたたまれた子はナビゲーションでスキップ',
+  },
+};
+
+const titles = sectionTitles[locale];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">TreeGrid vs Grid</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.treegridVsGrid}</h3>
   <p class="text-muted-foreground mb-4">
-    The <code>treegrid</code> role combines Grid's 2D keyboard navigation with TreeView's hierarchical
-    expand/collapse functionality. Key differences from Grid:
+    {titles.treegridVsGridNote}
   </p>
-  <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-    <li>Rows can be expanded/collapsed to show/hide child rows</li>
-    <li>
-      <strong>Row selection</strong> instead of cell selection (aria-selected on row, not gridcell)
-    </li>
-    <li>Tree operations (expand/collapse) only work at the <strong>rowheader</strong> column</li>
-    <li>Rows have <code>aria-level</code> to indicate hierarchy depth</li>
-  </ul>
+  {
+    additionalNotes && (
+      <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+        {additionalNotes.map((note) => (
+          <li>
+            <span set:html={t(note).replace(/(aria-\w+)/g, '<code>$1</code>')} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>treegrid</code></td>
-          <td class="py-2 pr-4">Container</td>
-          <td class="py-2">The treegrid container (composite widget)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>row</code></td>
-          <td class="py-2 pr-4">Row container</td>
-          <td class="py-2">Groups cells horizontally, may have children</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>columnheader</code></td>
-          <td class="py-2 pr-4">Header cells</td>
-          <td class="py-2">Column headers (not focusable)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>rowheader</code></td>
-          <td class="py-2 pr-4">First column cell</td>
-          <td class="py-2">Row header where tree operations occur</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>gridcell</code></td>
-          <td class="py-2 pr-4">Data cells</td>
-          <td class="py-2">Interactive cells (focusable)</td>
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink href="https://w3c.github.io/aria/#treegrid" class="text-primary hover:underline">
-      WAI-ARIA treegrid role
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink
+          href={references[1]?.url || references[0].url}
+          class="text-primary hover:underline"
+        >
+          {references[1]?.title || references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (TreeGrid Container)</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="treegrid"</code></td>
-          <td class="py-2 pr-4">-</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Identifies the container as a treegrid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">String</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Accessible name for the treegrid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Alternative to aria-label</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-multiselectable</code></td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Only present for multi-select mode</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-rowcount</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total rows (for virtualization)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-colcount</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Total columns (for virtualization)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Either <code>aria-label</code> or <code>aria-labelledby</code> is required.
-  </p>
+  {
+    properties && properties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')} (TreeGrid Container)</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{t(prop.values)}</td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? h('value.yes')
+                        : h('value.no')
+                      : t(prop.required)}
+                  </td>
+                  <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+        <p class="text-muted-foreground mb-6 text-sm">{titles.propertyFootnote}</p>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States (Rows)</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-level</code></td>
-          <td class="py-2 pr-4">Number (1-based)</td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Hierarchy depth (1 = root level)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Only on parent rows with children</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-selected</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">No**</td>
-          <td class="py-2">On row (NOT gridcell) when selectable</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the row is disabled</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-rowindex</code></td>
-          <td class="py-2 pr-4">Number</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Row position (for virtualization)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Only parent rows (with children) have <code>aria-expanded</code>. Leaf rows do NOT have this
-    attribute.<br />
-    ** When selection is supported, ALL rows should have <code>aria-selected</code>.
-  </p>
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')} (Rows)</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {states.map((state) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{state.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{t(state.values)}</td>
+                  <td class="py-2 pr-4">
+                    {state.required
+                      ? h('value.yes') + (state.attribute === 'aria-expanded' ? '*' : '')
+                      : h('value.no') + (state.attribute === 'aria-selected' ? '**' : '')}
+                  </td>
+                  <td class="py-2">{state.changeTrigger ? t(state.changeTrigger) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+        <p class="text-muted-foreground mb-6 text-sm">
+          {titles.stateFootnoteExpanded}
+          <br />
+          {titles.stateFootnoteSelected}
+        </p>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <h4 class="mb-2 font-medium">2D Navigation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↓</kbd></td
-          >
-          <td class="py-2">Move focus to same column in next visible row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">↑</kbd></td
-          >
-          <td class="py-2">Move focus to same column in previous visible row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd></td
-          >
-          <td class="py-2">Move focus one cell right (at non-rowheader cells)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd></td
-          >
-          <td class="py-2">Move focus one cell left (at non-rowheader cells)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last cell in row</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd
-            ></td
-          >
-          <td class="py-2">Move focus to first cell in treegrid</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd
-            ></td
-          >
-          <td class="py-2">Move focus to last cell in treegrid</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 font-medium">Tree Operations (at rowheader only)</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">→</kbd> (at rowheader)</td
-          >
-          <td class="py-2">
-            If collapsed parent: expand row<br />
-            If expanded parent: move to first child's rowheader<br />
-            If leaf: do nothing
-          </td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">←</kbd> (at rowheader)</td
-          >
-          <td class="py-2">
-            If expanded parent: collapse row<br />
-            If collapsed/leaf: move to parent's rowheader<br />
-            If at root level collapsed: do nothing
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+  {
+    keyboardSections?.map((section, index) => (
+      <>
+        <h4 class="mb-2 font-medium">{t(section.title ?? '')}</h4>
+        <ResponsiveTable class={index < keyboardSections.length - 1 ? 'mb-4' : 'mb-4'}>
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+                <th class="py-2 text-left">{h('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.shortcuts.map((shortcut) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                      {t(shortcut.key)}
+                    </kbd>
+                  </td>
+                  <td class="py-2">{t(shortcut.action)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
   <p class="text-muted-foreground mb-4 text-sm">
-    <strong>Important:</strong> Arrow keys at non-rowheader cells only move focus, they do NOT expand/collapse.
+    <strong>{locale === 'en' ? 'Important:' : '重要:'}</strong>
+    {titles.treeOpsNote.replace(/^(Important:|重要:)\s*/, '')}
   </p>
 
-  <h4 class="mb-2 font-medium">Row Selection & Cell Activation</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd></td
-          >
-          <td class="py-2">Toggle row selection (NOT cell selection)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd></td
-          >
-          <td class="py-2">Activate focused cell (does NOT expand/collapse)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Ctrl</kbd> + <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">A</kbd
-            ></td
-          >
-          <td class="py-2">Select all visible rows (when multiselectable)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses <strong>roving tabindex</strong> for focus management:
+    {
+      locale === 'en'
+        ? 'This component uses roving tabindex for focus management:'
+        : 'このコンポーネントはフォーカス管理にローヴィングタブインデックスを使用します:'
+    }
   </p>
-  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only one cell has <code>tabindex="0"</code> (the focused cell)</li>
-    <li>All other cells have <code>tabindex="-1"</code></li>
-    <li>TreeGrid is a single Tab stop</li>
-    <li>Column headers (columnheader) are NOT focusable</li>
-    <li>Collapsed child rows are NOT in keyboard navigation</li>
-    <li>When a parent collapses with focus on a child, focus moves to the parent</li>
-  </ul>
+  {
+    focusManagement && (
+      <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+        {focusManagement.map((rule) => (
+          <li>
+            <span set:html={t(rule.behavior).replace(/(tabindex="-?\d")/g, '<code>$1</code>')} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Key Differences from Grid</h3>
+  <h3 class="mb-3 text-lg font-medium">{titles.keyDifferencesFromGrid}</h3>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
     <li>
-      <strong>Selection:</strong> Row selection (aria-selected on row) vs Cell selection in Grid
+      <strong>{locale === 'en' ? 'Selection:' : '選択:'}</strong>
+      {titles.selectionDiff.replace(/^(Selection:|選択:)\s*/, '')}
     </li>
-    <li><strong>Arrow keys at rowheader:</strong> Expand/collapse tree vs Move focus in Grid</li>
-    <li><strong>Enter key:</strong> Cell activation only (never expands/collapses)</li>
-    <li><strong>Hierarchy:</strong> aria-level and aria-expanded required on rows</li>
-    <li><strong>Navigation:</strong> Collapsed children are skipped in navigation</li>
+    <li>
+      <strong>{locale === 'en' ? 'Arrow keys at rowheader:' : 'rowheaderでの矢印キー:'}</strong>
+      {titles.arrowKeysDiff.replace(/^(Arrow keys at rowheader:|rowheaderでの矢印キー:)\s*/, '')}
+    </li>
+    <li>
+      <strong>{locale === 'en' ? 'Enter key:' : 'Enterキー:'}</strong>
+      {titles.enterKeyDiff.replace(/^(Enter key:|Enterキー:)\s*/, '')}
+    </li>
+    <li>
+      <strong>{locale === 'en' ? 'Hierarchy:' : '階層:'}</strong>
+      {titles.hierarchyDiff.replace(/^(Hierarchy:|階層:)\s*/, '')}
+    </li>
+    <li>
+      <strong>{locale === 'en' ? 'Navigation:' : 'ナビゲーション:'}</strong>
+      {titles.navigationDiff.replace(/^(Navigation:|ナビゲーション:)\s*/, '')}
+    </li>
   </ul>
 </div>

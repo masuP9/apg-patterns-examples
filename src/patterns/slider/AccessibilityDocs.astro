@@ -1,309 +1,401 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { sliderAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = sliderAccessibilityData;
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Role</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>slider</code></td>
-          <td class="py-2 pr-4">Thumb element</td>
-          <td class="py-2">
-            Identifies the element as a slider that allows users to select a value from within a
-            range.
-          </td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mb-6 text-sm">
-    The <code>slider</code> role is used for interactive controls that let users select a value by moving
-    a thumb along a track. Unlike the <code>meter</code> role, sliders are interactive and receive keyboard
-    focus.
+    {
+      locale === 'ja' ? (
+        <>
+          <code>slider</code>{' '}
+          ロールは、ユーザーがトラックに沿ってつまみを動かして値を選択するインタラクティブなコントロールに使用されます。
+          <code>meter</code>{' '}
+          ロールとは異なり、スライダーはインタラクティブでキーボードフォーカスを受け取ります。
+        </>
+      ) : (
+        <>
+          The <code>slider</code> role is used for interactive controls that let users select a
+          value by moving a thumb along a track. Unlike the <code>meter</code> role, sliders are
+          interactive and receive keyboard focus.
+        </>
+      )
+    }
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA States and Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuenow</code> (Required)</h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates the current numeric value of the slider. Updated dynamically as the user changes the
-      value.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Range</td>
-            <td class="py-2">
-              Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
+  {
+    data.properties?.map((prop) => (
+      <div class="mb-6">
+        <h4 class="mb-2 font-medium">
+          <code>{prop.attribute}</code>
+          {typeof prop.required === 'boolean' && prop.required && (
+            <span class="ml-2 text-sm text-red-500">({locale === 'ja' ? '必須' : 'Required'})</span>
+          )}
+        </h4>
+        {prop.attribute === 'aria-valuenow' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーの現在の数値を示します。ユーザーが値を変更すると動的に更新されます。'
+              : 'Indicates the current numeric value of the slider. Updated dynamically as the user changes the value.'}
+          </p>
+        )}
+        {prop.attribute === 'aria-valuemin' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーの許容最小値を指定します。'
+              : 'Specifies the minimum allowed value for the slider.'}
+          </p>
+        )}
+        {prop.attribute === 'aria-valuemax' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーの許容最大値を指定します。'
+              : 'Specifies the maximum allowed value for the slider.'}
+          </p>
+        )}
+        {prop.attribute === 'aria-valuetext' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? '現在の値の人間が読めるテキスト代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。'
+              : "Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning."}
+          </p>
+        )}
+        {prop.attribute === 'aria-orientation' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーの向きを指定します。垂直スライダーの場合のみ "vertical" に設定します。水平の場合は省略します（デフォルト）。'
+              : 'Specifies the orientation of the slider. Only set to "vertical" for vertical sliders; omit for horizontal (default).'}
+          </p>
+        )}
+        {prop.attribute === 'aria-disabled' && (
+          <p class="text-muted-foreground mb-3">
+            {locale === 'ja'
+              ? 'スライダーが無効でインタラクティブではないことを示します。'
+              : 'Indicates that the slider is disabled and not interactive.'}
+          </p>
+        )}
+        <ResponsiveTable class="mb-2">
+          <table class="w-full border-collapse">
+            <tbody>
+              <tr class="border-border border-b">
+                <td class="w-32 py-2 pr-4 font-medium">{locale === 'ja' ? '型' : 'Type'}</td>
+                <td class="py-2">{t(prop.values)}</td>
+              </tr>
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
+                <td class="py-2">
+                  {typeof prop.required === 'boolean'
+                    ? prop.required
+                      ? h('value.yes')
+                      : h('value.no')
+                    : t(prop.required)}
+                </td>
+              </tr>
+              {prop.attribute === 'aria-valuemin' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">
+                    {locale === 'ja' ? 'デフォルト' : 'Default'}
+                  </td>
+                  <td class="py-2">0</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuemax' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">
+                    {locale === 'ja' ? 'デフォルト' : 'Default'}
+                  </td>
+                  <td class="py-2">100</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuetext' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '例' : 'Example'}</td>
+                  <td class="py-2">"50%", "Medium", "3 of 5 stars"</td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-valuenow' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '範囲' : 'Range'}</td>
+                  <td class="py-2">
+                    {locale === 'ja' ? (
+                      <>
+                        <code>aria-valuemin</code> と <code>aria-valuemax</code>{' '}
+                        の間である必要があります
+                      </>
+                    ) : (
+                      <>
+                        Must be between <code>aria-valuemin</code> and <code>aria-valuemax</code>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              )}
+              {prop.attribute === 'aria-orientation' && (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4 font-medium">
+                    {locale === 'ja' ? 'デフォルト' : 'Default'}
+                  </td>
+                  <td class="py-2">
+                    {locale === 'ja' ? 'horizontal（暗黙的）' : 'horizontal (implicit)'}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </div>
+    ))
+  }
 
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuemin</code> (Required)</h4>
-    <p class="text-muted-foreground mb-3">Specifies the minimum allowed value for the slider.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuemax</code> (Required)</h4>
-    <p class="text-muted-foreground mb-3">Specifies the maximum allowed value for the slider.</p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Number</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">Yes</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">100</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-valuetext</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Provides a human-readable text alternative for the current value. Use when the numeric value
-      alone doesn't convey sufficient meaning.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">String</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No (recommended when value needs context)</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Example</td>
-            <td class="py-2">"50%", "Medium", "3 of 5 stars"</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-orientation</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Specifies the orientation of the slider. Only set to "vertical" for vertical sliders; omit for
-      horizontal (default).
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">"horizontal" | "vertical"</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Default</td>
-            <td class="py-2">horizontal (implicit)</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-disabled</code></h4>
-    <p class="text-muted-foreground mb-3">
-      Indicates that the slider is disabled and not interactive.
-    </p>
-    <ResponsiveTable class="mb-2">
-      <table class="w-full border-collapse">
-        <tbody>
-          <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Type</td>
-            <td class="py-2">Boolean</td>
-          </tr>
-          <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
-            <td class="py-2">No</td>
-          </tr>
-        </tbody>
-      </table>
-    </ResponsiveTable>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
+          <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+          <th class="py-2 text-left">{h('table.action')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Right Arrow</kbd></td>
-          <td class="py-2">Increases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Up Arrow</kbd></td>
-          <td class="py-2">Increases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Left Arrow</kbd></td>
-          <td class="py-2">Decreases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Down Arrow</kbd></td>
-          <td class="py-2">Decreases the value by one step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Home</kbd></td>
-          <td class="py-2">Sets the slider to its minimum value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>End</kbd></td>
-          <td class="py-2">Sets the slider to its maximum value</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Page Up</kbd></td>
-          <td class="py-2">Increases the value by a large step (default: step * 10)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><kbd>Page Down</kbd></td>
-          <td class="py-2">Decreases the value by a large step (default: step * 10)</td>
-        </tr>
+        {
+          data.keyboardSupport?.map((item) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <kbd>{item.key}</kbd>
+              </td>
+              <td class="py-2">{t(item.action)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Accessible Naming</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.accessibleNaming')}</h3>
   <p class="text-muted-foreground mb-3">
-    Sliders must have an accessible name. This can be provided through:
+    {
+      locale === 'ja'
+        ? 'スライダーはアクセシブルな名前を持つ必要があります。これは以下の方法で提供できます:'
+        : 'Sliders must have an accessible name. This can be provided through:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Visible label</strong> - Using the <code>label</code> prop to display a visible label
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>表示されるラベル</strong> - <code>label</code>{' '}
+            プロパティを使用して表示されるラベルを提供
+          </>
+        ) : (
+          <>
+            <strong>Visible label</strong> - Using the <code>label</code> prop to display a visible
+            label
+          </>
+        )
+      }
     </li>
     <li>
-      <code>aria-label</code> - Provides an invisible label for the slider
+      <code>aria-label</code> -
+      {
+        locale === 'ja'
+          ? 'スライダーに見えないラベルを提供'
+          : 'Provides an invisible label for the slider'
+      }
     </li>
     <li>
-      <code>aria-labelledby</code> - References an external element as the label
+      <code>aria-labelledby</code> -
+      {
+        locale === 'ja'
+          ? '外部要素をラベルとして参照'
+          : 'References an external element as the label'
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Pointer Interaction</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'ポインター操作' : 'Pointer Interaction'}
+  </h3>
   <p class="text-muted-foreground mb-3">
-    This implementation supports mouse and touch interaction:
+    {
+      locale === 'ja'
+        ? 'この実装はマウスとタッチ操作をサポートしています:'
+        : 'This implementation supports mouse and touch interaction:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Click on track</strong> - Immediately moves the thumb to the clicked position
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>トラックをクリック</strong> - クリックした位置につまみを即座に移動
+          </>
+        ) : (
+          <>
+            <strong>Click on track</strong> - Immediately moves the thumb to the clicked position
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Drag thumb</strong> - Allows continuous adjustment while dragging
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>つまみをドラッグ</strong> - ドラッグ中の連続的な調整が可能
+          </>
+        ) : (
+          <>
+            <strong>Drag thumb</strong> - Allows continuous adjustment while dragging
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Pointer capture</strong> - Maintains interaction even when pointer moves outside the slider
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>ポインターキャプチャ</strong> -
+            ポインターがスライダーの外に出てもインタラクションを維持
+          </>
+        ) : (
+          <>
+            <strong>Pointer capture</strong> - Maintains interaction even when pointer moves outside
+            the slider
+          </>
+        )
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">Visual Design</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.visualDesign')}</h3>
   <p class="text-muted-foreground mb-3">
-    This implementation follows WCAG guidelines for accessible visual design:
+    {
+      locale === 'ja'
+        ? 'この実装は、アクセシブルなビジュアルデザインのためのWCAGガイドラインに従っています:'
+        : 'This implementation follows WCAG guidelines for accessible visual design:'
+    }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
     <li>
-      <strong>Focus indicator</strong> - Visible focus ring on the thumb element
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>フォーカスインジケーター</strong> - つまみ要素に可視のフォーカスリング
+          </>
+        ) : (
+          <>
+            <strong>Focus indicator</strong> - Visible focus ring on the thumb element
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Visual fill</strong> - Proportionally represents the current value
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>視覚的な塗りつぶし</strong> - 現在の値を比例的に表示
+          </>
+        ) : (
+          <>
+            <strong>Visual fill</strong> - Proportionally represents the current value
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Hover states</strong> - Visual feedback on hover
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>ホバー状態</strong> - ホバー時の視覚的フィードバック
+          </>
+        ) : (
+          <>
+            <strong>Hover states</strong> - Visual feedback on hover
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Disabled state</strong> - Clear visual indication when slider is disabled
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>無効状態</strong> - スライダーが無効な時の明確な視覚的表示
+          </>
+        ) : (
+          <>
+            <strong>Disabled state</strong> - Clear visual indication when slider is disabled
+          </>
+        )
+      }
     </li>
     <li>
-      <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows High Contrast
-      Mode
+      {
+        locale === 'ja' ? (
+          <>
+            <strong>強制カラーモード</strong> -
+            Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+          </>
+        ) : (
+          <>
+            <strong>Forced colors mode</strong> - Uses system colors for accessibility in Windows
+            High Contrast Mode
+          </>
+        )
+      }
     </li>
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
-  <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Slider Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range"
-        class="text-primary hover:underline"
-      >
-        MDN: &lt;input type="range"&gt; element
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink href="https://w3c.github.io/aria/#slider" class="text-primary hover:underline">
-        W3C ARIA: slider role
-      </ExternalLink>
-    </li>
-  </ul>
+  <h3 class="mb-3 text-lg font-medium">{h('section.references')}</h3>
+  {
+    data.references && (
+      <ul class="list-disc space-y-2 pl-6">
+        {data.references.map((ref) => (
+          <li>
+            <ExternalLink href={ref.url} class="text-primary hover:underline">
+              {ref.title}
+            </ExternalLink>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </div>

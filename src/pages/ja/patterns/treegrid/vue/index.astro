@@ -2,8 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import TreeGridDemoJa from '@patterns/treegrid/TreeGridDemoJa.vue';
-import AccessibilityDocs from '@patterns/treegrid/AccessibilityDocs.ja.astro';
-import TestingDocs from '@patterns/treegrid/TestingDocs.ja.astro';
+import AccessibilityDocs from '@patterns/treegrid/AccessibilityDocs.astro';
+import TestingDocs from '@patterns/treegrid/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -110,7 +110,7 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
       {t('pattern.accessibility')}
     </Heading>
-    <AccessibilityDocs />
+    <AccessibilityDocs locale="ja" />
   </section>
 
   <!-- Source Code Section -->
@@ -252,7 +252,7 @@ const selectedRowIds = ref([]);
     <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
       {t('pattern.testing')}
     </Heading>
-    <TestingDocs />
+    <TestingDocs locale="ja" />
   </section>
 
   <!-- Resources -->

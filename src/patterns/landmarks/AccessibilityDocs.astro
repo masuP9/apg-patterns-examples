@@ -1,107 +1,150 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import { landmarksAccessibilityData } from './accessibility-data';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+const data = landmarksAccessibilityData;
+
+// Localized constraints for landmarks
+const constraints: Record<string, { en: string; ja: string }> = {
+  banner: {
+    en: 'One per page, top-level only',
+    ja: 'ページに1つ、トップレベルのみ',
+  },
+  navigation: {
+    en: 'Multiple allowed, label when >1',
+    ja: '複数可、2つ以上の場合はラベル必須',
+  },
+  main: {
+    en: 'One per page, top-level only',
+    ja: 'ページに1つ、トップレベルのみ',
+  },
+  contentinfo: {
+    en: 'One per page, top-level only',
+    ja: 'ページに1つ、トップレベルのみ',
+  },
+  complementary: {
+    en: 'Top-level recommended',
+    ja: 'トップレベル推奨',
+  },
+  region: {
+    en: 'Requires aria-label/labelledby',
+    ja: 'aria-label/labelledby必須',
+  },
+  search: {
+    en: 'Use with form element',
+    ja: 'form要素と併用',
+  },
+  form: {
+    en: 'Requires aria-label/labelledby',
+    ja: 'aria-label/labelledby必須',
+  },
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Landmark Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'WAI-ARIA ランドマークロール' : 'WAI-ARIA Landmark Roles'}
+  </h3>
   <p class="text-muted-foreground mb-4">
-    Landmarks identify the major sections of a page. There are 8 landmark roles that enable
-    assistive technology users to efficiently navigate page structure.
+    {t(data.overview || '')}
   </p>
 
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">HTML Element</th>
-          <th class="py-2 pr-4 text-left">Description</th>
-          <th class="py-2 text-left">Constraint</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">
+            {locale === 'ja' ? 'HTML要素' : 'HTML Element'}
+          </th>
+          <th class="py-2 pr-4 text-left">{h('table.description')}</th>
+          <th class="py-2 text-left">{locale === 'ja' ? '制約' : 'Constraint'}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>banner</code></td>
-          <td class="py-2 pr-4"><code>&lt;header&gt;</code></td>
-          <td class="py-2 pr-4">Site-wide header</td>
-          <td class="py-2">One per page, top-level only</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>navigation</code></td>
-          <td class="py-2 pr-4"><code>&lt;nav&gt;</code></td>
-          <td class="py-2 pr-4">Navigation links</td>
-          <td class="py-2">Multiple allowed, label when &gt;1</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>main</code></td>
-          <td class="py-2 pr-4"><code>&lt;main&gt;</code></td>
-          <td class="py-2 pr-4">Primary content</td>
-          <td class="py-2">One per page, top-level only</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>contentinfo</code></td>
-          <td class="py-2 pr-4"><code>&lt;footer&gt;</code></td>
-          <td class="py-2 pr-4">Site-wide footer</td>
-          <td class="py-2">One per page, top-level only</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>complementary</code></td>
-          <td class="py-2 pr-4"><code>&lt;aside&gt;</code></td>
-          <td class="py-2 pr-4">Supporting content</td>
-          <td class="py-2">Top-level recommended</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>region</code></td>
-          <td class="py-2 pr-4"><code>&lt;section&gt;</code></td>
-          <td class="py-2 pr-4">Named section</td>
-          <td class="py-2"><b>Requires aria-label/labelledby</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>search</code></td>
-          <td class="py-2 pr-4"><code>&lt;form role="search"&gt;</code></td>
-          <td class="py-2 pr-4">Search functionality</td>
-          <td class="py-2">Use with form element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>form</code></td>
-          <td class="py-2 pr-4"><code>&lt;form&gt;</code></td>
-          <td class="py-2 pr-4">Form area</td>
-          <td class="py-2"><b>Requires aria-label/labelledby</b></td>
-        </tr>
+        {
+          data.roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4" set:html={t(role.element)} />
+              <td class="py-2 pr-4">{t(role.description)}</td>
+              <td class="py-2">
+                {role.name === 'region' || role.name === 'form' ? (
+                  <b>{constraints[role.name][locale]}</b>
+                ) : (
+                  constraints[role.name]?.[locale] || ''
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaProperties')}</h3>
 
   <div class="mb-6">
-    <h4 class="mb-2 font-medium"><code>aria-label</code> / <code>aria-labelledby</code></h4>
+    <h4 class="mb-2 font-medium">
+      <code>aria-label</code> / <code>aria-labelledby</code>
+    </h4>
     <p class="text-muted-foreground mb-3">
-      Provides an accessible name for the landmark. Required when multiple landmarks of the same
-      type exist, or for <code>region</code> and <code>form</code> landmarks.
+      {
+        locale === 'ja'
+          ? 'ランドマークにアクセシブルな名前を提供します。同じ種類のランドマークが複数存在する場合、またはregionとformランドマークには必須です。'
+          : 'Provides an accessible name for the landmark. Required when multiple landmarks of the same type exist, or for region and form landmarks.'
+      }
     </p>
     <ResponsiveTable class="mb-2">
       <table class="w-full border-collapse">
         <tbody>
           <tr class="border-border border-b">
-            <td class="w-32 py-2 pr-4 font-medium">Values</td>
-            <td class="py-2">String (aria-label) or ID reference (aria-labelledby)</td>
+            <td class="w-32 py-2 pr-4 font-medium">{h('table.values')}</td>
+            <td class="py-2">
+              {
+                locale === 'ja'
+                  ? '文字列（aria-label）またはID参照（aria-labelledby）'
+                  : 'String (aria-label) or ID reference (aria-labelledby)'
+              }
+            </td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Required</td>
+            <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
             <td class="py-2">
               <ul class="mb-0 list-disc pl-4">
-                <li>When multiple landmarks of same type exist</li>
-                <li>For <code>region</code> landmarks (always)</li>
-                <li>For <code>form</code> landmarks (always)</li>
+                <li>
+                  {
+                    locale === 'ja'
+                      ? '同じ種類のランドマークが複数ある場合'
+                      : 'When multiple landmarks of same type exist'
+                  }
+                </li>
+                <li>
+                  {locale === 'ja' ? 'regionランドマーク（常に）' : 'For region landmarks (always)'}
+                </li>
+                <li>
+                  {locale === 'ja' ? 'formランドマーク（常に）' : 'For form landmarks (always)'}
+                </li>
               </ul>
             </td>
           </tr>
           <tr class="border-border border-b">
-            <td class="py-2 pr-4 font-medium">Example</td>
+            <td class="py-2 pr-4 font-medium">{locale === 'ja' ? '例' : 'Example'}</td>
             <td class="py-2">
-              <code>&lt;nav aria-label="Main"&gt;</code> or
+              <code>&lt;nav aria-label="{locale === 'ja' ? 'メイン' : 'Main'}"&gt;</code>
+              {locale === 'ja' ? ' または ' : ' or '}
               <code>&lt;section aria-labelledby="heading-id"&gt;</code>
             </td>
           </tr>
@@ -110,101 +153,62 @@ import { ResponsiveTable } from '@/components/ui/table';
     </ResponsiveTable>
   </div>
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
   <p class="text-muted-foreground mb-4">
-    <strong>Landmarks require no keyboard interaction.</strong> They are structural elements, not interactive
-    widgets. Screen readers provide built-in landmark navigation:
+    {t(data.keyboardDocNote || '')}
   </p>
   <ResponsiveTable class="mb-4">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Screen Reader</th>
-          <th class="py-2 text-left">Navigation</th>
+          <th class="py-2 pr-4 text-left">
+            {locale === 'ja' ? 'スクリーンリーダー' : 'Screen Reader'}
+          </th>
+          <th class="py-2 text-left">{locale === 'ja' ? 'ナビゲーション方法' : 'Navigation'}</th>
         </tr>
       </thead>
       <tbody>
         <tr class="border-border border-b">
           <td class="py-2 pr-4">NVDA</td>
-          <td class="py-2"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">D</kbd> key</td
-          >
+          <td class="py-2">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">D</kbd>
+            {locale === 'ja' ? 'キー' : ' key'}
+          </td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4">VoiceOver</td>
-          <td class="py-2">Rotor (Web navigation)</td>
+          <td class="py-2">
+            {locale === 'ja' ? 'ローター（Webナビゲーション）' : 'Rotor (Web navigation)'}
+          </td>
         </tr>
         <tr class="border-border border-b">
           <td class="py-2 pr-4">JAWS</td>
-          <td class="py-2"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">R</kbd> key or semicolon</td
-          >
+          <td class="py-2">
+            <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">R</kbd>
+            {locale === 'ja' ? 'キーまたはセミコロン' : ' key or semicolon'}
+          </td>
         </tr>
       </tbody>
     </table>
   </ResponsiveTable>
 
-  <h3 class="mb-3 text-lg font-medium">Best Practices</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {locale === 'ja' ? 'ベストプラクティス' : 'Best Practices'}
+  </h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    <li>
-      <strong>Use semantic HTML elements</strong> - Prefer <code>&lt;header&gt;</code>,
-      <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, etc. over ARIA roles
-    </li>
-    <li>
-      <strong>Label multiple landmarks</strong> - When you have more than one <code
-        >&lt;nav&gt;</code
-      > or <code>&lt;aside&gt;</code>, give each a unique accessible name
-    </li>
-    <li>
-      <strong>Limit landmark count</strong> - Too many landmarks (more than ~7) can be overwhelming for
-      assistive technology users
-    </li>
-    <li>
-      <strong>Place all content in landmarks</strong> - Content outside landmarks may be missed by users
-      navigating by landmarks
-    </li>
-    <li>
-      <strong>Top-level placement</strong> - <code>&lt;header&gt;</code> and <code
-        >&lt;footer&gt;</code
-      > only map to <code>banner</code>/<code>contentinfo</code> when they are direct children of <code
-        >&lt;body&gt;</code
-      >
-    </li>
+    {data.additionalNotes?.map((note) => <li set:html={t(note)} />)}
   </ul>
 
-  <h3 class="mb-3 text-lg font-medium">References</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.references')}</h3>
   <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Landmarks Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: Landmark Regions
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://w3c.github.io/aria/#landmark"
-        class="text-primary hover:underline"
-      >
-        W3C ARIA: Landmark Roles
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role"
-        class="text-primary hover:underline"
-      >
-        MDN: ARIA Landmark Roles
-      </ExternalLink>
-    </li>
+    {
+      data.references?.map((ref) => (
+        <li>
+          <ExternalLink href={ref.url} class="text-primary hover:underline">
+            {ref.title}
+          </ExternalLink>
+        </li>
+      ))
+    }
   </ul>
 </div>

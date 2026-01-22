@@ -1,234 +1,124 @@
 ---
+import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { windowSplitterAccessibilityData } from './accessibility-data';
+import { localize } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = localize(locale);
+const data = windowSplitterAccessibilityData.testing!;
+
+const translations = {
+  en: {
+    intro:
+      'Tests verify APG compliance across ARIA structure, keyboard navigation, focus management, and pointer interaction. The Window Splitter component uses a two-layer testing strategy.',
+    testingStrategy: 'Testing Strategy',
+    testCategories: 'Test Categories',
+    runningTests: 'Running Tests',
+    unitTests: 'Unit Tests',
+    e2eTests: 'E2E Tests',
+    testingTools: 'Testing Tools',
+    priorityHigh: 'High Priority',
+    priorityMedium: 'Medium Priority',
+    priorityLow: 'Low Priority',
+    test: 'Test',
+    description: 'Description',
+  },
+  ja: {
+    intro:
+      'テストは、ARIA構造、キーボードナビゲーション、フォーカス管理、ポインターインタラクションのAPG準拠を検証します。Window Splitterコンポーネントは2層のテスト戦略を使用します。',
+    testingStrategy: 'テスト戦略',
+    testCategories: 'テストカテゴリ',
+    runningTests: 'テストの実行',
+    unitTests: 'ユニットテスト',
+    e2eTests: 'E2Eテスト',
+    testingTools: 'テストツール',
+    priorityHigh: '高優先度',
+    priorityMedium: '中優先度',
+    priorityLow: '低優先度',
+    test: 'テスト',
+    description: '説明',
+  },
+};
+
+const tr = translations[locale];
+
+const priorityColors = {
+  high: 'bg-red-500',
+  medium: 'bg-yellow-500',
+  low: 'bg-green-500',
+};
+
+const priorityLabels = {
+  high: tr.priorityHigh,
+  medium: tr.priorityMedium,
+  low: tr.priorityLow,
+};
 ---
 
 <div class="prose dark:prose-invert max-w-none">
   <p class="text-muted-foreground mb-4">
-    Tests verify APG compliance across ARIA structure, keyboard navigation, focus management, and
-    pointer interaction. The Window Splitter component uses a two-layer testing strategy.
+    {tr.intro}
   </p>
 
-  <h3 class="mb-3 text-lg font-medium">Testing Strategy</h3>
+  <h3 class="mb-3 text-lg font-medium">{tr.testingStrategy}</h3>
+
+  {
+    data.strategies.map((strategy) => (
+      <div class="bg-muted/50 mb-6 rounded-lg p-4">
+        <h4 class="mb-2 font-medium">{t(strategy.title)}</h4>
+        <p class="text-muted-foreground mb-2 text-sm">{t(strategy.description)}</p>
+        <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
+          {strategy.areas.map((area) => (
+            <li>{t(area)}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{tr.testCategories}</h3>
+
+  {
+    data.categories.map((category) => (
+      <>
+        <h4 class="mb-2 flex items-center gap-2 font-medium">
+          <span class={`inline-block h-3 w-3 rounded-full ${priorityColors[category.priority]}`} />
+          {priorityLabels[category.priority]}: {t(category.title)}
+        </h4>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{tr.test}</th>
+                <th class="py-2 text-left">{tr.description}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {category.items.map((item) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{item.name}</code>
+                  </td>
+                  <td class="py-2">{t(item.description)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{tr.runningTests}</h3>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests (Container API / Testing Library)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify the component's HTML output and basic interactions. These tests ensure correct template
-      rendering and ARIA attributes.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>ARIA structure (role, aria-valuenow, aria-controls)</li>
-      <li>Keyboard interaction (Arrow keys, Home/End, Enter)</li>
-      <li>Collapse/expand functionality</li>
-      <li>RTL support</li>
-      <li>Disabled/readonly states</li>
-    </ul>
-  </div>
-
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests (Playwright)</h4>
-    <p class="text-muted-foreground mb-2 text-sm">
-      Verify component behavior in a real browser environment including pointer interactions.
-    </p>
-    <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
-      <li>Pointer drag to resize</li>
-      <li>Focus management across Tab navigation</li>
-      <li>Cross-framework consistency</li>
-      <li>Visual state (CSS custom property updates)</li>
-    </ul>
-  </div>
-
-  <h3 class="mb-3 text-lg font-medium">Test Categories</h3>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: ARIA Structure
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>role="separator"</code></td>
-          <td class="py-2">Splitter has separator role</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuenow</code></td>
-          <td class="py-2">Primary pane size as percentage (0-100)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-valuemin/max</code></td>
-          <td class="py-2">Minimum and maximum values set</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2">References primary (and optional secondary) pane</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-orientation</code></td>
-          <td class="py-2">Set to "vertical" for vertical splitter</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2">Set to "true" when disabled</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Keyboard Interaction
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowRight/Left</code></td>
-          <td class="py-2">Moves horizontal splitter (increases/decreases)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>ArrowUp/Down</code></td>
-          <td class="py-2">Moves vertical splitter (increases/decreases)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Direction restriction</code></td>
-          <td class="py-2">Wrong-direction keys have no effect</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Shift+Arrow</code></td>
-          <td class="py-2">Moves by large step</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Home/End</code></td>
-          <td class="py-2">Moves to min/max position</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter (collapse)</code></td>
-          <td class="py-2">Collapses to 0</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Enter (expand)</code></td>
-          <td class="py-2">Restores previous position</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>RTL support</code></td>
-          <td class="py-2">ArrowLeft/Right reversed in RTL mode</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
-    High Priority: Focus Management
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="0"</code></td>
-          <td class="py-2">Splitter is focusable</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>tabindex="-1"</code></td>
-          <td class="py-2">Disabled splitter is not focusable</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>readonly focusable</code></td>
-          <td class="py-2">Readonly splitter is focusable but not operable</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus after collapse</code></td>
-          <td class="py-2">Focus remains on splitter</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Pointer Interaction
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Drag to resize</code></td>
-          <td class="py-2">Position updates during drag</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Focus on click</code></td>
-          <td class="py-2">Clicking focuses the splitter</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled no response</code></td>
-          <td class="py-2">Disabled splitter ignores pointer</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Readonly no response</code></td>
-          <td class="py-2">Readonly splitter ignores pointer</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h4 class="mb-2 flex items-center gap-2 font-medium">
-    <span class="inline-block h-3 w-3 rounded-full bg-yellow-500"></span>
-    Medium Priority: Accessibility
-  </h4>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Test</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>axe violations</code></td>
-          <td class="py-2">No WCAG 2.1 AA violations</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Collapsed state</code></td>
-          <td class="py-2">No violations when collapsed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>Disabled state</code></td>
-          <td class="py-2">No violations when disabled</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-
-  <h3 class="mb-3 text-lg font-medium">Running Tests</h3>
-
-  <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">Unit Tests</h4>
+    <h4 class="mb-2 font-medium">{tr.unitTests}</h4>
     <pre
       class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Window Splitter unit tests
 npx vitest run src/patterns/window-splitter/
@@ -241,7 +131,7 @@ npm run test:astro</code></pre>
   </div>
 
   <div class="bg-muted/50 mb-6 rounded-lg p-4">
-    <h4 class="mb-2 font-medium">E2E Tests</h4>
+    <h4 class="mb-2 font-medium">{tr.e2eTests}</h4>
     <pre
       class="text-muted-foreground overflow-x-auto text-sm"><code># Run all Window Splitter E2E tests
 npm run test:e2e -- window-splitter.spec.ts
@@ -249,4 +139,18 @@ npm run test:e2e -- window-splitter.spec.ts
 # Run in UI mode
 npm run test:e2e:ui -- window-splitter.spec.ts</code></pre>
   </div>
+
+  <h3 class="mb-3 text-lg font-medium">{tr.testingTools}</h3>
+  <ul class="mb-6 list-disc space-y-2 pl-6">
+    {
+      data.tools.map((tool) => (
+        <li>
+          <ExternalLink href={tool.url} class="text-primary hover:underline">
+            {tool.name}
+          </ExternalLink>
+          - {t(tool.description)}
+        </li>
+      ))
+    }
+  </ul>
 </div>

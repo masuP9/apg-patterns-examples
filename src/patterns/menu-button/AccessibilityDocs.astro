@@ -1,237 +1,305 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
+import { menuButtonAccessibilityData } from './accessibility-data';
+import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const {
+  roles,
+  properties,
+  states,
+  keyboardSections,
+  focusManagement,
+  additionalNotes,
+  references,
+} = menuButtonAccessibilityData;
+
+// Create localization function
+const t = localize(locale);
+const h = createTableHeaderTranslator(locale);
+
+// Section titles for this pattern
+const sectionTitles = {
+  en: {
+    propertiesButton: 'WAI-ARIA Properties (Button)',
+    propertiesMenu: 'WAI-ARIA Properties (Menu)',
+    hiddenState: 'Hidden State',
+    hiddenStateDesc: 'When closed, the menu uses both hidden and inert attributes to:',
+    hiddenStatePoints: [
+      'Hide the menu from visual display',
+      'Remove the menu from the accessibility tree',
+      'Prevent keyboard and mouse interaction with hidden items',
+    ],
+    accessibleNameNote: 'Either aria-labelledby or aria-label is required for an accessible name',
+  },
+  ja: {
+    propertiesButton: 'WAI-ARIA プロパティ（ボタン）',
+    propertiesMenu: 'WAI-ARIA プロパティ（メニュー）',
+    hiddenState: '非表示状態',
+    hiddenStateDesc: '閉じているとき、メニューはhiddenとinert属性の両方を使用して以下を実現します:',
+    hiddenStatePoints: [
+      '視覚的な表示からメニューを隠す',
+      'アクセシビリティツリーからメニューを削除する',
+      '非表示のアイテムに対するキーボードとマウスの操作を防ぐ',
+    ],
+    accessibleNameNote:
+      'aria-labelledbyまたはaria-labelのいずれかがアクセシブルな名前のために必須です',
+  },
+};
+
+const titles = sectionTitles[locale];
+
+// Separate button and menu properties
+const buttonProperties = properties?.filter((p) => p.element === 'button') || [];
+const menuProperties = properties?.filter((p) => p.element !== 'button') || [];
 ---
 
 <div class="prose dark:prose-invert max-w-none">
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Roles</h3>
+  <h3 class="mb-3 text-lg font-medium">{h('section.ariaRoles')}</h3>
   <ResponsiveTable class="mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Role</th>
-          <th class="py-2 pr-4 text-left">Target Element</th>
-          <th class="py-2 text-left">Description</th>
+          <th class="py-2 pr-4 text-left">{h('table.role')}</th>
+          <th class="py-2 pr-4 text-left">{h('table.element')}</th>
+          <th class="py-2 text-left">{h('table.description')}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>button</code></td>
-          <td class="py-2 pr-4">Trigger (<code>&lt;button&gt;</code>)</td>
-          <td class="py-2"
-            >The trigger that opens the menu (implicit via <code>&lt;button&gt;</code> element)</td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menu</code></td>
-          <td class="py-2 pr-4">Container (<code>&lt;ul&gt;</code>)</td>
-          <td class="py-2">A widget offering a list of choices to the user</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>menuitem</code></td>
-          <td class="py-2 pr-4">Each item (<code>&lt;li&gt;</code>)</td>
-          <td class="py-2">An option in a menu</td>
-        </tr>
+        {
+          roles.map((role) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>{role.name}</code>
+              </td>
+              <td class="py-2 pr-4">{t(role.element)}</td>
+              <td class="py-2">{t(role.description)}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    <ExternalLink href="https://w3c.github.io/aria/#menu" class="text-primary hover:underline">
-      WAI-ARIA menu role
-    </ExternalLink>
-  </p>
+  {
+    references && references.length > 0 && (
+      <p class="text-muted-foreground mb-6 text-sm">
+        <ExternalLink href={references[0].url} class="text-primary hover:underline">
+          {references[0].title}
+        </ExternalLink>
+      </p>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Button)</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-haspopup</code></td>
-          <td class="py-2 pr-4"><code>"menu"</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates the button opens a menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-expanded</code></td>
-          <td class="py-2 pr-4"><code>true</code> | <code>false</code></td>
-          <td class="py-2 pr-4">Yes</td>
-          <td class="py-2">Indicates whether the menu is open</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-controls</code></td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">References the menu element</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    buttonProperties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.propertiesButton}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {buttonProperties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">
+                    <code>{t(prop.values)}</code>
+                  </td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? h('value.yes')
+                        : h('value.no')
+                      : t(prop.required)}
+                  </td>
+                  <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">WAI-ARIA Properties (Menu)</h3>
-  <ResponsiveTable class="mb-6">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Attribute</th>
-          <th class="py-2 pr-4 text-left">Target</th>
-          <th class="py-2 pr-4 text-left">Values</th>
-          <th class="py-2 pr-4 text-left">Required</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-labelledby</code></td>
-          <td class="py-2 pr-4">menu</td>
-          <td class="py-2 pr-4">ID reference</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">References the button that opens the menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-label</code></td>
-          <td class="py-2 pr-4">menu</td>
-          <td class="py-2 pr-4">String</td>
-          <td class="py-2 pr-4">Yes*</td>
-          <td class="py-2">Provides an accessible name for the menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>aria-disabled</code></td>
-          <td class="py-2 pr-4">menuitem</td>
-          <td class="py-2 pr-4"><code>true</code></td>
-          <td class="py-2 pr-4">No</td>
-          <td class="py-2">Indicates the menu item is disabled</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
-  <p class="text-muted-foreground mb-6 text-sm">
-    * Either <code>aria-labelledby</code> or <code>aria-label</code> is required for an accessible name
-  </p>
+  {
+    menuProperties.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{titles.propertiesMenu}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.description')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {menuProperties.map((prop) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{prop.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{prop.element}</td>
+                  <td class="py-2 pr-4">
+                    <code>{t(prop.values)}</code>
+                  </td>
+                  <td class="py-2 pr-4">
+                    {typeof prop.required === 'boolean'
+                      ? prop.required
+                        ? h('value.yes')
+                        : h('value.no')
+                      : t(prop.required)}
+                  </td>
+                  <td class="py-2">{prop.notes ? t(prop.notes) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+        <p class="text-muted-foreground mb-6 text-sm">* {titles.accessibleNameNote}</p>
+      </>
+    )
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Keyboard Support</h3>
-  <h4 class="mb-2 font-medium">Button (Closed Menu)</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> / <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
-            ></td
-          >
-          <td class="py-2">Open menu and focus first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Open menu and focus first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Open menu and focus last item</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  {
+    states && states.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.ariaStates')}</h3>
+        <ResponsiveTable class="mb-6">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.attribute')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.target')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.values')}</th>
+                <th class="py-2 pr-4 text-left">{h('table.required')}</th>
+                <th class="py-2 text-left">{h('table.changeTrigger')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {states.map((state) => (
+                <tr class="border-border border-b">
+                  <td class="py-2 pr-4">
+                    <code>{state.attribute}</code>
+                  </td>
+                  <td class="py-2 pr-4">{state.element}</td>
+                  <td class="py-2 pr-4">
+                    {t(state.values)
+                      .split(' | ')
+                      .map((v: string, i: number, arr: string[]) => (
+                        <>
+                          <code>{v.trim()}</code>
+                          {i < arr.length - 1 && ' | '}
+                        </>
+                      ))}
+                  </td>
+                  <td class="py-2 pr-4">{state.required ? h('value.yes') : h('value.no')}</td>
+                  <td class="py-2">{state.changeTrigger ? t(state.changeTrigger) : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    )
+  }
 
-  <h4 class="mb-2 font-medium">Menu (Open)</h4>
-  <ResponsiveTable class="mb-4">
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Key</th>
-          <th class="py-2 text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Down Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to next item (wraps to first)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Up Arrow</kbd></td
-          >
-          <td class="py-2">Move focus to previous item (wraps to last)</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Home</kbd></td
-          >
-          <td class="py-2">Move focus to first item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">End</kbd></td
-          >
-          <td class="py-2">Move focus to last item</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Escape</kbd></td
-          >
-          <td class="py-2">Close menu and return focus to button</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Tab</kbd></td
-          >
-          <td class="py-2">Close menu and move focus to next focusable element</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"
-            ><kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Enter</kbd> / <kbd
-              class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">Space</kbd
-            ></td
-          >
-          <td class="py-2">Activate focused item and close menu</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Type character</td>
-          <td class="py-2">Type-ahead: focus item starting with typed character(s)</td>
-        </tr>
-      </tbody>
-    </table>
-  </ResponsiveTable>
+  <h3 class="mb-3 text-lg font-medium">{h('section.keyboardSupport')}</h3>
+  {
+    keyboardSections?.map((section) => (
+      <>
+        {section.title && <h4 class="mb-2 font-medium">{t(section.title)}</h4>}
+        <ResponsiveTable class="mb-4">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-border border-b">
+                <th class="py-2 pr-4 text-left">{h('table.key')}</th>
+                <th class="py-2 text-left">{h('table.action')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.shortcuts.map((shortcut) => {
+                const keyText = t(shortcut.key);
+                return (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      {keyText.includes('/') || keyText.includes('+') ? (
+                        <Fragment>
+                          {keyText
+                            .split(/\s*[/+]\s*/)
+                            .map((k: string, i: number, arr: string[]) => (
+                              <>
+                                <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">
+                                  {k.trim()}
+                                </kbd>
+                                {i < arr.length - 1 && (keyText.includes('+') ? ' + ' : ' / ')}
+                              </>
+                            ))}
+                        </Fragment>
+                      ) : keyText === 'Type character' || keyText === '文字を入力' ? (
+                        keyText
+                      ) : (
+                        <kbd class="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">{keyText}</kbd>
+                      )}
+                    </td>
+                    <td class="py-2">{t(shortcut.action)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ResponsiveTable>
+      </>
+    ))
+  }
 
-  <h3 class="mb-3 text-lg font-medium">Focus Management</h3>
+  {
+    focusManagement && focusManagement.length > 0 && (
+      <>
+        <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
+        <p class="text-muted-foreground mb-4">
+          {locale === 'en'
+            ? 'This component uses the Roving Tabindex pattern for focus management:'
+            : 'このコンポーネントは、フォーカス管理にRoving Tabindexパターンを使用します:'}
+        </p>
+        <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
+          {focusManagement.map((rule) => (
+            <li>
+              {t(rule.event)}
+              {typeof rule.behavior === 'string' && rule.behavior.includes('tabIndex')
+                ? `: ${rule.behavior}`
+                : `: ${t(rule.behavior)}`}
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <h3 class="mb-3 text-lg font-medium">{titles.hiddenState}</h3>
   <p class="text-muted-foreground mb-4">
-    This component uses the <strong>Roving Tabindex</strong> pattern for focus management:
+    {titles.hiddenStateDesc}
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Only one menu item has <code>tabindex="0"</code> at a time</li>
-    <li>Other menu items have <code>tabindex="-1"</code></li>
-    <li>Arrow keys move focus between items with wrapping</li>
-    <li>Disabled items are skipped during navigation</li>
-    <li>Focus returns to button when menu closes</li>
-  </ul>
-
-  <h3 class="mb-3 text-lg font-medium">Hidden State</h3>
-  <p class="text-muted-foreground mb-4">
-    When closed, the menu uses both <code>hidden</code> and <code>inert</code> attributes to:
-  </p>
-  <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    <li>Hide the menu from visual display</li>
-    <li>Remove the menu from the accessibility tree</li>
-    <li>Prevent keyboard and mouse interaction with hidden items</li>
+    {titles.hiddenStatePoints.map((point) => <li>{point}</li>)}
   </ul>
 </div>

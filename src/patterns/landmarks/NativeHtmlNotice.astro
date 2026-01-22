@@ -1,17 +1,120 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+// Translations
+const t = {
+  title: {
+    en: 'Prefer Native HTML Semantic Elements',
+    ja: 'ネイティブHTMLセマンティック要素を優先',
+  },
+  description: {
+    en: 'Always use native HTML semantic elements when possible.',
+    ja: '可能な限りネイティブHTMLセマンティック要素を使用してください。',
+  },
+  support: {
+    en: 'They provide built-in landmark roles without needing ARIA attributes and are better supported by assistive technologies.',
+    ja: 'これらはARIA属性なしでランドマークロールを提供し、支援技術によるサポートも優れています。',
+  },
+  htmlElement: {
+    en: 'HTML Element',
+    ja: 'HTML要素',
+  },
+  ariaRole: {
+    en: 'ARIA Role',
+    ja: 'ARIAロール',
+  },
+  autoMappingCondition: {
+    en: 'Auto-mapping Condition',
+    ja: '自動マッピング条件',
+  },
+  always: {
+    en: 'Always',
+    ja: '常に',
+  },
+  onlyBodyChild: {
+    en: 'Only when direct child of',
+    ja: 'の直接の子の場合のみ',
+  },
+  onlyLabeled: {
+    en: 'Only when aria-label or aria-labelledby is present',
+    ja: 'aria-labelまたはaria-labelledbyがある場合のみ',
+  },
+  searchNote: {
+    en: 'Note: For search functionality, use <code>&lt;form role="search"&gt;</code> as the <code>&lt;search&gt;</code> element has limited browser support.',
+    ja: '注：検索機能には<code>&lt;form role="search"&gt;</code>を使用してください。<code>&lt;search&gt;</code>要素はブラウザサポートが限定的です。',
+  },
+};
+
+// HTML to ARIA role mapping data
+const mappings = [
+  {
+    element: '<header>',
+    role: 'banner',
+    conditionType: 'body',
+  },
+  {
+    element: '<nav>',
+    role: 'navigation',
+    conditionType: 'always',
+  },
+  {
+    element: '<main>',
+    role: 'main',
+    conditionType: 'always',
+  },
+  {
+    element: '<footer>',
+    role: 'contentinfo',
+    conditionType: 'body',
+  },
+  {
+    element: '<aside>',
+    role: 'complementary',
+    conditionType: 'always',
+  },
+  {
+    element: '<section>',
+    role: 'region',
+    conditionType: 'labeled',
+  },
+  {
+    element: '<form>',
+    role: 'form',
+    conditionType: 'labeled',
+  },
+];
+
+function getCondition(conditionType: string) {
+  switch (conditionType) {
+    case 'always':
+      return t.always[locale];
+    case 'body':
+      return `<code>&lt;body&gt;</code>${t.onlyBodyChild[locale]}`;
+    case 'labeled':
+      return `<b class="text-red-700 dark:text-red-400">${t.onlyLabeled[locale]}</b>`;
+    default:
+      return '';
+  }
+}
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">✅</span> Prefer Native HTML Semantic Elements
+    <span aria-hidden="true">✅</span>
+    {t.title[locale]}
   </h2>
   <p class="mb-4">
-    <strong class="text-green-700 dark:text-green-400"
-      >Always use native HTML semantic elements when possible.</strong
-    >
-    They provide built-in landmark roles without needing ARIA attributes and are better supported by assistive
-    technologies.
+    <strong class="text-green-700 dark:text-green-400">
+      {t.description[locale]}
+    </strong>
+    {t.support[locale]}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -27,61 +130,27 @@ import { ResponsiveTable } from '@/components/ui/table';
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">HTML Element</th>
-          <th class="py-2 pr-4 text-left">ARIA Role</th>
-          <th class="py-2 text-left">Auto-mapping Condition</th>
+          <th class="py-2 pr-4 text-left">{t.htmlElement[locale]}</th>
+          <th class="py-2 pr-4 text-left">{t.ariaRole[locale]}</th>
+          <th class="py-2 text-left">{t.autoMappingCondition[locale]}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;header&gt;</code></td>
-          <td class="py-2 pr-4"><code>banner</code></td>
-          <td class="py-2">Only when direct child of <code>&lt;body&gt;</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;nav&gt;</code></td>
-          <td class="py-2 pr-4"><code>navigation</code></td>
-          <td class="py-2">Always</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;main&gt;</code></td>
-          <td class="py-2 pr-4"><code>main</code></td>
-          <td class="py-2">Always</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;footer&gt;</code></td>
-          <td class="py-2 pr-4"><code>contentinfo</code></td>
-          <td class="py-2">Only when direct child of <code>&lt;body&gt;</code></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;aside&gt;</code></td>
-          <td class="py-2 pr-4"><code>complementary</code></td>
-          <td class="py-2">Always</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;section&gt;</code></td>
-          <td class="py-2 pr-4"><code>region</code></td>
-          <td class="py-2"
-            ><b class="text-red-700 dark:text-red-400"
-              >Only when <code>aria-label</code> or <code>aria-labelledby</code> is present</b
-            ></td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4"><code>&lt;form&gt;</code></td>
-          <td class="py-2 pr-4"><code>form</code></td>
-          <td class="py-2"
-            ><b class="text-red-700 dark:text-red-400"
-              >Only when <code>aria-label</code> or <code>aria-labelledby</code> is present</b
-            ></td
-          >
-        </tr>
+        {
+          mappings.map((mapping) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">
+                <code>&lt;{mapping.element.slice(1, -1)}&gt;</code>
+              </td>
+              <td class="py-2 pr-4">
+                <code>{mapping.role}</code>
+              </td>
+              <td class="py-2" set:html={getCondition(mapping.conditionType)} />
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs">
-    Note: For search functionality, use <code>&lt;form role="search"&gt;</code> as the <code
-      >&lt;search&gt;</code
-    > element has limited browser support.
-  </p>
+  <p class="text-muted-foreground mt-3 text-xs" set:html={t.searchNote[locale]} />
 </div>
