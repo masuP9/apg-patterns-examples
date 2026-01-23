@@ -144,7 +144,6 @@ const llmMdUrl = withBase(
 <script define:vars={{ copiedText: t('ai.copied'), downloadFileName: mdFileName }}>
   function initAiGuideActions() {
     document.querySelectorAll('.ai-guide-actions').forEach((container) => {
-      const pattern = container.dataset.pattern;
       const llmUrl = container.dataset.llmUrl;
       const feedback = container.querySelector('.copied-feedback');
       const dropdown = container.querySelector('details.dropdown');
