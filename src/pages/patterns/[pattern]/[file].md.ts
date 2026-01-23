@@ -7,17 +7,22 @@ import { getAvailablePatterns } from '@/lib/patterns';
 const patterns = getAvailablePatterns().map((p) => p.id);
 
 export const getStaticPaths: GetStaticPaths = () => {
+  // Generate paths where file equals pattern name (e.g., /patterns/accordion/accordion.md)
   return patterns.map((pattern) => ({
-    params: { pattern },
+    params: { pattern, file: pattern },
   }));
 };
 
 export const GET: APIRoute = async ({ params }) => {
-  const { pattern } = params;
+  const { pattern, file } = params;
+
+  // Only serve if file matches pattern name
+  if (file !== pattern) {
+    return new Response('Not found', { status: 404 });
+  }
 
   try {
-    // Read from {pattern}.ja.md (e.g., alert-dialog.ja.md) for Japanese locale
-    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, `${pattern}.ja.md`);
+    const filePath = join(process.cwd(), 'src', 'patterns', pattern!, `${pattern}.md`);
     const content = await readFile(filePath, 'utf-8');
 
     return new Response(content, {
