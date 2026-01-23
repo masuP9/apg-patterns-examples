@@ -17,12 +17,12 @@ import { withBase } from '@/lib/utils';
       <h2 class="mb-4 text-2xl font-semibold">Using with AI Code Assistants</h2>
       <p class="text-muted-foreground mb-4">
         Each pattern includes an AI-friendly definition file (<code
-          class="bg-muted rounded px-1.5 py-0.5 text-sm">llm.md</code
+          class="bg-muted rounded px-1.5 py-0.5 text-sm">{'{pattern}.md'}</code
         >) that can be used as context when implementing similar components with AI coding
         assistants like Claude, Cursor, or GitHub Copilot.
       </p>
 
-      <h3 class="mt-6 mb-3 text-xl font-medium">What's included in llm.md</h3>
+      <h3 class="mt-6 mb-3 text-xl font-medium">What's included in definition files</h3>
       <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
         <li>ARIA roles, properties, and states requirements</li>
         <li>Keyboard interaction specifications</li>
@@ -43,7 +43,7 @@ import { withBase } from '@/lib/utils';
             <pre
               class="overflow-x-auto text-sm"><code>Implement a Tabs component in Angular following this specification:
 
-[paste llm.md content here]</code></pre>
+[paste definition file content here]</code></pre>
           </div>
         </div>
 
@@ -288,156 +288,169 @@ import { withBase } from '@/lib/utils';
     </section>
 
     <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Direct Links to llm.md</h2>
+      <h2 class="mb-4 text-2xl font-semibold">Direct Links to Pattern Definitions</h2>
       <p class="text-muted-foreground mb-4">
         Copy these URLs directly or fetch them with AI tools:
       </p>
       <div class="bg-muted rounded-md p-4">
         <ul class="space-y-1 text-sm">
           <li>
-            <a href={withBase('/patterns/accordion/llm.md')} class="text-primary hover:underline"
-              >/patterns/accordion/llm.md</a
+            <a
+              href={withBase('/patterns/accordion/accordion.md')}
+              class="text-primary hover:underline">/patterns/accordion/accordion.md</a
             >
           </li>
           <li>
-            <a href={withBase('/patterns/alert/llm.md')} class="text-primary hover:underline"
-              >/patterns/alert/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/alert-dialog/llm.md')} class="text-primary hover:underline"
-              >/patterns/alert-dialog/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/breadcrumb/llm.md')} class="text-primary hover:underline"
-              >/patterns/breadcrumb/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/button/llm.md')} class="text-primary hover:underline"
-              >/patterns/button/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/carousel/llm.md')} class="text-primary hover:underline"
-              >/patterns/carousel/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/checkbox/llm.md')} class="text-primary hover:underline"
-              >/patterns/checkbox/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/combobox/llm.md')} class="text-primary hover:underline"
-              >/patterns/combobox/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/dialog/llm.md')} class="text-primary hover:underline"
-              >/patterns/dialog/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/disclosure/llm.md')} class="text-primary hover:underline"
-              >/patterns/disclosure/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/feed/llm.md')} class="text-primary hover:underline"
-              >/patterns/feed/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/grid/llm.md')} class="text-primary hover:underline"
-              >/patterns/grid/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/landmarks/llm.md')} class="text-primary hover:underline"
-              >/patterns/landmarks/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/link/llm.md')} class="text-primary hover:underline"
-              >/patterns/link/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/listbox/llm.md')} class="text-primary hover:underline"
-              >/patterns/listbox/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/menu-button/llm.md')} class="text-primary hover:underline"
-              >/patterns/menu-button/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/menubar/llm.md')} class="text-primary hover:underline"
-              >/patterns/menubar/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/meter/llm.md')} class="text-primary hover:underline"
-              >/patterns/meter/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/radio-group/llm.md')} class="text-primary hover:underline"
-              >/patterns/radio-group/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/slider/llm.md')} class="text-primary hover:underline"
-              >/patterns/slider/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/spinbutton/llm.md')} class="text-primary hover:underline"
-              >/patterns/spinbutton/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/switch/llm.md')} class="text-primary hover:underline"
-              >/patterns/switch/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/table/llm.md')} class="text-primary hover:underline"
-              >/patterns/table/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/tabs/llm.md')} class="text-primary hover:underline"
-              >/patterns/tabs/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/toolbar/llm.md')} class="text-primary hover:underline"
-              >/patterns/toolbar/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/tooltip/llm.md')} class="text-primary hover:underline"
-              >/patterns/tooltip/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/treegrid/llm.md')} class="text-primary hover:underline"
-              >/patterns/treegrid/llm.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/treeview/llm.md')} class="text-primary hover:underline"
-              >/patterns/treeview/llm.md</a
+            <a href={withBase('/patterns/alert/alert.md')} class="text-primary hover:underline"
+              >/patterns/alert/alert.md</a
             >
           </li>
           <li>
             <a
-              href={withBase('/patterns/window-splitter/llm.md')}
-              class="text-primary hover:underline">/patterns/window-splitter/llm.md</a
+              href={withBase('/patterns/alert-dialog/alert-dialog.md')}
+              class="text-primary hover:underline">/patterns/alert-dialog/alert-dialog.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/breadcrumb/breadcrumb.md')}
+              class="text-primary hover:underline">/patterns/breadcrumb/breadcrumb.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/button/button.md')} class="text-primary hover:underline"
+              >/patterns/button/button.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/carousel/carousel.md')}
+              class="text-primary hover:underline">/patterns/carousel/carousel.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/checkbox/checkbox.md')}
+              class="text-primary hover:underline">/patterns/checkbox/checkbox.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/combobox/combobox.md')}
+              class="text-primary hover:underline">/patterns/combobox/combobox.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/dialog/dialog.md')} class="text-primary hover:underline"
+              >/patterns/dialog/dialog.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/disclosure/disclosure.md')}
+              class="text-primary hover:underline">/patterns/disclosure/disclosure.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/feed/feed.md')} class="text-primary hover:underline"
+              >/patterns/feed/feed.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/grid/grid.md')} class="text-primary hover:underline"
+              >/patterns/grid/grid.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/landmarks/landmarks.md')}
+              class="text-primary hover:underline">/patterns/landmarks/landmarks.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/link/link.md')} class="text-primary hover:underline"
+              >/patterns/link/link.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/listbox/listbox.md')} class="text-primary hover:underline"
+              >/patterns/listbox/listbox.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/menu-button/menu-button.md')}
+              class="text-primary hover:underline">/patterns/menu-button/menu-button.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/menubar/menubar.md')} class="text-primary hover:underline"
+              >/patterns/menubar/menubar.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/meter/meter.md')} class="text-primary hover:underline"
+              >/patterns/meter/meter.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/radio-group/radio-group.md')}
+              class="text-primary hover:underline">/patterns/radio-group/radio-group.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/slider/slider.md')} class="text-primary hover:underline"
+              >/patterns/slider/slider.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/spinbutton/spinbutton.md')}
+              class="text-primary hover:underline">/patterns/spinbutton/spinbutton.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/switch/switch.md')} class="text-primary hover:underline"
+              >/patterns/switch/switch.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/table/table.md')} class="text-primary hover:underline"
+              >/patterns/table/table.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/tabs/tabs.md')} class="text-primary hover:underline"
+              >/patterns/tabs/tabs.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/toolbar/toolbar.md')} class="text-primary hover:underline"
+              >/patterns/toolbar/toolbar.md</a
+            >
+          </li>
+          <li>
+            <a href={withBase('/patterns/tooltip/tooltip.md')} class="text-primary hover:underline"
+              >/patterns/tooltip/tooltip.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/treegrid/treegrid.md')}
+              class="text-primary hover:underline">/patterns/treegrid/treegrid.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/treeview/treeview.md')}
+              class="text-primary hover:underline">/patterns/treeview/treeview.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/window-splitter/window-splitter.md')}
+              class="text-primary hover:underline">/patterns/window-splitter/window-splitter.md</a
             >
           </li>
         </ul>

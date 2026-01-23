@@ -14,9 +14,12 @@ const { pattern, class: className } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-// Use locale-aware URL: /ja/patterns/{pattern}/llm.md for Japanese, /patterns/{pattern}/llm.md for English
+// Use locale-aware URL with consistent filename:
+// EN: /patterns/{pattern}/{pattern}.md
+// JA: /ja/patterns/{pattern}/{pattern}.ja.md
+const mdFileName = locale === 'ja' ? `${pattern}.ja.md` : `${pattern}.md`;
 const llmMdUrl = withBase(
-  locale === 'ja' ? `/ja/patterns/${pattern}/llm.md` : `/patterns/${pattern}/llm.md`
+  locale === 'ja' ? `/ja/patterns/${pattern}/${mdFileName}` : `/patterns/${pattern}/${mdFileName}`
 );
 ---
 
@@ -138,10 +141,9 @@ const llmMdUrl = withBase(
   }
 </style>
 
-<script define:vars={{ copiedText: t('ai.copied') }}>
+<script define:vars={{ copiedText: t('ai.copied'), downloadFileName: mdFileName }}>
   function initAiGuideActions() {
     document.querySelectorAll('.ai-guide-actions').forEach((container) => {
-      const pattern = container.dataset.pattern;
       const llmUrl = container.dataset.llmUrl;
       const feedback = container.querySelector('.copied-feedback');
       const dropdown = container.querySelector('details.dropdown');
@@ -175,7 +177,7 @@ const llmMdUrl = withBase(
 
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${pattern}-ai-guide.md`;
+          a.download = downloadFileName;
           a.click();
 
           URL.revokeObjectURL(url);
