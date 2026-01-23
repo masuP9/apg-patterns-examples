@@ -299,15 +299,6 @@ export const PATTERNS: Pattern[] = [
     status: 'available',
   },
   {
-    id: 'editable-grid',
-    name: 'Editable Grid',
-    description:
-      'A spreadsheet-like grid with inline cell editing, dropdowns, and validation support.',
-    icon: '✏️',
-    complexity: 'High',
-    status: 'planned',
-  },
-  {
     id: 'window-splitter',
     name: 'Window Splitter',
     description:
