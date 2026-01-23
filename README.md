@@ -59,6 +59,26 @@ Additionally, we provide styling that supports dark mode, high contrast mode, an
 - Reduced motion preferences support
 - Forced colors mode support
 
+## AI Guide
+
+Each pattern includes an AI-friendly definition file (`llm.md`) that can be used as context when implementing similar components with AI coding assistants like Claude, Cursor, or GitHub Copilot.
+
+### What's included
+
+- ARIA roles, properties, and states requirements
+- Keyboard interaction specifications
+- Focus management rules
+- Test checklist for verification
+- Localized versions (English and Japanese)
+
+### Usage
+
+1. **Download**: Click "Download for AI" button on any pattern page
+2. **Copy**: Use "Copy for AI" to copy the content to clipboard
+3. **Direct URL**: Access via `https://masup9.github.io/apg-patterns-examples/patterns/{pattern}/llm.md`
+
+For more details, see the [Guide](https://masup9.github.io/apg-patterns-examples/guide/).
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details on:

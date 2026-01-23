@@ -59,6 +59,26 @@
 - モーション削減の設定への対応
 - 強制カラーモードのサポート
 
+## AI ガイド
+
+各パターンには AI コーディングアシスタント向けの定義ファイル（`llm.md`）が含まれており、Claude、Cursor、GitHub Copilot などで類似コンポーネントを実装する際のコンテキストとして利用できます。
+
+### 含まれる内容
+
+- ARIA role、property、state の要件
+- キーボード操作の仕様
+- フォーカス管理のルール
+- 検証用のテストチェックリスト
+- ローカライズ版（英語・日本語）
+
+### 使い方
+
+1. **ダウンロード**: パターンページの「AIガイドをダウンロード」ボタンをクリック
+2. **コピー**: 「AIガイドをコピー」でクリップボードにコピー
+3. **直接URL**: `https://masup9.github.io/apg-patterns-examples/ja/patterns/{pattern}/llm.md` からアクセス
+
+詳細は[ガイド](https://masup9.github.io/apg-patterns-examples/ja/guide/)をご覧ください。
+
 ## コントリビューション
 
 コントリビューションを歓迎します！詳細については、[Contributing Guide](./CONTRIBUTING.md) をご覧ください：

@@ -84,7 +84,7 @@ import { withBase } from '@/lib/utils';
 
     <section class="mb-12">
       <h2 class="mb-4 text-2xl font-semibold">Available Patterns</h2>
-      <p class="text-muted-foreground mb-4">All 28 patterns have AI-friendly definition files:</p>
+      <p class="text-muted-foreground mb-4">All 32 patterns have AI-friendly definition files:</p>
       <div class="grid gap-4 md:grid-cols-2">
         <Tile variant="floating" href={withBase('/patterns/accordion/react/')}>
           <TileContent>
@@ -143,6 +143,14 @@ import { withBase } from '@/lib/utils';
             <TileTitle>Combobox</TileTitle>
             <TileDescription>
               Text input with dropdown suggestions and autocomplete.
+            </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/data-grid/react/')}>
+          <TileContent>
+            <TileTitle>Data Grid</TileTitle>
+            <TileDescription>
+              Interactive grid with editable cells and keyboard navigation.
             </TileDescription>
           </TileContent>
         </Tile>
@@ -224,6 +232,14 @@ import { withBase } from '@/lib/utils';
           <TileContent>
             <TileTitle>Slider</TileTitle>
             <TileDescription> Input for selecting a value from a range. </TileDescription>
+          </TileContent>
+        </Tile>
+        <Tile variant="floating" href={withBase('/patterns/slider-multithumb/react/')}>
+          <TileContent>
+            <TileTitle>Slider (Multi-Thumb)</TileTitle>
+            <TileDescription>
+              Range slider with multiple handles for range selection.
+            </TileDescription>
           </TileContent>
         </Tile>
         <Tile variant="floating" href={withBase('/patterns/spinbutton/react/')}>
@@ -335,6 +351,11 @@ import { withBase } from '@/lib/utils';
             >
           </li>
           <li>
+            <a href={withBase('/patterns/data-grid/llm.md')} class="text-primary hover:underline"
+              >/patterns/data-grid/llm.md</a
+            >
+          </li>
+          <li>
             <a href={withBase('/patterns/dialog/llm.md')} class="text-primary hover:underline"
               >/patterns/dialog/llm.md</a
             >
@@ -392,6 +413,12 @@ import { withBase } from '@/lib/utils';
           <li>
             <a href={withBase('/patterns/slider/llm.md')} class="text-primary hover:underline"
               >/patterns/slider/llm.md</a
+            >
+          </li>
+          <li>
+            <a
+              href={withBase('/patterns/slider-multithumb/llm.md')}
+              class="text-primary hover:underline">/patterns/slider-multithumb/llm.md</a
             >
           </li>
           <li>
