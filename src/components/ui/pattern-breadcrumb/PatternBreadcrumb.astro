@@ -1,7 +1,7 @@
 ---
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { type Framework } from '@/lib/frameworks';
-import { getAvailablePatterns, getPatternById } from '@/lib/patterns';
+import { getPatterns, getPatternById } from '@/lib/patterns';
 import { withBase } from '@/lib/utils';
 import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
 import {
@@ -22,7 +22,7 @@ const { pattern, framework } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 const currentPattern = getPatternById(pattern);
 ---
 
@@ -52,7 +52,7 @@ const currentPattern = getPatternById(pattern);
           <hr class="border-border" />
           <ul class="py-1">
             {
-              availablePatterns.map((p) => (
+              patterns.map((p) => (
                 <li>
                   <a
                     href={withBase(getLocalizedPath(`/patterns/${p.id}/${framework}/`, locale))}

@@ -2,12 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
-import { getAvailablePatterns } from '@/lib/patterns';
+import { getPatterns } from '@/lib/patterns';
 import { getLocalizedPath, useTranslation, getPatternName, getPatternDescription } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 ---
 
 <BaseLayout title={t('nav.patterns')} locale={locale}>
@@ -31,7 +31,7 @@ const availablePatterns = getAvailablePatterns();
       <h2 class="mb-6 text-2xl font-bold">{t('patterns.available')}</h2>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {
-          availablePatterns.map((pattern) => (
+          patterns.map((pattern) => (
             <Tile
               variant="floating"
               href={withBase(getLocalizedPath(`/patterns/${pattern.id}/`, locale))}

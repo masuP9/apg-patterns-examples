@@ -1,29 +1,28 @@
 ---
 import Feed, { type FeedArticle } from './Feed.astro';
 import KeyboardHints from './KeyboardHints.astro';
-import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+import { getPatterns, type Pattern } from '@/lib/patterns';
 
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 
 const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
-  description: `Complexity: ${pattern.complexity}`,
+  description: pattern.description,
   content: `${pattern.description}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/astro/`,
 });
 
-const initialArticles: FeedArticle[] = availablePatterns
+const initialArticles: FeedArticle[] = patterns
   .slice(0, 3)
   .map((pattern) => generateArticleFromPattern(pattern));
 
 // Pass patterns data to client-side script
 const patternsJson = JSON.stringify(
-  availablePatterns.map((p) => ({
+  patterns.map((p) => ({
     id: p.id,
     name: p.name,
     icon: p.icon,
     description: p.description,
-    complexity: p.complexity,
   }))
 );
 ---
@@ -84,7 +83,6 @@ const patternsJson = JSON.stringify(
     name: string;
     icon: string;
     description: string;
-    complexity: string;
   }
 
   class ApgFeedInfiniteDemo extends HTMLElement {
@@ -194,7 +192,7 @@ const patternsJson = JSON.stringify(
           }
           if (desc) {
             desc.id = descId;
-            desc.textContent = `Complexity: ${pattern.complexity}`;
+            desc.textContent = pattern.description;
           }
           if (content) {
             content.textContent = `${pattern.description}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/astro/`;

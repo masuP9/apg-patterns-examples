@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-import { getAvailablePatterns, type Pattern } from '../src/lib/patterns';
+import { getPatterns, type Pattern } from '../src/lib/patterns';
 
 const require = createRequire(import.meta.url);
 
@@ -173,8 +173,8 @@ function loadFontBold() {
 async function generatePatternOGImages() {
   console.log('Generating pattern OGP images...\n');
 
-  // Get available patterns from patterns.ts
-  const patterns = getAvailablePatterns();
+  // Get patterns from patterns.ts
+  const patterns = getPatterns();
   console.log(`Found ${patterns.length} available patterns\n`);
 
   // Ensure output directory exists

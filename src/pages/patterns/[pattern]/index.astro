@@ -3,11 +3,11 @@
 // This single file handles redirects for all patterns
 
 import { FRAMEWORKS, DEFAULT_FRAMEWORK } from '@/lib/frameworks';
-import { getAvailablePatterns } from '@/lib/patterns';
+import { getPatterns } from '@/lib/patterns';
 import { withBase } from '@/lib/utils';
 
 export function getStaticPaths() {
-  return getAvailablePatterns().map((p) => ({ params: { pattern: p.id } }));
+  return getPatterns().map((p) => ({ params: { pattern: p.id } }));
 }
 
 const { pattern } = Astro.params;

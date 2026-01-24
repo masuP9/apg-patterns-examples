@@ -60,14 +60,8 @@ export const ui = {
     'table.value': 'Value',
     'table.description': 'Description',
 
-    // Complexity
-    'complexity.low': 'Low',
-    'complexity.medium': 'Medium',
-    'complexity.high': 'High',
-
     // Status
     'status.available': 'Available',
-    'status.planned': 'Planned',
 
     // Language
     'language.switch': 'Language',
@@ -131,14 +125,8 @@ export const ui = {
     'table.value': '値',
     'table.description': '説明',
 
-    // Complexity
-    'complexity.low': '低',
-    'complexity.medium': '中',
-    'complexity.high': '高',
-
     // Status
     'status.available': '実装済み',
-    'status.planned': '実装予定',
 
     // Language
     'language.switch': '言語',
