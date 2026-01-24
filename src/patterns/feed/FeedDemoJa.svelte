@@ -1,18 +1,18 @@
 <script lang="ts">
   import Feed, { type FeedArticle } from './Feed.svelte';
   import KeyboardHintsJa from './KeyboardHintsJa.svelte';
-  import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+  import { getPatterns, type Pattern } from '@/lib/patterns';
 
-  const availablePatterns = getAvailablePatterns();
+  const patterns = getPatterns();
 
   const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
     id: `article-${pattern.id}`,
     title: `${pattern.icon} ${pattern.name}`,
     description: pattern.description,
-    content: `${pattern.description}\n\n複雑度: ${pattern.complexity}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/svelte/`,
+    content: `${pattern.description}\n\n${pattern.name} パターンを見る: /ja/patterns/${pattern.id}/svelte/`,
   });
 
-  const initialArticles: FeedArticle[] = availablePatterns
+  const initialArticles: FeedArticle[] = patterns
     .slice(0, 3)
     .map((pattern) => generateArticleFromPattern(pattern));
 
@@ -28,13 +28,13 @@
 
     setTimeout(() => {
       const currentLength = articles.length;
-      const nextPatterns = availablePatterns.slice(currentLength, currentLength + 2);
+      const nextPatterns = patterns.slice(currentLength, currentLength + 2);
       const newArticles = nextPatterns.map((pattern) => generateArticleFromPattern(pattern));
 
       articles = [...articles, ...newArticles];
       loading = false;
 
-      if (currentLength + newArticles.length >= availablePatterns.length) {
+      if (currentLength + newArticles.length >= patterns.length) {
         hasMore = false;
       }
     }, 1000);
@@ -42,8 +42,8 @@
 
   function addArticle() {
     const currentLength = articles.length;
-    if (currentLength < availablePatterns.length) {
-      const nextPattern = availablePatterns[currentLength];
+    if (currentLength < patterns.length) {
+      const nextPattern = patterns[currentLength];
       articles = [...articles, generateArticleFromPattern(nextPattern)];
     }
   }

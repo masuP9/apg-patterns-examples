@@ -1,10 +1,10 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { getAvailablePatterns } from '@/lib/patterns';
+import { getPatterns } from '@/lib/patterns';
 
 // Get pattern IDs from the centralized patterns definition
-const patterns = getAvailablePatterns().map((p) => p.id);
+const patterns = getPatterns().map((p) => p.id);
 
 export const getStaticPaths: GetStaticPaths = () => {
   // Generate paths where file equals pattern name (e.g., /patterns/accordion/accordion.md)

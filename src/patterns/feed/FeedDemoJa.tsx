@@ -1,13 +1,13 @@
 import { useState, useCallback, useRef } from 'react';
 import { Feed, type FeedArticle } from './Feed';
-import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+import { getPatterns, type Pattern } from '@/lib/patterns';
 
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 
 const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
-  description: `複雑度: ${pattern.complexity}`,
+  description: pattern.description,
   content: (
     <>
       <p>{pattern.description}</p>
@@ -18,7 +18,7 @@ const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   ),
 });
 
-const initialArticles: FeedArticle[] = availablePatterns
+const initialArticles: FeedArticle[] = patterns
   .slice(0, 3)
   .map((pattern) => generateArticleFromPattern(pattern));
 
@@ -64,14 +64,14 @@ export function FeedDemoJa() {
     // Simulate API call
     setTimeout(() => {
       const currentLength = articles.length;
-      const nextPatterns = availablePatterns.slice(currentLength, currentLength + 2);
+      const nextPatterns = patterns.slice(currentLength, currentLength + 2);
       const newArticles = nextPatterns.map((pattern) => generateArticleFromPattern(pattern));
 
       setArticles((prev) => [...prev, ...newArticles]);
       setLoading(false);
 
       // Stop when all patterns are loaded
-      if (currentLength + newArticles.length >= availablePatterns.length) {
+      if (currentLength + newArticles.length >= patterns.length) {
         setHasMore(false);
       }
     }, 1000);
@@ -79,8 +79,8 @@ export function FeedDemoJa() {
 
   const addArticle = useCallback(() => {
     const currentLength = articles.length;
-    if (currentLength < availablePatterns.length) {
-      const nextPattern = availablePatterns[currentLength];
+    if (currentLength < patterns.length) {
+      const nextPattern = patterns[currentLength];
       setArticles((prev) => [...prev, generateArticleFromPattern(nextPattern)]);
     }
   }, [articles.length]);

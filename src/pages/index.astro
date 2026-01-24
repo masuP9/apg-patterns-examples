@@ -2,9 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
-import { getAvailablePatterns } from '@/lib/patterns';
+import { getPatterns } from '@/lib/patterns';
 
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 ---
 
 <BaseLayout title="Home">
@@ -25,7 +25,7 @@ const availablePatterns = getAvailablePatterns();
       <h2 class="mb-6 text-2xl font-bold">Available Patterns</h2>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {
-          availablePatterns.map((pattern) => (
+          patterns.map((pattern) => (
             <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/`)}>
               <TileContent class="flex flex-row items-center gap-4 text-left">
                 <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">

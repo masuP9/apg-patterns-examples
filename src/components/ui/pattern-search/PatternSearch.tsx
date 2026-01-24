@@ -5,7 +5,7 @@ import {
   getPreferredFramework,
   type Locale,
 } from '@/lib/pattern-search';
-import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+import { getPatterns, type Pattern } from '@/lib/patterns';
 import { getPatternDescription } from '@/i18n/patterns';
 import type { KeyboardEvent, ReactElement } from 'react';
 import { Search } from 'lucide-react';
@@ -43,21 +43,21 @@ export function PatternSearch({
   const listboxRef = useRef<HTMLUListElement>(null);
 
   // Get available patterns
-  const availablePatterns = useMemo(() => getAvailablePatterns(), []);
+  const patterns = useMemo(() => getPatterns(), []);
 
   // Filter patterns based on query
   const filteredPatterns = useMemo(() => {
     if (!query.trim()) {
-      return availablePatterns;
+      return patterns;
     }
 
     const lowerQuery = query.toLowerCase();
-    return availablePatterns.filter(
+    return patterns.filter(
       (pattern) =>
         pattern.name.toLowerCase().includes(lowerQuery) ||
         pattern.description.toLowerCase().includes(lowerQuery)
     );
-  }, [availablePatterns, query]);
+  }, [patterns, query]);
 
   // Group patterns alphabetically and get sorted keys
   const { groupedPatterns, groupKeys } = useMemo(() => {

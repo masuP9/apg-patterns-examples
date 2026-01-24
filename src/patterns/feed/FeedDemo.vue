@@ -56,18 +56,18 @@
 import { ref } from 'vue';
 import Feed, { type FeedArticle } from './Feed.vue';
 import KeyboardHints from './KeyboardHints.vue';
-import { getAvailablePatterns, type Pattern } from '@/lib/patterns';
+import { getPatterns, type Pattern } from '@/lib/patterns';
 
-const availablePatterns = getAvailablePatterns();
+const patterns = getPatterns();
 
 const generateArticleFromPattern = (pattern: Pattern): FeedArticle => ({
   id: `article-${pattern.id}`,
   title: `${pattern.icon} ${pattern.name}`,
   description: pattern.description,
-  content: `${pattern.description}\n\nComplexity: ${pattern.complexity}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/vue/`,
+  content: `${pattern.description}\n\nView ${pattern.name} pattern: /patterns/${pattern.id}/vue/`,
 });
 
-const initialArticles: FeedArticle[] = availablePatterns
+const initialArticles: FeedArticle[] = patterns
   .slice(0, 3)
   .map((pattern) => generateArticleFromPattern(pattern));
 
@@ -83,13 +83,13 @@ const loadMore = () => {
 
   setTimeout(() => {
     const currentLength = articles.value.length;
-    const nextPatterns = availablePatterns.slice(currentLength, currentLength + 2);
+    const nextPatterns = patterns.slice(currentLength, currentLength + 2);
     const newArticles = nextPatterns.map((pattern) => generateArticleFromPattern(pattern));
 
     articles.value.push(...newArticles);
     loading.value = false;
 
-    if (currentLength + newArticles.length >= availablePatterns.length) {
+    if (currentLength + newArticles.length >= patterns.length) {
       hasMore.value = false;
     }
   }, 1000);
@@ -97,8 +97,8 @@ const loadMore = () => {
 
 const addArticle = () => {
   const currentLength = articles.value.length;
-  if (currentLength < availablePatterns.length) {
-    const nextPattern = availablePatterns[currentLength];
+  if (currentLength < patterns.length) {
+    const nextPattern = patterns[currentLength];
     articles.value.push(generateArticleFromPattern(nextPattern));
   }
 };
