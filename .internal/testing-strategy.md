@@ -554,6 +554,135 @@ for (const framework of frameworks) {
 
 ---
 
+## E2E テストの安定化
+
+E2E テストは実際のブラウザで動作するため、タイミングに依存したフラキーテストが発生しやすい。
+以下のパターンと対策を把握しておくことで、安定したテストを書ける。
+
+### フラキーテストの原因と対策
+
+#### 1. フォーカスレース問題
+
+**問題**: `click()` の後に `page.keyboard.press()` を使うと、フォーカスが一時的に別の要素に移動し、
+キーイベントが意図しない要素に送信されることがある。
+
+```typescript
+// ❌ フラキー: click() 後のフォーカスが不安定
+await secondTab.click();
+await page.keyboard.press('ArrowLeft'); // フォーカスが secondTab にない可能性
+
+// ✅ 安定: element.press() を使用
+await secondTab.click();
+await secondTab.press('ArrowLeft'); // 要素に直接キーを送信
+```
+
+**対策**:
+- `page.keyboard.press()` の代わりに `element.press()` を使用する
+- `element.press()` は要素に直接キーイベントを送信するため、フォーカスレースの影響を受けない
+
+#### 2. 選択されていないタブへの focus()
+
+**問題**: Roving tabindex パターンでは、選択されていない要素は `tabindex="-1"` を持つ。
+これらの要素に `focus()` を呼んでも、コンポーネントの内部状態と同期せず期待通りに動作しないことがある。
+
+```typescript
+// ❌ 不安定: tabindex="-1" の要素への focus()
+const secondTab = tabs.getByRole('tab').nth(1); // tabindex="-1"
+await secondTab.focus(); // 動作が不安定
+await page.keyboard.press('ArrowLeft');
+
+// ✅ 安定: キーボードナビゲーションで移動
+const firstTab = tabs.getByRole('tab').first(); // tabindex="0" (選択済み)
+await firstTab.focus();
+await expect(firstTab).toBeFocused();
+await firstTab.press('ArrowRight'); // キーボードで secondTab に移動
+await expect(secondTab).toBeFocused();
+await secondTab.press('ArrowLeft'); // 目的の操作をテスト
+```
+
+**対策**:
+- 選択済みタブ（`tabindex="0"`）に `focus()` してから、キーボードナビゲーションで目的のタブに移動する
+- 直接 `focus()` するのは `tabindex="0"` を持つ要素のみ
+
+#### 3. ハイドレーション待機の不足
+
+**問題**: フレームワークコンポーネント（特に React）は、HTML がレンダリングされた後も
+JavaScript のハイドレーションが完了するまでインタラクティブにならない。
+
+```typescript
+// ❌ 不十分: 要素の存在だけを待機
+await getTabs(page).first().waitFor();
+
+// ✅ 十分: ハイドレーション完了を示す属性も確認
+await getTabs(page).first().waitFor();
+const firstTab = getTabButtons(page).first();
+// ID が正しく設定されているか（ハイドレーション指標）
+await expect.poll(async () => {
+  const id = await firstTab.getAttribute('id');
+  return id && id.length > 1 && !id.startsWith('-');
+}).toBe(true);
+// インタラクティブな状態か
+await expect(firstTab).toHaveAttribute('tabindex', '0');
+await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+```
+
+**対策**:
+- `beforeEach` でハイドレーション完了を示す属性（`id`, `aria-controls` など）を待機する
+- 初期状態の ARIA 属性（`tabindex`, `aria-selected` など）が設定されていることを確認する
+
+### ユニットテスト vs E2E の使い分け
+
+jsdom/happy-dom 環境はフォーカス操作が実際のブラウザと異なる挙動を示すことがある。
+
+| テスト対象 | 推奨環境 | 理由 |
+|-----------|---------|------|
+| ARIA 属性の初期値 | ユニット | DOM 操作のみで検証可能 |
+| キーボードナビゲーション | E2E | フォーカス移動が正確 |
+| フォーカストラップ | E2E | Tab キーの挙動が jsdom で不安定 |
+| フォーカス復元 | E2E | 複雑なフォーカス管理は実ブラウザで検証 |
+
+**例**: フォーカストラップのテストが jsdom でフラキーな場合
+
+```typescript
+// ユニットテストで削除し、E2E でカバー
+// src/patterns/alert-dialog/AlertDialog.test.vue.ts
+
+// Note: "Tab が最後から最初にループする" テストは E2E で担保
+// (e2e/alert-dialog.spec.ts: "Tab wraps from last to first element")
+// jsdom 環境でのフォーカス操作が不安定なため、Unit test からは削除
+```
+
+### Playwright キーボード操作のベストプラクティス
+
+| メソッド | 用途 | 安定性 |
+|---------|------|--------|
+| `element.focus()` | 要素にフォーカスを設定 | ✅ `tabindex="0"` の要素のみ |
+| `element.press(key)` | 要素に直接キーを送信 | ✅ 安定 |
+| `element.click()` | 要素をクリック | ⚠️ フォーカス移動後の keyboard.press() に注意 |
+| `page.keyboard.press(key)` | 現在のフォーカス要素にキーを送信 | ⚠️ フォーカスレースの可能性 |
+
+**推奨パターン**:
+
+```typescript
+// キーボードナビゲーションのテスト
+test('ArrowRight moves focus to next tab', async ({ page }) => {
+  const firstTab = tabs.getByRole('tab').first();
+  const secondTab = tabs.getByRole('tab').nth(1);
+
+  // 1. 選択済み要素にフォーカス
+  await firstTab.focus();
+  await expect(firstTab).toBeFocused();
+
+  // 2. element.press() でキー送信
+  await firstTab.press('ArrowRight');
+
+  // 3. フォーカス移動を検証
+  await expect(secondTab).toBeFocused();
+});
+```
+
+---
+
 ## 使用ツール
 
 | ツール                      | 用途                                    |
@@ -589,3 +718,5 @@ expect.extend(toHaveNoViolations);
 - [DRY vs DAMP in Unit Tests](https://enterprisecraftsmanship.com/posts/dry-damp-unit-tests/)
 - [Testing Library](https://testing-library.com/)
 - [jest-axe](https://github.com/nickcolley/jest-axe)
+- [Playwright Locators](https://playwright.dev/docs/locators) - `element.press()` vs `page.keyboard.press()` の違い
+- [Playwright Best Practices](https://playwright.dev/docs/best-practices)
