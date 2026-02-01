@@ -4,15 +4,18 @@
  *
  * Provides typography styles for headings, paragraphs, lists, tables,
  * code blocks, links, and blockquotes using project design tokens.
+ * Also adds collapsible functionality to code blocks.
  */
 interface Props {
   class?: string;
+  /** Minimum lines for code block to be collapsible */
+  collapsedLines?: number;
 }
 
-const { class: className } = Astro.props;
+const { class: className, collapsedLines = 5 } = Astro.props;
 ---
 
-<article class:list={['prose', className]}>
+<article class:list={['prose', className]} data-collapsed-lines={collapsedLines}>
   <slot />
 </article>
 
@@ -201,4 +204,141 @@ const { class: className } = Astro.props;
   :global(.dark) .prose :global(th) {
     background-color: oklch(1 0 0 / 10%);
   }
+
+  /* Collapsible code blocks */
+  .prose :global(.code-block-wrapper) {
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(.code-block-wrapper pre) {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+  }
+
+  .prose :global(.code-block-wrapper.collapsed .code-content) {
+    max-height: calc(1.5rem * var(--collapsed-lines, 5) + 2rem);
+    overflow: hidden;
+  }
+
+  .prose :global(.code-block-wrapper.collapsed .code-content::after) {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, var(--muted));
+    pointer-events: none;
+  }
+
+  .prose :global(.code-content) {
+    position: relative;
+  }
+
+  .prose :global(.code-toggle) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--muted);
+    border: none;
+    border-top: 1px solid var(--border);
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .prose :global(.code-toggle:hover) {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .prose :global(.code-toggle:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: -2px;
+  }
+
+  .prose :global(.code-toggle-icon) {
+    transition: transform 0.2s;
+  }
+
+  .prose :global(.code-toggle[aria-expanded='true'] .code-toggle-icon) {
+    transform: rotate(180deg);
+  }
 </style>
+
+<script>
+  function initProseCodeBlocks() {
+    document.querySelectorAll('.prose').forEach((prose) => {
+      const collapsedLines = parseInt(prose.getAttribute('data-collapsed-lines') || '5', 10);
+
+      prose.querySelectorAll('pre').forEach((pre) => {
+        // Skip if already wrapped
+        if (pre.closest('.code-block-wrapper')) return;
+
+        const code = pre.querySelector('code');
+        if (!code) return;
+
+        const lines = code.textContent?.split('\n').length || 0;
+        if (lines <= collapsedLines) return;
+
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper collapsed';
+        wrapper.style.setProperty('--collapsed-lines', String(collapsedLines));
+
+        // Create content container
+        const content = document.createElement('div');
+        content.className = 'code-content';
+
+        // Create toggle button
+        const blockId = `prose-code-${Math.random().toString(36).substring(2, 9)}`;
+        content.id = blockId;
+
+        const toggle = document.createElement('button');
+        toggle.className = 'code-toggle';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-controls', blockId);
+        toggle.innerHTML = `
+          <svg class="code-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          <span class="code-toggle-text">Show more (${lines} lines)</span>
+        `;
+
+        toggle.addEventListener('click', () => {
+          const isExpanded = wrapper.classList.contains('collapsed');
+          wrapper.classList.toggle('collapsed');
+          toggle.setAttribute('aria-expanded', String(isExpanded));
+          const textEl = toggle.querySelector('.code-toggle-text');
+          if (textEl) {
+            textEl.textContent = isExpanded ? 'Show less' : `Show more (${lines} lines)`;
+          }
+        });
+
+        // Wrap the pre element
+        pre.parentNode?.insertBefore(wrapper, pre);
+        content.appendChild(pre);
+        wrapper.appendChild(content);
+        wrapper.appendChild(toggle);
+      });
+    });
+  }
+
+  // Initialize on page load
+  initProseCodeBlocks();
+
+  // Re-initialize after Astro page transitions
+  document.addEventListener('astro:after-swap', initProseCodeBlocks);
+</script>
