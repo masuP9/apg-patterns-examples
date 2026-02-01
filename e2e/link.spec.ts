@@ -97,7 +97,8 @@ for (const framework of frameworks) {
         });
 
         await link.focus();
-        await page.keyboard.press('Enter');
+        await expect(link).toBeFocused();
+        await link.press('Enter');
 
         // Verify Enter key was detected
         const enterPressed = await link.getAttribute('data-enter-pressed');
@@ -127,7 +128,8 @@ for (const framework of frameworks) {
         });
 
         await link.focus();
-        await page.keyboard.press('Space');
+        await expect(link).toBeFocused();
+        await link.press('Space');
         await page.waitForTimeout(100);
 
         // The link should still be on the page (no navigation happened)

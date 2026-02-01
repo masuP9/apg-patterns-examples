@@ -95,11 +95,13 @@ for (const framework of frameworks) {
       test('ArrowDown opens popup and focuses first option', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.click();
+        await expect(combobox).toBeFocused();
         // Close popup first if open
-        await page.keyboard.press('Escape');
+        await combobox.press('Escape');
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
 
-        await page.keyboard.press('ArrowDown');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown');
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
@@ -109,11 +111,13 @@ for (const framework of frameworks) {
       test('ArrowUp opens popup and focuses last option', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.click();
+        await expect(combobox).toBeFocused();
         // Close popup first if open
-        await page.keyboard.press('Escape');
+        await combobox.press('Escape');
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
 
-        await page.keyboard.press('ArrowUp');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowUp');
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
@@ -123,11 +127,13 @@ for (const framework of frameworks) {
       test('Alt+ArrowDown opens popup without focusing option', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.click();
+        await expect(combobox).toBeFocused();
         // Close popup first if open
-        await page.keyboard.press('Escape');
+        await combobox.press('Escape');
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
 
-        await page.keyboard.press('Alt+ArrowDown');
+        await expect(combobox).toBeFocused();
+        await combobox.press('Alt+ArrowDown');
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
         // Should not have active descendant
@@ -138,11 +144,13 @@ for (const framework of frameworks) {
       test('Typing opens popup and filters options', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.click();
+        await expect(combobox).toBeFocused();
         // Close popup first if open
-        await page.keyboard.press('Escape');
+        await combobox.press('Escape');
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
 
-        await page.keyboard.type('App');
+        await expect(combobox).toBeFocused();
+        await combobox.pressSequentially('App');
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
         // Should have filtered options
@@ -158,10 +166,12 @@ for (const framework of frameworks) {
       test('ArrowDown moves to next option (no wrap)', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
 
         const firstActiveDescendant = await combobox.getAttribute('aria-activedescendant');
-        await page.keyboard.press('ArrowDown');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown');
         const secondActiveDescendant = await combobox.getAttribute('aria-activedescendant');
 
         expect(secondActiveDescendant).not.toBe(firstActiveDescendant);
@@ -170,11 +180,14 @@ for (const framework of frameworks) {
       test('ArrowUp moves to previous option (no wrap)', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
-        await page.keyboard.press('ArrowDown'); // Move to second
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Move to second
 
         const secondActiveDescendant = await combobox.getAttribute('aria-activedescendant');
-        await page.keyboard.press('ArrowUp');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowUp');
         const firstActiveDescendant = await combobox.getAttribute('aria-activedescendant');
 
         expect(firstActiveDescendant).not.toBe(secondActiveDescendant);
@@ -183,9 +196,11 @@ for (const framework of frameworks) {
       test('Home moves to first option', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowUp'); // Open and focus last
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowUp'); // Open and focus last
 
-        await page.keyboard.press('Home');
+        await expect(combobox).toBeFocused();
+        await combobox.press('Home');
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
         expect(activeDescendant).toBeTruthy();
 
@@ -199,9 +214,11 @@ for (const framework of frameworks) {
       test('End moves to last option', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
 
-        await page.keyboard.press('End');
+        await expect(combobox).toBeFocused();
+        await combobox.press('End');
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
         expect(activeDescendant).toBeTruthy();
 
@@ -215,13 +232,15 @@ for (const framework of frameworks) {
       test('Enter selects focused option and closes popup', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
 
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
         const activeOption = page.locator(`#${activeDescendant}`);
         const optionText = await activeOption.textContent();
 
-        await page.keyboard.press('Enter');
+        await expect(combobox).toBeFocused();
+        await combobox.press('Enter');
 
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
         await expect(combobox).toHaveValue(optionText?.trim() || '');
@@ -230,13 +249,16 @@ for (const framework of frameworks) {
       test('Escape closes popup and restores value', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
+        await expect(combobox).toBeFocused();
         const originalValue = await combobox.inputValue();
 
-        await page.keyboard.press('ArrowDown'); // Open popup
+        await combobox.press('ArrowDown'); // Open popup
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
-        await page.keyboard.type('xxx'); // Change value
-        await page.keyboard.press('Escape');
+        await expect(combobox).toBeFocused();
+        await combobox.pressSequentially('xxx'); // Change value
+        await expect(combobox).toBeFocused();
+        await combobox.press('Escape');
 
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
         await expect(combobox).toHaveValue(originalValue);
@@ -245,14 +267,17 @@ for (const framework of frameworks) {
       test('Alt+ArrowUp selects focused option and closes popup', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
-        await page.keyboard.press('ArrowDown'); // Move to second
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Move to second
 
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
         const activeOption = page.locator(`#${activeDescendant}`);
         const optionText = await activeOption.textContent();
 
-        await page.keyboard.press('Alt+ArrowUp');
+        await expect(combobox).toBeFocused();
+        await combobox.press('Alt+ArrowUp');
 
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
         await expect(combobox).toHaveValue(optionText?.trim() || '');
@@ -261,9 +286,11 @@ for (const framework of frameworks) {
       test('Tab closes popup without selection change', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open popup
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open popup
         await expect(combobox).toHaveAttribute('aria-expanded', 'true');
 
+        // Keep page.keyboard.press() for Tab (page-level navigation)
         await page.keyboard.press('Tab');
         await expect(combobox).toHaveAttribute('aria-expanded', 'false');
       });
@@ -274,8 +301,10 @@ for (const framework of frameworks) {
       test('DOM focus stays on input during navigation', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
-        await page.keyboard.press('ArrowDown'); // Move to next
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Move to next
 
         // DOM focus should still be on combobox
         const focusedElement = page.locator(':focus');
@@ -285,12 +314,14 @@ for (const framework of frameworks) {
       test('aria-activedescendant updates on navigation', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
 
         const firstActiveDescendant = await combobox.getAttribute('aria-activedescendant');
         expect(firstActiveDescendant).toBeTruthy();
 
-        await page.keyboard.press('ArrowDown');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown');
         const secondActiveDescendant = await combobox.getAttribute('aria-activedescendant');
         expect(secondActiveDescendant).toBeTruthy();
         expect(secondActiveDescendant).not.toBe(firstActiveDescendant);
@@ -299,8 +330,10 @@ for (const framework of frameworks) {
       test('aria-activedescendant cleared when popup closes', async ({ page }) => {
         const combobox = getFirstCombobox(page);
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
-        await page.keyboard.press('Escape');
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('Escape');
 
         const activeDescendant = await combobox.getAttribute('aria-activedescendant');
         expect(activeDescendant).toBeFalsy();
@@ -311,7 +344,8 @@ for (const framework of frameworks) {
         const comboboxes = page.locator('[role="combobox"]:not([disabled])');
         const combobox = comboboxes.nth(2); // Country combobox with disabled options
         await combobox.focus();
-        await page.keyboard.press('ArrowDown'); // Open and focus first
+        await expect(combobox).toBeFocused();
+        await combobox.press('ArrowDown'); // Open and focus first
 
         // Navigate through options and collect active descendant IDs
         const activeIds: string[] = [];
@@ -320,7 +354,8 @@ for (const framework of frameworks) {
           if (activeDescendant && !activeIds.includes(activeDescendant)) {
             activeIds.push(activeDescendant);
           }
-          await page.keyboard.press('ArrowDown');
+          await expect(combobox).toBeFocused();
+          await combobox.press('ArrowDown');
         }
 
         // Check that none of the focused options are disabled

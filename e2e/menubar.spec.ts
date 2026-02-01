@@ -140,7 +140,8 @@ for (const framework of frameworks) {
 
         if ((await submenuTrigger.count()) > 0) {
           await submenuTrigger.focus();
-          await page.keyboard.press('ArrowRight');
+          await expect(submenuTrigger).toBeFocused();
+          await submenuTrigger.press('ArrowRight');
 
           // The submenu should now be open
           await expect(submenuTrigger).toHaveAttribute('aria-expanded', 'true');
@@ -156,7 +157,8 @@ for (const framework of frameworks) {
       test('ArrowRight moves to next menubar item', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('ArrowRight');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('ArrowRight');
 
         const editItem = page.getByRole('menuitem', { name: 'Edit' });
         await expect(editItem).toBeFocused();
@@ -165,7 +167,8 @@ for (const framework of frameworks) {
       test('ArrowLeft moves to previous menubar item', async ({ page }) => {
         const editItem = page.getByRole('menuitem', { name: 'Edit' });
         await editItem.focus();
-        await page.keyboard.press('ArrowLeft');
+        await expect(editItem).toBeFocused();
+        await editItem.press('ArrowLeft');
 
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await expect(fileItem).toBeFocused();
@@ -177,8 +180,9 @@ for (const framework of frameworks) {
         const items = menubar.getByRole('menuitem');
         const lastItem = items.last();
         await lastItem.focus();
+        await expect(lastItem).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await lastItem.press('ArrowRight');
 
         const firstItem = items.first();
         await expect(firstItem).toBeFocused();
@@ -187,7 +191,8 @@ for (const framework of frameworks) {
       test('ArrowDown opens submenu and focuses first item', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('ArrowDown');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('ArrowDown');
 
         await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
 
@@ -199,7 +204,8 @@ for (const framework of frameworks) {
       test('Enter opens submenu', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('Enter');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('Enter');
 
         await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
         const menu = page.getByRole('menu');
@@ -209,7 +215,8 @@ for (const framework of frameworks) {
       test('Space opens submenu', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('Space');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('Space');
 
         await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
         const menu = page.getByRole('menu');
@@ -219,7 +226,8 @@ for (const framework of frameworks) {
       test('Home moves to first menubar item', async ({ page }) => {
         const editItem = page.getByRole('menuitem', { name: 'Edit' });
         await editItem.focus();
-        await page.keyboard.press('Home');
+        await expect(editItem).toBeFocused();
+        await editItem.press('Home');
 
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await expect(fileItem).toBeFocused();
@@ -228,7 +236,8 @@ for (const framework of frameworks) {
       test('End moves to last menubar item', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('End');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('End');
 
         const menubar = page.getByRole('menubar');
         const items = menubar.getByRole('menuitem');
@@ -239,7 +248,8 @@ for (const framework of frameworks) {
       test('ArrowUp opens submenu and focuses last item', async ({ page }) => {
         const fileItem = page.getByRole('menuitem', { name: 'File' });
         await fileItem.focus();
-        await page.keyboard.press('ArrowUp');
+        await expect(fileItem).toBeFocused();
+        await fileItem.press('ArrowUp');
 
         await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
 
@@ -269,8 +279,9 @@ for (const framework of frameworks) {
         const items = menu.getByRole('menuitem');
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstItem.press('ArrowDown');
         await expect(items.nth(1)).toBeFocused();
       });
 
@@ -280,9 +291,11 @@ for (const framework of frameworks) {
 
         const menu = page.getByRole('menu');
         const items = menu.getByRole('menuitem');
-        await items.nth(1).focus();
+        const secondItem = items.nth(1);
+        await secondItem.focus();
+        await expect(secondItem).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await secondItem.press('ArrowUp');
         await expect(items.first()).toBeFocused();
       });
 
@@ -304,7 +317,8 @@ for (const framework of frameworks) {
         const menu = page.getByRole('menu');
         const newItem = menu.getByRole('menuitem', { name: 'New' });
         await newItem.focus();
-        await page.keyboard.press('Enter');
+        await expect(newItem).toBeFocused();
+        await newItem.press('Enter');
 
         await expect(fileItem).toHaveAttribute('aria-expanded', 'false');
       });
@@ -317,7 +331,8 @@ for (const framework of frameworks) {
         const items = menu.getByRole('menuitem');
         const lastItem = items.last();
         await lastItem.focus();
-        await page.keyboard.press('Home');
+        await expect(lastItem).toBeFocused();
+        await lastItem.press('Home');
 
         const firstItem = items.first();
         await expect(firstItem).toBeFocused();
@@ -331,7 +346,8 @@ for (const framework of frameworks) {
         const items = menu.getByRole('menuitem');
         const firstItem = items.first();
         await firstItem.focus();
-        await page.keyboard.press('End');
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('End');
 
         const lastItem = items.last();
         await expect(lastItem).toBeFocused();
@@ -347,7 +363,8 @@ for (const framework of frameworks) {
 
         if ((await submenuItem.count()) > 0) {
           await submenuItem.focus();
-          await page.keyboard.press('ArrowRight');
+          await expect(submenuItem).toBeFocused();
+          await submenuItem.press('ArrowRight');
 
           await expect(submenuItem).toHaveAttribute('aria-expanded', 'true');
         }
@@ -362,8 +379,9 @@ for (const framework of frameworks) {
         const menu = page.getByRole('menu');
         const firstItem = menu.getByRole('menuitem').first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstItem.press('ArrowRight');
 
         // File menu should close, Edit menu should open
         await expect(fileItem).toHaveAttribute('aria-expanded', 'false');
@@ -378,8 +396,9 @@ for (const framework of frameworks) {
         const menu = page.getByRole('menu');
         const firstItem = menu.getByRole('menuitem').first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await firstItem.press('ArrowLeft');
 
         // Edit menu should close, File menu should open
         await expect(editItem).toHaveAttribute('aria-expanded', 'false');
@@ -396,7 +415,8 @@ for (const framework of frameworks) {
         const checkbox = page.getByRole('menuitemcheckbox').first();
         const initialChecked = await checkbox.getAttribute('aria-checked');
         await checkbox.focus();
-        await page.keyboard.press('Space');
+        await expect(checkbox).toBeFocused();
+        await checkbox.press('Space');
 
         // Menu should still be open
         await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
@@ -414,7 +434,8 @@ for (const framework of frameworks) {
         const uncheckedRadio = page.getByRole('menuitemradio', { checked: false }).first();
         const radioName = await uncheckedRadio.textContent();
         await uncheckedRadio.focus();
-        await page.keyboard.press('Space');
+        await expect(uncheckedRadio).toBeFocused();
+        await uncheckedRadio.press('Space');
 
         // Menu should still be open
         await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
@@ -447,7 +468,8 @@ for (const framework of frameworks) {
         const checkbox = page.getByRole('menuitemcheckbox').first();
         const initialChecked = await checkbox.getAttribute('aria-checked');
         await checkbox.focus();
-        await page.keyboard.press('Enter');
+        await expect(checkbox).toBeFocused();
+        await checkbox.press('Enter');
 
         // Menu should still be open
         await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
@@ -465,7 +487,8 @@ for (const framework of frameworks) {
         const uncheckedRadio = page.getByRole('menuitemradio', { checked: false }).first();
         const radioName = await uncheckedRadio.textContent();
         await uncheckedRadio.focus();
-        await page.keyboard.press('Enter');
+        await expect(uncheckedRadio).toBeFocused();
+        await uncheckedRadio.press('Enter');
 
         // Menu should still be open
         await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
@@ -585,9 +608,10 @@ for (const framework of frameworks) {
         const menu = page.getByRole('menu');
         const firstItem = menu.getByRole('menuitem').first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
         // Type 's' to find 'Save'
-        await page.keyboard.type('s');
+        await firstItem.press('s');
 
         // Use exact match to avoid matching both "Save" and "Save As..."
         const saveItem = menu.getByRole('menuitem', { name: 'Save', exact: true });

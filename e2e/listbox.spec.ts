@@ -120,9 +120,10 @@ for (const framework of frameworks) {
         const secondOption = options.nth(1);
 
         await firstOption.focus();
+        await expect(firstOption).toBeFocused();
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowDown');
+        await firstOption.press('ArrowDown');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
         await expect(firstOption).toHaveAttribute('aria-selected', 'false');
@@ -136,12 +137,14 @@ for (const framework of frameworks) {
 
         // Click to set initial state, then navigate down to second option
         await firstOption.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowDown');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
 
         // Now navigate up
-        await page.keyboard.press('ArrowUp');
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowUp');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
       });
@@ -152,10 +155,15 @@ for (const framework of frameworks) {
         const firstOption = options.first();
 
         await firstOption.focus();
-        await page.keyboard.press('ArrowDown');
-        await page.keyboard.press('ArrowDown');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowDown');
+        const secondOption = options.nth(1);
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowDown');
+        const thirdOption = options.nth(2);
 
-        await page.keyboard.press('Home');
+        await expect(thirdOption).toBeFocused();
+        await thirdOption.press('Home');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
       });
@@ -167,7 +175,8 @@ for (const framework of frameworks) {
         const lastOption = options.last();
 
         await firstOption.focus();
-        await page.keyboard.press('End');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('End');
         await expect(lastOption).toHaveAttribute('tabindex', '0');
         await expect(lastOption).toHaveAttribute('aria-selected', 'true');
       });
@@ -178,9 +187,11 @@ for (const framework of frameworks) {
         const lastOption = options.last();
 
         await lastOption.focus();
-        await page.keyboard.press('End'); // Ensure we're at the end
+        await expect(lastOption).toBeFocused();
+        await lastOption.press('End'); // Ensure we're at the end
 
-        await page.keyboard.press('ArrowDown');
+        await expect(lastOption).toBeFocused();
+        await lastOption.press('ArrowDown');
 
         // Should still be on last option
         await expect(lastOption).toHaveAttribute('tabindex', '0');
@@ -201,10 +212,11 @@ for (const framework of frameworks) {
         const secondOption = options.nth(1);
 
         await firstOption.focus();
+        await expect(firstOption).toBeFocused();
         // Initially no selection in multi-select
         const initialSelected = await getSelectedOptions(listbox).count();
 
-        await page.keyboard.press('ArrowDown');
+        await firstOption.press('ArrowDown');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
 
         // Selection should not have changed
@@ -220,11 +232,13 @@ for (const framework of frameworks) {
 
         // Click to set initial state, then navigate down to second option
         await firstOption.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowDown');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
 
         // Navigate up should move focus but not change selection
-        await page.keyboard.press('ArrowUp');
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowUp');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -233,9 +247,10 @@ for (const framework of frameworks) {
         const firstOption = getAvailableOptions(listbox).first();
 
         await firstOption.focus();
+        await expect(firstOption).toBeFocused();
         await expect(firstOption).not.toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('Space');
+        await firstOption.press('Space');
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
       });
 
@@ -244,10 +259,12 @@ for (const framework of frameworks) {
         const firstOption = getAvailableOptions(listbox).first();
 
         await firstOption.focus();
-        await page.keyboard.press('Space'); // Select
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Space'); // Select
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('Space'); // Deselect
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Space'); // Deselect
         await expect(firstOption).toHaveAttribute('aria-selected', 'false');
       });
 
@@ -258,10 +275,12 @@ for (const framework of frameworks) {
         const secondOption = options.nth(1);
 
         await firstOption.focus();
-        await page.keyboard.press('Space'); // Select first as anchor
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Space'); // Select first as anchor
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('Shift+ArrowDown');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Shift+ArrowDown');
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
       });
@@ -274,9 +293,10 @@ for (const framework of frameworks) {
 
         // Click second option to set it as anchor (click toggles selection and sets anchor)
         await secondOption.click();
+        await expect(secondOption).toBeFocused();
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('Shift+ArrowUp');
+        await secondOption.press('Shift+ArrowUp');
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
       });
@@ -287,12 +307,13 @@ for (const framework of frameworks) {
         const firstOption = options.first();
         const thirdOption = options.nth(2);
 
+        // Focus third option, select it as anchor
         await thirdOption.focus();
-        await page.keyboard.press('ArrowDown');
-        await page.keyboard.press('ArrowDown');
-        await page.keyboard.press('Space'); // Select third as anchor
+        await expect(thirdOption).toBeFocused();
+        await thirdOption.press('Space'); // Select third as anchor
 
-        await page.keyboard.press('Shift+Home');
+        await expect(thirdOption).toBeFocused();
+        await thirdOption.press('Shift+Home');
 
         // All options from first to anchor should be selected
         await expect(firstOption).toHaveAttribute('aria-selected', 'true');
@@ -305,9 +326,11 @@ for (const framework of frameworks) {
         const lastOption = options.last();
 
         await firstOption.focus();
-        await page.keyboard.press('Space'); // Select first as anchor
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Space'); // Select first as anchor
 
-        await page.keyboard.press('Shift+End');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Shift+End');
 
         // All options from anchor to last should be selected
         await expect(lastOption).toHaveAttribute('aria-selected', 'true');
@@ -320,7 +343,8 @@ for (const framework of frameworks) {
         const firstOption = availableOptions.first();
 
         await firstOption.focus();
-        await page.keyboard.press('Control+a');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('Control+a');
 
         const count = await availableOptions.count();
         for (let i = 0; i < count; i++) {
@@ -339,7 +363,8 @@ for (const framework of frameworks) {
 
         // Click to focus Yellow first (ensures proper component state)
         await yellowOption.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(yellowOption).toBeFocused();
+        await yellowOption.press('ArrowDown');
 
         // Should skip Green and land on Blue
         await expect(blueOption).toHaveAttribute('tabindex', '0');
@@ -357,7 +382,8 @@ for (const framework of frameworks) {
         const secondOption = options.nth(1);
 
         await firstOption.focus();
-        await page.keyboard.press('ArrowRight');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowRight');
 
         await expect(secondOption).toHaveAttribute('tabindex', '0');
         await expect(secondOption).toHaveAttribute('aria-selected', 'true');
@@ -371,11 +397,13 @@ for (const framework of frameworks) {
 
         // Click to set initial state, then navigate right to second option
         await firstOption.click();
-        await page.keyboard.press('ArrowRight');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowRight');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
 
         // Now navigate left
-        await page.keyboard.press('ArrowLeft');
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowLeft');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -385,12 +413,14 @@ for (const framework of frameworks) {
         const firstOption = options.first();
 
         await firstOption.focus();
+        await expect(firstOption).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstOption.press('ArrowDown');
         // Should still be on first option
         await expect(firstOption).toHaveAttribute('tabindex', '0');
 
-        await page.keyboard.press('ArrowUp');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowUp');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -400,10 +430,15 @@ for (const framework of frameworks) {
         const firstOption = options.first();
 
         await firstOption.focus();
-        await page.keyboard.press('ArrowRight');
-        await page.keyboard.press('ArrowRight');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowRight');
+        const secondOption = options.nth(1);
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowRight');
+        const thirdOption = options.nth(2);
 
-        await page.keyboard.press('Home');
+        await expect(thirdOption).toBeFocused();
+        await thirdOption.press('Home');
         await expect(firstOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -414,7 +449,8 @@ for (const framework of frameworks) {
         const lastOption = options.last();
 
         await firstOption.focus();
-        await page.keyboard.press('End');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('End');
 
         await expect(lastOption).toHaveAttribute('tabindex', '0');
       });
@@ -451,10 +487,11 @@ for (const framework of frameworks) {
         const secondOption = options.nth(1);
 
         await firstOption.focus();
+        await expect(firstOption).toBeFocused();
         await expect(firstOption).toHaveAttribute('tabindex', '0');
         await expect(secondOption).toHaveAttribute('tabindex', '-1');
 
-        await page.keyboard.press('ArrowDown');
+        await firstOption.press('ArrowDown');
         await expect(firstOption).toHaveAttribute('tabindex', '-1');
         await expect(secondOption).toHaveAttribute('tabindex', '0');
       });
@@ -482,11 +519,14 @@ for (const framework of frameworks) {
         const thirdOption = options.nth(2);
 
         await firstOption.focus();
-        await page.keyboard.press('ArrowDown');
-        await page.keyboard.press('ArrowDown');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('ArrowDown');
+        const secondOption = options.nth(1);
+        await expect(secondOption).toBeFocused();
+        await secondOption.press('ArrowDown');
         await expect(thirdOption).toHaveAttribute('tabindex', '0');
 
-        // Tab out and back
+        // Tab out and back (page-level navigation)
         await page.keyboard.press('Tab');
         await page.keyboard.press('Shift+Tab');
 
@@ -505,7 +545,8 @@ for (const framework of frameworks) {
         const firstOption = listbox.locator('[role="option"][tabindex="0"]');
 
         await firstOption.focus();
-        await page.keyboard.press('g');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('g');
 
         await expect(grapeOption).toHaveAttribute('tabindex', '0');
       });
@@ -527,6 +568,7 @@ for (const framework of frameworks) {
         const listbox = getListboxByIndex(page, 0);
         const firstOption = listbox.locator('[role="option"][tabindex="0"]');
         await firstOption.click();
+        await expect(firstOption).toBeFocused();
 
         // Use id attribute pattern (works across frameworks: id ends with -option-{id} or data-option-id)
         const appleOption = listbox.locator(
@@ -537,15 +579,17 @@ for (const framework of frameworks) {
         );
 
         // Press 'a' - should stay on Apple (first match)
-        await page.keyboard.press('a');
+        await firstOption.press('a');
         await expect(appleOption).toHaveAttribute('tabindex', '0');
 
         // Press 'a' again - should cycle to Apricot (next match)
-        await page.keyboard.press('a');
+        await expect(appleOption).toBeFocused();
+        await appleOption.press('a');
         await expect(apricotOption).toHaveAttribute('tabindex', '0');
 
         // Press 'a' again - should cycle back to Apple
-        await page.keyboard.press('a');
+        await expect(apricotOption).toBeFocused();
+        await apricotOption.press('a');
         await expect(appleOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -556,13 +600,15 @@ for (const framework of frameworks) {
         const dateOption = listbox.locator('[role="option"]', { hasText: 'Date' });
 
         await firstOption.focus();
-        await page.keyboard.press('c'); // Focus Cherry
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('c'); // Focus Cherry
         await expect(cherryOption).toHaveAttribute('tabindex', '0');
 
         // Wait for buffer to clear (default 500ms + margin)
         await page.waitForTimeout(600);
 
-        await page.keyboard.press('d'); // Should focus Date, not search for "cd"
+        await expect(cherryOption).toBeFocused();
+        await cherryOption.press('d'); // Should focus Date, not search for "cd"
         await expect(dateOption).toHaveAttribute('tabindex', '0');
       });
 
@@ -572,7 +618,8 @@ for (const framework of frameworks) {
         const firstOption = listbox.locator('[role="option"][tabindex="0"]');
 
         await firstOption.focus();
-        await page.keyboard.press('g');
+        await expect(firstOption).toBeFocused();
+        await firstOption.press('g');
 
         // In single-select, selection follows focus
         await expect(grapeOption).toHaveAttribute('aria-selected', 'true');
@@ -714,7 +761,8 @@ test.describe('Listbox - Cross-framework Consistency', () => {
       const secondOption = options.nth(1);
 
       await firstOption.focus();
-      await page.keyboard.press('ArrowDown');
+      await expect(firstOption).toBeFocused();
+      await firstOption.press('ArrowDown');
 
       // Second option should now be focused and selected
       await expect(secondOption).toHaveAttribute('tabindex', '0');

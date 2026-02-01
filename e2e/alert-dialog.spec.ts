@@ -157,7 +157,7 @@ for (const framework of frameworks) {
         const cancelButton = page.getByRole('button', { name: /cancel/i });
         await expect(cancelButton).toBeFocused();
 
-        await page.keyboard.press('Enter');
+        await cancelButton.press('Enter');
 
         // Dialog should be closed
         const alertDialog = page.getByRole('alertdialog');
@@ -170,7 +170,7 @@ for (const framework of frameworks) {
         const cancelButton = page.getByRole('button', { name: /cancel/i });
         await expect(cancelButton).toBeFocused();
 
-        await page.keyboard.press('Space');
+        await cancelButton.press('Space');
 
         // Dialog should be closed
         const alertDialog = page.getByRole('alertdialog');

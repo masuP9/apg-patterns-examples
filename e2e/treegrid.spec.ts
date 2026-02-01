@@ -50,9 +50,31 @@ async function expectCellOrChildFocused(_page: Page, cell: Locator): Promise<voi
 
 /**
  * Helper to focus a cell, handling cells that contain links/buttons.
+ * Returns the focused element (either the cell or a focusable child).
  */
-async function focusCell(_page: Page, cell: Locator): Promise<void> {
+async function focusCell(_page: Page, cell: Locator): Promise<Locator> {
   await cell.click({ position: { x: 5, y: 5 } });
+
+  // Check if focus is on the cell or a child element
+  const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
+  if (cellIsFocused) {
+    return cell;
+  }
+
+  // Find and return the focused child
+  const focusedChild = cell.locator(
+    'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  const childCount = await focusedChild.count();
+  for (let i = 0; i < childCount; i++) {
+    const child = focusedChild.nth(i);
+    const childIsFocused = await child.evaluate((el) => document.activeElement === el);
+    if (childIsFocused) {
+      return child;
+    }
+  }
+
+  return cell;
 }
 
 /**
@@ -192,9 +214,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const rowheaders = treegrid.getByRole('rowheader');
         const firstRowheader = rowheaders.first();
-        await focusCell(page, firstRowheader);
+        const focusedElement = await focusCell(page, firstRowheader);
 
-        await page.keyboard.press('ArrowDown');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowDown');
 
         const secondRowheader = rowheaders.nth(1);
         await expectCellOrChildFocused(page, secondRowheader);
@@ -204,9 +227,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const rowheaders = treegrid.getByRole('rowheader');
         const secondRowheader = rowheaders.nth(1);
-        await focusCell(page, secondRowheader);
+        const focusedElement = await focusCell(page, secondRowheader);
 
-        await page.keyboard.press('ArrowUp');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowUp');
 
         const firstRowheader = rowheaders.first();
         await expectCellOrChildFocused(page, firstRowheader);
@@ -216,9 +240,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const rowheaders = treegrid.getByRole('rowheader');
         const firstRowheader = rowheaders.first();
-        await focusCell(page, firstRowheader);
+        const focusedElement = await focusCell(page, firstRowheader);
 
-        await page.keyboard.press('ArrowUp');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowUp');
 
         // Should stay on first row
         await expectCellOrChildFocused(page, firstRowheader);
@@ -231,9 +256,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const cells = treegrid.getByRole('gridcell');
         const firstCell = cells.first();
-        await focusCell(page, firstCell);
+        const focusedElement = await focusCell(page, firstCell);
 
-        await page.keyboard.press('ArrowRight');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         const secondCell = cells.nth(1);
         await expectCellOrChildFocused(page, secondCell);
@@ -243,9 +269,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const cells = treegrid.getByRole('gridcell');
         const secondCell = cells.nth(1);
-        await focusCell(page, secondCell);
+        const focusedElement = await focusCell(page, secondCell);
 
-        await page.keyboard.press('ArrowLeft');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowLeft');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -256,9 +283,10 @@ for (const framework of frameworks) {
         const cells = treegrid.getByRole('gridcell');
         const rowheaders = treegrid.getByRole('rowheader');
         const secondCell = cells.nth(1);
-        await focusCell(page, secondCell);
+        const focusedElement = await focusCell(page, secondCell);
 
-        await page.keyboard.press('Home');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Home');
 
         // Should move to rowheader (first cell in row)
         const firstRowheader = rowheaders.first();
@@ -269,9 +297,10 @@ for (const framework of frameworks) {
         const treegrid = page.getByRole('treegrid');
         const rowheaders = treegrid.getByRole('rowheader');
         const firstRowheader = rowheaders.first();
-        await focusCell(page, firstRowheader);
+        const focusedElement = await focusCell(page, firstRowheader);
 
-        await page.keyboard.press('End');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('End');
 
         // Should move to last cell in first data row
         // Get cells in the same row
@@ -286,9 +315,10 @@ for (const framework of frameworks) {
         const cells = treegrid.getByRole('gridcell');
         const rowheaders = treegrid.getByRole('rowheader');
         const lastCell = cells.last();
-        await focusCell(page, lastCell);
+        const focusedElement = await focusCell(page, lastCell);
 
-        await page.keyboard.press('Control+Home');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Control+Home');
 
         // Should move to first rowheader
         const firstRowheader = rowheaders.first();
@@ -300,9 +330,10 @@ for (const framework of frameworks) {
         const rowheaders = treegrid.getByRole('rowheader');
         const cells = treegrid.getByRole('gridcell');
         const firstRowheader = rowheaders.first();
-        await focusCell(page, firstRowheader);
+        const focusedElement = await focusCell(page, firstRowheader);
 
-        await page.keyboard.press('Control+End');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Control+End');
 
         // Should move to last cell
         const lastCell = cells.last();
@@ -335,9 +366,10 @@ for (const framework of frameworks) {
 
         const row = rows.nth(collapsedRowIndex);
         const rowheader = row.getByRole('rowheader');
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
-        await page.keyboard.press('ArrowRight');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         await expect(row).toHaveAttribute('aria-expanded', 'true');
       });
@@ -369,8 +401,9 @@ for (const framework of frameworks) {
         // Get initial visible rowheader count
         const visibleRowheadersBefore = await treegrid.getByRole('rowheader').count();
 
-        await focusCell(page, rowheader);
-        await page.keyboard.press('ArrowRight');
+        const focusedElement = await focusCell(page, rowheader);
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         await expect(row).toHaveAttribute('aria-expanded', 'true');
 
@@ -402,8 +435,9 @@ for (const framework of frameworks) {
             const ariaExpanded = await row.getAttribute('aria-expanded');
             if (ariaExpanded === 'false') {
               const rowheader = row.getByRole('rowheader');
-              await focusCell(page, rowheader);
-              await page.keyboard.press('ArrowRight');
+              const focused = await focusCell(page, rowheader);
+              await expect(focused).toBeFocused();
+              await focused.press('ArrowRight');
               await expect(row).toHaveAttribute('aria-expanded', 'true');
               expandedRowIndex = i;
               break;
@@ -418,9 +452,10 @@ for (const framework of frameworks) {
 
         const row = rows.nth(expandedRowIndex);
         const rowheader = row.getByRole('rowheader');
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
-        await page.keyboard.press('ArrowLeft');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowLeft');
 
         await expect(row).toHaveAttribute('aria-expanded', 'false');
       });
@@ -448,8 +483,9 @@ for (const framework of frameworks) {
             const ariaExpanded = await row.getAttribute('aria-expanded');
             if (ariaExpanded === 'false') {
               const rowheader = row.getByRole('rowheader');
-              await focusCell(page, rowheader);
-              await page.keyboard.press('ArrowRight');
+              const focused = await focusCell(page, rowheader);
+              await expect(focused).toBeFocused();
+              await focused.press('ArrowRight');
               await expect(row).toHaveAttribute('aria-expanded', 'true');
               expandedRowIndex = i;
               break;
@@ -467,10 +503,11 @@ for (const framework of frameworks) {
         const cells = row.getByRole('gridcell');
         const firstCell = cells.first();
 
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
         // ArrowRight at expanded rowheader should move to the next cell (not expand again)
-        await page.keyboard.press('ArrowRight');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         // Row should still be expanded
         await expect(row).toHaveAttribute('aria-expanded', 'true');
@@ -503,9 +540,10 @@ for (const framework of frameworks) {
         const row = rows.nth(collapsedRowIndex);
         const cells = row.getByRole('gridcell');
         const firstCell = cells.first();
-        await focusCell(page, firstCell);
+        const focusedElement = await focusCell(page, firstCell);
 
-        await page.keyboard.press('ArrowRight');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         // Should NOT expand - still collapsed
         await expect(row).toHaveAttribute('aria-expanded', 'false');
@@ -534,9 +572,10 @@ for (const framework of frameworks) {
 
         const row = rows.nth(collapsedRowIndex);
         const rowheader = row.getByRole('rowheader');
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
-        await page.keyboard.press('Enter');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Enter');
 
         // Should still be collapsed
         await expect(row).toHaveAttribute('aria-expanded', 'false');
@@ -568,9 +607,10 @@ for (const framework of frameworks) {
 
         const row = rows.nth(selectableRowIndex);
         const rowheader = row.getByRole('rowheader');
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
-        await page.keyboard.press('Space');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Space');
 
         await expect(row).toHaveAttribute('aria-selected', 'true');
       });
@@ -598,14 +638,15 @@ for (const framework of frameworks) {
 
         const row = rows.nth(selectableRowIndex);
         const rowheader = row.getByRole('rowheader');
-        await focusCell(page, rowheader);
+        const focusedElement = await focusCell(page, rowheader);
 
         // Select
-        await page.keyboard.press('Space');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('Space');
         await expect(row).toHaveAttribute('aria-selected', 'true');
 
-        // Deselect
-        await page.keyboard.press('Space');
+        // Deselect (focus should still be on the same element after Space)
+        await focusedElement.press('Space');
         await expect(row).toHaveAttribute('aria-selected', 'false');
       });
     });
@@ -659,10 +700,11 @@ for (const framework of frameworks) {
         await expect(secondCell).toHaveAttribute('tabindex', '-1');
 
         // Focus first gridcell (Size column) and navigate right to Date column
-        await focusCell(page, firstCell);
+        const focusedElement = await focusCell(page, firstCell);
         await expect(firstCell).toHaveAttribute('tabindex', '0');
 
-        await page.keyboard.press('ArrowRight');
+        await expect(focusedElement).toBeFocused();
+        await focusedElement.press('ArrowRight');
 
         // After navigation, tabindex should update
         await expect(firstCell).toHaveAttribute('tabindex', '-1');

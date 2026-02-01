@@ -133,7 +133,8 @@ for (const framework of frameworks) {
         const initialState = await button.getAttribute('aria-expanded');
 
         await button.focus();
-        await page.keyboard.press('Enter');
+        await expect(button).toBeFocused();
+        await button.press('Enter');
 
         const newState = await button.getAttribute('aria-expanded');
         expect(newState).not.toBe(initialState);
@@ -144,7 +145,8 @@ for (const framework of frameworks) {
         const initialState = await button.getAttribute('aria-expanded');
 
         await button.focus();
-        await page.keyboard.press('Space');
+        await expect(button).toBeFocused();
+        await button.press('Space');
 
         const newState = await button.getAttribute('aria-expanded');
         expect(newState).not.toBe(initialState);

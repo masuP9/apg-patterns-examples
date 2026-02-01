@@ -160,11 +160,13 @@ for (const framework of frameworks) {
         await expect(header).toHaveAttribute('aria-expanded', 'true');
 
         // Press Enter to toggle (should collapse)
-        await page.keyboard.press('Enter');
+        await expect(header).toBeFocused();
+        await header.press('Enter');
         await expect(header).toHaveAttribute('aria-expanded', 'false');
 
         // Press Space to toggle (should expand)
-        await page.keyboard.press('Space');
+        await expect(header).toBeFocused();
+        await header.press('Space');
         await expect(header).toHaveAttribute('aria-expanded', 'true');
       });
 
@@ -173,10 +175,11 @@ for (const framework of frameworks) {
         const headers = accordion.locator('.apg-accordion-trigger');
 
         // Click to set focus
-        await headers.first().click();
-        await expect(headers.first()).toBeFocused();
+        const firstHeader = headers.first();
+        await firstHeader.click();
+        await expect(firstHeader).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstHeader.press('ArrowDown');
 
         await expect(headers.nth(1)).toBeFocused();
       });
@@ -186,10 +189,11 @@ for (const framework of frameworks) {
         const headers = accordion.locator('.apg-accordion-trigger');
 
         // Click to ensure focus is properly set
-        await headers.nth(1).click();
-        await expect(headers.nth(1)).toBeFocused();
+        const secondHeader = headers.nth(1);
+        await secondHeader.click();
+        await expect(secondHeader).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await secondHeader.press('ArrowUp');
 
         await expect(headers.first()).toBeFocused();
       });
@@ -199,10 +203,11 @@ for (const framework of frameworks) {
         const headers = accordion.locator('.apg-accordion-trigger');
 
         // Click to set focus
-        await headers.nth(2).click();
-        await expect(headers.nth(2)).toBeFocused();
+        const thirdHeader = headers.nth(2);
+        await thirdHeader.click();
+        await expect(thirdHeader).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await thirdHeader.press('Home');
 
         await expect(headers.first()).toBeFocused();
       });
@@ -213,10 +218,11 @@ for (const framework of frameworks) {
         const count = await headers.count();
 
         // Click to set focus
-        await headers.first().click();
-        await expect(headers.first()).toBeFocused();
+        const firstHeader = headers.first();
+        await firstHeader.click();
+        await expect(firstHeader).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstHeader.press('End');
 
         await expect(headers.nth(count - 1)).toBeFocused();
       });
@@ -266,7 +272,7 @@ for (const framework of frameworks) {
             await firstEnabled.click();
             await expect(firstEnabled).toBeFocused();
 
-            await page.keyboard.press('ArrowDown');
+            await firstEnabled.press('ArrowDown');
 
             // Should skip disabled and go to next enabled
             const secondEnabled = headers.nth(1);

@@ -93,7 +93,7 @@ for (const framework of frameworks) {
         await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowRight');
+        await firstTab.press('ArrowRight');
         await page.waitForTimeout(350);
 
         const secondTab = tabs.nth(1);
@@ -108,9 +108,10 @@ for (const framework of frameworks) {
 
         await secondTab.click();
         await page.waitForTimeout(100);
+        await expect(secondTab).toBeFocused();
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowLeft');
+        await secondTab.press('ArrowLeft');
         await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
@@ -126,9 +127,10 @@ for (const framework of frameworks) {
 
         await lastTab.click();
         await page.waitForTimeout(100);
+        await expect(lastTab).toBeFocused();
         await expect(lastTab).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowRight');
+        await lastTab.press('ArrowRight');
         await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
@@ -144,9 +146,10 @@ for (const framework of frameworks) {
 
         await firstTab.click();
         await page.waitForTimeout(100);
+        await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowLeft');
+        await firstTab.press('ArrowLeft');
         await page.waitForTimeout(350);
 
         const lastTab = tabs.nth(count - 1);
@@ -162,7 +165,8 @@ for (const framework of frameworks) {
 
         await lastTab.click();
         await page.waitForTimeout(100);
-        await page.keyboard.press('Home');
+        await expect(lastTab).toBeFocused();
+        await lastTab.press('Home');
         await page.waitForTimeout(350);
 
         const firstTab = tabs.first();
@@ -178,7 +182,8 @@ for (const framework of frameworks) {
 
         await firstTab.click();
         await page.waitForTimeout(100);
-        await page.keyboard.press('End');
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('End');
         await page.waitForTimeout(350);
 
         const lastTab = tabs.nth(count - 1);

@@ -112,7 +112,7 @@ for (const framework of frameworks) {
         expect(initialValue).toBe('50');
 
         // Press ArrowRight
-        await page.keyboard.press('ArrowRight');
+        await splitter.press('ArrowRight');
         await page.waitForTimeout(50);
 
         // Position should increase by step (5)
@@ -124,9 +124,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="horizontal-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press ArrowLeft
-        await page.keyboard.press('ArrowLeft');
+        await splitter.press('ArrowLeft');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -137,9 +138,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="vertical-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press ArrowUp
-        await page.keyboard.press('ArrowUp');
+        await splitter.press('ArrowUp');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -150,9 +152,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="vertical-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press ArrowDown
-        await page.keyboard.press('ArrowDown');
+        await splitter.press('ArrowDown');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -163,9 +166,10 @@ for (const framework of frameworks) {
         const horizontalSplitter = page.locator('[data-testid="horizontal-splitter"]');
 
         await horizontalSplitter.focus();
+        await expect(horizontalSplitter).toBeFocused();
 
         // Press ArrowUp (should not affect horizontal splitter)
-        await page.keyboard.press('ArrowUp');
+        await horizontalSplitter.press('ArrowUp');
         await page.waitForTimeout(50);
 
         const value = await horizontalSplitter.getAttribute('aria-valuenow');
@@ -176,9 +180,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="horizontal-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press Shift+ArrowRight
-        await page.keyboard.press('Shift+ArrowRight');
+        await splitter.press('Shift+ArrowRight');
         await page.waitForTimeout(50);
 
         // Should move by largeStep (10)
@@ -190,9 +195,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="horizontal-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press Home
-        await page.keyboard.press('Home');
+        await splitter.press('Home');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -203,9 +209,10 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="horizontal-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Press End
-        await page.keyboard.press('End');
+        await splitter.press('End');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -299,12 +306,13 @@ for (const framework of frameworks) {
         const splitter = page.locator('[data-testid="readonly-splitter"]');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         const initialValue = await splitter.getAttribute('aria-valuenow');
         expect(initialValue).toBe('70');
 
         // Try to move with ArrowRight
-        await page.keyboard.press('ArrowRight');
+        await splitter.press('ArrowRight');
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
@@ -480,6 +488,7 @@ for (const framework of frameworks) {
         const container = page.locator('[data-testid="horizontal-demo"] .apg-window-splitter');
 
         await splitter.focus();
+        await expect(splitter).toBeFocused();
 
         // Initial value - check CSS variable via computed style
         const initialValue = await container.evaluate((el) => {
@@ -488,7 +497,7 @@ for (const framework of frameworks) {
         expect(initialValue).toBe('50%');
 
         // Move splitter
-        await page.keyboard.press('ArrowRight');
+        await splitter.press('ArrowRight');
         await page.waitForTimeout(50);
 
         // Style should update
@@ -528,7 +537,8 @@ test.describe('Window Splitter - Cross-framework Consistency', () => {
 
       const splitter = page.locator('[data-testid="horizontal-splitter"]');
       await splitter.focus();
-      await page.keyboard.press('ArrowRight');
+      await expect(splitter).toBeFocused();
+      await splitter.press('ArrowRight');
       await page.waitForTimeout(50);
 
       results[framework] = await splitter.getAttribute('aria-valuenow');

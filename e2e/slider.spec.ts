@@ -114,7 +114,7 @@ for (const framework of frameworks) {
         await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) + 1);
@@ -123,9 +123,10 @@ for (const framework of frameworks) {
       test('ArrowLeft decreases value by step', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowLeft');
+        await slider.press('ArrowLeft');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) - 1);
@@ -134,9 +135,10 @@ for (const framework of frameworks) {
       test('ArrowUp increases value by step', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowUp');
+        await slider.press('ArrowUp');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) + 1);
@@ -145,9 +147,10 @@ for (const framework of frameworks) {
       test('ArrowDown decreases value by step', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowDown');
+        await slider.press('ArrowDown');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) - 1);
@@ -156,8 +159,9 @@ for (const framework of frameworks) {
       test('Home sets value to minimum', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await slider.press('Home');
 
         await expect(slider).toHaveAttribute('aria-valuenow', '0');
       });
@@ -165,8 +169,9 @@ for (const framework of frameworks) {
       test('End sets value to maximum', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
-        await page.keyboard.press('End');
+        await slider.press('End');
 
         await expect(slider).toHaveAttribute('aria-valuenow', '100');
       });
@@ -174,9 +179,10 @@ for (const framework of frameworks) {
       test('PageUp increases value by large step', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('PageUp');
+        await slider.press('PageUp');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         // Large step is typically step * 10 = 10
@@ -186,9 +192,10 @@ for (const framework of frameworks) {
       test('PageDown decreases value by large step', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('PageDown');
+        await slider.press('PageDown');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         // Large step is typically step * 10 = 10
@@ -198,45 +205,48 @@ for (const framework of frameworks) {
       test('value does not exceed maximum', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         // Set to max first
-        await page.keyboard.press('End');
+        await slider.press('End');
         await expect(slider).toHaveAttribute('aria-valuenow', '100');
 
         // Try to go beyond max
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuenow', '100');
       });
 
       test('value does not go below minimum', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         // Set to min first
-        await page.keyboard.press('Home');
+        await slider.press('Home');
         await expect(slider).toHaveAttribute('aria-valuenow', '0');
 
         // Try to go below min
-        await page.keyboard.press('ArrowLeft');
+        await slider.press('ArrowLeft');
         await expect(slider).toHaveAttribute('aria-valuenow', '0');
       });
 
       test('Rating slider respects step of 1', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Rating');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         // Initial value might change due to click position, so use Home first
-        await page.keyboard.press('Home');
+        await slider.press('Home');
         await expect(slider).toHaveAttribute('aria-valuenow', '1');
 
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuenow', '2');
 
-        await page.keyboard.press('End');
+        await slider.press('End');
         await expect(slider).toHaveAttribute('aria-valuenow', '5');
 
         // Should not exceed max
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuenow', '5');
       });
     });
@@ -248,9 +258,10 @@ for (const framework of frameworks) {
       test('ArrowUp increases value in vertical slider', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Vertical');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowUp');
+        await slider.press('ArrowUp');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) + 1);
@@ -259,9 +270,10 @@ for (const framework of frameworks) {
       test('ArrowDown decreases value in vertical slider', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Vertical');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         const initialValue = await slider.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowDown');
+        await slider.press('ArrowDown');
 
         const newValue = await slider.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) - 1);
@@ -326,24 +338,26 @@ for (const framework of frameworks) {
       test('aria-valuetext updates on value change', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Volume');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         // Use Home to reset to known value
-        await page.keyboard.press('Home');
+        await slider.press('Home');
         await expect(slider).toHaveAttribute('aria-valuetext', '0%');
 
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuetext', '1%');
       });
 
       test('Rating slider aria-valuetext updates correctly', async ({ page }) => {
         const slider = getSliderByLabel(page, 'Rating');
         await slider.click();
+        await expect(slider).toBeFocused();
 
         // Use Home to reset to known value (min=1)
-        await page.keyboard.press('Home');
+        await slider.press('Home');
         await expect(slider).toHaveAttribute('aria-valuetext', '1 of 5');
 
-        await page.keyboard.press('ArrowRight');
+        await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuetext', '2 of 5');
       });
     });
@@ -452,17 +466,18 @@ test.describe('Slider - Cross-framework Consistency', () => {
 
       const slider = getSliderByLabel(page, 'Volume');
       await slider.click();
+      await expect(slider).toBeFocused();
 
       // Test Home (to reset to known value after click)
-      await page.keyboard.press('Home');
+      await slider.press('Home');
       await expect(slider).toHaveAttribute('aria-valuenow', '0');
 
       // Test ArrowRight
-      await page.keyboard.press('ArrowRight');
+      await slider.press('ArrowRight');
       await expect(slider).toHaveAttribute('aria-valuenow', '1');
 
       // Test End
-      await page.keyboard.press('End');
+      await slider.press('End');
       await expect(slider).toHaveAttribute('aria-valuenow', '100');
     }
   });

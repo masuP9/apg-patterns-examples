@@ -186,16 +186,17 @@ for (const framework of frameworks) {
 
         // Focus the checkbox (input is focusable even if visually hidden)
         await checkbox.focus();
+        await expect(checkbox).toBeFocused();
 
         // Initial state
         await expect(checkbox).not.toBeChecked();
 
         // Press Space to toggle
-        await page.keyboard.press('Space');
+        await checkbox.press('Space');
         await expect(checkbox).toBeChecked();
 
         // Press Space again to untoggle
-        await page.keyboard.press('Space');
+        await checkbox.press('Space');
         await expect(checkbox).not.toBeChecked();
       });
 
