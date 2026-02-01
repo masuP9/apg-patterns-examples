@@ -50,6 +50,10 @@ for (const framework of frameworks) {
           return id && id.length > 1 && !id.startsWith('-');
         })
         .toBe(true);
+
+      // Ensure first tab is interactive (hydration complete)
+      await expect(firstTab).toHaveAttribute('tabindex', '0');
+      await expect(firstTab).toHaveAttribute('aria-selected', 'true');
     });
 
     // ------------------------------------------
@@ -177,10 +181,10 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        await firstTab.click();
+        await firstTab.focus();
         await expect(firstTab).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstTab.press('ArrowRight');
 
         await expect(secondTab).toBeFocused();
         // Automatic mode: arrow key selects tab
@@ -193,11 +197,14 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        // Start from second tab
-        await secondTab.click();
+        // Navigate to second tab using keyboard
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowRight');
         await expect(secondTab).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        // Now test ArrowLeft from second tab
+        await secondTab.press('ArrowLeft');
 
         await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
@@ -209,10 +216,14 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const lastTab = tabButtons.last();
 
-        await lastTab.click();
+        // Navigate to last tab using keyboard
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('End');
         await expect(lastTab).toBeFocused();
 
-        await page.keyboard.press('Home');
+        // Now test Home from last tab
+        await lastTab.press('Home');
 
         await expect(firstTab).toBeFocused();
       });
@@ -223,10 +234,10 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const lastTab = tabButtons.last();
 
-        await firstTab.click();
+        await firstTab.focus();
         await expect(firstTab).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstTab.press('End');
 
         await expect(lastTab).toBeFocused();
       });
@@ -237,17 +248,18 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const lastTab = tabButtons.last();
 
-        // At last tab, ArrowRight should loop to first
-        await lastTab.click();
-        // Wait for selection state to be updated before pressing arrow key
-        await expect(lastTab).toHaveAttribute('aria-selected', 'true');
+        // Navigate to last tab using keyboard
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('End');
         await expect(lastTab).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        // At last tab, ArrowRight should loop to first
+        await lastTab.press('ArrowRight');
         await expect(firstTab).toBeFocused();
 
         // At first tab, ArrowLeft should loop to last
-        await page.keyboard.press('ArrowLeft');
+        await firstTab.press('ArrowLeft');
         await expect(lastTab).toBeFocused();
       });
     });
@@ -263,10 +275,11 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        await firstTab.click();
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
         await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
-        await page.keyboard.press('ArrowRight');
+        await firstTab.press('ArrowRight');
 
         // Focus should move
         await expect(secondTab).toBeFocused();
@@ -281,11 +294,13 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        await firstTab.click();
-        await page.keyboard.press('ArrowRight');
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowRight');
+        await expect(secondTab).toBeFocused();
 
         // Press Enter to activate
-        await page.keyboard.press('Enter');
+        await secondTab.press('Enter');
 
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
       });
@@ -296,11 +311,13 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        await firstTab.click();
-        await page.keyboard.press('ArrowRight');
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowRight');
+        await expect(secondTab).toBeFocused();
 
         // Press Space to activate
-        await page.keyboard.press('Space');
+        await secondTab.press('Space');
 
         await expect(secondTab).toHaveAttribute('aria-selected', 'true');
       });
@@ -355,8 +372,9 @@ for (const framework of frameworks) {
 
         await expect(tablist).toHaveAttribute('aria-orientation', 'vertical');
 
-        await firstTab.click();
-        await page.keyboard.press('ArrowDown');
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowDown');
 
         await expect(secondTab).toBeFocused();
       });
@@ -367,8 +385,14 @@ for (const framework of frameworks) {
         const firstTab = tabButtons.first();
         const secondTab = tabButtons.nth(1);
 
-        await secondTab.click();
-        await page.keyboard.press('ArrowUp');
+        // Navigate to second tab using keyboard
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowDown');
+        await expect(secondTab).toBeFocused();
+
+        // Now test ArrowUp from second tab
+        await secondTab.press('ArrowUp');
 
         await expect(firstTab).toBeFocused();
       });
@@ -398,8 +422,9 @@ for (const framework of frameworks) {
         const tabButtons = disabledTabs.getByRole('tab');
         const firstTab = tabButtons.first();
 
-        await firstTab.click();
-        await page.keyboard.press('ArrowRight');
+        await firstTab.focus();
+        await expect(firstTab).toBeFocused();
+        await firstTab.press('ArrowRight');
 
         // Should skip disabled tab and go to next enabled
         const focusedTab = disabledTabs.locator('[role="tab"]:focus');
