@@ -2,6 +2,7 @@
 import PracticeLayout from '../../../layouts/PracticeLayout.astro';
 import { Tile, TileContent, TileTitle } from '@/components/ui/tile';
 import Prose from '@/components/ui/Prose.astro';
+import PracticeDownload from '@/components/ui/PracticeDownload.astro';
 import { getPractices, getPracticeById } from '@/lib/practices';
 import { getPatternById } from '@/lib/patterns';
 import { withBase } from '@/lib/utils';
@@ -30,6 +31,10 @@ const mdxModule = await import(`../../../practices/${practiceId}/content.mdx`);
 const Content = mdxModule.default;
 const headings = mdxModule.getHeadings ? await mdxModule.getHeadings() : [];
 
+// Import raw content for download
+const rawContent = await import(`../../../practices/${practiceId}/content.mdx?raw`);
+const mdContent = rawContent.default;
+
 // Build TOC from MDX headings (h2 only)
 const tocItems: TocItem[] = headings
   .filter((h: { depth: number }) => h.depth === 2)
@@ -50,17 +55,25 @@ tocItems.push({ id: 'resources', text: 'Resources' });
 >
   <Prose>
     <header class="mb-8">
-      <div class="mb-4 flex items-center gap-4">
-        <div
-          class="bg-muted flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-4xl"
-        >
-          <span class="translate-y-[-0.1em]">
-            {practice.icon}
-          </span>
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div
+            class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl sm:h-16 sm:w-16 sm:text-4xl"
+          >
+            <span class="translate-y-[-0.1em]">
+              {practice.icon}
+            </span>
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-2xl font-bold break-words sm:text-3xl">{practice.name}</h1>
+          </div>
         </div>
-        <div>
-          <h1 class="text-3xl font-bold">{practice.name}</h1>
-        </div>
+        <PracticeDownload
+          practice={practiceId}
+          practiceName={practice.name}
+          content={mdContent}
+          locale="en"
+        />
       </div>
       <p class="text-muted-foreground">{practice.description}</p>
 
