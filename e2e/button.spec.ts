@@ -91,7 +91,7 @@ for (const framework of frameworks) {
     // 🔴 High Priority: Keyboard Interaction
     test.describe('APG: Keyboard Interaction', () => {
       test('activates on Space key', async ({ page }) => {
-        const button = getCustomButtons(page).first();
+        const button = page.locator('[role="button"]:not([aria-disabled="true"])').first();
 
         // Set up activation tracking
         await page.evaluate(() => {
@@ -108,7 +108,8 @@ for (const framework of frameworks) {
         });
 
         await button.focus();
-        await page.keyboard.press('Space');
+        await expect(button).toBeFocused();
+        await button.press('Space');
 
         // Check if button was activated (either via click event or custom event)
         const activated = await button.getAttribute('data-activated');
@@ -116,7 +117,7 @@ for (const framework of frameworks) {
       });
 
       test('activates on Enter key', async ({ page }) => {
-        const button = getCustomButtons(page).first();
+        const button = page.locator('[role="button"]:not([aria-disabled="true"])').first();
 
         // Set up activation tracking
         await page.evaluate(() => {
@@ -133,7 +134,8 @@ for (const framework of frameworks) {
         });
 
         await button.focus();
-        await page.keyboard.press('Enter');
+        await expect(button).toBeFocused();
+        await button.press('Enter');
 
         const activated = await button.getAttribute('data-activated');
         expect(activated).toBe('true');

@@ -88,7 +88,8 @@ for (const framework of frameworks) {
         const initialState = await switchEl.getAttribute('aria-checked');
 
         await switchEl.focus();
-        await page.keyboard.press('Space');
+        await expect(switchEl).toBeFocused();
+        await switchEl.press('Space');
 
         const newState = await switchEl.getAttribute('aria-checked');
         expect(newState).not.toBe(initialState);
@@ -99,7 +100,8 @@ for (const framework of frameworks) {
         const initialState = await switchEl.getAttribute('aria-checked');
 
         await switchEl.focus();
-        await page.keyboard.press('Enter');
+        await expect(switchEl).toBeFocused();
+        await switchEl.press('Enter');
 
         const newState = await switchEl.getAttribute('aria-checked');
         expect(newState).not.toBe(initialState);

@@ -194,7 +194,7 @@ for (const framework of frameworks) {
         await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
 
-        await page.keyboard.press('ArrowDown');
+        await firstRadio.press('ArrowDown');
 
         await expect(secondRadio).toBeFocused();
         await expect(secondRadio).toHaveAttribute('aria-checked', 'true');
@@ -208,8 +208,9 @@ for (const framework of frameworks) {
         const secondRadio = radios.nth(1);
 
         await firstRadio.click();
+        await expect(firstRadio).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstRadio.press('ArrowRight');
 
         await expect(secondRadio).toBeFocused();
         await expect(secondRadio).toHaveAttribute('aria-checked', 'true');
@@ -222,9 +223,10 @@ for (const framework of frameworks) {
         const firstRadio = radios.first();
 
         await secondRadio.click();
+        await expect(secondRadio).toBeFocused();
         await expect(secondRadio).toHaveAttribute('aria-checked', 'true');
 
-        await page.keyboard.press('ArrowUp');
+        await secondRadio.press('ArrowUp');
 
         await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
@@ -237,8 +239,9 @@ for (const framework of frameworks) {
         const firstRadio = radios.first();
 
         await secondRadio.click();
+        await expect(secondRadio).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await secondRadio.press('ArrowLeft');
 
         await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
@@ -254,7 +257,7 @@ for (const framework of frameworks) {
         await expect(lastRadio).toHaveAttribute('aria-checked', 'true');
         await expect(lastRadio).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await lastRadio.press('ArrowDown');
 
         await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
@@ -270,7 +273,7 @@ for (const framework of frameworks) {
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
         await expect(firstRadio).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await firstRadio.press('ArrowUp');
 
         await expect(lastRadio).toBeFocused();
         await expect(lastRadio).toHaveAttribute('aria-checked', 'true');
@@ -283,8 +286,9 @@ for (const framework of frameworks) {
         const firstRadio = radios.first();
 
         await lastRadio.click();
+        await expect(lastRadio).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await lastRadio.press('Home');
 
         await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
@@ -297,8 +301,9 @@ for (const framework of frameworks) {
         const lastRadio = radios.last();
 
         await firstRadio.click();
+        await expect(firstRadio).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstRadio.press('End');
 
         await expect(lastRadio).toBeFocused();
         await expect(lastRadio).toHaveAttribute('aria-checked', 'true');
@@ -316,11 +321,11 @@ for (const framework of frameworks) {
 
         // Move to second with arrow (focus without selecting in manual mode would need manual mode)
         // In automatic mode, arrow already selects, so test Space on already selected
-        await page.keyboard.press('ArrowDown');
+        await firstRadio.press('ArrowDown');
         await expect(secondRadio).toBeFocused();
 
         // Press Space - should keep it selected (confirms Space works)
-        await page.keyboard.press('Space');
+        await secondRadio.press('Space');
         await expect(secondRadio).toHaveAttribute('aria-checked', 'true');
       });
 
@@ -331,10 +336,11 @@ for (const framework of frameworks) {
 
         // Select first radio
         await firstRadio.click();
+        await expect(firstRadio).toBeFocused();
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
 
         // Press Space again - should stay selected
-        await page.keyboard.press('Space');
+        await firstRadio.press('Space');
 
         await expect(firstRadio).toHaveAttribute('aria-checked', 'true');
       });
@@ -356,10 +362,11 @@ for (const framework of frameworks) {
 
         // Start from first enabled radio
         await enabledRadios[0].click();
+        await expect(enabledRadios[0]).toBeFocused();
         await expect(enabledRadios[0]).toHaveAttribute('aria-checked', 'true');
 
         // Press ArrowDown - should skip disabled and go to next enabled
-        await page.keyboard.press('ArrowDown');
+        await enabledRadios[0].press('ArrowDown');
 
         // Should be on next enabled radio (skipping disabled)
         const focusedElement = page.locator(':focus');
@@ -588,7 +595,7 @@ test.describe('Radio Group - Cross-framework Consistency', () => {
       await expect(firstRadio).toBeFocused();
 
       // Arrow down should select second
-      await page.keyboard.press('ArrowDown');
+      await firstRadio.press('ArrowDown');
       await expect(secondRadio).toBeFocused();
       await expect(secondRadio).toHaveAttribute('aria-checked', 'true');
     }

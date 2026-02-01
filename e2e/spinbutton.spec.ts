@@ -150,7 +150,8 @@ for (const framework of frameworks) {
       test('ArrowUp increases value by step', async ({ page }) => {
         const spinbutton = getBasicSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowUp');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowUp');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '6');
       });
@@ -158,7 +159,8 @@ for (const framework of frameworks) {
       test('ArrowDown decreases value by step', async ({ page }) => {
         const spinbutton = getBasicSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowDown');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '4');
       });
@@ -166,7 +168,8 @@ for (const framework of frameworks) {
       test('ArrowUp increases value by custom step (step=5)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowUp');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowUp');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '55');
       });
@@ -174,7 +177,8 @@ for (const framework of frameworks) {
       test('ArrowDown decreases value by custom step (step=5)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowDown');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '45');
       });
@@ -182,7 +186,8 @@ for (const framework of frameworks) {
       test('Home sets value to min (when min is defined)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('Home');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('Home');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
       });
@@ -190,7 +195,8 @@ for (const framework of frameworks) {
       test('End sets value to max (when max is defined)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('End');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('End');
 
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
       });
@@ -198,7 +204,8 @@ for (const framework of frameworks) {
       test('Home has no effect when min is undefined', async ({ page }) => {
         const spinbutton = getBasicSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('Home');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('Home');
 
         // Value should remain unchanged
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '5');
@@ -207,7 +214,8 @@ for (const framework of frameworks) {
       test('End has no effect when max is undefined', async ({ page }) => {
         const spinbutton = getBasicSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('End');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('End');
 
         // Value should remain unchanged
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '5');
@@ -216,7 +224,8 @@ for (const framework of frameworks) {
       test('PageUp increases by large step (step × 10)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('PageUp');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('PageUp');
 
         // step=5, large step=50, 50+50=100 (capped at max)
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
@@ -225,7 +234,8 @@ for (const framework of frameworks) {
       test('PageDown decreases by large step (step × 10)', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('PageDown');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('PageDown');
 
         // step=5, large step=50, 50-50=0
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
@@ -234,26 +244,28 @@ for (const framework of frameworks) {
       test('value stops at max boundary', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
 
         // Press End to go to max
-        await page.keyboard.press('End');
+        await spinbutton.press('End');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
 
         // Try to increase - should stay at 100
-        await page.keyboard.press('ArrowUp');
+        await spinbutton.press('ArrowUp');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
       });
 
       test('value stops at min boundary', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
 
         // Press Home to go to min
-        await page.keyboard.press('Home');
+        await spinbutton.press('Home');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
 
         // Try to decrease - should stay at 0
-        await page.keyboard.press('ArrowDown');
+        await spinbutton.press('ArrowDown');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
       });
 
@@ -271,7 +283,8 @@ for (const framework of frameworks) {
       test('keyboard has no effect when read-only', async ({ page }) => {
         const spinbutton = getReadOnlySpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowUp');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowUp');
 
         // Value should remain unchanged
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '25');
@@ -373,9 +386,10 @@ for (const framework of frameworks) {
       test('increment button respects max boundary', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
 
         // Go to max first
-        await page.keyboard.press('End');
+        await spinbutton.press('End');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
 
         const incrementBtn = getIncrementButton(page, spinbutton);
@@ -389,9 +403,10 @@ for (const framework of frameworks) {
       test('decrement button respects min boundary', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
 
         // Go to min first
-        await page.keyboard.press('Home');
+        await spinbutton.press('Home');
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
 
         const decrementBtn = getDecrementButton(page, spinbutton);
@@ -450,7 +465,8 @@ for (const framework of frameworks) {
       test('aria-valuetext updates when value changes', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowUp');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowUp');
 
         // Value should be 55, so aria-valuetext should be "55%"
         await expect(spinbutton).toHaveAttribute('aria-valuetext', '55%');
@@ -459,7 +475,8 @@ for (const framework of frameworks) {
       test('aria-valuetext updates when value decreases', async ({ page }) => {
         const spinbutton = getRangeSpinbutton(page);
         await spinbutton.click();
-        await page.keyboard.press('ArrowDown');
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowDown');
 
         // Value should be 45, so aria-valuetext should be "45%"
         await expect(spinbutton).toHaveAttribute('aria-valuetext', '45%');
@@ -537,7 +554,8 @@ test.describe('Spinbutton - Cross-framework Consistency', () => {
 
       const spinbutton = getBasicSpinbutton(page);
       await spinbutton.click();
-      await page.keyboard.press('ArrowUp');
+      await expect(spinbutton).toBeFocused();
+      await spinbutton.press('ArrowUp');
 
       await expect(spinbutton).toHaveAttribute('aria-valuenow', '6');
     }
@@ -555,7 +573,8 @@ test.describe('Spinbutton - Cross-framework Consistency', () => {
 
       const spinbutton = getBasicSpinbutton(page);
       await spinbutton.click();
-      await page.keyboard.press('ArrowDown');
+      await expect(spinbutton).toBeFocused();
+      await spinbutton.press('ArrowDown');
 
       await expect(spinbutton).toHaveAttribute('aria-valuenow', '4');
     }

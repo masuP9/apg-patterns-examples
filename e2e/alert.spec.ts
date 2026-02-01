@@ -157,8 +157,10 @@ for (const framework of frameworks) {
         // Focus and activate dismiss button with Enter
         const dismissButton = page.locator('[role="alert"] button');
         if ((await dismissButton.count()) > 0) {
-          await dismissButton.first().focus();
-          await page.keyboard.press('Enter');
+          const btn = dismissButton.first();
+          await btn.focus();
+          await expect(btn).toBeFocused();
+          await btn.press('Enter');
 
           // Alert should be cleared
           await expect(alert).not.toContainText('successfully');
@@ -176,8 +178,10 @@ for (const framework of frameworks) {
         // Focus and activate dismiss button with Space
         const dismissButton = page.locator('[role="alert"] button');
         if ((await dismissButton.count()) > 0) {
-          await dismissButton.first().focus();
-          await page.keyboard.press('Space');
+          const btn = dismissButton.first();
+          await btn.focus();
+          await expect(btn).toBeFocused();
+          await btn.press('Space');
 
           // Alert should be cleared
           await expect(alert).not.toContainText('review');
