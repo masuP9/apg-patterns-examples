@@ -127,6 +127,135 @@ With roving tabindex:
 
 This separation allows keyboard users to navigate pages efficiently.
 
+### Focus Management with aria-activedescendant
+
+As an alternative to roving tabindex, you can use `aria-activedescendant` for focus management. With this approach, the container element always holds DOM focus, and the `aria-activedescendant` attribute indicates the currently active child element.
+
+#### Core Principle
+
+- The container element has `tabindex="0"` and receives focus
+- Child elements do not have `tabindex` (not directly focusable)
+- Set the container's `aria-activedescendant` attribute to the `id` of the active child
+- Update `aria-activedescendant` value when navigating with arrow keys
+
+```html
+<!-- Listbox using aria-activedescendant -->
+<ul
+  role="listbox"
+  tabindex="0"
+  aria-activedescendant="option-2"
+  aria-label="Select a fruit"
+>
+  <li id="option-1" role="option">Apple</li>
+  <li id="option-2" role="option" aria-selected="true">Banana</li>
+  <!-- ↑ currently active -->
+  <li id="option-3" role="option">Orange</li>
+</ul>
+```
+
+#### Implementation Pattern
+
+```javascript
+class ActiveDescendant {
+  constructor(container, selector) {
+    this.container = container;
+    this.items = [...container.querySelectorAll(selector)];
+    this.currentIndex = 0;
+    this.init();
+  }
+
+  init() {
+    // Assign unique IDs to each item
+    this.items.forEach((item, index) => {
+      if (!item.id) {
+        item.id = `${this.container.id}-item-${index}`;
+      }
+    });
+
+    // Set initial active element
+    this.container.setAttribute('aria-activedescendant', this.items[0].id);
+
+    // Handle keyboard events on the container
+    this.container.addEventListener('keydown', (e) => this.handleKeyDown(e));
+  }
+
+  handleKeyDown(event) {
+    let newIndex = this.currentIndex;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        newIndex = Math.min(this.currentIndex + 1, this.items.length - 1);
+        break;
+      case 'ArrowUp':
+        newIndex = Math.max(this.currentIndex - 1, 0);
+        break;
+      case 'Home':
+        newIndex = 0;
+        break;
+      case 'End':
+        newIndex = this.items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    this.setActiveDescendant(newIndex);
+  }
+
+  setActiveDescendant(newIndex) {
+    // Update visual highlight
+    this.items[this.currentIndex].classList.remove('active');
+    this.items[newIndex].classList.add('active');
+
+    // Update aria-activedescendant
+    this.currentIndex = newIndex;
+    this.container.setAttribute('aria-activedescendant', this.items[newIndex].id);
+  }
+}
+```
+
+#### Comparison with Roving tabindex
+
+| Aspect                 | Roving tabindex              | aria-activedescendant          |
+| ---------------------- | ---------------------------- | ------------------------------ |
+| DOM Focus              | Moves to each item           | Stays on container             |
+| Implementation         | Moderate complexity          | Slightly more complex          |
+| Screen reader support  | Widely supported             | Support varies                 |
+| Dynamic content        | Requires tabindex management | Only needs ID assignment       |
+| Recommended use cases  | Toolbars, tablists           | Listboxes, comboboxes          |
+
+#### When to Use Each Approach
+
+**Choose roving tabindex when:**
+- Broad screen reader support is required
+- Simpler implementation is preferred
+- Building toolbars, menus, or tablists
+
+**Choose aria-activedescendant when:**
+- Container has text input (combobox)
+- List has many items
+- Items are dynamically added or removed
+
+```html
+<!-- Combobox example -->
+<div class="combobox">
+  <input
+    type="text"
+    role="combobox"
+    aria-expanded="true"
+    aria-haspopup="listbox"
+    aria-activedescendant="suggestion-2"
+    aria-controls="suggestions"
+  />
+  <ul id="suggestions" role="listbox">
+    <li id="suggestion-1" role="option">Tokyo</li>
+    <li id="suggestion-2" role="option">Osaka</li>
+    <li id="suggestion-3" role="option">Nagoya</li>
+  </ul>
+</div>
+```
+
 ### Focus Trap for Modals
 
 Keep focus within modal dialogs:

@@ -127,6 +127,135 @@ roving tabindex により：
 
 この分離により、キーボードユーザーは効率的にページをナビゲートできます。
 
+### aria-activedescendant によるフォーカス管理
+
+roving tabindex の代替として、`aria-activedescendant` を使用したフォーカス管理があります。この手法では、コンテナ要素が常に DOM フォーカスを保持し、`aria-activedescendant` 属性で現在アクティブな子要素を示します。
+
+#### 基本原則
+
+- コンテナ要素が `tabindex="0"` を持ち、フォーカスを受け取る
+- 子要素は `tabindex` を持たない（フォーカス可能にしない）
+- コンテナの `aria-activedescendant` 属性にアクティブな子要素の `id` を設定
+- 矢印キーで `aria-activedescendant` の値を更新
+
+```html
+<!-- aria-activedescendant を使用したリストボックス -->
+<ul
+  role="listbox"
+  tabindex="0"
+  aria-activedescendant="option-2"
+  aria-label="フルーツを選択"
+>
+  <li id="option-1" role="option">りんご</li>
+  <li id="option-2" role="option" aria-selected="true">バナナ</li>
+  <!-- ↑ 現在アクティブ -->
+  <li id="option-3" role="option">オレンジ</li>
+</ul>
+```
+
+#### 実装パターン
+
+```javascript
+class ActiveDescendant {
+  constructor(container, selector) {
+    this.container = container;
+    this.items = [...container.querySelectorAll(selector)];
+    this.currentIndex = 0;
+    this.init();
+  }
+
+  init() {
+    // 各アイテムに一意のIDを付与
+    this.items.forEach((item, index) => {
+      if (!item.id) {
+        item.id = `${this.container.id}-item-${index}`;
+      }
+    });
+
+    // 初期のアクティブ要素を設定
+    this.container.setAttribute('aria-activedescendant', this.items[0].id);
+
+    // キーボードイベントはコンテナで処理
+    this.container.addEventListener('keydown', (e) => this.handleKeyDown(e));
+  }
+
+  handleKeyDown(event) {
+    let newIndex = this.currentIndex;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        newIndex = Math.min(this.currentIndex + 1, this.items.length - 1);
+        break;
+      case 'ArrowUp':
+        newIndex = Math.max(this.currentIndex - 1, 0);
+        break;
+      case 'Home':
+        newIndex = 0;
+        break;
+      case 'End':
+        newIndex = this.items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    this.setActiveDescendant(newIndex);
+  }
+
+  setActiveDescendant(newIndex) {
+    // 視覚的なハイライトを更新
+    this.items[this.currentIndex].classList.remove('active');
+    this.items[newIndex].classList.add('active');
+
+    // aria-activedescendant を更新
+    this.currentIndex = newIndex;
+    this.container.setAttribute('aria-activedescendant', this.items[newIndex].id);
+  }
+}
+```
+
+#### roving tabindex との比較
+
+| 観点                     | roving tabindex                | aria-activedescendant            |
+| ------------------------ | ------------------------------ | -------------------------------- |
+| DOM フォーカス           | 各アイテムに移動               | コンテナに固定                   |
+| 実装の複雑さ             | 中程度                         | やや複雑                         |
+| スクリーンリーダー対応   | 広く対応                       | 対応状況にばらつきあり           |
+| 動的コンテンツ           | 要素追加時に tabindex 管理必要 | ID の付与のみ                    |
+| 推奨ユースケース         | ツールバー、タブリスト         | リストボックス、コンボボックス   |
+
+#### 使い分けの指針
+
+**roving tabindex を選ぶ場合：**
+- 広範なスクリーンリーダーサポートが必要
+- シンプルな実装を優先
+- ツールバー、メニュー、タブリストなど
+
+**aria-activedescendant を選ぶ場合：**
+- コンテナにテキスト入力がある（コンボボックス）
+- 大量のアイテムを持つリスト
+- アイテムが動的に追加・削除される
+
+```html
+<!-- コンボボックスでの使用例 -->
+<div class="combobox">
+  <input
+    type="text"
+    role="combobox"
+    aria-expanded="true"
+    aria-haspopup="listbox"
+    aria-activedescendant="suggestion-2"
+    aria-controls="suggestions"
+  />
+  <ul id="suggestions" role="listbox">
+    <li id="suggestion-1" role="option">東京</li>
+    <li id="suggestion-2" role="option">大阪</li>
+    <li id="suggestion-3" role="option">名古屋</li>
+  </ul>
+</div>
+```
+
 ### モーダル用のフォーカストラップ
 
 モーダルダイアログ内にフォーカスを閉じ込める：
