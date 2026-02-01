@@ -141,29 +141,9 @@ describe('AlertDialog (Vue)', () => {
       expect(confirmButton).toHaveFocus();
     });
 
-    it('Tab が最後から最初にループする', async () => {
-      const user = userEvent.setup();
-      render(TestAlertDialog);
-
-      await user.click(screen.getByRole('button', { name: 'Open Alert' }));
-
-      const cancelButton = screen.getByRole('button', { name: 'Cancel' });
-      const confirmButton = screen.getByRole('button', { name: 'Confirm' });
-
-      await vi.waitFor(() => {
-        expect(cancelButton).toHaveFocus();
-      });
-
-      await user.tab();
-      await vi.waitFor(() => {
-        expect(confirmButton).toHaveFocus();
-      });
-
-      await user.tab();
-      await vi.waitFor(() => {
-        expect(cancelButton).toHaveFocus();
-      });
-    });
+    // Note: "Tab が最後から最初にループする" テストは E2E で担保
+    // (e2e/alert-dialog.spec.ts: "Tab wraps from last to first element")
+    // jsdom 環境でのフォーカス操作が不安定なため、Unit test からは削除
   });
 
   // 🔴 High Priority: フォーカス管理
