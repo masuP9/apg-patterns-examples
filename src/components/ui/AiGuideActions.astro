@@ -172,7 +172,9 @@ const llmMdUrl = withBase(
           const response = await fetch(llmUrl);
           const content = await response.text();
 
-          const blob = new Blob([content], { type: 'text/markdown' });
+          // Add UTF-8 BOM for proper encoding on Android/Windows
+          const BOM = '\uFEFF';
+          const blob = new Blob([BOM + content], { type: 'text/markdown;charset=utf-8' });
           const url = URL.createObjectURL(blob);
 
           const a = document.createElement('a');

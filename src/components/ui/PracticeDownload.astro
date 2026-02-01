@@ -158,7 +158,9 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
       // Download button handler
       const downloadBtn = container.querySelector('[data-action="download"]');
       downloadBtn?.addEventListener('click', () => {
-        const blob = new Blob([content], { type: 'text/markdown' });
+        // Add UTF-8 BOM for proper encoding on Android/Windows
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + content], { type: 'text/markdown;charset=utf-8' });
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
