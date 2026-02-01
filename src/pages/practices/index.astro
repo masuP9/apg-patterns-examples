@@ -1,19 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
-import { getPatterns } from '@/lib/patterns';
+import { getPractices } from '@/lib/practices';
 import { withBase } from '@/lib/utils';
 
-const patterns = getPatterns();
+const practices = getPractices();
 ---
 
-<BaseLayout title="Patterns">
+<BaseLayout title="Practices">
   <div class="mx-auto max-w-4xl">
     <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">APG Patterns</h1>
+      <h1 class="mb-4 text-3xl font-bold">APG Practices</h1>
       <p class="text-muted-foreground text-lg">
-        Accessible component patterns based on WAI-ARIA Authoring Practices Guide. Each pattern is
-        implemented in React, Vue, Svelte, and Astro.
+        Best practices for building accessible web applications based on WAI-ARIA Authoring
+        Practices Guide. These guides help you implement ARIA patterns correctly.
       </p>
     </header>
 
@@ -21,15 +21,15 @@ const patterns = getPatterns();
       <h2 class="mb-4 text-xl font-semibold">Available</h2>
       <div class="grid gap-4 md:grid-cols-2">
         {
-          patterns.map((pattern) => (
-            <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/`)}>
+          practices.map((practice) => (
+            <Tile variant="floating" href={withBase(`/practices/${practice.id}/`)}>
               <TileContent class="flex flex-row items-start gap-4">
                 <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
-                  <span class="translate-y-[-0.1em]">{pattern.icon}</span>
+                  <span class="translate-y-[-0.1em]">{practice.icon}</span>
                 </div>
                 <div class="flex flex-1 flex-col gap-2">
-                  <TileTitle>{pattern.name}</TileTitle>
-                  <TileDescription>{pattern.description}</TileDescription>
+                  <TileTitle>{practice.name}</TileTitle>
+                  <TileDescription>{practice.description}</TileDescription>
                 </div>
               </TileContent>
             </Tile>
@@ -40,21 +40,21 @@ const patterns = getPatterns();
 
     <Tile variant="floating" class="bg-muted/50">
       <TileContent>
-        <TileTitle class="text-xl">About These Patterns</TileTitle>
+        <TileTitle class="text-xl">About These Practices</TileTitle>
         <TileDescription class="mb-4">
-          Each pattern follows the <a
-            href="https://www.w3.org/WAI/ARIA/apg/"
+          Each practice follows the <a
+            href="https://www.w3.org/WAI/ARIA/apg/practices/"
             target="_blank"
             rel="noopener noreferrer"
             class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a
-          > specifications to ensure proper accessibility support.
+          > to help you build accessible web applications.
         </TileDescription>
         <ul class="text-muted-foreground list-disc space-y-2 pl-6">
-          <li>Proper ARIA roles and attributes</li>
-          <li>Full keyboard navigation support</li>
-          <li>Screen reader compatibility</li>
-          <li>High contrast mode support</li>
-          <li>Reduced motion preferences</li>
+          <li>Understanding ARIA landmark regions</li>
+          <li>Providing accessible names and descriptions</li>
+          <li>Building keyboard-accessible interfaces</li>
+          <li>Implementing grid and table properties correctly</li>
+          <li>Communicating values for range widgets</li>
         </ul>
       </TileContent>
     </Tile>

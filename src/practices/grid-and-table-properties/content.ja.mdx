@@ -1,0 +1,163 @@
+## 概要
+
+グリッドとテーブルは構造化されたデータを表示するために使用されます。スクリーンリーダーユーザーがこのデータをナビゲートし理解するためには、適切なARIAプロパティで構造（行数・列数、ヘッダー、セルの関係）を伝える必要があります。このプラクティスでは、これらのプロパティを正しく設定する方法を説明します。
+
+## テーブル vs グリッドの使い分け
+
+| パターン     | 使用場面                                     | キーボード動作                   |
+| ------------ | -------------------------------------------- | -------------------------------- |
+| **table**    | 静的、読み取り専用のデータ                   | 標準のタブナビゲーション         |
+| **grid**     | インタラクティブなセル（編集可能、操作可能） | セル間を矢印キーでナビゲーション |
+| **treegrid** | 展開可能な行を持つ階層データ                 | 矢印キー + 展開/折りたたみ       |
+
+## 必須のARIAプロパティ
+
+### 行数と列数
+
+仮想スクロールや部分的なデータ表示を使用する場合：
+
+```html
+<div role="grid" aria-rowcount="1000" aria-colcount="5">
+  <!-- 10〜20行目のみ表示 -->
+  <div role="row" aria-rowindex="10">
+    <div role="gridcell" aria-colindex="1">...</div>
+  </div>
+</div>
+```
+
+| プロパティ      | 目的                          |
+| --------------- | ----------------------------- |
+| `aria-rowcount` | 行の総数（非表示を含む）      |
+| `aria-colcount` | 列の総数（非表示を含む）      |
+| `aria-rowindex` | 現在の行の位置（1始まり）     |
+| `aria-colindex` | 現在のセルの列位置（1始まり） |
+
+### セルの結合
+
+複数の行または列にまたがるセル：
+
+```html
+<div role="gridcell" aria-colspan="2">2列にまたがる</div>
+<div role="gridcell" aria-rowspan="3">3行にまたがる</div>
+```
+
+### ヘッダー
+
+`columnheader` と `rowheader` ロールを使用：
+
+```html
+<div role="grid">
+  <div role="row">
+    <div role="columnheader">名前</div>
+    <div role="columnheader">メール</div>
+  </div>
+  <div role="row">
+    <div role="rowheader">山田太郎</div>
+    <div role="gridcell">taro@example.com</div>
+  </div>
+</div>
+```
+
+## ネイティブHTMLテーブルの拡張
+
+ネイティブの `<table>` 要素を使用する場合、ほとんどのプロパティは暗黙的です：
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th scope="col">商品</th>
+      <!-- columnheader -->
+      <th scope="col">価格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">ウィジェット</th>
+      <!-- rowheader -->
+      <td>¥1,000</td>
+      <!-- cell -->
+    </tr>
+  </tbody>
+</table>
+```
+
+ARIAは必要な場合（仮想スクロール、動的更新）にのみ追加：
+
+```html
+<table aria-rowcount="500">
+  <tbody>
+    <tr aria-rowindex="50">
+      ...
+    </tr>
+  </tbody>
+</table>
+```
+
+## 実装のポイント
+
+### ソート状態
+
+ソート可能な列と現在のソート状態を示す：
+
+```html
+<div role="columnheader" aria-sort="ascending">名前 ↑</div>
+<div role="columnheader" aria-sort="none">メール</div>
+```
+
+| 値           | 意味                                   |
+| ------------ | -------------------------------------- |
+| `ascending`  | 昇順（A-Z、小→大）                     |
+| `descending` | 降順（Z-A、大→小）                     |
+| `none`       | ソート可能だが現在はソートされていない |
+| `other`      | 他のアルゴリズムでソート               |
+
+### 読み取り専用と無効状態
+
+```html
+<!-- 読み取り専用セル -->
+<div role="gridcell" aria-readonly="true">固定値</div>
+
+<!-- 無効なセル -->
+<div role="gridcell" aria-disabled="true">利用不可</div>
+```
+
+### 選択状態
+
+選択可能な行やセルを持つグリッド：
+
+```html
+<div role="grid" aria-multiselectable="true">
+  <div role="row" aria-selected="true">選択中の行</div>
+  <div role="row" aria-selected="false">選択されていない行</div>
+</div>
+```
+
+## よくある間違い
+
+### 行/列インデックスの欠落
+
+仮想スクロールを使用する場合、スクリーンリーダーがセルの位置を認識できるよう、常にインデックスを提供する：
+
+```html
+<!-- 悪い例: 位置情報がない -->
+<div role="row">...</div>
+
+<!-- 良い例: 明確な位置 -->
+<div role="row" aria-rowindex="50">...</div>
+```
+
+### ネイティブテーブルでの不正なscope
+
+```html
+<!-- 悪い例: scopeがない -->
+<th>名前</th>
+
+<!-- 良い例: 明示的なscope -->
+<th scope="col">名前</th>
+<th scope="row">太郎</th>
+```
+
+### 非インタラクティブなテーブルにgridを使用
+
+個々のセルとのインタラクションが不要な場合は、`grid` ロールではなく `table` ロールを使用して、キーボードナビゲーションの不要な複雑さを避ける。

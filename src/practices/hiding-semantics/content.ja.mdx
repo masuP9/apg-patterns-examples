@@ -1,0 +1,167 @@
+## 概要
+
+`presentation` ロール（およびその同義語 `none`）は、要素の暗黙的なARIAセマンティクスをアクセシビリティツリーから削除します。これは要素の視覚的な外観がセマンティックな意味と一致しない場合に便利ですが、支援技術ユーザーから重要な情報を隠さないよう注意して使用する必要があります。
+
+## presentation/none を使用するタイミング
+
+### 装飾的な画像
+
+コンテンツを伝えない画像：
+
+```html
+<!-- 装飾的な画像には空のaltが推奨 -->
+<img src="decorative-border.png" alt="" />
+
+<!-- または presentation ロールを使用 -->
+<img src="decorative-border.png" role="presentation" />
+```
+
+### レイアウトテーブル
+
+視覚的なレイアウトのみに使用されるテーブル：
+
+```html
+<table role="presentation">
+  <tr>
+    <td>左カラムのコンテンツ</td>
+    <td>右カラムのコンテンツ</td>
+  </tr>
+</table>
+```
+
+### 冗長なコンテナ要素
+
+親要素のロールが冗長な場合：
+
+```html
+<!-- スタイリングのために ul/li を使用したタブパネル -->
+<div role="tablist">
+  <ul role="presentation">
+    <li role="presentation">
+      <button role="tab">タブ1</button>
+    </li>
+    <li role="presentation">
+      <button role="tab">タブ2</button>
+    </li>
+  </ul>
+</div>
+```
+
+## presentation vs none
+
+これらのロールは同義です：
+
+```html
+<!-- 両方とも同等 -->
+<div role="presentation">...</div>
+<div role="none">...</div>
+```
+
+`role="none"` は意図を明確にするために導入されました。`role="presentation"` は古い支援技術でより広くサポートされています。
+
+## presentation/none が削除するもの
+
+| 要素      | 元のロール | presentation 後 |
+| --------- | ---------- | --------------- |
+| `<table>` | table      | none            |
+| `<ul>`    | list       | none            |
+| `<li>`    | listitem   | none            |
+| `<img>`   | img        | none            |
+
+**重要:** ロールは要素自体にのみ影響し、その子孫には影響しません（必須の子要素を除く）。
+
+### 必須の子要素も非表示になる
+
+一部のロールには自動的に非表示になる必須の子要素があります：
+
+```html
+<table role="presentation">
+  <!-- tbody, tr, td のロールも削除される -->
+  <!-- tableの必須の子要素であるため -->
+</table>
+
+<ul role="presentation">
+  <!-- li のロールも削除される -->
+  <!-- listitem は list の必須所有要素であるため -->
+</ul>
+```
+
+## presentation/none が非表示にできないもの
+
+### フォーカス可能な要素
+
+要素がフォーカス可能な場合、`role="presentation"` は無視されます：
+
+```html
+<!-- tabindex があるため role="presentation" は無視される -->
+<button role="presentation" tabindex="0">まだボタン</button>
+
+<!-- href付きのリンクはフォーカス可能 -->
+<a href="/page" role="presentation">まだリンク</a>
+```
+
+### グローバルARIA属性を持つ要素
+
+aria-label、aria-describedby、その他のグローバルARIA属性が存在する場合：
+
+```html
+<!-- role="presentation" は無視される -->
+<img role="presentation" aria-label="重要な情報" />
+```
+
+## 実装のポイント
+
+### 装飾的なアイコンボタンを非表示にする
+
+```html
+<button type="button" aria-label="閉じる">
+  <!-- アイコンは装飾的、ATから非表示 -->
+  <svg aria-hidden="true">...</svg>
+</button>
+```
+
+支援技術から完全に非表示にしたいコンテンツには、`role="presentation"` ではなく `aria-hidden="true"` を使用します。
+
+### 冗長なテキストを非表示にする
+
+```html
+<button>
+  <svg aria-hidden="true">...</svg>
+  <span class="visually-hidden">閉じる</span>
+  <!-- 可視テキスト「閉じる」がアクセシブルな名前を提供 -->
+  閉じる
+</button>
+```
+
+## よくある間違い
+
+### 意味のあるコンテンツを非表示にする
+
+```html
+<!-- 悪い例: 重要な画像を非表示にする -->
+<img src="chart.png" role="presentation" alt="売上チャート" />
+
+<!-- 良い例: 意味のある画像はアクセシブルに保つ -->
+<img src="chart.png" alt="20%成長を示す売上チャート" />
+```
+
+### インタラクティブ要素に presentation を使用
+
+```html
+<!-- 悪い例: ボタンのセマンティクスを非表示にしようとする -->
+<button role="presentation">クリック</button>
+
+<!-- ボタンはフォーカス可能なのでロールは無視される -->
+```
+
+### 完全な非表示に aria-hidden を忘れる
+
+```html
+<!-- これはまだアクセシビリティツリーに表示される -->
+<div role="presentation">テキストコンテンツ</div>
+
+<!-- これは完全に非表示 -->
+<div aria-hidden="true">テキストコンテンツ</div>
+```
+
+要素とそのコンテンツの両方を支援技術から非表示にしたい場合は `aria-hidden="true"` を使用します。

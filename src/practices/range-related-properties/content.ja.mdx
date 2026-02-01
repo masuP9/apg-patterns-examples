@@ -1,0 +1,168 @@
+## 概要
+
+範囲ウィジェットは、定義された範囲内の値を設定または表示するためのものです。ARIAは4種類のロールを定義しています：slider、spinbutton、scrollbar、meter。それぞれに、現在の値とその限界を支援技術に伝えるための特定のプロパティが必要です。
+
+## 範囲ウィジェットの種類
+
+| ロール         | 目的                           | ユーザー操作       |
+| -------------- | ------------------------------ | ------------------ |
+| **slider**     | 範囲から値を選択               | 矢印キー、ドラッグ |
+| **spinbutton** | 数値の入力/調整                | 矢印キー、入力     |
+| **scrollbar**  | スクロール位置の制御           | ドラッグ、矢印キー |
+| **meter**      | ゲージ値の表示（読み取り専用） | なし（表示のみ）   |
+
+## 必須のARIAプロパティ
+
+### すべての範囲ウィジェット共通
+
+```html
+<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="音量"></div>
+```
+
+| プロパティ       | 必須   | 説明                             |
+| ---------------- | ------ | -------------------------------- |
+| `aria-valuenow`  | はい   | 現在の値                         |
+| `aria-valuemin`  | はい\* | 最小値（\*meterでは暗黙的に0）   |
+| `aria-valuemax`  | はい\* | 最大値（\*meterでは暗黙的に100） |
+| `aria-valuetext` | いいえ | 人間が読める値のテキスト         |
+
+### 数値以外の値に対する aria-valuetext
+
+値が数字として意味をなさない場合：
+
+```html
+<!-- 時刻スライダー -->
+<div
+  role="slider"
+  aria-valuenow="120"
+  aria-valuemin="0"
+  aria-valuemax="480"
+  aria-valuetext="14:00"
+  aria-label="会議開始時刻"
+></div>
+
+<!-- 優先度スライダー -->
+<div
+  role="slider"
+  aria-valuenow="2"
+  aria-valuemin="1"
+  aria-valuemax="5"
+  aria-valuetext="優先度: 中"
+></div>
+```
+
+## ネイティブHTMLの代替
+
+まずネイティブHTML要素を検討する：
+
+```html
+<!-- ネイティブrangeインプット -->
+<label for="volume">音量</label>
+<input type="range" id="volume" min="0" max="100" value="50" />
+
+<!-- ネイティブnumberインプット（spinbuttonセマンティクス） -->
+<label for="quantity">数量</label>
+<input type="number" id="quantity" min="1" max="99" value="1" />
+
+<!-- ネイティブmeter -->
+<label for="disk-usage">ディスク使用量</label>
+<meter id="disk-usage" min="0" max="100" low="33" high="66" optimum="20" value="75">75%</meter>
+
+<!-- ネイティブprogress -->
+<label for="upload">アップロード進行状況</label>
+<progress id="upload" max="100" value="70">70%</progress>
+```
+
+## 実装のポイント
+
+### マルチサムスライダー
+
+複数のサム（つまみ）を持つスライダー（例：価格範囲）：
+
+```html
+<div role="group" aria-label="価格範囲">
+  <div
+    role="slider"
+    aria-label="最低価格"
+    aria-valuenow="20"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+  <div
+    role="slider"
+    aria-label="最高価格"
+    aria-valuenow="80"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+</div>
+```
+
+### 方向
+
+垂直スライダーの場合は方向を指定：
+
+```html
+<div
+  role="slider"
+  aria-orientation="vertical"
+  aria-valuenow="50"
+  aria-valuemin="0"
+  aria-valuemax="100"
+></div>
+```
+
+### 読み取り専用のメーター
+
+メーターは本質的に読み取り専用です。表示専用のゲージには `meter` ロールを使用：
+
+```html
+<div
+  role="meter"
+  aria-valuenow="75"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-label="バッテリー残量"
+>
+  75%
+</div>
+```
+
+## よくある間違い
+
+### 複雑な値に valuetext がない
+
+```html
+<!-- 悪い例: スクリーンリーダーが時刻として「50」と読み上げる -->
+<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="480" aria-label="時刻"></div>
+
+<!-- 良い例: スクリーンリーダーが「8:30」と読み上げる -->
+<div
+  role="slider"
+  aria-valuenow="50"
+  aria-valuemin="0"
+  aria-valuemax="480"
+  aria-valuetext="8:30"
+  aria-label="時刻"
+></div>
+```
+
+### min/max/now の不整合
+
+```html
+<!-- 悪い例: valuenow が範囲外 -->
+<div role="slider" aria-valuenow="150" aria-valuemin="0" aria-valuemax="100"></div>
+
+<!-- 良い例: valuenow が範囲内 -->
+<div role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+```
+
+### 読み取り専用の表示に slider を使用
+
+```html
+<!-- 悪い例: 表示専用の値に slider -->
+<div role="slider" aria-valuenow="75" aria-readonly="true"></div>
+
+<!-- 良い例: 表示専用のゲージに meter -->
+<div role="meter" aria-valuenow="75"></div>
+```

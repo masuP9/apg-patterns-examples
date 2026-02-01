@@ -1,0 +1,163 @@
+## Overview
+
+Grids and tables are used to present structured data. For screen reader users to navigate and understand this data, proper ARIA properties must convey the structure—row and column counts, headers, and cell relationships. This practice explains how to set these properties correctly.
+
+## When to Use Table vs Grid
+
+| Pattern      | Use When                                 | Keyboard Behavior                  |
+| ------------ | ---------------------------------------- | ---------------------------------- |
+| **table**    | Static, read-only data                   | Standard tab navigation            |
+| **grid**     | Interactive cells (editable, actionable) | Arrow key navigation between cells |
+| **treegrid** | Hierarchical data with expandable rows   | Arrow keys + expand/collapse       |
+
+## Essential ARIA Properties
+
+### Row and Column Counts
+
+When using virtual scrolling or showing partial data:
+
+```html
+<div role="grid" aria-rowcount="1000" aria-colcount="5">
+  <!-- Only showing rows 10-20 -->
+  <div role="row" aria-rowindex="10">
+    <div role="gridcell" aria-colindex="1">...</div>
+  </div>
+</div>
+```
+
+| Property        | Purpose                                    |
+| --------------- | ------------------------------------------ |
+| `aria-rowcount` | Total number of rows (including hidden)    |
+| `aria-colcount` | Total number of columns (including hidden) |
+| `aria-rowindex` | Current row's position (1-based)           |
+| `aria-colindex` | Current cell's column position (1-based)   |
+
+### Spanning Cells
+
+For cells that span multiple rows or columns:
+
+```html
+<div role="gridcell" aria-colspan="2">Spans 2 columns</div>
+<div role="gridcell" aria-rowspan="3">Spans 3 rows</div>
+```
+
+### Headers
+
+Use `columnheader` and `rowheader` roles:
+
+```html
+<div role="grid">
+  <div role="row">
+    <div role="columnheader">Name</div>
+    <div role="columnheader">Email</div>
+  </div>
+  <div role="row">
+    <div role="rowheader">John Doe</div>
+    <div role="gridcell">john@example.com</div>
+  </div>
+</div>
+```
+
+## Native HTML Table Enhancement
+
+When using native `<table>` elements, most properties are implicit:
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <!-- columnheader -->
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Widget</th>
+      <!-- rowheader -->
+      <td>$10.00</td>
+      <!-- cell -->
+    </tr>
+  </tbody>
+</table>
+```
+
+Add ARIA only when needed (virtual scrolling, dynamic updates):
+
+```html
+<table aria-rowcount="500">
+  <tbody>
+    <tr aria-rowindex="50">
+      ...
+    </tr>
+  </tbody>
+</table>
+```
+
+## Implementation Tips
+
+### Sort State
+
+Indicate sortable columns and current sort:
+
+```html
+<div role="columnheader" aria-sort="ascending">Name ↑</div>
+<div role="columnheader" aria-sort="none">Email</div>
+```
+
+| Value        | Meaning                           |
+| ------------ | --------------------------------- |
+| `ascending`  | Sorted A-Z, low to high           |
+| `descending` | Sorted Z-A, high to low           |
+| `none`       | Sortable but not currently sorted |
+| `other`      | Sorted by other algorithm         |
+
+### Read-only and Disabled States
+
+```html
+<!-- Read-only cell -->
+<div role="gridcell" aria-readonly="true">Fixed value</div>
+
+<!-- Disabled cell -->
+<div role="gridcell" aria-disabled="true">Unavailable</div>
+```
+
+### Selection State
+
+For grids with selectable rows or cells:
+
+```html
+<div role="grid" aria-multiselectable="true">
+  <div role="row" aria-selected="true">Selected row</div>
+  <div role="row" aria-selected="false">Not selected</div>
+</div>
+```
+
+## Common Pitfalls
+
+### Missing Row/Column Indices
+
+When using virtual scrolling, always provide indices so screen readers know the cell's position:
+
+```html
+<!-- Bad: No position information -->
+<div role="row">...</div>
+
+<!-- Good: Clear position -->
+<div role="row" aria-rowindex="50">...</div>
+```
+
+### Incorrect Scope in Native Tables
+
+```html
+<!-- Bad: Missing scope -->
+<th>Name</th>
+
+<!-- Good: Explicit scope -->
+<th scope="col">Name</th>
+<th scope="row">John</th>
+```
+
+### Using Grid for Non-interactive Tables
+
+If users don't need to interact with individual cells, use `table` role instead of `grid` to avoid unnecessary complexity in keyboard navigation.

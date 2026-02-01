@@ -24,3 +24,6 @@ export { ui, type UIKey, useTranslation, t } from './ui';
 
 // Pattern translations
 export { getPatternTranslation, getPatternName, getPatternDescription } from './patterns';
+
+// Practice translations
+export { getPracticeTranslation, getPracticeName, getPracticeDescription } from './practices';

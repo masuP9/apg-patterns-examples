@@ -348,7 +348,7 @@ export function PatternSearch({
         <kbd
           className={cn(
             'pointer-events-none absolute top-1/2 right-2 -translate-y-1/2',
-            'bg-muted text-muted-foreground hidden h-5 items-center gap-0.5 rounded border px-1.5 font-mono text-[10px] font-medium select-none sm:flex'
+            'flex bg-muted text-muted-foreground h-5 items-center gap-0.5 rounded border px-1.5 font-mono text-[10px] font-medium select-none'
           )}
         >
           {isMac ? (

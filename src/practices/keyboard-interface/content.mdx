@@ -1,0 +1,343 @@
+## Overview
+
+Keyboard accessibility is essential for users who cannot use a mouse, including people with motor disabilities, blind users, and power users who prefer keyboard navigation. Unlike native HTML form elements, browsers do not provide built-in keyboard support for custom widgets—authors must implement it themselves.
+
+## Focus Management Fundamentals
+
+### Making Elements Focusable
+
+```html
+<!-- Native focusable elements -->
+<button>Click me</button>
+<a href="/page">Link</a>
+<input type="text" />
+
+<!-- Making non-focusable elements focusable -->
+<div role="button" tabindex="0">Custom button</div>
+
+<!-- Removing from tab order (but still programmatically focusable) -->
+<div tabindex="-1">Focusable via JavaScript only</div>
+```
+
+### tabindex Values
+
+| Value           | Behavior                                      |
+| --------------- | --------------------------------------------- |
+| `tabindex="0"`  | Included in tab order at its DOM position     |
+| `tabindex="-1"` | Focusable via JavaScript but not in tab order |
+| `tabindex="1+"` | **Avoid** - Creates confusing tab order       |
+
+## Keyboard Navigation Patterns
+
+### Roving tabindex
+
+For composite widgets like toolbars, tablists, and menus, the entire group is treated as a single Tab stop. Users press Tab to enter the group, arrow keys to navigate within, and Tab again to move to the next widget.
+
+#### Core Principle
+
+- Only **one element** in the group has `tabindex="0"`
+- All other elements have `tabindex="-1"`
+- When focus moves via arrow keys, swap the `tabindex` values
+
+```html
+<!-- Initial state: only first button has tabindex="0" -->
+<div role="toolbar" aria-label="Text formatting">
+  <button tabindex="0">Bold</button>
+  <button tabindex="-1">Italic</button>
+  <button tabindex="-1">Underline</button>
+</div>
+
+<!-- After pressing → key: second button now has tabindex="0" -->
+<div role="toolbar" aria-label="Text formatting">
+  <button tabindex="-1">Bold</button>
+  <button tabindex="0">Italic</button>
+  <!-- focus is here -->
+  <button tabindex="-1">Underline</button>
+</div>
+```
+
+#### Implementation Pattern
+
+```javascript
+class RovingTabIndex {
+  constructor(container, selector) {
+    this.items = [...container.querySelectorAll(selector)];
+    this.currentIndex = 0;
+    this.init();
+  }
+
+  init() {
+    // First element gets tabindex="0", others get tabindex="-1"
+    this.items.forEach((item, index) => {
+      item.setAttribute('tabindex', index === 0 ? '0' : '-1');
+    });
+
+    // Set up keyboard events
+    this.items.forEach((item) => {
+      item.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    });
+  }
+
+  handleKeyDown(event) {
+    let newIndex = this.currentIndex;
+
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        newIndex = (this.currentIndex + 1) % this.items.length; // wrap around
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        newIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+        break;
+      case 'Home':
+        newIndex = 0;
+        break;
+      case 'End':
+        newIndex = this.items.length - 1;
+        break;
+      default:
+        return; // don't handle other keys
+    }
+
+    event.preventDefault();
+    this.moveFocus(newIndex);
+  }
+
+  moveFocus(newIndex) {
+    // Remove current element from tab order
+    this.items[this.currentIndex].setAttribute('tabindex', '-1');
+
+    // Add new element to tab order and focus it
+    this.currentIndex = newIndex;
+    this.items[this.currentIndex].setAttribute('tabindex', '0');
+    this.items[this.currentIndex].focus();
+  }
+}
+```
+
+#### Why Roving tabindex?
+
+If every element in a composite widget had `tabindex="0"`, users would Tab through each one individually. A tablist with 10 tabs would require 10 Tab presses to reach the next section.
+
+With roving tabindex:
+
+- **Tab**: Skip the entire widget in one step
+- **Arrow keys**: Fine-grained navigation within the widget
+
+This separation allows keyboard users to navigate pages efficiently.
+
+### Focus Trap for Modals
+
+Keep focus within modal dialogs:
+
+```javascript
+// On modal open:
+// 1. Save the element that had focus
+// 2. Move focus to the first focusable element in modal
+// 3. Trap Tab/Shift+Tab within modal
+// 4. On close, restore focus to saved element
+```
+
+## Essential Key Bindings
+
+| Key               | Common Action                      |
+| ----------------- | ---------------------------------- |
+| `Enter` / `Space` | Activate buttons, select options   |
+| `Arrow keys`      | Navigate within composites         |
+| `Escape`          | Close dialogs, cancel operations   |
+| `Home` / `End`    | Jump to first/last item            |
+| `Tab`             | Move to next focusable element     |
+| `Shift + Tab`     | Move to previous focusable element |
+
+## Implementing Shortcut Keys
+
+Adding keyboard shortcuts can improve efficiency for power users. However, improper implementation can cause accessibility issues.
+
+### Combining with Modifier Keys
+
+Shortcuts typically combine modifier keys (Ctrl, Alt, Shift) with other keys:
+
+```javascript
+document.addEventListener('keydown', (event) => {
+  // Ctrl+S to save
+  if (event.ctrlKey && event.key === 's') {
+    event.preventDefault();
+    saveDocument();
+  }
+
+  // Ctrl+Shift+P to open command palette
+  if (event.ctrlKey && event.shiftKey && event.key === 'p') {
+    event.preventDefault();
+    openCommandPalette();
+  }
+});
+```
+
+### Avoiding Conflicts
+
+Be careful not to conflict with browser, OS, or assistive technology shortcuts:
+
+| Keys to Avoid | Reason                        |
+| ------------- | ----------------------------- |
+| `Ctrl+N/T/W`  | Browser tab/window operations |
+| `Ctrl+P`      | Print dialog                  |
+| `Ctrl+F`      | Find in page                  |
+| `Alt+letter`  | Menu bar access               |
+| `F1` - `F12`  | Browser or OS functions       |
+
+### The aria-keyshortcuts Attribute
+
+Use `aria-keyshortcuts` to communicate shortcuts to assistive technology:
+
+```html
+<button aria-keyshortcuts="Control+S" onclick="save()">Save</button>
+
+<button aria-keyshortcuts="Control+Shift+P" onclick="openPalette()">Command Palette</button>
+```
+
+**Notation rules:**
+
+- Use `Control`, `Alt`, `Shift`, `Meta` for modifier keys
+- Join keys with `+`
+- Separate multiple shortcuts with space
+
+### Problems with accesskey
+
+Avoid using HTML's `accesskey` attribute:
+
+```html
+<!-- Not recommended -->
+<button accesskey="s">Save</button>
+```
+
+Issues:
+
+- Modifier keys vary by browser and OS (Alt, Alt+Shift, Ctrl+Alt, etc.)
+- Easily conflicts with existing shortcuts
+- Hard for users to discover
+- Internationalization issues (key positions vary by keyboard layout)
+
+### Shortcut Discoverability
+
+Help users discover shortcuts:
+
+```html
+<!-- Show shortcuts in tooltips or labels -->
+<button title="Save (Ctrl+S)">
+  💾 Save
+  <kbd class="shortcut">Ctrl+S</kbd>
+</button>
+
+<!-- Provide a keyboard shortcuts reference -->
+<dialog id="shortcuts-help">
+  <h2>Keyboard Shortcuts</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd>+<kbd>S</kbd></dt>
+    <dd>Save document</dd>
+    <dt><kbd>Ctrl</kbd>+<kbd>Z</kbd></dt>
+    <dd>Undo</dd>
+  </dl>
+</dialog>
+```
+
+### Single-key Shortcut Considerations
+
+Single-key shortcuts without modifiers (e.g., `?` for help) can cause problems:
+
+- Voice input users may accidentally trigger commands
+- Can be triggered while typing in text fields
+
+WCAG 2.1 Success Criterion 2.1.4 requires single-key shortcuts to either:
+
+1. Be able to be turned off
+2. Be remappable to different keys
+3. Only be active when the component has focus
+
+```javascript
+// Example: shortcut only active when element has focus
+toolbar.addEventListener('keydown', (event) => {
+  if (event.key === 'b' && !event.ctrlKey && !event.altKey) {
+    event.preventDefault();
+    toggleBold();
+  }
+});
+```
+
+## Implementation Tips
+
+### Visual Focus Indicator
+
+Always provide a visible focus indicator:
+
+```css
+/* Never do this without an alternative */
+:focus {
+  outline: none;
+}
+
+/* Provide a clear focus style */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+```
+
+### Keyboard Event Handling
+
+```javascript
+element.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case 'Enter':
+    case ' ': // Space
+      event.preventDefault();
+      activateElement();
+      break;
+    case 'ArrowDown':
+      event.preventDefault();
+      focusNextItem();
+      break;
+    case 'ArrowUp':
+      event.preventDefault();
+      focusPreviousItem();
+      break;
+  }
+});
+```
+
+### Prevent Scroll on Space
+
+When Space activates an element, prevent default scrolling:
+
+```javascript
+if (event.key === ' ') {
+  event.preventDefault();
+  // Handle activation
+}
+```
+
+## Common Pitfalls
+
+### Mouse-only Interactions
+
+```html
+<!-- Bad: Only works with mouse -->
+<div onclick="showMenu()">Menu</div>
+
+<!-- Good: Works with keyboard too -->
+<button type="button" onclick="showMenu()">Menu</button>
+```
+
+### Focus Moving Off-screen
+
+Ensure focus never moves to hidden or off-screen elements. When hiding content:
+
+```javascript
+// Before hiding, move focus to a visible element
+focusElement.focus();
+hiddenElement.hidden = true;
+```
+
+### Ignoring Screen Orientation
+
+Support both horizontal and vertical arrow key navigation where appropriate, especially for widgets that may be oriented differently.

@@ -1,0 +1,343 @@
+## 概要
+
+キーボードアクセシビリティは、マウスを使用できないユーザーにとって不可欠です。これには運動障害のある人、視覚障害のあるユーザー、キーボードナビゲーションを好むパワーユーザーが含まれます。ネイティブHTMLフォーム要素とは異なり、ブラウザはカスタムウィジェットに対して組み込みのキーボードサポートを提供しないため、開発者が自ら実装する必要があります。
+
+## フォーカス管理の基本
+
+### 要素をフォーカス可能にする
+
+```html
+<!-- ネイティブでフォーカス可能な要素 -->
+<button>クリック</button>
+<a href="/page">リンク</a>
+<input type="text" />
+
+<!-- フォーカス不可能な要素をフォーカス可能にする -->
+<div role="button" tabindex="0">カスタムボタン</div>
+
+<!-- タブ順序から除外（JavaScriptでのみフォーカス可能） -->
+<div tabindex="-1">JavaScriptでのみフォーカス可能</div>
+```
+
+### tabindex の値
+
+| 値            | 動作                                                 |
+| ------------- | ---------------------------------------------------- |
+| `0`           | DOM上の位置でタブ順序に含まれる                      |
+| `-1`          | JavaScriptでフォーカス可能だがタブ順序には含まれない |
+| `1`以上の整数 | **避けるべき** - 混乱するタブ順序を作成する          |
+
+## キーボードナビゲーションパターン
+
+### ロービング tabindex
+
+ツールバー、タブリスト、メニューなどの複合ウィジェットでは、グループ全体を1つの Tab ストップとして扱います。ユーザーは Tab でグループに入り、矢印キーでグループ内を移動し、再度 Tab で次のウィジェットへ移動します。
+
+#### 基本原則
+
+- グループ内で **1つの要素だけ** が `tabindex="0"` を持つ
+- 他のすべての要素は `tabindex="-1"` を持つ
+- 矢印キーでフォーカスが移動するたびに、`tabindex` の値を入れ替える
+
+```html
+<!-- 初期状態：最初のボタンのみ tabindex="0" -->
+<div role="toolbar" aria-label="テキスト書式設定">
+  <button tabindex="0">太字</button>
+  <button tabindex="-1">斜体</button>
+  <button tabindex="-1">下線</button>
+</div>
+
+<!-- → キーを押した後：2番目のボタンが tabindex="0" に -->
+<div role="toolbar" aria-label="テキスト書式設定">
+  <button tabindex="-1">太字</button>
+  <button tabindex="0">斜体</button>
+  <!-- フォーカスがここに -->
+  <button tabindex="-1">下線</button>
+</div>
+```
+
+#### 実装パターン
+
+```javascript
+class RovingTabIndex {
+  constructor(container, selector) {
+    this.items = [...container.querySelectorAll(selector)];
+    this.currentIndex = 0;
+    this.init();
+  }
+
+  init() {
+    // 最初の要素のみ tabindex="0"、他は tabindex="-1"
+    this.items.forEach((item, index) => {
+      item.setAttribute('tabindex', index === 0 ? '0' : '-1');
+    });
+
+    // キーボードイベントを設定
+    this.items.forEach((item) => {
+      item.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    });
+  }
+
+  handleKeyDown(event) {
+    let newIndex = this.currentIndex;
+
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        newIndex = (this.currentIndex + 1) % this.items.length; // 循環
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        newIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+        break;
+      case 'Home':
+        newIndex = 0;
+        break;
+      case 'End':
+        newIndex = this.items.length - 1;
+        break;
+      default:
+        return; // 他のキーは処理しない
+    }
+
+    event.preventDefault();
+    this.moveFocus(newIndex);
+  }
+
+  moveFocus(newIndex) {
+    // 現在の要素を tabindex="-1" に
+    this.items[this.currentIndex].setAttribute('tabindex', '-1');
+
+    // 新しい要素を tabindex="0" にしてフォーカス
+    this.currentIndex = newIndex;
+    this.items[this.currentIndex].setAttribute('tabindex', '0');
+    this.items[this.currentIndex].focus();
+  }
+}
+```
+
+#### なぜ roving tabindex が必要か
+
+複合ウィジェット内のすべての要素が `tabindex="0"` だと、ユーザーは各要素を個別に Tab で移動する必要があります。10個のタブがあるタブリストでは、次のセクションに移動するために10回 Tab を押すことになります。
+
+roving tabindex により：
+
+- **Tab**: ウィジェット全体を1ステップでスキップ
+- **矢印キー**: ウィジェット内の細かいナビゲーション
+
+この分離により、キーボードユーザーは効率的にページをナビゲートできます。
+
+### モーダル用のフォーカストラップ
+
+モーダルダイアログ内にフォーカスを閉じ込める：
+
+```javascript
+// モーダルを開くとき：
+// 1. フォーカスがあった要素を保存
+// 2. モーダル内の最初のフォーカス可能な要素にフォーカスを移動
+// 3. Tab/Shift+Tab をモーダル内に閉じ込める
+// 4. 閉じるとき、保存した要素にフォーカスを戻す
+```
+
+## 必須のキーバインディング
+
+| キー              | 一般的なアクション                   |
+| ----------------- | ------------------------------------ |
+| `Enter` / `Space` | ボタンの有効化、オプションの選択     |
+| 矢印キー          | 複合ウィジェット内のナビゲーション   |
+| `Escape`          | ダイアログを閉じる、操作をキャンセル |
+| `Home` / `End`    | 最初/最後のアイテムへジャンプ        |
+| `Tab`             | 次のフォーカス可能な要素へ移動       |
+| `Shift + Tab`     | 前のフォーカス可能な要素へ移動       |
+
+## ショートカットキーの実装
+
+アプリケーションにショートカットキーを追加することで、パワーユーザーの操作効率を向上させることができます。ただし、適切に実装しないとアクセシビリティの問題を引き起こす可能性があります。
+
+### 修飾キーとの組み合わせ
+
+ショートカットキーは通常、修飾キー（Ctrl、Alt、Shift）と組み合わせて使用します：
+
+```javascript
+document.addEventListener('keydown', (event) => {
+  // Ctrl+S で保存
+  if (event.ctrlKey && event.key === 's') {
+    event.preventDefault();
+    saveDocument();
+  }
+
+  // Ctrl+Shift+P でコマンドパレットを開く
+  if (event.ctrlKey && event.shiftKey && event.key === 'p') {
+    event.preventDefault();
+    openCommandPalette();
+  }
+});
+```
+
+### 競合を避ける
+
+ブラウザやOS、支援技術のショートカットと競合しないよう注意が必要です：
+
+| 避けるべきキー | 理由                          |
+| -------------- | ----------------------------- |
+| `Ctrl+N/T/W`   | ブラウザのタブ/ウィンドウ操作 |
+| `Ctrl+P`       | 印刷ダイアログ                |
+| `Ctrl+F`       | ページ内検索                  |
+| `Alt+文字`     | メニューバーアクセス          |
+| `F1` - `F12`   | ブラウザやOSの機能            |
+
+### aria-keyshortcuts 属性
+
+ショートカットキーを支援技術に伝えるために `aria-keyshortcuts` を使用します：
+
+```html
+<button aria-keyshortcuts="Control+S" onclick="save()">保存</button>
+
+<button aria-keyshortcuts="Control+Shift+P" onclick="openPalette()">コマンドパレット</button>
+```
+
+**記法のルール：**
+
+- 修飾キーは `Control`、`Alt`、`Shift`、`Meta` を使用
+- キーは `+` で連結
+- 複数のショートカットは空白で区切る
+
+### accesskey 属性の問題点
+
+HTML の `accesskey` 属性は避けることを推奨します：
+
+```html
+<!-- 推奨されない -->
+<button accesskey="s">保存</button>
+```
+
+問題点：
+
+- ブラウザやOSによって修飾キーが異なる（Alt、Alt+Shift、Ctrl+Alt など）
+- 既存のショートカットと競合しやすい
+- ユーザーがショートカットを発見しにくい
+- 国際化の問題（キーボードレイアウトによってキーの位置が異なる）
+
+### ショートカットの発見可能性
+
+ユーザーがショートカットを見つけられるよう、以下の方法を検討してください：
+
+```html
+<!-- ツールチップやラベルにショートカットを表示 -->
+<button title="保存 (Ctrl+S)">
+  💾 保存
+  <kbd class="shortcut">Ctrl+S</kbd>
+</button>
+
+<!-- キーボードショートカット一覧を提供 -->
+<dialog id="shortcuts-help">
+  <h2>キーボードショートカット</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd>+<kbd>S</kbd></dt>
+    <dd>ドキュメントを保存</dd>
+    <dt><kbd>Ctrl</kbd>+<kbd>Z</kbd></dt>
+    <dd>元に戻す</dd>
+  </dl>
+</dialog>
+```
+
+### 単一キーショートカットの注意点
+
+修飾キーなしの単一キーショートカット（例：`?` でヘルプ表示）は、以下の場合に問題を引き起こします：
+
+- 音声入力ユーザーが意図せずコマンドを実行してしまう
+- テキスト入力中に誤ってトリガーされる
+
+WCAG 2.1 の達成基準 2.1.4 では、単一キーショートカットには以下のいずれかが必要です：
+
+1. ショートカットをオフにできる
+2. 別のキーにリマップできる
+3. フォーカスがコンポーネント上にあるときのみ有効
+
+```javascript
+// フォーカスがある要素でのみショートカットを有効にする例
+toolbar.addEventListener('keydown', (event) => {
+  if (event.key === 'b' && !event.ctrlKey && !event.altKey) {
+    event.preventDefault();
+    toggleBold();
+  }
+});
+```
+
+## 実装のポイント
+
+### 可視フォーカスインジケーター
+
+常に可視のフォーカスインジケーターを提供する：
+
+```css
+/* 代替手段なしにこれを行わない */
+:focus {
+  outline: none;
+}
+
+/* 明確なフォーカススタイルを提供 */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+```
+
+### キーボードイベントの処理
+
+```javascript
+element.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case 'Enter':
+    case ' ': // Space
+      event.preventDefault();
+      activateElement();
+      break;
+    case 'ArrowDown':
+      event.preventDefault();
+      focusNextItem();
+      break;
+    case 'ArrowUp':
+      event.preventDefault();
+      focusPreviousItem();
+      break;
+  }
+});
+```
+
+### スペースキーでのスクロールを防止
+
+スペースキーで要素をアクティブにする際、デフォルトのスクロールを防止する：
+
+```javascript
+if (event.key === ' ') {
+  event.preventDefault();
+  // アクティベーションを処理
+}
+```
+
+## よくある間違い
+
+### マウス専用のインタラクション
+
+```html
+<!-- 悪い例: マウスでのみ動作 -->
+<div onclick="showMenu()">メニュー</div>
+
+<!-- 良い例: キーボードでも動作 -->
+<button type="button" onclick="showMenu()">メニュー</button>
+```
+
+### フォーカスが画面外に移動
+
+フォーカスが非表示または画面外の要素に移動しないようにする。コンテンツを非表示にする際：
+
+```javascript
+// 非表示にする前に、可視要素にフォーカスを移動
+focusElement.focus();
+hiddenElement.hidden = true;
+```
+
+### 画面の向きを無視
+
+適切な場合は、水平方向と垂直方向の両方の矢印キーナビゲーションをサポートする。特に、異なる向きで表示される可能性のあるウィジェットの場合。

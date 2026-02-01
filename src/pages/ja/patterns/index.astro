@@ -32,9 +32,9 @@ const patterns = getPatterns();
             >
               <TileContent class="flex flex-row items-start gap-4">
                 <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
-                  {pattern.icon}
+                  <span class="translate-y-[-0.1em]">{pattern.icon}</span>
                 </div>
-                <div class="flex-1">
+                <div class="flex flex-1 flex-col gap-2">
                   <TileTitle>{getPatternName(pattern.id, pattern.name, locale)}</TileTitle>
                   <TileDescription>
                     {getPatternDescription(pattern.id, pattern.description, locale)}

@@ -1,0 +1,167 @@
+## Overview
+
+The `presentation` role (and its synonym `none`) removes the implicit ARIA semantics of an element from the accessibility tree. This can be useful when an element's visual appearance doesn't match its semantic meaning, but it must be used carefully to avoid hiding important information from assistive technology users.
+
+## When to Use presentation/none
+
+### Decorative Images
+
+Images that don't convey content:
+
+```html
+<!-- Empty alt is preferred for decorative images -->
+<img src="decorative-border.png" alt="" />
+
+<!-- Or use presentation role -->
+<img src="decorative-border.png" role="presentation" />
+```
+
+### Layout Tables
+
+Tables used only for visual layout:
+
+```html
+<table role="presentation">
+  <tr>
+    <td>Left column content</td>
+    <td>Right column content</td>
+  </tr>
+</table>
+```
+
+### Redundant Container Elements
+
+When a parent element's role is redundant:
+
+```html
+<!-- Tab panels using ul/li for styling -->
+<div role="tablist">
+  <ul role="presentation">
+    <li role="presentation">
+      <button role="tab">Tab 1</button>
+    </li>
+    <li role="presentation">
+      <button role="tab">Tab 2</button>
+    </li>
+  </ul>
+</div>
+```
+
+## presentation vs none
+
+These roles are synonymous:
+
+```html
+<!-- Both are equivalent -->
+<div role="presentation">...</div>
+<div role="none">...</div>
+```
+
+`role="none"` was introduced to clarify intent. `role="presentation"` is more widely supported in older assistive technology.
+
+## What presentation/none Removes
+
+| Element   | Original Role | After presentation |
+| --------- | ------------- | ------------------ |
+| `<table>` | table         | none               |
+| `<ul>`    | list          | none               |
+| `<li>`    | listitem      | none               |
+| `<img>`   | img           | none               |
+
+**Important:** The role only affects the element itself, not its descendants (except for required children).
+
+### Required Children Are Also Hidden
+
+Some roles have required children that are automatically hidden:
+
+```html
+<table role="presentation">
+  <!-- tbody, tr, td roles are also removed -->
+  <!-- because they're required children of table -->
+</table>
+
+<ul role="presentation">
+  <!-- li roles are also removed -->
+  <!-- because listitem is a required owned element of list -->
+</ul>
+```
+
+## What presentation/none Cannot Hide
+
+### Focusable Elements
+
+If an element is focusable, `role="presentation"` is ignored:
+
+```html
+<!-- role="presentation" is ignored because of tabindex -->
+<button role="presentation" tabindex="0">Still a button</button>
+
+<!-- Links with href are focusable -->
+<a href="/page" role="presentation">Still a link</a>
+```
+
+### Elements with Global ARIA Attributes
+
+If aria-label, aria-describedby, or other global ARIA attributes are present:
+
+```html
+<!-- role="presentation" is ignored -->
+<img role="presentation" aria-label="Important info" />
+```
+
+## Implementation Tips
+
+### Hiding Decorative Icon Buttons
+
+```html
+<button type="button" aria-label="Close">
+  <!-- Icon is decorative, hide from AT -->
+  <svg aria-hidden="true">...</svg>
+</button>
+```
+
+Use `aria-hidden="true"` instead of `role="presentation"` for content that should be completely hidden from assistive technology.
+
+### Hiding Redundant Text
+
+```html
+<button>
+  <svg aria-hidden="true">...</svg>
+  <span class="visually-hidden">Close</span>
+  <!-- Visible text "Close" provides the accessible name -->
+  Close
+</button>
+```
+
+## Common Pitfalls
+
+### Hiding Meaningful Content
+
+```html
+<!-- Bad: Hiding important image -->
+<img src="chart.png" role="presentation" alt="Sales chart" />
+
+<!-- Good: Keep meaningful images accessible -->
+<img src="chart.png" alt="Sales chart showing 20% growth" />
+```
+
+### Using presentation on Interactive Elements
+
+```html
+<!-- Bad: Trying to hide button semantics -->
+<button role="presentation">Click me</button>
+
+<!-- The role is ignored because button is focusable -->
+```
+
+### Forgetting aria-hidden for Complete Hiding
+
+```html
+<!-- This still appears in accessibility tree -->
+<div role="presentation">Text content</div>
+
+<!-- This is completely hidden -->
+<div aria-hidden="true">Text content</div>
+```
+
+Use `aria-hidden="true"` when you want to hide both the element and its content from assistive technology.
