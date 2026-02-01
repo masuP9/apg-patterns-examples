@@ -9,9 +9,10 @@ const locale = 'ja';
 const t = useTranslation(locale);
 
 const practices = getPractices();
+const ogImage = withBase('/og-images/practices.png');
 ---
 
-<BaseLayout title={t('practices.title')} locale={locale}>
+<BaseLayout title={t('practices.title')} locale={locale} ogImage={ogImage}>
   <div class="mx-auto max-w-4xl">
     <header class="mb-8">
       <h1 class="mb-4 text-3xl font-bold">APG プラクティス</h1>

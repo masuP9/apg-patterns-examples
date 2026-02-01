@@ -50,7 +50,7 @@ const ogImageUrl = ogImage
   : new URL(withBase('/og-image.png'), siteUrl).toString();
 const ogLocale = locale === 'ja' ? 'ja_JP' : 'en_US';
 const siteName = 'APG Patterns Examples';
-const fullTitle = `${title} | ${siteName}`;
+const fullTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [

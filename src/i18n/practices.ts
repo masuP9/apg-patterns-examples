@@ -37,9 +37,9 @@ const practiceTranslations: Record<Locale, PracticeTranslations> = {
         'グリッドやテーブルの構造と関係性を完全に伝えるために、制作者は ARIA の行と列のプロパティが正しく設定されていることを確認する必要があります。',
     },
     'range-related-properties': {
-      name: '範囲ウィジェットの値と限界の伝達',
+      name: '範囲ウィジェットの値と範囲の伝達',
       description:
-        'ARIA は4種類の範囲ウィジェットのロールを定義しています: scrollbar、slider、spinbutton、meter。',
+        'slider や spinbutton などの範囲ウィジェットでは、現在の値とその範囲を支援技術に伝えるための ARIA プロパティが必要です。',
     },
     'structural-roles': {
       name: '構造的ロール',
@@ -47,7 +47,7 @@ const practiceTranslations: Record<Locale, PracticeTranslations> = {
         '構造的ロールは、ページの構造を記述するために使用され、通常はドキュメントコンテンツに使用されます。',
     },
     'hiding-semantics': {
-      name: 'presentation ロールによるセマンティクスの非表示',
+      name: 'presentation ロールによるセマンティクスの無効化',
       description:
         'presentation ロールは、コンテンツを表示したまま、暗黙の ARIA セマンティクスをアクセシビリティツリーから削除します。',
     },

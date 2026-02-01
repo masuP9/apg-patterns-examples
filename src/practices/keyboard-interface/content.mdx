@@ -4,6 +4,12 @@ Keyboard accessibility is essential for users who cannot use a mouse, including 
 
 ## Focus Management Fundamentals
 
+There are three key principles for managing keyboard focus effectively:
+
+- **Visibility of the focus indicator**: Users must be able to easily distinguish where the focus is. Using browser default focus indicators is recommended.
+- **Persistence of focus**: There should always be an element that has focus. When closing dialogs or deleting items, focus must be moved to an appropriate element.
+- **Predictability of movement**: Users should be able to easily guess where focus will land next. Movement patterns that follow reading order and consistency within sections are important.
+
 ### Making Elements Focusable
 
 ```html
@@ -26,6 +32,44 @@ Keyboard accessibility is essential for users who cannot use a mouse, including 
 | `0`                      | Included in tab order at its DOM position     |
 | `-1`                     | Focusable via JavaScript but not in tab order |
 | Positive integers (`1`+) | **Avoid** - Creates confusing tab order       |
+
+### Focus vs Selection
+
+Focus and selection are different concepts. Focus indicates "the element currently being operated on" and only one element can have focus at a time. Selection state (`aria-selected="true"`), on the other hand, can be held by multiple elements simultaneously.
+
+In widgets like listboxes, trees, and tablists, focus and selection can exist separately. For example, in a multi-select listbox, multiple items can maintain their selected state while focus moves to a different item.
+
+Visually, it's important to clearly distinguish between the focus indicator and selection state styles.
+
+### Deciding When Selection Follows Focus
+
+For single-selection widgets (tablists, single-select listboxes, etc.), there's a "selection follows focus" pattern where selection state automatically changes when focus moves.
+
+**When appropriate:**
+
+- Tab panels already exist in the DOM and can be displayed immediately
+- Users want to quickly review options
+
+**When not appropriate:**
+
+- Panel display requires network requests or page refresh
+- Selection changes involve heavy processing
+
+When selection follows focus is not appropriate, adopt a pattern where users explicitly change selection with Enter or Space key.
+
+### Focusability of Disabled Controls
+
+By default, HTML disabled elements are excluded from the tab order. However, within composite widgets, it's often recommended to keep disabled elements focusable.
+
+| Element Type        | Recommendation When Disabled |
+| ------------------- | ---------------------------- |
+| Standalone elements | Make non-focusable           |
+| Listbox options     | Keep focusable               |
+| Menu items          | Keep focusable               |
+| Tabs                | Keep focusable               |
+| Tree items          | Keep focusable               |
+
+Keeping disabled elements focusable allows screen reader users to recognize their existence and disabled state. On the other hand, making them non-focusable reduces keystrokes but may hide the element's existence.
 
 ## Keyboard Navigation Patterns
 

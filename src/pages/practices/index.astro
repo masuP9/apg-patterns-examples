@@ -5,9 +5,10 @@ import { getPractices } from '@/lib/practices';
 import { withBase } from '@/lib/utils';
 
 const practices = getPractices();
+const ogImage = withBase('/og-images/practices.png');
 ---
 
-<BaseLayout title="Practices">
+<BaseLayout title="Practices" ogImage={ogImage}>
   <div class="mx-auto max-w-4xl">
     <header class="mb-8">
       <h1 class="mb-4 text-3xl font-bold">APG Practices</h1>

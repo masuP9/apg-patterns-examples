@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import { PracticeSidebar } from '@/components/ui/practice-sidebar';
 import { TableOfContents, type TocItem } from '@/components/ui/toc';
 import { type Locale, getLocaleFromUrl } from '@/i18n';
+import { withBase } from '@/lib/utils';
 
 interface Props {
   title: string;
@@ -15,9 +16,12 @@ interface Props {
 const { title, description, practice, tocItems = [] } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const hasToc = tocItems.length > 0;
+
+// Use practice-specific OG image
+const ogImage = withBase(`/og-images/practices/${practice}.png`);
 ---
 
-<BaseLayout title={title} description={description} locale={locale}>
+<BaseLayout title={title} description={description} locale={locale} ogImage={ogImage}>
   <div class="max-w-8xl mx-auto">
     <div
       class:list={[

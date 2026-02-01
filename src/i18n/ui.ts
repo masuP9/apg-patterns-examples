@@ -115,7 +115,7 @@ export const ui = {
 
     // Pattern list
     'patterns.title': 'パターン',
-    'patterns.available': '実装済みパターン',
+    'patterns.available': 'パターン',
     'patterns.planned': '実装予定パターン',
 
     // Practice list
