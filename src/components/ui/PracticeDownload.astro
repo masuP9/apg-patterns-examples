@@ -1,32 +1,27 @@
 ---
-import { withBase } from '@/lib/utils';
 import { type Locale, getLocaleFromUrl, useTranslation } from '@/i18n';
 import DownloadIcon from 'lucide-static/icons/download.svg';
 import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
 
 interface Props {
-  pattern: string;
+  practice: string;
+  practiceName: string;
+  content: string;
   locale?: Locale;
   class?: string;
 }
 
-const { pattern, class: className } = Astro.props;
+const { practice, practiceName, content, class: className } = Astro.props;
 const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
 const t = useTranslation(locale);
 
-// Use locale-aware URL with consistent filename:
-// EN: /patterns/{pattern}/{pattern}.md
-// JA: /ja/patterns/{pattern}/{pattern}.ja.md
-const mdFileName = locale === 'ja' ? `${pattern}.ja.md` : `${pattern}.md`;
-const llmMdUrl = withBase(
-  locale === 'ja' ? `/ja/patterns/${pattern}/${mdFileName}` : `/patterns/${pattern}/${mdFileName}`
-);
+const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
 ---
 
 <div
-  class:list={['ai-guide-actions relative inline-flex', className]}
-  data-pattern={pattern}
-  data-llm-url={llmMdUrl}
+  class:list={['practice-download relative inline-flex', className]}
+  data-practice={practice}
+  data-filename={mdFileName}
 >
   <div
     class="button-group inline-flex items-center rounded-md border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
@@ -88,6 +83,11 @@ const llmMdUrl = withBase(
   <span
     class="copied-feedback pointer-events-none absolute top-full left-1/2 z-20 mt-2 -translate-x-1/2 rounded-md bg-black px-3 py-1.5 text-sm whitespace-nowrap text-white opacity-0 shadow-lg transition-opacity duration-200"
     aria-live="polite"></span>
+
+  <!-- Hidden content for download -->
+  <template class="md-content">
+    <script type="text/markdown" set:html={`# ${practiceName}\n\n${content}`} />
+  </template>
 </div>
 
 <style>
@@ -127,24 +127,15 @@ const llmMdUrl = withBase(
       transform: translateY(0);
     }
   }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 </style>
 
-<script define:vars={{ copiedText: t('ai.copied'), downloadFileName: mdFileName }}>
-  function initAiGuideActions() {
-    document.querySelectorAll('.ai-guide-actions').forEach((container) => {
-      const llmUrl = container.dataset.llmUrl;
+<script define:vars={{ copiedText: t('ai.copied') }}>
+  function initPracticeDownload() {
+    document.querySelectorAll('.practice-download').forEach((container) => {
+      const filename = container.dataset.filename;
+      const template = container.querySelector('template.md-content');
+      const contentScript = template?.content.querySelector('script[type="text/markdown"]');
+      const content = contentScript?.textContent || '';
       const feedback = container.querySelector('.copied-feedback');
       const dropdown = container.querySelector('details.dropdown');
 
@@ -157,7 +148,6 @@ const llmMdUrl = withBase(
           setTimeout(() => {
             feedback.classList.remove('opacity-100');
             feedback.classList.add('opacity-0');
-            // Clear text after fade out
             setTimeout(() => {
               feedback.textContent = '';
             }, 200);
@@ -167,66 +157,45 @@ const llmMdUrl = withBase(
 
       // Download button handler
       const downloadBtn = container.querySelector('[data-action="download"]');
-      downloadBtn?.addEventListener('click', async () => {
+      downloadBtn?.addEventListener('click', () => {
+        // Add UTF-8 BOM for proper encoding on Android/Windows
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + content], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(url);
+      });
+
+      // Copy only handler
+      container.querySelector('[data-action="copy"]')?.addEventListener('click', async () => {
         try {
-          const response = await fetch(llmUrl);
-          const content = await response.text();
-
-          // Add UTF-8 BOM for proper encoding on Android/Windows
-          const BOM = '\uFEFF';
-          const blob = new Blob([BOM + content], { type: 'text/markdown;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
-
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = downloadFileName;
-          a.click();
-
-          URL.revokeObjectURL(url);
+          await navigator.clipboard.writeText(content);
+          showCopiedFeedback();
+          dropdown?.removeAttribute('open');
         } catch (error) {
-          console.error('Failed to download:', error);
+          console.error('Failed to copy:', error);
         }
       });
 
       // Copy & Open handlers
       async function handleCopyAndOpen(service) {
         try {
-          const response = await fetch(llmUrl);
-          const content = await response.text();
-
           await navigator.clipboard.writeText(content);
-
-          // Show feedback
           showCopiedFeedback();
 
-          // Open service in new tab
           const url = service === 'chatgpt' ? 'https://chat.openai.com/' : 'https://claude.ai/';
           window.open(url, '_blank');
 
-          // Close dropdown
           dropdown?.removeAttribute('open');
         } catch (error) {
           console.error('Failed to copy:', error);
         }
       }
-
-      // Copy only handler
-      container.querySelector('[data-action="copy"]')?.addEventListener('click', async () => {
-        try {
-          const response = await fetch(llmUrl);
-          const content = await response.text();
-
-          await navigator.clipboard.writeText(content);
-
-          // Show feedback
-          showCopiedFeedback();
-
-          // Close dropdown
-          dropdown?.removeAttribute('open');
-        } catch (error) {
-          console.error('Failed to copy:', error);
-        }
-      });
 
       container.querySelector('[data-action="chatgpt"]')?.addEventListener('click', () => {
         handleCopyAndOpen('chatgpt');
@@ -245,7 +214,6 @@ const llmMdUrl = withBase(
 
       // Keyboard navigation for dropdown
       container.addEventListener('keydown', (e) => {
-        // Close dropdown when pressing Escape
         if (e.key === 'Escape' && dropdown?.hasAttribute('open')) {
           dropdown.removeAttribute('open');
           const summary = dropdown.querySelector('summary');
@@ -254,7 +222,6 @@ const llmMdUrl = withBase(
           return;
         }
 
-        // Arrow key navigation within dropdown
         if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && dropdown?.hasAttribute('open')) {
           const buttons = Array.from(dropdown.querySelectorAll('[role="menuitem"]'));
           if (buttons.length === 0) return;
@@ -279,8 +246,8 @@ const llmMdUrl = withBase(
   }
 
   // Initialize on page load
-  initAiGuideActions();
+  initPracticeDownload();
 
   // Re-initialize after Astro page transitions
-  document.addEventListener('astro:after-swap', initAiGuideActions);
+  document.addEventListener('astro:after-swap', initPracticeDownload);
 </script>

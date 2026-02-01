@@ -1,0 +1,173 @@
+## Overview
+
+Structural roles describe the organization of content on a page. Unlike landmark roles (which identify major sections) or widget roles (which describe interactive elements), structural roles help assistive technology understand the relationship between elements within a document.
+
+## Common Structural Roles
+
+| Role        | Purpose                | HTML Equivalent |
+| ----------- | ---------------------- | --------------- |
+| `heading`   | Section heading        | `<h1>` - `<h6>` |
+| `list`      | A list of items        | `<ul>`, `<ol>`  |
+| `listitem`  | An item in a list      | `<li>`          |
+| `group`     | Related elements       | `<fieldset>`    |
+| `separator` | Visual divider         | `<hr>`          |
+| `img`       | Image content          | `<img>`         |
+| `figure`    | Self-contained content | `<figure>`      |
+
+## When to Use ARIA Structural Roles
+
+### Use Native HTML First
+
+Native HTML elements already have implicit roles:
+
+```html
+<!-- These have correct roles automatically -->
+<h2>Section Title</h2>
+<!-- role="heading" aria-level="2" -->
+<ul>
+  <!-- role="list" -->
+  <li>Item 1</li>
+  <!-- role="listitem" -->
+  <li>Item 2</li>
+</ul>
+<hr />
+<!-- role="separator" -->
+```
+
+### ARIA for Custom Structures
+
+Use ARIA when HTML semantics don't fit:
+
+```html
+<!-- Custom heading implementation -->
+<div role="heading" aria-level="2">Custom Section Title</div>
+
+<!-- Custom list with divs -->
+<div role="list">
+  <div role="listitem">Item 1</div>
+  <div role="listitem">Item 2</div>
+</div>
+```
+
+## The Group Role
+
+Use `group` to establish relationships between elements:
+
+```html
+<!-- Grouping related form fields -->
+<div role="group" aria-labelledby="address-heading">
+  <h3 id="address-heading">Shipping Address</h3>
+  <label>Street: <input type="text" /></label>
+  <label>City: <input type="text" /></label>
+</div>
+
+<!-- Grouping related buttons -->
+<div role="group" aria-label="Text alignment">
+  <button>Left</button>
+  <button>Center</button>
+  <button>Right</button>
+</div>
+```
+
+## Heading Levels
+
+### aria-level for Custom Headings
+
+When using `role="heading"`, specify the level:
+
+```html
+<div role="heading" aria-level="3">This behaves like an h3</div>
+```
+
+### Avoid Skipping Levels
+
+Maintain a logical heading hierarchy:
+
+```html
+<!-- Bad: Skipping from h2 to h4 -->
+<h2>Main Section</h2>
+<h4>Subsection</h4>
+
+<!-- Good: Proper hierarchy -->
+<h2>Main Section</h2>
+<h3>Subsection</h3>
+```
+
+## Separator Role
+
+### Focusable vs Non-focusable
+
+```html
+<!-- Non-focusable separator (visual divider) -->
+<hr />
+<!-- or -->
+<div role="separator"></div>
+
+<!-- Focusable separator (resizable splitter) -->
+<div
+  role="separator"
+  tabindex="0"
+  aria-valuenow="50"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-label="Resize panels"
+></div>
+```
+
+When `tabindex` is added, separator becomes a value widget requiring range properties.
+
+## Implementation Tips
+
+### None and Presentation Roles
+
+See the [Hiding Semantics practice](/practices/hiding-semantics/) for when to use `role="none"` or `role="presentation"`.
+
+### Document vs Application Mode
+
+By default, screen readers use "document mode" for reading. The `application` role switches to "application mode" for keyboard handling—use sparingly and only when needed.
+
+```html
+<!-- Rarely needed - use with caution -->
+<div role="application">
+  <!-- Custom keyboard handlers required -->
+</div>
+```
+
+## Common Pitfalls
+
+### Removing List Semantics Accidentally
+
+CSS can remove implicit list semantics in some browsers:
+
+```css
+/* This may remove list semantics in Safari */
+ul {
+  list-style: none;
+}
+```
+
+Fix with explicit role:
+
+```html
+<ul role="list" style="list-style: none;">
+  <li>Still announced as a list item</li>
+</ul>
+```
+
+### Overusing ARIA Structural Roles
+
+```html
+<!-- Bad: Unnecessary ARIA -->
+<div role="list">
+  <div role="listitem">Item</div>
+</div>
+
+<!-- Good: Native HTML -->
+<ul>
+  <li>Item</li>
+</ul>
+```
+
+### Incorrect Heading Hierarchy
+
+Screen reader users often navigate by headings. Ensure heading levels reflect document structure, not visual styling.

@@ -185,14 +185,9 @@ html.no-transitions * {
      Global settings for improved text rendering and CJK support
      ============================================================================= */
 
-  /* 1. overflow-wrap: 長い単語の折り返し */
+  /* 2. text-autospace: 日本語と英数字間の自動スペース */
   :where(:root) {
-    overflow-wrap: break-word;
-  }
-
-  /* 2. text-autospace: 日本語と英数字間の自動スペースを無効化 */
-  :where(:root) {
-    text-autospace: no-autospace;
+    text-autospace: normal;
   }
 
   /* 3. 英語タイポグラフィ */
@@ -215,6 +210,7 @@ html.no-transitions * {
     word-break: auto-phrase;
     font-kerning: normal;
     font-feature-settings: 'palt';
+    letter-spacing: 0.0125em;
   }
 
   /* 5. センターテキスト: 英語のみバランス

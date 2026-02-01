@@ -1,0 +1,61 @@
+## Overview
+
+ARIA landmark roles allow assistive technology users to quickly navigate to and identify different sections of a page. This practice explains how to use the eight landmark roles effectively.
+
+## The Eight Landmark Roles
+
+| Role            | HTML5 Element                      | Purpose                                                             |
+| --------------- | ---------------------------------- | ------------------------------------------------------------------- |
+| `banner`        | `<header>` (top-level)             | Site-wide header, typically containing the site logo and navigation |
+| `navigation`    | `<nav>`                            | Major navigation links                                              |
+| `main`          | `<main>`                           | The primary content of the page                                     |
+| `complementary` | `<aside>`                          | Supporting content related to the main content                      |
+| `contentinfo`   | `<footer>` (top-level)             | Site-wide footer with copyright, privacy links, etc.                |
+| `search`        | `<search>`                         | A search facility                                                   |
+| `form`          | `<form>` (with accessible name)    | A form landmark (when form has accessible name)                     |
+| `region`        | `<section>` (with accessible name) | A generic landmark for content that needs to be identified          |
+
+## Implementation Tips
+
+### Use HTML5 Semantic Elements
+
+The easiest way to create landmarks is to use HTML5 semantic elements. Browsers automatically assign the appropriate landmark role:
+
+```html
+<header><!-- banner --></header>
+<nav><!-- navigation --></nav>
+<main><!-- main --></main>
+<aside><!-- complementary --></aside>
+<footer><!-- contentinfo --></footer>
+```
+
+### Label Multiple Landmarks of the Same Type
+
+When you have multiple landmarks of the same type (e.g., multiple `<nav>` elements), use `aria-label` or `aria-labelledby` to distinguish them:
+
+```html
+<nav aria-label="Main">...</nav>
+<nav aria-label="Footer">...</nav>
+```
+
+### Avoid Nesting Landmarks Incorrectly
+
+Some landmarks should not be nested. For example, `main` should not contain another `main`, and `banner` should not be nested inside other landmarks (except `form` or `region`).
+
+## Common Pitfalls
+
+### Missing `main` Landmark
+
+Every page should have exactly one `main` landmark. This allows keyboard users to quickly jump to the primary content.
+
+### Unlabeled Duplicate Landmarks
+
+Having multiple `<nav>` elements without labels makes it difficult for screen reader users to distinguish between them.
+
+### Overusing `region`
+
+Only use `region` (or `<section>` with an accessible name) when the content is important enough to be included in a landmark navigation list. Too many landmarks reduce their usefulness.
+
+### Nested `header` and `footer` in Articles
+
+When `<header>` or `<footer>` is nested inside `<article>`, `<aside>`, `<main>`, `<nav>`, or `<section>`, it does NOT become a landmark. Only top-level `<header>` and `<footer>` elements are `banner` and `contentinfo` landmarks.

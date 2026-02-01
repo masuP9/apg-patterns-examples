@@ -1,0 +1,132 @@
+## Overview
+
+Every interactive element needs an accessible name that assistive technology can announce to users. Some elements also benefit from an accessible description that provides additional context. This practice explains how to provide these correctly.
+
+## Accessible Name vs Description
+
+| Concept                    | Purpose                                   | Announced When                |
+| -------------------------- | ----------------------------------------- | ----------------------------- |
+| **Accessible Name**        | Primary label that identifies the element | Focus, interaction            |
+| **Accessible Description** | Additional context or instructions        | After the name (configurable) |
+
+## Methods for Providing Accessible Names
+
+### 1. Native HTML Labels
+
+The most robust approach is using native HTML:
+
+```html
+<!-- Visible label (preferred) -->
+<label for="email">Email address</label>
+<input type="email" id="email" />
+
+<!-- Button with text content -->
+<button type="submit">Send message</button>
+
+<!-- Link with text content -->
+<a href="/about">About us</a>
+
+<!-- Image with alt text -->
+<img src="logo.png" alt="Company logo" />
+```
+
+### 2. aria-label
+
+For elements without visible text, use `aria-label`:
+
+```html
+<!-- Icon button -->
+<button type="button" aria-label="Close">
+  <svg aria-hidden="true">...</svg>
+</button>
+
+<!-- Search landmark -->
+<search aria-label="Site search">...</search>
+```
+
+### 3. aria-labelledby
+
+Reference existing visible text:
+
+```html
+<h2 id="billing-title">Billing Address</h2>
+<section aria-labelledby="billing-title">...</section>
+```
+
+## Methods for Providing Accessible Descriptions
+
+### aria-describedby
+
+Link to elements containing descriptive text:
+
+```html
+<label for="password">Password</label>
+<input type="password" id="password" aria-describedby="pwd-hint" />
+<p id="pwd-hint">Must be at least 8 characters with one number</p>
+```
+
+### aria-description
+
+Provide a description directly (newer, less supported):
+
+```html
+<button aria-description="Opens in a new window">External link</button>
+```
+
+## Common Pitfalls
+
+### Empty or Redundant Names
+
+```html
+<!-- Bad: No accessible name -->
+<button><svg>...</svg></button>
+
+<!-- Bad: Redundant - "button button" -->
+<button>Button</button>
+
+<!-- Good: Descriptive name -->
+<button aria-label="Add to cart">
+  <svg aria-hidden="true">...</svg>
+</button>
+```
+
+### Placeholder as Label
+
+```html
+<!-- Bad: Placeholder disappears -->
+<input type="text" placeholder="Email" />
+
+<!-- Good: Persistent label -->
+<label for="email">Email</label>
+<input type="text" id="email" placeholder="you@example.com" />
+```
+
+### Overriding Native Semantics
+
+```html
+<!-- Bad: aria-label on non-interactive element -->
+<p aria-label="Important">This is a paragraph</p>
+
+<!-- Good: Let content be the accessible name for paragraphs -->
+<p>This is a paragraph</p>
+```
+
+## Implementation Tips
+
+### Name Priority (Accessible Name Computation)
+
+When multiple naming methods are present, browsers use this priority:
+
+1. `aria-labelledby` (highest)
+2. `aria-label`
+3. Native HTML (label, alt, button text, etc.)
+4. `title` attribute (lowest, avoid for accessibility)
+
+### Test Your Names
+
+1. Use browser DevTools accessibility inspector
+2. Navigate with a screen reader
+3. Check that names are:
+   - Unique within context
+   - Descriptive but concise
+   - Localized appropriately

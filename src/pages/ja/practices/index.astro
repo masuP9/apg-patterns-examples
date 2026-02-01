@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { getPractices } from '@/lib/practices';
+import { withBase } from '@/lib/utils';
+import { getLocalizedPath, useTranslation, getPracticeName, getPracticeDescription } from '@/i18n';
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const practices = getPractices();
+const ogImage = withBase('/og-images/practices.png');
+---
+
+<BaseLayout title={t('practices.title')} locale={locale} ogImage={ogImage}>
+  <div class="mx-auto max-w-4xl">
+    <header class="mb-8">
+      <h1 class="mb-4 text-3xl font-bold">APG プラクティス</h1>
+      <p class="text-muted-foreground text-lg">
+        WAI-ARIA Authoring Practices Guide
+        に基づいたアクセシブルなウェブアプリケーション構築のためのベストプラクティス。
+        これらのガイドは、ARIA パターンを正しく実装するのに役立ちます。
+      </p>
+    </header>
+
+    <section class="mb-12">
+      <h2 class="mb-4 text-xl font-semibold">{t('practices.available')}</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          practices.map((practice) => (
+            <Tile
+              variant="floating"
+              href={withBase(getLocalizedPath(`/practices/${practice.id}/`, locale))}
+            >
+              <TileContent class="flex flex-row items-start gap-4">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  <span class="translate-y-[-0.1em]">{practice.icon}</span>
+                </div>
+                <div class="flex flex-1 flex-col gap-2">
+                  <TileTitle>{getPracticeName(practice.id, practice.name, locale)}</TileTitle>
+                  <TileDescription>
+                    {getPracticeDescription(practice.id, practice.description, locale)}
+                  </TileDescription>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <Tile variant="floating" class="bg-muted/50">
+      <TileContent>
+        <TileTitle class="text-xl">これらのプラクティスについて</TileTitle>
+        <TileDescription class="mb-4">
+          各プラクティスは <a
+            href="https://www.w3.org/WAI/ARIA/apg/practices/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline">WAI-ARIA Authoring Practices Guide (APG)</a
+          > に従い、アクセシブルなウェブアプリケーションの構築を支援します。
+        </TileDescription>
+        <ul class="text-muted-foreground list-disc space-y-2 pl-6">
+          <li>ARIA ランドマーク領域の理解</li>
+          <li>アクセシブルな名前と説明の提供</li>
+          <li>キーボードアクセシブルなインターフェースの構築</li>
+          <li>グリッドとテーブルのプロパティの正しい実装</li>
+          <li>範囲ウィジェットの値の伝達</li>
+        </ul>
+      </TileContent>
+    </Tile>
+  </div>
+</BaseLayout>

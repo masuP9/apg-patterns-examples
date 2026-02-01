@@ -3,11 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
 import { getPatterns } from '@/lib/patterns';
+import { getPractices } from '@/lib/practices';
 
 const patterns = getPatterns();
+const practices = getPractices();
 ---
 
-<BaseLayout title="Home">
+<BaseLayout title="APG Patterns Examples">
   <div class="text-center">
     <h1 class="mt-16 mb-8 text-6xl font-bold lg:mt-32">APG Patterns Examples</h1>
     <div class="mx-auto mb-8 max-w-3xl space-y-4 text-left text-lg">
@@ -22,7 +24,7 @@ const patterns = getPatterns();
     </div>
 
     <section class="mt-16">
-      <h2 class="mb-6 text-2xl font-bold">Available Patterns</h2>
+      <h2 class="mb-6 text-2xl font-bold">Patterns</h2>
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {
           patterns.map((pattern) => (
@@ -34,6 +36,27 @@ const patterns = getPatterns();
                 <div>
                   <TileTitle class="mb-2">{pattern.name}</TileTitle>
                   <TileDescription>{pattern.description}</TileDescription>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-bold">Practices</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {
+          practices.map((practice) => (
+            <Tile variant="floating" href={withBase(`/practices/${practice.id}/`)}>
+              <TileContent class="flex flex-row items-center gap-4 text-left">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {practice.icon}
+                </div>
+                <div>
+                  <TileTitle class="mb-2">{practice.name}</TileTitle>
+                  <TileDescription>{practice.description}</TileDescription>
                 </div>
               </TileContent>
             </Tile>

@@ -50,11 +50,12 @@ const ogImageUrl = ogImage
   : new URL(withBase('/og-image.png'), siteUrl).toString();
 const ogLocale = locale === 'ja' ? 'ja_JP' : 'en_US';
 const siteName = 'APG Patterns Examples';
-const fullTitle = `${title} | ${siteName}`;
+const fullTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
   { text: t('nav.patterns'), href: withBase(getLocalizedPath('/patterns/', locale)) },
+  { text: t('nav.practices'), href: withBase(getLocalizedPath('/practices/', locale)) },
   { text: t('nav.guide'), href: withBase(getLocalizedPath('/guide/', locale)) },
   { text: t('nav.about'), href: withBase(getLocalizedPath('/about/', locale)) },
 ];
@@ -94,12 +95,13 @@ const navLinks = [
       <Logo href={withBase(getLocalizedPath('/', locale))}>
         <LogoText>{t('site.logo')}</LogoText>
       </Logo>
-      <NavigationMenu class="mr-auto @max-lg:hidden">
+      <NavigationMenu class="mr-auto max-lg:hidden">
         <NavigationMenuList>
           {
             navLinks.map(({ href, text }) => (
               <NavigationMenuItem>
                 <NavigationMenuLink
+                  class="text-sm"
                   aria-current={currentPath.startsWith(href) ? 'page' : undefined}
                   href={href}
                 >
@@ -110,33 +112,34 @@ const navLinks = [
           }
         </NavigationMenuList>
       </NavigationMenu>
-      <HeaderActions class="@max-lg:hidden">
+      <HeaderActions class="ml-auto @max-md:hidden">
         <PatternSearch
           client:load
-          className="w-64"
+          className="w-56"
           placeholder={locale === 'ja' ? 'パターンを検索...' : 'Search patterns...'}
         />
-        <LanguageSwitcher locale={locale} />
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          href={GITHUB_URL}
-          target="_blank"
-          aria-label="GitHub"
-        >
-          <Icon href={GITHUB_URL} />
-        </Button>
-        <ThemeToggle />
+        <div class="max-xl:hidden">
+          <LanguageSwitcher locale={locale} />
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            href={GITHUB_URL}
+            target="_blank"
+            aria-label="GitHub"
+          >
+            <Icon href={GITHUB_URL} />
+          </Button>
+          <ThemeToggle />
+        </div>
       </HeaderActions>
-      <Sheet class="first:ml-auto">
-        <SheetTrigger class="@lg:hidden" variant="ghost" size="icon" aria-label={t('nav.openMenu')}>
+      <Sheet class="ml-auto xl:invisible">
+        <SheetTrigger variant="ghost" size="icon" aria-label={t('nav.openMenu')}>
           <MenuIcon class="size-5" />
         </SheetTrigger>
         <SheetContent class="overflow-y-auto px-4 py-12">
           <div class="mb-4">
             <PatternSearch
               client:load
-              className="w-full"
               placeholder={locale === 'ja' ? 'パターンを検索...' : 'Search patterns...'}
             />
           </div>
@@ -185,12 +188,10 @@ const navLinks = [
         </FooterDescription>
         <FooterMenu orientation="horizontal">
           <FooterMenuItem>
-            <FooterMenuLink href="https://www.w3.org/WAI/ARIA/apg/" target="_blank">
-              WAI-ARIA APG
-            </FooterMenuLink>
+            <FooterMenuLink href="https://www.w3.org/WAI/ARIA/apg/">WAI-ARIA APG</FooterMenuLink>
           </FooterMenuItem>
           <FooterMenuItem>
-            <FooterMenuLink href="https://github.com/masuP9/apg-patterns-examples" target="_blank">
+            <FooterMenuLink href="https://github.com/masuP9/apg-patterns-examples">
               GitHub
             </FooterMenuLink>
           </FooterMenuItem>

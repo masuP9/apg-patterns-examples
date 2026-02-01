@@ -9,9 +9,10 @@ const locale = 'ja';
 const t = useTranslation(locale);
 
 const patterns = getPatterns();
+const ogImage = withBase('/og-images/patterns.png');
 ---
 
-<BaseLayout title={t('patterns.title')} locale={locale}>
+<BaseLayout title={t('patterns.title')} locale={locale} ogImage={ogImage}>
   <div class="mx-auto max-w-4xl">
     <header class="mb-8">
       <h1 class="mb-4 text-3xl font-bold">APG パターン</h1>
@@ -32,9 +33,9 @@ const patterns = getPatterns();
             >
               <TileContent class="flex flex-row items-start gap-4">
                 <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
-                  {pattern.icon}
+                  <span class="translate-y-[-0.1em]">{pattern.icon}</span>
                 </div>
-                <div class="flex-1">
+                <div class="flex flex-1 flex-col gap-2">
                   <TileTitle>{getPatternName(pattern.id, pattern.name, locale)}</TileTitle>
                   <TileDescription>
                     {getPatternDescription(pattern.id, pattern.description, locale)}

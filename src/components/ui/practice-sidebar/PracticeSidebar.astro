@@ -1,0 +1,50 @@
+---
+import { getPractices } from '@/lib/practices';
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { withBase } from '@/lib/utils';
+import {
+  type Locale,
+  getLocaleFromUrl,
+  getLocalizedPath,
+  useTranslation,
+  getPracticeName,
+} from '@/i18n';
+
+interface Props {
+  currentPractice: string;
+  locale?: Locale;
+}
+
+const { currentPractice } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslation(locale);
+
+const practices = getPractices();
+---
+
+<nav aria-label="Practice navigation" class="w-full">
+  <div class="mb-4 flex items-center justify-between">
+    <h2 class="text-foreground px-2 text-sm font-semibold">{t('nav.practices')}</h2>
+  </div>
+
+  <SidebarMenu>
+    {
+      practices.map((practice) => (
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            href={withBase(getLocalizedPath(`/practices/${practice.id}/`, locale))}
+            active={currentPractice === practice.id}
+            aria-current={currentPractice === practice.id ? 'page' : undefined}
+            size="sm"
+            class="text-sm"
+          >
+            <span class="inline-flex w-5 justify-center text-xs" aria-hidden="true">
+              {practice.icon}
+            </span>
+            <span>{getPracticeName(practice.id, practice.name, locale)}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))
+    }
+  </SidebarMenu>
+</nav>

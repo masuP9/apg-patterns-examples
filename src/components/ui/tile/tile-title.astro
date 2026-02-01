@@ -12,7 +12,7 @@ const slot = await Astro.slots.render('default');
 
 {
   slot?.trim().length > 0 && (
-    <h3 class={cn('leading-none font-semibold', className)} {...props}>
+    <h3 class={cn('leading-tight font-semibold', className)} {...props}>
       <Fragment set:html={slot} />
     </h3>
   )

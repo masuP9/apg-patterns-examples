@@ -3,14 +3,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
 import { getPatterns } from '@/lib/patterns';
-import { getLocalizedPath, useTranslation, getPatternName, getPatternDescription } from '@/i18n';
+import { getPractices } from '@/lib/practices';
+import {
+  getLocalizedPath,
+  useTranslation,
+  getPatternName,
+  getPatternDescription,
+  getPracticeName,
+  getPracticeDescription,
+} from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
 const patterns = getPatterns();
+const practices = getPractices();
 ---
 
-<BaseLayout title={t('nav.patterns')} locale={locale}>
+<BaseLayout title="APG Patterns Examples" locale={locale}>
   <div class="text-center">
     <h1 class="mt-16 mb-8 text-6xl font-bold lg:mt-32">{t('site.title')}</h1>
     <div class="mx-auto mb-8 max-w-3xl space-y-4 text-left text-lg">
@@ -46,6 +55,34 @@ const patterns = getPatterns();
                   </TileTitle>
                   <TileDescription>
                     {getPatternDescription(pattern.id, pattern.description, locale)}
+                  </TileDescription>
+                </div>
+              </TileContent>
+            </Tile>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-bold">{t('practices.title')}</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {
+          practices.map((practice) => (
+            <Tile
+              variant="floating"
+              href={withBase(getLocalizedPath(`/practices/${practice.id}/`, locale))}
+            >
+              <TileContent class="flex flex-row items-center gap-4 text-left">
+                <div class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl">
+                  {practice.icon}
+                </div>
+                <div>
+                  <TileTitle class="mb-2">
+                    {getPracticeName(practice.id, practice.name, locale)}
+                  </TileTitle>
+                  <TileDescription>
+                    {getPracticeDescription(practice.id, practice.description, locale)}
                   </TileDescription>
                 </div>
               </TileContent>

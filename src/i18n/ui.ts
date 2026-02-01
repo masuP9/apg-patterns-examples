@@ -19,6 +19,7 @@ export const ui = {
   en: {
     // Navigation
     'nav.patterns': 'Patterns',
+    'nav.practices': 'Practices',
     'nav.guide': 'Guide',
     'nav.about': 'About',
     'nav.skipToContent': 'Skip to main content',
@@ -44,6 +45,12 @@ export const ui = {
     'patterns.title': 'Patterns',
     'patterns.available': 'Available Patterns',
     'patterns.planned': 'Planned Patterns',
+
+    // Practice list
+    'practices.title': 'Practices',
+    'practices.available': 'Available Practices',
+    'practices.relatedPatterns': 'Related Patterns',
+    'practices.viewApg': 'View APG documentation',
 
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA Roles',
@@ -84,6 +91,7 @@ export const ui = {
   ja: {
     // Navigation
     'nav.patterns': 'パターン',
+    'nav.practices': 'プラクティス',
     'nav.guide': 'ガイド',
     'nav.about': 'このサイトについて',
     'nav.skipToContent': 'メインコンテンツへスキップ',
@@ -107,8 +115,14 @@ export const ui = {
 
     // Pattern list
     'patterns.title': 'パターン',
-    'patterns.available': '実装済みパターン',
+    'patterns.available': 'パターン',
     'patterns.planned': '実装予定パターン',
+
+    // Practice list
+    'practices.title': 'プラクティス',
+    'practices.available': '利用可能なプラクティス',
+    'practices.relatedPatterns': '関連パターン',
+    'practices.viewApg': 'APG ドキュメントを見る',
 
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA ロール',

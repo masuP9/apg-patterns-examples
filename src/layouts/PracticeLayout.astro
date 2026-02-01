@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { PracticeSidebar } from '@/components/ui/practice-sidebar';
+import { TableOfContents, type TocItem } from '@/components/ui/toc';
+import { type Locale, getLocaleFromUrl } from '@/i18n';
+import { withBase } from '@/lib/utils';
+
+interface Props {
+  title: string;
+  description?: string;
+  practice: string;
+  tocItems?: TocItem[];
+  locale?: Locale;
+}
+
+const { title, description, practice, tocItems = [] } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const hasToc = tocItems.length > 0;
+
+// Use practice-specific OG image
+const ogImage = withBase(`/og-images/practices/${practice}.png`);
+---
+
+<BaseLayout title={title} description={description} locale={locale} ogImage={ogImage}>
+  <div class="max-w-8xl mx-auto">
+    <div
+      class:list={[
+        'lg:grid lg:gap-16 xl:gap-20',
+        hasToc
+          ? 'lg:grid-cols-[240px_1fr] xl:grid-cols-[240px_1fr_200px]'
+          : 'lg:grid-cols-[240px_1fr]',
+      ]}
+    >
+      <!-- Sidebar (desktop only) -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+          <PracticeSidebar currentPractice={practice} locale={locale} />
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <div class="max-w-4xl min-w-0">
+        <slot />
+      </div>
+
+      <!-- Right Sidebar: TOC (xl and above) -->
+      {
+        hasToc && (
+          <aside class="hidden xl:block">
+            <div class="sticky top-4">
+              <TableOfContents items={tocItems} />
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

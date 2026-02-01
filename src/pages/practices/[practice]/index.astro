@@ -1,0 +1,132 @@
+---
+import PracticeLayout from '../../../layouts/PracticeLayout.astro';
+import { Tile, TileContent, TileTitle } from '@/components/ui/tile';
+import Prose from '@/components/ui/Prose.astro';
+import PracticeDownload from '@/components/ui/PracticeDownload.astro';
+import { getPractices, getPracticeById } from '@/lib/practices';
+import { getPatternById } from '@/lib/patterns';
+import { withBase } from '@/lib/utils';
+import { useTranslation } from '@/i18n';
+import type { TocItem } from '@/components/ui/toc';
+
+export function getStaticPaths() {
+  return getPractices().map((p) => ({ params: { practice: p.id } }));
+}
+
+const { practice: practiceId } = Astro.params;
+const practice = getPracticeById(practiceId);
+const t = useTranslation('en');
+
+if (!practice) {
+  return Astro.redirect('/404');
+}
+
+// Get related patterns info
+const relatedPatterns = practice.relatedPatterns
+  .map((id) => getPatternById(id))
+  .filter((p): p is NonNullable<typeof p> => p !== undefined);
+
+// Import the MDX content and get headings
+const mdxModule = await import(`../../../practices/${practiceId}/content.mdx`);
+const Content = mdxModule.default;
+const headings = mdxModule.getHeadings ? await mdxModule.getHeadings() : [];
+
+// Import raw content for download
+const rawContent = await import(`../../../practices/${practiceId}/content.mdx?raw`);
+const mdContent = rawContent.default;
+
+// Build TOC from MDX headings (h2 only)
+const tocItems: TocItem[] = headings
+  .filter((h: { depth: number }) => h.depth === 2)
+  .map((h: { slug: string; text: string }) => ({ id: h.slug, text: h.text }));
+
+// Add Related Patterns and Resources sections
+if (relatedPatterns.length > 0) {
+  tocItems.push({ id: 'related-patterns', text: 'Related Patterns' });
+}
+tocItems.push({ id: 'resources', text: 'Resources' });
+---
+
+<PracticeLayout
+  title={practice.name}
+  description={practice.description}
+  practice={practiceId}
+  tocItems={tocItems}
+>
+  <Prose>
+    <header class="mb-8">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div
+            class="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl sm:h-16 sm:w-16 sm:text-4xl"
+          >
+            <span class="translate-y-[-0.1em]">
+              {practice.icon}
+            </span>
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-2xl font-bold break-words sm:text-3xl">{practice.name}</h1>
+          </div>
+        </div>
+        <PracticeDownload
+          practice={practiceId}
+          practiceName={practice.name}
+          content={mdContent}
+          locale="en"
+        />
+      </div>
+      <p class="text-muted-foreground">{practice.description}</p>
+
+      <p class="text-muted-foreground rounded-md border p-4">
+        This practice is documented in detail at
+        <a
+          href={practice.apgUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary underline"
+        >
+          {practice.name} - WAI-ARIA APG
+        </a>. Below we provide additional context specific to our pattern implementations.
+      </p>
+    </header>
+    <Content />
+  </Prose>
+
+  {
+    relatedPatterns.length > 0 && (
+      <section id="related-patterns" class="mt-16 mb-16">
+        <h2 id="related-patterns" class="mb-4 text-2xl font-semibold">
+          {t('practices.relatedPatterns')}
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {relatedPatterns.map((pattern) => (
+            <Tile variant="floating" href={withBase(`/patterns/${pattern.id}/`)}>
+              <TileContent class="flex flex-row items-center gap-4">
+                <div class="bg-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xl">
+                  {pattern.icon}
+                </div>
+                <TileTitle class="text-base">{pattern.name}</TileTitle>
+              </TileContent>
+            </Tile>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section id="resources">
+    <h2 id="resources" class="mb-4 text-2xl font-semibold">Resources</h2>
+    <ul class="list-inside list-disc space-y-2">
+      <li>
+        <a
+          href={practice.apgUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary underline"
+        >
+          {t('practices.viewApg')}
+        </a>
+      </li>
+    </ul>
+  </section>
+</PracticeLayout>
