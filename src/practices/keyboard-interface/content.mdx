@@ -21,11 +21,11 @@ Keyboard accessibility is essential for users who cannot use a mouse, including 
 
 ### tabindex Values
 
-| Value           | Behavior                                      |
-| --------------- | --------------------------------------------- |
-| `tabindex="0"`  | Included in tab order at its DOM position     |
-| `tabindex="-1"` | Focusable via JavaScript but not in tab order |
-| `tabindex="1+"` | **Avoid** - Creates confusing tab order       |
+| Value                     | Behavior                                      |
+| ------------------------- | --------------------------------------------- |
+| `0`                       | Included in tab order at its DOM position     |
+| `-1`                      | Focusable via JavaScript but not in tab order |
+| Positive integers (`1`+)  | **Avoid** - Creates confusing tab order       |
 
 ## Keyboard Navigation Patterns
 
