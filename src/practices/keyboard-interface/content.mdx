@@ -21,11 +21,11 @@ Keyboard accessibility is essential for users who cannot use a mouse, including 
 
 ### tabindex Values
 
-| Value                     | Behavior                                      |
-| ------------------------- | --------------------------------------------- |
-| `0`                       | Included in tab order at its DOM position     |
-| `-1`                      | Focusable via JavaScript but not in tab order |
-| Positive integers (`1`+)  | **Avoid** - Creates confusing tab order       |
+| Value                    | Behavior                                      |
+| ------------------------ | --------------------------------------------- |
+| `0`                      | Included in tab order at its DOM position     |
+| `-1`                     | Focusable via JavaScript but not in tab order |
+| Positive integers (`1`+) | **Avoid** - Creates confusing tab order       |
 
 ## Keyboard Navigation Patterns
 
@@ -140,12 +140,7 @@ As an alternative to roving tabindex, you can use `aria-activedescendant` for fo
 
 ```html
 <!-- Listbox using aria-activedescendant -->
-<ul
-  role="listbox"
-  tabindex="0"
-  aria-activedescendant="option-2"
-  aria-label="Select a fruit"
->
+<ul role="listbox" tabindex="0" aria-activedescendant="option-2" aria-label="Select a fruit">
   <li id="option-1" role="option">Apple</li>
   <li id="option-2" role="option" aria-selected="true">Banana</li>
   <!-- ↑ currently active -->
@@ -217,22 +212,24 @@ class ActiveDescendant {
 
 #### Comparison with Roving tabindex
 
-| Aspect                 | Roving tabindex              | aria-activedescendant          |
-| ---------------------- | ---------------------------- | ------------------------------ |
-| DOM Focus              | Moves to each item           | Stays on container             |
-| Implementation         | Moderate complexity          | Slightly more complex          |
-| Screen reader support  | Widely supported             | Support varies                 |
-| Dynamic content        | Requires tabindex management | Only needs ID assignment       |
-| Recommended use cases  | Toolbars, tablists           | Listboxes, comboboxes          |
+| Aspect                | Roving tabindex              | aria-activedescendant    |
+| --------------------- | ---------------------------- | ------------------------ |
+| DOM Focus             | Moves to each item           | Stays on container       |
+| Implementation        | Moderate complexity          | Slightly more complex    |
+| Screen reader support | Widely supported             | Support varies           |
+| Dynamic content       | Requires tabindex management | Only needs ID assignment |
+| Recommended use cases | Toolbars, tablists           | Listboxes, comboboxes    |
 
 #### When to Use Each Approach
 
 **Choose roving tabindex when:**
+
 - Broad screen reader support is required
 - Simpler implementation is preferred
 - Building toolbars, menus, or tablists
 
 **Choose aria-activedescendant when:**
+
 - Container has text input (combobox)
   - Focus stays on the input, allowing users to continue typing while selecting from suggestions
 - List has many items

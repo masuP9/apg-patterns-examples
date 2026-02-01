@@ -140,12 +140,7 @@ roving tabindex の代替として、`aria-activedescendant` を使用したフ�
 
 ```html
 <!-- aria-activedescendant を使用したリストボックス -->
-<ul
-  role="listbox"
-  tabindex="0"
-  aria-activedescendant="option-2"
-  aria-label="フルーツを選択"
->
+<ul role="listbox" tabindex="0" aria-activedescendant="option-2" aria-label="フルーツを選択">
   <li id="option-1" role="option">りんご</li>
   <li id="option-2" role="option" aria-selected="true">バナナ</li>
   <!-- ↑ 現在アクティブ -->
@@ -217,22 +212,24 @@ class ActiveDescendant {
 
 #### roving tabindex との比較
 
-| 観点                     | roving tabindex                | aria-activedescendant            |
-| ------------------------ | ------------------------------ | -------------------------------- |
-| DOM フォーカス           | 各アイテムに移動               | コンテナに固定                   |
-| 実装の複雑さ             | 中程度                         | やや複雑                         |
-| スクリーンリーダー対応   | 広く対応                       | 対応状況にばらつきあり           |
-| 動的コンテンツ           | 要素追加時に tabindex 管理必要 | ID の付与のみ                    |
-| 推奨ユースケース         | ツールバー、タブリスト         | リストボックス、コンボボックス   |
+| 観点                   | roving tabindex                | aria-activedescendant          |
+| ---------------------- | ------------------------------ | ------------------------------ |
+| DOM フォーカス         | 各アイテムに移動               | コンテナに固定                 |
+| 実装の複雑さ           | 中程度                         | やや複雑                       |
+| スクリーンリーダー対応 | 広く対応                       | 対応状況にばらつきあり         |
+| 動的コンテンツ         | 要素追加時に tabindex 管理必要 | ID の付与のみ                  |
+| 推奨ユースケース       | ツールバー、タブリスト         | リストボックス、コンボボックス |
 
 #### 使い分けの指針
 
 **roving tabindex を選ぶ場合：**
+
 - 広範なスクリーンリーダーサポートが必要
 - シンプルな実装を優先
 - ツールバー、メニュー、タブリストなど
 
 **aria-activedescendant を選ぶ場合：**
+
 - コンテナにテキスト入力がある（コンボボックス）
   - フォーカスが入力欄に留まるため、候補を選択しながらテキスト入力を継続できる
 - 大量のアイテムを持つリスト
