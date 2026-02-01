@@ -233,7 +233,7 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     left: 0;
     right: 0;
     height: 3rem;
-    background: linear-gradient(to bottom, transparent, var(--muted));
+    background: linear-gradient(to bottom, transparent, #24292e);
     pointer-events: none;
   }
 
@@ -248,10 +248,10 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     gap: 0.5rem;
     width: 100%;
     padding: 0.5rem;
-    background-color: var(--muted);
+    background-color: #1f2937;
     border: none;
-    border-top: 1px solid var(--border);
-    color: var(--muted-foreground);
+    border-top: 1px solid #374151;
+    color: #9ca3af;
     font-size: 0.875rem;
     cursor: pointer;
     transition:
@@ -260,8 +260,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
   }
 
   .prose :global(.code-toggle:hover) {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
+    background-color: #374151;
+    color: #f3f4f6;
   }
 
   .prose :global(.code-toggle:focus-visible) {
