@@ -114,8 +114,7 @@ for (const framework of frameworks) {
         await expect(firstArticle).toBeFocused();
 
         // Press Page Down
-        await page.keyboard.press('PageDown');
-        await page.waitForTimeout(100);
+        await firstArticle.press('PageDown');
 
         await expect(secondArticle).toBeFocused();
       });
@@ -131,8 +130,7 @@ for (const framework of frameworks) {
         await expect(secondArticle).toBeFocused();
 
         // Press Page Up
-        await page.keyboard.press('PageUp');
-        await page.waitForTimeout(100);
+        await secondArticle.press('PageUp');
 
         await expect(firstArticle).toBeFocused();
       });
@@ -147,8 +145,7 @@ for (const framework of frameworks) {
         await expect(firstArticle).toBeFocused();
 
         // Press Page Up - should stay on first
-        await page.keyboard.press('PageUp');
-        await page.waitForTimeout(100);
+        await firstArticle.press('PageUp');
 
         await expect(firstArticle).toBeFocused();
       });
@@ -164,8 +161,7 @@ for (const framework of frameworks) {
         await expect(lastArticle).toBeFocused();
 
         // Press Page Down - should stay on last
-        await page.keyboard.press('PageDown');
-        await page.waitForTimeout(100);
+        await lastArticle.press('PageDown');
 
         await expect(lastArticle).toBeFocused();
       });
@@ -181,8 +177,7 @@ for (const framework of frameworks) {
         await expect(firstArticle).toBeFocused();
 
         // Press Ctrl+End
-        await page.keyboard.press('Control+End');
-        await page.waitForTimeout(100);
+        await firstArticle.press('Control+End');
 
         // Should focus element after feed
         await expect(afterFeedElement).toBeFocused();
@@ -199,8 +194,7 @@ for (const framework of frameworks) {
         await expect(secondArticle).toBeFocused();
 
         // Press Ctrl+Home
-        await page.keyboard.press('Control+Home');
-        await page.waitForTimeout(100);
+        await secondArticle.press('Control+Home');
 
         // Should focus element before feed
         await expect(beforeFeedElement).toBeFocused();
@@ -209,10 +203,10 @@ for (const framework of frameworks) {
       test('moves to next article even when focus is inside article', async ({ page }) => {
         const feed = page.locator(feedSelector);
         const articles = feed.locator('article');
-        const firstArticle = articles.first();
         const secondArticle = articles.nth(1);
 
         // Focus an interactive element inside first article (title link)
+        const firstArticle = articles.first();
         const linkInFirstArticle = firstArticle.locator('a').first();
         const hasInteractiveElement = (await linkInFirstArticle.count()) > 0;
 
@@ -221,8 +215,7 @@ for (const framework of frameworks) {
           await expect(linkInFirstArticle).toBeFocused();
 
           // Press Page Down - should move to next article
-          await page.keyboard.press('PageDown');
-          await page.waitForTimeout(100);
+          await linkInFirstArticle.press('PageDown');
 
           await expect(secondArticle).toBeFocused();
         } else {
@@ -256,14 +249,15 @@ for (const framework of frameworks) {
 
         // Focus first article
         await firstArticle.focus();
+        await expect(firstArticle).toBeFocused();
         await expect(firstArticle).toHaveAttribute('tabindex', '0');
         await expect(secondArticle).toHaveAttribute('tabindex', '-1');
 
         // Move to second article
-        await page.keyboard.press('PageDown');
-        await page.waitForTimeout(100);
+        await firstArticle.press('PageDown');
 
         // Tabindex should be updated
+        await expect(secondArticle).toBeFocused();
         await expect(firstArticle).toHaveAttribute('tabindex', '-1');
         await expect(secondArticle).toHaveAttribute('tabindex', '0');
       });

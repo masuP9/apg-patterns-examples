@@ -81,13 +81,14 @@ const focusWithoutClick = async (
 };
 
 /**
- * Press a key and wait for focus to settle on a treeitem.
- * This is needed because React/Svelte update focus asynchronously.
+ * Press a key on a focused element and wait for focus to settle on a treeitem.
+ * Uses element.press() for stability instead of page.keyboard.press().
  */
-const pressKeyAndWaitForFocus = async (page: import('@playwright/test').Page, key: string) => {
-  await page.keyboard.press(key);
+const pressKeyOnElement = async (element: import('@playwright/test').Locator, key: string) => {
+  await expect(element).toBeFocused();
+  await element.press(key);
   // Wait for focus to settle on a treeitem
-  await expect(page.locator('[role="treeitem"]:focus')).toBeVisible();
+  await expect(element.page().locator('[role="treeitem"]:focus')).toBeVisible();
 };
 
 /**
@@ -96,7 +97,8 @@ const pressKeyAndWaitForFocus = async (page: import('@playwright/test').Page, ke
  */
 const navigateToIndex = async (page: import('@playwright/test').Page, targetIndex: number) => {
   for (let i = 0; i < targetIndex; i++) {
-    await pressKeyAndWaitForFocus(page, 'ArrowDown');
+    const currentFocused = page.locator('[role="treeitem"]:focus');
+    await pressKeyOnElement(currentFocused, 'ArrowDown');
   }
 };
 
@@ -262,8 +264,8 @@ for (const framework of frameworks) {
         const firstItem = items.first();
 
         await clickAndWaitForFocus(firstItem, page);
-
-        await page.keyboard.press('ArrowDown');
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('ArrowDown');
 
         // Focus should have moved to a different item
         const secondItem = items.nth(1);
@@ -277,8 +279,8 @@ for (const framework of frameworks) {
         // Click second item first
         const secondItem = items.nth(1);
         await clickAndWaitForFocus(secondItem, page);
-
-        await page.keyboard.press('ArrowUp');
+        await expect(secondItem).toBeFocused();
+        await secondItem.press('ArrowUp');
 
         const firstItem = items.first();
         await expect(firstItem).toBeFocused();
@@ -291,8 +293,8 @@ for (const framework of frameworks) {
         // Start from a later item
         const laterItem = items.nth(2);
         await clickAndWaitForFocus(laterItem, page);
-
-        await page.keyboard.press('Home');
+        await expect(laterItem).toBeFocused();
+        await laterItem.press('Home');
 
         const firstItem = items.first();
         await expect(firstItem).toBeFocused();
@@ -306,8 +308,8 @@ for (const framework of frameworks) {
         // Use the second item (first child of expanded parent)
         const secondItem = items.nth(1);
         await clickAndWaitForFocus(secondItem, page);
-
-        await page.keyboard.press('End');
+        await expect(secondItem).toBeFocused();
+        await secondItem.press('End');
 
         // Get current count after any DOM changes
         const currentCount = await items.count();
@@ -340,7 +342,8 @@ for (const framework of frameworks) {
 
           // Navigate to the parent node using keyboard
           // Use Home to go to first item, then navigate down
-          await page.keyboard.press('Home');
+          await expect(firstItem).toBeFocused();
+          await firstItem.press('Home');
 
           // Now navigate to the target node
           const items = tree.getByRole('treeitem');
@@ -361,12 +364,16 @@ for (const framework of frameworks) {
           const currentExpanded = await stableLocator.getAttribute('aria-expanded');
           if (currentExpanded === 'true') {
             // Collapse it first
-            await page.keyboard.press('ArrowLeft');
+            const focusedItem = page.locator('[role="treeitem"]:focus');
+            await expect(focusedItem).toBeFocused();
+            await focusedItem.press('ArrowLeft');
             await expect(stableLocator).toHaveAttribute('aria-expanded', 'false');
           }
 
           // Now test ArrowRight to expand
-          await page.keyboard.press('ArrowRight');
+          const focusedItem = page.locator('[role="treeitem"]:focus');
+          await expect(focusedItem).toBeFocused();
+          await focusedItem.press('ArrowRight');
           await expect(stableLocator).toHaveAttribute('aria-expanded', 'true');
         }
       });
@@ -382,8 +389,8 @@ for (const framework of frameworks) {
 
           // Focus without click to avoid toggling expansion
           await focusWithoutClick(expandedParent, page);
-
-          await page.keyboard.press('ArrowRight');
+          await expect(expandedParent).toBeFocused();
+          await expandedParent.press('ArrowRight');
 
           // Focus should move to first child - verify by checking:
           // 1. Focus moved to a different element
@@ -412,7 +419,8 @@ for (const framework of frameworks) {
           await clickAndWaitForFocus(firstItem, page);
 
           // Navigate to the parent node using keyboard
-          await page.keyboard.press('Home');
+          await expect(firstItem).toBeFocused();
+          await firstItem.press('Home');
 
           // Find the index of target node
           const items = tree.getByRole('treeitem');
@@ -433,12 +441,16 @@ for (const framework of frameworks) {
           const currentExpanded = await stableLocator.getAttribute('aria-expanded');
           if (currentExpanded === 'false') {
             // Expand it first
-            await page.keyboard.press('ArrowRight');
+            const focusedItem = page.locator('[role="treeitem"]:focus');
+            await expect(focusedItem).toBeFocused();
+            await focusedItem.press('ArrowRight');
             await expect(stableLocator).toHaveAttribute('aria-expanded', 'true');
           }
 
           // Now test ArrowLeft to collapse
-          await page.keyboard.press('ArrowLeft');
+          const focusedItem = page.locator('[role="treeitem"]:focus');
+          await expect(focusedItem).toBeFocused();
+          await focusedItem.press('ArrowLeft');
           await expect(stableLocator).toHaveAttribute('aria-expanded', 'false');
         }
       });
@@ -452,10 +464,13 @@ for (const framework of frameworks) {
           // Focus parent without click to avoid toggling expansion
           await focusWithoutClick(expandedParent, page);
           // Move to first child
-          await page.keyboard.press('ArrowRight');
+          await expect(expandedParent).toBeFocused();
+          await expandedParent.press('ArrowRight');
 
           // Now press ArrowLeft to go back to parent
-          await page.keyboard.press('ArrowLeft');
+          const focusedChild = page.locator('[role="treeitem"]:focus');
+          await expect(focusedChild).toBeFocused();
+          await focusedChild.press('ArrowLeft');
 
           await expect(expandedParent).toBeFocused();
         }
@@ -486,7 +501,8 @@ for (const framework of frameworks) {
 
         // The * key expands all expandable siblings at the SAME LEVEL as the focused node
         // First, let's ensure we're at the root level
-        await page.keyboard.press('Home');
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('Home');
 
         // Get all top-level treeitems (direct children of tree, not nested in groups)
         // Top-level items are those that are not inside a group element
@@ -502,7 +518,8 @@ for (const framework of frameworks) {
               // Navigate to this item and collapse it
               const labelledby = await parent.getAttribute('aria-labelledby');
               // Go home and navigate to find it
-              await pressKeyAndWaitForFocus(page, 'Home');
+              const currentFocused = page.locator('[role="treeitem"]:focus');
+              await pressKeyOnElement(currentFocused, 'Home');
               const items = tree.getByRole('treeitem');
               const count = await items.count();
               for (let j = 0; j < count; j++) {
@@ -511,7 +528,9 @@ for (const framework of frameworks) {
                   // Navigate to this item (with focus wait after each press)
                   await navigateToIndex(page, j);
                   // Collapse it
-                  await page.keyboard.press('ArrowLeft');
+                  const focusedItem = page.locator('[role="treeitem"]:focus');
+                  await expect(focusedItem).toBeFocused();
+                  await focusedItem.press('ArrowLeft');
                   await expect(parent).toHaveAttribute('aria-expanded', 'false');
                   break;
                 }
@@ -520,10 +539,13 @@ for (const framework of frameworks) {
           }
 
           // Go back home
-          await pressKeyAndWaitForFocus(page, 'Home');
+          const currentFocused = page.locator('[role="treeitem"]:focus');
+          await pressKeyOnElement(currentFocused, 'Home');
 
           // Press * to expand all siblings at the current level
-          await page.keyboard.press('*');
+          const focusedItem = page.locator('[role="treeitem"]:focus');
+          await expect(focusedItem).toBeFocused();
+          await focusedItem.press('*');
 
           // Wait for all top-level parents to be expanded (state-based wait)
           for (let i = 0; i < topLevelCount; i++) {
@@ -546,12 +568,12 @@ for (const framework of frameworks) {
         await clickAndWaitForFocus(firstItem, page);
 
         // Navigate to second item
-        await pressKeyAndWaitForFocus(page, 'ArrowDown');
+        await pressKeyOnElement(firstItem, 'ArrowDown');
         const secondItem = items.nth(1);
         await expect(secondItem).toBeFocused();
 
         // Press Enter to select
-        await page.keyboard.press('Enter');
+        await secondItem.press('Enter');
         await expect(secondItem).toHaveAttribute('aria-selected', 'true');
       });
 
@@ -564,12 +586,12 @@ for (const framework of frameworks) {
         await expect(firstItem).toHaveAttribute('aria-selected', 'true');
 
         // Navigate to another item without selecting (with focus wait)
-        await pressKeyAndWaitForFocus(page, 'ArrowDown');
+        await pressKeyOnElement(firstItem, 'ArrowDown');
         const secondItem = items.nth(1);
         await expect(secondItem).toBeFocused();
 
         // Press Space to select
-        await page.keyboard.press('Space');
+        await secondItem.press('Space');
         await expect(secondItem).toHaveAttribute('aria-selected', 'true');
         // First item should no longer be selected in single-select
         await expect(firstItem).toHaveAttribute('aria-selected', 'false');
@@ -585,10 +607,11 @@ for (const framework of frameworks) {
         await expect(firstItem).toHaveAttribute('aria-selected', 'true');
 
         // Press Enter to explicitly select it
-        await page.keyboard.press('Enter');
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('Enter');
 
         // Navigate away (with focus wait)
-        await pressKeyAndWaitForFocus(page, 'ArrowDown');
+        await pressKeyOnElement(firstItem, 'ArrowDown');
         const secondItem = items.nth(1);
         await expect(secondItem).toBeFocused();
 
@@ -618,11 +641,13 @@ for (const framework of frameworks) {
             await expect(firstItem).toHaveAttribute('aria-selected', 'true');
 
             // Toggle off
-            await page.keyboard.press('Space');
+            await expect(firstItem).toBeFocused();
+            await firstItem.press('Space');
             await expect(firstItem).toHaveAttribute('aria-selected', 'false');
 
             // Toggle on
-            await page.keyboard.press('Space');
+            await expect(firstItem).toBeFocused();
+            await firstItem.press('Space');
             await expect(firstItem).toHaveAttribute('aria-selected', 'true');
             break;
           }
@@ -646,7 +671,8 @@ for (const framework of frameworks) {
             await expect(firstItem).toHaveAttribute('aria-selected', 'true');
 
             // Shift+ArrowDown to extend selection
-            await page.keyboard.press('Shift+ArrowDown');
+            await expect(firstItem).toBeFocused();
+            await firstItem.press('Shift+ArrowDown');
 
             const secondItem = items.nth(1);
             await expect(secondItem).toHaveAttribute('aria-selected', 'true');
@@ -701,12 +727,12 @@ for (const framework of frameworks) {
                 foundDisabled = true;
                 break;
               }
-              await pressKeyAndWaitForFocus(page, 'ArrowDown');
+              await pressKeyOnElement(currentFocused, 'ArrowDown');
             }
 
             if (foundDisabled) {
               // Now we're on the disabled item via keyboard navigation
-              // Try to select it with Space
+              // Try to select it with Space (keep page.keyboard.press for disabled element tests)
               await page.keyboard.press('Space');
 
               // Should not be selected
@@ -728,9 +754,10 @@ for (const framework of frameworks) {
         const firstItem = items.first();
 
         await clickAndWaitForFocus(firstItem, page);
+        await expect(firstItem).toBeFocused();
 
         // Type 'r' to find nodes starting with 'r' (like 'readme.md')
-        await page.keyboard.press('r');
+        await firstItem.press('r');
 
         // Wait for type-ahead to process (state-based wait)
         // Focus should move to a node starting with 'r'
@@ -790,12 +817,18 @@ for (const framework of frameworks) {
           // Focus parent without click to avoid toggling expansion
           await focusWithoutClick(expandedParentLocator, page);
           // Navigate to a child
-          await page.keyboard.press('ArrowRight');
+          await expect(expandedParentLocator).toBeFocused();
+          await expandedParentLocator.press('ArrowRight');
 
           // Collapse the parent by pressing ArrowLeft twice
           // (first ArrowLeft goes back to parent, second collapses it)
-          await page.keyboard.press('ArrowLeft');
-          await page.keyboard.press('ArrowLeft');
+          let focusedItem = page.locator('[role="treeitem"]:focus');
+          await expect(focusedItem).toBeFocused();
+          await focusedItem.press('ArrowLeft');
+
+          focusedItem = page.locator('[role="treeitem"]:focus');
+          await expect(focusedItem).toBeFocused();
+          await focusedItem.press('ArrowLeft');
 
           // Use the stable selector to find the parent (now collapsed)
           const parent = tree.locator(`[role="treeitem"][aria-labelledby="${labelledby}"]`);

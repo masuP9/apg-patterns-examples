@@ -152,7 +152,7 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstButton.press('ArrowRight');
 
         await expect(secondButton).toBeFocused();
       });
@@ -165,7 +165,7 @@ for (const framework of frameworks) {
         await secondButton.click();
         await expect(secondButton).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await secondButton.press('ArrowLeft');
 
         await expect(firstButton).toBeFocused();
       });
@@ -178,7 +178,7 @@ for (const framework of frameworks) {
         await lastButton.click();
         await expect(lastButton).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await lastButton.press('Home');
 
         await expect(firstButton).toBeFocused();
       });
@@ -191,7 +191,7 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstButton.press('End');
 
         await expect(lastButton).toBeFocused();
       });
@@ -203,7 +203,7 @@ for (const framework of frameworks) {
         await lastButton.click();
         await expect(lastButton).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await lastButton.press('ArrowRight');
 
         // Should still be on last button (no wrap)
         await expect(lastButton).toBeFocused();
@@ -216,7 +216,7 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await firstButton.press('ArrowLeft');
 
         // Should still be on first button (no wrap)
         await expect(firstButton).toBeFocused();
@@ -229,10 +229,11 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstButton.press('ArrowDown');
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await expect(firstButton).toBeFocused();
+        await firstButton.press('ArrowUp');
         await expect(firstButton).toBeFocused();
       });
     });
@@ -250,7 +251,7 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstButton.press('ArrowDown');
 
         await expect(secondButton).toBeFocused();
       });
@@ -263,7 +264,7 @@ for (const framework of frameworks) {
         await secondButton.click();
         await expect(secondButton).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await secondButton.press('ArrowUp');
 
         await expect(firstButton).toBeFocused();
       });
@@ -275,10 +276,11 @@ for (const framework of frameworks) {
         await firstButton.click();
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstButton.press('ArrowRight');
         await expect(firstButton).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await expect(firstButton).toBeFocused();
+        await firstButton.press('ArrowLeft');
         await expect(firstButton).toBeFocused();
       });
     });
@@ -316,7 +318,7 @@ for (const framework of frameworks) {
         await expect(undoButton).toBeFocused();
 
         // ArrowRight should skip Redo (disabled) and go to Cut
-        await page.keyboard.press('ArrowRight');
+        await undoButton.press('ArrowRight');
 
         // Should be on Cut, not Redo
         const focusedButton = page.locator(':focus');
@@ -351,7 +353,8 @@ for (const framework of frameworks) {
         const secondButton = buttons.nth(1);
 
         await firstButton.click();
-        await page.keyboard.press('ArrowRight');
+        await expect(firstButton).toBeFocused();
+        await firstButton.press('ArrowRight');
 
         // Second button should now have tabindex="0"
         await expect(secondButton).toHaveAttribute('tabindex', '0');
@@ -393,7 +396,7 @@ for (const framework of frameworks) {
 
         const initialPressed = await toggleButton.getAttribute('aria-pressed');
 
-        await page.keyboard.press('Enter');
+        await toggleButton.press('Enter');
 
         const newPressed = await toggleButton.getAttribute('aria-pressed');
         expect(newPressed).not.toBe(initialPressed);
@@ -409,7 +412,7 @@ for (const framework of frameworks) {
 
         const initialPressed = await toggleButton.getAttribute('aria-pressed');
 
-        await page.keyboard.press('Space');
+        await toggleButton.press('Space');
 
         const newPressed = await toggleButton.getAttribute('aria-pressed');
         expect(newPressed).not.toBe(initialPressed);
@@ -464,7 +467,7 @@ test.describe('Toolbar - Cross-framework Consistency', () => {
       await firstButton.click();
       await expect(firstButton).toBeFocused();
 
-      await page.keyboard.press('ArrowRight');
+      await firstButton.press('ArrowRight');
       await expect(secondButton).toBeFocused();
     }
   });

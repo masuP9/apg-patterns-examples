@@ -159,7 +159,8 @@ for (const framework of frameworks) {
       test('Enter opens menu and focuses first item', async ({ page }) => {
         const button = getMenuButton(page);
         await button.focus();
-        await page.keyboard.press('Enter');
+        await expect(button).toBeFocused();
+        await button.press('Enter');
 
         await expect(getMenu(page)).toBeVisible();
         await expect(button).toHaveAttribute('aria-expanded', 'true');
@@ -172,7 +173,8 @@ for (const framework of frameworks) {
       test('Space opens menu and focuses first item', async ({ page }) => {
         const button = getMenuButton(page);
         await button.focus();
-        await page.keyboard.press('Space');
+        await expect(button).toBeFocused();
+        await button.press('Space');
 
         await expect(getMenu(page)).toBeVisible();
         const firstItem = getMenuItems(page).first();
@@ -182,7 +184,8 @@ for (const framework of frameworks) {
       test('ArrowDown opens menu and focuses first item', async ({ page }) => {
         const button = getMenuButton(page);
         await button.focus();
-        await page.keyboard.press('ArrowDown');
+        await expect(button).toBeFocused();
+        await button.press('ArrowDown');
 
         await expect(getMenu(page)).toBeVisible();
         const firstItem = getMenuItems(page).first();
@@ -192,7 +195,8 @@ for (const framework of frameworks) {
       test('ArrowUp opens menu and focuses last enabled item', async ({ page }) => {
         const button = getMenuButton(page);
         await button.focus();
-        await page.keyboard.press('ArrowUp');
+        await expect(button).toBeFocused();
+        await button.press('ArrowUp');
 
         await expect(getMenu(page)).toBeVisible();
 
@@ -211,8 +215,9 @@ for (const framework of frameworks) {
         const items = getMenuItems(page);
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstItem.press('ArrowDown');
 
         const secondItem = items.nth(1);
         await expect(secondItem).toBeFocused();
@@ -220,15 +225,20 @@ for (const framework of frameworks) {
 
       test('ArrowDown wraps from last to first', async ({ page }) => {
         await openMenu(page);
+        const items = getMenuItems(page);
+        const firstItem = items.first();
 
-        // Focus the last enabled item
-        // For basic menu, just navigate to end
-        for (let i = 0; i < 10; i++) {
-          await page.keyboard.press('End');
-        }
+        // Focus the first item, then use End to go to last
+        await firstItem.focus();
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('End');
+
+        // Get the last item and verify it's focused
+        const lastItem = items.last();
+        await expect(lastItem).toBeFocused();
 
         const focusedBefore = await page.evaluate(() => document.activeElement?.textContent);
-        await page.keyboard.press('ArrowDown');
+        await lastItem.press('ArrowDown');
         const focusedAfter = await page.evaluate(() => document.activeElement?.textContent);
 
         // Should have wrapped to a different item (first)
@@ -238,13 +248,17 @@ for (const framework of frameworks) {
       test('ArrowUp moves to previous item', async ({ page }) => {
         await openMenu(page);
         const items = getMenuItems(page);
-
-        // Start from second item
-        await items.nth(1).focus();
-
-        await page.keyboard.press('ArrowUp');
-
         const firstItem = items.first();
+        const secondItem = items.nth(1);
+
+        // Navigate to second item using keyboard
+        await firstItem.focus();
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('ArrowDown');
+        await expect(secondItem).toBeFocused();
+
+        await secondItem.press('ArrowUp');
+
         await expect(firstItem).toBeFocused();
       });
 
@@ -253,9 +267,10 @@ for (const framework of frameworks) {
         const items = getMenuItems(page);
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
         const focusedBefore = await page.evaluate(() => document.activeElement?.textContent);
-        await page.keyboard.press('ArrowUp');
+        await firstItem.press('ArrowUp');
         const focusedAfter = await page.evaluate(() => document.activeElement?.textContent);
 
         // Should have wrapped to last item
@@ -265,13 +280,17 @@ for (const framework of frameworks) {
       test('Home moves to first enabled item', async ({ page }) => {
         await openMenu(page);
         const items = getMenuItems(page);
-
-        // Start from second item
-        await items.nth(1).focus();
-
-        await page.keyboard.press('Home');
-
         const firstItem = items.first();
+        const secondItem = items.nth(1);
+
+        // Navigate to second item using keyboard
+        await firstItem.focus();
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('ArrowDown');
+        await expect(secondItem).toBeFocused();
+
+        await secondItem.press('Home');
+
         await expect(firstItem).toBeFocused();
       });
 
@@ -280,8 +299,9 @@ for (const framework of frameworks) {
         const items = getMenuItems(page);
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstItem.press('End');
 
         // Focus should be on last item (or last enabled item)
         const focusedItem = page.locator(':focus');
@@ -308,8 +328,9 @@ for (const framework of frameworks) {
         const items = getMenuItems(page);
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('Enter');
+        await firstItem.press('Enter');
 
         await expect(getMenu(page)).not.toBeVisible();
         await expect(button).toBeFocused();
@@ -320,8 +341,9 @@ for (const framework of frameworks) {
         const items = getMenuItems(page);
         const firstItem = items.first();
         await firstItem.focus();
+        await expect(firstItem).toBeFocused();
 
-        await page.keyboard.press('Space');
+        await firstItem.press('Space');
 
         await expect(getMenu(page)).not.toBeVisible();
         await expect(button).toBeFocused();
@@ -373,12 +395,17 @@ for (const framework of frameworks) {
 
         // Navigate through all items
         const focusedTexts: string[] = [];
+        // Get first focused item
+        const firstItem = getMenuItems(page).first();
+        await expect(firstItem).toBeFocused();
+
         for (let i = 0; i < 10; i++) {
-          const text = await page.evaluate(() => document.activeElement?.textContent || '');
+          const focusedElement = page.locator(':focus');
+          const text = await focusedElement.textContent();
           if (text && !focusedTexts.includes(text)) {
             focusedTexts.push(text);
           }
-          await page.keyboard.press('ArrowDown');
+          await focusedElement.press('ArrowDown');
         }
 
         // "Export" (disabled) should not be in the focused list
@@ -477,8 +504,8 @@ for (const framework of frameworks) {
         const firstItem = getMenuItems(page).first();
         await expect(firstItem).toBeFocused();
 
-        // Type 'p' to find "Paste" - use press() for single key
-        await page.keyboard.press('p');
+        // Type 'p' to find "Paste" - use element.press() for single key
+        await firstItem.press('p');
 
         // Wait for focus to move to item starting with 'p'
         // Use trim() because some frameworks may include whitespace in textContent
@@ -494,14 +521,18 @@ for (const framework of frameworks) {
 
       test('type-ahead wraps around', async ({ page }) => {
         await openMenu(page);
+        const items = getMenuItems(page);
+        const firstItem = items.first();
 
-        // Focus last item
-        await page.keyboard.press('End');
-        const lastItem = getMenuItems(page).last();
+        // Navigate to last item using keyboard
+        await firstItem.focus();
+        await expect(firstItem).toBeFocused();
+        await firstItem.press('End');
+        const lastItem = items.last();
         await expect(lastItem).toBeFocused();
 
-        // Type character that matches earlier item - use press() for single key
-        await page.keyboard.press('c');
+        // Type character that matches earlier item - use element.press() for single key
+        await lastItem.press('c');
 
         // Wait for focus to wrap and find item starting with 'c'
         // Use trim() because some frameworks may include whitespace in textContent
@@ -599,7 +630,8 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
 
       const button = getMenuButton(page);
       await button.focus();
-      await page.keyboard.press('Enter');
+      await expect(button).toBeFocused();
+      await button.press('Enter');
 
       const menu = getMenu(page);
       await expect(menu).toBeVisible();
@@ -609,7 +641,7 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
       await expect(firstItem).toBeFocused();
 
       // Arrow navigation
-      await page.keyboard.press('ArrowDown');
+      await firstItem.press('ArrowDown');
       const secondItem = getMenuItems(page).nth(1);
       await expect(secondItem).toBeFocused();
 

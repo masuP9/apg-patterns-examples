@@ -139,7 +139,8 @@ for (const framework of frameworks) {
 
         // Focus and press Enter
         await sortableHeader.focus();
-        await page.keyboard.press('Enter');
+        await expect(sortableHeader).toBeFocused();
+        await sortableHeader.press('Enter');
 
         // Check that aria-sort changed
         const newSort = await sortableHeader.getAttribute('aria-sort');
@@ -219,7 +220,8 @@ for (const framework of frameworks) {
         }
 
         await sortableHeader.focus();
-        await page.keyboard.press('Space');
+        await expect(sortableHeader).toBeFocused();
+        await sortableHeader.press('Space');
 
         const newSort = await sortableHeader.getAttribute('aria-sort');
         expect(newSort).not.toEqual(initialSort);
@@ -274,7 +276,8 @@ for (const framework of frameworks) {
         const firstCheckbox = checkboxes.first();
 
         await firstCheckbox.focus();
-        await page.keyboard.press('Space');
+        await expect(firstCheckbox).toBeFocused();
+        await firstCheckbox.press('Space');
 
         await expect(firstDataRow).toHaveAttribute('aria-selected', 'true');
       });
@@ -401,7 +404,8 @@ for (const framework of frameworks) {
         }
 
         await focusCell(page, firstCell);
-        await page.keyboard.press('Shift+ArrowDown');
+        await expect(firstCell).toBeFocused();
+        await firstCell.press('Shift+ArrowDown');
 
         // Multiple cells should be selected
         const selectedCells = grid.locator('[role="gridcell"][aria-selected="true"]');
@@ -420,7 +424,8 @@ for (const framework of frameworks) {
         }
 
         await focusCell(page, firstCell);
-        await page.keyboard.press('Shift+ArrowRight');
+        await expect(firstCell).toBeFocused();
+        await firstCell.press('Shift+ArrowRight');
 
         const selectedCells = grid.locator('[role="gridcell"][aria-selected="true"]');
         expect(await selectedCells.count()).toBeGreaterThan(1);
@@ -445,7 +450,8 @@ for (const framework of frameworks) {
 
         const editableCell = editableCells.first();
         await focusCell(page, editableCell);
-        await page.keyboard.press('Enter');
+        await expect(editableCell).toBeFocused();
+        await editableCell.press('Enter');
 
         // Should show input (textbox, combobox, or select)
         const input = editableCell.locator('input, select, [role="combobox"]').first();
@@ -464,7 +470,8 @@ for (const framework of frameworks) {
 
         const editableCell = editableCells.first();
         await focusCell(page, editableCell);
-        await page.keyboard.press('F2');
+        await expect(editableCell).toBeFocused();
+        await editableCell.press('F2');
 
         const input = editableCell.locator('input, select, [role="combobox"]').first();
         await expect(input).toBeFocused();
@@ -484,13 +491,14 @@ for (const framework of frameworks) {
         const originalValue = await editableCell.innerText();
 
         await focusCell(page, editableCell);
-        await page.keyboard.press('Enter');
+        await expect(editableCell).toBeFocused();
+        await editableCell.press('Enter');
 
         // Wait for edit mode to be active
         const input = editableCell.locator('input, select, [role="combobox"]').first();
         await expect(input).toBeFocused();
 
-        // Cancel editing
+        // Cancel editing - KEEP page.keyboard.press() for Escape
         await page.keyboard.press('Escape');
 
         // Value should be restored (or unchanged)
@@ -514,13 +522,15 @@ for (const framework of frameworks) {
 
         const editableCell = editableCells.first();
         await focusCell(page, editableCell);
-        await page.keyboard.press('Enter');
+        await expect(editableCell).toBeFocused();
+        await editableCell.press('Enter');
 
         const input = editableCell.locator('input, select, [role="combobox"]').first();
         await expect(input).toBeFocused();
 
         // Arrow keys should not navigate grid while editing
-        await page.keyboard.press('ArrowRight');
+        // In edit mode, focus is on input, so use input.press()
+        await input.press('ArrowRight');
 
         // Should still be in edit mode (input or cell should have focus)
         const inputStillFocused = await input.evaluate((el) => el === document.activeElement);
@@ -540,8 +550,9 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expect(firstCell).toBeFocused();
 
-        await page.keyboard.press('ArrowRight');
+        await firstCell.press('ArrowRight');
 
         const secondCell = cells.nth(1);
         await expectCellOrChildFocused(page, secondCell);
@@ -552,8 +563,9 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const secondCell = cells.nth(1);
         await focusCell(page, secondCell);
+        await expect(secondCell).toBeFocused();
 
-        await page.keyboard.press('ArrowLeft');
+        await secondCell.press('ArrowLeft');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -567,8 +579,9 @@ for (const framework of frameworks) {
 
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expect(firstCell).toBeFocused();
 
-        await page.keyboard.press('ArrowDown');
+        await firstCell.press('ArrowDown');
 
         const targetCell = cells.nth(columnCount);
         await expectCellOrChildFocused(page, targetCell);
@@ -582,8 +595,9 @@ for (const framework of frameworks) {
 
         const secondRowCell = cells.nth(columnCount);
         await focusCell(page, secondRowCell);
+        await expect(secondRowCell).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await secondRowCell.press('ArrowUp');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -617,8 +631,9 @@ for (const framework of frameworks) {
         }
 
         await focusCell(page, cellInSameColumn);
+        await expect(cellInSameColumn).toBeFocused();
 
-        await page.keyboard.press('ArrowUp');
+        await cellInSameColumn.press('ArrowUp');
 
         // Should focus sortable header
         await expect(firstSortableHeader).toBeFocused();
@@ -638,6 +653,7 @@ for (const framework of frameworks) {
         const allHeaders = grid.getByRole('columnheader');
         const firstSortableHeader = sortableHeaders.first();
         await firstSortableHeader.focus();
+        await expect(firstSortableHeader).toBeFocused();
 
         // Get the column index by finding the sortable header's position
         const headerCount = await allHeaders.count();
@@ -656,7 +672,7 @@ for (const framework of frameworks) {
           return;
         }
 
-        await page.keyboard.press('ArrowDown');
+        await firstSortableHeader.press('ArrowDown');
 
         // Find the first data row's cell at the same column index
         const rows = grid.getByRole('row');
@@ -677,8 +693,9 @@ for (const framework of frameworks) {
         const cellCount = await cellsInFirstRow.count();
         const lastCell = cellsInFirstRow.nth(cellCount - 1);
         await focusCell(page, lastCell);
+        await expect(lastCell).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await lastCell.press('Home');
 
         // Home should move to first focusable cell in the row
         // Some implementations move to checkbox cell, others to first data cell
@@ -703,8 +720,9 @@ for (const framework of frameworks) {
 
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expect(firstCell).toBeFocused();
 
-        await page.keyboard.press('End');
+        await firstCell.press('End');
 
         const lastCellInFirstRow = cells.nth(columnCount - 1);
         await expectCellOrChildFocused(page, lastCellInFirstRow);
@@ -719,8 +737,9 @@ for (const framework of frameworks) {
         const cellsInLastRow = lastDataRow.getByRole('gridcell');
         const lastCell = cellsInLastRow.last();
         await focusCell(page, lastCell);
+        await expect(lastCell).toBeFocused();
 
-        await page.keyboard.press('Control+Home');
+        await lastCell.press('Control+Home');
 
         // Ctrl+Home moves to first cell in grid
         // Some implementations move to checkbox cell, others to first data cell
@@ -745,8 +764,9 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expect(firstCell).toBeFocused();
 
-        await page.keyboard.press('Control+End');
+        await firstCell.press('Control+End');
 
         const lastCell = cells.last();
         await expectCellOrChildFocused(page, lastCell);
@@ -835,13 +855,14 @@ for (const framework of frameworks) {
 
         // First focus the first cell
         await focusCell(page, firstCell);
+        await expect(firstCell).toBeFocused();
 
         // After focusing first cell, it should have tabindex="0"
         await expect(firstCell).toHaveAttribute('tabindex', '0');
         await expect(secondCell).toHaveAttribute('tabindex', '-1');
 
         // Navigate right
-        await page.keyboard.press('ArrowRight');
+        await firstCell.press('ArrowRight');
 
         // tabindex should move to the second cell
         await expect(firstCell).toHaveAttribute('tabindex', '-1');
@@ -903,13 +924,14 @@ for (const framework of frameworks) {
         await expect(firstCheckboxCell).toBeFocused();
 
         // ArrowRight should move to next cell (name cell)
-        await page.keyboard.press('ArrowRight');
+        await firstCheckboxCell.press('ArrowRight');
         const cells = grid.getByRole('gridcell');
         const secondCell = cells.nth(1); // Name cell after checkbox
         await expectCellOrChildFocused(page, secondCell);
 
         // ArrowLeft should move back to checkbox cell
-        await page.keyboard.press('ArrowLeft');
+        await expect(secondCell).toBeFocused();
+        await secondCell.press('ArrowLeft');
         await expect(firstCheckboxCell).toBeFocused();
       });
 

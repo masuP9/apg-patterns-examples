@@ -119,7 +119,8 @@ for (const framework of frameworks) {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
 
         await lowerThumb.click();
-        await page.keyboard.press('ArrowRight');
+        await expect(lowerThumb).toBeFocused();
+        await lowerThumb.press('ArrowRight');
 
         // Lower thumb moved from 20 to 21
         await expect(lowerThumb).toHaveAttribute('aria-valuenow', '21');
@@ -134,7 +135,8 @@ for (const framework of frameworks) {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
 
         await upperThumb.click();
-        await page.keyboard.press('ArrowLeft');
+        await expect(upperThumb).toBeFocused();
+        await upperThumb.press('ArrowLeft');
 
         // Upper thumb moved from 80 to 79
         await expect(upperThumb).toHaveAttribute('aria-valuenow', '79');
@@ -155,7 +157,7 @@ for (const framework of frameworks) {
         await expect(lowerThumb).toBeFocused();
 
         const initialValue = await lowerThumb.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowRight');
+        await lowerThumb.press('ArrowRight');
 
         const newValue = await lowerThumb.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) + 1);
@@ -164,9 +166,10 @@ for (const framework of frameworks) {
       test('ArrowLeft decreases upper thumb value by step', async ({ page }) => {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
         const initialValue = await upperThumb.getAttribute('aria-valuenow');
-        await page.keyboard.press('ArrowLeft');
+        await upperThumb.press('ArrowLeft');
 
         const newValue = await upperThumb.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) - 1);
@@ -175,8 +178,9 @@ for (const framework of frameworks) {
       test('Home sets lower thumb to absolute minimum', async ({ page }) => {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await lowerThumb.press('Home');
 
         await expect(lowerThumb).toHaveAttribute('aria-valuenow', '0');
       });
@@ -185,11 +189,12 @@ for (const framework of frameworks) {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
 
         // Get upper thumb value to determine expected max
         const upperValue = await upperThumb.getAttribute('aria-valuenow');
 
-        await page.keyboard.press('End');
+        await lowerThumb.press('End');
 
         // Lower thumb should be at or near upper thumb value (respecting minDistance)
         const newValue = await lowerThumb.getAttribute('aria-valuenow');
@@ -200,11 +205,12 @@ for (const framework of frameworks) {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
         // Get lower thumb value to determine expected min
         const lowerValue = await lowerThumb.getAttribute('aria-valuenow');
 
-        await page.keyboard.press('Home');
+        await upperThumb.press('Home');
 
         // Upper thumb should be at or near lower thumb value (respecting minDistance)
         const newValue = await upperThumb.getAttribute('aria-valuenow');
@@ -214,8 +220,9 @@ for (const framework of frameworks) {
       test('End sets upper thumb to absolute maximum', async ({ page }) => {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
-        await page.keyboard.press('End');
+        await upperThumb.press('End');
 
         await expect(upperThumb).toHaveAttribute('aria-valuenow', '100');
       });
@@ -223,9 +230,10 @@ for (const framework of frameworks) {
       test('PageUp increases value by large step', async ({ page }) => {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
 
         const initialValue = await lowerThumb.getAttribute('aria-valuenow');
-        await page.keyboard.press('PageUp');
+        await lowerThumb.press('PageUp');
 
         const newValue = await lowerThumb.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) + 10);
@@ -234,9 +242,10 @@ for (const framework of frameworks) {
       test('PageDown decreases value by large step', async ({ page }) => {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
         const initialValue = await upperThumb.getAttribute('aria-valuenow');
-        await page.keyboard.press('PageDown');
+        await upperThumb.press('PageDown');
 
         const newValue = await upperThumb.getAttribute('aria-valuenow');
         expect(Number(newValue)).toBe(Number(initialValue) - 10);
@@ -251,12 +260,13 @@ for (const framework of frameworks) {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
 
         // Get upper thumb's current value
         const upperValue = await upperThumb.getAttribute('aria-valuenow');
 
         // Try to move lower thumb to End (dynamic max)
-        await page.keyboard.press('End');
+        await lowerThumb.press('End');
 
         // Verify lower thumb is at or below upper thumb
         const lowerValue = await lowerThumb.getAttribute('aria-valuenow');
@@ -267,12 +277,13 @@ for (const framework of frameworks) {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
         // Get lower thumb's current value
         const lowerValue = await lowerThumb.getAttribute('aria-valuenow');
 
         // Try to move upper thumb to Home (dynamic min)
-        await page.keyboard.press('Home');
+        await upperThumb.press('Home');
 
         // Verify upper thumb is at or above lower thumb
         const upperValue = await upperThumb.getAttribute('aria-valuenow');
@@ -285,8 +296,9 @@ for (const framework of frameworks) {
 
         // Move lower thumb toward upper thumb
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
         for (let i = 0; i < 100; i++) {
-          await page.keyboard.press('ArrowRight');
+          await lowerThumb.press('ArrowRight');
         }
 
         const lowerValue = await lowerThumb.getAttribute('aria-valuenow');
@@ -337,22 +349,26 @@ for (const framework of frameworks) {
       test('lower thumb aria-valuetext updates on value change', async ({ page }) => {
         const lowerThumb = getSliderByLabel(page, 'Minimum Price');
         await lowerThumb.click();
+        await expect(lowerThumb).toBeFocused();
 
-        await page.keyboard.press('Home');
+        await lowerThumb.press('Home');
         await expect(lowerThumb).toHaveAttribute('aria-valuetext', '$0');
 
-        await page.keyboard.press('ArrowRight');
+        await expect(lowerThumb).toBeFocused();
+        await lowerThumb.press('ArrowRight');
         await expect(lowerThumb).toHaveAttribute('aria-valuetext', '$1');
       });
 
       test('upper thumb aria-valuetext updates on value change', async ({ page }) => {
         const upperThumb = getSliderByLabel(page, 'Maximum Price');
         await upperThumb.click();
+        await expect(upperThumb).toBeFocused();
 
-        await page.keyboard.press('End');
+        await upperThumb.press('End');
         await expect(upperThumb).toHaveAttribute('aria-valuetext', '$100');
 
-        await page.keyboard.press('ArrowLeft');
+        await expect(upperThumb).toBeFocused();
+        await upperThumb.press('ArrowLeft');
         await expect(upperThumb).toHaveAttribute('aria-valuetext', '$99');
       });
     });
@@ -469,13 +485,15 @@ for (const framework of frameworks) {
           .first();
 
         await verticalThumb.click();
+        await expect(verticalThumb).toBeFocused();
         const initialValue = await verticalThumb.getAttribute('aria-valuenow');
 
-        await page.keyboard.press('ArrowUp');
+        await verticalThumb.press('ArrowUp');
         const afterUp = await verticalThumb.getAttribute('aria-valuenow');
         expect(Number(afterUp)).toBe(Number(initialValue) + 1);
 
-        await page.keyboard.press('ArrowDown');
+        await expect(verticalThumb).toBeFocused();
+        await verticalThumb.press('ArrowDown');
         const afterDown = await verticalThumb.getAttribute('aria-valuenow');
         expect(Number(afterDown)).toBe(Number(initialValue));
       });
@@ -495,7 +513,8 @@ for (const framework of frameworks) {
 
         // Try to move lower thumb to End
         await lowerThumb.click();
-        await page.keyboard.press('End');
+        await expect(lowerThumb).toBeFocused();
+        await lowerThumb.press('End');
 
         const lowerValue = Number(await lowerThumb.getAttribute('aria-valuenow'));
         const upperValue = Number(await upperThumb.getAttribute('aria-valuenow'));
@@ -593,10 +612,11 @@ test.describe('MultiThumbSlider - Cross-framework Consistency', () => {
 
       const lowerThumb = getSliderByLabel(page, 'Minimum Price');
       await lowerThumb.click();
+      await expect(lowerThumb).toBeFocused();
 
       // Test ArrowRight
       const initialValue = await lowerThumb.getAttribute('aria-valuenow');
-      await page.keyboard.press('ArrowRight');
+      await lowerThumb.press('ArrowRight');
 
       const newValue = await lowerThumb.getAttribute('aria-valuenow');
       expect(Number(newValue)).toBe(Number(initialValue) + 1);
@@ -623,7 +643,8 @@ test.describe('MultiThumbSlider - Cross-framework Consistency', () => {
 
       // Try to move lower thumb beyond upper
       await lowerThumb.click();
-      await page.keyboard.press('End');
+      await expect(lowerThumb).toBeFocused();
+      await lowerThumb.press('End');
 
       const lowerValue = Number(await lowerThumb.getAttribute('aria-valuenow'));
       const upperValue = Number(await upperThumb.getAttribute('aria-valuenow'));

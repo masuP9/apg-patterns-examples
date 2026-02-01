@@ -57,6 +57,36 @@ async function focusCell(_page: Page, cell: Locator): Promise<void> {
   await cell.click({ position: { x: 5, y: 5 } });
 }
 
+/**
+ * Helper to get the focused element within a cell (either the cell itself or a focusable child).
+ * Per APG: when cell contains a single widget, focus should be on the widget.
+ */
+async function getFocusedElementInCell(cell: Locator): Promise<Locator> {
+  // Check if cell itself is focused
+  const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
+  if (cellIsFocused) {
+    return cell;
+  }
+
+  // Check if a focusable child inside the cell is focused
+  const focusedChild = cell.locator(
+    'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  const childCount = await focusedChild.count();
+  if (childCount > 0) {
+    for (let i = 0; i < childCount; i++) {
+      const child = focusedChild.nth(i);
+      const childIsFocused = await child.evaluate((el) => document.activeElement === el);
+      if (childIsFocused) {
+        return child;
+      }
+    }
+  }
+
+  // Fall back to cell if nothing is focused
+  return cell;
+}
+
 const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 
 for (const framework of frameworks) {
@@ -135,8 +165,10 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
 
-        await page.keyboard.press('ArrowRight');
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('ArrowRight');
 
         const secondCell = cells.nth(1);
         await expectCellOrChildFocused(page, secondCell);
@@ -151,8 +183,10 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const secondCell = cells.nth(1);
         await focusCell(page, secondCell);
+        await expectCellOrChildFocused(page, secondCell);
 
-        await page.keyboard.press('ArrowLeft');
+        const focusedElement = await getFocusedElementInCell(secondCell);
+        await focusedElement.press('ArrowLeft');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -163,12 +197,14 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
 
         // Get the number of columns by counting headers in this grid
         const headers = grid.getByRole('columnheader');
         const columnCount = await headers.count();
 
-        await page.keyboard.press('ArrowDown');
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('ArrowDown');
 
         // Should move to the cell in the next row, same column
         const targetCell = cells.nth(columnCount);
@@ -184,8 +220,10 @@ for (const framework of frameworks) {
         // Focus second row, first column
         const secondRowFirstCell = cells.nth(columnCount);
         await focusCell(page, secondRowFirstCell);
+        await expectCellOrChildFocused(page, secondRowFirstCell);
 
-        await page.keyboard.press('ArrowUp');
+        const focusedElement = await getFocusedElementInCell(secondRowFirstCell);
+        await focusedElement.press('ArrowUp');
 
         // Should move to first row, first column
         const firstCell = cells.first();
@@ -198,8 +236,10 @@ for (const framework of frameworks) {
         // Use second cell (Email column) to avoid clicking on link in Name column
         const secondCell = cells.nth(1);
         await focusCell(page, secondCell);
+        await expectCellOrChildFocused(page, secondCell);
 
-        await page.keyboard.press('ArrowUp');
+        const focusedElement = await getFocusedElementInCell(secondCell);
+        await focusedElement.press('ArrowUp');
 
         // Should stay on second cell (cannot go into headers)
         await expectCellOrChildFocused(page, secondCell);
@@ -216,14 +256,17 @@ for (const framework of frameworks) {
         // Start from second row, second column (Email column, no link)
         const startCell = cells.nth(columnCount + 1);
         await focusCell(page, startCell);
+        await expectCellOrChildFocused(page, startCell);
 
         // Move left to Name column (which contains a link in React/Vue/Svelte demos)
-        await page.keyboard.press('ArrowLeft');
+        let focusedElement = await getFocusedElementInCell(startCell);
+        await focusedElement.press('ArrowLeft');
         const nameCell = cells.nth(columnCount);
         await expectCellOrChildFocused(page, nameCell);
 
         // Now try to move down - this should work
-        await page.keyboard.press('ArrowDown');
+        focusedElement = await getFocusedElementInCell(nameCell);
+        await focusedElement.press('ArrowDown');
         const targetCell = cells.nth(columnCount * 2); // Third row, first column
         await expectCellOrChildFocused(page, targetCell);
 
@@ -241,14 +284,17 @@ for (const framework of frameworks) {
         // Start from fourth row, second column (avoid third row which has disabled cell)
         const startCell = cells.nth(columnCount * 3 + 1);
         await focusCell(page, startCell);
+        await expectCellOrChildFocused(page, startCell);
 
         // Move left to Name column (which contains a link)
-        await page.keyboard.press('ArrowLeft');
+        let focusedElement = await getFocusedElementInCell(startCell);
+        await focusedElement.press('ArrowLeft');
         const nameCell = cells.nth(columnCount * 3);
         await expectCellOrChildFocused(page, nameCell);
 
         // Now try to move up - this should work
-        await page.keyboard.press('ArrowUp');
+        focusedElement = await getFocusedElementInCell(nameCell);
+        await focusedElement.press('ArrowUp');
         const targetCell = cells.nth(columnCount * 2); // Third row, first column
         await expectCellOrChildFocused(page, targetCell);
 
@@ -266,8 +312,10 @@ for (const framework of frameworks) {
         // Focus last cell in first row
         const lastCellInFirstRow = cells.nth(columnCount - 1);
         await focusCell(page, lastCellInFirstRow);
+        await expectCellOrChildFocused(page, lastCellInFirstRow);
 
-        await page.keyboard.press('Home');
+        const focusedElement = await getFocusedElementInCell(lastCellInFirstRow);
+        await focusedElement.press('Home');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -281,8 +329,10 @@ for (const framework of frameworks) {
 
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
 
-        await page.keyboard.press('End');
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('End');
 
         const lastCellInFirstRow = cells.nth(columnCount - 1);
         await expectCellOrChildFocused(page, lastCellInFirstRow);
@@ -293,8 +343,10 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const lastCell = cells.last();
         await focusCell(page, lastCell);
+        await expectCellOrChildFocused(page, lastCell);
 
-        await page.keyboard.press('Control+Home');
+        const focusedElement = await getFocusedElementInCell(lastCell);
+        await focusedElement.press('Control+Home');
 
         const firstCell = cells.first();
         await expectCellOrChildFocused(page, firstCell);
@@ -305,8 +357,10 @@ for (const framework of frameworks) {
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
 
-        await page.keyboard.press('Control+End');
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('Control+End');
 
         const lastCell = cells.last();
         await expectCellOrChildFocused(page, lastCell);
@@ -321,8 +375,10 @@ for (const framework of frameworks) {
         // Start at first row, first column
         const firstCell = cells.first();
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
 
-        await page.keyboard.press('PageDown');
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('PageDown');
 
         // pageSize=2, so should move to third row (index 2), first column
         const targetCell = cells.nth(columnCount * 2);
@@ -338,8 +394,10 @@ for (const framework of frameworks) {
         // Start at fourth row (index 3), first column
         const startCell = cells.nth(columnCount * 3);
         await focusCell(page, startCell);
+        await expectCellOrChildFocused(page, startCell);
 
-        await page.keyboard.press('PageUp');
+        const focusedElement = await getFocusedElementInCell(startCell);
+        await focusedElement.press('PageUp');
 
         // pageSize=2, so should move to second row (index 1), first column
         const targetCell = cells.nth(columnCount);
@@ -398,7 +456,10 @@ for (const framework of frameworks) {
 
         // Focus first cell and navigate right
         await focusCell(page, firstCell);
-        await page.keyboard.press('ArrowRight');
+        await expectCellOrChildFocused(page, firstCell);
+
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('ArrowRight');
 
         // After navigation, tabindex should update
         await expect(firstCell).toHaveAttribute('tabindex', '-1');
@@ -441,7 +502,10 @@ for (const framework of frameworks) {
         }
 
         await focusCell(page, firstCell);
-        await page.keyboard.press('Space');
+        await expectCellOrChildFocused(page, firstCell);
+
+        const focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('Space');
 
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
       });
@@ -452,9 +516,11 @@ for (const framework of frameworks) {
         // Use second cell (Email column) to avoid clicking on link in Name column
         const secondCell = cells.nth(1);
         await focusCell(page, secondCell);
+        await expectCellOrChildFocused(page, secondCell);
 
         // Just verify Enter doesn't cause errors
-        await page.keyboard.press('Enter');
+        const focusedElement = await getFocusedElementInCell(secondCell);
+        await focusedElement.press('Enter');
 
         // Cell should still be focused
         await expectCellOrChildFocused(page, secondCell);
@@ -473,13 +539,16 @@ for (const framework of frameworks) {
         }
 
         await focusCell(page, firstCell);
+        await expectCellOrChildFocused(page, firstCell);
+
+        const focusedElement = await getFocusedElementInCell(firstCell);
 
         // Select the cell
-        await page.keyboard.press('Space');
+        await focusedElement.press('Space');
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
 
         // Deselect the cell
-        await page.keyboard.press('Space');
+        await focusedElement.press('Space');
         await expect(firstCell).toHaveAttribute('aria-selected', 'false');
       });
 
@@ -499,12 +568,19 @@ for (const framework of frameworks) {
 
         // Select first cell
         await focusCell(page, firstCell);
-        await page.keyboard.press('Space');
+        await expectCellOrChildFocused(page, firstCell);
+
+        let focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('Space');
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
 
         // Navigate to second cell and select it
-        await page.keyboard.press('ArrowRight');
-        await page.keyboard.press('Space');
+        focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('ArrowRight');
+        await expectCellOrChildFocused(page, secondCell);
+
+        focusedElement = await getFocusedElementInCell(secondCell);
+        await focusedElement.press('Space');
 
         // Both should be selected
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
@@ -515,6 +591,7 @@ for (const framework of frameworks) {
         const grid = page.getByRole('grid').first();
         const cells = grid.getByRole('gridcell');
         const firstCell = cells.first();
+        const secondCell = cells.nth(1);
         const hasAriaSelected = await firstCell.getAttribute('aria-selected');
 
         // Skip if grid is not selectable
@@ -525,12 +602,20 @@ for (const framework of frameworks) {
 
         // Select first cell
         await focusCell(page, firstCell);
-        await page.keyboard.press('Space');
+        await expectCellOrChildFocused(page, firstCell);
+
+        let focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('Space');
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
 
         // Navigate away and back
-        await page.keyboard.press('ArrowRight');
-        await page.keyboard.press('ArrowLeft');
+        focusedElement = await getFocusedElementInCell(firstCell);
+        await focusedElement.press('ArrowRight');
+        await expectCellOrChildFocused(page, secondCell);
+
+        focusedElement = await getFocusedElementInCell(secondCell);
+        await focusedElement.press('ArrowLeft');
+        await expectCellOrChildFocused(page, firstCell);
 
         // Selection should persist
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
