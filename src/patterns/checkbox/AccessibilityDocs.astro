@@ -46,14 +46,14 @@ const h = createTableHeaderTranslator(locale);
               <td class="py-2 pr-4">
                 <code>{role.name}</code>
               </td>
-              <td
-                class="py-2 pr-4"
-                set:html={t(role.element).replace(/</g, '&lt;').replace(/>/g, '&gt;')}
-              />
-              <td
-                class="py-2"
-                set:html={t(role.description).replace(/</g, '&lt;').replace(/>/g, '&gt;')}
-              />
+              <td class="py-2 pr-4">
+                <Fragment set:html={t(role.element).replace(/</g, '&lt;').replace(/>/g, '&gt;')} />
+              </td>
+              <td class="py-2">
+                <Fragment
+                  set:html={t(role.description).replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                />
+              </td>
             </tr>
           ))
         }

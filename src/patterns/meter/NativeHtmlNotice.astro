@@ -84,7 +84,7 @@ const t = translations[locale];
     {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400" set:html={t.warning} />
+    <strong class="text-red-700 dark:text-red-400"><Fragment set:html={t.warning} /></strong>
     {t.description}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
@@ -145,5 +145,5 @@ const t = translations[locale];
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs" set:html={t.note} />
+  <p class="text-muted-foreground mt-3 text-xs"><Fragment set:html={t.note} /></p>
 </div>

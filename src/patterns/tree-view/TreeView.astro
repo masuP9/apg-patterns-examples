@@ -161,8 +161,9 @@ const treeHTML = nodes.map((node) => renderNodeHTML(node, 0)).join('');
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledby}
     class={containerClass}
-    set:html={treeHTML}
-  />
+  >
+    <Fragment set:html={treeHTML} />
+  </ul>
 </apg-treeview>
 
 <script>

@@ -110,7 +110,9 @@ const priorityLabels = {
   }
 
   <h3 class="mb-3 text-lg font-medium">{tr.exampleTestCode}</h3>
-  <p class="text-muted-foreground mb-4 text-sm" set:html={tr.exampleTestCodeDescription} />
+  <p class="text-muted-foreground mb-4 text-sm">
+    <Fragment set:html={tr.exampleTestCodeDescription} />
+  </p>
   <CodeBlock
     code={e2eTestCode}
     lang="typescript"

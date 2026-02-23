@@ -123,13 +123,14 @@ const hiddenStateBullets = {
               <td class="py-2 pr-4">
                 <code>{role.name}</code>
               </td>
-              <td
-                class="py-2 pr-4"
-                set:html={t(role.element)
-                  .replace(/</g, '&lt;')
-                  .replace(/>/g, '&gt;')
-                  .replace(/&lt;(\w+)&gt;/g, '<code>&lt;$1&gt;</code>')}
-              />
+              <td class="py-2 pr-4">
+                <Fragment
+                  set:html={t(role.element)
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/&lt;(\w+)&gt;/g, '<code>&lt;$1&gt;</code>')}
+                />
+              </td>
               <td class="py-2">{t(role.description)}</td>
             </tr>
           ))
@@ -162,16 +163,17 @@ const hiddenStateBullets = {
               <td class="py-2 pr-4">
                 <code>{prop.attribute}</code>
               </td>
-              <td
-                class="py-2 pr-4"
-                set:html={t(prop.values)
-                  .replace(/\|/g, ' | ')
-                  .replace(/(\w+)/g, '<code>$1</code>')
-                  .replace(
-                    /<code>"<\/code><code>menu<\/code><code>"<\/code>/g,
-                    '<code>"menu"</code>'
-                  )}
-              />
+              <td class="py-2 pr-4">
+                <Fragment
+                  set:html={t(prop.values)
+                    .replace(/\|/g, ' | ')
+                    .replace(/(\w+)/g, '<code>$1</code>')
+                    .replace(
+                      /<code>"<\/code><code>menu<\/code><code>"<\/code>/g,
+                      '<code>"menu"</code>'
+                    )}
+                />
+              </td>
               <td class="py-2 pr-4">
                 {typeof prop.required === 'boolean'
                   ? prop.required
@@ -179,12 +181,13 @@ const hiddenStateBullets = {
                     : th('value.no')
                   : t(prop.required)}
               </td>
-              <td
-                class="py-2"
-                set:html={t(prop.notes ?? '')
-                  .replace(/(<code>.*?<\/code>)/g, '$1')
-                  .replace(/"([^"]+)"/g, '<code>"$1"</code>')}
-              />
+              <td class="py-2">
+                <Fragment
+                  set:html={t(prop.notes ?? '')
+                    .replace(/(<code>.*?<\/code>)/g, '$1')
+                    .replace(/"([^"]+)"/g, '<code>"$1"</code>')}
+                />
+              </td>
             </tr>
           ))
         }
@@ -214,13 +217,14 @@ const hiddenStateBullets = {
                 <code>{prop.attribute}</code>
               </td>
               <td class="py-2 pr-4">{t(prop.element)}</td>
-              <td
-                class="py-2 pr-4"
-                set:html={t(prop.values)
-                  .split(' | ')
-                  .map((v) => `<code>${v}</code>`)
-                  .join(' | ')}
-              />
+              <td class="py-2 pr-4">
+                <Fragment
+                  set:html={t(prop.values)
+                    .split(' | ')
+                    .map((v) => `<code>${v}</code>`)
+                    .join(' | ')}
+                />
+              </td>
               <td class="py-2 pr-4">
                 {typeof prop.required === 'boolean'
                   ? prop.required
@@ -288,11 +292,13 @@ const hiddenStateBullets = {
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
     {
       data.focusManagement?.map((rule) => (
-        <li
-          set:html={t(rule.behavior)
-            .replace(/tabindex="(-?\d+)"/g, '<code>tabindex="$1"</code>')
-            .replace(/tabindex="-1"/g, '<code>tabindex="-1"</code>')}
-        />
+        <li>
+          <Fragment
+            set:html={t(rule.behavior)
+              .replace(/tabindex="(-?\d+)"/g, '<code>tabindex="$1"</code>')
+              .replace(/tabindex="-1"/g, '<code>tabindex="-1"</code>')}
+          />
+        </li>
       ))
     }
   </ul>
@@ -313,16 +319,18 @@ const hiddenStateBullets = {
           comparisonData[locale].map((row) => (
             <tr class="border-border border-b">
               <td class="py-2 pr-4">{row.feature}</td>
-              <td
-                class="py-2 pr-4"
-                set:html={row.menuButton.replace(/<(\w+)>/g, '<code>&lt;$1&gt;</code>')}
-              />
-              <td
-                class="py-2"
-                set:html={row.menubar
-                  .replace(/<([^>]+)>/g, '<code>&lt;$1&gt;</code>')
-                  .replace(/←\/→/g, '<code>←</code>/<code>→</code>')}
-              />
+              <td class="py-2 pr-4">
+                <Fragment
+                  set:html={row.menuButton.replace(/<(\w+)>/g, '<code>&lt;$1&gt;</code>')}
+                />
+              </td>
+              <td class="py-2">
+                <Fragment
+                  set:html={row.menubar
+                    .replace(/<([^>]+)>/g, '<code>&lt;$1&gt;</code>')
+                    .replace(/←\/→/g, '<code>←</code>/<code>→</code>')}
+                />
+              </td>
             </tr>
           ))
         }
@@ -338,15 +346,20 @@ const hiddenStateBullets = {
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
     {
       hiddenStateBullets[locale].map((bullet) => (
-        <li set:html={bullet.replace(/([a-z-]+: [a-z]+|aria-hidden)/g, '<code>$1</code>')} />
+        <li>
+          <Fragment
+            set:html={bullet.replace(/([a-z-]+: [a-z]+|aria-hidden)/g, '<code>$1</code>')}
+          />
+        </li>
       ))
     }
   </ul>
-  <p
-    class="text-muted-foreground mb-4"
-    set:html={tt.openStateDesc.replace(
-      /(aria-hidden="false"|visibility: visible)/g,
-      '<code>$1</code>'
-    )}
-  />
+  <p class="text-muted-foreground mb-4">
+    <Fragment
+      set:html={tt.openStateDesc.replace(
+        /(aria-hidden="false"|visibility: visible)/g,
+        '<code>$1</code>'
+      )}
+    />
+  </p>
 </div>

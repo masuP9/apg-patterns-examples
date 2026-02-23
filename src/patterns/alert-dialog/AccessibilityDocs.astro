@@ -219,7 +219,9 @@ const comparison = dialogVsAlertDialogDifferences[locale];
         <h3 class="mb-3 text-lg font-medium">{notesTitle}</h3>
         <ul class="text-muted-foreground list-disc space-y-2 pl-6">
           {data.additionalNotes.map((note) => (
-            <li set:html={t(note)} />
+            <li>
+              <Fragment set:html={t(note)} />
+            </li>
           ))}
         </ul>
       </>

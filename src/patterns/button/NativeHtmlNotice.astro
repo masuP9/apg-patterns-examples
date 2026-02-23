@@ -86,7 +86,7 @@ const t = translations[locale];
     {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400" set:html={t.warning} />
+    <strong class="text-red-700 dark:text-red-400"><Fragment set:html={t.warning} /></strong>
     {t.description}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
@@ -99,15 +99,15 @@ const t = translations[locale];
 &lt;!-- Disabled state --&gt;
 &lt;button type="button" disabled&gt;Disabled&lt;/button&gt;</code></pre>
   </div>
-  <p class="mb-4 text-sm" set:html={t.usage} />
+  <p class="mb-4 text-sm"><Fragment set:html={t.usage} /></p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
           <th class="py-2 pr-4 text-left">{t.feature}</th>
-          <th class="py-2 pr-4 text-left" set:html={t.nativeHtml} />
-          <th class="py-2 text-left" set:html={t.customImpl} />
+          <th class="py-2 pr-4 text-left"><Fragment set:html={t.nativeHtml} /></th>
+          <th class="py-2 text-left"><Fragment set:html={t.customImpl} /></th>
         </tr>
       </thead>
       <tbody>
@@ -161,5 +161,5 @@ const t = translations[locale];
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs" set:html={t.note} />
+  <p class="text-muted-foreground mt-3 text-xs"><Fragment set:html={t.note} /></p>
 </div>

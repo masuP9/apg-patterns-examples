@@ -107,7 +107,7 @@ const content = sectionContent[locale];
     {content.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400" set:html={content.warning} />
+    <strong class="text-red-700 dark:text-red-400"><Fragment set:html={content.warning} /></strong>
     {content.description}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
@@ -161,5 +161,5 @@ const content = sectionContent[locale];
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs" set:html={content.footnote} />
+  <p class="text-muted-foreground mt-3 text-xs"><Fragment set:html={content.footnote} /></p>
 </div>

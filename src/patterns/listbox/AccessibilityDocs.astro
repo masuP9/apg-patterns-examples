@@ -33,7 +33,9 @@ const data = listboxAccessibilityData;
               <td class="py-2 pr-4">
                 <code>{role.name}</code>
               </td>
-              <td class="py-2 pr-4" set:html={t(role.element)} />
+              <td class="py-2 pr-4">
+                <Fragment set:html={t(role.element)} />
+              </td>
               <td class="py-2">{t(role.description)}</td>
             </tr>
           ))
@@ -67,7 +69,9 @@ const data = listboxAccessibilityData;
                 <code>{prop.attribute}</code>
               </td>
               <td class="py-2 pr-4">{t(prop.element)}</td>
-              <td class="py-2 pr-4" set:html={t(prop.values)} />
+              <td class="py-2 pr-4">
+                <Fragment set:html={t(prop.values)} />
+              </td>
               <td class="py-2 pr-4">
                 {typeof prop.required === 'boolean'
                   ? prop.required
@@ -115,7 +119,9 @@ const data = listboxAccessibilityData;
               </tr>
               <tr class="border-border border-b">
                 <td class="py-2 pr-4 font-medium">{h('table.values')}</td>
-                <td class="py-2" set:html={t(state.values)} />
+                <td class="py-2">
+                  <Fragment set:html={t(state.values)} />
+                </td>
               </tr>
               <tr class="border-border border-b">
                 <td class="py-2 pr-4 font-medium">{h('table.required')}</td>
@@ -229,7 +235,9 @@ const data = listboxAccessibilityData;
         </h3>
         <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
           {data.additionalNotes.map((note) => (
-            <li set:html={t(note)} />
+            <li>
+              <Fragment set:html={t(note)} />
+            </li>
           ))}
         </ul>
       </>

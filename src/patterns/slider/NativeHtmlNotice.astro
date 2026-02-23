@@ -44,7 +44,9 @@ const tr = translations[locale];
   {
     nativeHtml?.recommendation && (
       <p class="mb-4">
-        <strong class="text-red-700 dark:text-red-400" set:html={t(nativeHtml.recommendation)} />
+        <strong class="text-red-700 dark:text-red-400">
+          <Fragment set:html={t(nativeHtml.recommendation)} />
+        </strong>
       </p>
     )
   }
@@ -95,5 +97,11 @@ const tr = translations[locale];
       </ResponsiveTable>
     )
   }
-  {footnote && <p class="text-muted-foreground mt-3 text-xs" set:html={t(footnote)} />}
+  {
+    footnote && (
+      <p class="text-muted-foreground mt-3 text-xs">
+        <Fragment set:html={t(footnote)} />
+      </p>
+    )
+  }
 </div>
