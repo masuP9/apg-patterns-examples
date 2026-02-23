@@ -138,12 +138,24 @@ function displayRequired(required: boolean | { en: string; ja: string }): string
 
   <h3 class="mb-3 text-lg font-medium">{h('section.focusManagement')}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    {data.focusManagement?.map((rule) => <li set:html={t(rule.behavior)} />)}
+    {
+      data.focusManagement?.map((rule) => (
+        <li>
+          <Fragment set:html={t(rule.behavior)} />
+        </li>
+      ))
+    }
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">{h('section.mousePointerBehavior')}</h3>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    {data.mousePointerBehavior?.map((item) => <li set:html={t(item)} />)}
+    {
+      data.mousePointerBehavior?.map((item) => (
+        <li>
+          <Fragment set:html={t(item)} />
+        </li>
+      ))
+    }
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">{h('section.importantNotes')}</h3>
@@ -171,6 +183,13 @@ function displayRequired(required: boolean | { en: string; ja: string }): string
     }
   </p>
   <ul class="mb-6 list-disc space-y-2 pl-6">
-    {Array.isArray(data.visualDesign) && data.visualDesign.map((item) => <li set:html={t(item)} />)}
+    {
+      Array.isArray(data.visualDesign) &&
+        data.visualDesign.map((item) => (
+          <li>
+            <Fragment set:html={t(item)} />
+          </li>
+        ))
+    }
   </ul>
 </div>

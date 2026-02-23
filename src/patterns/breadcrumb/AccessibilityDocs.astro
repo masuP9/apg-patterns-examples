@@ -35,7 +35,9 @@ const th = createTableHeaderTranslator(locale);
                 <code>{role.name}</code>
               </td>
               <td class="py-2 pr-4">{t(role.element)}</td>
-              <td class="py-2" set:html={t(role.description)} />
+              <td class="py-2">
+                <Fragment set:html={t(role.description)} />
+              </td>
             </tr>
           ))
         }
@@ -177,7 +179,9 @@ const th = createTableHeaderTranslator(locale);
   <!-- Additional Notes -->
   {
     data.additionalNotes && data.additionalNotes.length > 0 && (
-      <p class="text-muted-foreground text-sm" set:html={t(data.additionalNotes[0])} />
+      <p class="text-muted-foreground text-sm">
+        <Fragment set:html={t(data.additionalNotes[0])} />
+      </p>
     )
   }
 </div>

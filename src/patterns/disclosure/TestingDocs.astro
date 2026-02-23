@@ -117,10 +117,9 @@ const titles = sectionTitles[locale];
                   <td class="py-2 pr-4">
                     <code>{item.name}</code>
                   </td>
-                  <td
-                    class="py-2"
-                    set:html={t(item.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')}
-                  />
+                  <td class="py-2">
+                    <Fragment set:html={t(item.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')} />
+                  </td>
                 </tr>
               ))}
             </tbody>

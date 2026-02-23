@@ -200,7 +200,9 @@ const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
     <ul class="text-muted-foreground list-disc space-y-1 pl-6 text-sm">
       {
         titles.keyDifferences.map((diff) => (
-          <li set:html={diff.replace(/(\w+-\w+)/g, '<em>$1</em>')} />
+          <li>
+            <Fragment set:html={diff.replace(/(\w+-\w+)/g, '<em>$1</em>')} />
+          </li>
         ))
       }
     </ul>

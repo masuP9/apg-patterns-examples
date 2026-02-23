@@ -254,7 +254,13 @@ const h = createTableHeaderTranslator(locale);
     }
   </p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    {focusManagement?.map((item) => <li set:html={t(item.behavior)} />)}
+    {
+      focusManagement?.map((item) => (
+        <li>
+          <Fragment set:html={t(item.behavior)} />
+        </li>
+      ))
+    }
   </ul>
 
   <h3 class="mb-3 text-lg font-medium">

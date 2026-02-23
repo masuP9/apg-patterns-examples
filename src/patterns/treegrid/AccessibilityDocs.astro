@@ -76,7 +76,9 @@ const titles = sectionTitles[locale];
       <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
         {additionalNotes.map((note) => (
           <li>
-            <span set:html={t(note).replace(/(aria-\w+)/g, '<code>$1</code>')} />
+            <span>
+              <Fragment set:html={t(note).replace(/(aria-\w+)/g, '<code>$1</code>')} />
+            </span>
           </li>
         ))}
       </ul>
@@ -249,7 +251,11 @@ const titles = sectionTitles[locale];
       <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
         {focusManagement.map((rule) => (
           <li>
-            <span set:html={t(rule.behavior).replace(/(tabindex="-?\d")/g, '<code>$1</code>')} />
+            <span>
+              <Fragment
+                set:html={t(rule.behavior).replace(/(tabindex="-?\d")/g, '<code>$1</code>')}
+              />
+            </span>
           </li>
         ))}
       </ul>

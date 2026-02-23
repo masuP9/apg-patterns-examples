@@ -219,19 +219,18 @@ const codeExample =
       </tbody>
     </table>
   </ResponsiveTable>
-  <p class="text-muted-foreground mt-3 text-xs" set:html={t.nativeNote[locale]} />
+  <p class="text-muted-foreground mt-3 text-xs"><Fragment set:html={t.nativeNote[locale]} /></p>
 
   <div
     class="mt-4 rounded-md border border-amber-300 bg-amber-50 p-3 dark:border-amber-700 dark:bg-amber-950"
   >
     <h3 class="mb-2 flex items-center gap-2 text-sm font-bold text-amber-800 dark:text-amber-200">
       <span aria-hidden="true">⚠️</span>
-      <span set:html={t.a11yWarningTitle[locale]} />
+      <span><Fragment set:html={t.a11yWarningTitle[locale]} /></span>
     </h3>
-    <p
-      class="mb-2 text-sm text-amber-900 dark:text-amber-100"
-      set:html={t.a11yWarningIntro[locale]}
-    />
+    <p class="mb-2 text-sm text-amber-900 dark:text-amber-100">
+      <Fragment set:html={t.a11yWarningIntro[locale]} />
+    </p>
     <ul class="mb-2 list-inside list-disc space-y-1 text-sm text-amber-900 dark:text-amber-100">
       {
         a11yIssues.map((issue) => (

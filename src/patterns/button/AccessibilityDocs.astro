@@ -35,7 +35,9 @@ const th = createTableHeaderTranslator(locale);
                 <code>{role.name}</code>
               </td>
               <td class="py-2 pr-4">{t(role.element)}</td>
-              <td class="py-2" set:html={t(role.description)} />
+              <td class="py-2">
+                <Fragment set:html={t(role.description)} />
+              </td>
             </tr>
           ))
         }
@@ -62,7 +64,11 @@ const th = createTableHeaderTranslator(locale);
             typeof prop.required === 'object' &&
             ' (' + t(prop.notes).split('.')[0] + ')'}
         </h4>
-        {prop.notes && <p class="text-muted-foreground mb-3" set:html={t(prop.notes)} />}
+        {prop.notes && (
+          <p class="text-muted-foreground mb-3">
+            <Fragment set:html={t(prop.notes)} />
+          </p>
+        )}
         <ResponsiveTable class="mb-2">
           <table class="w-full border-collapse">
             <tbody>
@@ -113,7 +119,9 @@ const th = createTableHeaderTranslator(locale);
   </ResponsiveTable>
   {
     data.additionalNotes && data.additionalNotes[0] && (
-      <p class="text-muted-foreground mb-6 text-sm" set:html={t(data.additionalNotes[0])} />
+      <p class="text-muted-foreground mb-6 text-sm">
+        <Fragment set:html={t(data.additionalNotes[0])} />
+      </p>
     )
   }
 

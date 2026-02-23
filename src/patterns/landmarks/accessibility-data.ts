@@ -18,7 +18,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
   roles: [
     {
       name: 'banner',
-      element: '`<header>`',
+      element: '<code>&lt;header&gt;</code>',
       description: {
         en: 'Site-wide header',
         ja: 'サイト全体のヘッダー',
@@ -26,7 +26,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'navigation',
-      element: '`<nav>`',
+      element: '<code>&lt;nav&gt;</code>',
       description: {
         en: 'Navigation links',
         ja: 'ナビゲーションリンク',
@@ -34,7 +34,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'main',
-      element: '`<main>`',
+      element: '<code>&lt;main&gt;</code>',
       description: {
         en: 'Primary content',
         ja: '主要コンテンツ',
@@ -42,7 +42,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'contentinfo',
-      element: '`<footer>`',
+      element: '<code>&lt;footer&gt;</code>',
       description: {
         en: 'Site-wide footer',
         ja: 'サイト全体のフッター',
@@ -50,7 +50,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'complementary',
-      element: '`<aside>`',
+      element: '<code>&lt;aside&gt;</code>',
       description: {
         en: 'Supporting content',
         ja: '補完的コンテンツ',
@@ -58,7 +58,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'region',
-      element: '`<section>`',
+      element: '<code>&lt;section&gt;</code>',
       description: {
         en: 'Named section',
         ja: '名前付きセクション',
@@ -66,7 +66,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'search',
-      element: '`<form role="search">`',
+      element: '<code>&lt;form role="search"&gt;</code>',
       description: {
         en: 'Search functionality',
         ja: '検索機能',
@@ -74,7 +74,7 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'form',
-      element: '`<form>`',
+      element: '<code>&lt;form&gt;</code>',
       description: {
         en: 'Form area',
         ja: 'フォーム領域',
@@ -214,24 +214,24 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
 
   additionalNotes: [
     {
-      en: '**Use semantic HTML elements** - Prefer `<header>`, `<nav>`, `<main>`, etc. over ARIA roles',
-      ja: '**セマンティックHTML要素を使用** - ARIAロールよりも`<header>`、`<nav>`、`<main>`などを優先',
+      en: '<strong>Use semantic HTML elements</strong> - Prefer <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, etc. over ARIA roles',
+      ja: '<strong>セマンティックHTML要素を使用</strong> - ARIAロールよりも<code>&lt;header&gt;</code>、<code>&lt;nav&gt;</code>、<code>&lt;main&gt;</code>などを優先',
     },
     {
-      en: '**Label multiple landmarks** - When you have more than one `<nav>` or `<aside>`, give each a unique accessible name',
-      ja: '**複数のランドマークにラベルを付ける** - 複数の`<nav>`や`<aside>`がある場合、それぞれに一意のアクセシブルな名前を付ける',
+      en: '<strong>Label multiple landmarks</strong> - When you have more than one <code>&lt;nav&gt;</code> or <code>&lt;aside&gt;</code>, give each a unique accessible name',
+      ja: '<strong>複数のランドマークにラベルを付ける</strong> - 複数の<code>&lt;nav&gt;</code>や<code>&lt;aside&gt;</code>がある場合、それぞれに一意のアクセシブルな名前を付ける',
     },
     {
-      en: '**Limit landmark count** - Too many landmarks (more than ~7) can be overwhelming for assistive technology users',
-      ja: '**ランドマークの数を制限** - ランドマークが多すぎる（約7以上）と支援技術ユーザーにとって煩わしくなる',
+      en: '<strong>Limit landmark count</strong> - Too many landmarks (more than ~7) can be overwhelming for assistive technology users',
+      ja: '<strong>ランドマークの数を制限</strong> - ランドマークが多すぎる（約7以上）と支援技術ユーザーにとって煩わしくなる',
     },
     {
-      en: '**Place all content in landmarks** - Content outside landmarks may be missed by users navigating by landmarks',
-      ja: '**すべてのコンテンツをランドマーク内に配置** - ランドマーク外のコンテンツは、ランドマークでナビゲートするユーザーに見落とされる可能性がある',
+      en: '<strong>Place all content in landmarks</strong> - Content outside landmarks may be missed by users navigating by landmarks',
+      ja: '<strong>すべてのコンテンツをランドマーク内に配置</strong> - ランドマーク外のコンテンツは、ランドマークでナビゲートするユーザーに見落とされる可能性がある',
     },
     {
-      en: '**Top-level placement** - `<header>` and `<footer>` only map to `banner`/`contentinfo` when they are direct children of `<body>`',
-      ja: '**トップレベルに配置** - `<header>`と`<footer>`は`<body>`の直接の子の場合にのみ`banner`/`contentinfo`にマップされる',
+      en: '<strong>Top-level placement</strong> - <code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> only map to <code>banner</code>/<code>contentinfo</code> when they are direct children of <code>&lt;body&gt;</code>',
+      ja: '<strong>トップレベルに配置</strong> - <code>&lt;header&gt;</code>と<code>&lt;footer&gt;</code>は<code>&lt;body&gt;</code>の直接の子の場合にのみ<code>banner</code>/<code>contentinfo</code>にマップされる',
     },
   ],
 

@@ -430,6 +430,34 @@ const config = thirdPartyLib.getConfig() as Config; // TODO: 型定義改善待�
 
 ---
 
+## Astro `set:html` ディレクティブ
+
+### HTML要素に `set:html` を直接使わない — `<Fragment>` を使う
+
+`set:html` は `<Fragment>` でのみ使用し、HTML要素には直接付けない。
+
+**理由**: `prettier-plugin-astro` は `set:html` を持つ空要素を自動的に自己閉じタグに変換する。自己閉じの非void要素はコンテンツがレンダリングされないため、Prettier を実行するだけでコンテンツが消失する。
+
+```astro
+<!-- ❌ HTML要素に set:html を直接使用 -->
+<!-- Prettier が <td set:html={content} /> に変換 → コンテンツ消失 -->
+<td set:html={content}></td>
+<p class="note" set:html={htmlString}></p>
+
+<!-- ✅ Fragment パターン（Prettier の影響を受けない） -->
+<td><Fragment set:html={content} /></td>
+<p class="note"><Fragment set:html={htmlString} /></p>
+```
+
+**例外** — 以下の要素には `set:html` を直接使用できる:
+- `<Fragment>` — 自己閉じで正常動作する
+- PascalCase コンポーネント — フレームワークコンポーネント
+- `<script>` / `<style>` — Astro の特殊要素
+
+カスタム ESLint ルール `local/no-set-html-on-self-closing` が違反を検出し、autofix で Fragment パターンに変換する。
+
+---
+
 ## その他のルール
 
 ### Import順序

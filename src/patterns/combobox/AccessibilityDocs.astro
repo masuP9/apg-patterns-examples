@@ -270,8 +270,14 @@ const listboxProperties = (data.properties || []).filter(
   </ResponsiveTable>
 
   <h3 class="mb-3 text-lg font-medium">{labels.hiddenState}</h3>
-  <p class="text-muted-foreground mb-4" set:html={labels.hiddenDescription} />
+  <p class="text-muted-foreground mb-4"><Fragment set:html={labels.hiddenDescription} /></p>
   <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-2">
-    {labels.hiddenPoints.map((point) => <li set:html={point} />)}
+    {
+      labels.hiddenPoints.map((point) => (
+        <li>
+          <Fragment set:html={point} />
+        </li>
+      ))
+    }
   </ul>
 </div>

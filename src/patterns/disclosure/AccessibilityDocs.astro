@@ -38,7 +38,9 @@ const h = createTableHeaderTranslator(locale);
                 <code>{role.name}</code>
               </td>
               <td class="py-2 pr-4">{t(role.element)}</td>
-              <td class="py-2" set:html={t(role.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')} />
+              <td class="py-2">
+                <Fragment set:html={t(role.description).replace(/<([^>]+)>/g, '&lt;$1&gt;')} />
+              </td>
             </tr>
           ))
         }
@@ -206,10 +208,9 @@ const h = createTableHeaderTranslator(locale);
   </ResponsiveTable>
   {
     additionalNotes && additionalNotes.length > 0 && (
-      <p
-        class="text-muted-foreground text-sm"
-        set:html={t(additionalNotes[0]).replace(/<([^>]+)>/g, '&lt;$1&gt;')}
-      />
+      <p class="text-muted-foreground text-sm">
+        <Fragment set:html={t(additionalNotes[0]).replace(/<([^>]+)>/g, '&lt;$1&gt;')} />
+      </p>
     )
   }
 </div>

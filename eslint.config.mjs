@@ -7,6 +7,7 @@ import vue from 'eslint-plugin-vue';
 import svelte from 'eslint-plugin-svelte';
 import astro from 'eslint-plugin-astro';
 import globals from 'globals';
+import noSetHtmlOnSelfClosing from './eslint-rules/no-set-html-on-self-closing.js';
 
 // ===========================================
 // Shared globals definitions
@@ -290,6 +291,7 @@ export default tseslint.config(
     files: ['**/*.astro'],
     plugins: {
       '@typescript-eslint': tseslint.plugin,
+      local: { rules: { 'no-set-html-on-self-closing': noSetHtmlOnSelfClosing } },
     },
     languageOptions: {
       parserOptions: {
@@ -322,6 +324,8 @@ export default tseslint.config(
       ],
       // 制御文字の正規表現は許可（Astro Heading で必要）
       'no-control-regex': 'off',
+      // 非void要素の自己閉じタグで set:html を使うとコンテンツが消失する
+      'local/no-set-html-on-self-closing': 'error',
     },
   },
 

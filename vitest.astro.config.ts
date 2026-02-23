@@ -25,6 +25,7 @@ export default getViteConfig({
       'src/patterns/landmarks/LandmarkDemo.test.astro.ts',
       'src/patterns/feed/Feed.test.astro.ts',
       'src/patterns/grid/Grid.test.astro.ts',
+      'src/patterns/accessibility-docs-smoke.test.astro.ts',
     ],
   },
 });
