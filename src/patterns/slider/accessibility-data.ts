@@ -843,7 +843,10 @@ test('has no axe-core violations', async ({ page }) => {
     },
     {
       useCase: { en: 'Vertical orientation', ja: '垂直方向' },
-      native: { en: 'Limited browser support', ja: '限定的なブラウザサポート' },
+      native: {
+        en: 'Supported in modern browsers (fallback for older)',
+        ja: '現行ブラウザで対応（古いブラウザはフォールバック）',
+      },
       custom: { en: 'Full control', ja: '完全な制御' },
       nativeRecommended: false,
     },

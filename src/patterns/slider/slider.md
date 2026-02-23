@@ -16,7 +16,7 @@ A slider is an input widget where the user selects a value from within a given r
 | Form integration | Built-in | Manual implementation |
 | Custom styling | Limited (pseudo-elements) | Full control |
 | Consistent cross-browser appearance | Varies significantly | Consistent |
-| Vertical orientation | Limited browser support | Full control |
+| Vertical orientation | Supported in modern browsers (fallback for older) | Full control |
 
 ## ARIA Requirements
 
