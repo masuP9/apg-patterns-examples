@@ -25,8 +25,8 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
         ja: '<nav> 要素',
       },
       description: {
-        en: 'Provides a navigation landmark for assistive technology (implicit role of <nav>)',
-        ja: '支援技術にナビゲーションランドマークを提供します（<nav>の暗黙のロール）',
+        en: 'Provides a navigation landmark for assistive technology (implicit role of <code>&lt;nav&gt;</code>)',
+        ja: '支援技術にナビゲーションランドマークを提供します（<code>&lt;nav&gt;</code>の暗黙のロール）',
       },
     },
   ],
@@ -103,8 +103,8 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
   // --- Additional Notes ---
   additionalNotes: [
     {
-      en: 'Breadcrumb uses native <a> element behavior for keyboard interaction. No additional keyboard handlers are required.',
-      ja: 'Breadcrumbはネイティブの<a>要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは不要です。',
+      en: 'Breadcrumb uses native <code>&lt;a&gt;</code> element behavior for keyboard interaction. No additional keyboard handlers are required.',
+      ja: 'Breadcrumbはネイティブの<code>&lt;a&gt;</code>要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは不要です。',
     },
   ],
 
