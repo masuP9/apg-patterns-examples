@@ -13,8 +13,8 @@ export const listboxAccessibilityData: PatternAccessibilityData = {
     {
       name: 'listbox',
       element: {
-        en: 'Container (`<ul>`)',
-        ja: 'コンテナ（`<ul>`）',
+        en: 'Container (<code>&lt;ul&gt;</code>)',
+        ja: 'コンテナ（<code>&lt;ul&gt;</code>）',
       },
       description: {
         en: 'Widget for selecting one or more items from a list',
@@ -24,8 +24,8 @@ export const listboxAccessibilityData: PatternAccessibilityData = {
     {
       name: 'option',
       element: {
-        en: 'Each item (`<li>`)',
-        ja: '各アイテム（`<li>`）',
+        en: 'Each item (<code>&lt;li&gt;</code>)',
+        ja: '各アイテム（<code>&lt;li&gt;</code>）',
       },
       description: {
         en: 'Selectable option within the listbox',
