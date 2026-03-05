@@ -10,8 +10,8 @@
 
 | ユースケース | 推奨 |
 | --- | --- |
-| Simple action button | Native <button> |
-| Form submission | Native <button type="submit"> |
+| Simple action button | Native <code>&lt;button&gt;</code> |
+| Form submission | Native <code>&lt;button type="submit"&gt;</code> |
 | Educational purposes (demonstrating ARIA) | Custom role="button" |
 | Legacy constraints (non-button must act as button) | Custom role="button" |
 
@@ -34,15 +34,15 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `button` | <button> または role="button" を持つ要素 | 要素をボタンウィジェットとして識別します。ネイティブの <code>&lt;button&gt;</code> は暗黙的にこのロールを持ちます。 |
+| `button` | <code>&lt;button&gt;</code> または role="button" を持つ要素 | 要素をボタンウィジェットとして識別します。ネイティブの <code>&lt;button&gt;</code> は暗黙的にこのロールを持ちます。 |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `tabindex` | [object Object] | `"0"` \| `"-1"` | はい | カスタムボタン要素をキーボードナビゲーションでフォーカス可能にします。ネイティブの <code>&lt;button&gt;</code> はデフォルトでフォーカス可能です。無効時は -1 に設定します。 |
-| `aria-disabled` | [object Object] | `"true"` \| `"false"` | はい | ボタンがインタラクティブでなく、アクティブ化できないことを示します。ネイティブの <code>&lt;button disabled&gt;</code> はこれを自動的に処理します。 |
-| `aria-label` | [object Object] | アクションを説明するテキスト文字列 | はい | アイコンのみのボタンや、表示テキストが不十分な場合にアクセシブルな名前を提供します。 |
+| `tabindex` | カスタムボタン要素 | `"0"` \| `"-1"` | はい（カスタム実装の場合） | カスタムボタン要素をキーボードナビゲーションでフォーカス可能にします。ネイティブの <code>&lt;button&gt;</code> はデフォルトでフォーカス可能です。無効時は -1 に設定します。 |
+| `aria-disabled` | ボタン要素 | `"true"` \| `"false"` | いいえ（無効時のみ） | ボタンがインタラクティブでなく、アクティブ化できないことを示します。ネイティブの <code>&lt;button disabled&gt;</code> はこれを自動的に処理します。 |
+| `aria-label` | ボタン要素（オプション） | アクションを説明するテキスト文字列 | いいえ（アイコンのみのボタンの場合のみ） | アイコンのみのボタンや、表示テキストが不十分な場合にアクセシブルな名前を提供します。 |
 
 ## キーボードサポート
 

@@ -22,13 +22,13 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-roledescription` | [object Object] | "carousel" | はい | スクリーンリーダーに「carousel」と通知 |
-| `aria-roledescription` | [object Object] | "slide" | はい | 「tabpanel」の代わりに「slide」と通知 |
-| `aria-label` | [object Object] | テキスト | はい | カルーセルの目的を説明 |
-| `aria-label` | [object Object] | "N of M" | はい | スライド位置（例: "1 of 5"） |
-| `aria-controls` | [object Object] | ID参照 | はい | 制御対象要素を参照 |
-| `aria-labelledby` | [object Object] | ID参照 | はい | 関連するタブを参照 |
-| `aria-atomic` | [object Object] | "false" | いいえ | 変更されたコンテンツのみ通知 |
+| `aria-roledescription` | コンテナ | "carousel" | はい | スクリーンリーダーに「carousel」と通知 |
+| `aria-roledescription` | 各スライド（tabpanel） | "slide" | はい | 「tabpanel」の代わりに「slide」と通知 |
+| `aria-label` | コンテナ | テキスト | はい | カルーセルの目的を説明 |
+| `aria-label` | 各スライド（tabpanel） | "N of M" | はい | スライド位置（例: "1 of 5"） |
+| `aria-controls` | タブ、前へ/次へボタン | ID参照 | はい | 制御対象要素を参照 |
+| `aria-labelledby` | 各スライド（tabpanel） | ID参照 | はい | 関連するタブを参照 |
+| `aria-atomic` | スライドコンテナ | "false" | いいえ | 変更されたコンテンツのみ通知 |
 
 ### ステート
 

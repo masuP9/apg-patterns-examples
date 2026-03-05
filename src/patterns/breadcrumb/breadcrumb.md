@@ -12,14 +12,14 @@ A breadcrumb trail shows the user's location in a site hierarchy and provides na
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `navigation` | <nav> element | Provides a navigation landmark for assistive technology (implicit role of <nav>) |
+| `navigation` | <code>&lt;nav&gt;</code> element | Provides a navigation landmark for assistive technology (implicit role of <code>&lt;nav&gt;</code>) |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | <nav> | "Breadcrumb" (or localized) | Yes | Labels the navigation landmark for screen readers |
-| `aria-current` | [object Object] | "page" | Yes | Identifies the current page within the breadcrumb trail |
+| `aria-label` | <code>&lt;nav&gt;</code> | "Breadcrumb" (or localized) | Yes | Labels the navigation landmark for screen readers |
+| `aria-current` | Current page element | "page" | Yes (on last item) | Identifies the current page within the breadcrumb trail |
 
 ### States
 
@@ -38,12 +38,12 @@ A breadcrumb trail shows the user's location in a site hierarchy and provides na
 
 ### High Priority: ARIA
 
-- [ ] <nav> element is used
-- [ ] <nav> has aria-label="Breadcrumb" (or localized)
+- [ ] <code>&lt;nav&gt;</code> element is used
+- [ ] <code>&lt;nav&gt;</code> has aria-label="Breadcrumb" (or localized)
 - [ ] Last item has aria-current="page"
-- [ ] Links use native <a> elements
-- [ ] Uses ordered list (<ol>) for hierarchy
-- [ ] Each breadcrumb is a list item (<li>)
+- [ ] Links use native <code>&lt;a&gt;</code> elements
+- [ ] Uses ordered list (<code>&lt;ol&gt;</code>) for hierarchy
+- [ ] Each breadcrumb is a list item (<code>&lt;li&gt;</code>)
 - [ ] Current page is identifiable (text or aria-current)
 
 ### Medium Priority: Accessibility

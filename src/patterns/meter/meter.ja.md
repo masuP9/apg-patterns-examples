@@ -10,9 +10,9 @@
 
 | ユースケース | 推奨 |
 | --- | --- |
-| Simple value display | Native <meter> |
+| Simple value display | Native <code>&lt;meter&gt;</code> |
 | Custom styling needed | Custom role="meter" |
-| low/high/optimum thresholds | Native <meter> |
+| low/high/optimum thresholds | Native <code>&lt;meter&gt;</code> |
 | Full visual control | Custom implementation |
 
 ### ネイティブ vs カスタム比較
@@ -38,12 +38,12 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | 数値（現在の値） | はい | aria-valueminとaria-valuemaxの間である必要があります |
-| `aria-valuemin` | [object Object] | 数値（デフォルト: 0） | はい | メーターの最小許容値を指定します |
-| `aria-valuemax` | [object Object] | 数値（デフォルト: 100） | はい | メーターの最大許容値を指定します |
-| `aria-valuetext` | [object Object] | 文字列（例: "75% complete"） | いいえ | 現在の値に対する人間が読みやすいテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。 |
-| `aria-label` | [object Object] | 文字列 | はい | メーターに見えないラベルを提供します |
-| `aria-labelledby` | [object Object] | ID参照 | はい | 外部要素をラベルとして参照します |
+| `aria-valuenow` | メーター要素 | 数値（現在の値） | はい | aria-valueminとaria-valuemaxの間である必要があります |
+| `aria-valuemin` | メーター要素 | 数値（デフォルト: 0） | はい | メーターの最小許容値を指定します |
+| `aria-valuemax` | メーター要素 | 数値（デフォルト: 100） | はい | メーターの最大許容値を指定します |
+| `aria-valuetext` | メーター要素 | 文字列（例: "75% complete"） | いいえ | 現在の値に対する人間が読みやすいテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。 |
+| `aria-label` | メーター要素 | 文字列 | 条件付き（表示されるラベルがない場合は必須） | メーターに見えないラベルを提供します |
+| `aria-labelledby` | メーター要素 | ID参照 | 条件付き（表示されるラベルが存在する場合は必須） | 外部要素をラベルとして参照します |
 
 ## キーボードサポート
 

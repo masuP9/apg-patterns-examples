@@ -12,9 +12,9 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `button` | トリガー（<button>） | メニューを開くトリガー（<button>要素による暗黙的なロール） |
-| `menu` | コンテナ（<ul>） | ユーザーに選択肢のリストを提供するウィジェット |
-| `menuitem` | 各アイテム（<li>） | メニュー内のオプション |
+| `button` | トリガー（<code>&lt;button&gt;</code>） | メニューを開くトリガー（<code>&lt;button&gt;</code>要素による暗黙的なロール） |
+| `menu` | コンテナ（<code>&lt;ul&gt;</code>） | ユーザーに選択肢のリストを提供するウィジェット |
+| `menuitem` | 各アイテム（<code>&lt;li&gt;</code>） | メニュー内のオプション |
 
 ### プロパティ
 
@@ -22,8 +22,8 @@
 | --- | --- | --- | --- | --- |
 | `aria-haspopup` | button | "menu" | はい | ボタンがメニューを開くことを示す |
 | `aria-controls` | button | ID参照 | いいえ | メニュー要素を参照する |
-| `aria-labelledby` | menu | ID参照 | はい | メニューを開くボタンを参照する |
-| `aria-label` | menu | 文字列 | はい | メニューのアクセシブルな名前を提供する |
+| `aria-labelledby` | menu | ID参照 | はい（またはaria-label） | メニューを開くボタンを参照する |
+| `aria-label` | menu | 文字列 | はい（またはaria-labelledby） | メニューのアクセシブルな名前を提供する |
 | `aria-disabled` | menuitem | true | いいえ | メニューアイテムが無効であることを示す |
 
 ### ステート

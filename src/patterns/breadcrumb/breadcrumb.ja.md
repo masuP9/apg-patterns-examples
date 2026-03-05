@@ -12,14 +12,14 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `navigation` | <nav> 要素 | 支援技術にナビゲーションランドマークを提供します（<nav>の暗黙のロール） |
+| `navigation` | <code>&lt;nav&gt;</code> 要素 | 支援技術にナビゲーションランドマークを提供します（<code>&lt;nav&gt;</code>の暗黙のロール） |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | <nav> | "Breadcrumb"（またはローカライズされた値） | はい | スクリーンリーダー向けにナビゲーションランドマークにラベルを付けます |
-| `aria-current` | [object Object] | "page" | はい | パンくずリスト内の現在のページを識別します |
+| `aria-label` | <code>&lt;nav&gt;</code> | "Breadcrumb"（またはローカライズされた値） | はい | スクリーンリーダー向けにナビゲーションランドマークにラベルを付けます |
+| `aria-current` | 現在のページ要素 | "page" | はい（最後のアイテム） | パンくずリスト内の現在のページを識別します |
 
 ### ステート
 
@@ -38,12 +38,12 @@
 
 ### 高優先度: ARIA
 
-- [ ] <nav> element is used
-- [ ] <nav> has aria-label="Breadcrumb" (or localized)
+- [ ] <code>&lt;nav&gt;</code> element is used
+- [ ] <code>&lt;nav&gt;</code> has aria-label="Breadcrumb" (or localized)
 - [ ] Last item has aria-current="page"
-- [ ] Links use native <a> elements
-- [ ] Uses ordered list (<ol>) for hierarchy
-- [ ] Each breadcrumb is a list item (<li>)
+- [ ] Links use native <code>&lt;a&gt;</code> elements
+- [ ] Uses ordered list (<code>&lt;ol&gt;</code>) for hierarchy
+- [ ] Each breadcrumb is a list item (<code>&lt;li&gt;</code>)
 - [ ] Current page is identifiable (text or aria-current)
 
 ### 中優先度: アクセシビリティ

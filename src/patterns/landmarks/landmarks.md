@@ -10,13 +10,13 @@ Landmarks identify the major sections of a page. There are eight landmark roles 
 
 | Feature | Native | Custom |
 | --- | --- | --- |
-| `<header>` | banner | Only when direct child of `<body>` |
-| `<nav>` | navigation | Always |
-| `<main>` | main | Always |
-| `<footer>` | contentinfo | Only when direct child of `<body>` |
-| `<aside>` | complementary | Always |
-| `<section>` | region | **Only when aria-label/labelledby is present** |
-| `<form>` | form | **Only when aria-label/labelledby is present** |
+| `<code>&lt;header&gt;</code>` | banner | Only when direct child of `<body>` |
+| `<code>&lt;nav&gt;</code>` | navigation | Always |
+| `<code>&lt;main&gt;</code>` | main | Always |
+| `<code>&lt;footer&gt;</code>` | contentinfo | Only when direct child of `<body>` |
+| `<code>&lt;aside&gt;</code>` | complementary | Always |
+| `<code>&lt;section&gt;</code>` | region | **Only when aria-label/labelledby is present** |
+| `<code>&lt;form&gt;</code>` | form | **Only when aria-label/labelledby is present** |
 
 ## ARIA Requirements
 
@@ -24,21 +24,21 @@ Landmarks identify the major sections of a page. There are eight landmark roles 
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `banner` | `<header>` | Site-wide header |
-| `navigation` | `<nav>` | Navigation links |
-| `main` | `<main>` | Primary content |
-| `contentinfo` | `<footer>` | Site-wide footer |
-| `complementary` | `<aside>` | Supporting content |
-| `region` | `<section>` | Named section |
-| `search` | `<form role="search">` | Search functionality |
-| `form` | `<form>` | Form area |
+| `banner` | <code>&lt;header&gt;</code> | Site-wide header |
+| `navigation` | <code>&lt;nav&gt;</code> | Navigation links |
+| `main` | <code>&lt;main&gt;</code> | Primary content |
+| `contentinfo` | <code>&lt;footer&gt;</code> | Site-wide footer |
+| `complementary` | <code>&lt;aside&gt;</code> | Supporting content |
+| `region` | <code>&lt;section&gt;</code> | Named section |
+| `search` | <code>&lt;form role="search"&gt;</code> | Search functionality |
+| `form` | <code>&lt;form&gt;</code> | Form area |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | [object Object] | String | Yes | Provides an accessible name for the landmark |
-| `aria-labelledby` | [object Object] | ID reference | Yes | References a visible heading element |
+| `aria-label` | All landmarks | String | Conditional: when multiple of same type, or region/form | Provides an accessible name for the landmark |
+| `aria-labelledby` | All landmarks | ID reference | Conditional: reference visible heading | References a visible heading element |
 
 ## Keyboard Support
 
@@ -46,10 +46,10 @@ Landmarks identify the major sections of a page. There are eight landmark roles 
 
 ### High Priority: ARIA
 
-- [ ] Has banner landmark (`<header>` or `role="banner"`)
-- [ ] Has navigation landmark (`<nav>` or `role="navigation"`)
-- [ ] Has main landmark (`<main>` or `role="main"`)
-- [ ] Has contentinfo landmark (`<footer>` or `role="contentinfo"`)
+- [ ] Has banner landmark (`<code>&lt;header&gt;</code>` or `role="banner"`)
+- [ ] Has navigation landmark (`<code>&lt;nav&gt;</code>` or `role="navigation"`)
+- [ ] Has main landmark (`<code>&lt;main&gt;</code>` or `role="main"`)
+- [ ] Has contentinfo landmark (`<code>&lt;footer&gt;</code>` or `role="contentinfo"`)
 - [ ] Has exactly one main landmark
 - [ ] Banner is at top level (not inside article/aside/main/nav/section)
 - [ ] Navigation landmarks have unique labels when multiple

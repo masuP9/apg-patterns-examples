@@ -10,7 +10,7 @@
 
 | ユースケース | 推奨 |
 | --- | --- |
-| Simple numeric input | Native <input type="number"> |
+| Simple numeric input | Native <code>&lt;input type="number"&gt;</code> |
 | Custom styling needed | Custom role="spinbutton" |
 | Consistent keyboard behavior | Custom (browser varies) |
 | aria-valuetext needed | Custom implementation |
@@ -45,8 +45,8 @@
 | `aria-valuetext` | spinbutton | 文字列（例: "5 items", "3 of 10"） | いいえ | 現在の値に対する人間が読めるテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。 |
 | `aria-disabled` | spinbutton | `true` \| `false` | いいえ | スピンボタンが無効化されており、インタラクティブでないことを示します。 |
 | `aria-readonly` | spinbutton | `true` \| `false` | いいえ | スピンボタンが読み取り専用であることを示します。ユーザーはHome/Endキーでナビゲーションできますが、値を変更することはできません。 |
-| `aria-label` | spinbutton | 文字列 | はい | スピンボタンに不可視のラベルを提供します |
-| `aria-labelledby` | spinbutton | ID参照 | はい | 外部要素をラベルとして参照します |
+| `aria-label` | spinbutton | 文字列 | 条件付き（表示されるラベルがない場合は必須） | スピンボタンに不可視のラベルを提供します |
+| `aria-labelledby` | spinbutton | ID参照 | 条件付き（表示されるラベルが存在する場合は必須） | 外部要素をラベルとして参照します |
 
 ## キーボードサポート
 

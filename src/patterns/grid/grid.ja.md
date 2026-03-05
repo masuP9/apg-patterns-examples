@@ -10,9 +10,9 @@ Grid は矢印キー、Home、End などの方向キーを使用した2次元ナ
 
 | ユースケース | 推奨 |
 | --- | --- |
-| [object Object] | [object Object] |
-| [object Object] | [object Object] |
-| [object Object] | [object Object] |
+| セルがフォーカス可能でインタラクティブ（編集可能、選択可能、またはウィジェットを含む） | 2Dキーボードナビゲーションを備えたインタラクティブなデータグリッドには grid ロールを使用 |
+| インタラクティブ性のない静的データ表示 | 静的なデータテーブルにはネイティブの <code>&lt;table&gt;</code> 要素を使用 |
+| スプレッドシートやデータグリッドに類似したインターフェース | 完全なキーボードサポート付きの grid ロールを使用 |
 
 ## ARIA要件
 
@@ -30,9 +30,9 @@ Grid は矢印キー、Home、End などの方向キーを使用した2次元ナ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `role="grid"` | [object Object] | - | はい | コンテナをグリッドとして識別 |
-| `aria-label` | grid | String | はい | グリッドのアクセシブルな名前 |
-| `aria-labelledby` | grid | ID reference | はい | aria-labelの代替 |
+| `role="grid"` | コンテナ | - | はい | コンテナをグリッドとして識別 |
+| `aria-label` | grid | String | はい*（aria-label または aria-labelledby のいずれか） | グリッドのアクセシブルな名前 |
+| `aria-labelledby` | grid | ID reference | はい*（aria-label または aria-labelledby のいずれか） | aria-labelの代替 |
 | `aria-multiselectable` | grid | true | いいえ | 複数選択モード時のみ存在 |
 | `aria-rowcount` | grid | 数値 | いいえ | 総行数（仮想化用） |
 | `aria-colcount` | grid | 数値 | いいえ | 総列数（仮想化用） |

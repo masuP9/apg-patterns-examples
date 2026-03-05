@@ -10,9 +10,9 @@ Grid is an interactive container that enables 2-dimensional navigation using arr
 
 | Use Case | Recommended |
 | --- | --- |
-| [object Object] | [object Object] |
-| [object Object] | [object Object] |
-| [object Object] | [object Object] |
+| Cells are focusable and interactive (editable, selectable, or contain widgets) | Use grid role for interactive data grids with 2D keyboard navigation |
+| Static data display without interactivity | Use native <code>&lt;table&gt;</code> elements for static data tables |
+| Interface similar to spreadsheet or data grid | Use grid role with full keyboard support |
 
 ## ARIA Requirements
 
@@ -30,9 +30,9 @@ Grid is an interactive container that enables 2-dimensional navigation using arr
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `role="grid"` | [object Object] | - | Yes | Identifies the container as a grid |
-| `aria-label` | grid | String | Yes | Accessible name for the grid |
-| `aria-labelledby` | grid | ID reference | Yes | Alternative to aria-label |
+| `role="grid"` | Container | - | Yes | Identifies the container as a grid |
+| `aria-label` | grid | String | Yes* (either aria-label or aria-labelledby) | Accessible name for the grid |
+| `aria-labelledby` | grid | ID reference | Yes* (either aria-label or aria-labelledby) | Alternative to aria-label |
 | `aria-multiselectable` | grid | true | No | Only present for multi-select mode |
 | `aria-rowcount` | grid | Number | No | Total rows (for virtualization) |
 | `aria-colcount` | grid | Number | No | Total columns (for virtualization) |

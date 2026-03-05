@@ -12,9 +12,9 @@ A combobox is a composite widget with a text input field and an associated popup
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `combobox` | Input (`<input>`) | The text input element that users type into |
-| `listbox` | Popup (`<ul>`) | The popup containing selectable options |
-| `option` | Each item (`<li>`) | An individual selectable option |
+| `combobox` | Input (`<code>&lt;input&gt;</code>`) | The text input element that users type into |
+| `listbox` | Popup (`<code>&lt;ul&gt;</code>`) | The popup containing selectable options |
+| `option` | Each item (`<code>&lt;li&gt;</code>`) | An individual selectable option |
 
 ### Properties
 
@@ -25,7 +25,7 @@ A combobox is a composite widget with a text input field and an associated popup
 | `aria-expanded` | input | ``true`` \| ``false`` | Yes | Indicates whether the popup is open |
 | `aria-autocomplete` | input | ``list`` \| ``none`` \| ``both`` | Yes | Describes the autocomplete behavior |
 | `aria-activedescendant` | input | `ID reference` \| `empty` | Yes | References the currently focused option in the popup |
-| `aria-labelledby` | [object Object] | ID reference | Yes | References the label element |
+| `aria-labelledby` | input, listbox | ID reference | Yes* | References the label element |
 | `aria-selected` | option | ``true`` \| ``false`` | Yes | Indicates the currently focused option |
 | `aria-disabled` | option | `true` | No | Indicates the option is disabled |
 
@@ -36,7 +36,7 @@ A combobox is a composite widget with a text input field and an associated popup
 | `Down Arrow` | Open popup and focus first option |
 | `Up Arrow` | Open popup and focus last option |
 | `Alt + Down Arrow` | Open popup without changing focus position |
-| `[object Object]` | Filter options and open popup |
+| `Type characters` | Filter options and open popup |
 | `Down Arrow` | Move focus to next enabled option (no wrap) |
 | `Up Arrow` | Move focus to previous enabled option (no wrap) |
 | `Home` | Move focus to first enabled option |

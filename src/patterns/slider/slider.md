@@ -30,12 +30,12 @@ A slider is an input widget where the user selects a value from within a given r
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | Number | Yes | Updated dynamically when value changes via keyboard or pointer |
-| `aria-valuemin` | [object Object] | Number | Yes | Default: 0 |
-| `aria-valuemax` | [object Object] | Number | Yes | Default: 100 |
-| `aria-valuetext` | [object Object] | String | Yes | Example: "50%", "Medium", "3 of 5 stars" |
-| `aria-orientation` | [object Object] | `"horizontal"` \| `"vertical"` | No | Default: horizontal (implicit). Only set for vertical sliders. |
-| `aria-disabled` | [object Object] | `true` \| `undefined` | No | Set only when disabled |
+| `aria-valuenow` | slider element | Number | Yes | Updated dynamically when value changes via keyboard or pointer |
+| `aria-valuemin` | slider element | Number | Yes | Default: 0 |
+| `aria-valuemax` | slider element | Number | Yes | Default: 100 |
+| `aria-valuetext` | slider element | String | No (recommended when value needs context) | Example: "50%", "Medium", "3 of 5 stars" |
+| `aria-orientation` | slider element | `"horizontal"` \| `"vertical"` | No | Default: horizontal (implicit). Only set for vertical sliders. |
+| `aria-disabled` | slider element | `true` \| `undefined` | No | Set only when disabled |
 
 ## Keyboard Support
 

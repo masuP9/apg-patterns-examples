@@ -10,8 +10,8 @@
 
 | ユースケース | 推奨 |
 | --- | --- |
-| Standard navigation | Native `<a href>` |
-| JavaScript-driven navigation | Native `<a href>` with `event.preventDefault()` |
+| Standard navigation | Native `<code>&lt;a href&gt;</code>` |
+| JavaScript-driven navigation | Native `<code>&lt;a href&gt;</code>` with `event.preventDefault()` |
 | Non-link element that navigates | Custom `role="link"` (educational purposes only) |
 
 ### ネイティブ vs カスタム比較
@@ -33,13 +33,13 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `link` | <a href> または role="link" を持つ要素 | 要素をハイパーリンクとして識別します。ネイティブの <a href> は暗黙的にこのロールを持ちます。 |
+| `link` | <code>&lt;a href&gt;</code> または role="link" を持つ要素 | 要素をハイパーリンクとして識別します。ネイティブの <code>&lt;a href&gt;</code> は暗黙的にこのロールを持ちます。 |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `tabindex` | Custom element | `0 (focusable)` \| `-1 (not focusable)` | はい | カスタム実装では必須。ネイティブの <a href> はデフォルトでフォーカス可能。無効時は -1 に設定。 |
+| `tabindex` | Custom element | `0 (focusable)` \| `-1 (not focusable)` | はい | カスタム実装では必須。ネイティブの <code>&lt;a href&gt;</code> はデフォルトでフォーカス可能。無効時は -1 に設定。 |
 | `aria-label` | Link element | string | いいえ | 表示テキストがない場合にリンクの非表示ラベルを提供 |
 | `aria-labelledby` | Link element | ID reference | いいえ | 外部要素をラベルとして参照 |
 | `aria-current` | Link element | `page` \| `step` \| `location` \| `date` \| `time` \| `true` | いいえ | セット内の現在の項目を示す（例：ナビゲーション内の現在のページ） |
@@ -60,7 +60,7 @@
 
 ## フォーカス管理
 
-- ネイティブ <a href>: デフォルトでフォーカス可能
+- ネイティブ <code>&lt;a href&gt;</code>: デフォルトでフォーカス可能
 - カスタムリンク: tabindex="0" が必要
 - 無効なリンク: tabindex="-1" を使用（Tabオーダーから除外）
 

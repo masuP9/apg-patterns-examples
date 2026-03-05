@@ -23,7 +23,7 @@
 | `aria-valuenow` | 各slider要素 | Number | はい | キーボードまたはポインターによる値変更時に動的に更新 |
 | `aria-valuemin` | 各slider要素 | Number | はい | 下限つまみは静的（絶対最小値）、上限つまみは動的（下限値 + minDistance） |
 | `aria-valuemax` | 各slider要素 | Number | はい | 下限つまみは動的（上限値 - minDistance）、上限つまみは静的（絶対最大値） |
-| `aria-valuetext` | 各slider要素 | String | はい | 例: "$20", "$80", "20% - 80%" |
+| `aria-valuetext` | 各slider要素 | String | いいえ（値にコンテキストが必要な場合は推奨） | 例: "$20", "$80", "20% - 80%" |
 | `aria-orientation` | 各slider要素 | `"horizontal"` \| `"vertical"` | いいえ | デフォルト: horizontal（暗黙的）。垂直スライダーの場合のみ設定。 |
 | `aria-disabled` | 各slider要素 | `true` \| `undefined` | いいえ | 無効化時のみ設定 |
 

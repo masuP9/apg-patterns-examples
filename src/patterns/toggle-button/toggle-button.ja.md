@@ -38,7 +38,7 @@
 
 ### 高優先度: ARIA
 
-- [ ] Has role="button" (implicit for <button>)
+- [ ] Has role="button" (implicit for <code>&lt;button&gt;</code>)
 - [ ] Has aria-pressed attribute
 - [ ] aria-pressed toggles between true and false
 - [ ] Has type="button" (prevents form submission)

@@ -10,9 +10,9 @@ A meter displays a numeric value within a defined range as a graphical gauge. Us
 
 | Use Case | Recommended |
 | --- | --- |
-| Simple value display | Native <meter> |
+| Simple value display | Native <code>&lt;meter&gt;</code> |
 | Custom styling needed | Custom role="meter" |
-| low/high/optimum thresholds | Native <meter> |
+| low/high/optimum thresholds | Native <code>&lt;meter&gt;</code> |
 | Full visual control | Custom implementation |
 
 ### Native vs Custom Comparison
@@ -38,12 +38,12 @@ A meter displays a numeric value within a defined range as a graphical gauge. Us
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | Number (current value) | Yes | Must be between aria-valuemin and aria-valuemax |
-| `aria-valuemin` | [object Object] | Number (default: 0) | Yes | Specifies the minimum allowed value for the meter |
-| `aria-valuemax` | [object Object] | Number (default: 100) | Yes | Specifies the maximum allowed value for the meter |
-| `aria-valuetext` | [object Object] | String (e.g., "75% complete") | No | Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning. |
-| `aria-label` | [object Object] | String | Yes | Provides an invisible label for the meter |
-| `aria-labelledby` | [object Object] | ID reference | Yes | References an external element as the label |
+| `aria-valuenow` | Meter element | Number (current value) | Yes | Must be between aria-valuemin and aria-valuemax |
+| `aria-valuemin` | Meter element | Number (default: 0) | Yes | Specifies the minimum allowed value for the meter |
+| `aria-valuemax` | Meter element | Number (default: 100) | Yes | Specifies the maximum allowed value for the meter |
+| `aria-valuetext` | Meter element | String (e.g., "75% complete") | No | Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning. |
+| `aria-label` | Meter element | String | Conditional (required if no visible label) | Provides an invisible label for the meter |
+| `aria-labelledby` | Meter element | ID reference | Conditional (required if visible label exists) | References an external element as the label |
 
 ## Keyboard Support
 

@@ -20,8 +20,8 @@
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
 | `aria-orientation` | radiogroup | `horizontal` \| `vertical` | いいえ | ラジオグループの方向を示します。デフォルトは縦方向です。横方向の場合のみ設定します。 |
-| `aria-label` | radiogroup | String | はい | ラジオグループのアクセシブルな名前 |
-| `aria-labelledby` | radiogroup | ID参照 | はい | aria-labelの代替 |
+| `aria-label` | radiogroup | String | はい（またはaria-labelledby） | ラジオグループのアクセシブルな名前 |
+| `aria-labelledby` | radiogroup | ID参照 | はい（またはaria-label） | aria-labelの代替 |
 
 ### ステート
 

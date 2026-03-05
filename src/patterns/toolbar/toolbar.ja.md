@@ -13,15 +13,15 @@
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
 | `toolbar` | コンテナ | コントロールをグループ化するコンテナ |
-| `button` | ボタン要素 | <button>要素の暗黙的なロール |
+| `button` | ボタン要素 | <code>&lt;button&gt;</code>要素の暗黙的なロール |
 | `separator` | セパレーター | グループ間の視覚的およびセマンティックなセパレーター |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | toolbar | String | はい | ツールバーのアクセシブルな名前 |
-| `aria-labelledby` | toolbar | ID参照 | はい | aria-labelの代替（優先される） |
+| `aria-label` | toolbar | String | はい* | ツールバーのアクセシブルな名前 |
+| `aria-labelledby` | toolbar | ID参照 | はい* | aria-labelの代替（優先される） |
 | `aria-orientation` | toolbar | `"horizontal"` \| `"vertical"` | いいえ | ツールバーの方向（デフォルト: horizontal） |
 
 ### ステート

@@ -30,12 +30,12 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | Number | はい | キーボードまたはポインターによる値変更時に動的に更新 |
-| `aria-valuemin` | [object Object] | Number | はい | デフォルト: 0 |
-| `aria-valuemax` | [object Object] | Number | はい | デフォルト: 100 |
-| `aria-valuetext` | [object Object] | String | はい | 例: "50%", "Medium", "3 of 5 stars" |
-| `aria-orientation` | [object Object] | `"horizontal"` \| `"vertical"` | いいえ | デフォルト: horizontal（暗黙的）。垂直スライダーの場合のみ設定。 |
-| `aria-disabled` | [object Object] | `true` \| `undefined` | いいえ | 無効化時のみ設定 |
+| `aria-valuenow` | slider 要素 | Number | はい | キーボードまたはポインターによる値変更時に動的に更新 |
+| `aria-valuemin` | slider 要素 | Number | はい | デフォルト: 0 |
+| `aria-valuemax` | slider 要素 | Number | はい | デフォルト: 100 |
+| `aria-valuetext` | slider 要素 | String | いいえ（値にコンテキストが必要な場合は推奨） | 例: "50%", "Medium", "3 of 5 stars" |
+| `aria-orientation` | slider 要素 | `"horizontal"` \| `"vertical"` | いいえ | デフォルト: horizontal（暗黙的）。垂直スライダーの場合のみ設定。 |
+| `aria-disabled` | slider 要素 | `true` \| `undefined` | いいえ | 無効化時のみ設定 |
 
 ## キーボードサポート
 

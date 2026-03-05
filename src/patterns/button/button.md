@@ -10,8 +10,8 @@ A button is a widget that enables users to trigger an action or event, such as s
 
 | Use Case | Recommended |
 | --- | --- |
-| Simple action button | Native <button> |
-| Form submission | Native <button type="submit"> |
+| Simple action button | Native <code>&lt;button&gt;</code> |
+| Form submission | Native <code>&lt;button type="submit"&gt;</code> |
 | Educational purposes (demonstrating ARIA) | Custom role="button" |
 | Legacy constraints (non-button must act as button) | Custom role="button" |
 
@@ -34,15 +34,15 @@ A button is a widget that enables users to trigger an action or event, such as s
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `button` | <button> or element with role="button" | Identifies the element as a button widget. Native <code>&lt;button&gt;</code> has this role implicitly. |
+| `button` | <code>&lt;button&gt;</code> or element with role="button" | Identifies the element as a button widget. Native <code>&lt;button&gt;</code> has this role implicitly. |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `tabindex` | [object Object] | `"0"` \| `"-1"` | Yes | Makes the custom button element focusable via keyboard navigation. Native <code>&lt;button&gt;</code> is focusable by default. Set to -1 when disabled. |
-| `aria-disabled` | [object Object] | `"true"` \| `"false"` | Yes | Indicates the button is not interactive and cannot be activated. Native <code>&lt;button disabled&gt;</code> automatically handles this. |
-| `aria-label` | [object Object] | Text string describing the action | Yes | Provides an accessible name for icon-only buttons or when visible text is insufficient. |
+| `tabindex` | Custom button element | `"0"` \| `"-1"` | Yes (for custom implementations) | Makes the custom button element focusable via keyboard navigation. Native <code>&lt;button&gt;</code> is focusable by default. Set to -1 when disabled. |
+| `aria-disabled` | Button element | `"true"` \| `"false"` | No (only when disabled) | Indicates the button is not interactive and cannot be activated. Native <code>&lt;button disabled&gt;</code> automatically handles this. |
+| `aria-label` | Button element (optional) | Text string describing the action | No (only for icon-only buttons) | Provides an accessible name for icon-only buttons or when visible text is insufficient. |
 
 ## Keyboard Support
 

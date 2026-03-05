@@ -22,7 +22,7 @@
 | --- | --- | --- | --- | --- |
 | `aria-level` | heading | 2 - 6 | はい | headingLevel プロパティ |
 | `aria-controls` | button | 関連付けられたパネルへのID参照 | はい | 自動生成 |
-| `aria-labelledby` | [object Object] | ヘッダーボタンへのID参照 | はい | 自動生成 |
+| `aria-labelledby` | region (パネル) | ヘッダーボタンへのID参照 | はい (regionを使用する場合) | 自動生成 |
 
 ### ステート
 

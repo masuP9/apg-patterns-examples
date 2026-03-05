@@ -22,13 +22,13 @@ A carousel presents a set of items (slides), one at a time, with controls to nav
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-roledescription` | [object Object] | "carousel" | Yes | Announces "carousel" to screen readers |
-| `aria-roledescription` | [object Object] | "slide" | Yes | Announces "slide" instead of "tabpanel" |
-| `aria-label` | [object Object] | Text | Yes | Describes the carousel purpose |
-| `aria-label` | [object Object] | "N of M" | Yes | Slide position (e.g., "1 of 5") |
-| `aria-controls` | [object Object] | ID reference | Yes | References controlled element |
-| `aria-labelledby` | [object Object] | ID reference | Yes | References associated tab |
-| `aria-atomic` | [object Object] | "false" | No | Only announce changed content |
+| `aria-roledescription` | Container | "carousel" | Yes | Announces "carousel" to screen readers |
+| `aria-roledescription` | Each slide (tabpanel) | "slide" | Yes | Announces "slide" instead of "tabpanel" |
+| `aria-label` | Container | Text | Yes | Describes the carousel purpose |
+| `aria-label` | Each slide (tabpanel) | "N of M" | Yes | Slide position (e.g., "1 of 5") |
+| `aria-controls` | Tab, Prev/Next buttons | ID reference | Yes | References controlled element |
+| `aria-labelledby` | Each slide (tabpanel) | ID reference | Yes | References associated tab |
+| `aria-atomic` | Slides container | "false" | No | Only announce changed content |
 
 ### States
 

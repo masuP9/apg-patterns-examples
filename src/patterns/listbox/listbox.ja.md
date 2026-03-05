@@ -4,7 +4,7 @@
 
 ## 概要
 
-リストボックスウィジェットは、オプションのリストを表示し、1つまたは複数のアイテムの選択を可能にします。ネイティブの `<select>` を超えたカスタム選択動作を提供します。
+リストボックスウィジェットは、オプションのリストを表示し、1つまたは複数のアイテムの選択を可能にします。ネイティブの `<code>&lt;select&gt;</code>` を超えたカスタム選択動作を提供します。
 
 ## ARIA要件
 
@@ -12,15 +12,15 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `listbox` | コンテナ（`<ul>`） | リストから1つまたは複数のアイテムを選択するためのウィジェット |
-| `option` | 各アイテム（`<li>`） | リストボックス内の選択可能なオプション |
+| `listbox` | コンテナ（<code>&lt;ul&gt;</code>） | リストから1つまたは複数のアイテムを選択するためのウィジェット |
+| `option` | 各アイテム（<code>&lt;li&gt;</code>） | リストボックス内の選択可能なオプション |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | listbox | String | はい | リストボックスのアクセシブル名 |
-| `aria-labelledby` | listbox | ID reference | はい | ラベル要素への参照 |
+| `aria-label` | listbox | String | はい* | リストボックスのアクセシブル名 |
+| `aria-labelledby` | listbox | ID reference | はい* | ラベル要素への参照 |
 | `aria-multiselectable` | listbox | `true` | いいえ | 複数選択モードを有効にする |
 | `aria-orientation` | listbox | ``"vertical"`` \| ``"horizontal"`` | いいえ | ナビゲーションの方向（デフォルト: vertical） |
 

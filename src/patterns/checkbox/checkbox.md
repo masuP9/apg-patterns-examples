@@ -22,14 +22,14 @@ A checkbox allows users to select one or more options from a set. Supports dual-
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `checkbox` | <input type="checkbox"> or element with role="checkbox" | Identifies the element as a checkbox. Native <input type="checkbox"> has this role implicitly. |
+| `checkbox` | <code>&lt;input type="checkbox"&gt;</code> or element with role="checkbox" | Identifies the element as a checkbox. Native <code>&lt;input type="checkbox"&gt;</code> has this role implicitly. |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | Control | string | Yes | Provides accessible name |
-| `aria-labelledby` | Control | ID reference | Yes | References external text as label |
+| `aria-label` | Control | string | When no visible label | Provides accessible name |
+| `aria-labelledby` | Control | ID reference | When no visible label | References external text as label |
 | `aria-describedby` | Control | ID reference | No | Additional description |
 
 ### States
@@ -37,7 +37,7 @@ A checkbox allows users to select one or more options from a set. Supports dual-
 | Attribute | Element | Values | Required | Change Trigger |
 | --- | --- | --- | --- | --- |
 | `aria-checked / checked` | Checkbox element | `true` \| `false` \| `mixed` | Yes | Click, Space key |
-| `indeterminate` | Native checkbox (<input>) | `true` \| `false` | No | Parent-child sync, automatically cleared on user interaction |
+| `indeterminate` | Native checkbox (<code>&lt;input&gt;</code>) | `true` \| `false` | No | Parent-child sync, automatically cleared on user interaction |
 | `disabled` | Checkbox element | `present` \| `absent` | No | Programmatic change |
 
 ## Keyboard Support
@@ -64,7 +64,7 @@ A checkbox allows users to select one or more options from a set. Supports dual-
 - [ ] indeterminate property settable
 - [ ] Disabled state prevents interaction
 - [ ] Accessible name via aria-label
-- [ ] Accessible name via external <label>
+- [ ] Accessible name via external <code>&lt;label&gt;</code>
 - [ ] name attribute for form submission
 - [ ] value attribute set correctly
 

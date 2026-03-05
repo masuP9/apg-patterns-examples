@@ -18,14 +18,14 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | 0-100 | はい | プライマリペインのサイズ（パーセンテージ） |
-| `aria-valuemin` | [object Object] | number | はい | 最小値（デフォルト: 10） |
-| `aria-valuemax` | [object Object] | number | はい | 最大値（デフォルト: 90） |
-| `aria-controls` | [object Object] | ID reference(s) | はい | プライマリペインのID（+ セカンダリペインのIDは任意） |
-| `aria-label` | [object Object] | string | はい | アクセシブルな名前 |
-| `aria-labelledby` | [object Object] | ID reference | はい | 表示されるラベル要素への参照 |
-| `aria-orientation` | [object Object] | `"horizontal"` \| `"vertical"` | いいえ | デフォルト: horizontal（左右分割） |
-| `aria-disabled` | [object Object] | `true` \| `false` | いいえ | 無効状態 |
+| `aria-valuenow` | separator | 0-100 | はい | プライマリペインのサイズ（パーセンテージ） |
+| `aria-valuemin` | separator | number | はい | 最小値（デフォルト: 10） |
+| `aria-valuemax` | separator | number | はい | 最大値（デフォルト: 90） |
+| `aria-controls` | separator | ID reference(s) | はい | プライマリペインのID（+ セカンダリペインのIDは任意） |
+| `aria-label` | separator | string | 条件付き（aria-labelledbyがない場合は必須） | アクセシブルな名前 |
+| `aria-labelledby` | separator | ID reference | 条件付き（aria-labelがない場合は必須） | 表示されるラベル要素への参照 |
+| `aria-orientation` | separator | `"horizontal"` \| `"vertical"` | いいえ | デフォルト: horizontal（左右分割） |
+| `aria-disabled` | separator | `true` \| `false` | いいえ | 無効状態 |
 
 ### ステート
 

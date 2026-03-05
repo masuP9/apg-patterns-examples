@@ -23,8 +23,8 @@ A treegrid combines Grid 2D keyboard navigation with TreeView hierarchical expan
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
 | `role="treegrid"` | Container | - | Yes | Identifies the container as a treegrid |
-| `aria-label` | treegrid | String | Yes | Accessible name for the treegrid |
-| `aria-labelledby` | treegrid | ID reference | Yes | Alternative to aria-label |
+| `aria-label` | treegrid | String | Yes (either aria-label or aria-labelledby) | Accessible name for the treegrid |
+| `aria-labelledby` | treegrid | ID reference | Yes (either aria-label or aria-labelledby) | Alternative to aria-label |
 | `aria-multiselectable` | treegrid | true | No | Only present for multi-select mode |
 | `aria-rowcount` | treegrid | Number | No | Total rows (for virtualization) |
 | `aria-colcount` | treegrid | Number | No | Total columns (for virtualization) |

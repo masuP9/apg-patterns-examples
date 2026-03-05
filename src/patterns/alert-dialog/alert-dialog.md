@@ -18,9 +18,9 @@ An alert dialog is a modal dialog that interrupts the user's workflow to communi
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-modal` | alertdialog | true | Yes | Provided automatically by showModal(). No explicit attribute needed when using native <dialog> element. |
+| `aria-modal` | alertdialog | true | Implicit | Provided automatically by showModal(). No explicit attribute needed when using native <code>&lt;dialog&gt;</code> element. |
 | `aria-labelledby` | alertdialog | ID reference to title element | Yes | References the alert dialog title |
-| `aria-describedby` | alertdialog | ID reference to message | Yes | References the alert message. Unlike regular Dialog, this is required for Alert Dialog as the message is central to the user's understanding of what action is being confirmed. |
+| `aria-describedby` | alertdialog | ID reference to message | Yes (required) | References the alert message. Unlike regular Dialog, this is required for Alert Dialog as the message is central to the user's understanding of what action is being confirmed. |
 
 ## Keyboard Support
 

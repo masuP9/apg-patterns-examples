@@ -38,7 +38,7 @@ A toggle button is a two-state button that can be either pressed or not pressed.
 
 ### High Priority: ARIA
 
-- [ ] Has role="button" (implicit for <button>)
+- [ ] Has role="button" (implicit for <code>&lt;button&gt;</code>)
 - [ ] Has aria-pressed attribute
 - [ ] aria-pressed toggles between true and false
 - [ ] Has type="button" (prevents form submission)
