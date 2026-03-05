@@ -7,6 +7,7 @@
  * Astro's client:load directive for hydration.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { Disclosure as DisclosureReact } from './Disclosure';
 import DisclosureVue from './Disclosure.vue';
 import DisclosureSvelte from './Disclosure.svelte';
@@ -14,17 +15,23 @@ import DisclosureAstro from './Disclosure.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 <div class="space-y-8">
   <!-- Basic Disclosure -->
   <div>
-    <h3 class="mb-3 text-lg font-medium">Basic Disclosure</h3>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ディスクロージャー' : 'Basic Disclosure'}</h3>
     <p class="text-muted-foreground mb-4 text-sm">
-      A simple disclosure that toggles the visibility of content when clicked.
+      {
+        isJa
+          ? 'クリックでコンテンツの表示・非表示を切り替えるシンプルなディスクロージャー。'
+          : 'A simple disclosure that toggles the visibility of content when clicked.'
+      }
     </p>
     <div class="border-border bg-background rounded-lg border p-6">
       {
@@ -72,9 +79,19 @@ const { framework } = Astro.props;
 
   <!-- Initially Expanded -->
   <div>
-    <h3 class="mb-3 text-lg font-medium">Initially Expanded</h3>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '初期展開状態' : 'Initially Expanded'}</h3>
     <p class="text-muted-foreground mb-4 text-sm">
-      Use the <code>defaultExpanded</code> prop to show the content on initial render.
+      {
+        isJa ? (
+          <>
+            <code>defaultExpanded</code> プロパティを使用して、初期表示時にコンテンツを表示します。
+          </>
+        ) : (
+          <>
+            Use the <code>defaultExpanded</code> prop to show the content on initial render.
+          </>
+        )
+      }
     </p>
     <div class="border-border bg-background rounded-lg border p-6">
       {
@@ -135,9 +152,19 @@ const { framework } = Astro.props;
 
   <!-- Disabled -->
   <div>
-    <h3 class="mb-3 text-lg font-medium">Disabled State</h3>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '無効状態' : 'Disabled State'}</h3>
     <p class="text-muted-foreground mb-4 text-sm">
-      Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+      {
+        isJa ? (
+          <>
+            <code>disabled</code> プロパティを使用して、ディスクロージャーの操作を無効にします。
+          </>
+        ) : (
+          <>
+            Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+          </>
+        )
+      }
     </p>
     <div class="border-border bg-background rounded-lg border p-6">
       {

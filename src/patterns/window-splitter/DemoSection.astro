@@ -7,6 +7,7 @@
  * Astro's client:load directive for hydration.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { WindowSplitterDemo as WindowSplitterDemoReact } from './WindowSplitterDemo';
 import WindowSplitterDemoVue from './WindowSplitterDemo.vue';
 import WindowSplitterDemoSvelte from './WindowSplitterDemo.svelte';
@@ -14,15 +15,20 @@ import WindowSplitterDemoAstro from './WindowSplitterDemo.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 <div class="border-border bg-background rounded-lg border p-6">
   <p class="text-muted-foreground mb-4 text-sm">
-    Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a
-    larger step. Home/End moves to min/max position.
+    {
+      isJa
+        ? '矢印キーでスプリッターを移動します。Enter キーで折りたたみ/展開します。Shift+矢印キーで大きなステップで移動します。Home/End キーで最小/最大位置に移動します。'
+        : 'Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a larger step. Home/End moves to min/max position.'
+    }
   </p>
   {framework === 'react' && <WindowSplitterDemoReact client:load />}
   {framework === 'vue' && <WindowSplitterDemoVue client:load />}

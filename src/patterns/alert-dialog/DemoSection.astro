@@ -8,6 +8,7 @@
  * Astro renders multiple AlertDialog instances directly.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import AlertDialogDemoReact from './AlertDialogDemo';
 import AlertDialogDemoVue from './AlertDialogDemo.vue';
 import AlertDialogDemoSvelte from './AlertDialogDemo.svelte';
@@ -15,9 +16,11 @@ import AlertDialog from './AlertDialog.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 {framework === 'react' && <AlertDialogDemoReact client:only="react" />}
@@ -28,9 +31,11 @@ const { framework } = Astro.props;
     <div>
       {/* Delete Confirmation */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Delete Confirmation</h3>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '削除の確認' : 'Delete Confirmation'}</h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          A destructive action that requires explicit confirmation. Escape key is disabled.
+          {isJa
+            ? '明示的な確認が必要な破壊的アクションです。Escapeキーは無効です。'
+            : 'A destructive action that requires explicit confirmation. Escape key is disabled.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <AlertDialog
@@ -47,8 +52,10 @@ const { framework } = Astro.props;
 
       {/* Discard Changes */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Discard Changes</h3>
-        <p class="text-muted-foreground mb-4 text-sm">Confirm before losing unsaved changes.</p>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '変更の破棄' : 'Discard Changes'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '未保存の変更を失う前に確認します。' : 'Confirm before losing unsaved changes.'}
+        </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <AlertDialog
             title="Discard unsaved changes?"
@@ -63,9 +70,13 @@ const { framework } = Astro.props;
 
       {/* Information Acknowledgment */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Information Acknowledgment</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? '情報の確認' : 'Information Acknowledgment'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Non-destructive alert with Escape key enabled.
+          {isJa
+            ? 'Escapeキーが有効な非破壊的アラートです。'
+            : 'Non-destructive alert with Escape key enabled.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <AlertDialog

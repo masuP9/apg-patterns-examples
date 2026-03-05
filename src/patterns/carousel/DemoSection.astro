@@ -6,6 +6,7 @@
  * Includes both manual navigation and auto-rotation demos.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { CarouselDemo as CarouselDemoReact } from './CarouselDemo';
 import CarouselDemoVue from './CarouselDemo.vue';
 import CarouselDemoSvelte from './CarouselDemo.svelte';
@@ -13,17 +14,23 @@ import CarouselDemoAstro from './CarouselDemo.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 const basePath = import.meta.env.BASE_URL;
 ---
 
 <!-- Manual Navigation -->
 <div class="mb-8">
-  <h3 class="mb-3 text-lg font-medium">Manual Navigation</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '手動ナビゲーション' : 'Manual Navigation'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Navigate using the tab indicators, previous/next buttons, or keyboard arrows.
+    {
+      isJa
+        ? 'タブインジケーター、前へ/次へボタン、またはキーボードの矢印キーで操作できます。'
+        : 'Navigate using the tab indicators, previous/next buttons, or keyboard arrows.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {framework === 'react' && <CarouselDemoReact client:load basePath={basePath} />}
@@ -35,10 +42,13 @@ const basePath = import.meta.env.BASE_URL;
 
 <!-- Auto-Rotation -->
 <div>
-  <h3 class="mb-3 text-lg font-medium">Auto-Rotation</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '自動回転' : 'Auto-Rotation'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Automatically rotates through slides. Pauses on hover, focus, or when the user clicks the pause
-    button. Respects prefers-reduced-motion.
+    {
+      isJa
+        ? 'スライドを自動的に切り替えます。ホバー、フォーカス、または一時停止ボタンのクリックで停止します。prefers-reduced-motion を尊重します。'
+        : 'Automatically rotates through slides. Pauses on hover, focus, or when the user clicks the pause button. Respects prefers-reduced-motion.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {

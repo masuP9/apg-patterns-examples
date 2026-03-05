@@ -7,6 +7,7 @@
  * Astro uses the Alert.astro Web Component directly with inline buttons.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { AlertDemo as AlertDemoReact } from './AlertDemo';
 import AlertDemoVue from './AlertDemo.vue';
 import AlertDemoSvelte from './AlertDemo.svelte';
@@ -14,9 +15,11 @@ import Alert from './Alert.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 <div class="border-border bg-background rounded-lg border p-6">
@@ -24,8 +27,9 @@ const { framework } = Astro.props;
     framework === 'react' && (
       <div>
         <p class="text-muted-foreground mb-4">
-          Click the buttons below to show alerts with different variants. The live region container
-          exists in the DOM from page load - only the content changes.
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
         </p>
         <AlertDemoReact client:load />
       </div>
@@ -35,8 +39,9 @@ const { framework } = Astro.props;
     framework === 'vue' && (
       <div>
         <p class="text-muted-foreground mb-4">
-          Click the buttons below to show alerts with different variants. The live region container
-          exists in the DOM from page load - only the content changes.
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
         </p>
         <AlertDemoVue client:load />
       </div>
@@ -46,8 +51,9 @@ const { framework } = Astro.props;
     framework === 'svelte' && (
       <div>
         <p class="text-muted-foreground mb-4">
-          Click the buttons below to show alerts with different variants. The live region container
-          exists in the DOM from page load - only the content changes.
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
         </p>
         <AlertDemoSvelte client:load />
       </div>
@@ -57,9 +63,19 @@ const { framework } = Astro.props;
     framework === 'astro' && (
       <div>
         <p class="text-muted-foreground mb-4">
-          The Astro implementation uses a Web Component that provides a <code>setMessage()</code>{' '}
-          method for updating alert content. The live region container exists in the DOM from page
-          load - only the content changes.
+          {isJa ? (
+            <Fragment>
+              Astro実装では、アラートコンテンツの更新に <code>setMessage()</code>{' '}
+              メソッドを提供するWeb
+              Componentを使用します。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。
+            </Fragment>
+          ) : (
+            <Fragment>
+              The Astro implementation uses a Web Component that provides a{' '}
+              <code>setMessage()</code> method for updating alert content. The live region container
+              exists in the DOM from page load - only the content changes.
+            </Fragment>
+          )}
         </p>
         <div class="space-y-4">
           <Alert id="demo-alert" variant="info" dismissible />

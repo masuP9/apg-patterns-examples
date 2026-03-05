@@ -7,6 +7,7 @@
  * Astro's client:load directive for hydration.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { BasicMenuButtonDemo, DisabledItemsMenuButtonDemo } from './MenuButtonDemo';
 import MenuButtonDemoVue from './MenuButtonDemo.vue';
 import MenuButtonDemoSvelte from './MenuButtonDemo.svelte';
@@ -14,9 +15,11 @@ import MenuButton from './MenuButton.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 
 const actionItems = [
   { id: 'cut', label: 'Cut' },
@@ -37,9 +40,13 @@ const fileItems = [
 
 <!-- Basic -->
 <div class="mb-8">
-  <h3 class="mb-3 text-lg font-medium">Basic Menu Button</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本的なメニューボタン' : 'Basic Menu Button'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Click the button or use keyboard to open the menu.
+    {
+      isJa
+        ? 'ボタンをクリックするか、キーボードでメニューを開きます。'
+        : 'Click the button or use keyboard to open the menu.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {framework === 'react' && <BasicMenuButtonDemo client:load />}
@@ -60,9 +67,13 @@ const fileItems = [
 
 <!-- With Disabled Items -->
 <div>
-  <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目を含む場合' : 'With Disabled Items'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Disabled items are skipped during keyboard navigation.
+    {
+      isJa
+        ? '無効な項目はキーボード操作時にスキップされます。'
+        : 'Disabled items are skipped during keyboard navigation.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {framework === 'react' && <DisabledItemsMenuButtonDemo client:load />}
@@ -76,7 +87,9 @@ const fileItems = [
             Last action: None
           </p>
           <p class="text-muted-foreground text-xs">
-            Note: "Export" is disabled and will be skipped during keyboard navigation
+            {isJa
+              ? '注: "Export" は無効化されており、キーボード操作時にスキップされます'
+              : 'Note: "Export" is disabled and will be skipped during keyboard navigation'}
           </p>
         </div>
       )

@@ -7,6 +7,7 @@
  * Astro's client:load directive for hydration.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import { RadioGroup as RadioGroupReact } from './RadioGroup';
 import RadioGroupVue from './RadioGroup.vue';
 import RadioGroupSvelte from './RadioGroup.svelte';
@@ -14,9 +15,11 @@ import RadioGroupAstro from './RadioGroup.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 
 const colorOptions = [
   { id: 'red', label: 'Red', value: 'red' },
@@ -47,9 +50,13 @@ const ratingOptions = [
 
 <!-- Basic -->
 <div class="mb-8">
-  <h3 class="mb-3 text-lg font-medium">Basic Radio Group</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本的なラジオグループ' : 'Basic Radio Group'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Use arrow keys to navigate and select. Tab moves focus in/out of the group.
+    {
+      isJa
+        ? '矢印キーで移動・選択します。Tabでグループの内外にフォーカスを移動します。'
+        : 'Use arrow keys to navigate and select. Tab moves focus in/out of the group.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {
@@ -87,9 +94,19 @@ const ratingOptions = [
 
 <!-- With Default Value -->
 <div class="mb-8">
-  <h3 class="mb-3 text-lg font-medium">With Default Value</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? 'デフォルト値あり' : 'With Default Value'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Pre-selected option using the <code>defaultValue</code> prop.
+    {
+      isJa ? (
+        <>
+          <code>defaultValue</code> propで事前に選択されたオプション。
+        </>
+      ) : (
+        <>
+          Pre-selected option using the <code>defaultValue</code> prop.
+        </>
+      )
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {
@@ -140,9 +157,15 @@ const ratingOptions = [
 
 <!-- With Disabled Option -->
 <div class="mb-8">
-  <h3 class="mb-3 text-lg font-medium">With Disabled Option</h3>
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? '無効なオプションを含む場合' : 'With Disabled Option'}
+  </h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Disabled options are skipped during keyboard navigation.
+    {
+      isJa
+        ? '無効なオプションはキーボード操作時にスキップされます。'
+        : 'Disabled options are skipped during keyboard navigation.'
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {
@@ -185,9 +208,19 @@ const ratingOptions = [
 
 <!-- Horizontal Orientation -->
 <div>
-  <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '水平方向' : 'Horizontal Orientation'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
-    Horizontal layout with <code>orientation="horizontal"</code>.
+    {
+      isJa ? (
+        <>
+          <code>orientation="horizontal"</code> による水平レイアウト。
+        </>
+      ) : (
+        <>
+          Horizontal layout with <code>orientation="horizontal"</code>.
+        </>
+      )
+    }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
     {

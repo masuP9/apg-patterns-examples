@@ -136,7 +136,7 @@ const { Content: AccessibilityContent } = await getAccessibilityContent(pattern,
   <!-- Demo Section -->
   <section class="mb-12">
     <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
-    {DemoSection && <DemoSection framework={framework} />}
+    {DemoSection && <DemoSection framework={framework} locale={locale} />}
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
     </p>

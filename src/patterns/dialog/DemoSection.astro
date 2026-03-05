@@ -8,6 +8,7 @@
  * Astro renders server-side with Web Component interactivity.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 import DialogDemoReact from './DialogDemo';
 import DialogDemoVue from './DialogDemo.vue';
 import DialogDemoSvelte from './DialogDemo.svelte';
@@ -15,9 +16,11 @@ import Dialog from './Dialog.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 <div>
@@ -25,9 +28,11 @@ const { framework } = Astro.props;
     framework === 'react' && (
       <>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ダイアログ' : 'Basic Dialog'}</h3>
           <p class="text-muted-foreground mb-4 text-sm">
-            A simple modal dialog with title, description, and close functionality.
+            {isJa
+              ? 'タイトル、説明、閉じる機能を備えたシンプルなモーダルダイアログ。'
+              : 'A simple modal dialog with title, description, and close functionality.'}
           </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoReact
@@ -50,8 +55,12 @@ const { framework } = Astro.props;
           </div>
         </div>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
-          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '説明なし' : 'Without Description'}</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            {isJa
+              ? 'タイトルとコンテンツのみのダイアログ。'
+              : 'A dialog with only a title and content.'}
+          </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoReact
               client:only="react"
@@ -70,9 +79,11 @@ const { framework } = Astro.props;
     framework === 'vue' && (
       <>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ダイアログ' : 'Basic Dialog'}</h3>
           <p class="text-muted-foreground mb-4 text-sm">
-            A simple modal dialog with title, description, and close functionality.
+            {isJa
+              ? 'タイトル、説明、閉じる機能を備えたシンプルなモーダルダイアログ。'
+              : 'A simple modal dialog with title, description, and close functionality.'}
           </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoVue
@@ -95,8 +106,12 @@ const { framework } = Astro.props;
           </div>
         </div>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
-          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '説明なし' : 'Without Description'}</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            {isJa
+              ? 'タイトルとコンテンツのみのダイアログ。'
+              : 'A dialog with only a title and content.'}
+          </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoVue
               client:only="vue"
@@ -115,9 +130,11 @@ const { framework } = Astro.props;
     framework === 'svelte' && (
       <>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ダイアログ' : 'Basic Dialog'}</h3>
           <p class="text-muted-foreground mb-4 text-sm">
-            A simple modal dialog with title, description, and close functionality.
+            {isJa
+              ? 'タイトル、説明、閉じる機能を備えたシンプルなモーダルダイアログ。'
+              : 'A simple modal dialog with title, description, and close functionality.'}
           </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoSvelte
@@ -131,8 +148,12 @@ const { framework } = Astro.props;
           </div>
         </div>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
-          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '説明なし' : 'Without Description'}</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            {isJa
+              ? 'タイトルとコンテンツのみのダイアログ。'
+              : 'A dialog with only a title and content.'}
+          </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <DialogDemoSvelte
               client:load
@@ -150,9 +171,11 @@ const { framework } = Astro.props;
     framework === 'astro' && (
       <>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ダイアログ' : 'Basic Dialog'}</h3>
           <p class="text-muted-foreground mb-4 text-sm">
-            A simple modal dialog with title, description, and close functionality.
+            {isJa
+              ? 'タイトル、説明、閉じる機能を備えたシンプルなモーダルダイアログ。'
+              : 'A simple modal dialog with title, description, and close functionality.'}
           </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <Dialog
@@ -174,8 +197,12 @@ const { framework } = Astro.props;
           </div>
         </div>
         <div class="mb-8">
-          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
-          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <h3 class="mb-3 text-lg font-medium">{isJa ? '説明なし' : 'Without Description'}</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            {isJa
+              ? 'タイトルとコンテンツのみのダイアログ。'
+              : 'A dialog with only a title and content.'}
+          </p>
           <div class="border-border bg-background rounded-lg border p-6">
             <Dialog
               title="Simple Dialog"

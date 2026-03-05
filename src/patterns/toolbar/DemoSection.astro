@@ -6,6 +6,7 @@
  * The toolbar pattern has multiple demo variants showing different configurations.
  */
 import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
 
 // React demos
 import {
@@ -38,9 +39,11 @@ import ToolbarSeparator from './ToolbarSeparator.astro';
 
 interface Props {
   framework: Framework;
+  locale?: Locale;
 }
 
-const { framework } = Astro.props;
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
 ---
 
 {
@@ -48,9 +51,13 @@ const { framework } = Astro.props;
     <>
       {/* Text Formatting Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'テキスト書式ツールバー' : 'Text Formatting Toolbar'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          A horizontal toolbar with toggle buttons and regular buttons.
+          {isJa
+            ? 'トグルボタンと通常のボタンを持つ水平ツールバー。'
+            : 'A horizontal toolbar with toggle buttons and regular buttons.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <TextFormattingToolbarDemoReact client:load />
@@ -59,8 +66,10 @@ const { framework } = Astro.props;
 
       {/* Vertical Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
-        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直ツールバー' : 'Vertical Toolbar'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '上下矢印キーで操作します。' : 'Use arrow up/down keys to navigate.'}
+        </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <VerticalToolbarDemoReact client:load />
         </div>
@@ -68,9 +77,11 @@ const { framework } = Astro.props;
 
       {/* With Disabled Items */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目付き' : 'With Disabled Items'}</h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Disabled items are skipped during keyboard navigation.
+          {isJa
+            ? '無効な項目はキーボードナビゲーション中にスキップされます。'
+            : 'Disabled items are skipped during keyboard navigation.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <DisabledItemsToolbarDemoReact client:load />
@@ -79,10 +90,13 @@ const { framework } = Astro.props;
 
       {/* Controlled Toggle Buttons */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? '制御されたトグルボタン' : 'Controlled Toggle Buttons'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with controlled state. The current state is displayed and applied to the
-          sample text.
+          {isJa
+            ? '制御された状態を持つトグルボタン。現在の状態が表示され、サンプルテキストに適用されます。'
+            : 'Toggle buttons with controlled state. The current state is displayed and applied to the sample text.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDemoReact client:load />
@@ -91,10 +105,14 @@ const { framework } = Astro.props;
 
       {/* Default Pressed States */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'デフォルトの押下状態' : 'Default Pressed States'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
-          states.
+          {isJa ? '初期状態に' : 'Toggle buttons with'} <code>defaultPressed</code>{' '}
+          {isJa
+            ? 'を使用したトグルボタン。無効状態を含みます。'
+            : 'for initial state, including disabled states.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDefaultDemoReact client:load />
@@ -109,9 +127,13 @@ const { framework } = Astro.props;
     <>
       {/* Text Formatting Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'テキスト書式ツールバー' : 'Text Formatting Toolbar'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          A horizontal toolbar with toggle buttons and regular buttons.
+          {isJa
+            ? 'トグルボタンと通常のボタンを持つ水平ツールバー。'
+            : 'A horizontal toolbar with toggle buttons and regular buttons.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <TextFormattingToolbarDemoVue client:load />
@@ -120,8 +142,10 @@ const { framework } = Astro.props;
 
       {/* Vertical Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
-        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直ツールバー' : 'Vertical Toolbar'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '上下矢印キーで操作します。' : 'Use arrow up/down keys to navigate.'}
+        </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <VerticalToolbarDemoVue client:load />
         </div>
@@ -129,9 +153,11 @@ const { framework } = Astro.props;
 
       {/* With Disabled Items */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目付き' : 'With Disabled Items'}</h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Disabled items are skipped during keyboard navigation.
+          {isJa
+            ? '無効な項目はキーボードナビゲーション中にスキップされます。'
+            : 'Disabled items are skipped during keyboard navigation.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <DisabledItemsToolbarDemoVue client:load />
@@ -140,10 +166,13 @@ const { framework } = Astro.props;
 
       {/* Controlled Toggle Buttons */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? '制御されたトグルボタン' : 'Controlled Toggle Buttons'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with controlled state using v-model. The current state is displayed and
-          applied to the sample text.
+          {isJa
+            ? 'v-model を使用した制御された状態を持つトグルボタン。現在の状態が表示され、サンプルテキストに適用されます。'
+            : 'Toggle buttons with controlled state using v-model. The current state is displayed and applied to the sample text.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDemoVue client:load />
@@ -152,10 +181,14 @@ const { framework } = Astro.props;
 
       {/* Default Pressed States */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'デフォルトの押下状態' : 'Default Pressed States'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with <code>default-pressed</code> for initial state, including disabled
-          states.
+          {isJa ? '初期状態に' : 'Toggle buttons with'} <code>default-pressed</code>{' '}
+          {isJa
+            ? 'を使用したトグルボタン。無効状態を含みます。'
+            : 'for initial state, including disabled states.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDefaultDemoVue client:load />
@@ -170,9 +203,13 @@ const { framework } = Astro.props;
     <>
       {/* Text Formatting Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'テキスト書式ツールバー' : 'Text Formatting Toolbar'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          A horizontal toolbar with toggle buttons and regular buttons.
+          {isJa
+            ? 'トグルボタンと通常のボタンを持つ水平ツールバー。'
+            : 'A horizontal toolbar with toggle buttons and regular buttons.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <TextFormattingToolbarDemoSvelte client:load />
@@ -181,8 +218,10 @@ const { framework } = Astro.props;
 
       {/* Vertical Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
-        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直ツールバー' : 'Vertical Toolbar'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '上下矢印キーで操作します。' : 'Use arrow up/down keys to navigate.'}
+        </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <VerticalToolbarDemoSvelte client:load />
         </div>
@@ -190,9 +229,11 @@ const { framework } = Astro.props;
 
       {/* With Disabled Items */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目付き' : 'With Disabled Items'}</h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Disabled items are skipped during keyboard navigation.
+          {isJa
+            ? '無効な項目はキーボードナビゲーション中にスキップされます。'
+            : 'Disabled items are skipped during keyboard navigation.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <DisabledItemsToolbarDemoSvelte client:load />
@@ -201,10 +242,13 @@ const { framework } = Astro.props;
 
       {/* Controlled Toggle Buttons */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? '制御されたトグルボタン' : 'Controlled Toggle Buttons'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with controlled state. The current state is displayed and applied to the
-          sample text.
+          {isJa
+            ? '制御された状態を持つトグルボタン。現在の状態が表示され、サンプルテキストに適用されます。'
+            : 'Toggle buttons with controlled state. The current state is displayed and applied to the sample text.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDemoSvelte client:load />
@@ -213,10 +257,14 @@ const { framework } = Astro.props;
 
       {/* Default Pressed States */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'デフォルトの押下状態' : 'Default Pressed States'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
-          states.
+          {isJa ? '初期状態に' : 'Toggle buttons with'} <code>defaultPressed</code>{' '}
+          {isJa
+            ? 'を使用したトグルボタン。無効状態を含みます。'
+            : 'for initial state, including disabled states.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <ToolbarToggleDefaultDemoSvelte client:load />
@@ -231,9 +279,13 @@ const { framework } = Astro.props;
     <>
       {/* Text Formatting Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'テキスト書式ツールバー' : 'Text Formatting Toolbar'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          A horizontal toolbar with toggle buttons and regular buttons.
+          {isJa
+            ? 'トグルボタンと通常のボタンを持つ水平ツールバー。'
+            : 'A horizontal toolbar with toggle buttons and regular buttons.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <Toolbar aria-label="Text formatting">
@@ -254,8 +306,10 @@ const { framework } = Astro.props;
 
       {/* Vertical Toolbar */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
-        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直ツールバー' : 'Vertical Toolbar'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '上下矢印キーで操作します。' : 'Use arrow up/down keys to navigate.'}
+        </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <Toolbar orientation="vertical" aria-label="Actions">
             <ToolbarButton>New</ToolbarButton>
@@ -269,9 +323,11 @@ const { framework } = Astro.props;
 
       {/* With Disabled Items */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目付き' : 'With Disabled Items'}</h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Disabled items are skipped during keyboard navigation.
+          {isJa
+            ? '無効な項目はキーボードナビゲーション中にスキップされます。'
+            : 'Disabled items are skipped during keyboard navigation.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <Toolbar aria-label="Edit actions">
@@ -287,10 +343,14 @@ const { framework } = Astro.props;
 
       {/* Toggle Buttons with Event Handling */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Toggle Buttons with Event Handling</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'イベント処理付きトグルボタン' : 'Toggle Buttons with Event Handling'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons that emit <code>pressed-change</code> events. The current state is logged
-          and displayed.
+          {isJa ? '' : 'Toggle buttons that emit'} <code>pressed-change</code>{' '}
+          {isJa
+            ? 'イベントを発行するトグルボタン。現在の状態がログに記録され表示されます。'
+            : 'events. The current state is logged and displayed.'}
         </p>
         <div class="border-border bg-background space-y-4 rounded-lg border p-6">
           <Toolbar aria-label="Text formatting with events" id="toggle-demo-toolbar">
@@ -314,10 +374,14 @@ const { framework } = Astro.props;
 
       {/* Default Pressed States */}
       <div class="mb-8">
-        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? 'デフォルトの押下状態' : 'Default Pressed States'}
+        </h3>
         <p class="text-muted-foreground mb-4 text-sm">
-          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
-          states.
+          {isJa ? '初期状態に' : 'Toggle buttons with'} <code>defaultPressed</code>{' '}
+          {isJa
+            ? 'を使用したトグルボタン。無効状態を含みます。'
+            : 'for initial state, including disabled states.'}
         </p>
         <div class="border-border bg-background rounded-lg border p-6">
           <Toolbar aria-label="Default pressed states">
