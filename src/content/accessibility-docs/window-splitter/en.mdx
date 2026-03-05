@@ -4,11 +4,12 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role        | Target Element   | Description                                 |
+| ----------- | ---------------- | ------------------------------------------- |
 | `separator` | Splitter element | Focusable separator that controls pane size |
 
 ### WAI-ARIA Properties
@@ -17,112 +18,116 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Primary pane size as percentage
 
-| | |
-|---|---|
-| **Values** | 0-100 |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">0-100</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemin`
 
 Minimum value (default: 10)
 
-| | |
-|---|---|
-| **Values** | number |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">number</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemax`
 
 Maximum value (default: 90)
 
-| | |
-|---|---|
-| **Values** | number |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">number</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 Primary pane ID (+ secondary pane ID optional)
 
-| | |
-|---|---|
-| **Values** | ID reference(s) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference(s)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 Accessible name
 
-| | |
-|---|---|
-| **Values** | string |
-| **Required** | Conditional (required if no aria-labelledby) |
+<KeyValueList>
+  <KeyValueListItem term="Values">string</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional (required if no aria-labelledby)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 Reference to visible label element
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Conditional (required if no aria-label) |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional (required if no aria-label)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-orientation`
 
 Default: horizontal (left-right split)
 
-| | |
-|---|---|
-| **Values** | "horizontal" \| "vertical" |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 Disabled state
 
-| | |
-|---|---|
-| **Values** | true \| false |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-valuenow`
 
-| | |
-|---|---|
-| **Target Element** | separator element |
-| **Values** | 0-100 (0 = collapsed, 50 = half, 100 = fully expanded) |
-| **Required** | Yes |
-| **Change Trigger** | Arrow keys, Home/End, Enter (collapse/expand), pointer drag |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">separator element</KeyValueListItem>
+  <KeyValueListItem term="Values">
+    0-100 (0 = collapsed, 50 = half, 100 = fully expanded)
+  </KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Arrow keys, Home/End, Enter (collapse/expand), pointer drag
+  </KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
+| Key                                 | Action                                       |
+| ----------------------------------- | -------------------------------------------- |
 | <kbd>Arrow Right / Arrow Left</kbd> | Move horizontal splitter (increase/decrease) |
-| <kbd>Arrow Up / Arrow Down</kbd> | Move vertical splitter (increase/decrease) |
-| <kbd>Shift + Arrow</kbd> | Move by large step (default: 10%) |
-| <kbd>Home</kbd> | Move to minimum position |
-| <kbd>End</kbd> | Move to maximum position |
-| <kbd>Enter</kbd> | Toggle collapse/expand primary pane |
+| <kbd>Arrow Up / Arrow Down</kbd>    | Move vertical splitter (increase/decrease)   |
+| <kbd>Shift + Arrow</kbd>            | Move by large step (default: 10%)            |
+| <kbd>Home</kbd>                     | Move to minimum position                     |
+| <kbd>End</kbd>                      | Move to maximum position                     |
+| <kbd>Enter</kbd>                    | Toggle collapse/expand primary pane          |
 
-> Arrow keys are direction-restricted based on orientation. Horizontal splitters only respond to Left/Right, vertical splitters only to Up/Down.
-
-> In RTL mode, ArrowLeft increases and ArrowRight decreases for horizontal splitters.
-
-> aria-readonly is NOT valid for role="separator". Readonly behavior must be enforced via JavaScript only.
+- Arrow keys are direction-restricted based on orientation. Horizontal splitters only respond to Left/Right, vertical splitters only to Up/Down.
+- In RTL mode, ArrowLeft increases and ArrowRight decreases for horizontal splitters.
+- aria-readonly is NOT valid for role="separator". Readonly behavior must be enforced via JavaScript only.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Tab | Splitter receives focus via normal tab order |
-| Disabled | Splitter is not focusable (tabindex="-1") |
-| Readonly | Splitter is focusable but not operable |
-| After collapse/expand | Focus remains on splitter |
+| Event                 | Behavior                                     |
+| --------------------- | -------------------------------------------- |
+| Tab                   | Splitter receives focus via normal tab order |
+| Disabled              | Splitter is not focusable (`tabindex="-1"`)  |
+| Readonly              | Splitter is focusable but not operable       |
+| After collapse/expand | Focus remains on splitter                    |
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/">WAI-ARIA APG: Window Splitter Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/">
+    WAI-ARIA APG: Window Splitter Pattern
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#separator">W3C ARIA: separator role</ExternalLink>

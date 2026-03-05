@@ -17,7 +17,10 @@ import testCode from '@patterns/slider-multithumb/MultiThumbSlider.test.tsx?raw'
 
 const locale = 'ja';
 const t = useTranslation(locale);
-const { Content: AccessibilityContent } = await getAccessibilityContent('slider-multithumb', locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent(
+  'slider-multithumb',
+  locale
+);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },

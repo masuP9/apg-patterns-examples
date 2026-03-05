@@ -4,11 +4,12 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール | 対象要素                                 | 説明                                                                                           |
+| ------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | `link` | `<a href>` または role="link" を持つ要素 | 要素をハイパーリンクとして識別します。ネイティブの `<a href>` は暗黙的にこのロールを持ちます。 |
 
 ### WAI-ARIA プロパティ
@@ -17,73 +18,75 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 カスタム実装では必須。ネイティブの `<a href>` はデフォルトでフォーカス可能。無効時は -1 に設定。
 
-| | |
-|---|---|
-| **値** | 0 (focusable) \| -1 (not focusable) |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">0 (focusable) | -1 (not focusable)</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 表示テキストがない場合にリンクの非表示ラベルを提供
 
-| | |
-|---|---|
-| **値** | string |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">string</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 外部要素をラベルとして参照
 
-| | |
-|---|---|
-| **値** | ID reference |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">ID reference</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-current`
 
 セット内の現在の項目を示す（例：ナビゲーション内の現在のページ）
 
-| | |
-|---|---|
-| **値** | page \| step \| location \| date \| time \| true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">page | step | location | date | time | true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | リンク要素 |
-| **値** | true \| false |
-| **必須** | いいえ |
-| **変更トリガー** | 無効状態の変更 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">リンク要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">無効状態の変更</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Enter</kbd> | リンクをアクティブ化し、ターゲットリソースに遷移 |
-| <kbd>Tab</kbd> | 次のフォーカス可能な要素にフォーカスを移動 |
-| <kbd>Shift + Tab</kbd> | 前のフォーカス可能な要素にフォーカスを移動 |
+| キー                   | アクション                                       |
+| ---------------------- | ------------------------------------------------ |
+| <kbd>Enter</kbd>       | リンクをアクティブ化し、ターゲットリソースに遷移 |
+| <kbd>Tab</kbd>         | 次のフォーカス可能な要素にフォーカスを移動       |
+| <kbd>Shift + Tab</kbd> | 前のフォーカス可能な要素にフォーカスを移動       |
 
-> この実装は教育目的で `<span role="link">` を使用しています。本番環境では、ネイティブの `<a href>` 要素を優先してください。
-
-> ボタンとは異なり、Spaceキーはリンクをアクティブ化しません。これは link ロールと button ロールの重要な違いです。
-
-> リンクにはテキストコンテンツ、aria-label、またはaria-labelledbyからアクセシブルな名前が必要です。
+- この実装は教育目的で `<span role="link">` を使用しています。本番環境では、ネイティブの `<a href>` 要素を優先してください。
+- ボタンとは異なり、Spaceキーはリンクをアクティブ化しません。これは link ロールと button ロールの重要な違いです。
+- リンクにはテキストコンテンツ、aria-label、またはaria-labelledbyからアクセシブルな名前が必要です。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| ネイティブ `<a href>` | デフォルトでフォーカス可能 |
-| カスタムリンク | tabindex="0" が必要 |
-| 無効なリンク | tabindex="-1" を使用（Tabオーダーから除外） |
+| イベント              | 振る舞い                                      |
+| --------------------- | --------------------------------------------- |
+| ネイティブ `<a href>` | デフォルトでフォーカス可能                    |
+| カスタムリンク        | `tabindex="0"` が必要                         |
+| 無効なリンク          | `tabindex="-1"` を使用（Tabオーダーから除外） |
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/link/">WAI-ARIA APG: Link Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a">MDN: &lt;a&gt; element</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/link/">
+    WAI-ARIA APG: Link Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a">
+    MDN: &lt;a&gt; element
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#link">W3C ARIA: link role</ExternalLink>

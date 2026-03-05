@@ -4,47 +4,45 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール   | 対象要素     | 説明                                                               |
+| -------- | ------------ | ------------------------------------------------------------------ |
 | `switch` | スイッチ要素 | ユーザーがオン/オフの2つの値のいずれかを選択できる入力ウィジェット |
 
 ### WAI-ARIA ステート
 
 #### `aria-checked`
 
-| | |
-|---|---|
-| **対象要素** | switch 要素 |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | クリック、Enter、Space |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">switch 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Enter、Space</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | switch 要素 |
-| **値** | true \| undefined |
-| **必須** | いいえ |
-| **変更トリガー** | 無効化時のみ |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">switch 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">無効化時のみ</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
+| キー             | アクション                            |
+| ---------------- | ------------------------------------- |
 | <kbd>Space</kbd> | スイッチの状態を切り替え（オン/オフ） |
 | <kbd>Enter</kbd> | スイッチの状態を切り替え（オン/オフ） |
 
-> スイッチには表示されるラベル（推奨）、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
-
-> この実装は、色のみに依存せず状態を示すことでWCAG 1.4.1（色の使用）に準拠しています。
-
-> つまみの位置: 左 = オフ、右 = オン。チェックマークアイコンはオンの時のみ表示。
-
-> 強制カラーモードはWindowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用します。
+- スイッチには表示されるラベル（推奨）、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
+- この実装は、色のみに依存せず状態を示すことでWCAG 1.4.1（色の使用）に準拠しています。
+- つまみの位置: 左 = オフ、右 = オン。チェックマークアイコンはオンの時のみ表示。
+- 強制カラーモードはWindowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用します。
 
 ### 実装ノート
 

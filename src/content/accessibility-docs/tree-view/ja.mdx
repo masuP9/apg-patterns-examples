@@ -4,14 +4,15 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `tree` | コンテナ（`<ul>`） | ツリーウィジェットのコンテナ |
-| `treeitem` | 各ノード（`<li>`） | 個々のツリーノード（親ノードとリーフノードの両方） |
-| `group` | 子コンテナ（`<ul>`） | 展開された親の子ノードのコンテナ |
+| ロール     | 対象要素             | 説明                                               |
+| ---------- | -------------------- | -------------------------------------------------- |
+| `tree`     | コンテナ（`<ul>`）   | ツリーウィジェットのコンテナ                       |
+| `treeitem` | 各ノード（`<li>`）   | 個々のツリーノード（親ノードとリーフノードの両方） |
+| `group`    | 子コンテナ（`<ul>`） | 展開された親の子ノードのコンテナ                   |
 
 ### WAI-ARIA プロパティ
 
@@ -19,117 +20,115 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 コンテナをツリーウィジェットとして識別
 
-| | |
-|---|---|
-| **値** | - |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">-</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 ツリーのアクセシブルな名前
 
-| | |
-|---|---|
-| **値** | String |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 aria-labelの代替（優先される）
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-multiselectable`
 
 複数選択モードでのみ存在
 
-| | |
-|---|---|
-| **値** | true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-expanded`
 
-| | |
-|---|---|
-| **対象要素** | 親treeitem |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | Click、ArrowRight、ArrowLeft、Enter |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">親treeitem</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">Click、ArrowRight、ArrowLeft、Enter</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **対象要素** | すべてのtreeitem |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | Click、Enter、Space、矢印キー |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">すべてのtreeitem</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">Click、Enter、Space、矢印キー</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | 無効化されたtreeitem |
-| **値** | true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">無効化されたtreeitem</KeyValueListItem>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
 #### ナビゲーション
 
-| キー | アクション |
-|------|------|
-| <kbd>ArrowDown</kbd> | 次の表示ノードにフォーカスを移動 |
-| <kbd>ArrowUp</kbd> | 前の表示ノードにフォーカスを移動 |
-| <kbd>ArrowRight</kbd> | 閉じた親: 展開 / 開いた親: 最初の子へ移動 / リーフ: 操作なし |
-| <kbd>ArrowLeft</kbd> | 開いた親: 折りたたみ / 子または閉じた親: 親へ移動 / ルート: 操作なし |
-| <kbd>Home</kbd> | 最初のノードにフォーカスを移動 |
-| <kbd>End</kbd> | 最後の表示ノードにフォーカスを移動 |
-| <kbd>Enter</kbd> | ノードを選択してアクティブ化（下記選択セクション参照） |
-| <kbd>*</kbd> | 現在のレベルのすべての兄弟を展開 |
-| <kbd>文字入力</kbd> | その文字で始まる次の表示ノードにフォーカスを移動 |
+| キー                  | アクション                                                           |
+| --------------------- | -------------------------------------------------------------------- |
+| <kbd>ArrowDown</kbd>  | 次の表示ノードにフォーカスを移動                                     |
+| <kbd>ArrowUp</kbd>    | 前の表示ノードにフォーカスを移動                                     |
+| <kbd>ArrowRight</kbd> | 閉じた親: 展開 / 開いた親: 最初の子へ移動 / リーフ: 操作なし         |
+| <kbd>ArrowLeft</kbd>  | 開いた親: 折りたたみ / 子または閉じた親: 親へ移動 / ルート: 操作なし |
+| <kbd>Home</kbd>       | 最初のノードにフォーカスを移動                                       |
+| <kbd>End</kbd>        | 最後の表示ノードにフォーカスを移動                                   |
+| <kbd>Enter</kbd>      | ノードを選択してアクティブ化（下記選択セクション参照）               |
+| <kbd>\*</kbd>         | 現在のレベルのすべての兄弟を展開                                     |
+| <kbd>文字入力</kbd>   | その文字で始まる次の表示ノードにフォーカスを移動                     |
 
 #### 選択（単一選択モード）
 
-| キー | アクション |
-|------|------|
-| <kbd>ArrowDown / ArrowUp</kbd> | フォーカスのみ移動（選択はフォーカスに追従しない） |
-| <kbd>Enter</kbd> | フォーカスされたノードを選択してアクティブ化（onActivateコールバックを発火） |
-| <kbd>Space</kbd> | フォーカスされたノードを選択してアクティブ化（onActivateコールバックを発火） |
-| <kbd>クリック</kbd> | クリックしたノードを選択してアクティブ化（onActivateコールバックを発火） |
+| キー                           | アクション                                                                   |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| <kbd>ArrowDown / ArrowUp</kbd> | フォーカスのみ移動（選択はフォーカスに追従しない）                           |
+| <kbd>Enter</kbd>               | フォーカスされたノードを選択してアクティブ化（onActivateコールバックを発火） |
+| <kbd>Space</kbd>               | フォーカスされたノードを選択してアクティブ化（onActivateコールバックを発火） |
+| <kbd>クリック</kbd>            | クリックしたノードを選択してアクティブ化（onActivateコールバックを発火）     |
 
 #### 選択（複数選択モード）
 
-| キー | アクション |
-|------|------|
-| <kbd>Space</kbd> | フォーカスされたノードの選択を切り替え |
-| <kbd>Ctrl + Space</kbd> | フォーカスを移動せずに選択を切り替え |
-| <kbd>Shift + ArrowDown / ArrowUp</kbd> | アンカーから選択範囲を拡張 |
-| <kbd>Shift + Home</kbd> | 最初のノードまで選択を拡張 |
-| <kbd>Shift + End</kbd> | 最後の表示ノードまで選択を拡張 |
-| <kbd>Ctrl + A</kbd> | すべての表示ノードを選択 |
+| キー                                   | アクション                             |
+| -------------------------------------- | -------------------------------------- |
+| <kbd>Space</kbd>                       | フォーカスされたノードの選択を切り替え |
+| <kbd>Ctrl + Space</kbd>                | フォーカスを移動せずに選択を切り替え   |
+| <kbd>Shift + ArrowDown / ArrowUp</kbd> | アンカーから選択範囲を拡張             |
+| <kbd>Shift + Home</kbd>                | 最初のノードまで選択を拡張             |
+| <kbd>Shift + End</kbd>                 | 最後の表示ノードまで選択を拡張         |
+| <kbd>Ctrl + A</kbd>                    | すべての表示ノードを選択               |
 
-> * aria-labelまたはaria-labelledbyのいずれかが必須です。
-
-> 親ノードはaria-expandedを持つ必要があります。リーフノードはaria-expandedを持ってはいけません。
-
-> 選択がサポートされる場合、すべてのtreeitemはaria-selectedを持つ必要があります。
+- aria-labelまたはaria-labelledbyのいずれかが必須です。
+- 親ノードはaria-expandedを持つ必要があります。リーフノードはaria-expandedを持ってはいけません。
+- 選択がサポートされる場合、すべてのtreeitemはaria-selectedを持つ必要があります。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| Roving tabindex | 1つのノードのみが`tabindex="0"`を持つ（フォーカスされたノード） |
-| 他のノード | 他のすべてのノードは`tabindex="-1"`を持つ |
-| 単一Tabストップ | ツリーは単一のTabストップ（Tabで入り、Shift+Tabで出る） |
-| 表示ノードのみ | フォーカスは表示ノード間のみを移動（折りたたまれた子はスキップ） |
-| 折りたたみ動作 | 子にフォーカスがある状態で親を折りたたむと、フォーカスは親に移動 |
+| イベント        | 振る舞い                                                         |
+| --------------- | ---------------------------------------------------------------- |
+| Roving tabindex | 1つのノードのみが`tabindex="0"`を持つ（フォーカスされたノード）  |
+| 他のノード      | 他のすべてのノードは`tabindex="-1"`を持つ                        |
+| 単一Tabストップ | ツリーは単一のTabストップ（Tabで入り、Shift+Tabで出る）          |
+| 表示ノードのみ  | フォーカスは表示ノード間のみを移動（折りたたまれた子はスキップ） |
+| 折りたたみ動作  | 子にフォーカスがある状態で親を折りたたむと、フォーカスは親に移動 |
 
 ### 参考資料
 

@@ -4,11 +4,12 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role       | Target Element                                            | Description                                                                                      |
+| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `checkbox` | `<input type="checkbox">` or element with role="checkbox" | Identifies the element as a checkbox. Native `<input type="checkbox">` has this role implicitly. |
 
 ### WAI-ARIA Properties
@@ -17,67 +18,67 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Provides accessible name
 
-| | |
-|---|---|
-| **Values** | string |
-| **Required** | When no visible label |
+<KeyValueList>
+  <KeyValueListItem term="Values">string</KeyValueListItem>
+  <KeyValueListItem term="Required">When no visible label</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References external text as label
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | When no visible label |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">When no visible label</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 Additional description
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-checked / checked`
 
-| | |
-|---|---|
-| **Target Element** | Checkbox element |
-| **Values** | true \| false \| mixed |
-| **Required** | Yes |
-| **Change Trigger** | Click, Space key |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Checkbox element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false | mixed</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Space key</KeyValueListItem>
+</KeyValueList>
 
 #### `indeterminate`
 
-| | |
-|---|---|
-| **Target Element** | Native checkbox (`<input>`) |
-| **Values** | true \| false |
-| **Required** | No |
-| **Change Trigger** | Parent-child sync, automatically cleared on user interaction |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Native checkbox (`<input>`)</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Parent-child sync, automatically cleared on user interaction</KeyValueListItem>
+</KeyValueList>
 
 #### `disabled`
 
-| | |
-|---|---|
-| **Target Element** | Checkbox element |
-| **Values** | present \| absent |
-| **Required** | No |
-| **Change Trigger** | Programmatic change |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Checkbox element</KeyValueListItem>
+  <KeyValueListItem term="Values">present | absent</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Programmatic change</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Space</kbd> | Toggle the checkbox state (checked/unchecked) |
-| <kbd>Tab</kbd> | Move focus to the next focusable element |
-| <kbd>Shift + Tab</kbd> | Move focus to the previous focusable element |
+| Key                    | Action                                        |
+| ---------------------- | --------------------------------------------- |
+| <kbd>Space</kbd>       | Toggle the checkbox state (checked/unchecked) |
+| <kbd>Tab</kbd>         | Move focus to the next focusable element      |
+| <kbd>Shift + Tab</kbd> | Move focus to the previous focusable element  |
 
-> Unlike the Switch pattern, the Enter key does not toggle the checkbox.
+- Unlike the Switch pattern, the Enter key does not toggle the checkbox.
 
 ### Accessible Naming
 
@@ -89,11 +90,11 @@ Checkboxes must have an accessible name. This can be provided through:
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Native checkbox | Focusable by default |
-| Custom implementation | Requires tabindex="0" |
-| Disabled checkbox | Skipped in Tab order |
+| Event                 | Behavior                |
+| --------------------- | ----------------------- |
+| Native checkbox       | Focusable by default    |
+| Custom implementation | Requires `tabindex="0"` |
+| Disabled checkbox     | Skipped in Tab order    |
 
 ### Visual Design
 
@@ -106,6 +107,10 @@ This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on c
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">WAI-ARIA APG Checkbox Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">MDN: &lt;input type="checkbox"&gt;</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">
+    WAI-ARIA APG Checkbox Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">
+    MDN: &lt;input type="checkbox"&gt;
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#checkbox">W3C ARIA: checkbox role</ExternalLink>

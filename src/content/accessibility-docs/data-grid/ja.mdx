@@ -4,16 +4,17 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `grid` | コンテナ | グリッドとして要素を識別します。グリッドはセルの行を含みます。 |
-| `row` | 各行 | セルの行を識別します |
-| `gridcell` | 各セル | グリッド内のインタラクティブなセルを識別します |
-| `rowheader` | 行ヘッダーセル | 行のヘッダーとしてセルを識別します |
-| `columnheader` | 列ヘッダーセル | 列のヘッダーとしてセルを識別します |
+| ロール         | 対象要素       | 説明                                                           |
+| -------------- | -------------- | -------------------------------------------------------------- |
+| `grid`         | コンテナ       | グリッドとして要素を識別します。グリッドはセルの行を含みます。 |
+| `row`          | 各行           | セルの行を識別します                                           |
+| `gridcell`     | 各セル         | グリッド内のインタラクティブなセルを識別します                 |
+| `rowheader`    | 行ヘッダーセル | 行のヘッダーとしてセルを識別します                             |
+| `columnheader` | 列ヘッダーセル | 列のヘッダーとしてセルを識別します                             |
 
 ### WAI-ARIA プロパティ
 
@@ -21,119 +22,119 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 行が仮想化されている場合に必須
 
-| | |
-|---|---|
-| **値** | 総行数 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">総行数</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-colcount`
 
 列が非表示または仮想化されている場合に必須
 
-| | |
-|---|---|
-| **値** | 総列数 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">総列数</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-rowindex`
 
 行が仮想化されている場合に必須
 
-| | |
-|---|---|
-| **値** | グリッド内の行の位置 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">グリッド内の行の位置</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-colindex`
 
 列が非表示または仮想化されている場合に必須
 
-| | |
-|---|---|
-| **値** | グリッド内の列の位置 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">グリッド内の列の位置</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-sort`
 
 列のソート状態を示します
 
-| | |
-|---|---|
-| **値** | "ascending" \| "descending" \| "none" \| "other" |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`ascending` | `descending` | `none` | `other`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 グリッドに関する追加のコンテキストを提供します
 
-| | |
-|---|---|
-| **値** | 説明要素へのID参照 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">説明要素へのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **対象要素** | gridcell または row |
-| **値** | true \| false |
-| **必須** | いいえ |
-| **変更トリガー** | クリック、Space、Ctrl/Cmd+クリック |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">gridcell または row</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Space、Ctrl/Cmd+クリック</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-readonly`
 
-| | |
-|---|---|
-| **対象要素** | grid または gridcell |
-| **値** | true \| false |
-| **必須** | いいえ |
-| **変更トリガー** | グリッド/セルの設定 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">grid または gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">グリッド/セルの設定</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | grid、row、または gridcell |
-| **値** | true \| false |
-| **必須** | いいえ |
-| **変更トリガー** | グリッド/行/セルの状態変更 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">grid、row、または gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">グリッド/行/セルの状態変更</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>ArrowRight</kbd> | フォーカスを右に1セル移動します。末尾の場合は次の行に折り返します。 |
-| <kbd>ArrowLeft</kbd> | フォーカスを左に1セル移動します。先頭の場合は前の行に折り返します。 |
-| <kbd>ArrowDown</kbd> | フォーカスを下に1セル移動します。 |
-| <kbd>ArrowUp</kbd> | フォーカスを上に1セル移動します。 |
-| <kbd>Home</kbd> | 行の最初のセルにフォーカスを移動します。 |
-| <kbd>End</kbd> | 行の最後のセルにフォーカスを移動します。 |
-| <kbd>Ctrl + Home</kbd> | グリッドの最初のセルにフォーカスを移動します。 |
-| <kbd>Ctrl + End</kbd> | グリッドの最後のセルにフォーカスを移動します。 |
-| <kbd>Page Down</kbd> | フォーカスを1ページ下に移動します（実装依存）。 |
-| <kbd>Page Up</kbd> | フォーカスを1ページ上に移動します（実装依存）。 |
-| <kbd>Space / Enter</kbd> | セルをアクティブ化します（例：編集、選択）。 |
-| <kbd>Escape</kbd> | 編集モードをキャンセルまたは選択解除します。 |
+| キー                     | アクション                                                          |
+| ------------------------ | ------------------------------------------------------------------- |
+| <kbd>ArrowRight</kbd>    | フォーカスを右に1セル移動します。末尾の場合は次の行に折り返します。 |
+| <kbd>ArrowLeft</kbd>     | フォーカスを左に1セル移動します。先頭の場合は前の行に折り返します。 |
+| <kbd>ArrowDown</kbd>     | フォーカスを下に1セル移動します。                                   |
+| <kbd>ArrowUp</kbd>       | フォーカスを上に1セル移動します。                                   |
+| <kbd>Home</kbd>          | 行の最初のセルにフォーカスを移動します。                            |
+| <kbd>End</kbd>           | 行の最後のセルにフォーカスを移動します。                            |
+| <kbd>Ctrl + Home</kbd>   | グリッドの最初のセルにフォーカスを移動します。                      |
+| <kbd>Ctrl + End</kbd>    | グリッドの最後のセルにフォーカスを移動します。                      |
+| <kbd>Page Down</kbd>     | フォーカスを1ページ下に移動します（実装依存）。                     |
+| <kbd>Page Up</kbd>       | フォーカスを1ページ上に移動します（実装依存）。                     |
+| <kbd>Space / Enter</kbd> | セルをアクティブ化します（例：編集、選択）。                        |
+| <kbd>Escape</kbd>        | 編集モードをキャンセルまたは選択解除します。                        |
 
-> テーブルがインタラクティブな場合にのみ role="grid" を使用してください。静的なデータにはネイティブの `<table>` 要素を使用してください。
-
-> 効率的なキーボードナビゲーションのためにローヴィングタブインデックスが推奨されます。
-
-> フォーカスされているセルに視覚的なフォーカスインジケーターを提供することを検討してください。
+- テーブルがインタラクティブな場合にのみ role="grid" を使用してください。静的なデータにはネイティブの `<table>` 要素を使用してください。
+- 効率的なキーボードナビゲーションのためにローヴィングタブインデックスが推奨されます。
+- フォーカスされているセルに視覚的なフォーカスインジケーターを提供することを検討してください。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| グリッド | コンテナまたは最初のフォーカス可能なセルに tabindex="0" |
-| フォーカス中のセル | tabindex="0" |
-| 他のセル | tabindex="-1" |
+| イベント                             | 振る舞い                                                    |
+| ------------------------------------ | ----------------------------------------------------------- |
+| グリッド                             | コンテナまたは最初のフォーカス可能なセルに `tabindex="0"`   |
+| フォーカス中のセル                   | `tabindex="0"`                                              |
+| 他のセル                             | `tabindex="-1"`                                             |
 | セル内のインタラクティブなコンテンツ | Enterでセル内のコンテンツにフォーカス移動、Escapeで移動終了 |
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">WAI-ARIA APG: Grid Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">
+    WAI-ARIA APG: Grid Pattern
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#grid">W3C ARIA: grid role</ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#gridcell">W3C ARIA: gridcell role</ExternalLink>

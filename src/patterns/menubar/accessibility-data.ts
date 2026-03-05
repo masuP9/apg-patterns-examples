@@ -907,7 +907,11 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
       priority: 'high',
       category: 'aria',
     },
-    { description: 'All <code>&lt;li&gt;</code> have role="none"', priority: 'high', category: 'aria' },
+    {
+      description: 'All <code>&lt;li&gt;</code> have role="none"',
+      priority: 'high',
+      category: 'aria',
+    },
     { description: 'Submenu holder has aria-haspopup="menu"', priority: 'high', category: 'aria' },
     { description: 'Submenu holder has aria-expanded', priority: 'high', category: 'aria' },
     {

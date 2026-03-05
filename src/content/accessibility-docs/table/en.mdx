@@ -4,17 +4,18 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `table` | Container element | Identifies the element as a table structure containing rows and cells of data. |
-| `rowgroup` | Header/Body container | Groups rows together (equivalent to `<thead>`, `<tbody>`, `<tfoot>`). |
-| `row` | Row element | A row of cells within the table (equivalent to `<tr>`). |
-| `columnheader` | Header cell | A header cell for a column (equivalent to `<th>` in header row). |
-| `rowheader` | Header cell | A header cell for a row (equivalent to `<th scope="row">`). |
-| `cell` | Data cell | A data cell within a row (equivalent to `<td>`). |
+| Role           | Target Element        | Description                                                                    |
+| -------------- | --------------------- | ------------------------------------------------------------------------------ |
+| `table`        | Container element     | Identifies the element as a table structure containing rows and cells of data. |
+| `rowgroup`     | Header/Body container | Groups rows together (equivalent to `<thead>`, `<tbody>`, `<tfoot>`).          |
+| `row`          | Row element           | A row of cells within the table (equivalent to `<tr>`).                        |
+| `columnheader` | Header cell           | A header cell for a column (equivalent to `<th>` in header row).               |
+| `rowheader`    | Header cell           | A header cell for a row (equivalent to `<th scope="row">`).                    |
+| `cell`         | Data cell             | A data cell within a row (equivalent to `<td>`).                               |
 
 ### WAI-ARIA Properties
 
@@ -22,103 +23,104 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Provides an accessible name for the table. Required for screen reader users to understand the table's purpose.
 
-| | |
-|---|---|
-| **Values** | String |
-| **Required** | Yes (or aria-labelledby) |
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-labelledby)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References an element that provides the accessible name for the table.
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Yes (or aria-label) |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-label)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 References an element providing additional description for the table.
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-colcount`
 
 Defines the total number of columns in the table when only a subset is rendered (virtualization).
 
-| | |
-|---|---|
-| **Values** | Number |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-rowcount`
 
 Defines the total number of rows in the table when only a subset is rendered (virtualization).
 
-| | |
-|---|---|
-| **Values** | Number |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-colindex`
 
 Indicates the position of a cell within the full table (virtualization).
 
-| | |
-|---|---|
-| **Values** | Number (1-based) |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (1-based)</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-rowindex`
 
 Indicates the position of a row within the full table (virtualization).
 
-| | |
-|---|---|
-| **Values** | Number (1-based) |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (1-based)</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-colspan`
 
 Indicates how many columns the cell spans. Only set when >1.
 
-| | |
-|---|---|
-| **Values** | Number |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-rowspan`
 
 Indicates how many rows the cell spans. Only set when >1.
 
-| | |
-|---|---|
-| **Values** | Number |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-sort`
 
-| | |
-|---|---|
-| **Target Element** | columnheader/rowheader |
-| **Values** | ascending \| descending \| none \| other |
-| **Required** | No |
-| **Change Trigger** | When sort order changes (click sort button) |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">columnheader/rowheader</KeyValueListItem>
+  <KeyValueListItem term="Values">ascending | descending | none | other</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    When sort order changes (click sort button)
+  </KeyValueListItem>
+</KeyValueList>
 
-> The table role creates a static tabular structure for displaying data. Unlike the grid role, tables are not interactive and do not support keyboard navigation between cells.
-
-> Keyboard support is not applicable for the table pattern. Interactive elements within cells (buttons, links) receive focus through normal tab order.
+- The table role creates a static tabular structure for displaying data. Unlike the grid role, tables are not interactive and do not support keyboard navigation between cells.
+- Keyboard support is not applicable for the table pattern. Interactive elements within cells (buttons, links) receive focus through normal tab order.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Static table | Not applicable - no roving tabindex needed |
+| Event                | Behavior                                         |
+| -------------------- | ------------------------------------------------ |
+| Static table         | Not applicable - no roving tabindex needed       |
 | Interactive elements | Links/buttons receive focus via normal tab order |
 
 ### Visual Design
@@ -130,6 +132,10 @@ Indicates how many rows the cell spans. Only set when >1.
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/table/">WAI-ARIA APG: Table Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table">MDN: &lt;table&gt; element</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/table/">
+    WAI-ARIA APG: Table Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table">
+    MDN: &lt;table&gt; element
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#table">W3C ARIA: table role</ExternalLink>

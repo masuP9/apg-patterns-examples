@@ -1,17 +1,91 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const t = {
+  en: {
+    title: 'Use Native HTML First',
+    recommendation:
+      'Before using this custom component, consider using native <code>&lt;table&gt;</code> elements.',
+    benefits:
+      'They provide built-in semantics, work without JavaScript, and require no ARIA attributes.',
+    customNote:
+      'Use custom implementations only when you need CSS Grid/Flexbox layouts for responsive tables, or when you cannot use native <code>&lt;table&gt;</code> elements due to design constraints.',
+    useCase: 'Use Case',
+    nativeHtml: 'Native HTML',
+    customImpl: 'Custom Implementation',
+    footnote:
+      'The native <code>&lt;table&gt;</code> element with <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;th&gt;</code>, and <code>&lt;td&gt;</code> provides complete semantic structure automatically. The ARIA table pattern is only necessary when using non-table elements (e.g., <code>&lt;div&gt;</code>) for layout purposes.',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    recommendation:
+      'このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;table&gt;</code> 要素の使用を検討してください。',
+    benefits: '組み込みのセマンティクスを提供し、JavaScript なしで動作し、ARIA 属性は不要です。',
+    customNote:
+      'レスポンシブテーブルのために CSS Grid/Flexbox レイアウトが必要な場合や、デザイン上の制約でネイティブの <code>&lt;table&gt;</code> 要素を使用できない場合にのみカスタム実装を使用してください。',
+    useCase: 'ユースケース',
+    nativeHtml: 'ネイティブ HTML',
+    customImpl: 'カスタム実装',
+    footnote:
+      'ネイティブの <code>&lt;table&gt;</code> 要素は <code>&lt;thead&gt;</code>、<code>&lt;tbody&gt;</code>、<code>&lt;th&gt;</code>、<code>&lt;td&gt;</code> と組み合わせることで、完全なセマンティック構造を自動的に提供します。ARIA テーブルパターンは、レイアウト目的でテーブル以外の要素（例: <code>&lt;div&gt;</code>）を使用する場合にのみ必要です。',
+  },
+}[locale];
+
+const rows = [
+  {
+    useCase: { en: 'Basic tabular data', ja: '基本的な表形式データ' },
+    native: { en: 'Recommended', ja: '推奨' },
+    nativeRecommended: true,
+    custom: { en: 'Not needed', ja: '不要' },
+  },
+  {
+    useCase: { en: 'JavaScript disabled support', ja: 'JavaScript 無効時のサポート' },
+    native: { en: 'Works natively', ja: 'ネイティブで動作' },
+    nativeRecommended: true,
+    custom: { en: 'Requires fallback', ja: 'フォールバックが必要' },
+  },
+  {
+    useCase: { en: 'Built-in accessibility', ja: '組み込みアクセシビリティ' },
+    native: { en: 'Automatic', ja: '自動' },
+    nativeRecommended: true,
+    custom: { en: 'Manual ARIA required', ja: '手動の ARIA が必要' },
+  },
+  {
+    useCase: { en: 'CSS Grid/Flexbox layout', ja: 'CSS Grid/Flexbox レイアウト' },
+    native: { en: 'Limited (display: table)', ja: '限定的（display: table）' },
+    nativeRecommended: false,
+    custom: { en: 'Full control', ja: '完全な制御' },
+  },
+  {
+    useCase: { en: 'Responsive column reordering', ja: 'レスポンシブな列の並び替え' },
+    native: { en: 'Limited', ja: '限定的' },
+    nativeRecommended: false,
+    custom: { en: 'Full control', ja: '完全な制御' },
+  },
+  {
+    useCase: { en: 'Virtualization support', ja: '仮想化サポート' },
+    native: { en: 'Not built-in', ja: '組み込みなし' },
+    nativeRecommended: false,
+    custom: { en: 'With ARIA support', ja: 'ARIA サポート付き' },
+  },
+];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">⚠️</span> Use Native HTML First
+    <span aria-hidden="true">⚠️</span>
+    {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code>&lt;table&gt;</code>
-      elements.</strong
-    >
-    They provide built-in semantics, work without JavaScript, and require no ARIA attributes.
+    <strong class="text-red-700 dark:text-red-400"><Fragment set:html={t.recommendation} /></strong>
+    {t.benefits}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -34,58 +108,44 @@ import { ResponsiveTable } from '@/components/ui/table';
 &lt;/table&gt;</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    Use custom implementations only when you need CSS Grid/Flexbox layouts for responsive tables, or
-    when you cannot use native <code>&lt;table&gt;</code> elements due to design constraints.
+    <Fragment set:html={t.customNote} />
   </p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Use Case</th>
-          <th class="py-2 pr-4 text-left">Native HTML</th>
-          <th class="py-2 text-left">Custom Implementation</th>
+          <th class="py-2 pr-4 text-left">{t.useCase}</th>
+          <th class="py-2 pr-4 text-left">{t.nativeHtml}</th>
+          <th class="py-2 text-left">{t.customImpl}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Basic tabular data</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
-          <td class="py-2">Not needed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JavaScript disabled support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
-          >
-          <td class="py-2">Requires fallback</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Built-in accessibility</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Automatic</b></td>
-          <td class="py-2">Manual ARIA required</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">CSS Grid/Flexbox layout</td>
-          <td class="py-2 pr-4">Limited (display: table)</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Responsive column reordering</td>
-          <td class="py-2 pr-4">Limited</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Virtualization support</td>
-          <td class="py-2 pr-4">Not built-in</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">With ARIA support</b></td>
-        </tr>
+        {
+          rows.map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{row.useCase[locale]}</td>
+              <td class="py-2 pr-4">
+                {row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{row.native[locale]}</b>
+                ) : (
+                  row.native[locale]
+                )}
+              </td>
+              <td class="py-2">
+                {!row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{row.custom[locale]}</b>
+                ) : (
+                  row.custom[locale]
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mt-3 text-xs">
-    The native <code>&lt;table&gt;</code> element with <code>&lt;thead&gt;</code>,
-    <code>&lt;tbody&gt;</code>, <code>&lt;th&gt;</code>, and <code>&lt;td&gt;</code> provides complete
-    semantic structure automatically. The ARIA table pattern is only necessary when using non-table elements
-    (e.g., <code>&lt;div&gt;</code>) for layout purposes.
+    <Fragment set:html={t.footnote} />
   </p>
 </div>

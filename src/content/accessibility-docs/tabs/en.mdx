@@ -4,14 +4,15 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `tablist` | Container | Container for tab elements |
-| `tab` | Each tab | Individual tab element |
-| `tabpanel` | Panel | Content area for each tab |
+| Role       | Target Element | Description                |
+| ---------- | -------------- | -------------------------- |
+| `tablist`  | Container      | Container for tab elements |
+| `tab`      | Each tab       | Individual tab element     |
+| `tabpanel` | Panel          | Content area for each tab  |
 
 ### WAI-ARIA Properties
 
@@ -19,68 +20,70 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 orientation prop
 
-| | |
-|---|---|
-| **Values** | "horizontal" \| "vertical" |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 Auto-generated
 
-| | |
-|---|---|
-| **Values** | ID reference to associated panel |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to associated panel</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 Auto-generated
 
-| | |
-|---|---|
-| **Values** | ID reference to associated tab |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to associated tab</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **Target Element** | tab element |
-| **Values** | true \| false |
-| **Required** | Yes |
-| **Change Trigger** | Tab click, Arrow keys (automatic), Enter/Space (manual) |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">tab element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Tab click, Arrow keys (automatic), Enter/Space (manual)
+  </KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
 #### Horizontal Orientation
 
-| Key | Action |
-|------|------|
-| <kbd>Tab</kbd> | Move focus into/out of the tablist |
-| <kbd>ArrowRight</kbd> | Move to next tab (loops at end) |
-| <kbd>ArrowLeft</kbd> | Move to previous tab (loops at start) |
-| <kbd>Home</kbd> | Move to first tab |
-| <kbd>End</kbd> | Move to last tab |
-| <kbd>Enter / Space</kbd> | Activate tab (manual mode only) |
+| Key                      | Action                                |
+| ------------------------ | ------------------------------------- |
+| <kbd>Tab</kbd>           | Move focus into/out of the tablist    |
+| <kbd>ArrowRight</kbd>    | Move to next tab (loops at end)       |
+| <kbd>ArrowLeft</kbd>     | Move to previous tab (loops at start) |
+| <kbd>Home</kbd>          | Move to first tab                     |
+| <kbd>End</kbd>           | Move to last tab                      |
+| <kbd>Enter / Space</kbd> | Activate tab (manual mode only)       |
 
 #### Vertical Orientation
 
-| Key | Action |
-|------|------|
-| <kbd>ArrowDown</kbd> | Move to next tab (loops at end) |
-| <kbd>ArrowUp</kbd> | Move to previous tab (loops at start) |
+| Key                  | Action                                |
+| -------------------- | ------------------------------------- |
+| <kbd>ArrowDown</kbd> | Move to next tab (loops at end)       |
+| <kbd>ArrowUp</kbd>   | Move to previous tab (loops at start) |
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Selected/focused tab | tabIndex="0" |
-| Other tabs | tabIndex="-1" |
-| Tabpanel | tabIndex="0" (focusable) |
-| Disabled tabs | Skipped during keyboard navigation |
+| Event                | Behavior                           |
+| -------------------- | ---------------------------------- |
+| Selected/focused tab | `tabIndex="0"`                     |
+| Other tabs           | `tabIndex="-1"`                    |
+| Tabpanel             | `tabIndex="0"` (focusable)         |
+| Disabled tabs        | Skipped during keyboard navigation |
 
 ### Implementation Notes
 

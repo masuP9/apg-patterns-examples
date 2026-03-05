@@ -11,8 +11,14 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
 
   // Native HTML considerations for disclosure
   nativeHtmlConsiderations: [
-    { useCase: 'Simple toggle content', recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>' },
-    { useCase: 'JavaScript disabled support', recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>' },
+    {
+      useCase: 'Simple toggle content',
+      recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>',
+    },
+    {
+      useCase: 'JavaScript disabled support',
+      recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>',
+    },
     { useCase: 'Smooth animations', recommended: 'Custom implementation' },
     { useCase: 'External state control', recommended: 'Custom implementation' },
     { useCase: 'Custom styling', recommended: 'Custom implementation' },
@@ -344,7 +350,11 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
   // llm.md specific data
   testChecklist: [
     // ARIA - High Priority
-    { description: 'Trigger is a <code>&lt;button&gt;</code> element', priority: 'high', category: 'aria' },
+    {
+      description: 'Trigger is a <code>&lt;button&gt;</code> element',
+      priority: 'high',
+      category: 'aria',
+    },
     { description: 'Button has aria-expanded attribute', priority: 'high', category: 'aria' },
     {
       description: 'aria-expanded toggles between true and false',

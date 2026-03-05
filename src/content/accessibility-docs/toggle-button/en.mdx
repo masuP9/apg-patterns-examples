@@ -4,36 +4,35 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role     | Target Element | Description                                               |
+| -------- | -------------- | --------------------------------------------------------- |
 | `button` | Button element | Indicates a widget that triggers an action when activated |
 
 ### WAI-ARIA States
 
 #### `aria-pressed`
 
-| | |
-|---|---|
-| **Target Element** | button |
-| **Values** | true \| false |
-| **Required** | Yes |
-| **Change Trigger** | Click, Enter, Space |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
+| Key              | Action                  |
+| ---------------- | ----------------------- |
 | <kbd>Space</kbd> | Toggle the button state |
 | <kbd>Enter</kbd> | Toggle the button state |
 
-> Toggle buttons must have an accessible name via visible label text, aria-label, or aria-labelledby.
-
-> Use type="button" to prevent accidental form submission.
-
-> Tri-state buttons may use aria-pressed="mixed" for partially selected state (e.g., "Select All" when some items selected).
+- Toggle buttons must have an accessible name via visible label text, aria-label, or aria-labelledby.
+- Use type="button" to prevent accidental form submission.
+- Tri-state buttons may use aria-pressed="mixed" for partially selected state (e.g., "Select All" when some items selected).
 
 ### Implementation Notes
 

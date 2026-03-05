@@ -4,14 +4,15 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `tablist` | コンテナ | タブ要素のコンテナ |
-| `tab` | 各タブ | 個々のタブ要素 |
-| `tabpanel` | パネル | 各タブのコンテンツエリア |
+| ロール     | 対象要素 | 説明                     |
+| ---------- | -------- | ------------------------ |
+| `tablist`  | コンテナ | タブ要素のコンテナ       |
+| `tab`      | 各タブ   | 個々のタブ要素           |
+| `tabpanel` | パネル   | 各タブのコンテンツエリア |
 
 ### WAI-ARIA プロパティ
 
@@ -19,68 +20,70 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 orientation プロパティ
 
-| | |
-|---|---|
-| **値** | "horizontal" \| "vertical" |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 自動生成
 
-| | |
-|---|---|
-| **値** | 関連するパネルへのID参照 |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">関連するパネルへのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 自動生成
 
-| | |
-|---|---|
-| **値** | 関連するタブへのID参照 |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">関連するタブへのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **対象要素** | tab 要素 |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | タブクリック、矢印キー（自動）、Enter/Space（手動） |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">tab 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    タブクリック、矢印キー（自動）、Enter/Space（手動）
+  </KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
 #### 水平方向
 
-| キー | アクション |
-|------|------|
-| <kbd>Tab</kbd> | タブリスト内にフォーカスを移動、またはタブリストから移動 |
-| <kbd>ArrowRight</kbd> | 次のタブに移動（末尾でループ） |
-| <kbd>ArrowLeft</kbd> | 前のタブに移動（先頭でループ） |
-| <kbd>Home</kbd> | 最初のタブに移動 |
-| <kbd>End</kbd> | 最後のタブに移動 |
-| <kbd>Enter / Space</kbd> | タブをアクティブ化（手動モードのみ） |
+| キー                     | アクション                                               |
+| ------------------------ | -------------------------------------------------------- |
+| <kbd>Tab</kbd>           | タブリスト内にフォーカスを移動、またはタブリストから移動 |
+| <kbd>ArrowRight</kbd>    | 次のタブに移動（末尾でループ）                           |
+| <kbd>ArrowLeft</kbd>     | 前のタブに移動（先頭でループ）                           |
+| <kbd>Home</kbd>          | 最初のタブに移動                                         |
+| <kbd>End</kbd>           | 最後のタブに移動                                         |
+| <kbd>Enter / Space</kbd> | タブをアクティブ化（手動モードのみ）                     |
 
 #### 垂直方向
 
-| キー | アクション |
-|------|------|
+| キー                 | アクション                     |
+| -------------------- | ------------------------------ |
 | <kbd>ArrowDown</kbd> | 次のタブに移動（末尾でループ） |
-| <kbd>ArrowUp</kbd> | 前のタブに移動（先頭でループ） |
+| <kbd>ArrowUp</kbd>   | 前のタブに移動（先頭でループ） |
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| 選択中/フォーカス中のタブ | tabIndex="0" |
-| 他のタブ | tabIndex="-1" |
-| タブパネル | tabIndex="0"（フォーカス可能） |
-| 無効化されたタブ | キーボードナビゲーションでスキップ |
+| イベント                  | 振る舞い                           |
+| ------------------------- | ---------------------------------- |
+| 選択中/フォーカス中のタブ | `tabIndex="0"`                     |
+| 他のタブ                  | `tabIndex="-1"`                    |
+| タブパネル                | `tabIndex="0"`（フォーカス可能）   |
+| 無効化されたタブ          | キーボードナビゲーションでスキップ |
 
 ### 実装ノート
 

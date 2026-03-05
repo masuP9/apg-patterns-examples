@@ -4,11 +4,12 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール     | 対象要素                                                    | 説明                                                                                                            |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `checkbox` | `<input type="checkbox">` または role="checkbox" を持つ要素 | 要素をチェックボックスとして識別します。ネイティブの `<input type="checkbox">` はこのロールを暗黙的に持ちます。 |
 
 ### WAI-ARIA プロパティ
@@ -17,67 +18,67 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 アクセシブルな名前を提供
 
-| | |
-|---|---|
-| **値** | string |
-| **必須** | 可視ラベルがない場合 |
+<KeyValueList>
+  <KeyValueListItem term="値">string</KeyValueListItem>
+  <KeyValueListItem term="必須">可視ラベルがない場合</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 外部テキストをラベルとして参照
 
-| | |
-|---|---|
-| **値** | ID 参照 |
-| **必須** | 可視ラベルがない場合 |
+<KeyValueList>
+  <KeyValueListItem term="値">ID 参照</KeyValueListItem>
+  <KeyValueListItem term="必須">可視ラベルがない場合</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 追加の説明
 
-| | |
-|---|---|
-| **値** | ID 参照 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">ID 参照</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-checked / checked`
 
-| | |
-|---|---|
-| **対象要素** | チェックボックス要素 |
-| **値** | true \| false \| mixed |
-| **必須** | はい |
-| **変更トリガー** | クリック、Space キー |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">チェックボックス要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false | mixed</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Space キー</KeyValueListItem>
+</KeyValueList>
 
 #### `indeterminate`
 
-| | |
-|---|---|
-| **対象要素** | ネイティブチェックボックス（`<input>`） |
-| **値** | true \| false |
-| **必須** | いいえ |
-| **変更トリガー** | 親子同期、ユーザー操作時に自動的にクリア |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">ネイティブチェックボックス（`<input>`）</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">親子同期、ユーザー操作時に自動的にクリア</KeyValueListItem>
+</KeyValueList>
 
 #### `disabled`
 
-| | |
-|---|---|
-| **対象要素** | チェックボックス要素 |
-| **値** | present \| absent |
-| **必須** | いいえ |
-| **変更トリガー** | プログラムによる変更 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">チェックボックス要素</KeyValueListItem>
+  <KeyValueListItem term="値">present | absent</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">プログラムによる変更</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Space</kbd> | チェックボックスの状態を切り替える（チェック/未チェック） |
-| <kbd>Tab</kbd> | 次のフォーカス可能な要素にフォーカスを移動 |
-| <kbd>Shift + Tab</kbd> | 前のフォーカス可能な要素にフォーカスを移動 |
+| キー                   | アクション                                                |
+| ---------------------- | --------------------------------------------------------- |
+| <kbd>Space</kbd>       | チェックボックスの状態を切り替える（チェック/未チェック） |
+| <kbd>Tab</kbd>         | 次のフォーカス可能な要素にフォーカスを移動                |
+| <kbd>Shift + Tab</kbd> | 前のフォーカス可能な要素にフォーカスを移動                |
 
-> Switchパターンとは異なり、Enterキーではチェックボックスが切り替わりません。
+- Switchパターンとは異なり、Enterキーではチェックボックスが切り替わりません。
 
 ### アクセシブルな名前
 
@@ -89,11 +90,11 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
+| イベント                   | 振る舞い                   |
+| -------------------------- | -------------------------- |
 | ネイティブチェックボックス | デフォルトでフォーカス可能 |
-| カスタム実装 | tabindex="0" が必要 |
-| 無効なチェックボックス | Tab 順序でスキップ |
+| カスタム実装               | `tabindex="0"` が必要      |
+| 無効なチェックボックス     | Tab 順序でスキップ         |
 
 ### ビジュアルデザイン
 
@@ -106,6 +107,10 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">WAI-ARIA APG Checkbox Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">MDN: &lt;input type="checkbox"&gt;</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">
+    WAI-ARIA APG Checkbox Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">
+    MDN: &lt;input type="checkbox"&gt;
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#checkbox">W3C ARIA: checkbox role</ExternalLink>

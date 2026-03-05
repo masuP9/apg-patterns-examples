@@ -4,16 +4,17 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `region` | コンテナ（section） | カルーセルのランドマーク領域 |
-| `group` | スライドコンテナ | すべてのスライドをグループ化 |
-| `tablist` | タブコンテナ | スライドインジケータタブのコンテナ |
-| `tab` | 各タブボタン | 個々のスライドインジケータ |
-| `tabpanel` | 各スライド | 個々のスライドコンテンツエリア |
+| ロール     | 対象要素            | 説明                               |
+| ---------- | ------------------- | ---------------------------------- |
+| `region`   | コンテナ（section） | カルーセルのランドマーク領域       |
+| `group`    | スライドコンテナ    | すべてのスライドをグループ化       |
+| `tablist`  | タブコンテナ        | スライドインジケータタブのコンテナ |
+| `tab`      | 各タブボタン        | 個々のスライドインジケータ         |
+| `tabpanel` | 各スライド          | 個々のスライドコンテンツエリア     |
 
 ### WAI-ARIA プロパティ
 
@@ -21,112 +22,118 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 スクリーンリーダーに「carousel」と通知
 
-| | |
-|---|---|
-| **値** | "carousel" |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">`carousel`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-roledescription`
 
 「tabpanel」の代わりに「slide」と通知
 
-| | |
-|---|---|
-| **値** | "slide" |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">`slide`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 カルーセルの目的を説明
 
-| | |
-|---|---|
-| **値** | テキスト |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">テキスト</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 スライド位置（例: "1 of 5"）
 
-| | |
-|---|---|
-| **値** | "N of M" |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">`N of M`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 制御対象要素を参照
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 関連するタブを参照
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-atomic`
 
 変更されたコンテンツのみ通知
 
-| | |
-|---|---|
-| **値** | "false" |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`false`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **対象要素** | tab 要素 |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | タブクリック、矢印キー、前へ/次へボタン、自動回転 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">tab 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    タブクリック、矢印キー、前へ/次へボタン、自動回転
+  </KeyValueListItem>
+</KeyValueList>
 
 #### `aria-live`
 
-| | |
-|---|---|
-| **対象要素** | スライドコンテナ |
-| **値** | "off" \| "polite" |
-| **必須** | はい |
-| **変更トリガー** | 再生/一時停止クリック、フォーカスイン/アウト、マウスホバー |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">スライドコンテナ</KeyValueListItem>
+  <KeyValueListItem term="値">`off` | `polite`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    再生/一時停止クリック、フォーカスイン/アウト、マウスホバー
+  </KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Tab</kbd> | コントロール間を移動（再生/一時停止、タブリスト、前へ/次へ） |
-| <kbd>ArrowRight</kbd> | 次のスライドインジケータタブに移動（最初にループ） |
-| <kbd>ArrowLeft</kbd> | 前のスライドインジケータタブに移動（最後にループ） |
-| <kbd>Home</kbd> | 最初のスライドインジケータタブにフォーカス移動 |
-| <kbd>End</kbd> | 最後のスライドインジケータタブにフォーカス移動 |
-| <kbd>Enter / Space</kbd> | フォーカスされたタブまたはボタンをアクティブ化 |
+| キー                     | アクション                                                   |
+| ------------------------ | ------------------------------------------------------------ |
+| <kbd>Tab</kbd>           | コントロール間を移動（再生/一時停止、タブリスト、前へ/次へ） |
+| <kbd>ArrowRight</kbd>    | 次のスライドインジケータタブに移動（最初にループ）           |
+| <kbd>ArrowLeft</kbd>     | 前のスライドインジケータタブに移動（最後にループ）           |
+| <kbd>Home</kbd>          | 最初のスライドインジケータタブにフォーカス移動               |
+| <kbd>End</kbd>           | 最後のスライドインジケータタブにフォーカス移動               |
+| <kbd>Enter / Space</kbd> | フォーカスされたタブまたはボタンをアクティブ化               |
 
-> 自動回転中はユーザーの作業を中断しないよう aria-live を "off" に設定されます。回転が停止すると "polite" に変更され、スライド変更が通知されるようになります。
+- 自動回転中はユーザーの作業を中断しないよう aria-live を "off" に設定されます。回転が停止すると "polite" に変更され、スライド変更が通知されるようになります。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| 選択中のタブ | tabIndex="0" |
-| 他のタブ | tabIndex="-1" |
-| キーボードフォーカスがカルーセルに入る | 回転が一時的に停止、aria-live が "polite" に変更 |
-| キーボードフォーカスがカルーセルから離れる | 回転が再開（自動回転モードがオンの場合） |
-| マウスがスライド上をホバー | 回転が一時的に停止 |
-| マウスがスライドから離れる | 回転が再開（自動回転モードがオンの場合） |
-| 一時停止ボタンをクリック | 自動回転モードをオフ、ボタンは再生アイコンを表示 |
-| 再生ボタンをクリック | 自動回転モードをオンにし、即座に回転を開始 |
-| prefers-reduced-motion: reduce | 自動回転がデフォルトで無効 |
+| イベント                                   | 振る舞い                                         |
+| ------------------------------------------ | ------------------------------------------------ |
+| 選択中のタブ                               | `tabIndex="0"`                                   |
+| 他のタブ                                   | `tabIndex="-1"`                                  |
+| キーボードフォーカスがカルーセルに入る     | 回転が一時的に停止、aria-live が "polite" に変更 |
+| キーボードフォーカスがカルーセルから離れる | 回転が再開（自動回転モードがオンの場合）         |
+| マウスがスライド上をホバー                 | 回転が一時的に停止                               |
+| マウスがスライドから離れる                 | 回転が再開（自動回転モードがオンの場合）         |
+| 一時停止ボタンをクリック                   | 自動回転モードをオフ、ボタンは再生アイコンを表示 |
+| 再生ボタンをクリック                       | 自動回転モードをオンにし、即座に回転を開始       |
+| prefers-reduced-motion: reduce             | 自動回転がデフォルトで無効                       |
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/">WAI-ARIA APG Carousel Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/">
+    WAI-ARIA APG Carousel Pattern
+  </ExternalLink>

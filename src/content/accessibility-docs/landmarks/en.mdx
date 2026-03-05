@@ -4,19 +4,20 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `banner` | `<header>` | Site-wide header |
-| `navigation` | `<nav>` | Navigation links |
-| `main` | `<main>` | Primary content |
-| `contentinfo` | `<footer>` | Site-wide footer |
-| `complementary` | `<aside>` | Supporting content |
-| `region` | `<section>` | Named section |
-| `search` | `<form role="search">` | Search functionality |
-| `form` | `<form>` | Form area |
+| Role            | Target Element         | Description          |
+| --------------- | ---------------------- | -------------------- |
+| `banner`        | `<header>`             | Site-wide header     |
+| `navigation`    | `<nav>`                | Navigation links     |
+| `main`          | `<main>`               | Primary content      |
+| `contentinfo`   | `<footer>`             | Site-wide footer     |
+| `complementary` | `<aside>`              | Supporting content   |
+| `region`        | `<section>`            | Named section        |
+| `search`        | `<form role="search">` | Search functionality |
+| `form`          | `<form>`               | Form area            |
 
 ### WAI-ARIA Properties
 
@@ -24,33 +25,37 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Provides an accessible name for the landmark
 
-| | |
-|---|---|
-| **Values** | String |
-| **Required** | Conditional: when multiple of same type, or region/form |
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">
+    Conditional: when multiple of same type, or region/form
+  </KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References a visible heading element
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Conditional: reference visible heading |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional: reference visible heading</KeyValueListItem>
+</KeyValueList>
 
-> **Use semantic HTML elements** - Prefer `<header>`, `<nav>`, `<main>`, etc. over ARIA roles
-
-> **Label multiple landmarks** - When you have more than one `<nav>` or `<aside>`, give each a unique accessible name
-
-> **Limit landmark count** - Too many landmarks (more than ~7) can be overwhelming for assistive technology users
-
-> **Place all content in landmarks** - Content outside landmarks may be missed by users navigating by landmarks
-
-> **Top-level placement** - `<header>` and `<footer>` only map to `banner`/`contentinfo` when they are direct children of `<body>`
+- **Use semantic HTML elements** - Prefer `<header>`, `<nav>`, `<main>`, etc. over ARIA roles
+- **Label multiple landmarks** - When you have more than one `<nav>` or `<aside>`, give each a unique accessible name
+- **Limit landmark count** - Too many landmarks (more than ~7) can be overwhelming for assistive technology users
+- **Place all content in landmarks** - Content outside landmarks may be missed by users navigating by landmarks
+- **Top-level placement** - `<header>` and `<footer>` only map to `banner`/`contentinfo` when they are direct children of `<body>`
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/">WAI-ARIA APG: Landmarks Pattern</ExternalLink>
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">WAI-ARIA APG: Landmark Regions</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/">
+    WAI-ARIA APG: Landmarks Pattern
+  </ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">
+    WAI-ARIA APG: Landmark Regions
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#landmark">W3C ARIA: Landmark Roles</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role">MDN: ARIA Landmark Roles</ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role">
+    MDN: ARIA Landmark Roles
+  </ExternalLink>

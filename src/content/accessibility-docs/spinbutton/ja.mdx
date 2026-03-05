@@ -4,11 +4,12 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール       | 対象要素 | 説明                                                                                                                                        |
+| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `spinbutton` | 入力要素 | ユーザーがインクリメント/デクリメントまたは直接入力によって、離散的なセットまたは範囲から値を選択できるスピンボタンとして要素を識別します。 |
 
 ### WAI-ARIA プロパティ
@@ -17,99 +18,97 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 値が変更されたとき（キーボード、ボタンクリック、またはテキスト入力）、即座に更新する必要があります
 
-| | |
-|---|---|
-| **値** | 数値（現在の値） |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">数値（現在の値）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemin`
 
 最小値が定義されている場合のみ設定します。最小制限が存在しない場合は、属性を完全に省略してください。
 
-| | |
-|---|---|
-| **値** | 数値 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemax`
 
 最大値が定義されている場合のみ設定します。最大制限が存在しない場合は、属性を完全に省略してください。
 
-| | |
-|---|---|
-| **値** | 数値 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuetext`
 
 現在の値に対する人間が読めるテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。
 
-| | |
-|---|---|
-| **値** | 文字列（例: "5 items", "3 of 10"） |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">文字列（例: `5 items`, `3 of 10`）</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 スピンボタンが無効化されており、インタラクティブでないことを示します。
 
-| | |
-|---|---|
-| **値** | true \| false |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-readonly`
 
 スピンボタンが読み取り専用であることを示します。ユーザーはHome/Endキーでナビゲーションできますが、値を変更することはできません。
 
-| | |
-|---|---|
-| **値** | true \| false |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 スピンボタンに不可視のラベルを提供します
 
-| | |
-|---|---|
-| **値** | 文字列 |
-| **必須** | 条件付き（表示されるラベルがない場合は必須） |
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルがない場合は必須）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 外部要素をラベルとして参照します
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | 条件付き（表示されるラベルが存在する場合は必須） |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルが存在する場合は必須）</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>ArrowUp</kbd> | 値を1ステップ増やします |
-| <kbd>ArrowDown</kbd> | 値を1ステップ減らします |
-| <kbd>Home</kbd> | 値を最小値に設定します（最小値が定義されている場合のみ） |
-| <kbd>End</kbd> | 値を最大値に設定します（最大値が定義されている場合のみ） |
-| <kbd>Page Up</kbd> | 値を大きなステップで増やします（デフォルト: step × 10） |
-| <kbd>Page Down</kbd> | 値を大きなステップで減らします（デフォルト: step × 10） |
+| キー                 | アクション                                               |
+| -------------------- | -------------------------------------------------------- |
+| <kbd>ArrowUp</kbd>   | 値を1ステップ増やします                                  |
+| <kbd>ArrowDown</kbd> | 値を1ステップ減らします                                  |
+| <kbd>Home</kbd>      | 値を最小値に設定します（最小値が定義されている場合のみ） |
+| <kbd>End</kbd>       | 値を最大値に設定します（最大値が定義されている場合のみ） |
+| <kbd>Page Up</kbd>   | 値を大きなステップで増やします（デフォルト: step × 10）  |
+| <kbd>Page Down</kbd> | 値を大きなステップで減らします（デフォルト: step × 10）  |
 
-> spinbuttonロールは、ユーザーがインクリメント/デクリメントボタン、矢印キー、または直接入力によって数値を選択できる入力コントロールに使用されます。テキスト入力と値の上下調整機能を組み合わせたものです。
-
-> スライダーパターンとは異なり、スピンボタンは上下矢印キーのみを使用します（左右矢印キーは使用しません）。これにより、ユーザーはテキスト入力を使用して直接数値を入力できます。
-
-> スピンボタンにはアクセシブルな名前が必要です。これはlabelプロパティを使用した表示されるラベル、見えないラベルのためのaria-label、または外部要素を参照するaria-labelledbyによって提供できます。
+- spinbuttonロールは、ユーザーがインクリメント/デクリメントボタン、矢印キー、または直接入力によって数値を選択できる入力コントロールに使用されます。テキスト入力と値の上下調整機能を組み合わせたものです。
+- スライダーパターンとは異なり、スピンボタンは上下矢印キーのみを使用します（左右矢印キーは使用しません）。これにより、ユーザーはテキスト入力を使用して直接数値を入力できます。
+- スピンボタンにはアクセシブルな名前が必要です。これはlabelプロパティを使用した表示されるラベル、見えないラベルのためのaria-label、または外部要素を参照するaria-labelledbyによって提供できます。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| 入力要素 | tabindex="0" |
-| 無効化された入力 | tabindex="-1" |
-| 増加/減少ボタン | tabindex="-1"（タブ順序に含まれない） |
-| ボタンクリック | フォーカスはスピンボタンに留まります（ボタンには移動しません） |
+| イベント         | 振る舞い                                                       |
+| ---------------- | -------------------------------------------------------------- |
+| 入力要素         | `tabindex="0"`                                                 |
+| 無効化された入力 | `tabindex="-1"`                                                |
+| 増加/減少ボタン  | `tabindex="-1"`（タブ順序に含まれない）                        |
+| ボタンクリック   | フォーカスはスピンボタンに留まります（ボタンには移動しません） |
 
 ### ビジュアルデザイン
 
@@ -121,6 +120,12 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/">WAI-ARIA APG: Spinbutton Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number">MDN: &lt;input type="number"&gt; element</ExternalLink>
-- <ExternalLink href="https://w3c.github.io/aria/#spinbutton">W3C ARIA: spinbutton role</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/">
+    WAI-ARIA APG: Spinbutton Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number">
+    MDN: &lt;input type="number"&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#spinbutton">
+    W3C ARIA: spinbutton role
+  </ExternalLink>

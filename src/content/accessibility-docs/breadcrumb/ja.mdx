@@ -4,11 +4,12 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール       | 対象要素     | 説明                                                                      |
+| ------------ | ------------ | ------------------------------------------------------------------------- |
 | `navigation` | `<nav>` 要素 | 支援技術にナビゲーションランドマークを提供します（`<nav>`の暗黙のロール） |
 
 ### WAI-ARIA プロパティ
@@ -17,40 +18,46 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 スクリーンリーダー向けにナビゲーションランドマークにラベルを付けます
 
-| | |
-|---|---|
-| **値** | "Breadcrumb"（またはローカライズされた値） |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">`Breadcrumb`（またはローカライズされた値）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-current`
 
 パンくずリスト内の現在のページを識別します
 
-| | |
-|---|---|
-| **値** | "page" |
-| **必須** | はい（最後のアイテム） |
+<KeyValueList>
+  <KeyValueListItem term="値">`page`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（最後のアイテム）</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-current`
 
-| | |
-|---|---|
-| **対象要素** | パンくずリストの最後のアイテム（現在のページ） |
-| **値** | "page" |
-| **必須** | はい |
-| **変更トリガー** | パンくずリストナビゲーション内の現在のページ位置を示します。 |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">
+    パンくずリストの最後のアイテム（現在のページ）
+  </KeyValueListItem>
+  <KeyValueListItem term="値">`page`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    パンくずリストナビゲーション内の現在のページ位置を示します。
+  </KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Tab</kbd> | パンくずリストのリンク間でフォーカスを移動します |
-| <kbd>Enter</kbd> | フォーカスされたリンクをアクティブ化します |
+| キー             | アクション                                       |
+| ---------------- | ------------------------------------------------ |
+| <kbd>Tab</kbd>   | パンくずリストのリンク間でフォーカスを移動します |
+| <kbd>Enter</kbd> | フォーカスされたリンクをアクティブ化します       |
 
-> Breadcrumbはネイティブの`<a>`要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは不要です。
+- Breadcrumbはネイティブの`<a>`要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは不要です。
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">WAI-ARIA Breadcrumb Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">
+    WAI-ARIA Breadcrumb Pattern
+  </ExternalLink>

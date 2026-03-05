@@ -4,11 +4,12 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール   | 対象要素   | 説明                                                               |
+| -------- | ---------- | ------------------------------------------------------------------ |
 | `slider` | つまみ要素 | ユーザーが範囲内から値を選択できるスライダーとして要素を識別します |
 
 ### WAI-ARIA プロパティ
@@ -17,76 +18,73 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 キーボードまたはポインターによる値変更時に動的に更新
 
-| | |
-|---|---|
-| **値** | Number |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemin`
 
 デフォルト: 0
 
-| | |
-|---|---|
-| **値** | Number |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemax`
 
 デフォルト: 100
 
-| | |
-|---|---|
-| **値** | Number |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuetext`
 
 例: "50%", "Medium", "3 of 5 stars"
 
-| | |
-|---|---|
-| **値** | String |
-| **必須** | いいえ（値にコンテキストが必要な場合は推奨） |
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ（値にコンテキストが必要な場合は推奨）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-orientation`
 
 デフォルト: horizontal（暗黙的）。垂直スライダーの場合のみ設定。
 
-| | |
-|---|---|
-| **値** | "horizontal" \| "vertical" |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 無効化時のみ設定
 
-| | |
-|---|---|
-| **値** | true \| undefined |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Right Arrow</kbd> | 値を1ステップ増加させる |
-| <kbd>Up Arrow</kbd> | 値を1ステップ増加させる |
-| <kbd>Left Arrow</kbd> | 値を1ステップ減少させる |
-| <kbd>Down Arrow</kbd> | 値を1ステップ減少させる |
-| <kbd>Home</kbd> | スライダーを最小値に設定する |
-| <kbd>End</kbd> | スライダーを最大値に設定する |
-| <kbd>Page Up</kbd> | 値を大きいステップで増加させる（デフォルト: step * 10） |
-| <kbd>Page Down</kbd> | 値を大きいステップで減少させる（デフォルト: step * 10） |
+| キー                   | アクション                                               |
+| ---------------------- | -------------------------------------------------------- |
+| <kbd>Right Arrow</kbd> | 値を1ステップ増加させる                                  |
+| <kbd>Up Arrow</kbd>    | 値を1ステップ増加させる                                  |
+| <kbd>Left Arrow</kbd>  | 値を1ステップ減少させる                                  |
+| <kbd>Down Arrow</kbd>  | 値を1ステップ減少させる                                  |
+| <kbd>Home</kbd>        | スライダーを最小値に設定する                             |
+| <kbd>End</kbd>         | スライダーを最大値に設定する                             |
+| <kbd>Page Up</kbd>     | 値を大きいステップで増加させる（デフォルト: step \* 10） |
+| <kbd>Page Down</kbd>   | 値を大きいステップで減少させる（デフォルト: step \* 10） |
 
-> スライダーには表示されるラベル（推奨）、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
-
-> この実装は、フォーカスインジケーター、視覚的な塗りつぶし、ホバー状態を含むアクセシブルなビジュアルデザインのWCAGガイドラインに従っています。
-
-> ポインター操作: トラックをクリックするとつまみが即座に移動し、ドラッグで連続的な調整が可能です。
-
-> 強制カラーモードはWindowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用します。
+- スライダーには表示されるラベル（推奨）、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
+- この実装は、フォーカスインジケーター、視覚的な塗りつぶし、ホバー状態を含むアクセシブルなビジュアルデザインのWCAGガイドラインに従っています。
+- ポインター操作: トラックをクリックするとつまみが即座に移動し、ドラッグで連続的な調整が可能です。
+- 強制カラーモードはWindowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用します。
 
 ### 実装ノート
 
@@ -128,6 +126,10 @@ Sliderコンポーネントの構造と視覚的なレイアウト
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/">WAI-ARIA APG: Slider Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range">MDN: &lt;input type="range"&gt; element</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/">
+    WAI-ARIA APG: Slider Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range">
+    MDN: &lt;input type="range"&gt; element
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#slider">W3C ARIA: slider role</ExternalLink>

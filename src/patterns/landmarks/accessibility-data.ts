@@ -570,7 +570,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
       category: 'aria',
     },
     {
-      description: 'Has contentinfo landmark (`<code>&lt;footer&gt;</code>` or `role="contentinfo"`)',
+      description:
+        'Has contentinfo landmark (`<code>&lt;footer&gt;</code>` or `role="contentinfo"`)',
       priority: 'high',
       category: 'aria',
     },

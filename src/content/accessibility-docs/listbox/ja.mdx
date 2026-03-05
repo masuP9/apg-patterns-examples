@@ -4,13 +4,14 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `listbox` | コンテナ（`<ul>`） | リストから1つまたは複数のアイテムを選択するためのウィジェット |
-| `option` | 各アイテム（`<li>`） | リストボックス内の選択可能なオプション |
+| ロール    | 対象要素             | 説明                                                          |
+| --------- | -------------------- | ------------------------------------------------------------- |
+| `listbox` | コンテナ（`<ul>`）   | リストから1つまたは複数のアイテムを選択するためのウィジェット |
+| `option`  | 各アイテム（`<li>`） | リストボックス内の選択可能なオプション                        |
 
 ### WAI-ARIA プロパティ
 
@@ -18,101 +19,102 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 リストボックスのアクセシブル名
 
-| | |
-|---|---|
-| **値** | String |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 ラベル要素への参照
 
-| | |
-|---|---|
-| **値** | ID reference |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">ID reference</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-multiselectable`
 
 複数選択モードを有効にする
 
-| | |
-|---|---|
-| **値** | `true` |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`true`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-orientation`
 
 ナビゲーションの方向（デフォルト: vertical）
 
-| | |
-|---|---|
-| **値** | `"vertical"` \| `"horizontal"` |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">`vertical` | `horizontal`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **対象要素** | option |
-| **値** | `true` \| `false` |
-| **必須** | はい |
-| **変更トリガー** | クリック、矢印キー（単一選択）、Space（複数選択） |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">option</KeyValueListItem>
+  <KeyValueListItem term="値">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    クリック、矢印キー（単一選択）、Space（複数選択）
+  </KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | option |
-| **値** | `true` |
-| **必須** | いいえ |
-| **変更トリガー** | 無効時のみ |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">option</KeyValueListItem>
+  <KeyValueListItem term="値">`true`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">無効時のみ</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
 #### 共通ナビゲーション
 
-| キー | アクション |
-|------|------|
-| <kbd>Down Arrow / Up Arrow</kbd> | フォーカスを移動（垂直方向） |
-| <kbd>Right Arrow / Left Arrow</kbd> | フォーカスを移動（水平方向） |
-| <kbd>Home</kbd> | 最初のオプションにフォーカスを移動 |
-| <kbd>End</kbd> | 最後のオプションにフォーカスを移動 |
-| <kbd>Type character</kbd> | 先行入力: 入力した文字で始まるオプションにフォーカス |
+| キー                                | アクション                                           |
+| ----------------------------------- | ---------------------------------------------------- |
+| <kbd>Down Arrow / Up Arrow</kbd>    | フォーカスを移動（垂直方向）                         |
+| <kbd>Right Arrow / Left Arrow</kbd> | フォーカスを移動（水平方向）                         |
+| <kbd>Home</kbd>                     | 最初のオプションにフォーカスを移動                   |
+| <kbd>End</kbd>                      | 最後のオプションにフォーカスを移動                   |
+| <kbd>Type character</kbd>           | 先行入力: 入力した文字で始まるオプションにフォーカス |
 
 #### 単一選択（選択がフォーカスに追従）
 
-| キー | アクション |
-|------|------|
-| <kbd>Arrow keys</kbd> | フォーカスと選択を同時に移動 |
-| <kbd>Space / Enter</kbd> | 現在の選択を確定 |
+| キー                     | アクション                   |
+| ------------------------ | ---------------------------- |
+| <kbd>Arrow keys</kbd>    | フォーカスと選択を同時に移動 |
+| <kbd>Space / Enter</kbd> | 現在の選択を確定             |
 
 #### 複数選択
 
-| キー | アクション |
-|------|------|
-| <kbd>Arrow keys</kbd> | フォーカスのみ移動（選択は変更なし） |
-| <kbd>Space</kbd> | フォーカス中のオプションの選択をトグル |
-| <kbd>Shift + Arrow</kbd> | フォーカスを移動し選択範囲を拡張 |
-| <kbd>Shift + Home</kbd> | アンカーから最初のオプションまで選択 |
-| <kbd>Shift + End</kbd> | アンカーから最後のオプションまで選択 |
-| <kbd>Ctrl + A</kbd> | すべてのオプションを選択 |
+| キー                     | アクション                             |
+| ------------------------ | -------------------------------------- |
+| <kbd>Arrow keys</kbd>    | フォーカスのみ移動（選択は変更なし）   |
+| <kbd>Space</kbd>         | フォーカス中のオプションの選択をトグル |
+| <kbd>Shift + Arrow</kbd> | フォーカスを移動し選択範囲を拡張       |
+| <kbd>Shift + Home</kbd>  | アンカーから最初のオプションまで選択   |
+| <kbd>Shift + End</kbd>   | アンカーから最後のオプションまで選択   |
+| <kbd>Ctrl + A</kbd>      | すべてのオプションを選択               |
 
-> **単一選択:** 選択がフォーカスに追従（矢印キーで選択が変更される）
-
-> **複数選択:** フォーカスと選択は独立（Spaceで選択をトグル）
+- **単一選択:** 選択がフォーカスに追従（矢印キーで選択が変更される）
+- **複数選択:** フォーカスと選択は独立（Spaceで選択をトグル）
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| フォーカス中のオプション | 常に1つのオプションのみが `tabindex="0"` を持つ（ローヴィングタブインデックス） |
-| フォーカスされていないオプション | 他のオプションは `tabindex="-1"` を持つ |
-| 矢印ナビゲーション | 矢印キーでオプション間のフォーカスを移動 |
-| 無効化されたオプション | 無効化されたオプションはナビゲーション中にスキップされる |
-| 端の動作 | フォーカスは端で折り返さない（端で停止） |
+| イベント                         | 振る舞い                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| フォーカス中のオプション         | 常に1つのオプションのみが `tabindex="0"` を持つ（ローヴィングタブインデックス） |
+| フォーカスされていないオプション | 他のオプションは `tabindex="-1"` を持つ                                         |
+| 矢印ナビゲーション               | 矢印キーでオプション間のフォーカスを移動                                        |
+| 無効化されたオプション           | 無効化されたオプションはナビゲーション中にスキップされる                        |
+| 端の動作                         | フォーカスは端で折り返さない（端で停止）                                        |
 
 ### 参考資料
 

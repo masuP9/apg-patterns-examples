@@ -4,11 +4,12 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role    | Target Element    | Description                                                                       |
+| ------- | ----------------- | --------------------------------------------------------------------------------- |
 | `meter` | Container element | Identifies the element as a meter displaying a scalar value within a known range. |
 
 ### WAI-ARIA Properties
@@ -17,59 +18,60 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Must be between aria-valuemin and aria-valuemax
 
-| | |
-|---|---|
-| **Values** | Number (current value) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (current value)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemin`
 
 Specifies the minimum allowed value for the meter
 
-| | |
-|---|---|
-| **Values** | Number (default: 0) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (default: 0)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuemax`
 
 Specifies the maximum allowed value for the meter
 
-| | |
-|---|---|
-| **Values** | Number (default: 100) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (default: 100)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-valuetext`
 
 Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning.
 
-| | |
-|---|---|
-| **Values** | String (e.g., "75% complete") |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">String (e.g., `75% complete`)</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 Provides an invisible label for the meter
 
-| | |
-|---|---|
-| **Values** | String |
-| **Required** | Conditional (required if no visible label) |
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional (required if no visible label)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References an external element as the label
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Conditional (required if visible label exists) |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">
+    Conditional (required if visible label exists)
+  </KeyValueListItem>
+</KeyValueList>
 
-> Meters must have an accessible name. This can be provided through a visible label using the label prop, aria-label for an invisible label, or aria-labelledby to reference an external element.
-
-> The meter role is used for graphical displays of numeric values within a defined range. It is not interactive and should not receive focus by default.
+- Meters must have an accessible name. This can be provided through a visible label using the label prop, aria-label for an invisible label, or aria-labelledby to reference an external element.
+- The meter role is used for graphical displays of numeric values within a defined range. It is not interactive and should not receive focus by default.
 
 ### Visual Design
 
@@ -80,6 +82,10 @@ References an external element as the label
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/">WAI-ARIA APG: Meter Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter">MDN: &lt;meter&gt; element</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/">
+    WAI-ARIA APG: Meter Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter">
+    MDN: &lt;meter&gt; element
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#meter">W3C ARIA: meter role</ExternalLink>

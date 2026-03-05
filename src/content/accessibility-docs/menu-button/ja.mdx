@@ -4,14 +4,15 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `button` | トリガー（`<button>`） | メニューを開くトリガー（`<button>`要素による暗黙的なロール） |
-| `menu` | コンテナ（`<ul>`） | ユーザーに選択肢のリストを提供するウィジェット |
-| `menuitem` | 各アイテム（`<li>`） | メニュー内のオプション |
+| ロール     | 対象要素               | 説明                                                         |
+| ---------- | ---------------------- | ------------------------------------------------------------ |
+| `button`   | トリガー（`<button>`） | メニューを開くトリガー（`<button>`要素による暗黙的なロール） |
+| `menu`     | コンテナ（`<ul>`）     | ユーザーに選択肢のリストを提供するウィジェット               |
+| `menuitem` | 各アイテム（`<li>`）   | メニュー内のオプション                                       |
 
 ### WAI-ARIA プロパティ
 
@@ -19,92 +20,92 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ボタンがメニューを開くことを示す
 
-| | |
-|---|---|
-| **値** | "menu" |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">`menu`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 メニュー要素を参照する
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 メニューを開くボタンを参照する
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい（またはaria-label） |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（またはaria-label）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 メニューのアクセシブルな名前を提供する
 
-| | |
-|---|---|
-| **値** | 文字列 |
-| **必須** | はい（またはaria-labelledby） |
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（またはaria-labelledby）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 メニューアイテムが無効であることを示す
 
-| | |
-|---|---|
-| **値** | true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-expanded`
 
-| | |
-|---|---|
-| **対象要素** | button |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | メニューを開く/閉じる |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">button</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">メニューを開く/閉じる</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
 #### ボタン（メニューが閉じている状態）
 
-| キー | アクション |
-|------|------|
+| キー                     | アクション                                           |
+| ------------------------ | ---------------------------------------------------- |
 | <kbd>Enter / Space</kbd> | メニューを開き、最初のアイテムにフォーカスを移動する |
-| <kbd>Down Arrow</kbd> | メニューを開き、最初のアイテムにフォーカスを移動する |
-| <kbd>Up Arrow</kbd> | メニューを開き、最後のアイテムにフォーカスを移動する |
+| <kbd>Down Arrow</kbd>    | メニューを開き、最初のアイテムにフォーカスを移動する |
+| <kbd>Up Arrow</kbd>      | メニューを開き、最後のアイテムにフォーカスを移動する |
 
 #### メニュー（開いている状態）
 
-| キー | アクション |
-|------|------|
-| <kbd>Down Arrow</kbd> | 次のアイテムにフォーカスを移動する（最後の項目から最初にラップする） |
-| <kbd>Up Arrow</kbd> | 前のアイテムにフォーカスを移動する（最初の項目から最後にラップする） |
-| <kbd>Home</kbd> | 最初のアイテムにフォーカスを移動する |
-| <kbd>End</kbd> | 最後のアイテムにフォーカスを移動する |
-| <kbd>Escape</kbd> | メニューを閉じ、フォーカスをボタンに戻す |
-| <kbd>Tab</kbd> | メニューを閉じ、次のフォーカス可能な要素にフォーカスを移動する |
-| <kbd>Enter / Space</kbd> | フォーカスされたアイテムを実行し、メニューを閉じる |
-| <kbd>Type character</kbd> | 先行入力: 入力された文字で始まるアイテムにフォーカスを移動する |
+| キー                      | アクション                                                           |
+| ------------------------- | -------------------------------------------------------------------- |
+| <kbd>Down Arrow</kbd>     | 次のアイテムにフォーカスを移動する（最後の項目から最初にラップする） |
+| <kbd>Up Arrow</kbd>       | 前のアイテムにフォーカスを移動する（最初の項目から最後にラップする） |
+| <kbd>Home</kbd>           | 最初のアイテムにフォーカスを移動する                                 |
+| <kbd>End</kbd>            | 最後のアイテムにフォーカスを移動する                                 |
+| <kbd>Escape</kbd>         | メニューを閉じ、フォーカスをボタンに戻す                             |
+| <kbd>Tab</kbd>            | メニューを閉じ、次のフォーカス可能な要素にフォーカスを移動する       |
+| <kbd>Enter / Space</kbd>  | フォーカスされたアイテムを実行し、メニューを閉じる                   |
+| <kbd>Type character</kbd> | 先行入力: 入力された文字で始まるアイテムにフォーカスを移動する       |
 
-> 閉じているとき、メニューはhiddenとinert属性の両方を使用して、視覚的な表示からメニューを隠し、アクセシビリティツリーから削除し、非表示のアイテムに対するキーボードとマウスの操作を防ぎます。
+- 閉じているとき、メニューはhiddenとinert属性の両方を使用して、視覚的な表示からメニューを隠し、アクセシビリティツリーから削除し、非表示のアイテムに対するキーボードとマウスの操作を防ぎます。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| フォーカスされたメニューアイテム | tabIndex="0" |
-| その他のメニューアイテム | tabIndex="-1" |
-| 矢印キーナビゲーション | 最後から最初へ、またはその逆にラップする |
-| 無効なアイテム | ナビゲーション中にスキップされる |
-| メニューが閉じる | フォーカスがボタンに戻る |
+| イベント                         | 振る舞い                                 |
+| -------------------------------- | ---------------------------------------- |
+| フォーカスされたメニューアイテム | `tabIndex="0"`                           |
+| その他のメニューアイテム         | `tabIndex="-1"`                          |
+| 矢印キーナビゲーション           | 最後から最初へ、またはその逆にラップする |
+| 無効なアイテム                   | ナビゲーション中にスキップされる         |
+| メニューが閉じる                 | フォーカスがボタンに戻る                 |
 
 ### 参考資料
 

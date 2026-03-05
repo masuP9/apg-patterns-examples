@@ -4,14 +4,15 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button |
-| `button` | Header trigger | Interactive element that toggles panel visibility |
-| `region` | Panel (optional) | Content area associated with header (omit for 6+ panels) |
+| Role      | Target Element         | Description                                              |
+| --------- | ---------------------- | -------------------------------------------------------- |
+| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button                    |
+| `button`  | Header trigger         | Interactive element that toggles panel visibility        |
+| `region`  | Panel (optional)       | Content area associated with header (omit for 6+ panels) |
 
 ### WAI-ARIA Properties
 
@@ -19,69 +20,69 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 headingLevel prop
 
-| | |
-|---|---|
-| **Values** | 2 - 6 |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">2 - 6</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 Auto-generated
 
-| | |
-|---|---|
-| **Values** | ID reference to associated panel |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to associated panel</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 Auto-generated
 
-| | |
-|---|---|
-| **Values** | ID reference to header button |
-| **Required** | Yes (if region used) |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to header button</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (if region used)</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-expanded`
 
-| | |
-|---|---|
-| **Target Element** | button element |
-| **Values** | true \| false |
-| **Required** | Yes |
-| **Change Trigger** | Click, Enter, Space |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **Target Element** | button element |
-| **Values** | true \| false |
-| **Required** | No |
-| **Change Trigger** | Only when disabled |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Only when disabled</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Tab</kbd> | Move focus to the next focusable element |
-| <kbd>Space / Enter</kbd> | Toggle the expansion of the focused accordion header |
-| <kbd>Arrow Down</kbd> | Move focus to the next accordion header (optional) |
-| <kbd>Arrow Up</kbd> | Move focus to the previous accordion header (optional) |
-| <kbd>Home</kbd> | Move focus to the first accordion header (optional) |
-| <kbd>End</kbd> | Move focus to the last accordion header (optional) |
+| Key                      | Action                                                 |
+| ------------------------ | ------------------------------------------------------ |
+| <kbd>Tab</kbd>           | Move focus to the next focusable element               |
+| <kbd>Space / Enter</kbd> | Toggle the expansion of the focused accordion header   |
+| <kbd>Arrow Down</kbd>    | Move focus to the next accordion header (optional)     |
+| <kbd>Arrow Up</kbd>      | Move focus to the previous accordion header (optional) |
+| <kbd>Home</kbd>          | Move focus to the first accordion header (optional)    |
+| <kbd>End</kbd>           | Move focus to the last accordion header (optional)     |
 
-> Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
+- Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Header buttons | Focusable via their button elements |
-| Arrow keys | Navigate between headers (skip disabled) |
-| Edges | Focus does not wrap at edges |
+| Event          | Behavior                                 |
+| -------------- | ---------------------------------------- |
+| Header buttons | Focusable via their button elements      |
+| Arrow keys     | Navigate between headers (skip disabled) |
+| Edges          | Focus does not wrap at edges             |
 
 ### Implementation Notes
 
@@ -109,4 +110,6 @@ Accordion component structure with ID relationships
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/">WAI-ARIA Accordion Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/">
+    WAI-ARIA Accordion Pattern
+  </ExternalLink>

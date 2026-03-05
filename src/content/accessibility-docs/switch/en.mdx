@@ -4,47 +4,45 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role     | Target Element | Description                                                              |
+| -------- | -------------- | ------------------------------------------------------------------------ |
 | `switch` | Switch element | An input widget that allows users to choose one of two values: on or off |
 
 ### WAI-ARIA States
 
 #### `aria-checked`
 
-| | |
-|---|---|
-| **Target Element** | switch element |
-| **Values** | true \| false |
-| **Required** | Yes |
-| **Change Trigger** | Click, Enter, Space |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">switch element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **Target Element** | switch element |
-| **Values** | true \| undefined |
-| **Required** | No |
-| **Change Trigger** | Only when disabled |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">switch element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Only when disabled</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
+| Key              | Action                           |
+| ---------------- | -------------------------------- |
 | <kbd>Space</kbd> | Toggle the switch state (on/off) |
 | <kbd>Enter</kbd> | Toggle the switch state (on/off) |
 
-> Switches must have an accessible name via visible label (recommended), aria-label, or aria-labelledby.
-
-> This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state.
-
-> Thumb position: Left = off, Right = on. Checkmark icon visible only when on.
-
-> Forced colors mode uses system colors for Windows High Contrast Mode accessibility.
+- Switches must have an accessible name via visible label (recommended), aria-label, or aria-labelledby.
+- This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state.
+- Thumb position: Left = off, Right = on. Checkmark icon visible only when on.
+- Forced colors mode uses system colors for Windows High Contrast Mode accessibility.
 
 ### Implementation Notes
 

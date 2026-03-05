@@ -1,0 +1,17 @@
+---
+/**
+ * A single key-value pair for use inside KeyValueList.
+ * Renders a <dt> + <dd> pair, enforcing 1:1 structure.
+ *
+ * Usage:
+ *   <KeyValueListItem term="Values">true | false</KeyValueListItem>
+ */
+interface Props {
+  term: string;
+}
+
+const { term } = Astro.props;
+---
+
+<dt class="kv-item-term">{term}</dt>
+<dd class="kv-item-value"><slot /></dd>

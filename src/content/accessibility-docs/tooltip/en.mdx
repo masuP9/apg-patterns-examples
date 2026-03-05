@@ -4,12 +4,13 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `tooltip` | Tooltip popup | A contextual popup that displays a description for an element |
+| Role      | Target Element | Description                                                   |
+| --------- | -------------- | ------------------------------------------------------------- |
+| `tooltip` | Tooltip popup  | A contextual popup that displays a description for an element |
 
 ### WAI-ARIA Properties
 
@@ -17,34 +18,34 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Only when tooltip is visible. References the tooltip element to provide an accessible description for the trigger element.
 
-| | |
-|---|---|
-| **Values** | ID of tooltip |
-| **Required** | Conditional |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID of tooltip</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-hidden`
 
 Indicates whether the tooltip is hidden from assistive technology. Default is true.
 
-| | |
-|---|---|
-| **Values** | `true` \| `false` |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Escape</kbd> | Closes the tooltip |
-| <kbd>Tab</kbd> | Standard focus navigation; tooltip shows when trigger receives focus |
+| Key               | Action                                                               |
+| ----------------- | -------------------------------------------------------------------- |
+| <kbd>Escape</kbd> | Closes the tooltip                                                   |
+| <kbd>Tab</kbd>    | Standard focus navigation; tooltip shows when trigger receives focus |
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
+| Event           | Behavior                                                                                                                                           |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tooltip display | Tooltip never receives focus - Per APG, tooltips must not be focusable. If interactive content is needed, use a Dialog or Popover pattern instead. |
-| Trigger focus | Focus triggers display - When the trigger element receives focus, the tooltip appears after the configured delay. |
-| Trigger blur | Blur hides tooltip - When focus leaves the trigger element, the tooltip is hidden. |
+| Trigger focus   | Focus triggers display - When the trigger element receives focus, the tooltip appears after the configured delay.                                  |
+| Trigger blur    | Blur hides tooltip - When focus leaves the trigger element, the tooltip is hidden.                                                                 |
 
 ### Mouse/Pointer Behavior
 

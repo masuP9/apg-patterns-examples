@@ -4,6 +4,7 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
@@ -19,28 +20,28 @@ This implementation uses `<span role="button">` for educational purposes. For pr
 
 Makes the custom button element focusable via keyboard navigation. Native `<button>` is focusable by default. Set to -1 when disabled.
 
-|              |                                  |
-| ------------ | -------------------------------- |
-| **Values**   | `"0"` \| `"-1"`                  |
-| **Required** | Yes (for custom implementations) |
+<KeyValueList>
+  <KeyValueListItem term="Values">`0` | `-1`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (for custom implementations)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 Indicates the button is not interactive and cannot be activated. Native `<button disabled>` automatically handles this.
 
-|              |                         |
-| ------------ | ----------------------- |
-| **Values**   | `"true"` \| `"false"`   |
-| **Required** | No (only when disabled) |
+<KeyValueList>
+  <KeyValueListItem term="Values">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="Required">No (only when disabled)</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 Provides an accessible name for icon-only buttons or when visible text is insufficient.
 
-|              |                                   |
-| ------------ | --------------------------------- |
-| **Values**   | Text string describing the action |
-| **Required** | No (only for icon-only buttons)   |
+<KeyValueList>
+  <KeyValueListItem term="Values">Text string describing the action</KeyValueListItem>
+  <KeyValueListItem term="Required">No (only for icon-only buttons)</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 

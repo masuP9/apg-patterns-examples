@@ -4,16 +4,17 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `region` | Container (section) | Landmark region for the carousel |
-| `group` | Slides container | Groups all slides together |
-| `tablist` | Tab container | Container for slide indicator tabs |
-| `tab` | Each tab button | Individual slide indicator |
-| `tabpanel` | Each slide | Individual slide content area |
+| Role       | Target Element      | Description                        |
+| ---------- | ------------------- | ---------------------------------- |
+| `region`   | Container (section) | Landmark region for the carousel   |
+| `group`    | Slides container    | Groups all slides together         |
+| `tablist`  | Tab container       | Container for slide indicator tabs |
+| `tab`      | Each tab button     | Individual slide indicator         |
+| `tabpanel` | Each slide          | Individual slide content area      |
 
 ### WAI-ARIA Properties
 
@@ -21,112 +22,118 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Announces "carousel" to screen readers
 
-| | |
-|---|---|
-| **Values** | "carousel" |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">`carousel`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-roledescription`
 
 Announces "slide" instead of "tabpanel"
 
-| | |
-|---|---|
-| **Values** | "slide" |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">`slide`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 Describes the carousel purpose
 
-| | |
-|---|---|
-| **Values** | Text |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Text</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 Slide position (e.g., "1 of 5")
 
-| | |
-|---|---|
-| **Values** | "N of M" |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">`N of M`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-controls`
 
 References controlled element
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References associated tab
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-atomic`
 
 Only announce changed content
 
-| | |
-|---|---|
-| **Values** | "false" |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">`false`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-selected`
 
-| | |
-|---|---|
-| **Target Element** | Tab element |
-| **Values** | true \| false |
-| **Required** | Yes |
-| **Change Trigger** | Tab click, Arrow keys, Prev/Next buttons, Auto-rotation |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Tab element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Tab click, Arrow keys, Prev/Next buttons, Auto-rotation
+  </KeyValueListItem>
+</KeyValueList>
 
 #### `aria-live`
 
-| | |
-|---|---|
-| **Target Element** | Slides container |
-| **Values** | "off" \| "polite" |
-| **Required** | Yes |
-| **Change Trigger** | Play/Pause click, Focus in/out, Mouse hover |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Slides container</KeyValueListItem>
+  <KeyValueListItem term="Values">`off` | `polite`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Play/Pause click, Focus in/out, Mouse hover
+  </KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Tab</kbd> | Navigate between controls (Play/Pause, tablist, Prev/Next) |
-| <kbd>ArrowRight</kbd> | Move to next slide indicator tab (loops to first) |
-| <kbd>ArrowLeft</kbd> | Move to previous slide indicator tab (loops to last) |
-| <kbd>Home</kbd> | Move focus to first slide indicator tab |
-| <kbd>End</kbd> | Move focus to last slide indicator tab |
-| <kbd>Enter / Space</kbd> | Activate focused tab or button |
+| Key                      | Action                                                     |
+| ------------------------ | ---------------------------------------------------------- |
+| <kbd>Tab</kbd>           | Navigate between controls (Play/Pause, tablist, Prev/Next) |
+| <kbd>ArrowRight</kbd>    | Move to next slide indicator tab (loops to first)          |
+| <kbd>ArrowLeft</kbd>     | Move to previous slide indicator tab (loops to last)       |
+| <kbd>Home</kbd>          | Move focus to first slide indicator tab                    |
+| <kbd>End</kbd>           | Move focus to last slide indicator tab                     |
+| <kbd>Enter / Space</kbd> | Activate focused tab or button                             |
 
-> Set aria-live to "off" during auto-rotation to prevent interrupting users. Changes to "polite" when rotation stops, allowing slide changes to be announced.
+- Set aria-live to "off" during auto-rotation to prevent interrupting users. Changes to "polite" when rotation stops, allowing slide changes to be announced.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Selected tab | tabIndex="0" |
-| Other tabs | tabIndex="-1" |
+| Event                          | Behavior                                                   |
+| ------------------------------ | ---------------------------------------------------------- |
+| Selected tab                   | `tabIndex="0"`                                             |
+| Other tabs                     | `tabIndex="-1"`                                            |
 | Keyboard focus enters carousel | Rotation pauses temporarily, aria-live changes to "polite" |
-| Keyboard focus leaves carousel | Rotation resumes (if auto-rotate mode is on) |
-| Mouse hovers over slides | Rotation pauses temporarily |
-| Mouse leaves slides | Rotation resumes (if auto-rotate mode is on) |
-| Pause button clicked | Turns off auto-rotate mode, button shows play icon |
-| Play button clicked | Turns on auto-rotate mode and starts rotation immediately |
-| prefers-reduced-motion: reduce | Auto-rotation disabled by default |
+| Keyboard focus leaves carousel | Rotation resumes (if auto-rotate mode is on)               |
+| Mouse hovers over slides       | Rotation pauses temporarily                                |
+| Mouse leaves slides            | Rotation resumes (if auto-rotate mode is on)               |
+| Pause button clicked           | Turns off auto-rotate mode, button shows play icon         |
+| Play button clicked            | Turns on auto-rotate mode and starts rotation immediately  |
+| prefers-reduced-motion: reduce | Auto-rotation disabled by default                          |
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/">WAI-ARIA APG Carousel Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/">
+    WAI-ARIA APG Carousel Pattern
+  </ExternalLink>

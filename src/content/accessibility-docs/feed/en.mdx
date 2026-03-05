@@ -4,106 +4,110 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
-| `feed` | Container element | A dynamic list of articles where scrolling may add/remove content |
-| `article` | Each article element | Independent content item within the feed |
+| Role      | Target Element       | Description                                                       |
+| --------- | -------------------- | ----------------------------------------------------------------- |
+| `feed`    | Container element    | A dynamic list of articles where scrolling may add/remove content |
+| `article` | Each article element | Independent content item within the feed                          |
 
 ### WAI-ARIA Properties
 
 #### `aria-label`
 
-Accessible name for the feed (conditional*)
+Accessible name for the feed (conditional\*)
 
-| | |
-|---|---|
-| **Values** | Text |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">Text</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
-References visible heading for the feed (conditional*)
+References visible heading for the feed (conditional\*)
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References the article title element
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 References the article description or content (recommended)
 
-| | |
-|---|---|
-| **Values** | ID reference |
-| **Required** | No |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-posinset`
 
 Position of article in the feed (starts at 1)
 
-| | |
-|---|---|
-| **Values** | Number (1-based) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (1-based)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-setsize`
 
 Total articles in feed, or -1 if unknown
 
-| | |
-|---|---|
-| **Values** | Number or -1 |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">Number or -1</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-busy`
 
-| | |
-|---|---|
-| **Target Element** | Feed container |
-| **Values** | true \| false |
-| **Required** | No |
-| **Change Trigger** | Loading starts (true), loading completes (false). Indicates when the feed is loading new content. Screen readers will wait to announce changes until loading completes. |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Feed container</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Loading starts (true), loading completes (false). Indicates when the feed is loading new
+    content. Screen readers will wait to announce changes until loading completes.
+  </KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Page Down</kbd> | Move focus to next article in the feed |
-| <kbd>Page Up</kbd> | Move focus to previous article in the feed |
-| <kbd>Ctrl + End</kbd> | Move focus to first focusable element after the feed |
+| Key                    | Action                                                |
+| ---------------------- | ----------------------------------------------------- |
+| <kbd>Page Down</kbd>   | Move focus to next article in the feed                |
+| <kbd>Page Up</kbd>     | Move focus to previous article in the feed            |
+| <kbd>Ctrl + End</kbd>  | Move focus to first focusable element after the feed  |
 | <kbd>Ctrl + Home</kbd> | Move focus to first focusable element before the feed |
 
-> Either aria-label or aria-labelledby is required on the feed container. Use aria-labelledby when a visible heading exists.
-
-> Why Page Up/Down instead of Arrow keys? Feeds contain long-form content like articles. Using Page Up/Down allows users to navigate between articles while Arrow keys remain available for reading within articles.
-
-> Set aria-busy to true when adding multiple articles to prevent premature announcements. Set to false after all DOM updates are complete.
+- Either aria-label or aria-labelledby is required on the feed container. Use aria-labelledby when a visible heading exists.
+- Why Page Up/Down instead of Arrow keys? Feeds contain long-form content like articles. Using Page Up/Down allows users to navigate between articles while Arrow keys remain available for reading within articles.
+- Set aria-busy to true when adding multiple articles to prevent premature announcements. Set to false after all DOM updates are complete.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Roving tabindex | Only one article has tabindex="0", others have tabindex="-1" |
-| Initial focus | First article has tabindex="0" by default |
-| Focus tracking | tabindex updates as focus moves between articles |
-| No wrap | Focus does not wrap from first to last article or vice versa |
-| Content inside articles | Interactive elements inside articles remain keyboard accessible |
+| Event                   | Behavior                                                         |
+| ----------------------- | ---------------------------------------------------------------- |
+| Roving tabindex         | Only one article has `tabindex="0"`, others have `tabindex="-1"` |
+| Initial focus           | First article has `tabindex="0"` by default                      |
+| Focus tracking          | tabindex updates as focus moves between articles                 |
+| No wrap                 | Focus does not wrap from first to last article or vice versa     |
+| Content inside articles | Interactive elements inside articles remain keyboard accessible  |
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/">WAI-ARIA APG Feed Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/feed/">
+    WAI-ARIA APG Feed Pattern
+  </ExternalLink>

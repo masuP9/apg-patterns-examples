@@ -4,6 +4,7 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
@@ -19,28 +20,28 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 カスタムボタン要素をキーボードナビゲーションでフォーカス可能にします。ネイティブの `<button>` はデフォルトでフォーカス可能です。無効時は -1 に設定します。
 
-|          |                            |
-| -------- | -------------------------- |
-| **値**   | `"0"` \| `"-1"`            |
-| **必須** | はい（カスタム実装の場合） |
+<KeyValueList>
+  <KeyValueListItem term="値">`0` | `-1`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（カスタム実装の場合）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 ボタンがインタラクティブでなく、アクティブ化できないことを示します。ネイティブの `<button disabled>` はこれを自動的に処理します。
 
-|          |                       |
-| -------- | --------------------- |
-| **値**   | `"true"` \| `"false"` |
-| **必須** | いいえ（無効時のみ）  |
+<KeyValueList>
+  <KeyValueListItem term="値">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ（無効時のみ）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 アイコンのみのボタンや、表示テキストが不十分な場合にアクセシブルな名前を提供します。
 
-|          |                                          |
-| -------- | ---------------------------------------- |
-| **値**   | アクションを説明するテキスト文字列       |
-| **必須** | いいえ（アイコンのみのボタンの場合のみ） |
+<KeyValueList>
+  <KeyValueListItem term="値">アクションを説明するテキスト文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ（アイコンのみのボタンの場合のみ）</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 

@@ -4,13 +4,14 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `radiogroup` | コンテナ要素 | ラジオボタンをグループ化します。aria-labelまたはaria-labelledbyでアクセシブルな名前を持つ必要があります。 |
-| `radio` | 各オプション要素 | 要素をラジオボタンとして識別します。グループ内で一度にチェックできるのは1つのラジオのみです。 |
+| ロール       | 対象要素         | 説明                                                                                                      |
+| ------------ | ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `radiogroup` | コンテナ要素     | ラジオボタンをグループ化します。aria-labelまたはaria-labelledbyでアクセシブルな名前を持つ必要があります。 |
+| `radio`      | 各オプション要素 | 要素をラジオボタンとして識別します。グループ内で一度にチェックできるのは1つのラジオのみです。             |
 
 ### WAI-ARIA プロパティ
 
@@ -18,65 +19,63 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ラジオグループの方向を示します。デフォルトは縦方向です。横方向の場合のみ設定します。
 
-| | |
-|---|---|
-| **値** | horizontal \| vertical |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">horizontal | vertical</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 ラジオグループのアクセシブルな名前
 
-| | |
-|---|---|
-| **値** | String |
-| **必須** | はい（またはaria-labelledby） |
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（またはaria-labelledby）</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 aria-labelの代替
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい（またはaria-label） |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（またはaria-label）</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA ステート
 
 #### `aria-checked`
 
-| | |
-|---|---|
-| **対象要素** | 各ラジオ |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | Click、Space、矢印キー |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">各ラジオ</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">Click、Space、矢印キー</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
-| | |
-|---|---|
-| **対象要素** | 無効化されたラジオ |
-| **値** | true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">無効化されたラジオ</KeyValueListItem>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
-| <kbd>Tab</kbd> | グループにフォーカスを移動（選択された、または最初のラジオへ） |
-| <kbd>Shift + Tab</kbd> | グループからフォーカスを移動 |
-| <kbd>Space</kbd> | フォーカスされたラジオを選択（選択解除はしない） |
-| <kbd>ArrowDown / ArrowRight</kbd> | 次のラジオに移動して選択（最初に戻る） |
-| <kbd>ArrowUp / ArrowLeft</kbd> | 前のラジオに移動して選択（最後に戻る） |
-| <kbd>Home</kbd> | 最初のラジオに移動して選択 |
-| <kbd>End</kbd> | 最後のラジオに移動して選択 |
+| キー                              | アクション                                                     |
+| --------------------------------- | -------------------------------------------------------------- |
+| <kbd>Tab</kbd>                    | グループにフォーカスを移動（選択された、または最初のラジオへ） |
+| <kbd>Shift + Tab</kbd>            | グループからフォーカスを移動                                   |
+| <kbd>Space</kbd>                  | フォーカスされたラジオを選択（選択解除はしない）               |
+| <kbd>ArrowDown / ArrowRight</kbd> | 次のラジオに移動して選択（最初に戻る）                         |
+| <kbd>ArrowUp / ArrowLeft</kbd>    | 前のラジオに移動して選択（最後に戻る）                         |
+| <kbd>Home</kbd>                   | 最初のラジオに移動して選択                                     |
+| <kbd>End</kbd>                    | 最後のラジオに移動して選択                                     |
 
-> Checkboxとは異なり、矢印キーはフォーカスの移動と選択の変更の両方を行います。
-
-> 無効化されたラジオはナビゲーション中にスキップされます。
-
-> この実装は、一貫したクロスブラウザキーボード動作のためにカスタムrole="radiogroup"とrole="radio"を使用します。ネイティブ`<input type="radio">`はこれらのロールを暗黙的に提供します。
+- Checkboxとは異なり、矢印キーはフォーカスの移動と選択の変更の両方を行います。
+- 無効化されたラジオはナビゲーション中にスキップされます。
+- この実装は、一貫したクロスブラウザキーボード動作のためにカスタムrole="radiogroup"とrole="radio"を使用します。ネイティブ`<input type="radio">`はこれらのロールを暗黙的に提供します。
 
 ### アクセシブルな名前
 
@@ -88,13 +87,13 @@ aria-labelの代替
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| Roving tabindex | グループ内で一度に1つのラジオのみがTab可能 |
-| 選択されたラジオ | `tabindex="0"`を持つ |
-| 選択がない場合 | 最初の有効なラジオが`tabindex="0"`を持つ |
-| 他のすべてのラジオ | `tabindex="-1"`を持つ |
-| 無効化されたラジオ | 常に`tabindex="-1"`を持つ |
+| イベント           | 振る舞い                                   |
+| ------------------ | ------------------------------------------ |
+| Roving tabindex    | グループ内で一度に1つのラジオのみがTab可能 |
+| 選択されたラジオ   | `tabindex="0"`を持つ                       |
+| 選択がない場合     | 最初の有効なラジオが`tabindex="0"`を持つ   |
+| 他のすべてのラジオ | `tabindex="-1"`を持つ                      |
+| 無効化されたラジオ | 常に`tabindex="-1"`を持つ                  |
 
 ### ビジュアルデザイン
 
@@ -107,7 +106,13 @@ aria-labelの代替
 
 ### 参考資料
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">WAI-ARIA APG: Radio Group Pattern</ExternalLink>
-- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio">MDN: &lt;input type="radio"&gt;</ExternalLink>
-- <ExternalLink href="https://w3c.github.io/aria/#radiogroup">W3C ARIA: radiogroup role</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">
+    WAI-ARIA APG: Radio Group Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio">
+    MDN: &lt;input type="radio"&gt;
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#radiogroup">
+    W3C ARIA: radiogroup role
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#radio">W3C ARIA: radio role</ExternalLink>

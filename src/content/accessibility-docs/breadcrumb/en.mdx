@@ -4,11 +4,12 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role         | Target Element  | Description                                                                        |
+| ------------ | --------------- | ---------------------------------------------------------------------------------- |
 | `navigation` | `<nav>` element | Provides a navigation landmark for assistive technology (implicit role of `<nav>`) |
 
 ### WAI-ARIA Properties
@@ -17,40 +18,46 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Labels the navigation landmark for screen readers
 
-| | |
-|---|---|
-| **Values** | "Breadcrumb" (or localized) |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">`Breadcrumb` (or localized)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-current`
 
 Identifies the current page within the breadcrumb trail
 
-| | |
-|---|---|
-| **Values** | "page" |
-| **Required** | Yes (on last item) |
+<KeyValueList>
+  <KeyValueListItem term="Values">`page`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (on last item)</KeyValueListItem>
+</KeyValueList>
 
 ### WAI-ARIA States
 
 #### `aria-current`
 
-| | |
-|---|---|
-| **Target Element** | Last item in the breadcrumb (current page) |
-| **Values** | "page" |
-| **Required** | Yes |
-| **Change Trigger** | Indicates the current page location within the breadcrumb navigation. |
+<KeyValueList>
+  <KeyValueListItem term="Target Element">
+    Last item in the breadcrumb (current page)
+  </KeyValueListItem>
+  <KeyValueListItem term="Values">`page`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Indicates the current page location within the breadcrumb navigation.
+  </KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Tab</kbd> | Move focus between breadcrumb links |
-| <kbd>Enter</kbd> | Activate the focused link |
+| Key              | Action                              |
+| ---------------- | ----------------------------------- |
+| <kbd>Tab</kbd>   | Move focus between breadcrumb links |
+| <kbd>Enter</kbd> | Activate the focused link           |
 
-> Breadcrumb uses native `<a>` element behavior for keyboard interaction. No additional keyboard handlers are required.
+- Breadcrumb uses native `<a>` element behavior for keyboard interaction. No additional keyboard handlers are required.
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">WAI-ARIA Breadcrumb Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">
+    WAI-ARIA Breadcrumb Pattern
+  </ExternalLink>

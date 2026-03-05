@@ -4,36 +4,35 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
+| ロール   | 対象要素   | 説明                                                               |
+| -------- | ---------- | ------------------------------------------------------------------ |
 | `button` | ボタン要素 | アクティブ化されたときにアクションをトリガーするウィジェットを示す |
 
 ### WAI-ARIA ステート
 
 #### `aria-pressed`
 
-| | |
-|---|---|
-| **対象要素** | ボタン |
-| **値** | true \| false |
-| **必須** | はい |
-| **変更トリガー** | クリック、Enter、Space |
+<KeyValueList>
+  <KeyValueListItem term="対象要素">ボタン</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Enter、Space</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
-| キー | アクション |
-|------|------|
+| キー             | アクション               |
+| ---------------- | ------------------------ |
 | <kbd>Space</kbd> | ボタンの状態を切り替える |
 | <kbd>Enter</kbd> | ボタンの状態を切り替える |
 
-> トグルボタンには表示されるラベルテキスト、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
-
-> type="button"を使用して誤ったフォーム送信を防ぎます。
-
-> 3状態ボタンでは部分的に選択された状態（例：一部のアイテムが選択された「すべて選択」）に aria-pressed="mixed" を使用できます。
+- トグルボタンには表示されるラベルテキスト、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
+- type="button"を使用して誤ったフォーム送信を防ぎます。
+- 3状態ボタンでは部分的に選択された状態（例：一部のアイテムが選択された「すべて選択」）に aria-pressed="mixed" を使用できます。
 
 ### 実装ノート
 

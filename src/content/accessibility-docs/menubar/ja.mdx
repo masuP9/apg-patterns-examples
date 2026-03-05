@@ -4,19 +4,20 @@ locale: ja
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA ロール
 
-| ロール | 対象要素 | 説明 |
-|------|------|------|
-| `menubar` | 水平コンテナ（`<ul>`） | トップレベルのメニューバー（常に表示） |
-| `menu` | 垂直コンテナ（`<ul>`） | ドロップダウンメニューまたはサブメニュー |
-| `menuitem` | アイテム（`<span>`） | 標準的なアクションアイテム |
-| `menuitemcheckbox` | チェックボックスアイテム | トグル可能なオプション |
-| `menuitemradio` | ラジオアイテム | グループ内の排他的なオプション |
-| `separator` | 区切り線（`<hr>`） | 視覚的な区切り（フォーカス不可） |
-| `group` | グループコンテナ | ラジオアイテムをラベル付きでグループ化 |
-| `none` | `<li>` elements | スクリーンリーダーからリストセマンティクスを隠す |
+| ロール             | 対象要素                 | 説明                                             |
+| ------------------ | ------------------------ | ------------------------------------------------ |
+| `menubar`          | 水平コンテナ（`<ul>`）   | トップレベルのメニューバー（常に表示）           |
+| `menu`             | 垂直コンテナ（`<ul>`）   | ドロップダウンメニューまたはサブメニュー         |
+| `menuitem`         | アイテム（`<span>`）     | 標準的なアクションアイテム                       |
+| `menuitemcheckbox` | チェックボックスアイテム | トグル可能なオプション                           |
+| `menuitemradio`    | ラジオアイテム           | グループ内の排他的なオプション                   |
+| `separator`        | 区切り線（`<hr>`）       | 視覚的な区切り（フォーカス不可）                 |
+| `group`            | グループコンテナ         | ラジオアイテムをラベル付きでグループ化           |
+| `none`             | `<li>` elements          | スクリーンリーダーからリストセマンティクスを隠す |
 
 ### WAI-ARIA プロパティ
 
@@ -24,108 +25,107 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 アイテムがメニューを開くことを示す（"true"ではなく"menu"を使用）
 
-| | |
-|---|---|
-| **値** | "menu" |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">`menu`</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-expanded`
 
 メニューが開いているかどうかを示す
 
-| | |
-|---|---|
-| **値** | true \| false |
-| **必須** | はい* |
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 親のmenuitemを参照する
 
-| | |
-|---|---|
-| **値** | ID参照 |
-| **必須** | はい** |
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい**</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-label`
 
 アクセシブルな名前を提供する
 
-| | |
-|---|---|
-| **値** | 文字列 |
-| **必須** | はい** |
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">はい**</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-checked`
 
 チェック状態を示す
 
-| | |
-|---|---|
-| **値** | true \| false |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-disabled`
 
 アイテムが無効であることを示す
 
-| | |
-|---|---|
-| **値** | true |
-| **必須** | いいえ |
+<KeyValueList>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-hidden`
 
 閉じているときメニューをスクリーンリーダーから隠す
 
-| | |
-|---|---|
-| **値** | true \| false |
-| **必須** | はい |
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
 
 ### キーボードサポート
 
 #### メニューバーナビゲーション
 
-| キー | アクション |
-|------|------|
-| <kbd>Right Arrow</kbd> | 次のメニューバーアイテムにフォーカスを移動（最後から最初にラップ） |
-| <kbd>Left Arrow</kbd> | 前のメニューバーアイテムにフォーカスを移動（最初から最後にラップ） |
-| <kbd>Down Arrow</kbd> | サブメニューを開き、最初のアイテムにフォーカス |
-| <kbd>Up Arrow</kbd> | サブメニューを開き、最後のアイテムにフォーカス |
-| <kbd>Enter / Space</kbd> | サブメニューを開き、最初のアイテムにフォーカス |
-| <kbd>Home</kbd> | 最初のメニューバーアイテムにフォーカスを移動 |
-| <kbd>End</kbd> | 最後のメニューバーアイテムにフォーカスを移動 |
-| <kbd>Tab</kbd> | すべてのメニューを閉じてフォーカスを外に移動 |
+| キー                     | アクション                                                         |
+| ------------------------ | ------------------------------------------------------------------ |
+| <kbd>Right Arrow</kbd>   | 次のメニューバーアイテムにフォーカスを移動（最後から最初にラップ） |
+| <kbd>Left Arrow</kbd>    | 前のメニューバーアイテムにフォーカスを移動（最初から最後にラップ） |
+| <kbd>Down Arrow</kbd>    | サブメニューを開き、最初のアイテムにフォーカス                     |
+| <kbd>Up Arrow</kbd>      | サブメニューを開き、最後のアイテムにフォーカス                     |
+| <kbd>Enter / Space</kbd> | サブメニューを開き、最初のアイテムにフォーカス                     |
+| <kbd>Home</kbd>          | 最初のメニューバーアイテムにフォーカスを移動                       |
+| <kbd>End</kbd>           | 最後のメニューバーアイテムにフォーカスを移動                       |
+| <kbd>Tab</kbd>           | すべてのメニューを閉じてフォーカスを外に移動                       |
 
 #### メニュー/サブメニューナビゲーション
 
-| キー | アクション |
-|------|------|
-| <kbd>Down Arrow</kbd> | 次のアイテムにフォーカスを移動（最後から最初にラップ） |
-| <kbd>Up Arrow</kbd> | 前のアイテムにフォーカスを移動（最初から最後にラップ） |
-| <kbd>Right Arrow</kbd> | サブメニューがあれば開く、またはトップレベルメニューでは次のメニューバーアイテムのメニューに移動 |
-| <kbd>Left Arrow</kbd> | サブメニューを閉じて親に戻る、またはトップレベルメニューでは前のメニューバーアイテムのメニューに移動 |
+| キー                     | アクション                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| <kbd>Down Arrow</kbd>    | 次のアイテムにフォーカスを移動（最後から最初にラップ）                                                  |
+| <kbd>Up Arrow</kbd>      | 前のアイテムにフォーカスを移動（最初から最後にラップ）                                                  |
+| <kbd>Right Arrow</kbd>   | サブメニューがあれば開く、またはトップレベルメニューでは次のメニューバーアイテムのメニューに移動        |
+| <kbd>Left Arrow</kbd>    | サブメニューを閉じて親に戻る、またはトップレベルメニューでは前のメニューバーアイテムのメニューに移動    |
 | <kbd>Enter / Space</kbd> | アイテムを実行してメニューを閉じる；チェックボックス/ラジオは状態を切り替えてメニューを開いたままにする |
-| <kbd>Escape</kbd> | メニューを閉じてフォーカスを親（メニューバーアイテムまたは親menuitem）に戻す |
-| <kbd>Home</kbd> | 最初のアイテムにフォーカスを移動 |
-| <kbd>End</kbd> | 最後のアイテムにフォーカスを移動 |
-| <kbd>Character</kbd> | 先行入力: 入力された文字で始まるアイテムにフォーカスを移動 |
+| <kbd>Escape</kbd>        | メニューを閉じてフォーカスを親（メニューバーアイテムまたは親menuitem）に戻す                            |
+| <kbd>Home</kbd>          | 最初のアイテムにフォーカスを移動                                                                        |
+| <kbd>End</kbd>           | 最後のアイテムにフォーカスを移動                                                                        |
+| <kbd>Character</kbd>     | 先行入力: 入力された文字で始まるアイテムにフォーカスを移動                                              |
 
-> 閉じているとき、メニューはaria-hidden="true"とCSSを使用して、スクリーンリーダーから隠す（aria-hidden）、視覚的に隠す（visibility: hidden）、ポインター操作を防ぐ（pointer-events: none）、開閉時のスムーズなCSSアニメーションを可能にします。
-
-> 開いているとき、メニューはaria-hidden="false"とvisibility: visibleになります。
+- 閉じているとき、メニューはaria-hidden="true"とCSSを使用して、スクリーンリーダーから隠す（aria-hidden）、視覚的に隠す（visibility: hidden）、ポインター操作を防ぐ（pointer-events: none）、開閉時のスムーズなCSSアニメーションを可能にします。
+- 開いているとき、メニューはaria-hidden="false"とvisibility: visibleになります。
 
 ### フォーカス管理
 
-| イベント | 振る舞い |
-|------|------|
-| 初期フォーカス | 一度に1つのメニューバーアイテムのみがtabindex="0"を持つ |
-| その他のアイテム | その他のアイテムはtabindex="-1"を持つ |
-| 矢印キーナビゲーション | 矢印キーでアイテム間のフォーカス移動（ラップあり） |
-| 無効なアイテム | 無効なアイテムはフォーカス可能だが実行不可（APG推奨） |
-| 区切り線 | 区切り線はフォーカス不可 |
-| メニューを閉じる | メニューが閉じると、フォーカスは呼び出し元に戻る |
+| イベント               | 振る舞い                                                  |
+| ---------------------- | --------------------------------------------------------- |
+| 初期フォーカス         | 一度に1つのメニューバーアイテムのみが`tabindex="0"`を持つ |
+| その他のアイテム       | その他のアイテムは`tabindex="-1"`を持つ                   |
+| 矢印キーナビゲーション | 矢印キーでアイテム間のフォーカス移動（ラップあり）        |
+| 無効なアイテム         | 無効なアイテムはフォーカス可能だが実行不可（APG推奨）     |
+| 区切り線               | 区切り線はフォーカス不可                                  |
+| メニューを閉じる       | メニューが閉じると、フォーカスは呼び出し元に戻る          |
 
 ### 参考資料
 

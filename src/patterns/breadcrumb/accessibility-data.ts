@@ -364,10 +364,22 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
       category: 'aria',
     },
     { description: 'Last item has aria-current="page"', priority: 'high', category: 'aria' },
-    { description: 'Links use native <code>&lt;a&gt;</code> elements', priority: 'high', category: 'aria' },
+    {
+      description: 'Links use native <code>&lt;a&gt;</code> elements',
+      priority: 'high',
+      category: 'aria',
+    },
     // High Priority: Structure
-    { description: 'Uses ordered list (<code>&lt;ol&gt;</code>) for hierarchy', priority: 'high', category: 'aria' },
-    { description: 'Each breadcrumb is a list item (<code>&lt;li&gt;</code>)', priority: 'high', category: 'aria' },
+    {
+      description: 'Uses ordered list (<code>&lt;ol&gt;</code>) for hierarchy',
+      priority: 'high',
+      category: 'aria',
+    },
+    {
+      description: 'Each breadcrumb is a list item (<code>&lt;li&gt;</code>)',
+      priority: 'high',
+      category: 'aria',
+    },
     {
       description: 'Current page is identifiable (text or aria-current)',
       priority: 'high',

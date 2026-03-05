@@ -4,11 +4,12 @@ locale: en
 ---
 
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role          | Target Element   | Description                                                                                                                                                                 |
+| ------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `alertdialog` | Dialog container | A type of dialog that interrupts the user's workflow to communicate an important message and require a response. May trigger system alert sounds in assistive technologies. |
 
 ### WAI-ARIA Properties
@@ -17,58 +18,56 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 Provided automatically by showModal(). No explicit attribute needed when using native `<dialog>` element.
 
-| | |
-|---|---|
-| **Values** | true |
-| **Required** | Implicit |
+<KeyValueList>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">Implicit</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-labelledby`
 
 References the alert dialog title
 
-| | |
-|---|---|
-| **Values** | ID reference to title element |
-| **Required** | Yes |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to title element</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
 
 #### `aria-describedby`
 
 References the alert message. Unlike regular Dialog, this is required for Alert Dialog as the message is central to the user's understanding of what action is being confirmed.
 
-| | |
-|---|---|
-| **Values** | ID reference to message |
-| **Required** | Yes (required) |
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to message</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (required)</KeyValueListItem>
+</KeyValueList>
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
-| <kbd>Tab</kbd> | Move focus to next focusable element within dialog. When focus is on the last element, moves to first. |
-| <kbd>Shift + Tab</kbd> | Move focus to previous focusable element within dialog. When focus is on the first element, moves to last. |
-| <kbd>Escape</kbd> | Disabled by default. Unlike regular Dialog, Alert Dialog prevents Escape key closure to ensure users explicitly respond to the alert. Can be enabled via allowEscapeClose prop for non-critical alerts. |
-| <kbd>Enter</kbd> | Activates the focused button |
-| <kbd>Space</kbd> | Activates the focused button |
+| Key                    | Action                                                                                                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <kbd>Tab</kbd>         | Move focus to next focusable element within dialog. When focus is on the last element, moves to first.                                                                                                  |
+| <kbd>Shift + Tab</kbd> | Move focus to previous focusable element within dialog. When focus is on the first element, moves to last.                                                                                              |
+| <kbd>Escape</kbd>      | Disabled by default. Unlike regular Dialog, Alert Dialog prevents Escape key closure to ensure users explicitly respond to the alert. Can be enabled via allowEscapeClose prop for non-critical alerts. |
+| <kbd>Enter</kbd>       | Activates the focused button                                                                                                                                                                            |
+| <kbd>Space</kbd>       | Activates the focused button                                                                                                                                                                            |
 
-> Alert Dialog is for critical messages that require user acknowledgment or a decision. For general content, use regular Dialog.
-
-> The alertdialog role may cause assistive technologies to announce the dialog more urgently or with an alert sound.
-
-> Both title and message are required to provide complete context for the user's decision.
-
-> The Cancel button should always be the safest choice (no destructive action).
-
-> Consider using the danger variant for destructive actions to provide visual distinction.
+- Alert Dialog is for critical messages that require user acknowledgment or a decision. For general content, use regular Dialog.
+- The alertdialog role may cause assistive technologies to announce the dialog more urgently or with an alert sound.
+- Both title and message are required to provide complete context for the user's decision.
+- The Cancel button should always be the safest choice (no destructive action).
+- Consider using the danger variant for destructive actions to provide visual distinction.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Dialog opens | Focus moves to the Cancel button (safest action). This differs from regular Dialog which focuses the first focusable element. |
-| Dialog closes | Focus returns to the element that triggered the dialog |
-| Focus trap | Tab/Shift+Tab cycles through focusable elements within the dialog only |
-| Background | Content outside dialog is made inert (not focusable or interactive) |
+| Event         | Behavior                                                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Dialog opens  | Focus moves to the Cancel button (safest action). This differs from regular Dialog which focuses the first focusable element. |
+| Dialog closes | Focus returns to the element that triggered the dialog                                                                        |
+| Focus trap    | Tab/Shift+Tab cycles through focusable elements within the dialog only                                                        |
+| Background    | Content outside dialog is made inert (not focusable or interactive)                                                           |
 
 ### References
 
-- <ExternalLink href="https://w3c.github.io/aria/#alertdialog">WAI-ARIA alertdialog role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#alertdialog">
+    WAI-ARIA alertdialog role
+  </ExternalLink>

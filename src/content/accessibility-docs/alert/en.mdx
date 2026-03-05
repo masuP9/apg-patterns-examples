@@ -7,33 +7,33 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 
 ### WAI-ARIA Roles
 
-| Role | Target Element | Description |
-|------|------|------|
+| Role    | Target Element  | Description                                                                                                            |
+| ------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `alert` | Alert container | An element that displays a brief, important message that attracts the user's attention without interrupting their task |
 
 ### Implicit ARIA Properties
 
-| Attribute | Implicit Value | Description |
-|------|------|------|
-| `aria-live` | `assertive` | Interrupts screen reader to announce immediately |
-| `aria-atomic` | `true` | Announces entire alert content, not just changed parts |
+| Attribute     | Implicit Value | Description                                            |
+| ------------- | -------------- | ------------------------------------------------------ |
+| `aria-live`   | `assertive`    | Interrupts screen reader to announce immediately       |
+| `aria-atomic` | `true`         | Announces entire alert content, not just changed parts |
 
 ### Keyboard Support
 
-| Key | Action |
-|------|------|
+| Key              | Action                                    |
+| ---------------- | ----------------------------------------- |
 | <kbd>Enter</kbd> | Activates the dismiss button (if present) |
 | <kbd>Space</kbd> | Activates the dismiss button (if present) |
 
-> Screen readers detect changes to live regions by observing DOM mutations inside them. If the live region itself is added dynamically, some screen readers may not announce the content reliably.
+- Screen readers detect changes to live regions by observing DOM mutations inside them. If the live region itself is added dynamically, some screen readers may not announce the content reliably.
 
 ### Focus Management
 
-| Event | Behavior |
-|------|------|
-| Alert must NOT move focus | Alerts are non-modal and should not interrupt user workflow by stealing focus |
-| Alert container is not focusable | The alert element should not have tabindex or receive keyboard focus |
-| Dismiss button is focusable | If present, the dismiss button can be reached via Tab navigation |
+| Event                            | Behavior                                                                      |
+| -------------------------------- | ----------------------------------------------------------------------------- |
+| Alert must NOT move focus        | Alerts are non-modal and should not interrupt user workflow by stealing focus |
+| Alert container is not focusable | The alert element should not have tabindex or receive keyboard focus          |
+| Dismiss button is focusable      | If present, the dismiss button can be reached via Tab navigation              |
 
 ### Implementation Notes
 
@@ -75,10 +75,14 @@ Alert component structure and announcement behavior
 
 ### Important Notes
 
-> The live region container (role="alert") must exist in the DOM from page load. Do NOT dynamically add/remove the container itself. Only the content inside the container should change dynamically.
+- The live region container (role="alert") must exist in the DOM from page load. Do NOT dynamically add/remove the container itself. Only the content inside the container should change dynamically.
 
 ### References
 
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">WAI-ARIA APG: Alert Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">
+    WAI-ARIA APG: Alert Pattern
+  </ExternalLink>
 - <ExternalLink href="https://w3c.github.io/aria/#alert">WAI-ARIA: alert role</ExternalLink>
-- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/">WAI-ARIA APG: Alert Dialog Pattern</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/">
+    WAI-ARIA APG: Alert Dialog Pattern
+  </ExternalLink>
