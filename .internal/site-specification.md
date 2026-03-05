@@ -209,21 +209,8 @@ import FeedDemo from '@patterns/feed/FeedDemo.tsx';
 ```
 src/
 ├── components/
-│   ├── patterns/                    # APG パターン実装
-│   │   ├── button/
-│   │   │   ├── ToggleButton.tsx     # React コンポーネント
-│   │   │   ├── ToggleButton.vue     # Vue コンポーネント
-│   │   │   ├── ToggleButton.svelte  # Svelte コンポーネント
-│   │   │   ├── ToggleButton.astro   # Astro コンポーネント（Web Components）
-│   │   │   ├── ToggleButtonDemo.tsx
-│   │   │   ├── ToggleButtonDemo.vue
-│   │   │   └── ToggleButtonDemo.svelte
-│   │   └── tabs/
-│   │       └── ...
 │   └── ui/                          # サイト UI（shadcn/ui ベース）
 │       ├── button.tsx               # shadcn/ui
-│       ├── dropdown-menu.tsx        # shadcn/ui
-│       ├── ...                      # その他 shadcn/ui コンポーネント
 │       ├── Header.astro
 │       ├── Footer.astro
 │       ├── FrameworkSelector.astro
@@ -231,29 +218,40 @@ src/
 │       ├── CodeBlock.astro
 │       ├── ThemeToggle.astro
 │       └── Search.astro
+├── patterns/                        # APG パターン実装
+│   └── button/                      # 例: button パターン
+│       ├── meta.ts                  # パターンメタデータ（単一の真実源）
+│       ├── DemoSection.astro        # 全フレームワーク統合デモ
+│       ├── TestingDocs.astro        # テストドキュメント
+│       ├── Button.tsx               # React 実装
+│       ├── Button.vue               # Vue 実装
+│       ├── Button.svelte            # Svelte 実装
+│       ├── Button.astro             # Astro 実装（Web Components）
+│       ├── ButtonDemo.tsx           # デモラッパー（必要時）
+│       ├── Button.test.tsx          # テスト
+│       └── button.md               # AI向け定義ファイル
 ├── content/
-│   └── patterns/
-│       ├── button/
-│       │   ├── index.mdx            # 共通コンテンツ
-│       │   ├── react.mdx
-│       │   ├── vue.mdx
-│       │   └── svelte.mdx
-│       └── tabs/
-│           └── ...
+│   └── accessibility-docs/          # アクセシビリティ解説（MDX）
+│       └── button/
+│           ├── en.mdx
+│           └── ja.mdx
 ├── layouts/
 │   ├── BaseLayout.astro
 │   └── PatternLayout.astro
 ├── lib/
-│   └── frameworks.ts            # フレームワーク定義の一元管理
+│   ├── frameworks.ts                # フレームワーク定義の一元管理
+│   └── pattern-meta-types.ts        # PatternMeta 型定義
 ├── pages/
 │   ├── index.astro
 │   ├── patterns/
+│   │   ├── [pattern]/
+│   │   │   └── [framework]/
+│   │   │       └── index.astro      # 動的ルーティング（en）
+│   │   └── index.astro
+│   ├── ja/patterns/
 │   │   └── [pattern]/
-│   │       ├── index.astro          # リダイレクト
-│   │       ├── react/
-│   │       ├── vue/
-│   │       ├── svelte/
-│   │       └── astro/
+│   │       └── [framework]/
+│   │           └── index.astro      # 動的ルーティング（ja）
 │   ├── guide/
 │   └── about.astro
 ├── i18n/                            # 多言語対応
@@ -263,6 +261,14 @@ src/
     └── global.css
 ```
 
+### データ駆動アーキテクチャ
+
+各パターンの `meta.ts` が `PatternMeta` 型でメタデータを一元定義する。動的ルーティング（`[pattern]/[framework]/index.astro`）が `import.meta.glob()` で全パターンの `meta.ts` を検出し、`getStaticPaths()` で 4フレームワーク × 2言語 のページをビルド時に生成する。
+
+- **`meta.ts`**: タイトル、説明、TOC、リソース、フレームワーク別 API ドキュメント。全テキストは `Record<Locale, string>` で i18n 対応
+- **`DemoSection.astro`**: 4フレームワークの実装を静的 import し、`framework` prop で切り替え表示
+- **`content/accessibility-docs/`**: MDX でアクセシビリティ解説を記述。frontmatter は `pattern` と `locale` のみ
+
 ---
 
 ## コード表示
@@ -270,11 +276,11 @@ src/
 ### 実装方式
 
 ```typescript
-// ソースファイルを ?raw で読み込み
-import toggleButtonCode from '../components/patterns/button/ToggleButton.tsx?raw';
+// 動的ルーティングでは import.meta.glob で ?raw 読み込み
+const rawModules = import.meta.glob('/src/patterns/**/*.{tsx,vue,svelte,astro}', { query: '?raw' });
 
-// Astro の Code コンポーネントで表示
-<Code code={toggleButtonCode} lang="tsx" />
+// 静的 import の場合
+import toggleButtonCode from '@patterns/button/Button.tsx?raw';
 ```
 
 ### 要件

@@ -23,6 +23,7 @@
 | デモ           | React / Vue / Svelte / Astro   |
 | スタイリング   | Tailwind CSS + shadcn/ui       |
 | コード表示     | Shiki                          |
+| フォーマット   | Prettier + @takazudo/mdx-formatter |
 | テスト         | Vitest + Playwright            |
 | 検索           | Pagefind                       |
 | 多言語         | Astro i18n                     |
@@ -37,35 +38,48 @@ src/
 ├── components/                # サイト UI (shadcn/ui)
 │   └── ui/
 ├── lib/                       # ユーティリティ
-│   └── frameworks.ts          # フレームワーク定義の一元管理
+│   ├── frameworks.ts          # フレームワーク定義の一元管理
+│   └── pattern-meta-types.ts  # PatternMeta 型定義
 ├── patterns/                  # APG パターン実装
-│   ├── button/
-│   │   ├── ToggleButton.tsx
-│   │   ├── ToggleButton.vue
-│   │   ├── ToggleButton.svelte
-│   │   ├── ToggleButton.astro  # Web Components
-│   │   └── AccessibilityDocs.astro
-│   └── tabs/
-│       ├── Tabs.tsx
-│       ├── Tabs.vue
-│       ├── Tabs.svelte
-│       ├── Tabs.astro          # Web Components
-│       └── AccessibilityDocs.astro
+│   └── button/                # 例: button パターン
+│       ├── meta.ts            # パターンメタデータ（単一の真実源）
+│       ├── DemoSection.astro  # 全フレームワーク統合デモ
+│       ├── TestingDocs.astro  # テストドキュメント
+│       ├── Button.tsx         # React 実装
+│       ├── Button.vue         # Vue 実装
+│       ├── Button.svelte      # Svelte 実装
+│       ├── Button.astro       # Astro 実装（Web Components）
+│       ├── ButtonDemo.tsx     # React デモラッパー（必要時）
+│       ├── Button.test.tsx    # テスト
+│       └── button.md          # AI向け定義ファイル（llm.md）
 ├── content/
-│   └── patterns/              # MDX コンテンツ
+│   └── accessibility-docs/    # アクセシビリティ解説（MDX）
+│       └── button/
+│           ├── en.mdx         # 英語
+│           └── ja.mdx         # 日本語
 ├── layouts/
 ├── pages/
 │   ├── patterns/
+│   │   ├── [pattern]/
+│   │   │   └── [framework]/
+│   │   │       └── index.astro  # 動的ルーティング（en）
+│   │   └── index.astro          # パターン一覧
+│   ├── ja/patterns/
 │   │   └── [pattern]/
-│   │       ├── index.astro    # リダイレクト
-│   │       ├── react/
-│   │       ├── vue/
-│   │       ├── svelte/
-│   │       └── astro/
+│   │       └── [framework]/
+│   │           └── index.astro  # 動的ルーティング（ja）
 │   └── ...
 ├── i18n/
 └── styles/
 ```
+
+### データ駆動アーキテクチャ
+
+各パターンの `meta.ts` が単一の真実源（Single Source of Truth）となる。1つの `meta.ts` から 4フレームワーク × 2言語 = 8ページが動的に生成される。
+
+- **`meta.ts`**: タイトル、説明、TOC、リソース、フレームワーク別メタデータ（ソースファイル、API Props/Events/Slots）を `PatternMeta` 型で定義。全テキストは `Record<Locale, string>` で i18n 対応
+- **`DemoSection.astro`**: 4フレームワークの実装を静的 import し、`framework` prop で切り替えて表示
+- **動的ルーティング**: `[pattern]/[framework]/index.astro` が `import.meta.glob()` で全パターンの `meta.ts` を検出し、`getStaticPaths()` でビルド時にページ生成
 
 **パスエイリアス**（tsconfig.json）:
 
@@ -149,7 +163,7 @@ defineOptions({ inheritAttrs: false })
 
 #### 3. AccessibilityDocs 構成
 
-各パターンの `AccessibilityDocs.astro` は以下のセクション構成で作成する:
+各パターンのアクセシビリティ解説は `src/content/accessibility-docs/{pattern}/{en,ja}.mdx` に MDX で記述する。`TestingDocs.astro` がこれを読み込んで表示する。以下のセクション構成で作成する:
 
 1. **Native HTML Considerations** (該当パターンのみ)
    - ネイティブ HTML 要素の推奨（例: `<a>`, `<table>`, `<input type="number">`）
@@ -336,7 +350,9 @@ npm run test:watch    # ウォッチモード
 npm run test:coverage # カバレッジ
 
 # フォーマット
-npm run format
+npm run format           # Prettier + mdx-formatter（並列実行）
+npm run format:mdx       # MDX のみ（mdx-formatter）
+npm run format:mdx:check # MDX フォーマットチェック
 
 # リント
 npm run lint            # 全チェック（並列実行）

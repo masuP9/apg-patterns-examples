@@ -125,14 +125,18 @@ git rebase upstream/main
 
 ### Code Formatting
 
-We use Prettier with specific configurations:
+We use Prettier for most files and `@takazudo/mdx-formatter` for MDX files (`.prettierignore` excludes `*.mdx`). Both run in parallel via `npm-run-all2`:
 
 ```bash
-# Format all files
+# Format all files (Prettier + mdx-formatter in parallel)
 npm run format
 
 # Check formatting
 npm run format:check
+
+# MDX only
+npm run format:mdx
+npm run format:mdx:check
 ```
 
 **Formatting Rules**:
@@ -179,27 +183,34 @@ Each pattern should include:
 
 ```
 src/patterns/{pattern}/
+├── meta.ts                    # Pattern metadata (single source of truth)
+├── DemoSection.astro          # Unified demo for all frameworks
+├── TestingDocs.astro          # Test documentation
 ├── {Pattern}.tsx              # React implementation
 ├── {Pattern}.vue              # Vue implementation
 ├── {Pattern}.svelte           # Svelte implementation
 ├── {Pattern}.astro            # Astro/Web Components implementation
-├── AccessibilityDocs.astro    # ARIA documentation
-├── llm.md                     # AI assistant reference
-└── __tests__/
-    ├── {Pattern}.test.tsx     # React tests
-    ├── {Pattern}.test.vue     # Vue tests (wrapper)
-    └── {Pattern}.test.svelte  # Svelte tests (wrapper)
+├── {Pattern}.test.tsx         # React tests
+├── {Pattern}.test.vue.ts      # Vue tests
+├── {Pattern}.test.svelte.ts   # Svelte tests
+└── {pattern}.md               # AI assistant reference (llm.md)
+
+src/content/accessibility-docs/{pattern}/
+├── en.mdx                     # Accessibility docs (English)
+└── ja.mdx                     # Accessibility docs (Japanese)
 ```
 
 ### Required Documentation
 
-1. **AccessibilityDocs.astro**: Include sections for:
+1. **Accessibility docs** (`src/content/accessibility-docs/{pattern}/en.mdx`, `ja.mdx`): Include sections for:
    - Native HTML Considerations (if applicable)
    - WAI-ARIA Roles
    - WAI-ARIA States/Properties
    - Keyboard Support
 
-2. **llm.md**: AI-friendly reference (see [.internal/llm-md-template.md](.internal/llm-md-template.md))
+2. **meta.ts**: Pattern metadata including title, description, TOC, resources, and per-framework API docs (see `src/lib/pattern-meta-types.ts` for the `PatternMeta` type)
+
+3. **llm.md**: AI-friendly reference (see [.internal/llm-md-template.md](.internal/llm-md-template.md))
 
 ## Testing
 

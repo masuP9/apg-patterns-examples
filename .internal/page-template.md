@@ -2,19 +2,23 @@
 
 このテンプレートは、APG パターンページの構成を統一するためのガイドラインです。
 
+> **Note**: ページは動的ルーティング（`[pattern]/[framework]/index.astro`）で自動生成される。個別のページファイル作成は不要。新しいパターンを追加するには `meta.ts` と `DemoSection.astro` を作成すればよい。
+
 ## 章構成 (tocItems)
+
+`meta.ts` の `tocItems` で定義する。
 
 ### 基本構成
 
 ```typescript
 const tocItems = [
-  { id: 'demo', text: 'Demo' },
-  { id: 'accessibility-features', text: 'Accessibility Features' },
-  { id: 'source-code', text: 'Source Code' },
-  { id: 'usage', text: 'Usage' },
-  { id: 'api', text: 'API' },
-  { id: 'testing', text: 'Testing' },
-  { id: 'resources', text: 'Resources' },
+  { id: 'demo', text: { en: 'Demo', ja: 'デモ' } },
+  { id: 'accessibility-features', text: { en: 'Accessibility Features', ja: 'アクセシビリティ機能' } },
+  { id: 'source-code', text: { en: 'Source Code', ja: 'ソースコード' } },
+  { id: 'usage', text: { en: 'Usage', ja: '使い方' } },
+  { id: 'api', text: { en: 'API', ja: 'API' } },
+  { id: 'testing', text: { en: 'Testing', ja: 'テスト' } },
+  { id: 'resources', text: { en: 'Resources', ja: 'リソース' } },
 ];
 ```
 
@@ -24,14 +28,9 @@ const tocItems = [
 
 ```typescript
 const tocItems = [
-  { id: 'demo', text: 'Demo' },
-  { id: 'native-html', text: 'Native HTML' },  // Demo の直後
-  { id: 'accessibility-features', text: 'Accessibility Features' },
-  { id: 'source-code', text: 'Source Code' },
-  { id: 'usage', text: 'Usage' },
-  { id: 'api', text: 'API' },
-  { id: 'testing', text: 'Testing' },
-  { id: 'resources', text: 'Resources' },
+  { id: 'demo', text: { en: 'Demo', ja: 'デモ' } },
+  { id: 'native-html', text: { en: 'Native HTML', ja: 'ネイティブ HTML' } },  // Demo の直後
+  // ...
 ];
 ```
 
@@ -43,199 +42,52 @@ const tocItems = [
 - Meter → `<meter>`
 - Spinbutton → `<input type="number">`
 
-## 必須インポート
+## 必要なファイル
 
-```typescript
-import PatternLayout from '../../../../layouts/PatternLayout.astro';
-import CodeBlock from '@/components/ui/CodeBlock.astro';
-import ExternalLink from '@/components/ui/ExternalLink.astro';
-import AiGuideActions from '@/components/ui/AiGuideActions.astro';
-import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/{pattern}/AccessibilityDocs.astro';
-import TestingDocs from '@patterns/{pattern}/TestingDocs.astro';
-import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
-import { ResponsiveTable } from '@/components/ui/table';
-import Heading from '@/components/ui/Heading.astro';
-import sourceCode from '@patterns/{pattern}/{Component}.tsx?raw';
-import testCode from '@patterns/{pattern}/{Component}.test.tsx?raw';
+動的ルーティングテンプレートが以下のファイルを `import.meta.glob()` で検出・読み込む:
 
-// Native HTML セクションがある場合のみ
-import NativeHtmlNotice from '@patterns/{pattern}/NativeHtmlNotice.astro';
-```
+| ファイル | 役割 | 検出パターン |
+|---------|------|-------------|
+| `meta.ts` | メタデータ定義 | `/src/patterns/*/meta.ts` |
+| `DemoSection.astro` | デモ表示 | `/src/patterns/*/DemoSection.astro` |
+| `TestingDocs.astro` | テスト解説 | `/src/patterns/*/TestingDocs.astro` |
+| `{Component}.{tsx,vue,svelte,astro}` | ソースコード表示 | `/src/patterns/**/*.{tsx,vue,svelte,astro}` (`?raw`) |
+| `{Component}.test.*` | テストコード表示 | `/src/patterns/**/*.test.*` (`?raw`) |
+| `en.mdx` / `ja.mdx` | アクセシビリティ解説 | `src/content/accessibility-docs/{pattern}/` |
 
 ## 章の説明
 
 ### 1. Demo
-- コンポーネントの実際の動作を確認できるインタラクティブなデモ
-- 複数のバリエーションがある場合は `<h3>` 小見出しで分割
-- デモごとに説明文を `<p class="text-muted-foreground mb-4 text-sm">` で追加
+- `DemoSection.astro` コンポーネントが `framework` prop に基づいて適切なフレームワーク実装を表示
+- 複数のバリエーションがある場合は DemoSection 内で `<h3>` 小見出しで分割
 
 ### 2. Native HTML（条件付き）
 - `NativeHtmlNotice.astro` コンポーネントを使用
 - ネイティブ HTML 要素の推奨とカスタム実装が必要なケースを説明
 
 ### 3. Accessibility Features
-- `AccessibilityDocs.astro` コンポーネントを使用
+- `src/content/accessibility-docs/{pattern}/{locale}.mdx` の内容を表示
 - WAI-ARIA Roles, States/Properties, Keyboard Support を含む
 
 ### 4. Source Code
-- `CodeBlock` コンポーネントで実装コードを表示
-- `collapsible collapsedLines={5}` で折りたたみ表示
+- `meta.ts` の `frameworks[framework].sourceFile` で指定されたファイルを `?raw` で読み込み表示
+- `CodeBlock` コンポーネントで `collapsible collapsedLines={5}` で折りたたみ表示
 
 ### 5. Usage
-- 基本的な使用例をコードブロックで表示
-- 複数のユースケースがある場合は含める
+- `meta.ts` の `frameworks[framework].usageCode` で定義されたコード例を表示
 
 ### 6. API
-- Props テーブル（`ResponsiveTable` 使用）
-- Events/Emits テーブル（該当する場合）
-- TypeScript インターフェース（`CodeBlock` で表示）
+- `meta.ts` の `frameworks[framework].apiProps`, `apiEvents`, `apiSlots`, `apiSubComponents` から自動生成
+- `ResponsiveTable` で表示
 
 ### 7. Testing
 - `TestingDocs.astro` コンポーネントを使用
-- **テストコードブロックを必ず含める**（`<div class="mt-6">` でラップ）
+- テストコードブロックは `meta.ts` の `frameworks[framework].testFile` で指定
 
 ### 8. Resources
+- `meta.ts` の `resources` で定義
 - WAI-ARIA APG パターンへのリンク（`ExternalLink` 使用）
 - MDN リファレンスへのリンク（該当する場合）
-- `AiGuideResourceItem` コンポーネントで AI Guide リンクを追加
-
-## ヘッダー構成
-
-```astro
-<header class="mb-8">
-  <div class="mb-4 flex flex-wrap items-center gap-4">
-    <h1 class="text-3xl font-bold">{Pattern Name}</h1>
-    <AiGuideActions pattern="{pattern}" />
-  </div>
-  <p class="text-muted-foreground text-lg">
-    {Short description}
-  </p>
-</header>
-```
-
-## セクション構成テンプレート
-
-### Demo Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
-  <div class="border-border bg-background rounded-lg border p-6">
-    <Component client:load />
-  </div>
-</section>
-```
-
-### Native HTML Section（条件付き）
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Native HTML</Heading>
-  <NativeHtmlNotice />
-</section>
-```
-
-### Accessibility Features Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-  <AccessibilityDocs />
-</section>
-```
-
-### Source Code Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Source Code</Heading>
-  <CodeBlock collapsible collapsedLines={5} code={sourceCode} lang="tsx" title="{Component}.tsx" />
-</section>
-```
-
-### Usage Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Usage</Heading>
-  <CodeBlock
-    collapsible
-    collapsedLines={5}
-    code={`// Usage example here`}
-    lang="tsx"
-    title="Example"
-  />
-</section>
-```
-
-### API Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">API</Heading>
-  <ResponsiveTable>
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Prop</th>
-          <th class="py-2 pr-4 text-left">Type</th>
-          <th class="py-2 pr-4 text-left">Default</th>
-          <th class="py-2 text-left">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Props rows -->
-      </tbody>
-    </table>
-  </ResponsiveTable>
-</section>
-```
-
-### Testing Section
-
-```astro
-<section class="mb-12">
-  <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
-  <TestingDocs />
-  <div class="mt-6">
-    <CodeBlock
-      collapsible
-      collapsedLines={5}
-      code={testCode}
-      lang="tsx"
-      title="{Component}.test.tsx"
-    />
-  </div>
-</section>
-```
-
-### Resources Section
-
-```astro
-<section>
-  <Heading level={2} class="mb-4 text-xl font-semibold">Resources</Heading>
-  <ul class="list-disc space-y-2 pl-6">
-    <li>
-      <ExternalLink
-        href="https://www.w3.org/WAI/ARIA/apg/patterns/{pattern}/"
-        class="text-primary hover:underline"
-      >
-        WAI-ARIA APG: {Pattern Name} Pattern
-      </ExternalLink>
-    </li>
-    <li>
-      <ExternalLink
-        href="https://developer.mozilla.org/en-US/docs/Web/..."
-        class="text-primary hover:underline"
-      >
-        MDN: {Related Element/API}
-      </ExternalLink>
-    </li>
-    <AiGuideResourceItem pattern="{pattern}" />
-  </ul>
-</section>
-```
 
 ## セクション ID 命名規則
 
@@ -252,29 +104,25 @@ import NativeHtmlNotice from '@patterns/{pattern}/NativeHtmlNotice.astro';
 
 ## チェックリスト
 
-新しいパターンページを作成する際：
+新しいパターンを追加する際：
 
 ### 必須ファイル
+- [ ] `src/patterns/{pattern}/meta.ts` - パターンメタデータ（`PatternMeta` 型）
+- [ ] `src/patterns/{pattern}/DemoSection.astro` - 全フレームワーク統合デモ
 - [ ] `src/patterns/{pattern}/{Component}.tsx` - React 実装
 - [ ] `src/patterns/{pattern}/{Component}.vue` - Vue 実装
 - [ ] `src/patterns/{pattern}/{Component}.svelte` - Svelte 実装
 - [ ] `src/patterns/{pattern}/{Component}.astro` - Astro 実装
 - [ ] `src/patterns/{pattern}/{Component}.test.tsx` - テストファイル
-- [ ] `src/patterns/{pattern}/AccessibilityDocs.astro` - アクセシビリティドキュメント
 - [ ] `src/patterns/{pattern}/TestingDocs.astro` - テストドキュメント
-- [ ] `src/patterns/{pattern}/llm.md` - AI 向けガイド
+- [ ] `src/content/accessibility-docs/{pattern}/en.mdx` - アクセシビリティ解説（英語）
+- [ ] `src/content/accessibility-docs/{pattern}/ja.mdx` - アクセシビリティ解説（日本語）
+- [ ] `src/patterns/{pattern}/{pattern}.md` - AI 向けガイド
 - [ ] `src/patterns/{pattern}/NativeHtmlNotice.astro` - Native HTML 説明（該当パターンのみ）
 
-### ページ構成
-- [ ] tocItems が正しい順序になっている
-- [ ] 全セクションの ID が命名規則に従っている
-- [ ] ヘッダーに `AiGuideActions` がある
-- [ ] Testing セクションにテストコードブロックがある
-- [ ] Resources に `AiGuideResourceItem` がある
-
-### 4フレームワーク対応
-- [ ] `src/pages/patterns/{pattern}/react/index.astro`
-- [ ] `src/pages/patterns/{pattern}/vue/index.astro`
-- [ ] `src/pages/patterns/{pattern}/svelte/index.astro`
-- [ ] `src/pages/patterns/{pattern}/astro/index.astro`
-- [ ] `src/pages/patterns/{pattern}/index.astro` - リダイレクト用
+### meta.ts 構成確認
+- [ ] `PatternMeta` 型に準拠している
+- [ ] 全テキストが `Record<Locale, string>` で i18n 対応
+- [ ] `tocItems` が正しい順序になっている
+- [ ] 4フレームワーク分の `frameworks` メタデータが定義されている
+- [ ] `resources` にAPG公式リンクが含まれている
