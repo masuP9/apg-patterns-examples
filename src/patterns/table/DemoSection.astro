@@ -1,0 +1,331 @@
+---
+/**
+ * Table Demo Section
+ *
+ * Renders the table demo for each framework variant.
+ * Each framework has multiple demo variants (basic, sortable, row headers,
+ * virtualized, spanning cells) shown together.
+ */
+import type { Framework } from '@/lib/frameworks';
+import {
+  BasicTableDemo,
+  SortableTableDemo,
+  RowHeaderTableDemo,
+  VirtualizedTableDemo,
+  SpanningCellsTableDemo,
+} from './TableDemo';
+import TableDemoVue from './TableDemo.vue';
+import TableDemoSvelte from './TableDemo.svelte';
+import Table from './Table.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+
+// Data for Astro framework demo
+const basicColumns = [
+  { id: 'name', header: 'Name' },
+  { id: 'age', header: 'Age' },
+  { id: 'city', header: 'City' },
+];
+
+const basicRows = [
+  { id: '1', cells: ['Alice', '30', 'Tokyo'] },
+  { id: '2', cells: ['Bob', '25', 'Osaka'] },
+  { id: '3', cells: ['Charlie', '35', 'Kyoto'] },
+  { id: '4', cells: ['Diana', '28', 'Nagoya'] },
+  { id: '5', cells: ['Edward', '42', 'Sapporo'] },
+];
+
+const sortableColumns = [
+  { id: 'name', header: 'Name', sortable: true, sort: 'ascending' as const },
+  { id: 'age', header: 'Age', sortable: true },
+  { id: 'city', header: 'City', sortable: true },
+];
+
+const rowHeaderRows = [
+  { id: '1', cells: ['Alice', '30', 'Tokyo'], hasRowHeader: true },
+  { id: '2', cells: ['Bob', '25', 'Osaka'], hasRowHeader: true },
+  { id: '3', cells: ['Charlie', '35', 'Kyoto'], hasRowHeader: true },
+];
+
+const virtualizedRows = [
+  { id: '5', cells: ['Alice', '30', 'Tokyo'], rowIndex: 5 },
+  { id: '6', cells: ['Bob', '25', 'Osaka'], rowIndex: 6 },
+  { id: '7', cells: ['Charlie', '35', 'Kyoto'], rowIndex: 7 },
+  { id: '8', cells: ['Diana', '28', 'Nagoya'], rowIndex: 8 },
+  { id: '9', cells: ['Edward', '42', 'Sapporo'], rowIndex: 9 },
+];
+
+const spanningColumns = [
+  { id: 'product', header: 'Product' },
+  { id: 'q1', header: 'Q1' },
+  { id: 'q2', header: 'Q2' },
+  { id: 'q3', header: 'Q3' },
+  { id: 'q4', header: 'Q4' },
+];
+
+const spanningRows = [
+  {
+    id: 'electronics',
+    cells: [{ content: 'Electronics', rowspan: 2 }, '150', '180', '200', '220'],
+  },
+  { id: 'electronics-sub', cells: ['175', '190', '210', '240'] },
+  { id: 'clothing', cells: ['Clothing', { content: 'N/A', colspan: 2 }, '90', '120'] },
+  { id: 'summary', cells: [{ content: 'Total', colspan: 4 }, '1775'] },
+];
+---
+
+{/* React demos */}
+{
+  framework === 'react' && (
+    <>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Basic Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A simple static table displaying data. No interactive features.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <BasicTableDemo />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <SortableTableDemo client:load />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Row Headers</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          First cell in each row uses <code>role="rowheader"</code> for better screen reader
+          navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <RowHeaderTableDemo />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Virtualization Support</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          For large datasets, use <code>aria-rowcount</code>, <code>aria-colcount</code>, and
+          <code>aria-rowindex</code> to communicate the full table structure.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <VirtualizedTableDemo />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-3 text-lg font-medium">Spanning Cells</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Cells can span multiple columns or rows using <code>colspan</code> and{' '}
+          <code>rowspan</code>. This implementation uses CSS Grid with{' '}
+          <code>grid-column: span N</code> and <code>grid-row: span N</code> for visual spanning,
+          plus <code>aria-colspan</code> and <code>aria-rowspan</code> for screen reader
+          accessibility.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <SpanningCellsTableDemo />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{/* Vue demos */}
+{
+  framework === 'vue' && (
+    <>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Basic Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A simple static table displaying data. No interactive features.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoVue variant="basic" />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoVue variant="sortable" client:load />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Row Headers</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          First cell in each row uses <code>role="rowheader"</code> for better screen reader
+          navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoVue variant="rowHeader" />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Virtualization Support</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          For large datasets, use <code>aria-rowcount</code>, <code>aria-colcount</code>, and
+          <code>aria-rowindex</code> to communicate the full table structure.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoVue variant="virtualized" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-3 text-lg font-medium">Spanning Cells</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Cells can span multiple columns or rows using <code>colspan</code> and{' '}
+          <code>rowspan</code>. This implementation uses CSS Grid with{' '}
+          <code>grid-column: span N</code> and <code>grid-row: span N</code> for visual spanning,
+          plus <code>aria-colspan</code> and <code>aria-rowspan</code> for screen reader
+          accessibility.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoVue variant="spanning" />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{/* Svelte demos */}
+{
+  framework === 'svelte' && (
+    <>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Basic Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A simple static table displaying data. No interactive features.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoSvelte variant="basic" />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoSvelte variant="sortable" client:load />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Row Headers</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          First cell in each row uses <code>role="rowheader"</code> for better screen reader
+          navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoSvelte variant="rowHeader" />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Virtualization Support</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          For large datasets, use <code>aria-rowcount</code>, <code>aria-colcount</code>, and
+          <code>aria-rowindex</code> to communicate the full table structure.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoSvelte variant="virtualized" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-3 text-lg font-medium">Spanning Cells</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Cells can span multiple columns or rows using <code>colspan</code> and{' '}
+          <code>rowspan</code>. This implementation uses CSS Grid with{' '}
+          <code>grid-column: span N</code> and <code>grid-row: span N</code> for visual spanning,
+          plus <code>aria-colspan</code> and <code>aria-rowspan</code> for screen reader
+          accessibility.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TableDemoSvelte variant="spanning" />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{/* Astro demos */}
+{
+  framework === 'astro' && (
+    <>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Basic Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A simple static table displaying data. No interactive features.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Table columns={basicColumns} rows={basicRows} aria-label="User List" />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Sortable Table</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Click column headers to sort. Uses <code>aria-sort</code> to indicate sort direction. This
+          demo uses a React component with <code>client:load</code> for interactive sorting.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <SortableTableDemo client:load />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Row Headers</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          First cell in each row uses <code>role="rowheader"</code> for better screen reader
+          navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Table
+            columns={basicColumns}
+            rows={rowHeaderRows}
+            aria-label="User List with Row Headers"
+          />
+        </div>
+      </div>
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Virtualization Support</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          For large datasets, use <code>aria-rowcount</code>, <code>aria-colcount</code>, and
+          <code>aria-rowindex</code> to communicate the full table structure.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Table
+            columns={basicColumns}
+            rows={virtualizedRows}
+            aria-label="Virtualized Table (rows 5-9 of 100)"
+            totalRows={100}
+            totalColumns={3}
+            startColIndex={1}
+          />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-3 text-lg font-medium">Spanning Cells</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Cells can span multiple columns or rows using <code>colspan</code> and{' '}
+          <code>rowspan</code>. This implementation uses CSS Grid with{' '}
+          <code>grid-column: span N</code> and <code>grid-row: span N</code> for visual spanning,
+          plus <code>aria-colspan</code> and <code>aria-rowspan</code> for screen reader
+          accessibility.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Table
+            columns={spanningColumns}
+            rows={spanningRows}
+            aria-label="Quarterly Sales with Spanning Cells"
+          />
+        </div>
+      </div>
+    </>
+  )
+}

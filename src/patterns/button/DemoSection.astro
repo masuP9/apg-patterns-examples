@@ -1,0 +1,67 @@
+---
+/**
+ * Button Demo Section
+ *
+ * Renders the button demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { Button as ButtonReact } from './Button';
+import ButtonVue from './Button.vue';
+import ButtonSvelte from './Button.svelte';
+import ButtonAstro from './Button.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap gap-4">
+    {
+      framework === 'react' && (
+        <>
+          <ButtonReact client:load onClick={() => alert('Clicked!')}>
+            Click me
+          </ButtonReact>
+          <ButtonReact client:load disabled onClick={() => alert('This should not fire!')}>
+            Disabled Button
+          </ButtonReact>
+        </>
+      )
+    }
+    {
+      framework === 'vue' && (
+        <>
+          <ButtonVue client:load>Click me</ButtonVue>
+          <ButtonVue client:load disabled>
+            Disabled Button
+          </ButtonVue>
+        </>
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <>
+          <ButtonSvelte client:load onClick={() => alert('Clicked!')}>
+            Click me
+          </ButtonSvelte>
+          <ButtonSvelte client:load disabled onClick={() => alert('This should not fire!')}>
+            Disabled Button
+          </ButtonSvelte>
+        </>
+      )
+    }
+    {
+      framework === 'astro' && (
+        <>
+          <ButtonAstro>Click me</ButtonAstro>
+          <ButtonAstro disabled>Disabled Button</ButtonAstro>
+        </>
+      )
+    }
+  </div>
+</div>

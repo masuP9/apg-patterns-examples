@@ -1,0 +1,375 @@
+---
+/**
+ * Dynamic pattern page (Japanese)
+ *
+ * Japanese locale wrapper using the same meta.ts data as the English version.
+ * Key differences from English:
+ *   - locale='ja' passed to layout and components
+ *   - useTranslation('ja') for section headings
+ *   - Explicit id on Heading components (required for non-ASCII text)
+ */
+import PatternLayout from '@/layouts/PatternLayout.astro';
+import CodeBlock from '@/components/ui/CodeBlock.astro';
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import AiGuideActions from '@/components/ui/AiGuideActions.astro';
+import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
+import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+import { FRAMEWORKS, FRAMEWORK_INFO, isValidFramework } from '@/lib/frameworks';
+import { getPatterns } from '@/lib/patterns';
+import { useTranslation } from '@/i18n';
+import type { PatternMeta } from '@/lib/pattern-meta-types';
+
+// Glob imports for dynamic content loading
+const demoModules = import.meta.glob<{ default: any }>('/src/patterns/*/DemoSection.astro');
+const testingModules = import.meta.glob<{ default: any }>('/src/patterns/*/TestingDocs.astro');
+const nativeHtmlModules = import.meta.glob<{ default: any }>(
+  '/src/patterns/*/NativeHtmlNotice.astro'
+);
+const comparisonModules = import.meta.glob<{ default: any }>(
+  '/src/patterns/*/ComparisonSection.astro'
+);
+const sourceModules = import.meta.glob<string>('/src/patterns/**/*.{tsx,vue,svelte,astro}', {
+  query: '?raw',
+  import: 'default',
+});
+const testModules = import.meta.glob<string>(
+  '/src/patterns/**/*.test.{tsx,ts,vue.ts,svelte.ts,astro.ts}',
+  {
+    query: '?raw',
+    import: 'default',
+  }
+);
+
+export function getStaticPaths() {
+  const metaModules = import.meta.glob<{ default: PatternMeta }>('/src/patterns/*/meta.ts', {
+    eager: true,
+  });
+  const patterns = getPatterns();
+  return patterns
+    .filter((p) => `/src/patterns/${p.id}/meta.ts` in metaModules)
+    .flatMap((p) =>
+      FRAMEWORKS.map((f) => ({
+        params: { pattern: p.id, framework: f },
+        props: { meta: metaModules[`/src/patterns/${p.id}/meta.ts`].default },
+      }))
+    );
+}
+
+const { pattern, framework } = Astro.params;
+const { meta } = Astro.props as { meta: PatternMeta };
+if (!pattern || !framework || !isValidFramework(framework)) {
+  return Astro.redirect('/ja/patterns/');
+}
+
+const locale = 'ja';
+const t = useTranslation(locale);
+
+const fwMeta = meta.frameworks[framework];
+if (!fwMeta) {
+  throw new Error(
+    `Framework "${framework}" not found in meta.ts for pattern "${pattern}". ` +
+      `Available frameworks: ${Object.keys(meta.frameworks).join(', ')}`
+  );
+}
+const fwInfo = FRAMEWORK_INFO[framework];
+
+// Load dynamic components
+const DemoSection = (await demoModules[`/src/patterns/${pattern}/DemoSection.astro`]?.())
+  ?.default as any;
+const TestingDocs = (await testingModules[`/src/patterns/${pattern}/TestingDocs.astro`]?.())
+  ?.default as any;
+const NativeHtmlNotice = meta.hasNativeHtmlNotice
+  ? ((await nativeHtmlModules[`/src/patterns/${pattern}/NativeHtmlNotice.astro`]?.())
+      ?.default as any)
+  : null;
+const ComparisonSection = meta.hasComparisonSection
+  ? ((await comparisonModules[`/src/patterns/${pattern}/ComparisonSection.astro`]?.())
+      ?.default as any)
+  : null;
+
+// Load source and test code (fail-fast to catch meta.ts typos)
+const sourcePath = `/src/patterns/${pattern}/${fwMeta.sourceFile}`;
+const sourceLoader = sourceModules[sourcePath];
+if (!sourceLoader) {
+  throw new Error(`Source file not found: ${sourcePath} (check meta.ts sourceFile)`);
+}
+const sourceCode = await sourceLoader();
+
+let testCode: string | null = null;
+if (fwMeta.testFile) {
+  const testPath = `/src/patterns/${pattern}/${fwMeta.testFile}`;
+  const testLoader = testModules[testPath];
+  if (!testLoader) {
+    throw new Error(`Test file not found: ${testPath} (check meta.ts testFile)`);
+  }
+  testCode = await testLoader();
+}
+
+// Load accessibility MDX content
+const { Content: AccessibilityContent } = await getAccessibilityContent(pattern, locale);
+---
+
+<PatternLayout
+  title={`${meta.title[locale]} - ${fwInfo.label}`}
+  pattern={pattern}
+  framework={framework}
+  tocItems={meta.tocItems[locale]}
+  locale={locale}
+>
+  <header class="mb-8">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-3xl font-bold">{meta.title[locale]}</h1>
+      <AiGuideActions pattern={pattern} />
+    </div>
+    <p class="text-muted-foreground text-lg">
+      {meta.description[locale]}
+    </p>
+  </header>
+
+  <!-- Framework Selector -->
+  <FrameworkTabs pattern={pattern} currentFramework={framework} locale={locale} />
+
+  <!-- Demo Section -->
+  <section class="mb-12">
+    <Heading level={2} id="demo" class="mb-4 text-xl font-semibold">{t('pattern.demo')}</Heading>
+    {DemoSection && <DemoSection framework={framework} />}
+    <p class="text-muted-foreground mt-2 text-sm">
+      <a href="./demo/" class="text-primary hover:underline">デモのみ表示 →</a>
+    </p>
+  </section>
+
+  <!-- Native HTML Section (conditional) -->
+  {
+    NativeHtmlNotice && (
+      <section class="mb-12">
+        <Heading level={2} id="native-html" class="mb-4 text-xl font-semibold">
+          ネイティブ HTML
+        </Heading>
+        <NativeHtmlNotice locale="ja" />
+      </section>
+    )
+  }
+
+  <!-- Comparison Section (conditional) -->
+  {
+    ComparisonSection && (
+      <section class="mb-12">
+        <ComparisonSection locale="ja" />
+      </section>
+    )
+  }
+
+  <!-- Accessibility Section -->
+  <section class="mb-12">
+    <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
+      {t('pattern.accessibility')}
+    </Heading>
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
+  </section>
+
+  <!-- Source Code Section -->
+  <section class="mb-12">
+    <Heading level={2} id="source-code" class="mb-4 text-xl font-semibold">
+      {t('pattern.sourceCode')}
+    </Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={sourceCode}
+      lang={fwMeta.lang}
+      title={fwMeta.sourceFile}
+    />
+  </section>
+
+  <!-- Usage Section -->
+  <section class="mb-12">
+    <Heading level={2} id="usage" class="mb-4 text-xl font-semibold">
+      {t('pattern.usage')}
+    </Heading>
+    <CodeBlock
+      collapsible
+      collapsedLines={5}
+      code={fwMeta.usageCode}
+      lang={fwMeta.lang}
+      title="Example"
+    />
+  </section>
+
+  <!-- API Section -->
+  <section class="mb-12">
+    <Heading level={2} id="api" class="mb-4 text-xl font-semibold">{t('pattern.api')}</Heading>
+    <ResponsiveTable>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-border border-b">
+            <th class="py-2 pr-4 text-left">プロパティ</th>
+            <th class="py-2 pr-4 text-left">型</th>
+            <th class="py-2 pr-4 text-left">デフォルト</th>
+            <th class="py-2 text-left">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            fwMeta.apiProps.map((prop) => (
+              <tr class="border-border border-b">
+                <td class="py-2 pr-4">
+                  <code>{prop.name}</code>
+                </td>
+                <td class="text-muted-foreground py-2 pr-4">{prop.type}</td>
+                <td class="text-muted-foreground py-2 pr-4">{prop.default}</td>
+                <td class="py-2">{prop.description[locale]}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </ResponsiveTable>
+
+    {
+      fwMeta.apiSlots && fwMeta.apiSlots.length > 0 && (
+        <>
+          <h3 class="mt-6 mb-2 font-medium">スロット</h3>
+          <ResponsiveTable>
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="border-border border-b">
+                  <th class="py-2 pr-4 text-left">スロット</th>
+                  <th class="py-2 pr-4 text-left">デフォルト</th>
+                  <th class="py-2 text-left">説明</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fwMeta.apiSlots.map((slot) => (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{slot.name}</code>
+                    </td>
+                    <td class="text-muted-foreground py-2 pr-4">{slot.default}</td>
+                    <td class="py-2">{slot.description[locale]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTable>
+        </>
+      )
+    }
+
+    {
+      fwMeta.apiSubComponents &&
+        fwMeta.apiSubComponents.map((sub) => (
+          <>
+            <h3 class="mt-6 mb-3 text-lg font-medium">{sub.name} Props</h3>
+            <ResponsiveTable>
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="border-border border-b">
+                    <th class="py-2 pr-4 text-left">プロパティ</th>
+                    <th class="py-2 pr-4 text-left">型</th>
+                    <th class="py-2 pr-4 text-left">デフォルト</th>
+                    <th class="py-2 text-left">説明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sub.props.map((prop) => (
+                    <tr class="border-border border-b">
+                      <td class="py-2 pr-4">
+                        <code>{prop.name}</code>
+                      </td>
+                      <td class="text-muted-foreground py-2 pr-4">{prop.type}</td>
+                      <td class="text-muted-foreground py-2 pr-4">{prop.default}</td>
+                      <td class="py-2">{prop.description[locale]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </ResponsiveTable>
+          </>
+        ))
+    }
+
+    {
+      fwMeta.apiNote && (
+        <div class="text-muted-foreground mt-4 text-sm">
+          <Fragment set:html={fwMeta.apiNote[locale]} />
+        </div>
+      )
+    }
+
+    {
+      fwMeta.apiEvents && fwMeta.apiEvents.length > 0 && (
+        <>
+          <h3 class="mt-6 mb-2 font-medium">Custom Events</h3>
+          <ResponsiveTable>
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="border-border border-b">
+                  <th class="py-2 pr-4 text-left">イベント</th>
+                  <th class="py-2 pr-4 text-left">Detail</th>
+                  <th class="py-2 text-left">説明</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fwMeta.apiEvents.map((event) => (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pr-4">
+                      <code>{event.name}</code>
+                    </td>
+                    <td class="text-muted-foreground py-2 pr-4">{event.detail}</td>
+                    <td class="py-2">{event.description[locale]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ResponsiveTable>
+        </>
+      )
+    }
+  </section>
+
+  <!-- Testing Section -->
+  <section class="mb-12">
+    <Heading level={2} id="testing" class="mb-4 text-xl font-semibold">
+      {t('pattern.testing')}
+    </Heading>
+    {TestingDocs && <TestingDocs locale="ja" />}
+    {
+      testCode && fwMeta.testFile && (
+        <div class="mt-6">
+          <CodeBlock
+            collapsible
+            collapsedLines={5}
+            code={testCode}
+            lang={fwMeta.lang === 'tsx' ? 'tsx' : 'typescript'}
+            title={fwMeta.testFile}
+          />
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Resources -->
+  <section>
+    <Heading level={2} id="resources" class="mb-4 text-xl font-semibold">
+      {t('pattern.resources')}
+    </Heading>
+    <ul class="list-disc space-y-2 pl-6">
+      {
+        meta.resources.map((resource) => (
+          <li>
+            <ExternalLink href={resource.href} class="text-primary hover:underline">
+              {resource.label[locale]}
+            </ExternalLink>
+          </li>
+        ))
+      }
+      <AiGuideResourceItem pattern={pattern} />
+    </ul>
+  </section>
+</PatternLayout>

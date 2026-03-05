@@ -1,0 +1,61 @@
+---
+/**
+ * Breadcrumb Demo Section
+ *
+ * Renders the breadcrumb demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { Breadcrumb as BreadcrumbReact } from './Breadcrumb';
+import BreadcrumbVue from './Breadcrumb.vue';
+import BreadcrumbSvelte from './Breadcrumb.svelte';
+import BreadcrumbAstro from './Breadcrumb.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+
+const basicItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Patterns', href: '/patterns/' },
+  { label: 'Breadcrumb' },
+];
+
+const longPathItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'Electronics', href: '/products/electronics/' },
+  { label: 'Computers', href: '/products/electronics/computers/' },
+  { label: 'Laptops', href: '/products/electronics/computers/laptops/' },
+  { label: 'MacBook Pro' },
+];
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Basic Breadcrumb</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A simple breadcrumb trail showing the path to the current page.
+      </p>
+      {framework === 'react' && <BreadcrumbReact client:load items={basicItems} />}
+      {framework === 'vue' && <BreadcrumbVue client:load items={basicItems} />}
+      {framework === 'svelte' && <BreadcrumbSvelte client:load items={basicItems} />}
+      {framework === 'astro' && <BreadcrumbAstro items={basicItems} />}
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-lg font-medium">Long Path</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        A deeper navigation path with multiple levels of hierarchy.
+      </p>
+      {framework === 'react' && <BreadcrumbReact client:load items={longPathItems} />}
+      {framework === 'vue' && <BreadcrumbVue client:load items={longPathItems} />}
+      {framework === 'svelte' && <BreadcrumbSvelte client:load items={longPathItems} />}
+      {framework === 'astro' && <BreadcrumbAstro items={longPathItems} />}
+    </div>
+  </div>
+</div>

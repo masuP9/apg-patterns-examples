@@ -1,0 +1,237 @@
+---
+/**
+ * Radio Group Demo Section
+ *
+ * Renders the radio group demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { RadioGroup as RadioGroupReact } from './RadioGroup';
+import RadioGroupVue from './RadioGroup.vue';
+import RadioGroupSvelte from './RadioGroup.svelte';
+import RadioGroupAstro from './RadioGroup.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+
+const colorOptions = [
+  { id: 'red', label: 'Red', value: 'red' },
+  { id: 'blue', label: 'Blue', value: 'blue' },
+  { id: 'green', label: 'Green', value: 'green' },
+];
+
+const sizeOptions = [
+  { id: 'small', label: 'Small', value: 'small' },
+  { id: 'medium', label: 'Medium', value: 'medium' },
+  { id: 'large', label: 'Large', value: 'large' },
+];
+
+const planOptions = [
+  { id: 'free', label: 'Free', value: 'free' },
+  { id: 'pro', label: 'Pro', value: 'pro' },
+  { id: 'enterprise', label: 'Enterprise (Coming Soon)', value: 'enterprise', disabled: true },
+];
+
+const ratingOptions = [
+  { id: 'r1', label: '1', value: '1' },
+  { id: 'r2', label: '2', value: '2' },
+  { id: 'r3', label: '3', value: '3' },
+  { id: 'r4', label: '4', value: '4' },
+  { id: 'r5', label: '5', value: '5' },
+];
+---
+
+<!-- Basic -->
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">Basic Radio Group</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    Use arrow keys to navigate and select. Tab moves focus in/out of the group.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {
+      framework === 'react' && (
+        <RadioGroupReact
+          client:load
+          options={colorOptions}
+          name="color"
+          aria-label="Favorite color"
+        />
+      )
+    }
+    {
+      framework === 'vue' && (
+        <RadioGroupVue client:load options={colorOptions} name="color" ariaLabel="Favorite color" />
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <RadioGroupSvelte
+          client:load
+          options={colorOptions}
+          name="color"
+          aria-label="Favorite color"
+        />
+      )
+    }
+    {
+      framework === 'astro' && (
+        <RadioGroupAstro options={colorOptions} name="color" aria-label="Favorite color" />
+      )
+    }
+  </div>
+</div>
+
+<!-- With Default Value -->
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">With Default Value</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    Pre-selected option using the <code>defaultValue</code> prop.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {
+      framework === 'react' && (
+        <RadioGroupReact
+          client:load
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      )
+    }
+    {
+      framework === 'vue' && (
+        <RadioGroupVue
+          client:load
+          options={sizeOptions}
+          name="size"
+          ariaLabel="T-shirt size"
+          defaultValue="medium"
+        />
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <RadioGroupSvelte
+          client:load
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      )
+    }
+    {
+      framework === 'astro' && (
+        <RadioGroupAstro
+          options={sizeOptions}
+          name="size"
+          aria-label="T-shirt size"
+          defaultValue="medium"
+        />
+      )
+    }
+  </div>
+</div>
+
+<!-- With Disabled Option -->
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">With Disabled Option</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    Disabled options are skipped during keyboard navigation.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {
+      framework === 'react' && (
+        <RadioGroupReact
+          client:load
+          options={planOptions}
+          name="plan"
+          aria-label="Subscription plan"
+        />
+      )
+    }
+    {
+      framework === 'vue' && (
+        <RadioGroupVue
+          client:load
+          options={planOptions}
+          name="plan"
+          ariaLabel="Subscription plan"
+        />
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <RadioGroupSvelte
+          client:load
+          options={planOptions}
+          name="plan"
+          aria-label="Subscription plan"
+        />
+      )
+    }
+    {
+      framework === 'astro' && (
+        <RadioGroupAstro options={planOptions} name="plan" aria-label="Subscription plan" />
+      )
+    }
+  </div>
+</div>
+
+<!-- Horizontal Orientation -->
+<div>
+  <h3 class="mb-3 text-lg font-medium">Horizontal Orientation</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    Horizontal layout with <code>orientation="horizontal"</code>.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {
+      framework === 'react' && (
+        <RadioGroupReact
+          client:load
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      )
+    }
+    {
+      framework === 'vue' && (
+        <RadioGroupVue
+          client:load
+          options={ratingOptions}
+          name="rating"
+          ariaLabel="Rating"
+          orientation="horizontal"
+        />
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <RadioGroupSvelte
+          client:load
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      )
+    }
+    {
+      framework === 'astro' && (
+        <RadioGroupAstro
+          options={ratingOptions}
+          name="rating"
+          aria-label="Rating"
+          orientation="horizontal"
+        />
+      )
+    }
+  </div>
+</div>

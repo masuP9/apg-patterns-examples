@@ -1,0 +1,192 @@
+---
+/**
+ * Dialog Demo Section
+ *
+ * Renders the dialog demo for each framework variant.
+ * React and Vue use client:only for proper portal/overlay handling.
+ * Svelte uses client:load with contentHtml prop since it cannot use slots across islands.
+ * Astro renders server-side with Web Component interactivity.
+ */
+import type { Framework } from '@/lib/frameworks';
+import DialogDemoReact from './DialogDemo';
+import DialogDemoVue from './DialogDemo.vue';
+import DialogDemoSvelte from './DialogDemo.svelte';
+import Dialog from './Dialog.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div>
+  {
+    framework === 'react' && (
+      <>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            A simple modal dialog with title, description, and close functionality.
+          </p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoReact
+              client:only="react"
+              title="Dialog Title"
+              description="This is a description of the dialog content. It provides additional context for users."
+              triggerText="Open Dialog"
+              triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              <p class="mb-4">
+                This is the main content of the dialog. You can place any content here, such as
+                text, forms, or other components.
+              </p>
+              <p>
+                Press{' '}
+                <kbd class="rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800">Escape</kbd> or
+                click outside to close.
+              </p>
+            </DialogDemoReact>
+          </div>
+        </div>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
+          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoReact
+              client:only="react"
+              title="Simple Dialog"
+              triggerText="Open Simple Dialog"
+              triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+            >
+              <p>This dialog has no description, only a title and content.</p>
+            </DialogDemoReact>
+          </div>
+        </div>
+      </>
+    )
+  }
+  {
+    framework === 'vue' && (
+      <>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            A simple modal dialog with title, description, and close functionality.
+          </p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoVue
+              client:only="vue"
+              title="Dialog Title"
+              description="This is a description of the dialog content. It provides additional context for users."
+              triggerText="Open Dialog"
+              triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              <p class="mb-4">
+                This is the main content of the dialog. You can place any content here, such as
+                text, forms, or other components.
+              </p>
+              <p>
+                Press{' '}
+                <kbd class="rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800">Escape</kbd> or
+                click outside to close.
+              </p>
+            </DialogDemoVue>
+          </div>
+        </div>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
+          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoVue
+              client:only="vue"
+              title="Simple Dialog"
+              triggerText="Open Simple Dialog"
+              triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+            >
+              <p>This dialog has no description, only a title and content.</p>
+            </DialogDemoVue>
+          </div>
+        </div>
+      </>
+    )
+  }
+  {
+    framework === 'svelte' && (
+      <>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            A simple modal dialog with title, description, and close functionality.
+          </p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoSvelte
+              client:load
+              title="Dialog Title"
+              description="This is a description of the dialog content. It provides additional context for users."
+              triggerText="Open Dialog"
+              triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              contentHtml={`<p class="mb-4">This is the main content of the dialog. You can place any content here, such as text, forms, or other components.</p><p>Press <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">Escape</kbd> or click outside to close.</p>`}
+            />
+          </div>
+        </div>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
+          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <DialogDemoSvelte
+              client:load
+              title="Simple Dialog"
+              triggerText="Open Simple Dialog"
+              triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+              contentHtml="<p>This dialog has no description, only a title and content.</p>"
+            />
+          </div>
+        </div>
+      </>
+    )
+  }
+  {
+    framework === 'astro' && (
+      <>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Basic Dialog</h3>
+          <p class="text-muted-foreground mb-4 text-sm">
+            A simple modal dialog with title, description, and close functionality.
+          </p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <Dialog
+              title="Dialog Title"
+              description="This is a description of the dialog content. It provides additional context for users."
+              triggerText="Open Dialog"
+              triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              <p class="mb-4">
+                This is the main content of the dialog. You can place any content here, such as
+                text, forms, or other components.
+              </p>
+              <p>
+                Press{' '}
+                <kbd class="rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800">Escape</kbd> or
+                click outside to close.
+              </p>
+            </Dialog>
+          </div>
+        </div>
+        <div class="mb-8">
+          <h3 class="mb-3 text-lg font-medium">Without Description</h3>
+          <p class="text-muted-foreground mb-4 text-sm">A dialog with only a title and content.</p>
+          <div class="border-border bg-background rounded-lg border p-6">
+            <Dialog
+              title="Simple Dialog"
+              triggerText="Open Simple Dialog"
+              triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+            >
+              <p>This dialog has no description, only a title and content.</p>
+            </Dialog>
+          </div>
+        </div>
+      </>
+    )
+  }
+</div>

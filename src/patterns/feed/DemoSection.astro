@@ -1,0 +1,38 @@
+---
+/**
+ * Feed Demo Section
+ *
+ * Renders the feed demo for each framework variant.
+ * Uses locale-specific demo components (FeedDemo / FeedDemoJa)
+ * to display articles in the appropriate language.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { FeedDemo as FeedDemoReact } from './FeedDemo';
+import FeedDemoVue from './FeedDemo.vue';
+import FeedDemoSvelte from './FeedDemo.svelte';
+import FeedDemoAstro from './FeedDemo.astro';
+import { FeedDemoJa as FeedDemoJaReact } from './FeedDemoJa';
+import FeedDemoJaVue from './FeedDemoJa.vue';
+import FeedDemoJaSvelte from './FeedDemoJa.svelte';
+import FeedDemoJaAstro from './FeedDemoJa.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+const isJa = Astro.url.pathname.startsWith('/ja/');
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {
+    framework === 'react' &&
+      (isJa ? <FeedDemoJaReact client:load /> : <FeedDemoReact client:load />)
+  }
+  {framework === 'vue' && (isJa ? <FeedDemoJaVue client:load /> : <FeedDemoVue client:load />)}
+  {
+    framework === 'svelte' &&
+      (isJa ? <FeedDemoJaSvelte client:load /> : <FeedDemoSvelte client:load />)
+  }
+  {framework === 'astro' && (isJa ? <FeedDemoJaAstro /> : <FeedDemoAstro />)}
+</div>

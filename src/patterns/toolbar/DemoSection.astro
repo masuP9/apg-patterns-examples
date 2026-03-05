@@ -1,0 +1,362 @@
+---
+/**
+ * Toolbar Demo Section
+ *
+ * Renders the toolbar demos for each framework variant.
+ * The toolbar pattern has multiple demo variants showing different configurations.
+ */
+import type { Framework } from '@/lib/frameworks';
+
+// React demos
+import {
+  ToolbarToggleDemo as ToolbarToggleDemoReact,
+  ToolbarToggleDefaultDemo as ToolbarToggleDefaultDemoReact,
+  TextFormattingToolbarDemo as TextFormattingToolbarDemoReact,
+  VerticalToolbarDemo as VerticalToolbarDemoReact,
+  DisabledItemsToolbarDemo as DisabledItemsToolbarDemoReact,
+} from './ToolbarToggleDemo';
+
+// Vue demos
+import TextFormattingToolbarDemoVue from './TextFormattingToolbarDemo.vue';
+import VerticalToolbarDemoVue from './VerticalToolbarDemo.vue';
+import DisabledItemsToolbarDemoVue from './DisabledItemsToolbarDemo.vue';
+import ToolbarToggleDemoVue from './ToolbarToggleDemo.vue';
+import ToolbarToggleDefaultDemoVue from './ToolbarToggleDefaultDemo.vue';
+
+// Svelte demos
+import TextFormattingToolbarDemoSvelte from './TextFormattingToolbarDemo.svelte';
+import VerticalToolbarDemoSvelte from './VerticalToolbarDemo.svelte';
+import DisabledItemsToolbarDemoSvelte from './DisabledItemsToolbarDemo.svelte';
+import ToolbarToggleDemoSvelte from './ToolbarToggleDemo.svelte';
+import ToolbarToggleDefaultDemoSvelte from './ToolbarToggleDefaultDemo.svelte';
+
+// Astro components
+import Toolbar from './Toolbar.astro';
+import ToolbarButton from './ToolbarButton.astro';
+import ToolbarToggleButton from './ToolbarToggleButton.astro';
+import ToolbarSeparator from './ToolbarSeparator.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+{
+  framework === 'react' && (
+    <>
+      {/* Text Formatting Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A horizontal toolbar with toggle buttons and regular buttons.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TextFormattingToolbarDemoReact client:load />
+        </div>
+      </div>
+
+      {/* Vertical Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <VerticalToolbarDemoReact client:load />
+        </div>
+      </div>
+
+      {/* With Disabled Items */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Disabled items are skipped during keyboard navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <DisabledItemsToolbarDemoReact client:load />
+        </div>
+      </div>
+
+      {/* Controlled Toggle Buttons */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with controlled state. The current state is displayed and applied to the
+          sample text.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDemoReact client:load />
+        </div>
+      </div>
+
+      {/* Default Pressed States */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
+          states.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDefaultDemoReact client:load />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{
+  framework === 'vue' && (
+    <>
+      {/* Text Formatting Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A horizontal toolbar with toggle buttons and regular buttons.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TextFormattingToolbarDemoVue client:load />
+        </div>
+      </div>
+
+      {/* Vertical Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <VerticalToolbarDemoVue client:load />
+        </div>
+      </div>
+
+      {/* With Disabled Items */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Disabled items are skipped during keyboard navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <DisabledItemsToolbarDemoVue client:load />
+        </div>
+      </div>
+
+      {/* Controlled Toggle Buttons */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with controlled state using v-model. The current state is displayed and
+          applied to the sample text.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDemoVue client:load />
+        </div>
+      </div>
+
+      {/* Default Pressed States */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with <code>default-pressed</code> for initial state, including disabled
+          states.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDefaultDemoVue client:load />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{
+  framework === 'svelte' && (
+    <>
+      {/* Text Formatting Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A horizontal toolbar with toggle buttons and regular buttons.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <TextFormattingToolbarDemoSvelte client:load />
+        </div>
+      </div>
+
+      {/* Vertical Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <VerticalToolbarDemoSvelte client:load />
+        </div>
+      </div>
+
+      {/* With Disabled Items */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Disabled items are skipped during keyboard navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <DisabledItemsToolbarDemoSvelte client:load />
+        </div>
+      </div>
+
+      {/* Controlled Toggle Buttons */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Controlled Toggle Buttons</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with controlled state. The current state is displayed and applied to the
+          sample text.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDemoSvelte client:load />
+        </div>
+      </div>
+
+      {/* Default Pressed States */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
+          states.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <ToolbarToggleDefaultDemoSvelte client:load />
+        </div>
+      </div>
+    </>
+  )
+}
+
+{
+  framework === 'astro' && (
+    <>
+      {/* Text Formatting Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Text Formatting Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          A horizontal toolbar with toggle buttons and regular buttons.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Toolbar aria-label="Text formatting">
+            <ToolbarToggleButton>Bold</ToolbarToggleButton>
+            <ToolbarToggleButton>Italic</ToolbarToggleButton>
+            <ToolbarToggleButton>Underline</ToolbarToggleButton>
+            <ToolbarSeparator />
+            <ToolbarButton>Align Left</ToolbarButton>
+            <ToolbarButton>Center</ToolbarButton>
+            <ToolbarButton>Align Right</ToolbarButton>
+            <ToolbarSeparator />
+            <ToolbarButton>Copy</ToolbarButton>
+            <ToolbarButton>Cut</ToolbarButton>
+            <ToolbarButton>Paste</ToolbarButton>
+          </Toolbar>
+        </div>
+      </div>
+
+      {/* Vertical Toolbar */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Vertical Toolbar</h3>
+        <p class="text-muted-foreground mb-4 text-sm">Use arrow up/down keys to navigate.</p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Toolbar orientation="vertical" aria-label="Actions">
+            <ToolbarButton>New</ToolbarButton>
+            <ToolbarButton>Open</ToolbarButton>
+            <ToolbarButton>Save</ToolbarButton>
+            <ToolbarSeparator />
+            <ToolbarButton>Print</ToolbarButton>
+          </Toolbar>
+        </div>
+      </div>
+
+      {/* With Disabled Items */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">With Disabled Items</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Disabled items are skipped during keyboard navigation.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Toolbar aria-label="Edit actions">
+            <ToolbarButton>Undo</ToolbarButton>
+            <ToolbarButton disabled>Redo</ToolbarButton>
+            <ToolbarSeparator />
+            <ToolbarButton>Cut</ToolbarButton>
+            <ToolbarButton>Copy</ToolbarButton>
+            <ToolbarButton disabled>Paste</ToolbarButton>
+          </Toolbar>
+        </div>
+      </div>
+
+      {/* Toggle Buttons with Event Handling */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Toggle Buttons with Event Handling</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons that emit <code>pressed-change</code> events. The current state is logged
+          and displayed.
+        </p>
+        <div class="border-border bg-background space-y-4 rounded-lg border p-6">
+          <Toolbar aria-label="Text formatting with events" id="toggle-demo-toolbar">
+            <ToolbarToggleButton>Bold</ToolbarToggleButton>
+            <ToolbarToggleButton>Italic</ToolbarToggleButton>
+            <ToolbarToggleButton>Underline</ToolbarToggleButton>
+          </Toolbar>
+          <div class="text-muted-foreground text-sm">
+            <p>
+              Current state:{' '}
+              <span id="toggle-state" class="font-mono">
+                {'{ bold: false, italic: false, underline: false }'}
+              </span>
+            </p>
+          </div>
+          <div id="toggle-sample-text" class="border-border rounded-lg border p-4">
+            Sample text with applied formatting
+          </div>
+        </div>
+      </div>
+
+      {/* Default Pressed States */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">Default Pressed States</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          Toggle buttons with <code>defaultPressed</code> for initial state, including disabled
+          states.
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <Toolbar aria-label="Default pressed states">
+            <ToolbarToggleButton defaultPressed>Bold (default on)</ToolbarToggleButton>
+            <ToolbarToggleButton>Italic (default off)</ToolbarToggleButton>
+            <ToolbarSeparator />
+            <ToolbarToggleButton defaultPressed disabled>
+              Disabled (pressed)
+            </ToolbarToggleButton>
+            <ToolbarToggleButton disabled>Disabled (not pressed)</ToolbarToggleButton>
+          </Toolbar>
+        </div>
+      </div>
+    </>
+  )
+}
+
+<script>
+  // Handle toggle button state changes for the Astro demo
+  const toolbar = document.getElementById('toggle-demo-toolbar');
+  const stateDisplay = document.getElementById('toggle-state');
+  const sampleText = document.getElementById('toggle-sample-text');
+
+  if (toolbar && stateDisplay && sampleText) {
+    const state: Record<string, boolean> = { bold: false, italic: false, underline: false };
+    const buttons = toolbar.querySelectorAll('apg-toolbar-toggle-button');
+
+    buttons.forEach((btn, index) => {
+      btn.addEventListener('pressed-change', (e) => {
+        if (!(e instanceof CustomEvent)) return;
+
+        const key = ['bold', 'italic', 'underline'][index];
+        state[key] = e.detail.pressed;
+
+        stateDisplay.textContent = JSON.stringify(state);
+        (sampleText as HTMLElement).style.fontWeight = state.bold ? 'bold' : 'normal';
+        (sampleText as HTMLElement).style.fontStyle = state.italic ? 'italic' : 'normal';
+        (sampleText as HTMLElement).style.textDecoration = state.underline ? 'underline' : 'none';
+      });
+    });
+  }
+</script>

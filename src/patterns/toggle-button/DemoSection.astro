@@ -1,0 +1,54 @@
+---
+/**
+ * Toggle Button Demo Section
+ *
+ * Renders the toggle button demo for each framework variant.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { MuteDemo, DarkModeDemo, NotificationsDemo } from './ToggleButtonDemo';
+import ToggleButtonDemoVue from './ToggleButtonDemo.vue';
+import ToggleButtonDemoSvelte from './ToggleButtonDemo.svelte';
+import ToggleButton from './ToggleButton.astro';
+import Icon from '@/components/ui/icon/icon.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {
+    framework === 'react' && (
+      <div class="flex flex-wrap gap-4">
+        <MuteDemo client:load />
+        <DarkModeDemo client:load />
+        <NotificationsDemo client:load />
+      </div>
+    )
+  }
+  {framework === 'vue' && <ToggleButtonDemoVue client:load />}
+  {framework === 'svelte' && <ToggleButtonDemoSvelte client:load />}
+  {
+    framework === 'astro' && (
+      <div class="flex flex-wrap gap-4">
+        <ToggleButton>
+          <Icon name="volume-off" slot="pressed-indicator" />
+          <Icon name="volume-2" slot="unpressed-indicator" />
+          Mute
+        </ToggleButton>
+        <ToggleButton initialPressed={true}>
+          <Icon name="moon" slot="pressed-indicator" />
+          <Icon name="sun" slot="unpressed-indicator" />
+          Dark Mode
+        </ToggleButton>
+        <ToggleButton disabled>
+          <Icon name="bell-off" slot="pressed-indicator" />
+          <Icon name="bell" slot="unpressed-indicator" />
+          Notifications
+        </ToggleButton>
+      </div>
+    )
+  }
+</div>

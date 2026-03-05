@@ -1,0 +1,27 @@
+---
+/**
+ * Landmarks Demo Section
+ *
+ * Renders the landmark demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { LandmarkDemo as LandmarkDemoReact } from './LandmarkDemo';
+import LandmarkDemoVue from './LandmarkDemo.vue';
+import LandmarkDemoSvelte from './LandmarkDemo.svelte';
+import LandmarkDemoAstro from './LandmarkDemo.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {framework === 'react' && <LandmarkDemoReact client:load showLabels={true} />}
+  {framework === 'vue' && <LandmarkDemoVue client:load showLabels={true} />}
+  {framework === 'svelte' && <LandmarkDemoSvelte client:load showLabels={true} />}
+  {framework === 'astro' && <LandmarkDemoAstro showLabels={true} />}
+</div>
