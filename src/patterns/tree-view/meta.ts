@@ -227,10 +227,43 @@ function App() {
           },
         },
       ],
-      apiNote: {
-        en: 'TreeNode interface: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-        ja: 'TreeNode インターフェース: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-      },
+      apiSubComponents: [
+        {
+          name: 'TreeNode',
+          props: [
+            {
+              name: 'id',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Unique node identifier', ja: 'ノードの一意な識別子' },
+            },
+            {
+              name: 'label',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Display text for the node', ja: 'ノードの表示テキスト' },
+            },
+            {
+              name: 'children',
+              type: 'TreeNode[]',
+              default: '-',
+              description: {
+                en: 'Child nodes (makes this a parent node)',
+                ja: '子ノード（親ノードになる）',
+              },
+            },
+            {
+              name: 'disabled',
+              type: 'boolean',
+              default: 'false',
+              description: {
+                en: 'Whether the node is disabled',
+                ja: 'ノードが無効化されているかどうか',
+              },
+            },
+          ],
+        },
+      ],
     },
     vue: {
       sourceFile: 'TreeView.vue',
@@ -402,10 +435,43 @@ function handleActivate(id) {
           },
         },
       ],
-      apiNote: {
-        en: 'TreeNode interface: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-        ja: 'TreeNode インターフェース: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-      },
+      apiSubComponents: [
+        {
+          name: 'TreeNode',
+          props: [
+            {
+              name: 'id',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Unique node identifier', ja: 'ノードの一意な識別子' },
+            },
+            {
+              name: 'label',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Display text for the node', ja: 'ノードの表示テキスト' },
+            },
+            {
+              name: 'children',
+              type: 'TreeNode[]',
+              default: '-',
+              description: {
+                en: 'Child nodes (makes this a parent node)',
+                ja: '子ノード（親ノードになる）',
+              },
+            },
+            {
+              name: 'disabled',
+              type: 'boolean',
+              default: 'false',
+              description: {
+                en: 'Whether the node is disabled',
+                ja: 'ノードが無効化されているかどうか',
+              },
+            },
+          ],
+        },
+      ],
     },
     svelte: {
       sourceFile: 'TreeView.svelte',
@@ -575,10 +641,43 @@ function handleActivate(event) {
           },
         },
       ],
-      apiNote: {
-        en: 'TreeNode interface: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-        ja: 'TreeNode インターフェース: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-      },
+      apiSubComponents: [
+        {
+          name: 'TreeNode',
+          props: [
+            {
+              name: 'id',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Unique node identifier', ja: 'ノードの一意な識別子' },
+            },
+            {
+              name: 'label',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Display text for the node', ja: 'ノードの表示テキスト' },
+            },
+            {
+              name: 'children',
+              type: 'TreeNode[]',
+              default: '-',
+              description: {
+                en: 'Child nodes (makes this a parent node)',
+                ja: '子ノード（親ノードになる）',
+              },
+            },
+            {
+              name: 'disabled',
+              type: 'boolean',
+              default: 'false',
+              description: {
+                en: 'Whether the node is disabled',
+                ja: 'ノードが無効化されているかどうか',
+              },
+            },
+          ],
+        },
+      ],
     },
     astro: {
       sourceFile: 'TreeView.astro',
@@ -727,10 +826,43 @@ const nodes = [
           },
         },
       ],
-      apiNote: {
-        en: 'TreeNode interface: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-        ja: 'TreeNode インターフェース: <code>{ id: string, label: string, children?: TreeNode[], disabled?: boolean }</code>',
-      },
+      apiSubComponents: [
+        {
+          name: 'TreeNode',
+          props: [
+            {
+              name: 'id',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Unique node identifier', ja: 'ノードの一意な識別子' },
+            },
+            {
+              name: 'label',
+              type: 'string',
+              default: 'required',
+              description: { en: 'Display text for the node', ja: 'ノードの表示テキスト' },
+            },
+            {
+              name: 'children',
+              type: 'TreeNode[]',
+              default: '-',
+              description: {
+                en: 'Child nodes (makes this a parent node)',
+                ja: '子ノード（親ノードになる）',
+              },
+            },
+            {
+              name: 'disabled',
+              type: 'boolean',
+              default: 'false',
+              description: {
+                en: 'Whether the node is disabled',
+                ja: 'ノードが無効化されているかどうか',
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

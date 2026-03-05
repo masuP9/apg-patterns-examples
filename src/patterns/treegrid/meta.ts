@@ -1,4 +1,85 @@
-import type { PatternMeta } from '@/lib/pattern-meta-types';
+import type { ApiSubComponent, PatternMeta } from '@/lib/pattern-meta-types';
+
+const treegridTypeSubComponents: ApiSubComponent[] = [
+  {
+    name: 'TreeGridColumnDef',
+    props: [
+      {
+        name: 'id',
+        type: 'string',
+        default: 'required',
+        description: { en: 'Unique column identifier', ja: '列の一意な識別子' },
+      },
+      {
+        name: 'header',
+        type: 'string',
+        default: 'required',
+        description: { en: 'Column header text', ja: '列ヘッダーテキスト' },
+      },
+      {
+        name: 'isRowHeader',
+        type: 'boolean',
+        default: 'false',
+        description: {
+          en: 'Whether this column is a row header',
+          ja: 'この列が行ヘッダーかどうか',
+        },
+      },
+    ],
+  },
+  {
+    name: 'TreeGridCellData',
+    props: [
+      {
+        name: 'id',
+        type: 'string',
+        default: 'required',
+        description: { en: 'Unique cell identifier', ja: 'セルの一意な識別子' },
+      },
+      {
+        name: 'value',
+        type: 'string | number',
+        default: 'required',
+        description: { en: 'Cell value', ja: 'セルの値' },
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        default: 'false',
+        description: { en: 'Whether the cell is disabled', ja: 'セルが無効化されているかどうか' },
+      },
+    ],
+  },
+  {
+    name: 'TreeGridNodeData',
+    props: [
+      {
+        name: 'id',
+        type: 'string',
+        default: 'required',
+        description: { en: 'Unique node identifier', ja: 'ノードの一意な識別子' },
+      },
+      {
+        name: 'cells',
+        type: 'TreeGridCellData[]',
+        default: 'required',
+        description: { en: 'Array of cell data for this row', ja: 'この行のセルデータ配列' },
+      },
+      {
+        name: 'children',
+        type: 'TreeGridNodeData[]',
+        default: '-',
+        description: { en: 'Child nodes (makes this a parent row)', ja: '子ノード（親行になる）' },
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        default: 'false',
+        description: { en: 'Whether the node is disabled', ja: 'ノードが無効化されているかどうか' },
+      },
+    ],
+  },
+];
 
 const treegridMeta: PatternMeta = {
   title: {
@@ -191,10 +272,7 @@ const nodes: TreeGridNodeData[] = [
           },
         },
       ],
-      apiNote: {
-        en: 'Type definitions: <code>TreeGridColumnDef { id: string, header: string, isRowHeader?: boolean }</code>, <code>TreeGridCellData { id: string, value: string | number, disabled?: boolean }</code>, <code>TreeGridNodeData { id: string, cells: TreeGridCellData[], children?: TreeGridNodeData[], disabled?: boolean }</code>',
-        ja: '型定義: <code>TreeGridColumnDef { id: string, header: string, isRowHeader?: boolean }</code>, <code>TreeGridCellData { id: string, value: string | number, disabled?: boolean }</code>, <code>TreeGridNodeData { id: string, cells: TreeGridCellData[], children?: TreeGridNodeData[], disabled?: boolean }</code>',
-      },
+      apiSubComponents: treegridTypeSubComponents,
     },
     vue: {
       sourceFile: 'TreeGrid.vue',

@@ -1,4 +1,96 @@
-import type { PatternMeta } from '@/lib/pattern-meta-types';
+import type { ApiSubComponent, PatternMeta } from '@/lib/pattern-meta-types';
+
+function createTableSubComponents(cellContentType: string, cellsType: string): ApiSubComponent[] {
+  return [
+    {
+      name: 'TableColumn',
+      props: [
+        {
+          name: 'id',
+          type: 'string',
+          default: 'required',
+          description: { en: 'Unique column identifier', ja: '列の一意な識別子' },
+        },
+        {
+          name: 'header',
+          type: 'string',
+          default: 'required',
+          description: { en: 'Column header text', ja: '列ヘッダーテキスト' },
+        },
+        {
+          name: 'sortable',
+          type: 'boolean',
+          default: 'false',
+          description: { en: 'Whether column is sortable', ja: '列がソート可能かどうか' },
+        },
+        {
+          name: 'sort',
+          type: "'ascending' | 'descending' | 'none'",
+          default: '-',
+          description: { en: 'Current sort direction', ja: '現在のソート方向' },
+        },
+      ],
+    },
+    {
+      name: 'TableCell',
+      props: [
+        {
+          name: 'content',
+          type: cellContentType,
+          default: 'required',
+          description: { en: 'Cell content', ja: 'セルの内容' },
+        },
+        {
+          name: 'colspan',
+          type: 'number',
+          default: '-',
+          description: { en: 'Number of columns to span', ja: '結合する列数' },
+        },
+        {
+          name: 'rowspan',
+          type: 'number',
+          default: '-',
+          description: { en: 'Number of rows to span', ja: '結合する行数' },
+        },
+      ],
+    },
+    {
+      name: 'TableRow',
+      props: [
+        {
+          name: 'id',
+          type: 'string',
+          default: 'required',
+          description: { en: 'Unique row identifier', ja: '行の一意な識別子' },
+        },
+        {
+          name: 'cells',
+          type: cellsType,
+          default: 'required',
+          description: { en: 'Array of cell data', ja: 'セルデータの配列' },
+        },
+        {
+          name: 'hasRowHeader',
+          type: 'boolean',
+          default: 'false',
+          description: {
+            en: 'Whether first cell is a row header',
+            ja: '最初のセルを行ヘッダーにするかどうか',
+          },
+        },
+        {
+          name: 'rowIndex',
+          type: 'number',
+          default: '-',
+          description: {
+            en: 'Row index for virtualization',
+            ja: '仮想化用の行インデックス',
+          },
+        },
+      ],
+    },
+  ];
+}
 
 const tableMeta: PatternMeta = {
   title: {
@@ -167,10 +259,10 @@ const rowsWithHeaders: TableRow[] = [
           },
         },
       ],
-      apiNote: {
-        en: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string | ReactNode; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | ReactNode | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-        ja: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string | ReactNode; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | ReactNode | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-      },
+      apiSubComponents: createTableSubComponents(
+        'string | ReactNode',
+        '(string | ReactNode | TableCell)[]'
+      ),
     },
     vue: {
       sourceFile: 'Table.vue',
@@ -288,10 +380,7 @@ function handleSortChange(columnId: string, direction: 'ascending' | 'descending
           },
         },
       ],
-      apiNote: {
-        en: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-        ja: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-      },
+      apiSubComponents: createTableSubComponents('string', '(string | TableCell)[]'),
     },
     svelte: {
       sourceFile: 'Table.svelte',
@@ -407,10 +496,7 @@ function handleSortChange(columnId: string, direction: 'ascending' | 'descending
           },
         },
       ],
-      apiNote: {
-        en: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-        ja: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-      },
+      apiSubComponents: createTableSubComponents('string', '(string | TableCell)[]'),
     },
     astro: {
       sourceFile: 'Table.astro',
@@ -527,10 +613,7 @@ const rowsWithHeaders = [
           },
         },
       ],
-      apiNote: {
-        en: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-        ja: "<strong>TableColumn</strong>: <code>{ id: string; header: string; sortable?: boolean; sort?: 'ascending' | 'descending' | 'none' }</code><br/><strong>TableCell</strong>: <code>{ content: string; colspan?: number; rowspan?: number }</code><br/><strong>TableRow</strong>: <code>{ id: string; cells: (string | TableCell)[]; hasRowHeader?: boolean; rowIndex?: number }</code>",
-      },
+      apiSubComponents: createTableSubComponents('string', '(string | TableCell)[]'),
     },
   },
 };

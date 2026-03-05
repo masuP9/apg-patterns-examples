@@ -58,7 +58,10 @@ const { class: className, collapsedLines = 5 } = Astro.props;
   /* First heading should not have top margin */
   .prose > :global(h2:first-child),
   .prose > :global(h3:first-child),
-  .prose > :global(h4:first-child) {
+  .prose > :global(h4:first-child),
+  .prose :global(h2:first-child),
+  .prose :global(h3:first-child),
+  .prose :global(h4:first-child) {
     margin-top: 0;
   }
 
@@ -129,8 +132,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     border-bottom: 1px solid var(--border);
   }
 
-  /* Code blocks */
-  .prose :global(pre:not(.code-block-content pre):not(.code-content pre)) {
+  /* Code blocks — base styles for all <pre> inside Prose */
+  .prose :global(pre) {
     background-color: var(--muted);
     border-radius: 0.5rem;
     padding: 1rem;
@@ -139,6 +142,16 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     margin-bottom: 1.5rem;
     font-size: 0.875rem;
     line-height: 1.6;
+  }
+
+  /* CodeBlock component (<pre> inside .code-block-content) — reset layout, CodeBlock handles its own styling */
+  .prose :global(.code-block-content pre) {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    padding: 1rem;
+    background-color: #24292e;
+    color: #e1e4e8;
   }
 
   .prose :global(pre code) {

@@ -1,12 +1,46 @@
-import type { PatternMeta } from '@/lib/pattern-meta-types';
+import type { ApiSubComponent, PatternMeta } from '@/lib/pattern-meta-types';
 
-const accordionItemTypeBlock = `<details class="mt-4"><summary class="cursor-pointer font-medium">AccordionItem Interface</summary><pre class="mt-2 rounded bg-muted p-3 text-sm"><code>interface AccordionItem {
-  id: string;
-  header: string;
-  content: string;
-  disabled?: boolean;
-  defaultExpanded?: boolean;
-}</code></pre></details>`;
+const accordionItemSubComponent: ApiSubComponent = {
+  name: 'AccordionItem',
+  props: [
+    {
+      name: 'id',
+      type: 'string',
+      default: 'required',
+      description: { en: 'Unique item identifier', ja: 'アイテムの一意な識別子' },
+    },
+    {
+      name: 'header',
+      type: 'string',
+      default: 'required',
+      description: {
+        en: 'Header text for the accordion trigger',
+        ja: 'アコーディオントリガーのヘッダーテキスト',
+      },
+    },
+    {
+      name: 'content',
+      type: 'string',
+      default: 'required',
+      description: { en: 'Content of the accordion panel', ja: 'アコーディオンパネルの内容' },
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      default: 'false',
+      description: { en: 'Whether the item is disabled', ja: 'アイテムが無効化されているかどうか' },
+    },
+    {
+      name: 'defaultExpanded',
+      type: 'boolean',
+      default: 'false',
+      description: {
+        en: 'Whether the item is initially expanded',
+        ja: 'アイテムが初期表示で展開されているかどうか',
+      },
+    },
+  ],
+};
 
 const accordionMeta: PatternMeta = {
   title: {
@@ -133,10 +167,7 @@ function App() {
           },
         },
       ],
-      apiNote: {
-        en: accordionItemTypeBlock,
-        ja: accordionItemTypeBlock,
-      },
+      apiSubComponents: [accordionItemSubComponent],
     },
     vue: {
       sourceFile: 'Accordion.vue',
@@ -216,10 +247,7 @@ const items = [
           },
         },
       ],
-      apiNote: {
-        en: accordionItemTypeBlock,
-        ja: accordionItemTypeBlock,
-      },
+      apiSubComponents: [accordionItemSubComponent],
     },
     svelte: {
       sourceFile: 'Accordion.svelte',
@@ -300,10 +328,7 @@ const items = [
           },
         },
       ],
-      apiNote: {
-        en: accordionItemTypeBlock,
-        ja: accordionItemTypeBlock,
-      },
+      apiSubComponents: [accordionItemSubComponent],
     },
     astro: {
       sourceFile: 'Accordion.astro',
@@ -388,10 +413,7 @@ const items = [
           },
         },
       ],
-      apiNote: {
-        en: accordionItemTypeBlock,
-        ja: accordionItemTypeBlock,
-      },
+      apiSubComponents: [accordionItemSubComponent],
     },
   },
 };

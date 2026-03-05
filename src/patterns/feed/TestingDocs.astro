@@ -51,6 +51,16 @@ const sectionTitles = {
 };
 
 const titles = sectionTitles[locale];
+
+// Pre-format all commands into a single text block (same as other patterns)
+const commandsText = commands
+  ? commands
+      .map((cmd) => {
+        const comment = t(cmd.comment);
+        return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
+      })
+      .join('\n\n')
+  : '';
 ---
 
 <Prose>
@@ -127,53 +137,7 @@ const titles = sectionTitles[locale];
 
   <h3 class="mb-3 text-lg font-medium">{titles.runningTests}</h3>
 
-  {
-    commands && (
-      <>
-        <div class="bg-muted/50 mb-6 rounded-lg p-4">
-          <h4 class="mb-2 font-medium">{titles.unitTests}</h4>
-          <pre class="text-muted-foreground overflow-x-auto text-sm">
-            <code>
-              {commands
-                .filter((cmd) => {
-                  const comment = t(cmd.comment);
-                  return (
-                    comment.toLowerCase().includes('unit') ||
-                    comment.includes('ユニット') ||
-                    comment.includes('framework')
-                  );
-                })
-                .map((cmd) => {
-                  const comment = t(cmd.comment);
-                  return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
-                })
-                .join('\n\n')}
-            </code>
-          </pre>
-        </div>
-
-        <div class="bg-muted/50 mb-6 rounded-lg p-4">
-          <h4 class="mb-2 font-medium">{titles.e2eTests}</h4>
-          <pre class="text-muted-foreground overflow-x-auto text-sm">
-            <code>
-              {commands
-                .filter((cmd) => {
-                  const comment = t(cmd.comment);
-                  return (
-                    comment.toLowerCase().includes('e2e') ||
-                    comment.toLowerCase().includes('ui mode') ||
-                    comment.includes('UI モード')
-                  );
-                })
-                .map((cmd) => {
-                  const comment = t(cmd.comment);
-                  return comment ? `# ${comment}\n${cmd.command}` : cmd.command;
-                })
-                .join('\n\n')}
-            </code>
-          </pre>
-        </div>
-      </>
-    )
-  }
+  {/* prettier-ignore */}
+  <pre
+    class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{commandsText}</code></pre>
 </Prose>
