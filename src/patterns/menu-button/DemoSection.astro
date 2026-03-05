@@ -7,10 +7,7 @@
  * Astro's client:load directive for hydration.
  */
 import type { Framework } from '@/lib/frameworks';
-import {
-  BasicMenuButtonDemo,
-  DisabledItemsMenuButtonDemo,
-} from './MenuButtonDemo';
+import { BasicMenuButtonDemo, DisabledItemsMenuButtonDemo } from './MenuButtonDemo';
 import MenuButtonDemoVue from './MenuButtonDemo.vue';
 import MenuButtonDemoSvelte from './MenuButtonDemo.svelte';
 import MenuButton from './MenuButton.astro';
@@ -87,20 +84,16 @@ const fileItems = [
   </div>
 </div>
 
-{
-  framework === 'astro' && (
-    <script>
-      // Handle itemselect events from Web Components
-      document.querySelectorAll('apg-menu-button').forEach((menuButton, index) => {
-        const outputId = index === 0 ? 'basic-output' : 'disabled-output';
-        const output = document.getElementById(outputId);
-        menuButton.addEventListener('itemselect', (e) => {
-          const event = e as CustomEvent<{ itemId: string }>;
-          if (output) {
-            output.textContent = `Last action: ${event.detail.itemId}`;
-          }
-        });
-      });
-    </script>
-  )
-}
+<script>
+  // Handle itemselect events from Web Components
+  document.querySelectorAll('apg-menu-button').forEach((menuButton, index) => {
+    const outputId = index === 0 ? 'basic-output' : 'disabled-output';
+    const output = document.getElementById(outputId);
+    menuButton.addEventListener('itemselect', (e) => {
+      const event = e as CustomEvent<{ itemId: string }>;
+      if (output) {
+        output.textContent = `Last action: ${event.detail.itemId}`;
+      }
+    });
+  });
+</script>
