@@ -130,7 +130,7 @@ const { class: className, collapsedLines = 5 } = Astro.props;
   }
 
   /* Code blocks */
-  .prose :global(pre) {
+  .prose :global(pre:not(.code-block-content pre):not(.code-content pre)) {
     background-color: var(--muted);
     border-radius: 0.5rem;
     padding: 1rem;
@@ -219,6 +219,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     margin: 0;
     border-radius: 0;
     border: none;
+    background-color: #24292e;
+    color: #e1e4e8;
   }
 
   .prose :global(.code-block-wrapper.collapsed .code-content) {
