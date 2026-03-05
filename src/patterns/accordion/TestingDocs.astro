@@ -7,6 +7,7 @@ import path from 'node:path';
 import { accordionAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -67,7 +68,7 @@ const sectionTitles = {
 const titles = sectionTitles[locale];
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {titles.intro}
   </p>
@@ -190,4 +191,4 @@ const titles = sectionTitles[locale];
       </p>
     )
   }
-</div>
+</Prose>

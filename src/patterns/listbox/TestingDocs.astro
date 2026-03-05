@@ -7,6 +7,7 @@ import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import { listboxAccessibilityData } from './accessibility-data';
 import fs from 'node:fs';
 import path from 'node:path';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -53,7 +54,7 @@ const priorityLabels: Record<string, Record<string, string>> = {
 };
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {
       locale === 'ja'
@@ -150,4 +151,4 @@ const priorityLabels: Record<string, Record<string, string>> = {
       </p>
     )
   }
-</div>
+</Prose>

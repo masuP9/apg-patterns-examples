@@ -4,13 +4,14 @@ import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import Prose from '@/components/ui/Prose.astro';
 
 // Read actual test file at build time
 const e2eTestPath = path.join(process.cwd(), 'e2e/tree-view.spec.ts');
 const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance for ARIA attributes, keyboard interactions, expansion/collapse
     behavior, selection models, and accessibility requirements. The Tree View component uses a
@@ -526,4 +527,4 @@ npm run test:e2e:astro:pattern --pattern=tree-view</code></pre>
       </ExternalLink>
     </li>
   </ul>
-</div>
+</Prose>

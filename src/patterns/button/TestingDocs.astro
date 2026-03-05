@@ -4,6 +4,7 @@ import ExternalLink from '@/components/ui/ExternalLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import { buttonAccessibilityData } from './accessibility-data';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -52,7 +53,7 @@ const priorityLabels: Record<string, Record<string, string>> = {
 
 {
   testing && (
-    <div class="prose dark:prose-invert max-w-none">
+    <Prose>
       <p class="text-muted-foreground mb-4">{titles.intro}</p>
 
       <h3 class="mb-3 text-lg font-medium">{titles.strategy}</h3>
@@ -144,6 +145,6 @@ const priorityLabels: Record<string, Record<string, string>> = {
           {titles.docLink}
         </p>
       )}
-    </div>
+    </Prose>
   )
 }

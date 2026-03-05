@@ -4,13 +4,14 @@ import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import Prose from '@/components/ui/Prose.astro';
 
 // Read actual test file at build time
 const e2eTestPath = path.join(process.cwd(), 'e2e/radio-group.spec.ts');
 const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     Tests verify APG compliance across keyboard interaction, ARIA attributes, focus management, and
     accessibility requirements. The Radio Group component uses a two-layer testing strategy.
@@ -366,4 +367,4 @@ npm run test:e2e:astro:pattern --pattern=radio-group</code></pre>
       class="text-primary hover:underline">testing-strategy.md</ExternalLink
     > for full documentation.
   </p>
-</div>
+</Prose>
