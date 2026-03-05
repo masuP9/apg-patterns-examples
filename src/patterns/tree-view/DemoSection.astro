@@ -1,0 +1,288 @@
+---
+/**
+ * Tree View Demo Section
+ *
+ * Renders the tree view demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { TreeView as TreeViewReact } from './TreeView';
+import { TreeViewActivationDemo as TreeViewActivationDemoReact } from './TreeViewActivationDemo';
+import TreeViewVue from './TreeView.vue';
+import TreeViewActivationDemoVue from './TreeViewActivationDemo.vue';
+import TreeViewSvelte from './TreeView.svelte';
+import TreeViewActivationDemoSvelte from './TreeViewActivationDemo.svelte';
+import TreeViewAstro from './TreeView.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+const isJa = Astro.url.pathname.startsWith('/ja/');
+
+const fileSystemNodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+      {
+        id: 'projects',
+        label: 'Projects',
+        children: [
+          { id: 'project-a', label: 'Project A' },
+          { id: 'project-b', label: 'Project B' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    children: [
+      { id: 'vacation', label: 'vacation.jpg' },
+      { id: 'profile', label: 'profile.png' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+const disabledNodes = [
+  {
+    id: 'folder1',
+    label: 'Accessible Folder',
+    children: [
+      { id: 'file1', label: 'file1.txt' },
+      { id: 'file2', label: 'file2.txt', disabled: true },
+    ],
+  },
+  {
+    id: 'folder2',
+    label: 'Restricted Folder',
+    disabled: true,
+    children: [{ id: 'secret', label: 'secret.txt' }],
+  },
+  { id: 'public', label: 'public.txt' },
+];
+
+const singleSelectLabel = isJa ? '単一選択 + アクティベーション' : 'Single-Select with Activation';
+const multiSelectLabel = isJa ? '複数選択' : 'Multi-Select';
+const disabledLabel = isJa ? '無効化されたノード' : 'With Disabled Nodes';
+const fileExplorerAriaLabel = isJa ? 'ファイルエクスプローラー' : 'File Explorer';
+const multiSelectAriaLabel = isJa
+  ? '複数選択ファイルエクスプローラー'
+  : 'Multi-select File Explorer';
+const restrictedAriaLabel = isJa
+  ? 'アクセス制限付きファイルエクスプローラー'
+  : 'File Explorer with Restricted Access';
+const activatedPlaceholder = isJa
+  ? 'Enter、Space、またはクリックでノードを選択してください'
+  : 'Select a node with Enter, Space, or Click';
+const activatedPrefix = isJa ? 'アクティベート: ' : 'Activated: ';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-8">
+    {
+      framework === 'react' && (
+        <>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{singleSelectLabel}</h3>
+            <TreeViewActivationDemoReact
+              client:load
+              nodes={fileSystemNodes}
+              aria-label={fileExplorerAriaLabel}
+              defaultExpandedIds={['documents']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{multiSelectLabel}</h3>
+            <TreeViewReact
+              client:load
+              nodes={fileSystemNodes}
+              aria-label={multiSelectAriaLabel}
+              multiselectable
+              defaultExpandedIds={['documents', 'images']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{disabledLabel}</h3>
+            <TreeViewReact
+              client:load
+              nodes={disabledNodes}
+              aria-label={restrictedAriaLabel}
+              defaultExpandedIds={['folder1']}
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'vue' && (
+        <>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{singleSelectLabel}</h3>
+            <TreeViewActivationDemoVue
+              client:load
+              nodes={fileSystemNodes}
+              ariaLabel={fileExplorerAriaLabel}
+              defaultExpandedIds={['documents']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{multiSelectLabel}</h3>
+            <TreeViewVue
+              client:load
+              nodes={fileSystemNodes}
+              aria-label={multiSelectAriaLabel}
+              multiselectable
+              defaultExpandedIds={['documents', 'images']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{disabledLabel}</h3>
+            <TreeViewVue
+              client:load
+              nodes={disabledNodes}
+              aria-label={restrictedAriaLabel}
+              defaultExpandedIds={['folder1']}
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{singleSelectLabel}</h3>
+            <TreeViewActivationDemoSvelte
+              client:load
+              nodes={fileSystemNodes}
+              ariaLabel={fileExplorerAriaLabel}
+              defaultExpandedIds={['documents']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{multiSelectLabel}</h3>
+            <TreeViewSvelte
+              client:load
+              nodes={fileSystemNodes}
+              aria-label={multiSelectAriaLabel}
+              multiselectable
+              defaultExpandedIds={['documents', 'images']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{disabledLabel}</h3>
+            <TreeViewSvelte
+              client:load
+              nodes={disabledNodes}
+              aria-label={restrictedAriaLabel}
+              defaultExpandedIds={['folder1']}
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'astro' && (
+        <>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{singleSelectLabel}</h3>
+            <div class="flex flex-col gap-4">
+              <TreeViewAstro
+                nodes={fileSystemNodes}
+                aria-label={fileExplorerAriaLabel}
+                defaultExpandedIds={['documents']}
+              />
+              <div class="flex items-center gap-3">
+                <div
+                  id="activation-status"
+                  role="status"
+                  aria-live="polite"
+                  class="flex-1 rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm dark:border-gray-600 dark:bg-gray-800"
+                >
+                  <span class="text-muted-foreground">{activatedPrefix}</span>
+                  <span id="activated-label" class="text-muted-foreground italic">
+                    {activatedPlaceholder}
+                  </span>
+                </div>
+                <button
+                  id="reset-button"
+                  type="button"
+                  class="hidden rounded-md border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{multiSelectLabel}</h3>
+            <TreeViewAstro
+              nodes={fileSystemNodes}
+              aria-label={multiSelectAriaLabel}
+              multiselectable
+              defaultExpandedIds={['documents', 'images']}
+            />
+          </div>
+          <div>
+            <h3 class="mb-3 text-sm font-medium">{disabledLabel}</h3>
+            <TreeViewAstro
+              nodes={disabledNodes}
+              aria-label={restrictedAriaLabel}
+              defaultExpandedIds={['folder1']}
+            />
+          </div>
+        </>
+      )
+    }
+  </div>
+</div>
+
+<script define:vars={{ fileSystemNodes, activatedPlaceholder }}>
+  const treeview = document.querySelector('apg-treeview');
+  const activatedLabel = document.getElementById('activated-label');
+  const resetButton = document.getElementById('reset-button');
+
+  function findNodeLabel(nodes, id) {
+    for (const node of nodes) {
+      if (node.id === id) {
+        return node.label;
+      }
+      if (node.children) {
+        const found = findNodeLabel(node.children, id);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return null;
+  }
+
+  function resetActivation() {
+    if (activatedLabel) {
+      activatedLabel.textContent = activatedPlaceholder;
+      activatedLabel.classList.add('italic', 'text-muted-foreground');
+      activatedLabel.classList.remove('font-medium');
+    }
+    resetButton?.classList.add('hidden');
+  }
+
+  treeview?.addEventListener('activate', (event) => {
+    const { nodeId } = event.detail;
+    const label = findNodeLabel(fileSystemNodes, nodeId);
+    if (activatedLabel && label) {
+      activatedLabel.textContent = label;
+      activatedLabel.classList.remove('italic', 'text-muted-foreground');
+      activatedLabel.classList.add('font-medium');
+      resetButton?.classList.remove('hidden');
+    }
+  });
+
+  resetButton?.addEventListener('click', resetActivation);
+</script>

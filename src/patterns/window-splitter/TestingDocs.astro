@@ -4,6 +4,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 import { windowSplitterAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -61,7 +62,7 @@ const priorityLabels = {
 };
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {tr.intro}
   </p>
@@ -153,4 +154,4 @@ npm run test:e2e:ui -- window-splitter.spec.ts</code></pre>
       ))
     }
   </ul>
-</div>
+</Prose>

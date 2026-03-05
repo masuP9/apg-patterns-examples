@@ -1,0 +1,95 @@
+---
+/**
+ * Alert Dialog Demo Section
+ *
+ * Renders the alert dialog demo for each framework variant.
+ * React/Vue/Svelte use wrapper Demo components with client:only
+ * since they require browser-only APIs (portals, teleport).
+ * Astro renders multiple AlertDialog instances directly.
+ */
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import AlertDialogDemoReact from './AlertDialogDemo';
+import AlertDialogDemoVue from './AlertDialogDemo.vue';
+import AlertDialogDemoSvelte from './AlertDialogDemo.svelte';
+import AlertDialog from './AlertDialog.astro';
+
+interface Props {
+  framework: Framework;
+  locale?: Locale;
+}
+
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+{framework === 'react' && <AlertDialogDemoReact client:only="react" />}
+{framework === 'vue' && <AlertDialogDemoVue client:only="vue" />}
+{framework === 'svelte' && <AlertDialogDemoSvelte client:only="svelte" />}
+{
+  framework === 'astro' && (
+    <div>
+      {/* Delete Confirmation */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '削除の確認' : 'Delete Confirmation'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa
+            ? '明示的な確認が必要な破壊的アクションです。Escapeキーは無効です。'
+            : 'A destructive action that requires explicit confirmation. Escape key is disabled.'}
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <AlertDialog
+            title="Delete this item?"
+            message="This action cannot be undone. This will permanently delete the item from your account."
+            triggerText="Delete Item"
+            confirmLabel="Delete"
+            cancelLabel="Cancel"
+            confirmVariant="danger"
+            triggerClass="bg-destructive text-destructive-foreground rounded-md px-4 py-2 hover:opacity-90"
+          />
+        </div>
+      </div>
+
+      {/* Discard Changes */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">{isJa ? '変更の破棄' : 'Discard Changes'}</h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa ? '未保存の変更を失う前に確認します。' : 'Confirm before losing unsaved changes.'}
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <AlertDialog
+            title="Discard unsaved changes?"
+            message="You have unsaved changes. Are you sure you want to discard them?"
+            triggerText="Close Editor"
+            confirmLabel="Discard"
+            cancelLabel="Keep Editing"
+            triggerClass="bg-secondary text-secondary-foreground rounded-md px-4 py-2 hover:opacity-90"
+          />
+        </div>
+      </div>
+
+      {/* Information Acknowledgment */}
+      <div class="mb-8">
+        <h3 class="mb-3 text-lg font-medium">
+          {isJa ? '情報の確認' : 'Information Acknowledgment'}
+        </h3>
+        <p class="text-muted-foreground mb-4 text-sm">
+          {isJa
+            ? 'Escapeキーが有効な非破壊的アラートです。'
+            : 'Non-destructive alert with Escape key enabled.'}
+        </p>
+        <div class="border-border bg-background rounded-lg border p-6">
+          <AlertDialog
+            title="System Maintenance"
+            message="The system will undergo maintenance on Sunday at 2:00 AM. Please save your work before then."
+            triggerText="Show Notice"
+            confirmLabel="Understood"
+            cancelLabel="Remind Me Later"
+            allowEscapeClose={true}
+            triggerClass="bg-primary text-primary-foreground rounded-md px-4 py-2 hover:opacity-90"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}

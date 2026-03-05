@@ -1,0 +1,80 @@
+---
+/**
+ * Grid vs Table Comparison Section
+ *
+ * Explains the differences between grid and table roles
+ * to help developers choose the right pattern.
+ */
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+
+interface Props {
+  locale?: 'en' | 'ja';
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<Heading level={2} id="grid-vs-table" class="mb-4 text-xl font-semibold">Grid vs Table</Heading>
+<p class="text-muted-foreground mb-4">
+  {
+    isJa ? (
+      <>
+        インタラクティブなデータグリッドには<code>grid</code>ロールを、静的なデータ表示には
+        <code>table</code>ロールを使用します。
+      </>
+    ) : (
+      <>
+        Use <code>grid</code> role for interactive data grids, and <code>table</code> role for
+        static data presentation.
+      </>
+    )
+  }
+</p>
+<ResponsiveTable class="mb-4">
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="border-border border-b">
+        <th class="py-2 pr-4 text-left">{isJa ? '機能' : 'Feature'}</th>
+        <th class="py-2 pr-4 text-left">Grid</th>
+        <th class="py-2 text-left">Table</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'キーボードナビゲーション' : 'Keyboard Navigation'}</td>
+        <td class="py-2 pr-4">{isJa ? '2D（矢印キー）' : '2D (Arrow keys)'}</td>
+        <td class="py-2"
+          >{
+            isJa
+              ? 'テーブルナビゲーション（ブラウザデフォルト）'
+              : 'Table navigation (browser default)'
+          }</td
+        >
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'セルフォーカス' : 'Cell Focus'}</td>
+        <td class="py-2 pr-4">{isJa ? '必須（roving tabindex）' : 'Required (roving tabindex)'}</td>
+        <td class="py-2">{isJa ? '不要' : 'Not required'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '選択' : 'Selection'}</td>
+        <td class="py-2 pr-4">aria-selected</td>
+        <td class="py-2">{isJa ? '未対応' : 'Not supported'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '編集' : 'Editing'}</td>
+        <td class="py-2 pr-4">{isJa ? 'オプション' : 'Optional'}</td>
+        <td class="py-2">{isJa ? '未対応' : 'Not supported'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'ユースケース' : 'Use Case'}</td>
+        <td class="py-2 pr-4"
+          >{isJa ? 'スプレッドシート風、データグリッド' : 'Spreadsheet-like, data grids'}</td
+        >
+        <td class="py-2">{isJa ? '静的データ表示' : 'Static data display'}</td>
+      </tr>
+    </tbody>
+  </table>
+</ResponsiveTable>

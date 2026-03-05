@@ -53,9 +53,8 @@ const tr = translations[locale];
   {
     nativeHtml?.codeExample && (
       <div class="bg-muted mb-4 rounded-md p-3">
-        <pre class="m-0 overflow-x-auto text-sm">
-          <code>{nativeHtml.codeExample}</code>
-        </pre>
+        {/* prettier-ignore */}
+        <pre class="m-0 overflow-x-auto text-sm"><code>{nativeHtml.codeExample}</code></pre>
       </div>
     )
   }

@@ -1,0 +1,211 @@
+---
+/**
+ * Spinbutton Demo Section
+ *
+ * Renders the spinbutton demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { Spinbutton as SpinbuttonReact } from './Spinbutton';
+import SpinbuttonVue from './Spinbutton.vue';
+import SpinbuttonSvelte from './Spinbutton.svelte';
+import SpinbuttonAstro from './Spinbutton.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-6">
+    {
+      framework === 'react' && (
+        <>
+          <div>
+            <SpinbuttonReact client:load defaultValue={5} min={0} max={100} label="Quantity" />
+          </div>
+          <div>
+            <SpinbuttonReact
+              client:load
+              defaultValue={3}
+              min={1}
+              max={10}
+              label="Rating"
+              format="{value} of {max}"
+            />
+          </div>
+          <div>
+            <SpinbuttonReact
+              client:load
+              defaultValue={0.5}
+              min={0}
+              max={1}
+              step={0.1}
+              label="Opacity"
+            />
+          </div>
+          <div>
+            <SpinbuttonReact client:load defaultValue={0} label="Unbounded" showButtons={true} />
+          </div>
+          <div>
+            <SpinbuttonReact
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Read-only"
+              readOnly
+            />
+          </div>
+          <div>
+            <SpinbuttonReact
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Disabled"
+              disabled
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'vue' && (
+        <>
+          <div>
+            <SpinbuttonVue client:load defaultValue={5} min={0} max={100} label="Quantity" />
+          </div>
+          <div>
+            <SpinbuttonVue
+              client:load
+              defaultValue={3}
+              min={1}
+              max={10}
+              label="Rating"
+              format="{value} of {max}"
+            />
+          </div>
+          <div>
+            <SpinbuttonVue
+              client:load
+              defaultValue={0.5}
+              min={0}
+              max={1}
+              step={0.1}
+              label="Opacity"
+            />
+          </div>
+          <div>
+            <SpinbuttonVue client:load defaultValue={0} label="Unbounded" showButtons={true} />
+          </div>
+          <div>
+            <SpinbuttonVue
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Read-only"
+              readOnly
+            />
+          </div>
+          <div>
+            <SpinbuttonVue
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Disabled"
+              disabled
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <>
+          <div>
+            <SpinbuttonSvelte client:load defaultValue={5} min={0} max={100} label="Quantity" />
+          </div>
+          <div>
+            <SpinbuttonSvelte
+              client:load
+              defaultValue={3}
+              min={1}
+              max={10}
+              label="Rating"
+              format="{value} of {max}"
+            />
+          </div>
+          <div>
+            <SpinbuttonSvelte
+              client:load
+              defaultValue={0.5}
+              min={0}
+              max={1}
+              step={0.1}
+              label="Opacity"
+            />
+          </div>
+          <div>
+            <SpinbuttonSvelte client:load defaultValue={0} label="Unbounded" showButtons={true} />
+          </div>
+          <div>
+            <SpinbuttonSvelte
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Read-only"
+              readOnly
+            />
+          </div>
+          <div>
+            <SpinbuttonSvelte
+              client:load
+              defaultValue={50}
+              min={0}
+              max={100}
+              label="Disabled"
+              disabled
+            />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'astro' && (
+        <>
+          <div>
+            <SpinbuttonAstro defaultValue={5} min={0} max={100} label="Quantity" />
+          </div>
+          <div>
+            <SpinbuttonAstro
+              defaultValue={3}
+              min={1}
+              max={10}
+              label="Rating"
+              format="{value} of {max}"
+            />
+          </div>
+          <div>
+            <SpinbuttonAstro defaultValue={0.5} min={0} max={1} step={0.1} label="Opacity" />
+          </div>
+          <div>
+            <SpinbuttonAstro defaultValue={0} label="Unbounded" showButtons={true} />
+          </div>
+          <div>
+            <SpinbuttonAstro defaultValue={50} min={0} max={100} label="Read-only" readOnly />
+          </div>
+          <div>
+            <SpinbuttonAstro defaultValue={50} min={0} max={100} label="Disabled" disabled />
+          </div>
+        </>
+      )
+    }
+  </div>
+</div>

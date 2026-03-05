@@ -1,0 +1,205 @@
+---
+/**
+ * Disclosure Demo Section
+ *
+ * Renders the disclosure demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { Disclosure as DisclosureReact } from './Disclosure';
+import DisclosureVue from './Disclosure.vue';
+import DisclosureSvelte from './Disclosure.svelte';
+import DisclosureAstro from './Disclosure.astro';
+
+interface Props {
+  framework: Framework;
+  locale?: Locale;
+}
+
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="space-y-8">
+  <!-- Basic Disclosure -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ディスクロージャー' : 'Basic Disclosure'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa
+          ? 'クリックでコンテンツの表示・非表示を切り替えるシンプルなディスクロージャー。'
+          : 'A simple disclosure that toggles the visibility of content when clicked.'
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      {
+        framework === 'react' && (
+          <DisclosureReact client:load trigger="What is a Disclosure?">
+            <p>
+              A disclosure is a button that controls the visibility of a section of content. It is
+              commonly used for FAQ sections, additional details, or expandable navigation.
+            </p>
+          </DisclosureReact>
+        )
+      }
+      {
+        framework === 'vue' && (
+          <DisclosureVue client:load trigger="What is a Disclosure?">
+            <p>
+              A disclosure is a button that controls the visibility of a section of content. It is
+              commonly used for FAQ sections, additional details, or expandable navigation.
+            </p>
+          </DisclosureVue>
+        )
+      }
+      {
+        framework === 'svelte' && (
+          <DisclosureSvelte client:load id={crypto.randomUUID()} trigger="What is a Disclosure?">
+            <p>
+              A disclosure is a button that controls the visibility of a section of content. It is
+              commonly used for FAQ sections, additional details, or expandable navigation.
+            </p>
+          </DisclosureSvelte>
+        )
+      }
+      {
+        framework === 'astro' && (
+          <DisclosureAstro trigger="What is a Disclosure?">
+            <p>
+              A disclosure is a button that controls the visibility of a section of content. It is
+              commonly used for FAQ sections, additional details, or expandable navigation.
+            </p>
+          </DisclosureAstro>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Initially Expanded -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '初期展開状態' : 'Initially Expanded'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa ? (
+          <>
+            <code>defaultExpanded</code> プロパティを使用して、初期表示時にコンテンツを表示します。
+          </>
+        ) : (
+          <>
+            Use the <code>defaultExpanded</code> prop to show the content on initial render.
+          </>
+        )
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      {
+        framework === 'react' && (
+          <DisclosureReact
+            client:load
+            trigger="This section is open by default"
+            defaultExpanded={true}
+          >
+            <p>
+              This content is visible when the page loads because <code>defaultExpanded</code> is
+              set to <code>true</code>.
+            </p>
+          </DisclosureReact>
+        )
+      }
+      {
+        framework === 'vue' && (
+          <DisclosureVue
+            client:load
+            trigger="This section is open by default"
+            defaultExpanded={true}
+          >
+            <p>
+              This content is visible when the page loads because <code>defaultExpanded</code> is
+              set to <code>true</code>.
+            </p>
+          </DisclosureVue>
+        )
+      }
+      {
+        framework === 'svelte' && (
+          <DisclosureSvelte
+            client:load
+            id={crypto.randomUUID()}
+            trigger="This section is open by default"
+            defaultExpanded={true}
+          >
+            <p>
+              This content is visible when the page loads because <code>defaultExpanded</code> is
+              set to <code>true</code>.
+            </p>
+          </DisclosureSvelte>
+        )
+      }
+      {
+        framework === 'astro' && (
+          <DisclosureAstro trigger="This section is open by default" defaultExpanded={true}>
+            <p>
+              This content is visible when the page loads because <code>defaultExpanded</code> is
+              set to <code>true</code>.
+            </p>
+          </DisclosureAstro>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Disabled -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '無効状態' : 'Disabled State'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa ? (
+          <>
+            <code>disabled</code> プロパティを使用して、ディスクロージャーの操作を無効にします。
+          </>
+        ) : (
+          <>
+            Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+          </>
+        )
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      {
+        framework === 'react' && (
+          <DisclosureReact client:load trigger="This disclosure is disabled" disabled={true}>
+            <p>This content cannot be revealed because the disclosure is disabled.</p>
+          </DisclosureReact>
+        )
+      }
+      {
+        framework === 'vue' && (
+          <DisclosureVue client:load trigger="This disclosure is disabled" disabled={true}>
+            <p>This content cannot be revealed because the disclosure is disabled.</p>
+          </DisclosureVue>
+        )
+      }
+      {
+        framework === 'svelte' && (
+          <DisclosureSvelte
+            client:load
+            id={crypto.randomUUID()}
+            trigger="This disclosure is disabled"
+            disabled={true}
+          >
+            <p>This content cannot be revealed because the disclosure is disabled.</p>
+          </DisclosureSvelte>
+        )
+      }
+      {
+        framework === 'astro' && (
+          <DisclosureAstro trigger="This disclosure is disabled" disabled={true}>
+            <p>This content cannot be revealed because the disclosure is disabled.</p>
+          </DisclosureAstro>
+        )
+      }
+    </div>
+  </div>
+</div>

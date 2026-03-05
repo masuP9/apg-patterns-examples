@@ -1,0 +1,74 @@
+---
+/**
+ * Breadcrumb Demo Section
+ *
+ * Renders the breadcrumb demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { Breadcrumb as BreadcrumbReact } from './Breadcrumb';
+import BreadcrumbVue from './Breadcrumb.vue';
+import BreadcrumbSvelte from './Breadcrumb.svelte';
+import BreadcrumbAstro from './Breadcrumb.astro';
+
+interface Props {
+  framework: Framework;
+  locale?: Locale;
+}
+
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const basicItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Patterns', href: '/patterns/' },
+  { label: 'Breadcrumb' },
+];
+
+const longPathItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'Electronics', href: '/products/electronics/' },
+  { label: 'Computers', href: '/products/electronics/computers/' },
+  { label: 'Laptops', href: '/products/electronics/computers/laptops/' },
+  { label: 'MacBook Pro' },
+];
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-3 text-lg font-medium">
+        {isJa ? '基本的なパンくずリスト' : 'Basic Breadcrumb'}
+      </h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        {
+          isJa
+            ? '現在のページまでのパスを表示するシンプルなパンくずリストです。'
+            : 'A simple breadcrumb trail showing the path to the current page.'
+        }
+      </p>
+      {framework === 'react' && <BreadcrumbReact client:load items={basicItems} />}
+      {framework === 'vue' && <BreadcrumbVue client:load items={basicItems} />}
+      {framework === 'svelte' && <BreadcrumbSvelte client:load items={basicItems} />}
+      {framework === 'astro' && <BreadcrumbAstro items={basicItems} />}
+    </div>
+
+    <div>
+      <h3 class="mb-3 text-lg font-medium">{isJa ? '深い階層のパス' : 'Long Path'}</h3>
+      <p class="text-muted-foreground mb-4 text-sm">
+        {
+          isJa
+            ? '複数の階層レベルを持つ深いナビゲーションパスです。'
+            : 'A deeper navigation path with multiple levels of hierarchy.'
+        }
+      </p>
+      {framework === 'react' && <BreadcrumbReact client:load items={longPathItems} />}
+      {framework === 'vue' && <BreadcrumbVue client:load items={longPathItems} />}
+      {framework === 'svelte' && <BreadcrumbSvelte client:load items={longPathItems} />}
+      {framework === 'astro' && <BreadcrumbAstro items={longPathItems} />}
+    </div>
+  </div>
+</div>

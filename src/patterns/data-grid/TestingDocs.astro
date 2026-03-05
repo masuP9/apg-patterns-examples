@@ -4,6 +4,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 import { dataGridAccessibilityData } from './accessibility-data';
 import { createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -226,7 +227,7 @@ const translations = {
 const text = translations[locale];
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">{text.intro}</p>
 
   <h3 class="mb-3 text-lg font-medium">{text.testingStrategy}</h3>
@@ -618,4 +619,4 @@ const text = translations[locale];
     </ExternalLink>
     {text.forFullDocumentation}
   </p>
-</div>
+</Prose>

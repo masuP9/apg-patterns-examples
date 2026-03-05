@@ -1,0 +1,76 @@
+---
+/**
+ * Data Grid vs Grid Comparison Section
+ *
+ * Explains the differences between data-grid and grid patterns
+ * to help developers choose the right pattern.
+ */
+import { ResponsiveTable } from '@/components/ui/table';
+import Heading from '@/components/ui/Heading.astro';
+
+interface Props {
+  locale?: 'en' | 'ja';
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<Heading level={2} id="data-grid-vs-grid" class="mb-4 text-xl font-semibold"
+  >Data Grid vs Grid</Heading
+>
+<p class="text-muted-foreground mb-4">
+  {
+    isJa
+      ? 'Data Grid は基本的な Grid パターンを拡張し、データ操作のための追加機能を提供します。'
+      : 'Data Grid extends the basic Grid pattern with additional features for data manipulation.'
+  }
+</p>
+<ResponsiveTable class="mb-4">
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="border-border border-b">
+        <th class="py-2 pr-4 text-left">{isJa ? '機能' : 'Feature'}</th>
+        <th class="py-2 pr-4 text-left">Grid</th>
+        <th class="py-2 text-left">Data Grid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '2Dナビゲーション' : '2D Navigation'}</td>
+        <td class="py-2 pr-4">{isJa ? 'あり' : 'Yes'}</td>
+        <td class="py-2">{isJa ? 'あり' : 'Yes'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'セル選択' : 'Cell Selection'}</td>
+        <td class="py-2 pr-4">{isJa ? 'あり' : 'Yes'}</td>
+        <td class="py-2">{isJa ? 'あり' : 'Yes'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '列ソート' : 'Column Sorting'}</td>
+        <td class="py-2 pr-4">{isJa ? 'なし' : 'No'}</td>
+        <td class="py-2">{isJa ? 'あり（aria-sort）' : 'Yes (aria-sort)'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '行選択' : 'Row Selection'}</td>
+        <td class="py-2 pr-4">{isJa ? 'なし' : 'No'}</td>
+        <td class="py-2">{isJa ? 'あり（チェックボックス）' : 'Yes (checkbox)'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? '範囲選択' : 'Range Selection'}</td>
+        <td class="py-2 pr-4">{isJa ? 'なし' : 'No'}</td>
+        <td class="py-2">{isJa ? 'あり（Shift+矢印）' : 'Yes (Shift+Arrow)'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'セル編集' : 'Cell Editing'}</td>
+        <td class="py-2 pr-4">{isJa ? 'なし' : 'No'}</td>
+        <td class="py-2">{isJa ? 'あり（Enter/F2）' : 'Yes (Enter/F2)'}</td>
+      </tr>
+      <tr class="border-border border-b">
+        <td class="py-2 pr-4">{isJa ? 'ヘッダーナビゲーション' : 'Header Navigation'}</td>
+        <td class="py-2 pr-4">{isJa ? 'なし' : 'No'}</td>
+        <td class="py-2">{isJa ? 'あり（ソート可能ヘッダー）' : 'Yes (sortable headers)'}</td>
+      </tr>
+    </tbody>
+  </table>
+</ResponsiveTable>

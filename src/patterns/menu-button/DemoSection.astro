@@ -1,0 +1,112 @@
+---
+/**
+ * Menu Button Demo Section
+ *
+ * Renders the menu button demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { BasicMenuButtonDemo, DisabledItemsMenuButtonDemo } from './MenuButtonDemo';
+import MenuButtonDemoVue from './MenuButtonDemo.vue';
+import MenuButtonDemoSvelte from './MenuButtonDemo.svelte';
+import MenuButton from './MenuButton.astro';
+
+interface Props {
+  framework: Framework;
+  locale?: Locale;
+}
+
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const actionItems = [
+  { id: 'cut', label: 'Cut' },
+  { id: 'copy', label: 'Copy' },
+  { id: 'paste', label: 'Paste' },
+  { id: 'delete', label: 'Delete' },
+];
+
+const fileItems = [
+  { id: 'new', label: 'New File' },
+  { id: 'open', label: 'Open...' },
+  { id: 'save', label: 'Save' },
+  { id: 'save-as', label: 'Save As...' },
+  { id: 'export', label: 'Export', disabled: true },
+  { id: 'print', label: 'Print' },
+];
+---
+
+<!-- Basic -->
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本的なメニューボタン' : 'Basic Menu Button'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'ボタンをクリックするか、キーボードでメニューを開きます。'
+        : 'Click the button or use keyboard to open the menu.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {framework === 'react' && <BasicMenuButtonDemo client:load />}
+    {framework === 'vue' && <MenuButtonDemoVue variant="basic" client:load />}
+    {framework === 'svelte' && <MenuButtonDemoSvelte variant="basic" client:load />}
+    {
+      framework === 'astro' && (
+        <div class="space-y-4">
+          <MenuButton items={actionItems} label="Actions" />
+          <p id="basic-output" class="text-muted-foreground text-sm">
+            Last action: None
+          </p>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<!-- With Disabled Items -->
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目を含む場合' : 'With Disabled Items'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '無効な項目はキーボード操作時にスキップされます。'
+        : 'Disabled items are skipped during keyboard navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    {framework === 'react' && <DisabledItemsMenuButtonDemo client:load />}
+    {framework === 'vue' && <MenuButtonDemoVue variant="disabled-items" client:load />}
+    {framework === 'svelte' && <MenuButtonDemoSvelte variant="disabled-items" client:load />}
+    {
+      framework === 'astro' && (
+        <div class="space-y-4">
+          <MenuButton items={fileItems} label="File" />
+          <p id="disabled-output" class="text-muted-foreground text-sm">
+            Last action: None
+          </p>
+          <p class="text-muted-foreground text-xs">
+            {isJa
+              ? '注: "Export" は無効化されており、キーボード操作時にスキップされます'
+              : 'Note: "Export" is disabled and will be skipped during keyboard navigation'}
+          </p>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<script>
+  // Handle itemselect events from Web Components
+  document.querySelectorAll('apg-menu-button').forEach((menuButton, index) => {
+    const outputId = index === 0 ? 'basic-output' : 'disabled-output';
+    const output = document.getElementById(outputId);
+    menuButton.addEventListener('itemselect', (e) => {
+      const event = e as CustomEvent<{ itemId: string }>;
+      if (output) {
+        output.textContent = `Last action: ${event.detail.itemId}`;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,97 @@
+---
+/**
+ * Meter Demo Section
+ *
+ * Renders the meter demo for each framework variant.
+ * Each framework's component is statically imported to support
+ * Astro's client:load directive for hydration.
+ */
+import type { Framework } from '@/lib/frameworks';
+import { Meter as MeterReact } from './Meter';
+import MeterVue from './Meter.vue';
+import MeterSvelte from './Meter.svelte';
+import MeterAstro from './Meter.astro';
+
+interface Props {
+  framework: Framework;
+}
+
+const { framework } = Astro.props;
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-6">
+    {
+      framework === 'react' && (
+        <>
+          <div>
+            <MeterReact value={75} label="CPU Usage" valueText="75%" />
+          </div>
+          <div>
+            <MeterReact value={3.5} min={0} max={5} label="Rating" valueText="3.5 / 5" />
+          </div>
+          <div>
+            <MeterReact value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+          </div>
+          <div>
+            <MeterReact value={65} min={0} max={100} label="Progress" valueText="65%" />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'vue' && (
+        <>
+          <div>
+            <MeterVue value={75} label="CPU Usage" format="{value}%" />
+          </div>
+          <div>
+            <MeterVue value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" />
+          </div>
+          <div>
+            <MeterVue value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+          </div>
+          <div>
+            <MeterVue value={65} min={0} max={100} label="Progress" format="{value}%" />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'svelte' && (
+        <>
+          <div>
+            <MeterSvelte value={75} label="CPU Usage" format="{value}%" />
+          </div>
+          <div>
+            <MeterSvelte value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" />
+          </div>
+          <div>
+            <MeterSvelte value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+          </div>
+          <div>
+            <MeterSvelte value={65} min={0} max={100} label="Progress" format="{value}%" />
+          </div>
+        </>
+      )
+    }
+    {
+      framework === 'astro' && (
+        <>
+          <div>
+            <MeterAstro value={75} label="CPU Usage" format="{value}%" />
+          </div>
+          <div>
+            <MeterAstro value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" />
+          </div>
+          <div>
+            <MeterAstro value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+          </div>
+          <div>
+            <MeterAstro value={65} min={0} max={100} label="Progress" format="{value}%" />
+          </div>
+        </>
+      )
+    }
+  </div>
+</div>

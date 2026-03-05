@@ -4,6 +4,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 import { linkAccessibilityData } from './accessibility-data';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -28,7 +29,7 @@ const priorityLabels = {
 };
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {
       locale === 'ja'
@@ -130,4 +131,4 @@ const priorityLabels = {
     </ExternalLink>
     {locale === 'ja' ? ' を参照してください。' : ' for full documentation.'}
   </p>
-</div>
+</Prose>

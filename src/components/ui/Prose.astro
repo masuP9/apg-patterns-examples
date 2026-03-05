@@ -58,7 +58,10 @@ const { class: className, collapsedLines = 5 } = Astro.props;
   /* First heading should not have top margin */
   .prose > :global(h2:first-child),
   .prose > :global(h3:first-child),
-  .prose > :global(h4:first-child) {
+  .prose > :global(h4:first-child),
+  .prose :global(h2:first-child),
+  .prose :global(h3:first-child),
+  .prose :global(h4:first-child) {
     margin-top: 0;
   }
 
@@ -129,7 +132,7 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     border-bottom: 1px solid var(--border);
   }
 
-  /* Code blocks */
+  /* Code blocks — base styles for all <pre> inside Prose */
   .prose :global(pre) {
     background-color: var(--muted);
     border-radius: 0.5rem;
@@ -139,6 +142,16 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     margin-bottom: 1.5rem;
     font-size: 0.875rem;
     line-height: 1.6;
+  }
+
+  /* CodeBlock component (<pre> inside .code-block-content) — reset layout, CodeBlock handles its own styling */
+  .prose :global(.code-block-content pre) {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    padding: 1rem;
+    background-color: #24292e;
+    color: #e1e4e8;
   }
 
   .prose :global(pre code) {
@@ -219,6 +232,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
     margin: 0;
     border-radius: 0;
     border: none;
+    background-color: #24292e;
+    color: #e1e4e8;
   }
 
   .prose :global(.code-block-wrapper.collapsed .code-content) {
@@ -284,8 +299,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
       const collapsedLines = parseInt(prose.getAttribute('data-collapsed-lines') || '5', 10);
 
       prose.querySelectorAll('pre').forEach((pre) => {
-        // Skip if already wrapped
-        if (pre.closest('.code-block-wrapper')) return;
+        // Skip if already wrapped or inside a CodeBlock component
+        if (pre.closest('.code-block-wrapper') || pre.closest('.code-block')) return;
 
         const code = pre.querySelector('code');
         if (!code) return;

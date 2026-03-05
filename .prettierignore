@@ -16,3 +16,6 @@ pnpm-lock.yaml
 
 # Markdown files (code blocks cause parse errors)
 *.md
+
+# MDX files (Prettier reformats component children, causing <p> wrapping issues)
+*.mdx

@@ -1,0 +1,116 @@
+---
+/**
+ * Alert Demo Section
+ *
+ * Renders the alert demo for each framework variant.
+ * React/Vue/Svelte use their respective AlertDemo wrapper components.
+ * Astro uses the Alert.astro Web Component directly with inline buttons.
+ */
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { AlertDemo as AlertDemoReact } from './AlertDemo';
+import AlertDemoVue from './AlertDemo.vue';
+import AlertDemoSvelte from './AlertDemo.svelte';
+import Alert from './Alert.astro';
+
+interface Props {
+  framework: Framework;
+  locale?: Locale;
+}
+
+const { framework, locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {
+    framework === 'react' && (
+      <div>
+        <p class="text-muted-foreground mb-4">
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
+        </p>
+        <AlertDemoReact client:load />
+      </div>
+    )
+  }
+  {
+    framework === 'vue' && (
+      <div>
+        <p class="text-muted-foreground mb-4">
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
+        </p>
+        <AlertDemoVue client:load />
+      </div>
+    )
+  }
+  {
+    framework === 'svelte' && (
+      <div>
+        <p class="text-muted-foreground mb-4">
+          {isJa
+            ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+            : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'}
+        </p>
+        <AlertDemoSvelte client:load />
+      </div>
+    )
+  }
+  {
+    framework === 'astro' && (
+      <div>
+        <p class="text-muted-foreground mb-4">
+          {isJa ? (
+            <Fragment>
+              Astro実装では、アラートコンテンツの更新に <code>setMessage()</code>{' '}
+              メソッドを提供するWeb
+              Componentを使用します。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。
+            </Fragment>
+          ) : (
+            <Fragment>
+              The Astro implementation uses a Web Component that provides a{' '}
+              <code>setMessage()</code> method for updating alert content. The live region container
+              exists in the DOM from page load - only the content changes.
+            </Fragment>
+          )}
+        </p>
+        <div class="space-y-4">
+          <Alert id="demo-alert" variant="info" dismissible />
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="rounded-md bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+              onclick="document.querySelector('apg-alert').setMessage('This is an informational message.', 'info')"
+            >
+              Info
+            </button>
+            <button
+              type="button"
+              class="rounded-md bg-green-100 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+              onclick="document.querySelector('apg-alert').setMessage('Operation completed successfully!', 'success')"
+            >
+              Success
+            </button>
+            <button
+              type="button"
+              class="rounded-md bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700 hover:bg-amber-200 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:outline-none"
+              onclick="document.querySelector('apg-alert').setMessage('Please review your input before proceeding.', 'warning')"
+            >
+              Warning
+            </button>
+            <button
+              type="button"
+              class="rounded-md bg-red-100 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+              onclick="document.querySelector('apg-alert').setMessage('An error occurred. Please try again.', 'error')"
+            >
+              Error
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>

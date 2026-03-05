@@ -20,10 +20,7 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
       en: 'They provide built-in accessibility, work without JavaScript, and require no ARIA attributes.',
       ja: 'ネイティブ要素は組み込みのアクセシビリティを提供し、JavaScript なしで動作し、ARIA 属性を必要としません。',
     },
-    codeExample: `<code>&lt;label&gt;</code>
-  <code>&lt;input type="checkbox" name="agree" /&gt;</code>
-  I agree to the terms
-<code>&lt;/label&gt;</code>`,
+    codeExample: `<label>\n  <input type="checkbox" name="agree" />\n  I agree to the terms\n</label>`,
     customUseCases: {
       en: 'Use custom implementations only when you need custom styling that native elements cannot provide, or complex indeterminate state management for checkbox groups.',
       ja: 'カスタム実装は、ネイティブ要素では提供できないカスタムスタイリングが必要な場合、またはチェックボックスグループの複雑な不確定状態管理が必要な場合にのみ使用してください。',

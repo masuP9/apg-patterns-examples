@@ -7,6 +7,7 @@ import path from 'node:path';
 import { toolbarAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -66,7 +67,7 @@ const e2eTestPath = path.join(process.cwd(), 'e2e/toolbar.spec.ts');
 const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {titles.intro}
   </p>
@@ -185,4 +186,4 @@ const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
       </p>
     )
   }
-</div>
+</Prose>

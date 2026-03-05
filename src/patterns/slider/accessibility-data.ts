@@ -793,8 +793,7 @@ test('has no axe-core violations', async ({ page }) => {
       en: 'Before using this custom component, consider using native <code>&lt;input type="range"&gt;</code> elements. They provide built-in keyboard support, work without JavaScript, and have native accessibility support.',
       ja: 'このカスタムコンポーネントを使用する前に、ネイティブの<code>&lt;input type="range"&gt;</code>要素の使用を検討してください。組み込みのキーボードサポート、JavaScriptなしでの動作、ネイティブのアクセシビリティサポートを提供します。',
     },
-    codeExample: `<code>&lt;label for="volume"&gt;</code>Volume<code>&lt;/label&gt;</code>
-<code>&lt;input type="range" id="volume" min="0" max="100" value="50"&gt;</code>`,
+    codeExample: `<label for="volume">Volume</label>\n<input type="range" id="volume" min="0" max="100" value="50">`,
     benefits: {
       en: 'Use custom implementations only when you need custom styling that native elements cannot provide, or when you require specific visual feedback during interactions.',
       ja: 'ネイティブ要素では提供できないカスタムスタイリングが必要な場合、またはインタラクション中に特定の視覚的フィードバックが必要な場合にのみ、カスタム実装を使用してください。',

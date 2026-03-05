@@ -4,6 +4,7 @@ import { ResponsiveTable } from '@/components/ui/table';
 import type { Locale } from '@/i18n';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import { landmarksAccessibilityData } from './accessibility-data';
+import Prose from '@/components/ui/Prose.astro';
 
 interface Props {
   locale?: Locale;
@@ -66,7 +67,7 @@ const manualChecklist = [
 ];
 ---
 
-<div class="prose dark:prose-invert max-w-none">
+<Prose>
   <p class="text-muted-foreground mb-4">
     {labels.intro}
   </p>
@@ -153,4 +154,4 @@ const manualChecklist = [
       </p>
     )
   }
-</div>
+</Prose>
