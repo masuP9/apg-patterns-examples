@@ -5,7 +5,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/accordion/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -15,6 +16,7 @@ import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('accordion', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -155,7 +157,9 @@ const disabledItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -305,7 +309,7 @@ const items = [
     <Heading level={2} id="implementation-notes" class="mb-4 text-xl font-semibold"
       >実装上の注意</Heading
     >
-    <div class="prose dark:prose-invert max-w-none">
+    <Prose>
       <p>
         この Astro 実装は、クライアント側のインタラクティビティに Web Components（<code
           >customElements.define</code
@@ -318,7 +322,7 @@ const items = [
         <li>プログレッシブエンハンスメント - JavaScript なしでも基本機能が動作</li>
         <li>最小限の JavaScript バンドルサイズ</li>
       </ul>
-    </div>
+    </Prose>
   </section>
 
   <!-- Resources -->

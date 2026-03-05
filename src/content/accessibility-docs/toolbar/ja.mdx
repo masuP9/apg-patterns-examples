@@ -1,0 +1,82 @@
+---
+pattern: toolbar
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール      | 対象要素     | 説明                                                 |
+| ----------- | ------------ | ---------------------------------------------------- |
+| `toolbar`   | コンテナ     | コントロールをグループ化するコンテナ                 |
+| `button`    | ボタン要素   | `<button>`要素の暗黙的なロール                       |
+| `separator` | セパレーター | グループ間の視覚的およびセマンティックなセパレーター |
+
+### WAI-ARIA プロパティ
+
+#### `aria-label`
+
+ツールバーのアクセシブルな名前
+
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+aria-labelの代替（優先される）
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-orientation`
+
+ツールバーの方向（デフォルト: horizontal）
+
+<KeyValueList>
+  <KeyValueListItem term="値">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `aria-pressed`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">ToolbarToggleButton</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">Click、Enter、Space</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー                                | アクション                                       |
+| ----------------------------------- | ------------------------------------------------ |
+| <kbd>Tab</kbd>                      | ツールバーへのフォーカス移動（単一Tabストップ）  |
+| <kbd>Arrow Right / Arrow Left</kbd> | コントロール間のナビゲーション（水平ツールバー） |
+| <kbd>Arrow Down / Arrow Up</kbd>    | コントロール間のナビゲーション（垂直ツールバー） |
+| <kbd>Home</kbd>                     | 最初のコントロールにフォーカスを移動             |
+| <kbd>End</kbd>                      | 最後のコントロールにフォーカスを移動             |
+| <kbd>Enter / Space</kbd>            | ボタンをアクティブ化 / 押下状態を切り替え        |
+
+- ツールバーコンテナにはaria-labelまたはaria-labelledbyのいずれかが必須です。
+
+### フォーカス管理
+
+| イベント            | 振る舞い                                               |
+| ------------------- | ------------------------------------------------------ |
+| Roving Tabindex     | 一度に1つのコントロールのみが`tabindex="0"`を持つ      |
+| 他のコントロール    | 他のコントロールは`tabindex="-1"`を持つ                |
+| 矢印キー            | 矢印キーでコントロール間のフォーカスを移動             |
+| 無効化/セパレーター | 無効化されたコントロールとセパレーターはスキップされる |
+| 折り返しなし        | フォーカスは折り返さない（端で停止）                   |
+
+### 参考資料
+
+- <ExternalLink href="https://w3c.github.io/aria/#toolbar">WAI-ARIA toolbar role</ExternalLink>

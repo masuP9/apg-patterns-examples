@@ -1,0 +1,89 @@
+---
+pattern: meter
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール  | 対象要素     | 説明                                                               |
+| ------- | ------------ | ------------------------------------------------------------------ |
+| `meter` | コンテナ要素 | 既知の範囲内のスカラー値を表示するメーターとして要素を識別します。 |
+
+### WAI-ARIA プロパティ
+
+#### `aria-valuenow`
+
+aria-valueminとaria-valuemaxの間である必要があります
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（現在の値）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemin`
+
+メーターの最小許容値を指定します
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（デフォルト: 0）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemax`
+
+メーターの最大許容値を指定します
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（デフォルト: 100）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuetext`
+
+現在の値に対する人間が読みやすいテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列（例: `75% complete`）</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+メーターに見えないラベルを提供します
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルがない場合は必須）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+外部要素をラベルとして参照します
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルが存在する場合は必須）</KeyValueListItem>
+</KeyValueList>
+
+- メーターはアクセシブルな名前を持つ必要があります。これはlabelプロパティを使用した表示されるラベル、見えないラベルのためのaria-label、または外部要素を参照するaria-labelledbyによって提供できます。
+- meterロールは、定義された範囲内の数値のグラフィカル表示に使用されます。インタラクティブではないため、デフォルトではフォーカスを受け取るべきではありません。
+
+### ビジュアルデザイン
+
+- 視覚的な塗りつぶしバー - 現在の値を比例的に表現
+- 数値表示 - 現在の値を示すオプションのテキスト
+- 表示されるラベル - メーターの目的を識別するオプションのラベル
+- 強制カラーモード - Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/meter/">
+    WAI-ARIA APG: Meter Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter">
+    MDN: &lt;meter&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#meter">W3C ARIA: meter role</ExternalLink>

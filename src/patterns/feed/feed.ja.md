@@ -19,12 +19,12 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | [object Object] | テキスト | いいえ | フィードのアクセシブルな名前（条件付き*） |
-| `aria-labelledby` | [object Object] | ID参照 | いいえ | フィードの可視見出しを参照（条件付き*） |
-| `aria-labelledby` | [object Object] | ID参照 | はい | 記事タイトル要素を参照 |
-| `aria-describedby` | [object Object] | ID参照 | いいえ | 記事の説明またはコンテンツを参照（推奨） |
-| `aria-posinset` | [object Object] | 数値（1始まり） | はい | フィード内の記事の位置（1から開始） |
-| `aria-setsize` | [object Object] | 数値または-1 | はい | フィード内の総記事数、不明な場合は-1 |
+| `aria-label` | Feedコンテナ | テキスト | いいえ | フィードのアクセシブルな名前（条件付き*） |
+| `aria-labelledby` | Feedコンテナ | ID参照 | いいえ | フィードの可視見出しを参照（条件付き*） |
+| `aria-labelledby` | 各記事 | ID参照 | はい | 記事タイトル要素を参照 |
+| `aria-describedby` | 各記事 | ID参照 | いいえ | 記事の説明またはコンテンツを参照（推奨） |
+| `aria-posinset` | 各記事 | 数値（1始まり） | はい | フィード内の記事の位置（1から開始） |
+| `aria-setsize` | 各記事 | 数値または-1 | はい | フィード内の総記事数、不明な場合は-1 |
 
 ### ステート
 

@@ -12,25 +12,25 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `menubar` | 水平コンテナ（<ul>） | トップレベルのメニューバー（常に表示） |
-| `menu` | 垂直コンテナ（<ul>） | ドロップダウンメニューまたはサブメニュー |
-| `menuitem` | アイテム（<span>） | 標準的なアクションアイテム |
+| `menubar` | 水平コンテナ（<code>&lt;ul&gt;</code>） | トップレベルのメニューバー（常に表示） |
+| `menu` | 垂直コンテナ（<code>&lt;ul&gt;</code>） | ドロップダウンメニューまたはサブメニュー |
+| `menuitem` | アイテム（<code>&lt;span&gt;</code>） | 標準的なアクションアイテム |
 | `menuitemcheckbox` | チェックボックスアイテム | トグル可能なオプション |
 | `menuitemradio` | ラジオアイテム | グループ内の排他的なオプション |
-| `separator` | 区切り線（<hr>） | 視覚的な区切り（フォーカス不可） |
+| `separator` | 区切り線（<code>&lt;hr&gt;</code>） | 視覚的な区切り（フォーカス不可） |
 | `group` | グループコンテナ | ラジオアイテムをラベル付きでグループ化 |
-| `none` | <li> elements | スクリーンリーダーからリストセマンティクスを隠す |
+| `none` | <code>&lt;li&gt;</code> elements | スクリーンリーダーからリストセマンティクスを隠す |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-haspopup` | [object Object] | "menu" | はい | アイテムがメニューを開くことを示す（"true"ではなく"menu"を使用） |
-| `aria-expanded` | [object Object] | `true` \| `false` | はい | メニューが開いているかどうかを示す |
-| `aria-labelledby` | menu | ID参照 | はい | 親のmenuitemを参照する |
-| `aria-label` | menubar/menu | 文字列 | はい | アクセシブルな名前を提供する |
+| `aria-haspopup` | サブメニューを持つmenuitem | "menu" | はい* | アイテムがメニューを開くことを示す（"true"ではなく"menu"を使用） |
+| `aria-expanded` | サブメニューを持つmenuitem | `true` \| `false` | はい* | メニューが開いているかどうかを示す |
+| `aria-labelledby` | menu | ID参照 | はい** | 親のmenuitemを参照する |
+| `aria-label` | menubar/menu | 文字列 | はい** | アクセシブルな名前を提供する |
 | `aria-checked` | checkbox/radio | `true` \| `false` | はい | チェック状態を示す |
-| `aria-disabled` | menuitem | true | はい | アイテムが無効であることを示す |
+| `aria-disabled` | menuitem | true | いいえ | アイテムが無効であることを示す |
 | `aria-hidden` | menu/submenu | `true` \| `false` | はい | 閉じているときメニューをスクリーンリーダーから隠す |
 
 ## キーボードサポート
@@ -80,7 +80,7 @@
 - [ ] Items have correct role (menuitem/menuitemcheckbox/menuitemradio)
 - [ ] Separator has role="separator"
 - [ ] Radio group has role="group" with aria-label
-- [ ] All <li> have role="none"
+- [ ] All <code>&lt;li&gt;</code> have role="none"
 - [ ] Submenu holder has aria-haspopup="menu"
 - [ ] Submenu holder has aria-expanded
 - [ ] Submenu has aria-labelledby referencing parent menuitem

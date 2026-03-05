@@ -4,13 +4,13 @@
 
 ## Overview
 
-Table is a static tabular structure for displaying data. Unlike Grid, it has no keyboard interaction - it provides semantic structure for screen readers. Native HTML <table> is strongly recommended; use ARIA table only for CSS Grid/Flexbox layouts.
+Table is a static tabular structure for displaying data. Unlike Grid, it has no keyboard interaction - it provides semantic structure for screen readers. Native HTML <code>&lt;table&gt;</code> is strongly recommended; use ARIA table only for CSS Grid/Flexbox layouts.
 
 ## Native HTML vs Custom Implementation
 
 | Use Case | Recommended |
 | --- | --- |
-| Basic tabular data | Native <table> |
+| Basic tabular data | Native <code>&lt;table&gt;</code> |
 | CSS Grid/Flexbox layout | Custom role="table" |
 | Responsive column reordering | Custom implementation |
 | Virtualization support | Custom with ARIA |
@@ -33,18 +33,18 @@ Table is a static tabular structure for displaying data. Unlike Grid, it has no 
 | Role | Element | Description |
 | --- | --- | --- |
 | `table` | Container element | Identifies the element as a table structure containing rows and cells of data. (required) |
-| `rowgroup` | Header/Body container | Groups rows together (equivalent to <thead>, <tbody>, <tfoot>). |
-| `row` | Row element | A row of cells within the table (equivalent to <tr>). (required) |
-| `columnheader` | Header cell | A header cell for a column (equivalent to <th> in header row). |
-| `rowheader` | Header cell | A header cell for a row (equivalent to <th scope="row">). |
-| `cell` | Data cell | A data cell within a row (equivalent to <td>). (required) |
+| `rowgroup` | Header/Body container | Groups rows together (equivalent to <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>). |
+| `row` | Row element | A row of cells within the table (equivalent to <code>&lt;tr&gt;</code>). (required) |
+| `columnheader` | Header cell | A header cell for a column (equivalent to <code>&lt;th&gt;</code> in header row). |
+| `rowheader` | Header cell | A header cell for a row (equivalent to <code>&lt;th scope="row"&gt;</code>). |
+| `cell` | Data cell | A data cell within a row (equivalent to <code>&lt;td&gt;</code>). (required) |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | table | String | Yes | Provides an accessible name for the table. Required for screen reader users to understand the table's purpose. |
-| `aria-labelledby` | table | ID reference | Yes | References an element that provides the accessible name for the table. |
+| `aria-label` | table | String | Yes (or aria-labelledby) | Provides an accessible name for the table. Required for screen reader users to understand the table's purpose. |
+| `aria-labelledby` | table | ID reference | Yes (or aria-label) | References an element that provides the accessible name for the table. |
 | `aria-describedby` | table | ID reference | No | References an element providing additional description for the table. |
 | `aria-colcount` | table | Number | No | Defines the total number of columns in the table when only a subset is rendered (virtualization). |
 | `aria-rowcount` | table | Number | No | Defines the total number of rows in the table when only a subset is rendered (virtualization). |

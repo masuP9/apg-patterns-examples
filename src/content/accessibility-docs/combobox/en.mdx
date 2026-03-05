@@ -1,0 +1,126 @@
+---
+pattern: combobox
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role       | Target Element     | Description                                 |
+| ---------- | ------------------ | ------------------------------------------- |
+| `combobox` | Input (`<input>`)  | The text input element that users type into |
+| `listbox`  | Popup (`<ul>`)     | The popup containing selectable options     |
+| `option`   | Each item (`<li>`) | An individual selectable option             |
+
+### WAI-ARIA Properties
+
+#### `role="combobox"`
+
+Identifies the input as a combobox
+
+<KeyValueList>
+  <KeyValueListItem term="Values">-</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-controls`
+
+References the listbox popup (even when closed)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-expanded`
+
+Indicates whether the popup is open
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-autocomplete`
+
+Describes the autocomplete behavior
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`list` | `none` | `both`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-activedescendant`
+
+References the currently focused option in the popup
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference | empty</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References the label element
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-selected`
+
+Indicates the currently focused option
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+Indicates the option is disabled
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`true`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                         | Action                                          |
+| --------------------------- | ----------------------------------------------- |
+| <kbd>Down Arrow</kbd>       | Open popup and focus first option               |
+| <kbd>Up Arrow</kbd>         | Open popup and focus last option                |
+| <kbd>Alt + Down Arrow</kbd> | Open popup without changing focus position      |
+| <kbd>Type characters</kbd>  | Filter options and open popup                   |
+| <kbd>Down Arrow</kbd>       | Move focus to next enabled option (no wrap)     |
+| <kbd>Up Arrow</kbd>         | Move focus to previous enabled option (no wrap) |
+| <kbd>Home</kbd>             | Move focus to first enabled option              |
+| <kbd>End</kbd>              | Move focus to last enabled option               |
+| <kbd>Enter</kbd>            | Select focused option and close popup           |
+| <kbd>Escape</kbd>           | Close popup and restore previous input value    |
+| <kbd>Alt + Up Arrow</kbd>   | Select focused option and close popup           |
+| <kbd>Tab</kbd>              | Close popup and move to next focusable element  |
+
+- **Listbox always in DOM**: Keep listbox in DOM with `hidden` attribute when closed (for `aria-controls` reference)
+- **IME Handling**: Track composition state to prevent filtering during IME input
+- **Click Outside**: Use event listener to close popup on outside clicks
+- **Value Restoration**: Store pre-edit value to restore on Escape
+
+### Focus Management
+
+| Event                                    | Behavior                                                                                 |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Navigation via arrow keys                | DOM focus remains on input; aria-activedescendant references the visually focused option |
+| Popup closes or filter results are empty | aria-activedescendant is cleared                                                         |
+| Disabled option encountered              | Disabled options are skipped during navigation                                           |
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/">
+    WAI-ARIA APG: Combobox Pattern
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#combobox">WAI-ARIA: combobox role</ExternalLink>

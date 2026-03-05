@@ -5,13 +5,13 @@ export const tableAccessibilityData: PatternAccessibilityData = {
   apgUrl: 'https://www.w3.org/WAI/ARIA/apg/patterns/table/',
 
   overview: {
-    en: 'Table is a static tabular structure for displaying data. Unlike Grid, it has no keyboard interaction - it provides semantic structure for screen readers. Native HTML <table> is strongly recommended; use ARIA table only for CSS Grid/Flexbox layouts.',
-    ja: 'Tableはデータを表示するための静的な表構造です。Gridとは異なり、キーボード操作はありません - スクリーンリーダー向けのセマンティック構造を提供します。ネイティブのHTML <table>が強く推奨されます。ARIA tableはCSS Grid/Flexboxレイアウトの場合にのみ使用してください。',
+    en: 'Table is a static tabular structure for displaying data. Unlike Grid, it has no keyboard interaction - it provides semantic structure for screen readers. Native HTML <code>&lt;table&gt;</code> is strongly recommended; use ARIA table only for CSS Grid/Flexbox layouts.',
+    ja: 'Tableはデータを表示するための静的な表構造です。Gridとは異なり、キーボード操作はありません - スクリーンリーダー向けのセマンティック構造を提供します。ネイティブのHTML <code>&lt;table&gt;</code>が強く推奨されます。ARIA tableはCSS Grid/Flexboxレイアウトの場合にのみ使用してください。',
   },
 
   // Native HTML considerations
   nativeHtmlConsiderations: [
-    { useCase: 'Basic tabular data', recommended: 'Native <table>' },
+    { useCase: 'Basic tabular data', recommended: 'Native <code>&lt;table&gt;</code>' },
     { useCase: 'CSS Grid/Flexbox layout', recommended: 'Custom role="table"' },
     { useCase: 'Responsive column reordering', recommended: 'Custom implementation' },
     { useCase: 'Virtualization support', recommended: 'Custom with ARIA' },
@@ -64,8 +64,8 @@ export const tableAccessibilityData: PatternAccessibilityData = {
       name: 'rowgroup',
       element: { en: 'Header/Body container', ja: 'ヘッダー/ボディコンテナ' },
       description: {
-        en: 'Groups rows together (equivalent to <thead>, <tbody>, <tfoot>).',
-        ja: '行をグループ化します（<thead>、<tbody>、<tfoot>に相当）。',
+        en: 'Groups rows together (equivalent to <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>).',
+        ja: '行をグループ化します（<code>&lt;thead&gt;</code>、<code>&lt;tbody&gt;</code>、<code>&lt;tfoot&gt;</code>に相当）。',
       },
       required: false,
     },
@@ -73,8 +73,8 @@ export const tableAccessibilityData: PatternAccessibilityData = {
       name: 'row',
       element: { en: 'Row element', ja: '行要素' },
       description: {
-        en: 'A row of cells within the table (equivalent to <tr>).',
-        ja: 'テーブル内の1行（<tr>に相当）。',
+        en: 'A row of cells within the table (equivalent to <code>&lt;tr&gt;</code>).',
+        ja: 'テーブル内の1行（<code>&lt;tr&gt;</code>に相当）。',
       },
       required: true,
     },
@@ -82,8 +82,8 @@ export const tableAccessibilityData: PatternAccessibilityData = {
       name: 'columnheader',
       element: { en: 'Header cell', ja: 'ヘッダーセル' },
       description: {
-        en: 'A header cell for a column (equivalent to <th> in header row).',
-        ja: '列の見出しセル（ヘッダー行の<th>に相当）。',
+        en: 'A header cell for a column (equivalent to <code>&lt;th&gt;</code> in header row).',
+        ja: '列の見出しセル（ヘッダー行の<code>&lt;th&gt;</code>に相当）。',
       },
       required: false,
     },
@@ -91,8 +91,8 @@ export const tableAccessibilityData: PatternAccessibilityData = {
       name: 'rowheader',
       element: { en: 'Header cell', ja: 'ヘッダーセル' },
       description: {
-        en: 'A header cell for a row (equivalent to <th scope="row">).',
-        ja: '行の見出しセル（<th scope="row">に相当）。',
+        en: 'A header cell for a row (equivalent to <code>&lt;th scope="row"&gt;</code>).',
+        ja: '行の見出しセル（<code>&lt;th scope="row"&gt;</code>に相当）。',
       },
       required: false,
     },
@@ -100,8 +100,8 @@ export const tableAccessibilityData: PatternAccessibilityData = {
       name: 'cell',
       element: { en: 'Data cell', ja: 'データセル' },
       description: {
-        en: 'A data cell within a row (equivalent to <td>).',
-        ja: '行内のデータセル（<td>に相当）。',
+        en: 'A data cell within a row (equivalent to <code>&lt;td&gt;</code>).',
+        ja: '行内のデータセル（<code>&lt;td&gt;</code>に相当）。',
       },
       required: true,
     },

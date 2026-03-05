@@ -12,17 +12,17 @@ A tree view presents a hierarchical list of nodes that can be expanded or collap
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `tree` | Container (<ul>) | The tree widget container |
-| `treeitem` | Each node (<li>) | Individual tree nodes (both parent and leaf) |
-| `group` | Child container (<ul>) | Container for child nodes of an expanded parent |
+| `tree` | Container (<code>&lt;ul&gt;</code>) | The tree widget container |
+| `treeitem` | Each node (<code>&lt;li&gt;</code>) | Individual tree nodes (both parent and leaf) |
+| `group` | Child container (<code>&lt;ul&gt;</code>) | Container for child nodes of an expanded parent |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `role="tree"` | [object Object] | - | Yes | Identifies the container as a tree widget |
-| `aria-label` | tree | String | Yes | Accessible name for the tree |
-| `aria-labelledby` | tree | ID reference | Yes | Alternative to aria-label (takes precedence) |
+| `role="tree"` | Container | - | Yes | Identifies the container as a tree widget |
+| `aria-label` | tree | String | Yes* | Accessible name for the tree |
+| `aria-labelledby` | tree | ID reference | Yes* | Alternative to aria-label (takes precedence) |
 | `aria-multiselectable` | tree | true | No | Only present for multi-select mode |
 
 ### States
@@ -47,7 +47,7 @@ A tree view presents a hierarchical list of nodes that can be expanded or collap
 | `End` | Move focus to last visible node |
 | `Enter` | Select and activate node (see Selection section below) |
 | `*` | Expand all siblings at current level |
-| `[object Object]` | Move focus to next visible node starting with that character |
+| `Type characters` | Move focus to next visible node starting with that character |
 
 ### Selection (Single-Select Mode)
 
@@ -56,7 +56,7 @@ A tree view presents a hierarchical list of nodes that can be expanded or collap
 | `ArrowDown / ArrowUp` | Move focus only (selection does NOT follow focus) |
 | `Enter` | Select focused node and activate (fire onActivate callback) |
 | `Space` | Select focused node and activate (fire onActivate callback) |
-| `[object Object]` | Select clicked node and activate (fire onActivate callback) |
+| `Click` | Select clicked node and activate (fire onActivate callback) |
 
 ### Selection (Multi-Select Mode)
 

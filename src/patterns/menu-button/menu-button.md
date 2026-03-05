@@ -12,9 +12,9 @@ A menu button is a button that opens a menu. The button element has aria-haspopu
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `button` | Trigger (<button>) | The trigger that opens the menu (implicit via <button> element) |
-| `menu` | Container (<ul>) | A widget offering a list of choices to the user |
-| `menuitem` | Each item (<li>) | An option in a menu |
+| `button` | Trigger (<code>&lt;button&gt;</code>) | The trigger that opens the menu (implicit via <code>&lt;button&gt;</code> element) |
+| `menu` | Container (<code>&lt;ul&gt;</code>) | A widget offering a list of choices to the user |
+| `menuitem` | Each item (<code>&lt;li&gt;</code>) | An option in a menu |
 
 ### Properties
 
@@ -22,8 +22,8 @@ A menu button is a button that opens a menu. The button element has aria-haspopu
 | --- | --- | --- | --- | --- |
 | `aria-haspopup` | button | "menu" | Yes | Indicates the button opens a menu |
 | `aria-controls` | button | ID reference | No | References the menu element |
-| `aria-labelledby` | menu | ID reference | Yes | References the button that opens the menu |
-| `aria-label` | menu | String | Yes | Provides an accessible name for the menu |
+| `aria-labelledby` | menu | ID reference | Yes (or aria-label) | References the button that opens the menu |
+| `aria-label` | menu | String | Yes (or aria-labelledby) | Provides an accessible name for the menu |
 | `aria-disabled` | menuitem | true | No | Indicates the menu item is disabled |
 
 ### States

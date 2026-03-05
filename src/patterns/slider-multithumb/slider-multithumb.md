@@ -23,7 +23,7 @@ A multi-thumb slider is an input widget with two thumbs that allows users to sel
 | `aria-valuenow` | Each slider element | Number | Yes | Updated dynamically when value changes via keyboard or pointer |
 | `aria-valuemin` | Each slider element | Number | Yes | Static for lower thumb (absolute min), dynamic for upper thumb (lower value + minDistance) |
 | `aria-valuemax` | Each slider element | Number | Yes | Dynamic for lower thumb (upper value - minDistance), static for upper thumb (absolute max) |
-| `aria-valuetext` | Each slider element | String | Yes | Example: "$20", "$80", "20% - 80%" |
+| `aria-valuetext` | Each slider element | String | No (recommended when value needs context) | Example: "$20", "$80", "20% - 80%" |
 | `aria-orientation` | Each slider element | `"horizontal"` \| `"vertical"` | No | Default: horizontal (implicit). Only set for vertical sliders. |
 | `aria-disabled` | Each slider element | `true` \| `undefined` | No | Set only when disabled |
 

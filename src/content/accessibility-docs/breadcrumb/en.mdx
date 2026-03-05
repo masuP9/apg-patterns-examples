@@ -1,0 +1,63 @@
+---
+pattern: breadcrumb
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role         | Target Element  | Description                                                                        |
+| ------------ | --------------- | ---------------------------------------------------------------------------------- |
+| `navigation` | `<nav>` element | Provides a navigation landmark for assistive technology (implicit role of `<nav>`) |
+
+### WAI-ARIA Properties
+
+#### `aria-label`
+
+Labels the navigation landmark for screen readers
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`Breadcrumb` (or localized)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-current`
+
+Identifies the current page within the breadcrumb trail
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`page`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (on last item)</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-current`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">
+    Last item in the breadcrumb (current page)
+  </KeyValueListItem>
+  <KeyValueListItem term="Values">`page`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Indicates the current page location within the breadcrumb navigation.
+  </KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key              | Action                              |
+| ---------------- | ----------------------------------- |
+| <kbd>Tab</kbd>   | Move focus between breadcrumb links |
+| <kbd>Enter</kbd> | Activate the focused link           |
+
+- Breadcrumb uses native `<a>` element behavior for keyboard interaction. No additional keyboard handlers are required.
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">
+    WAI-ARIA Breadcrumb Pattern
+  </ExternalLink>

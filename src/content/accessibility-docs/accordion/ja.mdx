@@ -1,0 +1,115 @@
+---
+pattern: accordion
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール    | 対象要素                 | 説明                                                               |
+| --------- | ------------------------ | ------------------------------------------------------------------ |
+| `heading` | ヘッダーラッパー (h2-h6) | アコーディオントリガーボタンを含む                                 |
+| `button`  | ヘッダートリガー         | パネルの表示/非表示を切り替える対話要素                            |
+| `region`  | パネル (オプション)      | ヘッダーと関連付けられたコンテンツエリア (6個以上のパネルでは省略) |
+
+### WAI-ARIA プロパティ
+
+#### `aria-level`
+
+headingLevel プロパティ
+
+<KeyValueList>
+  <KeyValueListItem term="値">2 - 6</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-controls`
+
+自動生成
+
+<KeyValueList>
+  <KeyValueListItem term="値">関連付けられたパネルへのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+自動生成
+
+<KeyValueList>
+  <KeyValueListItem term="値">ヘッダーボタンへのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい (regionを使用する場合)</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">button 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Enter、Space</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">button 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">無効化する場合のみ</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー                     | アクション                                                      |
+| ------------------------ | --------------------------------------------------------------- |
+| <kbd>Tab</kbd>           | 次のフォーカス可能な要素にフォーカスを移動                      |
+| <kbd>Space / Enter</kbd> | フォーカスされたアコーディオンヘッダーの展開/折り畳みを切り替え |
+| <kbd>Arrow Down</kbd>    | 次のアコーディオンヘッダーにフォーカスを移動 (オプション)       |
+| <kbd>Arrow Up</kbd>      | 前のアコーディオンヘッダーにフォーカスを移動 (オプション)       |
+| <kbd>Home</kbd>          | 最初のアコーディオンヘッダーにフォーカスを移動 (オプション)     |
+| <kbd>End</kbd>           | 最後のアコーディオンヘッダーにフォーカスを移動 (オプション)     |
+
+- 矢印キーによるナビゲーションはオプションですが推奨されます。フォーカスはリストの端でループしません。
+
+### フォーカス管理
+
+| イベント       | 振る舞い                                             |
+| -------------- | ---------------------------------------------------- |
+| ヘッダーボタン | ボタン要素経由でフォーカス可能                       |
+| 矢印キー       | ヘッダー間をナビゲート（無効化されたものはスキップ） |
+| 端             | フォーカスは端でループしない                         |
+
+### 実装ノート
+
+```
+┌─────────────────────────────────────┐
+│ [▼] Section 1                       │  ← button (aria-expanded="true")
+├─────────────────────────────────────┤
+│ Panel 1 content...                  │  ← region (aria-labelledby)
+├─────────────────────────────────────┤
+│ [▶] Section 2                       │  ← button (aria-expanded="false")
+├─────────────────────────────────────┤
+│ [▶] Section 3                       │  ← button (aria-expanded="false")
+└─────────────────────────────────────┘
+
+ID Relationships:
+- Button: id="header-1", aria-controls="panel-1"
+- Panel: id="panel-1", aria-labelledby="header-1"
+
+Region Role Rule:
+- ≤6 panels: use role="region" on panels
+- >6 panels: omit role="region" (too many landmarks)
+```
+
+ID関連を含むアコーディオンコンポーネントの構造
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/">
+    WAI-ARIA Accordion Pattern
+  </ExternalLink>

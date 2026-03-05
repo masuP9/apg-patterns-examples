@@ -42,8 +42,8 @@ export const alertDialogAccessibilityData: PatternAccessibilityData = {
         ja: '暗黙的',
       },
       notes: {
-        en: 'Provided automatically by showModal(). No explicit attribute needed when using native <dialog> element.',
-        ja: 'showModal() によって自動的に提供される。ネイティブの <dialog> 要素使用時は明示的な属性は不要。',
+        en: 'Provided automatically by showModal(). No explicit attribute needed when using native <code>&lt;dialog&gt;</code> element.',
+        ja: 'showModal() によって自動的に提供される。ネイティブの <code>&lt;dialog&gt;</code> 要素使用時は明示的な属性は不要。',
       },
     },
     {

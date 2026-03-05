@@ -10,7 +10,7 @@ A spinbutton allows users to select a value from a discrete set or range. Contai
 
 | Use Case | Recommended |
 | --- | --- |
-| Simple numeric input | Native <input type="number"> |
+| Simple numeric input | Native <code>&lt;input type="number"&gt;</code> |
 | Custom styling needed | Custom role="spinbutton" |
 | Consistent keyboard behavior | Custom (browser varies) |
 | aria-valuetext needed | Custom implementation |
@@ -45,8 +45,8 @@ A spinbutton allows users to select a value from a discrete set or range. Contai
 | `aria-valuetext` | spinbutton | String (e.g., "5 items", "3 of 10") | No | Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning. |
 | `aria-disabled` | spinbutton | `true` \| `false` | No | Indicates that the spinbutton is disabled and not interactive. |
 | `aria-readonly` | spinbutton | `true` \| `false` | No | Indicates that the spinbutton is read-only. Users can navigate with Home/End but cannot change the value. |
-| `aria-label` | spinbutton | String | Yes | Provides an invisible label for the spinbutton |
-| `aria-labelledby` | spinbutton | ID reference | Yes | References an external element as the label |
+| `aria-label` | spinbutton | String | Conditional (required if no visible label) | Provides an invisible label for the spinbutton |
+| `aria-labelledby` | spinbutton | ID reference | Conditional (required if visible label exists) | References an external element as the label |
 
 ## Keyboard Support
 

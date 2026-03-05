@@ -24,8 +24,8 @@ A data grid presents tabular data with interactive cells that support navigation
 | --- | --- | --- | --- | --- |
 | `aria-rowcount` | grid | Total number of rows | No | Required when rows are virtualized |
 | `aria-colcount` | grid | Total number of columns | No | Required when columns are hidden or virtualized |
-| `aria-rowindex` | [object Object] | Row's position in the grid | No | Required when rows are virtualized |
-| `aria-colindex` | [object Object] | Column's position in the grid | No | Required when columns are hidden or virtualized |
+| `aria-rowindex` | row or gridcell | Row's position in the grid | No | Required when rows are virtualized |
+| `aria-colindex` | gridcell or columnheader | Column's position in the grid | No | Required when columns are hidden or virtualized |
 | `aria-sort` | columnheader | `"ascending"` \| `"descending"` \| `"none"` \| `"other"` | No | Indicates the sorting state of a column |
 | `aria-describedby` | grid | ID reference to description element | No | Provides additional context about the grid |
 

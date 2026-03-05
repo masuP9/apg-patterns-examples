@@ -12,25 +12,25 @@ Menubar is a horizontal menu bar that provides application-style navigation. Eac
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `menubar` | Horizontal container (<ul>) | Top-level menu bar, always visible |
-| `menu` | Vertical container (<ul>) | Dropdown menu or submenu |
-| `menuitem` | Item (<span>) | Standard action item |
+| `menubar` | Horizontal container (<code>&lt;ul&gt;</code>) | Top-level menu bar, always visible |
+| `menu` | Vertical container (<code>&lt;ul&gt;</code>) | Dropdown menu or submenu |
+| `menuitem` | Item (<code>&lt;span&gt;</code>) | Standard action item |
 | `menuitemcheckbox` | Checkbox item | Toggleable option |
 | `menuitemradio` | Radio item | Exclusive option in a group |
-| `separator` | Divider (<hr>) | Visual separator (not focusable) |
+| `separator` | Divider (<code>&lt;hr&gt;</code>) | Visual separator (not focusable) |
 | `group` | Group container | Groups radio items with a label |
-| `none` | <li> elements | Hides list semantics from screen readers |
+| `none` | <code>&lt;li&gt;</code> elements | Hides list semantics from screen readers |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-haspopup` | [object Object] | "menu" | Yes | Indicates the item opens a menu (use "menu", not "true") |
-| `aria-expanded` | [object Object] | `true` \| `false` | Yes | Indicates whether the menu is open |
-| `aria-labelledby` | menu | ID reference | Yes | References the parent menuitem |
-| `aria-label` | menubar/menu | String | Yes | Provides an accessible name |
+| `aria-haspopup` | menuitem with submenu | "menu" | Yes* | Indicates the item opens a menu (use "menu", not "true") |
+| `aria-expanded` | menuitem with submenu | `true` \| `false` | Yes* | Indicates whether the menu is open |
+| `aria-labelledby` | menu | ID reference | Yes** | References the parent menuitem |
+| `aria-label` | menubar/menu | String | Yes** | Provides an accessible name |
 | `aria-checked` | checkbox/radio | `true` \| `false` | Yes | Indicates checked state |
-| `aria-disabled` | menuitem | true | Yes | Indicates the item is disabled |
+| `aria-disabled` | menuitem | true | No | Indicates the item is disabled |
 | `aria-hidden` | menu/submenu | `true` \| `false` | Yes | Hides menu from screen readers when closed |
 
 ## Keyboard Support
@@ -80,7 +80,7 @@ Menubar is a horizontal menu bar that provides application-style navigation. Eac
 - [ ] Items have correct role (menuitem/menuitemcheckbox/menuitemradio)
 - [ ] Separator has role="separator"
 - [ ] Radio group has role="group" with aria-label
-- [ ] All <li> have role="none"
+- [ ] All <code>&lt;li&gt;</code> have role="none"
 - [ ] Submenu holder has aria-haspopup="menu"
 - [ ] Submenu holder has aria-expanded
 - [ ] Submenu has aria-labelledby referencing parent menuitem

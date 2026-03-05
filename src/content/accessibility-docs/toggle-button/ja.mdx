@@ -1,0 +1,63 @@
+---
+pattern: toggle-button
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール   | 対象要素   | 説明                                                               |
+| -------- | ---------- | ------------------------------------------------------------------ |
+| `button` | ボタン要素 | アクティブ化されたときにアクションをトリガーするウィジェットを示す |
+
+### WAI-ARIA ステート
+
+#### `aria-pressed`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">ボタン</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Enter、Space</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー             | アクション               |
+| ---------------- | ------------------------ |
+| <kbd>Space</kbd> | ボタンの状態を切り替える |
+| <kbd>Enter</kbd> | ボタンの状態を切り替える |
+
+- トグルボタンには表示されるラベルテキスト、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
+- type="button"を使用して誤ったフォーム送信を防ぎます。
+- 3状態ボタンでは部分的に選択された状態（例：一部のアイテムが選択された「すべて選択」）に aria-pressed="mixed" を使用できます。
+
+### 実装ノート
+
+```
+Structure:
+<button type="button" aria-pressed="false">
+  Mute
+</button>
+
+State Changes:
+- Initial: aria-pressed="false" (not pressed)
+- After click: aria-pressed="true" (pressed)
+
+Use type="button":
+- Prevents accidental form submission
+- Native <button> defaults to type="submit"
+
+Tri-state (rare):
+- aria-pressed="mixed" for partially selected state
+- Example: "Select All" when some items selected
+```
+
+トグルボタンの構造と状態変化
+
+### 参考資料
+
+- <ExternalLink href="https://w3c.github.io/aria/#button">WAI-ARIA button role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#aria-pressed">aria-pressed</ExternalLink>

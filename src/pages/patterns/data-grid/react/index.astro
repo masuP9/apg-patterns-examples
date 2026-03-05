@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import DataGridDemo from '@patterns/data-grid/DataGridDemo';
-import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
 import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -46,6 +47,8 @@ const keyboardHintsSections = [
     ],
   },
 ];
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('data-grid', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -145,7 +148,9 @@ const tocItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

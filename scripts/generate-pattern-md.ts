@@ -215,7 +215,9 @@ function generateMarkdown(data: PatternAccessibilityData, options: GenerateOptio
       lines.push('| --- | --- |');
       for (const item of considerations) {
         if (item.useCase && item.recommended) {
-          lines.push(`| ${item.useCase} | ${item.recommended} |`);
+          const useCase = localize(item.useCase, locale);
+          const recommended = localize(item.recommended, locale);
+          lines.push(`| ${useCase} | ${recommended} |`);
         }
       }
       lines.push('');
@@ -270,7 +272,15 @@ function generateMarkdown(data: PatternAccessibilityData, options: GenerateOptio
 
       const notes = prop.notes ? localize(prop.notes, locale) : '';
       const requiredText =
-        locale === 'ja' ? (prop.required ? 'はい' : 'いいえ') : prop.required ? 'Yes' : 'No';
+        typeof prop.required === 'boolean'
+          ? locale === 'ja'
+            ? prop.required
+              ? 'はい'
+              : 'いいえ'
+            : prop.required
+              ? 'Yes'
+              : 'No'
+          : localize(prop.required, locale);
 
       const element = localize(prop.element, locale);
       lines.push(`| \`${prop.attribute}\` | ${element} | ${values} | ${requiredText} | ${notes} |`);
@@ -322,8 +332,9 @@ function generateMarkdown(data: PatternAccessibilityData, options: GenerateOptio
       lines.push(`| ${t.key} | ${t.action} |`);
       lines.push('| --- | --- |');
       for (const shortcut of section.shortcuts) {
+        const key = localize(shortcut.key, locale);
         const action = localize(shortcut.action, locale);
-        lines.push(`| \`${shortcut.key}\` | ${action} |`);
+        lines.push(`| \`${key}\` | ${action} |`);
       }
       lines.push('');
     }
@@ -331,8 +342,9 @@ function generateMarkdown(data: PatternAccessibilityData, options: GenerateOptio
     lines.push(`| ${t.key} | ${t.action} |`);
     lines.push('| --- | --- |');
     for (const shortcut of data.keyboardSupport) {
+      const key = localize(shortcut.key, locale);
       const action = localize(shortcut.action, locale);
-      lines.push(`| \`${shortcut.key}\` | ${action} |`);
+      lines.push(`| \`${key}\` | ${action} |`);
     }
     lines.push('');
   }

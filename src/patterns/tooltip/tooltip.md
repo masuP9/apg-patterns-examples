@@ -18,8 +18,8 @@ A tooltip is a popup that displays information related to an element when the el
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-describedby` | [object Object] | ID of tooltip | Yes | Only when tooltip is visible. References the tooltip element to provide an accessible description for the trigger element. |
-| `aria-hidden` | [object Object] | ``true`` \| ``false`` | No | Indicates whether the tooltip is hidden from assistive technology. Default is true. |
+| `aria-describedby` | Trigger element (wrapper) | ID of tooltip | Conditional | Only when tooltip is visible. References the tooltip element to provide an accessible description for the trigger element. |
+| `aria-hidden` | Tooltip element | ``true`` \| ``false`` | No | Indicates whether the tooltip is hidden from assistive technology. Default is true. |
 
 ## Keyboard Support
 

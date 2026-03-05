@@ -1,0 +1,135 @@
+---
+pattern: tree-view
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role       | Target Element           | Description                                     |
+| ---------- | ------------------------ | ----------------------------------------------- |
+| `tree`     | Container (`<ul>`)       | The tree widget container                       |
+| `treeitem` | Each node (`<li>`)       | Individual tree nodes (both parent and leaf)    |
+| `group`    | Child container (`<ul>`) | Container for child nodes of an expanded parent |
+
+### WAI-ARIA Properties
+
+#### `role="tree"`
+
+Identifies the container as a tree widget
+
+<KeyValueList>
+  <KeyValueListItem term="Values">-</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Accessible name for the tree
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+Alternative to aria-label (takes precedence)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-multiselectable`
+
+Only present for multi-select mode
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Parent treeitem</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, ArrowRight, ArrowLeft, Enter</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">All treeitems</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space, Arrow keys</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Disabled treeitem</KeyValueListItem>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+#### Navigation
+
+| Key                        | Action                                                                           |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| <kbd>ArrowDown</kbd>       | Move focus to next visible node                                                  |
+| <kbd>ArrowUp</kbd>         | Move focus to previous visible node                                              |
+| <kbd>ArrowRight</kbd>      | Closed parent: expand / Open parent: move to first child / Leaf: no action       |
+| <kbd>ArrowLeft</kbd>       | Open parent: collapse / Child or closed parent: move to parent / Root: no action |
+| <kbd>Home</kbd>            | Move focus to first node                                                         |
+| <kbd>End</kbd>             | Move focus to last visible node                                                  |
+| <kbd>Enter</kbd>           | Select and activate node (see Selection section below)                           |
+| <kbd>\*</kbd>              | Expand all siblings at current level                                             |
+| <kbd>Type characters</kbd> | Move focus to next visible node starting with that character                     |
+
+#### Selection (Single-Select Mode)
+
+| Key                            | Action                                                      |
+| ------------------------------ | ----------------------------------------------------------- |
+| <kbd>ArrowDown / ArrowUp</kbd> | Move focus only (selection does NOT follow focus)           |
+| <kbd>Enter</kbd>               | Select focused node and activate (fire onActivate callback) |
+| <kbd>Space</kbd>               | Select focused node and activate (fire onActivate callback) |
+| <kbd>Click</kbd>               | Select clicked node and activate (fire onActivate callback) |
+
+#### Selection (Multi-Select Mode)
+
+| Key                                    | Action                                |
+| -------------------------------------- | ------------------------------------- |
+| <kbd>Space</kbd>                       | Toggle selection of focused node      |
+| <kbd>Ctrl + Space</kbd>                | Toggle selection without moving focus |
+| <kbd>Shift + ArrowDown / ArrowUp</kbd> | Extend selection range from anchor    |
+| <kbd>Shift + Home</kbd>                | Extend selection to first node        |
+| <kbd>Shift + End</kbd>                 | Extend selection to last visible node |
+| <kbd>Ctrl + A</kbd>                    | Select all visible nodes              |
+
+- Either aria-label or aria-labelledby is required.
+- Parent nodes must have aria-expanded. Leaf nodes must NOT have aria-expanded.
+- When selection is supported, ALL treeitems must have aria-selected.
+
+### Focus Management
+
+| Event              | Behavior                                                                      |
+| ------------------ | ----------------------------------------------------------------------------- |
+| Roving tabindex    | Only one node has `tabindex="0"` (the focused node)                           |
+| Other nodes        | All other nodes have `tabindex="-1"`                                          |
+| Single Tab stop    | Tree is a single Tab stop (Tab enters tree, Shift+Tab exits)                  |
+| Visible nodes only | Focus moves only among visible nodes (collapsed children are skipped)         |
+| Collapse behavior  | When a parent is collapsed while a child has focus, focus moves to the parent |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#tree">WAI-ARIA tree role</ExternalLink>

@@ -10,8 +10,8 @@ A link is an interactive element that navigates to a resource when activated. Pr
 
 | Use Case | Recommended |
 | --- | --- |
-| Standard navigation | Native `<a href>` |
-| JavaScript-driven navigation | Native `<a href>` with `event.preventDefault()` |
+| Standard navigation | Native `<code>&lt;a href&gt;</code>` |
+| JavaScript-driven navigation | Native `<code>&lt;a href&gt;</code>` with `event.preventDefault()` |
 | Non-link element that navigates | Custom `role="link"` (educational purposes only) |
 
 ### Native vs Custom Comparison
@@ -33,13 +33,13 @@ A link is an interactive element that navigates to a resource when activated. Pr
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `link` | <a href> or element with role="link" | Identifies the element as a hyperlink. Native <a href> has this role implicitly. |
+| `link` | <code>&lt;a href&gt;</code> or element with role="link" | Identifies the element as a hyperlink. Native <code>&lt;a href&gt;</code> has this role implicitly. |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `tabindex` | Custom element | `0 (focusable)` \| `-1 (not focusable)` | Yes | Required for custom implementations. Native <a href> is focusable by default. Set to -1 when disabled. |
+| `tabindex` | Custom element | `0 (focusable)` \| `-1 (not focusable)` | Yes | Required for custom implementations. Native <code>&lt;a href&gt;</code> is focusable by default. Set to -1 when disabled. |
 | `aria-label` | Link element | string | No | Provides an invisible label for the link when no visible text |
 | `aria-labelledby` | Link element | ID reference | No | References an external element as the label |
 | `aria-current` | Link element | `page` \| `step` \| `location` \| `date` \| `time` \| `true` | No | Indicates the current item within a set (e.g., current page in navigation) |
@@ -60,7 +60,7 @@ A link is an interactive element that navigates to a resource when activated. Pr
 
 ## Focus Management
 
-- Native <a href>: Focusable by default
+- Native <code>&lt;a href&gt;</code>: Focusable by default
 - Custom links: Require tabindex="0"
 - Disabled links: Use tabindex="-1" (removed from tab order)
 

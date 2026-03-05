@@ -10,8 +10,8 @@
 
 | ユースケース | 推奨 |
 | --- | --- |
-| Simple toggle content | Native <details>/<summary> |
-| JavaScript disabled support | Native <details>/<summary> |
+| Simple toggle content | Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> |
+| JavaScript disabled support | Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> |
 | Smooth animations | Custom implementation |
 | External state control | Custom implementation |
 | Custom styling | Custom implementation |
@@ -32,7 +32,7 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `button` | トリガー要素 | パネルの表示を切り替えるインタラクティブな要素（ネイティブの<button>を使用） |
+| `button` | トリガー要素 | パネルの表示を切り替えるインタラクティブな要素（ネイティブの<code>&lt;button&gt;</code>を使用） |
 
 ### プロパティ
 
@@ -58,7 +58,7 @@
 
 ### 高優先度: ARIA
 
-- [ ] Trigger is a <button> element
+- [ ] Trigger is a <code>&lt;button&gt;</code> element
 - [ ] Button has aria-expanded attribute
 - [ ] aria-expanded toggles between true and false
 - [ ] Button has aria-controls referencing panel id

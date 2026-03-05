@@ -1,0 +1,135 @@
+---
+pattern: slider
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role     | Target Element | Description                                                                                |
+| -------- | -------------- | ------------------------------------------------------------------------------------------ |
+| `slider` | Thumb element  | Identifies the element as a slider that allows users to select a value from within a range |
+
+### WAI-ARIA Properties
+
+#### `aria-valuenow`
+
+Updated dynamically when value changes via keyboard or pointer
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemin`
+
+Default: 0
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemax`
+
+Default: 100
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuetext`
+
+Example: "50%", "Medium", "3 of 5 stars"
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">No (recommended when value needs context)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-orientation`
+
+Default: horizontal (implicit). Only set for vertical sliders.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+Set only when disabled
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                    | Action                                                    |
+| ---------------------- | --------------------------------------------------------- |
+| <kbd>Right Arrow</kbd> | Increases the value by one step                           |
+| <kbd>Up Arrow</kbd>    | Increases the value by one step                           |
+| <kbd>Left Arrow</kbd>  | Decreases the value by one step                           |
+| <kbd>Down Arrow</kbd>  | Decreases the value by one step                           |
+| <kbd>Home</kbd>        | Sets the slider to its minimum value                      |
+| <kbd>End</kbd>         | Sets the slider to its maximum value                      |
+| <kbd>Page Up</kbd>     | Increases the value by a large step (default: step \* 10) |
+| <kbd>Page Down</kbd>   | Decreases the value by a large step (default: step \* 10) |
+
+- Sliders must have an accessible name via visible label (recommended), aria-label, or aria-labelledby.
+- This implementation follows WCAG guidelines for accessible visual design including focus indicators, visual fill, and hover states.
+- Pointer interaction: Click on track moves thumb immediately; drag allows continuous adjustment.
+- Forced colors mode uses system colors for Windows High Contrast Mode accessibility.
+
+### Implementation Notes
+
+```
+Structure:
+<div class="slider-container">
+  <label id="label">Volume</label>
+  <div class="slider-track">
+    <div class="slider-fill" />
+    <div
+      role="slider"
+      tabindex="0"
+      aria-valuenow="50"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-labelledby="label"
+      class="slider-thumb"
+    />
+  </div>
+</div>
+
+Visual Layout:
+┌─────────────────────────────────────┐
+│ Volume                               │
+│ ├─────────●─────────────────────────┤
+│ 0        50                     100  │
+└─────────────────────────────────────┘
+
+Keyboard Navigation:
+← / ↓  = Decrease by step
+→ / ↑  = Increase by step
+Home   = Set to min
+End    = Set to max
+PgUp   = Increase by large step
+PgDn   = Decrease by large step
+```
+
+Slider component structure and visual layout
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/slider/">
+    WAI-ARIA APG: Slider Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range">
+    MDN: &lt;input type="range"&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#slider">W3C ARIA: slider role</ExternalLink>

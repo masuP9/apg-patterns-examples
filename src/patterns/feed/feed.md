@@ -19,12 +19,12 @@ A feed is a section of a page that automatically loads new content as the user s
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | [object Object] | Text | No | Accessible name for the feed (conditional*) |
-| `aria-labelledby` | [object Object] | ID reference | No | References visible heading for the feed (conditional*) |
-| `aria-labelledby` | [object Object] | ID reference | Yes | References the article title element |
-| `aria-describedby` | [object Object] | ID reference | No | References the article description or content (recommended) |
-| `aria-posinset` | [object Object] | Number (1-based) | Yes | Position of article in the feed (starts at 1) |
-| `aria-setsize` | [object Object] | Number or -1 | Yes | Total articles in feed, or -1 if unknown |
+| `aria-label` | Feed container | Text | No | Accessible name for the feed (conditional*) |
+| `aria-labelledby` | Feed container | ID reference | No | References visible heading for the feed (conditional*) |
+| `aria-labelledby` | Each article | ID reference | Yes | References the article title element |
+| `aria-describedby` | Each article | ID reference | No | References the article description or content (recommended) |
+| `aria-posinset` | Each article | Number (1-based) | Yes | Position of article in the feed (starts at 1) |
+| `aria-setsize` | Each article | Number or -1 | Yes | Total articles in feed, or -1 if unknown |
 
 ### States
 

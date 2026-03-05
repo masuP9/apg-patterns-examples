@@ -1,0 +1,177 @@
+---
+pattern: treegrid
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role           | Target Element    | Description                                  |
+| -------------- | ----------------- | -------------------------------------------- |
+| `treegrid`     | Container         | The treegrid container (composite widget)    |
+| `row`          | Row container     | Groups cells horizontally, may have children |
+| `columnheader` | Header cells      | Column headers (not focusable)               |
+| `rowheader`    | First column cell | Row header where tree operations occur       |
+| `gridcell`     | Data cells        | Interactive cells (focusable)                |
+
+### WAI-ARIA Properties
+
+#### `role="treegrid"`
+
+Identifies the container as a treegrid
+
+<KeyValueList>
+  <KeyValueListItem term="Values">-</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Accessible name for the treegrid
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (either aria-label or aria-labelledby)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+Alternative to aria-label
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (either aria-label or aria-labelledby)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-multiselectable`
+
+Only present for multi-select mode
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowcount`
+
+Total rows (for virtualization)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colcount`
+
+Total columns (for virtualization)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-level`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">row</KeyValueListItem>
+  <KeyValueListItem term="Values">Number (1-based)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Static per row (determined by hierarchy)
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">row (parent only)</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    ArrowRight/Left at rowheader, click on expand icon
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">row</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Space key, click (NOT on gridcell)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">row</KeyValueListItem>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Only when row is disabled</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowindex`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">row</KeyValueListItem>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Static (for virtualization)</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+#### 2D Navigation
+
+| Key                    | Action                                             |
+| ---------------------- | -------------------------------------------------- |
+| <kbd>Arrow Down</kbd>  | Move focus to same column in next visible row      |
+| <kbd>Arrow Up</kbd>    | Move focus to same column in previous visible row  |
+| <kbd>Arrow Right</kbd> | Move focus one cell right (at non-rowheader cells) |
+| <kbd>Arrow Left</kbd>  | Move focus one cell left (at non-rowheader cells)  |
+| <kbd>Home</kbd>        | Move focus to first cell in row                    |
+| <kbd>End</kbd>         | Move focus to last cell in row                     |
+| <kbd>Ctrl + Home</kbd> | Move focus to first cell in treegrid               |
+| <kbd>Ctrl + End</kbd>  | Move focus to last cell in treegrid                |
+
+#### Tree Operations (at rowheader only)
+
+| Key                                   | Action                                                                                                                  |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| <kbd>Arrow Right (at rowheader)</kbd> | If collapsed parent: expand row. If expanded parent: move to first child's rowheader. If leaf: do nothing               |
+| <kbd>Arrow Left (at rowheader)</kbd>  | If expanded parent: collapse row. If collapsed/leaf: move to parent's rowheader. If at root level collapsed: do nothing |
+
+#### Row Selection & Cell Activation
+
+| Key                 | Action                                           |
+| ------------------- | ------------------------------------------------ |
+| <kbd>Space</kbd>    | Toggle row selection (NOT cell selection)        |
+| <kbd>Enter</kbd>    | Activate focused cell (does NOT expand/collapse) |
+| <kbd>Ctrl + A</kbd> | Select all visible rows (when multiselectable)   |
+
+- Rows can be expanded/collapsed to show/hide child rows
+- Row selection instead of cell selection (aria-selected on row, not gridcell)
+- Tree operations (expand/collapse) only work at the rowheader column
+- Rows have aria-level to indicate hierarchy depth
+
+### Focus Management
+
+| Event              | Behavior                                           |
+| ------------------ | -------------------------------------------------- |
+| Focus model        | Roving tabindex - only one cell has `tabindex="0"` |
+| Other cells        | `tabindex="-1"`                                    |
+| TreeGrid           | Single Tab stop (Tab enters/exits the grid)        |
+| Column headers     | NOT focusable (no tabindex)                        |
+| Collapsed children | NOT in keyboard navigation                         |
+| Parent collapses   | If focus was on child, move focus to parent        |
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/">
+    WAI-ARIA APG: TreeGrid Pattern
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#treegrid">W3C ARIA: treegrid role</ExternalLink>

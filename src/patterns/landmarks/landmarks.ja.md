@@ -10,13 +10,13 @@
 
 | 機能 | ネイティブ | カスタム |
 | --- | --- | --- |
-| `<header>` | banner | `<body>`の直接の子の場合のみ |
-| `<nav>` | navigation | 常に |
-| `<main>` | main | 常に |
-| `<footer>` | contentinfo | `<body>`の直接の子の場合のみ |
-| `<aside>` | complementary | 常に |
-| `<section>` | region | **aria-label/labelledbyがある場合のみ** |
-| `<form>` | form | **aria-label/labelledbyがある場合のみ** |
+| `<code>&lt;header&gt;</code>` | banner | `<body>`の直接の子の場合のみ |
+| `<code>&lt;nav&gt;</code>` | navigation | 常に |
+| `<code>&lt;main&gt;</code>` | main | 常に |
+| `<code>&lt;footer&gt;</code>` | contentinfo | `<body>`の直接の子の場合のみ |
+| `<code>&lt;aside&gt;</code>` | complementary | 常に |
+| `<code>&lt;section&gt;</code>` | region | **aria-label/labelledbyがある場合のみ** |
+| `<code>&lt;form&gt;</code>` | form | **aria-label/labelledbyがある場合のみ** |
 
 ## ARIA要件
 
@@ -24,21 +24,21 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `banner` | `<header>` | サイト全体のヘッダー |
-| `navigation` | `<nav>` | ナビゲーションリンク |
-| `main` | `<main>` | 主要コンテンツ |
-| `contentinfo` | `<footer>` | サイト全体のフッター |
-| `complementary` | `<aside>` | 補完的コンテンツ |
-| `region` | `<section>` | 名前付きセクション |
-| `search` | `<form role="search">` | 検索機能 |
-| `form` | `<form>` | フォーム領域 |
+| `banner` | <code>&lt;header&gt;</code> | サイト全体のヘッダー |
+| `navigation` | <code>&lt;nav&gt;</code> | ナビゲーションリンク |
+| `main` | <code>&lt;main&gt;</code> | 主要コンテンツ |
+| `contentinfo` | <code>&lt;footer&gt;</code> | サイト全体のフッター |
+| `complementary` | <code>&lt;aside&gt;</code> | 補完的コンテンツ |
+| `region` | <code>&lt;section&gt;</code> | 名前付きセクション |
+| `search` | <code>&lt;form role="search"&gt;</code> | 検索機能 |
+| `form` | <code>&lt;form&gt;</code> | フォーム領域 |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | [object Object] | String | はい | ランドマークにアクセシブルな名前を提供 |
-| `aria-labelledby` | [object Object] | ID reference | はい | 可視の見出し要素を参照 |
+| `aria-label` | すべてのランドマーク | String | 条件付き: 同じ種類が複数ある場合、またはregion/formの場合 | ランドマークにアクセシブルな名前を提供 |
+| `aria-labelledby` | すべてのランドマーク | ID reference | 条件付き: 可視見出しを参照 | 可視の見出し要素を参照 |
 
 ## キーボードサポート
 
@@ -46,10 +46,10 @@
 
 ### 高優先度: ARIA
 
-- [ ] Has banner landmark (`<header>` or `role="banner"`)
-- [ ] Has navigation landmark (`<nav>` or `role="navigation"`)
-- [ ] Has main landmark (`<main>` or `role="main"`)
-- [ ] Has contentinfo landmark (`<footer>` or `role="contentinfo"`)
+- [ ] Has banner landmark (`<code>&lt;header&gt;</code>` or `role="banner"`)
+- [ ] Has navigation landmark (`<code>&lt;nav&gt;</code>` or `role="navigation"`)
+- [ ] Has main landmark (`<code>&lt;main&gt;</code>` or `role="main"`)
+- [ ] Has contentinfo landmark (`<code>&lt;footer&gt;</code>` or `role="contentinfo"`)
 - [ ] Has exactly one main landmark
 - [ ] Banner is at top level (not inside article/aside/main/nav/section)
 - [ ] Navigation landmarks have unique labels when multiple

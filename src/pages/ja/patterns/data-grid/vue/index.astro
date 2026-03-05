@@ -2,7 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import DataGridDemo from '@patterns/data-grid/DataGridDemo.vue';
-import AccessibilityDocs from '@patterns/data-grid/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/data-grid/TestingDocs.astro';
 import KeyboardHints from '@/components/blocks/KeyboardHints.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -16,6 +17,7 @@ import sourceCode from '@patterns/data-grid/DataGrid.vue?raw';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('data-grid', locale);
 
 const keyboardHintsSections = [
   {
@@ -152,7 +154,9 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
       {t('pattern.accessibility')}
     </Heading>
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

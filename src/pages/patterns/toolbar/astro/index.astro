@@ -8,7 +8,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/toolbar/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/toolbar/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -17,6 +18,8 @@ import toolbarSource from '@patterns/toolbar/Toolbar.astro?raw';
 import buttonSource from '@patterns/toolbar/ToolbarButton.astro?raw';
 import toggleSource from '@patterns/toolbar/ToolbarToggleButton.astro?raw';
 import separatorSource from '@patterns/toolbar/ToolbarSeparator.astro?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('toolbar', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -179,7 +182,9 @@ const tocItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -371,7 +376,7 @@ import ToolbarSeparator from '@patterns/toolbar/ToolbarSeparator.astro';
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>pressed-change</code></td>
             <td class="py-2 pr-4"><code>apg-toolbar-toggle-button</code></td>
-            <td class="py-2 pr-4"><code>{'{ pressed: boolean }'}</code></td>
+            <td class="py-2 pr-4"><code>{'{'} pressed: boolean {'}'}</code></td>
             <td class="py-2">Fired when toggle button state changes</td>
           </tr>
         </tbody>

@@ -1,0 +1,141 @@
+---
+pattern: table
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール         | 対象要素                | 説明                                                            |
+| -------------- | ----------------------- | --------------------------------------------------------------- |
+| `table`        | コンテナ要素            | 要素をデータの行とセルを含むテーブル構造として識別します。      |
+| `rowgroup`     | ヘッダー/ボディコンテナ | 行をグループ化します（`<thead>`、`<tbody>`、`<tfoot>`に相当）。 |
+| `row`          | 行要素                  | テーブル内の1行（`<tr>`に相当）。                               |
+| `columnheader` | ヘッダーセル            | 列の見出しセル（ヘッダー行の`<th>`に相当）。                    |
+| `rowheader`    | ヘッダーセル            | 行の見出しセル（`<th scope="row">`に相当）。                    |
+| `cell`         | データセル              | 行内のデータセル（`<td>`に相当）。                              |
+
+### WAI-ARIA プロパティ
+
+#### `aria-label`
+
+テーブルのアクセシブル名を提供します。スクリーンリーダーのユーザーがテーブルの目的を理解するために必要です。
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（または aria-labelledby）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+テーブルのアクセシブル名を提供する要素を参照します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（または aria-label）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-describedby`
+
+テーブルの追加説明を提供する要素を参照します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colcount`
+
+一部のみがレンダリングされている場合のテーブルの総列数を定義します（仮想化用）。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowcount`
+
+一部のみがレンダリングされている場合のテーブルの総行数を定義します（仮想化用）。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colindex`
+
+テーブル全体におけるセルの位置を示します（仮想化用）。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（1始まり）</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowindex`
+
+テーブル全体における行の位置を示します（仮想化用）。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（1始まり）</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colspan`
+
+セルが何列にまたがるかを示します。1より大きい場合のみ設定します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowspan`
+
+セルが何行にまたがるかを示します。1より大きい場合のみ設定します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `aria-sort`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">columnheader/rowheader 要素</KeyValueListItem>
+  <KeyValueListItem term="値">ascending | descending | none | other</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    ソート順が変更されたとき（ソートボタンクリック）
+  </KeyValueListItem>
+</KeyValueList>
+
+- tableロールはデータを表示するための静的な表構造を作成します。gridロールとは異なり、テーブルはインタラクティブではなく、セル間のキーボードナビゲーションをサポートしません。
+- tableパターンにはキーボードサポートは該当しません。セル内のインタラクティブな要素（ボタン、リンク）は通常のTab順序でフォーカスを受け取ります。
+
+### フォーカス管理
+
+| イベント             | 振る舞い                                           |
+| -------------------- | -------------------------------------------------- |
+| 静的テーブル         | 該当なし - roving tabindexは不要                   |
+| インタラクティブ要素 | リンク/ボタンは通常のTab順序でフォーカスを受け取る |
+
+### ビジュアルデザイン
+
+- CSS Gridレイアウト - 視覚的なセル結合サポートのためにCSS Grid + subgridを使用
+- セルの罫線 - 背景色を使用したギャップベースの罫線
+- ソートインジケーター - ソート方向を示す視覚的なアイコン
+- ヘッダースタイリング - ヘッダーセルの明確な背景色
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/table/">
+    WAI-ARIA APG: Table Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table">
+    MDN: &lt;table&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#table">W3C ARIA: table role</ExternalLink>

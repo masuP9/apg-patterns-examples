@@ -1,0 +1,118 @@
+---
+pattern: radio-group
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role         | Target Element      | Description                                                                                    |
+| ------------ | ------------------- | ---------------------------------------------------------------------------------------------- |
+| `radiogroup` | Container element   | Groups radio buttons together. Must have an accessible name via aria-label or aria-labelledby. |
+| `radio`      | Each option element | Identifies the element as a radio button. Only one radio in a group can be checked at a time.  |
+
+### WAI-ARIA Properties
+
+#### `aria-orientation`
+
+Indicates the orientation of the radio group. Vertical is the default. Only set when horizontal.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">horizontal | vertical</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Accessible name for the radio group
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-labelledby)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+Alternative to aria-label
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-label)</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-checked`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Each radio</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Space, Arrow keys</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Disabled radio</KeyValueListItem>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                               | Action                                                 |
+| --------------------------------- | ------------------------------------------------------ |
+| <kbd>Tab</kbd>                    | Move focus into the group (to selected or first radio) |
+| <kbd>Shift + Tab</kbd>            | Move focus out of the group                            |
+| <kbd>Space</kbd>                  | Select the focused radio (does not unselect)           |
+| <kbd>ArrowDown / ArrowRight</kbd> | Move to next radio and select (wraps to first)         |
+| <kbd>ArrowUp / ArrowLeft</kbd>    | Move to previous radio and select (wraps to last)      |
+| <kbd>Home</kbd>                   | Move to first radio and select                         |
+| <kbd>End</kbd>                    | Move to last radio and select                          |
+
+- Unlike Checkbox, arrow keys both move focus AND change selection.
+- Disabled radios are skipped during navigation.
+- This implementation uses custom role="radiogroup" and role="radio" for consistent cross-browser keyboard behavior. Native `<input type="radio">` provides these roles implicitly.
+
+### Accessible Naming
+
+Both the radio group and individual radios must have accessible names:
+
+- **Radio group** — Use `aria-label` or `aria-labelledby` on the container
+- **Individual radios** — Each radio is labeled by its visible text content via `aria-labelledby`
+- **Native alternative** — Use `<fieldset>` with `<legend>` for group labeling
+
+### Focus Management
+
+| Event            | Behavior                                            |
+| ---------------- | --------------------------------------------------- |
+| Roving tabindex  | Only one radio in the group is tabbable at any time |
+| Selected radio   | Has `tabindex="0"`                                  |
+| If none selected | First enabled radio has `tabindex="0"`              |
+| All other radios | Have `tabindex="-1"`                                |
+| Disabled radios  | Always have `tabindex="-1"`                         |
+
+### Visual Design
+
+This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state:
+
+- **Selected** — Filled circle
+- **Unselected** — Empty circle
+- **Disabled** — Reduced opacity
+- **Forced colors mode** — Uses system colors for accessibility in Windows High Contrast Mode
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">
+    WAI-ARIA APG: Radio Group Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio">
+    MDN: &lt;input type="radio"&gt;
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#radiogroup">
+    W3C ARIA: radiogroup role
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#radio">W3C ARIA: radio role</ExternalLink>

@@ -1,0 +1,89 @@
+---
+pattern: dialog
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role     | Target Element   | Description                              |
+| -------- | ---------------- | ---------------------------------------- |
+| `dialog` | Dialog container | Indicates the element is a dialog window |
+
+### WAI-ARIA Properties
+
+#### `aria-modal`
+
+Indicates this is a modal dialog
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References the dialog title
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to title element</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-describedby`
+
+References optional description text
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to description</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                    | Action                                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| <kbd>Tab</kbd>         | Move focus to next focusable element within dialog. When focus is on the last element, moves to first.     |
+| <kbd>Shift + Tab</kbd> | Move focus to previous focusable element within dialog. When focus is on the first element, moves to last. |
+| <kbd>Escape</kbd>      | Close the dialog and return focus to trigger element                                                       |
+
+- The dialog title is required for accessibility and should clearly describe the purpose of the dialog
+- Page scrolling is disabled while the dialog is open
+- Clicking the overlay (background) closes the dialog by default
+- The close button has an accessible label for screen readers
+
+### Focus Management
+
+| Event         | Behavior                                                               |
+| ------------- | ---------------------------------------------------------------------- |
+| Dialog opens  | Focus moves to first focusable element inside the dialog               |
+| Dialog closes | Focus returns to the element that triggered the dialog                 |
+| Focus trap    | Tab/Shift+Tab cycles through focusable elements within the dialog only |
+| Background    | Content outside dialog is made inert (not focusable or interactive)    |
+
+### Implementation Notes
+
+```
+Structure:
++-------------------------------------+
+| Dialog Title          [X]           |  <- aria-labelledby target
++-------------------------------------+
+|                                     |
+| Dialog content...                   |  <- aria-describedby target (optional)
+|                                     |
+| [Cancel]  [Confirm]                 |  <- focusable elements
++-------------------------------------+
+
+Focus Trap:
+- First focusable -> ... -> Last focusable -> First focusable (loop)
+- Store trigger element reference before opening
+- Restore focus to trigger on close
+```
+
+Dialog component structure and focus management
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#dialog">WAI-ARIA dialog role</ExternalLink>

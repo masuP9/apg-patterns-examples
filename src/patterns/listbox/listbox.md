@@ -4,7 +4,7 @@
 
 ## Overview
 
-A listbox widget presents a list of options and allows selection of one or more items. It provides custom selection behavior beyond native `<select>`.
+A listbox widget presents a list of options and allows selection of one or more items. It provides custom selection behavior beyond native `<code>&lt;select&gt;</code>`.
 
 ## ARIA Requirements
 
@@ -12,15 +12,15 @@ A listbox widget presents a list of options and allows selection of one or more 
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `listbox` | Container (`<ul>`) | Widget for selecting one or more items from a list |
-| `option` | Each item (`<li>`) | Selectable option within the listbox |
+| `listbox` | Container (<code>&lt;ul&gt;</code>) | Widget for selecting one or more items from a list |
+| `option` | Each item (<code>&lt;li&gt;</code>) | Selectable option within the listbox |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | listbox | String | Yes | Accessible name for the listbox |
-| `aria-labelledby` | listbox | ID reference | Yes | References the labeling element |
+| `aria-label` | listbox | String | Yes* | Accessible name for the listbox |
+| `aria-labelledby` | listbox | ID reference | Yes* | References the labeling element |
 | `aria-multiselectable` | listbox | `true` | No | Enables multi-select mode |
 | `aria-orientation` | listbox | ``"vertical"`` \| ``"horizontal"`` | No | Navigation direction (default: vertical) |
 

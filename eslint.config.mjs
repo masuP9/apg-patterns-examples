@@ -8,6 +8,7 @@ import svelte from 'eslint-plugin-svelte';
 import astro from 'eslint-plugin-astro';
 import globals from 'globals';
 import noSetHtmlOnSelfClosing from './eslint-rules/no-set-html-on-self-closing.js';
+import noUnescapedHtmlInSetHtmlData from './eslint-rules/no-unescaped-html-in-set-html-data.js';
 
 // ===========================================
 // Shared globals definitions
@@ -480,6 +481,25 @@ export default tseslint.config(
     rules: {
       'no-console': 'off',
       '@typescript-eslint/consistent-type-assertions': 'off',
+    },
+  },
+
+  // ===========================================
+  // Accessibility data: detect unescaped HTML tags
+  // Strings in these files are rendered via <Fragment set:html={...} />
+  // so raw <tagname> would be interpreted as actual HTML elements.
+  // ===========================================
+  {
+    files: ['src/patterns/**/accessibility-data.ts'],
+    plugins: {
+      local: {
+        rules: {
+          'no-unescaped-html-in-set-html-data': noUnescapedHtmlInSetHtmlData,
+        },
+      },
+    },
+    rules: {
+      'local/no-unescaped-html-in-set-html-data': 'warn',
     },
   }
 );

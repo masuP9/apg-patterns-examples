@@ -18,9 +18,9 @@
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-modal` | alertdialog | true | はい | showModal() によって自動的に提供される。ネイティブの <dialog> 要素使用時は明示的な属性は不要。 |
+| `aria-modal` | alertdialog | true | 暗黙的 | showModal() によって自動的に提供される。ネイティブの <code>&lt;dialog&gt;</code> 要素使用時は明示的な属性は不要。 |
 | `aria-labelledby` | alertdialog | タイトル要素への ID 参照 | はい | アラートダイアログのタイトルを参照する |
-| `aria-describedby` | alertdialog | メッセージへの ID 参照 | はい | アラートメッセージを参照する。通常の Dialog とは異なり、Alert Dialog ではメッセージがユーザーの意思決定を理解する上で中心的であるため、この属性は必須です。 |
+| `aria-describedby` | alertdialog | メッセージへの ID 参照 | はい（必須） | アラートメッセージを参照する。通常の Dialog とは異なり、Alert Dialog ではメッセージがユーザーの意思決定を理解する上で中心的であるため、この属性は必須です。 |
 
 ## キーボードサポート
 

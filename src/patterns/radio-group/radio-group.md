@@ -20,8 +20,8 @@ A radio group is a set of checkable buttons, known as radio buttons, where no mo
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
 | `aria-orientation` | radiogroup | `horizontal` \| `vertical` | No | Indicates the orientation of the radio group. Vertical is the default. Only set when horizontal. |
-| `aria-label` | radiogroup | String | Yes | Accessible name for the radio group |
-| `aria-labelledby` | radiogroup | ID reference | Yes | Alternative to aria-label |
+| `aria-label` | radiogroup | String | Yes (or aria-labelledby) | Accessible name for the radio group |
+| `aria-labelledby` | radiogroup | ID reference | Yes (or aria-label) | Alternative to aria-label |
 
 ### States
 

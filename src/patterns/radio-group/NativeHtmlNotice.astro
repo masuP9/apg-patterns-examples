@@ -1,18 +1,91 @@
 ---
 import { ResponsiveTable } from '@/components/ui/table';
+import type { Locale } from '@/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+
+const t = {
+  en: {
+    title: 'Use Native HTML First',
+    recommendation:
+      'Before using this custom component, consider using native <code>&lt;input type="radio"&gt;</code> elements with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code>.',
+    benefits:
+      'They provide built-in accessibility, work without JavaScript, and require no ARIA attributes.',
+    customNote:
+      'Use custom implementations when you need consistent cross-browser keyboard behavior or custom styling that native elements cannot provide.',
+    useCase: 'Use Case',
+    nativeHtml: 'Native HTML',
+    customImpl: 'Custom Implementation',
+    footnote:
+      '*Native radio keyboard behavior varies between browsers. Some browsers may not support all APG keyboard interactions (like Home/End) out of the box.',
+  },
+  ja: {
+    title: 'ネイティブ HTML を優先',
+    recommendation:
+      'このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;input type="radio"&gt;</code> 要素と <code>&lt;fieldset&gt;</code>、<code>&lt;legend&gt;</code> の使用を検討してください。',
+    benefits: '組み込みのアクセシビリティを提供し、JavaScript なしで動作し、ARIA 属性は不要です。',
+    customNote:
+      '一貫したクロスブラウザキーボード動作や、ネイティブ要素では実現できないカスタムスタイリングが必要な場合にカスタム実装を使用してください。',
+    useCase: 'ユースケース',
+    nativeHtml: 'ネイティブ HTML',
+    customImpl: 'カスタム実装',
+    footnote:
+      '*ネイティブラジオのキーボード動作はブラウザによって異なります。一部のブラウザでは、APG のキーボード操作（Home/End など）がデフォルトでサポートされていない場合があります。',
+  },
+}[locale];
+
+const rows = [
+  {
+    useCase: { en: 'Basic form input', ja: '基本的なフォーム入力' },
+    native: { en: 'Recommended', ja: '推奨' },
+    nativeRecommended: true,
+    custom: { en: 'Not needed', ja: '不要' },
+  },
+  {
+    useCase: {
+      en: 'JavaScript disabled support',
+      ja: 'JavaScript 無効時のサポート',
+    },
+    native: { en: 'Works natively', ja: 'ネイティブで動作' },
+    nativeRecommended: true,
+    custom: { en: 'Requires fallback', ja: 'フォールバックが必要' },
+  },
+  {
+    useCase: { en: 'Arrow key navigation', ja: '矢印キーナビゲーション' },
+    native: { en: 'Browser-dependent*', ja: 'ブラウザ依存*' },
+    nativeRecommended: false,
+    custom: { en: 'Consistent behavior', ja: '一貫した動作' },
+  },
+  {
+    useCase: { en: 'Custom styling', ja: 'カスタムスタイリング' },
+    native: {
+      en: 'Limited (browser-dependent)',
+      ja: '限定的（ブラウザ依存）',
+    },
+    nativeRecommended: false,
+    custom: { en: 'Full control', ja: '完全な制御' },
+  },
+  {
+    useCase: { en: 'Form submission', ja: 'フォーム送信' },
+    native: { en: 'Built-in', ja: '組み込み' },
+    nativeRecommended: true,
+    custom: { en: 'Requires hidden input', ja: '隠し input が必要' },
+  },
+];
 ---
 
 <div class="border-primary mb-8 rounded-lg border-2 p-4">
   <h2 class="mb-2 flex items-center gap-2 text-lg font-bold">
-    <span aria-hidden="true">&#9888;&#65039;</span> Use Native HTML First
+    <span aria-hidden="true">&#9888;&#65039;</span>
+    {t.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >Before using this custom component, consider using native <code
-        >&lt;input type="radio"&gt;</code
-      > elements with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code>.</strong
-    >
-    They provide built-in accessibility, work without JavaScript, and require no ARIA attributes.
+    <strong class="text-red-700 dark:text-red-400"><Fragment set:html={t.recommendation} /></strong>
+    {t.benefits}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
     <pre
@@ -24,52 +97,44 @@ import { ResponsiveTable } from '@/components/ui/table';
 &lt;/fieldset&gt;</code></pre>
   </div>
   <p class="mb-4 text-sm">
-    Use custom implementations when you need consistent cross-browser keyboard behavior or custom
-    styling that native elements cannot provide.
+    {t.customNote}
   </p>
 
   <ResponsiveTable>
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-border border-b">
-          <th class="py-2 pr-4 text-left">Use Case</th>
-          <th class="py-2 pr-4 text-left">Native HTML</th>
-          <th class="py-2 text-left">Custom Implementation</th>
+          <th class="py-2 pr-4 text-left">{t.useCase}</th>
+          <th class="py-2 pr-4 text-left">{t.nativeHtml}</th>
+          <th class="py-2 text-left">{t.customImpl}</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Basic form input</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Recommended</b></td>
-          <td class="py-2">Not needed</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">JavaScript disabled support</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Works natively</b></td
-          >
-          <td class="py-2">Requires fallback</td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Arrow key navigation</td>
-          <td class="py-2 pr-4">Browser-dependent*</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Consistent behavior</b></td
-          >
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Custom styling</td>
-          <td class="py-2 pr-4">Limited (browser-dependent)</td>
-          <td class="py-2"><b class="text-green-700 dark:text-green-400">Full control</b></td>
-        </tr>
-        <tr class="border-border border-b">
-          <td class="py-2 pr-4">Form submission</td>
-          <td class="py-2 pr-4"><b class="text-green-700 dark:text-green-400">Built-in</b></td>
-          <td class="py-2">Requires hidden input</td>
-        </tr>
+        {
+          rows.map((row) => (
+            <tr class="border-border border-b">
+              <td class="py-2 pr-4">{row.useCase[locale]}</td>
+              <td class="py-2 pr-4">
+                {row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{row.native[locale]}</b>
+                ) : (
+                  row.native[locale]
+                )}
+              </td>
+              <td class="py-2">
+                {!row.nativeRecommended ? (
+                  <b class="text-green-700 dark:text-green-400">{row.custom[locale]}</b>
+                ) : (
+                  row.custom[locale]
+                )}
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </ResponsiveTable>
   <p class="text-muted-foreground mt-3 text-xs">
-    *Native radio keyboard behavior varies between browsers. Some browsers may not support all APG
-    keyboard interactions (like Home/End) out of the box.
+    {t.footnote}
   </p>
 </div>

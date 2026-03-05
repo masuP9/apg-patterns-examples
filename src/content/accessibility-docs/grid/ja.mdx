@@ -1,0 +1,170 @@
+---
+pattern: grid
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール         | 対象要素       | 説明                                     |
+| -------------- | -------------- | ---------------------------------------- |
+| `grid`         | コンテナ       | グリッドコンテナ（複合ウィジェット）     |
+| `row`          | 行コンテナ     | セルを水平方向にグループ化               |
+| `columnheader` | ヘッダーセル   | 列ヘッダー（この実装ではフォーカス不可） |
+| `rowheader`    | 行ヘッダーセル | 行ヘッダー（オプション）                 |
+| `gridcell`     | データセル     | インタラクティブセル（フォーカス可能）   |
+
+### WAI-ARIA プロパティ
+
+#### `role="grid"`
+
+コンテナをグリッドとして識別
+
+<KeyValueList>
+  <KeyValueListItem term="値">-</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+グリッドのアクセシブルな名前
+
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">
+    はい*（aria-label または aria-labelledby のいずれか）
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+aria-labelの代替
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID reference</KeyValueListItem>
+  <KeyValueListItem term="必須">
+    はい*（aria-label または aria-labelledby のいずれか）
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-multiselectable`
+
+複数選択モード時のみ存在
+
+<KeyValueList>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowcount`
+
+総行数（仮想化用）
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colcount`
+
+総列数（仮想化用）
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `tabindex`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">0 | -1</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">フォーカス管理用のroving tabindex</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    グリッドが選択をサポートする場合に存在。選択をサポートする場合、すべてのgridcellにaria-selectedが必要。
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">セルが無効であることを示す</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowindex`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row, gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">行位置（仮想化用）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colindex`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">gridcell</KeyValueListItem>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">列位置（仮想化用）</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+#### 2Dナビゲーション
+
+| キー                   | アクション                                        |
+| ---------------------- | ------------------------------------------------- |
+| <kbd>→</kbd>           | フォーカスを右のセルに移動                        |
+| <kbd>←</kbd>           | フォーカスを左のセルに移動                        |
+| <kbd>↓</kbd>           | フォーカスを下の行に移動                          |
+| <kbd>↑</kbd>           | フォーカスを上の行に移動                          |
+| <kbd>Home</kbd>        | フォーカスを行の最初のセルに移動                  |
+| <kbd>End</kbd>         | フォーカスを行の最後のセルに移動                  |
+| <kbd>Ctrl + Home</kbd> | フォーカスをグリッドの最初のセルに移動            |
+| <kbd>Ctrl + End</kbd>  | フォーカスをグリッドの最後のセルに移動            |
+| <kbd>PageDown</kbd>    | フォーカスをページサイズ分下に移動（デフォルト5） |
+| <kbd>PageUp</kbd>      | フォーカスをページサイズ分上に移動（デフォルト5） |
+
+#### 選択とアクティベーション
+
+| キー             | アクション                                                     |
+| ---------------- | -------------------------------------------------------------- |
+| <kbd>Space</kbd> | フォーカス中のセルを選択/選択解除（選択可能時）                |
+| <kbd>Enter</kbd> | フォーカス中のセルをアクティベート（onCellActivateをトリガー） |
+
+- グリッドコンテナには aria-label または aria-labelledby のいずれかが必須です。
+- 無効化セルはaria-disabled="true"を持ち、フォーカス可能（キーボードナビゲーションに含まれる）ですが、選択またはアクティベートできず、視覚的に区別されます（例：グレーアウト）。
+
+### フォーカス管理
+
+| イベント         | 振る舞い                                                                                           |
+| ---------------- | -------------------------------------------------------------------------------------------------- |
+| Roving tabindex  | 1つのセルのみが`tabindex="0"`（フォーカス中のセル）を持ち、他のすべてのセルは`tabindex="-1"`を持つ |
+| 単一Tabストップ  | グリッドは単一のTabストップ（Tabでグリッドに入り、Shift+Tabで離脱）                                |
+| ヘッダーセル     | ヘッダーセル（columnheader）はフォーカス不可（この実装ではソート機能なし）                         |
+| データセルのみ   | データ行のgridcellのみがキーボードナビゲーションに含まれる                                         |
+| フォーカスメモリ | グリッドを離れて再入場した際、最後にフォーカスされたセルが記憶される                               |
+
+### 参考資料
+
+- <ExternalLink href="https://w3c.github.io/aria/#grid">WAI-ARIA grid role</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">
+    WAI-ARIA APG Grid Pattern
+  </ExternalLink>

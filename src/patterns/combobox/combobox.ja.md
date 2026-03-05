@@ -12,9 +12,9 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `combobox` | Input (`<input>`) | ユーザーが入力するテキスト入力要素 |
-| `listbox` | Popup (`<ul>`) | 選択可能なオプションを含むポップアップ |
-| `option` | Each item (`<li>`) | 個々の選択可能なオプション |
+| `combobox` | Input (`<code>&lt;input&gt;</code>`) | ユーザーが入力するテキスト入力要素 |
+| `listbox` | Popup (`<code>&lt;ul&gt;</code>`) | 選択可能なオプションを含むポップアップ |
+| `option` | Each item (`<code>&lt;li&gt;</code>`) | 個々の選択可能なオプション |
 
 ### プロパティ
 
@@ -25,7 +25,7 @@
 | `aria-expanded` | input | ``true`` \| ``false`` | はい | ポップアップが開いているかどうかを示す |
 | `aria-autocomplete` | input | ``list`` \| ``none`` \| ``both`` | はい | オートコンプリートの動作を説明 |
 | `aria-activedescendant` | input | `ID reference` \| `empty` | はい | ポップアップ内で現在フォーカスされているオプションを参照 |
-| `aria-labelledby` | [object Object] | ID reference | はい | ラベル要素を参照 |
+| `aria-labelledby` | input、listbox | ID reference | はい* | ラベル要素を参照 |
 | `aria-selected` | option | ``true`` \| ``false`` | はい | 現在フォーカスされているオプションを示す |
 | `aria-disabled` | option | `true` | いいえ | オプションが無効であることを示す |
 
@@ -36,7 +36,7 @@
 | `Down Arrow` | ポップアップを開き、最初のオプションにフォーカス |
 | `Up Arrow` | ポップアップを開き、最後のオプションにフォーカス |
 | `Alt + Down Arrow` | フォーカス位置を変更せずにポップアップを開く |
-| `[object Object]` | オプションをフィルタリングしてポップアップを開く |
+| `文字入力` | オプションをフィルタリングしてポップアップを開く |
 | `Down Arrow` | 次の有効なオプションにフォーカスを移動（折り返しなし） |
 | `Up Arrow` | 前の有効なオプションにフォーカスを移動（折り返しなし） |
 | `Home` | 最初の有効なオプションにフォーカスを移動 |

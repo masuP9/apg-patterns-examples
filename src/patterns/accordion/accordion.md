@@ -22,7 +22,7 @@ An accordion is a vertically stacked set of interactive headings that each revea
 | --- | --- | --- | --- | --- |
 | `aria-level` | heading | 2 - 6 | Yes | headingLevel prop |
 | `aria-controls` | button | ID reference to associated panel | Yes | Auto-generated |
-| `aria-labelledby` | [object Object] | ID reference to header button | Yes | Auto-generated |
+| `aria-labelledby` | region (panel) | ID reference to header button | Yes (if region used) | Auto-generated |
 
 ### States
 

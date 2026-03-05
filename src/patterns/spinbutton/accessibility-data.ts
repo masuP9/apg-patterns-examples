@@ -11,7 +11,10 @@ export const spinbuttonAccessibilityData: PatternAccessibilityData = {
 
   // Native HTML considerations
   nativeHtmlConsiderations: [
-    { useCase: 'Simple numeric input', recommended: 'Native <input type="number">' },
+    {
+      useCase: 'Simple numeric input',
+      recommended: 'Native <code>&lt;input type="number"&gt;</code>',
+    },
     { useCase: 'Custom styling needed', recommended: 'Custom role="spinbutton"' },
     { useCase: 'Consistent keyboard behavior', recommended: 'Custom (browser varies)' },
     { useCase: 'aria-valuetext needed', recommended: 'Custom implementation' },

@@ -26,8 +26,8 @@ export const gridAccessibilityData: PatternAccessibilityData = {
         ja: 'インタラクティブ性のない静的データ表示',
       },
       recommended: {
-        en: 'Use native <table> elements for static data tables',
-        ja: '静的なデータテーブルにはネイティブの <table> 要素を使用',
+        en: 'Use native <code>&lt;table&gt;</code> elements for static data tables',
+        ja: '静的なデータテーブルにはネイティブの <code>&lt;table&gt;</code> 要素を使用',
       },
     },
     {

@@ -2,7 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import GridDemo from '@patterns/grid/GridDemo.vue';
-import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/grid/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -15,6 +16,7 @@ import sourceCode from '@patterns/grid/Grid.vue?raw';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('grid', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -63,7 +65,9 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold">
       {t('pattern.accessibility')}
     </Heading>
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <section class="mb-12">

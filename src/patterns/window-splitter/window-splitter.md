@@ -18,14 +18,14 @@ A window splitter is a movable separator between two panes that allows users to 
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-valuenow` | [object Object] | 0-100 | Yes | Primary pane size as percentage |
-| `aria-valuemin` | [object Object] | number | Yes | Minimum value (default: 10) |
-| `aria-valuemax` | [object Object] | number | Yes | Maximum value (default: 90) |
-| `aria-controls` | [object Object] | ID reference(s) | Yes | Primary pane ID (+ secondary pane ID optional) |
-| `aria-label` | [object Object] | string | Yes | Accessible name |
-| `aria-labelledby` | [object Object] | ID reference | Yes | Reference to visible label element |
-| `aria-orientation` | [object Object] | `"horizontal"` \| `"vertical"` | No | Default: horizontal (left-right split) |
-| `aria-disabled` | [object Object] | `true` \| `false` | No | Disabled state |
+| `aria-valuenow` | separator | 0-100 | Yes | Primary pane size as percentage |
+| `aria-valuemin` | separator | number | Yes | Minimum value (default: 10) |
+| `aria-valuemax` | separator | number | Yes | Maximum value (default: 90) |
+| `aria-controls` | separator | ID reference(s) | Yes | Primary pane ID (+ secondary pane ID optional) |
+| `aria-label` | separator | string | Conditional (required if no aria-labelledby) | Accessible name |
+| `aria-labelledby` | separator | ID reference | Conditional (required if no aria-label) | Reference to visible label element |
+| `aria-orientation` | separator | `"horizontal"` \| `"vertical"` | No | Default: horizontal (left-right split) |
+| `aria-disabled` | separator | `true` \| `false` | No | Disabled state |
 
 ### States
 

@@ -1,0 +1,115 @@
+---
+pattern: accordion
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role      | Target Element         | Description                                              |
+| --------- | ---------------------- | -------------------------------------------------------- |
+| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button                    |
+| `button`  | Header trigger         | Interactive element that toggles panel visibility        |
+| `region`  | Panel (optional)       | Content area associated with header (omit for 6+ panels) |
+
+### WAI-ARIA Properties
+
+#### `aria-level`
+
+headingLevel prop
+
+<KeyValueList>
+  <KeyValueListItem term="Values">2 - 6</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-controls`
+
+Auto-generated
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to associated panel</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+Auto-generated
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to header button</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (if region used)</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Only when disabled</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                      | Action                                                 |
+| ------------------------ | ------------------------------------------------------ |
+| <kbd>Tab</kbd>           | Move focus to the next focusable element               |
+| <kbd>Space / Enter</kbd> | Toggle the expansion of the focused accordion header   |
+| <kbd>Arrow Down</kbd>    | Move focus to the next accordion header (optional)     |
+| <kbd>Arrow Up</kbd>      | Move focus to the previous accordion header (optional) |
+| <kbd>Home</kbd>          | Move focus to the first accordion header (optional)    |
+| <kbd>End</kbd>           | Move focus to the last accordion header (optional)     |
+
+- Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
+
+### Focus Management
+
+| Event          | Behavior                                 |
+| -------------- | ---------------------------------------- |
+| Header buttons | Focusable via their button elements      |
+| Arrow keys     | Navigate between headers (skip disabled) |
+| Edges          | Focus does not wrap at edges             |
+
+### Implementation Notes
+
+```
+┌─────────────────────────────────────┐
+│ [▼] Section 1                       │  ← button (aria-expanded="true")
+├─────────────────────────────────────┤
+│ Panel 1 content...                  │  ← region (aria-labelledby)
+├─────────────────────────────────────┤
+│ [▶] Section 2                       │  ← button (aria-expanded="false")
+├─────────────────────────────────────┤
+│ [▶] Section 3                       │  ← button (aria-expanded="false")
+└─────────────────────────────────────┘
+
+ID Relationships:
+- Button: id="header-1", aria-controls="panel-1"
+- Panel: id="panel-1", aria-labelledby="header-1"
+
+Region Role Rule:
+- ≤6 panels: use role="region" on panels
+- >6 panels: omit role="region" (too many landmarks)
+```
+
+Accordion component structure with ID relationships
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/">
+    WAI-ARIA Accordion Pattern
+  </ExternalLink>

@@ -1,0 +1,121 @@
+---
+pattern: listbox
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role      | Target Element     | Description                                        |
+| --------- | ------------------ | -------------------------------------------------- |
+| `listbox` | Container (`<ul>`) | Widget for selecting one or more items from a list |
+| `option`  | Each item (`<li>`) | Selectable option within the listbox               |
+
+### WAI-ARIA Properties
+
+#### `aria-label`
+
+Accessible name for the listbox
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References the labeling element
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-multiselectable`
+
+Enables multi-select mode
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`true`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-orientation`
+
+Navigation direction (default: vertical)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`vertical` | `horizontal`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">option</KeyValueListItem>
+  <KeyValueListItem term="Values">`true` | `false`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">
+    Click, Arrow keys (single-select), Space (multi-select)
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">option</KeyValueListItem>
+  <KeyValueListItem term="Values">`true`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">When disabled</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+#### Common Navigation
+
+| Key                                 | Action                                                    |
+| ----------------------------------- | --------------------------------------------------------- |
+| <kbd>Down Arrow / Up Arrow</kbd>    | Move focus (vertical orientation)                         |
+| <kbd>Right Arrow / Left Arrow</kbd> | Move focus (horizontal orientation)                       |
+| <kbd>Home</kbd>                     | Move focus to first option                                |
+| <kbd>End</kbd>                      | Move focus to last option                                 |
+| <kbd>Type character</kbd>           | Type-ahead: focus option starting with typed character(s) |
+
+#### Single-Select (Selection Follows Focus)
+
+| Key                      | Action                                  |
+| ------------------------ | --------------------------------------- |
+| <kbd>Arrow keys</kbd>    | Move focus and selection simultaneously |
+| <kbd>Space / Enter</kbd> | Confirm current selection               |
+
+#### Multi-Select
+
+| Key                      | Action                                |
+| ------------------------ | ------------------------------------- |
+| <kbd>Arrow keys</kbd>    | Move focus only (selection unchanged) |
+| <kbd>Space</kbd>         | Toggle selection of focused option    |
+| <kbd>Shift + Arrow</kbd> | Move focus and extend selection range |
+| <kbd>Shift + Home</kbd>  | Select from anchor to first option    |
+| <kbd>Shift + End</kbd>   | Select from anchor to last option     |
+| <kbd>Ctrl + A</kbd>      | Select all options                    |
+
+- **Single-select:** Selection follows focus (arrow keys change selection)
+- **Multi-select:** Focus and selection are independent (Space toggles selection)
+
+### Focus Management
+
+| Event               | Behavior                                                       |
+| ------------------- | -------------------------------------------------------------- |
+| Focused option      | Only one option has `tabindex="0"` at a time (Roving Tabindex) |
+| Non-focused options | Other options have `tabindex="-1"`                             |
+| Arrow navigation    | Arrow keys move focus between options                          |
+| Disabled options    | Disabled options are skipped during navigation                 |
+| Edge behavior       | Focus does not wrap (stops at edges)                           |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#listbox">WAI-ARIA listbox role</ExternalLink>

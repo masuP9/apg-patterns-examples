@@ -1,0 +1,61 @@
+---
+pattern: landmarks
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール          | 対象要素               | 説明                 |
+| --------------- | ---------------------- | -------------------- |
+| `banner`        | `<header>`             | サイト全体のヘッダー |
+| `navigation`    | `<nav>`                | ナビゲーションリンク |
+| `main`          | `<main>`               | 主要コンテンツ       |
+| `contentinfo`   | `<footer>`             | サイト全体のフッター |
+| `complementary` | `<aside>`              | 補完的コンテンツ     |
+| `region`        | `<section>`            | 名前付きセクション   |
+| `search`        | `<form role="search">` | 検索機能             |
+| `form`          | `<form>`               | フォーム領域         |
+
+### WAI-ARIA プロパティ
+
+#### `aria-label`
+
+ランドマークにアクセシブルな名前を提供
+
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">
+    条件付き: 同じ種類が複数ある場合、またはregion/formの場合
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+可視の見出し要素を参照
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID reference</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き: 可視見出しを参照</KeyValueListItem>
+</KeyValueList>
+
+- **セマンティックHTML要素を使用** - ARIAロールよりも`<header>`、`<nav>`、`<main>`などを優先
+- **複数のランドマークにラベルを付ける** - 複数の`<nav>`や`<aside>`がある場合、それぞれに一意のアクセシブルな名前を付ける
+- **ランドマークの数を制限** - ランドマークが多すぎる（約7以上）と支援技術ユーザーにとって煩わしくなる
+- **すべてのコンテンツをランドマーク内に配置** - ランドマーク外のコンテンツは、ランドマークでナビゲートするユーザーに見落とされる可能性がある
+- **トップレベルに配置** - `<header>`と`<footer>`は`<body>`の直接の子の場合にのみ`banner`/`contentinfo`にマップされる
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/landmarks/">
+    WAI-ARIA APG: Landmarks Pattern
+  </ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">
+    WAI-ARIA APG: Landmark Regions
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#landmark">W3C ARIA: Landmark Roles</ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/landmark_role">
+    MDN: ARIA Landmark Roles
+  </ExternalLink>

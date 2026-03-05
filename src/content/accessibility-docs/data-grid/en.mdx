@@ -1,0 +1,140 @@
+---
+pattern: data-grid
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role           | Target Element     | Description                                                        |
+| -------------- | ------------------ | ------------------------------------------------------------------ |
+| `grid`         | Container          | Identifies the element as a grid. The grid contains rows of cells. |
+| `row`          | Each row           | Identifies a row of cells                                          |
+| `gridcell`     | Each cell          | Identifies an interactive cell in the grid                         |
+| `rowheader`    | Row header cell    | Identifies a cell as a header for its row                          |
+| `columnheader` | Column header cell | Identifies a cell as a header for its column                       |
+
+### WAI-ARIA Properties
+
+#### `aria-rowcount`
+
+Required when rows are virtualized
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Total number of rows</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colcount`
+
+Required when columns are hidden or virtualized
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Total number of columns</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowindex`
+
+Required when rows are virtualized
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Row's position in the grid</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colindex`
+
+Required when columns are hidden or virtualized
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Column's position in the grid</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-sort`
+
+Indicates the sorting state of a column
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`ascending` | `descending` | `none` | `other`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-describedby`
+
+Provides additional context about the grid
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference to description element</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">gridcell or row</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Space, Ctrl/Cmd+Click</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-readonly`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">grid or gridcell</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Grid/cell configuration</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">grid, row, or gridcell</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Grid/row/cell state change</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                      | Action                                                              |
+| ------------------------ | ------------------------------------------------------------------- |
+| <kbd>ArrowRight</kbd>    | Move focus one cell to the right. Wraps to next row if at end.      |
+| <kbd>ArrowLeft</kbd>     | Move focus one cell to the left. Wraps to previous row if at start. |
+| <kbd>ArrowDown</kbd>     | Move focus one cell down.                                           |
+| <kbd>ArrowUp</kbd>       | Move focus one cell up.                                             |
+| <kbd>Home</kbd>          | Move focus to the first cell in the row.                            |
+| <kbd>End</kbd>           | Move focus to the last cell in the row.                             |
+| <kbd>Ctrl + Home</kbd>   | Move focus to the first cell in the grid.                           |
+| <kbd>Ctrl + End</kbd>    | Move focus to the last cell in the grid.                            |
+| <kbd>Page Down</kbd>     | Move focus down by a page (implementation-defined).                 |
+| <kbd>Page Up</kbd>       | Move focus up by a page (implementation-defined).                   |
+| <kbd>Space / Enter</kbd> | Activate the cell (e.g., edit, select).                             |
+| <kbd>Escape</kbd>        | Cancel edit mode or deselect.                                       |
+
+- Use role="grid" only when the table is interactive. For static data, use native `<table>` elements.
+- Roving tabindex is recommended for efficient keyboard navigation.
+- Consider providing a visible focus indicator for the focused cell.
+
+### Focus Management
+
+| Event                        | Behavior                                              |
+| ---------------------------- | ----------------------------------------------------- |
+| Grid                         | `tabindex="0"` on container or first focusable cell   |
+| Focused cell                 | `tabindex="0"`                                        |
+| Other cells                  | `tabindex="-1"`                                       |
+| Interactive content in cells | Focus moves into cell content on Enter, out on Escape |
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">
+    WAI-ARIA APG: Grid Pattern
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#grid">W3C ARIA: grid role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#gridcell">W3C ARIA: gridcell role</ExternalLink>

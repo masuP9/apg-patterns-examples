@@ -1,0 +1,80 @@
+---
+pattern: switch
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール   | 対象要素     | 説明                                                               |
+| -------- | ------------ | ------------------------------------------------------------------ |
+| `switch` | スイッチ要素 | ユーザーがオン/オフの2つの値のいずれかを選択できる入力ウィジェット |
+
+### WAI-ARIA ステート
+
+#### `aria-checked`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">switch 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">クリック、Enter、Space</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">switch 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">無効化時のみ</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー             | アクション                            |
+| ---------------- | ------------------------------------- |
+| <kbd>Space</kbd> | スイッチの状態を切り替え（オン/オフ） |
+| <kbd>Enter</kbd> | スイッチの状態を切り替え（オン/オフ） |
+
+- スイッチには表示されるラベル（推奨）、aria-label、またはaria-labelledbyを通じてアクセシブルな名前が必要です。
+- この実装は、色のみに依存せず状態を示すことでWCAG 1.4.1（色の使用）に準拠しています。
+- つまみの位置: 左 = オフ、右 = オン。チェックマークアイコンはオンの時のみ表示。
+- 強制カラーモードはWindowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用します。
+
+### 実装ノート
+
+```
+Structure:
+<button role="switch" aria-checked="false">
+  <span class="switch-track">
+    <span class="switch-thumb" />
+  </span>
+  Enable notifications
+</button>
+
+Visual States:
+┌─────────┬────────────┐
+│ OFF     │ ON         │
+├─────────┼────────────┤
+│ [○    ] │ [    ✓]   │
+│ Left    │ Right+icon │
+└─────────┴────────────┘
+
+Switch vs Checkbox:
+- Switch: immediate effect, on/off semantics
+- Checkbox: may require form submit, checked/unchecked semantics
+
+Use Switch when:
+- Action takes effect immediately
+- Represents on/off, enable/disable
+- Similar to a physical switch
+```
+
+Switchコンポーネントの構造と視覚的な状態
+
+### 参考資料
+
+- <ExternalLink href="https://w3c.github.io/aria/#switch">WAI-ARIA switch role</ExternalLink>

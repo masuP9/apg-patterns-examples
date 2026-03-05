@@ -13,17 +13,17 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
 
   nativeHtmlConsiderations: {
     recommendation: {
-      en: 'Before using this custom component, consider using native <input type="checkbox"> elements.',
-      ja: 'このカスタムコンポーネントを使用する前に、ネイティブの <input type="checkbox"> 要素の使用を検討してください。',
+      en: 'Before using this custom component, consider using native <code>&lt;input type="checkbox"&gt;</code> elements.',
+      ja: 'このカスタムコンポーネントを使用する前に、ネイティブの <code>&lt;input type="checkbox"&gt;</code> 要素の使用を検討してください。',
     },
     benefits: {
       en: 'They provide built-in accessibility, work without JavaScript, and require no ARIA attributes.',
       ja: 'ネイティブ要素は組み込みのアクセシビリティを提供し、JavaScript なしで動作し、ARIA 属性を必要としません。',
     },
-    codeExample: `<label>
-  <input type="checkbox" name="agree" />
+    codeExample: `<code>&lt;label&gt;</code>
+  <code>&lt;input type="checkbox" name="agree" /&gt;</code>
   I agree to the terms
-</label>`,
+<code>&lt;/label&gt;</code>`,
     customUseCases: {
       en: 'Use custom implementations only when you need custom styling that native elements cannot provide, or complex indeterminate state management for checkbox groups.',
       ja: 'カスタム実装は、ネイティブ要素では提供できないカスタムスタイリングが必要な場合、またはチェックボックスグループの複雑な不確定状態管理が必要な場合にのみ使用してください。',
@@ -74,12 +74,12 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
     {
       name: 'checkbox',
       element: {
-        en: '<input type="checkbox"> or element with role="checkbox"',
-        ja: '<input type="checkbox"> または role="checkbox" を持つ要素',
+        en: '<code>&lt;input type="checkbox"&gt;</code> or element with role="checkbox"',
+        ja: '<code>&lt;input type="checkbox"&gt;</code> または role="checkbox" を持つ要素',
       },
       description: {
-        en: 'Identifies the element as a checkbox. Native <input type="checkbox"> has this role implicitly.',
-        ja: '要素をチェックボックスとして識別します。ネイティブの <input type="checkbox"> はこのロールを暗黙的に持ちます。',
+        en: 'Identifies the element as a checkbox. Native <code>&lt;input type="checkbox"&gt;</code> has this role implicitly.',
+        ja: '要素をチェックボックスとして識別します。ネイティブの <code>&lt;input type="checkbox"&gt;</code> はこのロールを暗黙的に持ちます。',
       },
     },
   ],
@@ -95,7 +95,10 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
     },
     {
       attribute: 'indeterminate',
-      element: { en: 'Native checkbox (<input>)', ja: 'ネイティブチェックボックス（<input>）' },
+      element: {
+        en: 'Native checkbox (<code>&lt;input&gt;</code>)',
+        ja: 'ネイティブチェックボックス（<code>&lt;input&gt;</code>）',
+      },
       values: 'true | false',
       required: false,
       changeTrigger: {
@@ -220,8 +223,8 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
       {
         method: { en: 'Label element (recommended)', ja: 'label要素（推奨）' },
         description: {
-          en: 'Using <label> with for attribute or wrapping the input',
-          ja: '<label> を for 属性で使用するか、inputをラップします',
+          en: 'Using <code>&lt;label&gt;</code> with for attribute or wrapping the input',
+          ja: '<code>&lt;label&gt;</code> を for 属性で使用するか、inputをラップします',
         },
       },
       {
@@ -565,7 +568,11 @@ export const checkboxAccessibilityData: PatternAccessibilityData = {
 
     // Label & Form - High Priority
     { description: 'Accessible name via aria-label', priority: 'high', category: 'aria' },
-    { description: 'Accessible name via external <label>', priority: 'high', category: 'aria' },
+    {
+      description: 'Accessible name via external <code>&lt;label&gt;</code>',
+      priority: 'high',
+      category: 'aria',
+    },
     { description: 'name attribute for form submission', priority: 'high', category: 'aria' },
     { description: 'value attribute set correctly', priority: 'high', category: 'aria' },
 

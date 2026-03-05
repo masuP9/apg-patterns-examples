@@ -1,0 +1,133 @@
+---
+pattern: spinbutton
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role         | Target Element | Description                                                                                                                                               |
+| ------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `spinbutton` | Input element  | Identifies the element as a spin button that allows users to select a value from a discrete set or range by incrementing/decrementing or typing directly. |
+
+### WAI-ARIA Properties
+
+#### `aria-valuenow`
+
+Must be updated immediately when value changes (keyboard, button click, or text input)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number (current value)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemin`
+
+Only set when min is defined. Omit attribute entirely when no minimum limit exists.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemax`
+
+Only set when max is defined. Omit attribute entirely when no maximum limit exists.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">Number</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuetext`
+
+Provides a human-readable text alternative for the current value. Use when the numeric value alone doesn't convey sufficient meaning.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String (e.g., `5 items`, `3 of 10`)</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+Indicates that the spinbutton is disabled and not interactive.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-readonly`
+
+Indicates that the spinbutton is read-only. Users can navigate with Home/End but cannot change the value.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Provides an invisible label for the spinbutton
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Conditional (required if no visible label)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References an external element as the label
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">
+    Conditional (required if visible label exists)
+  </KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                  | Action                                                    |
+| -------------------- | --------------------------------------------------------- |
+| <kbd>ArrowUp</kbd>   | Increases the value by one step                           |
+| <kbd>ArrowDown</kbd> | Decreases the value by one step                           |
+| <kbd>Home</kbd>      | Sets the value to its minimum (only when min is defined)  |
+| <kbd>End</kbd>       | Sets the value to its maximum (only when max is defined)  |
+| <kbd>Page Up</kbd>   | Increases the value by a large step (default: step \* 10) |
+| <kbd>Page Down</kbd> | Decreases the value by a large step (default: step \* 10) |
+
+- The spinbutton role is used for input controls that let users select a numeric value by using increment/decrement buttons, arrow keys, or typing directly. It combines the functionality of a text input with up/down value adjustment.
+- Unlike the slider pattern, spinbutton uses Up/Down arrows only (not Left/Right). This allows users to type numeric values directly using the text input.
+- Spinbuttons must have an accessible name. This can be provided through a visible label using the label prop, aria-label for an invisible label, or aria-labelledby to reference an external element.
+
+### Focus Management
+
+| Event                       | Behavior                                            |
+| --------------------------- | --------------------------------------------------- |
+| Input element               | `tabindex="0"`                                      |
+| Disabled input              | `tabindex="-1"`                                     |
+| Increment/decrement buttons | `tabindex="-1"` (not in tab order)                  |
+| Button click                | Focus stays on spinbutton (does NOT move to button) |
+
+### Visual Design
+
+- Focus indicator - Visible focus ring on the entire controls container (including buttons)
+- Button states - Visual feedback on hover and active states
+- Disabled state - Clear visual indication when spinbutton is disabled
+- Read-only state - Distinct visual style for read-only mode
+- Forced colors mode - Uses system colors for accessibility in Windows High Contrast Mode
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/">
+    WAI-ARIA APG: Spinbutton Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number">
+    MDN: &lt;input type="number"&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#spinbutton">
+    W3C ARIA: spinbutton role
+  </ExternalLink>

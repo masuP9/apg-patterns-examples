@@ -2,7 +2,8 @@
 import PatternLayout from '../../../../../layouts/PatternLayout.astro';
 import { useTranslation } from '@/i18n';
 import Table from '@patterns/table/Table.astro';
-import AccessibilityDocs from '@patterns/table/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/table/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -17,6 +18,7 @@ import testCode from '@patterns/table/Table.test.astro.ts?raw';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('table', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -189,7 +191,9 @@ const spanningRows = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

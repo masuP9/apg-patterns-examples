@@ -13,15 +13,15 @@ A toolbar is a container for grouping a set of controls, such as buttons, toggle
 | Role | Element | Description |
 | --- | --- | --- |
 | `toolbar` | Container | Container for grouping controls |
-| `button` | Button elements | Implicit role for <button> elements |
+| `button` | Button elements | Implicit role for <code>&lt;button&gt;</code> elements |
 | `separator` | Separator | Visual and semantic separator between groups |
 
 ### Properties
 
 | Attribute | Element | Values | Required | Notes |
 | --- | --- | --- | --- | --- |
-| `aria-label` | toolbar | String | Yes | Accessible name for the toolbar |
-| `aria-labelledby` | toolbar | ID reference | Yes | Alternative to aria-label (takes precedence) |
+| `aria-label` | toolbar | String | Yes* | Accessible name for the toolbar |
+| `aria-labelledby` | toolbar | ID reference | Yes* | Alternative to aria-label (takes precedence) |
 | `aria-orientation` | toolbar | `"horizontal"` \| `"vertical"` | No | Orientation of the toolbar (default: horizontal) |
 
 ### States

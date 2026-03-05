@@ -1,0 +1,59 @@
+---
+pattern: disclosure
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール   | 対象要素     | 説明                                                                           |
+| -------- | ------------ | ------------------------------------------------------------------------------ |
+| `button` | トリガー要素 | パネルの表示を切り替えるインタラクティブな要素（ネイティブの`<button>`を使用） |
+
+### WAI-ARIA プロパティ
+
+#### `aria-controls`
+
+ボタンと制御対象のパネルを関連付けます
+
+<KeyValueList>
+  <KeyValueListItem term="値">パネルへのID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-hidden`
+
+折りたたまれた際にパネルを支援技術から隠します
+
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">button 要素</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">Click、Enter、Space</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー                     | アクション                                       |
+| ------------------------ | ------------------------------------------------ |
+| <kbd>Tab</kbd>           | ディスクロージャーボタンにフォーカスを移動します |
+| <kbd>Space / Enter</kbd> | ディスクロージャーパネルの表示を切り替えます     |
+
+- ディスクロージャーはネイティブの`<button>`要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは必要ありません。
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">
+    WAI-ARIA Disclosure Pattern
+  </ExternalLink>

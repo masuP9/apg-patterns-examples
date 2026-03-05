@@ -1,0 +1,177 @@
+---
+pattern: treegrid
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール         | 対象要素     | 説明                                                 |
+| -------------- | ------------ | ---------------------------------------------------- |
+| `treegrid`     | コンテナ     | treegridコンテナ（複合ウィジェット）                 |
+| `row`          | 行コンテナ   | セルを水平方向にグループ化し、子を持つことができます |
+| `columnheader` | ヘッダーセル | 列ヘッダー（フォーカス不可）                         |
+| `rowheader`    | 最初の列セル | ツリー操作が行われる行ヘッダー                       |
+| `gridcell`     | データセル   | インタラクティブなセル（フォーカス可能）             |
+
+### WAI-ARIA プロパティ
+
+#### `role="treegrid"`
+
+コンテナをtreegridとして識別します
+
+<KeyValueList>
+  <KeyValueListItem term="値">-</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+treegridのアクセシブルな名前
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（aria-labelまたはaria-labelledbyのいずれか）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+aria-labelの代替
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">はい（aria-labelまたはaria-labelledbyのいずれか）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-multiselectable`
+
+複数選択モードの場合のみ存在
+
+<KeyValueList>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowcount`
+
+総行数（仮想化用）
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-colcount`
+
+総列数（仮想化用）
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA ステート
+
+#### `aria-level`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row</KeyValueListItem>
+  <KeyValueListItem term="値">数値（1始まり）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">行ごとに静的（階層構造により決定）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row（親のみ）</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    rowheaderでのArrowRight/Left、展開アイコンのクリック
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-selected`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row</KeyValueListItem>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">
+    Spaceキー、クリック（gridcellではなく行に設定）
+  </KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row</KeyValueListItem>
+  <KeyValueListItem term="値">true</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">行が無効な場合のみ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-rowindex`
+
+<KeyValueList>
+  <KeyValueListItem term="対象要素">row</KeyValueListItem>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+  <KeyValueListItem term="変更トリガー">静的（仮想化用）</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+#### 2Dナビゲーション
+
+| キー                   | アクション                                         |
+| ---------------------- | -------------------------------------------------- |
+| <kbd>Arrow Down</kbd>  | 次の表示行の同じ列にフォーカスを移動               |
+| <kbd>Arrow Up</kbd>    | 前の表示行の同じ列にフォーカスを移動               |
+| <kbd>Arrow Right</kbd> | フォーカスを右に1セル移動（非rowheaderセルの場合） |
+| <kbd>Arrow Left</kbd>  | フォーカスを左に1セル移動（非rowheaderセルの場合） |
+| <kbd>Home</kbd>        | 行の最初のセルにフォーカスを移動                   |
+| <kbd>End</kbd>         | 行の最後のセルにフォーカスを移動                   |
+| <kbd>Ctrl + Home</kbd> | treegridの最初のセルにフォーカスを移動             |
+| <kbd>Ctrl + End</kbd>  | treegridの最後のセルにフォーカスを移動             |
+
+#### ツリー操作（rowheaderのみ）
+
+| キー                                  | アクション                                                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| <kbd>Arrow Right (at rowheader)</kbd> | 折りたたまれた親の場合: 行を展開。展開された親の場合: 最初の子のrowheaderに移動。リーフの場合: 何もしない                            |
+| <kbd>Arrow Left (at rowheader)</kbd>  | 展開された親の場合: 行を折りたたみ。折りたたみ済み/リーフの場合: 親のrowheaderに移動。ルートレベルで折りたたみ済みの場合: 何もしない |
+
+#### 行選択とセルアクティベーション
+
+| キー                | アクション                                                    |
+| ------------------- | ------------------------------------------------------------- |
+| <kbd>Space</kbd>    | 行の選択を切り替え（セル選択ではない）                        |
+| <kbd>Enter</kbd>    | フォーカスされたセルをアクティブ化（展開/折りたたみはしない） |
+| <kbd>Ctrl + A</kbd> | すべての表示行を選択（複数選択可能な場合）                    |
+
+- 行を展開/折りたたみして子行の表示/非表示を切り替えられます
+- セル選択ではなく行選択（aria-selectedはgridcellではなくrowに設定）
+- ツリー操作（展開/折りたたみ）はrowheader列でのみ機能します
+- 行には階層の深さを示すaria-levelがあります
+
+### フォーカス管理
+
+| イベント         | 振る舞い                                                           |
+| ---------------- | ------------------------------------------------------------------ |
+| フォーカスモデル | ローヴィングタブインデックス - 1つのセルのみが`tabindex="0"`を持つ |
+| 他のセル         | `tabindex="-1"`                                                    |
+| TreeGrid         | 単一のTabストップ（Tabでグリッドに入る/出る）                      |
+| 列ヘッダー       | フォーカス不可（tabindexなし）                                     |
+| 折りたたまれた子 | キーボードナビゲーションに含まれない                               |
+| 親の折りたたみ   | 子にフォーカスがあった場合、親にフォーカスを移動                   |
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/treegrid/">
+    WAI-ARIA APG: TreeGrid Pattern
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#treegrid">W3C ARIA: treegrid role</ExternalLink>

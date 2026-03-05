@@ -1,0 +1,112 @@
+---
+pattern: menu-button
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role       | Target Element       | Description                                                       |
+| ---------- | -------------------- | ----------------------------------------------------------------- |
+| `button`   | Trigger (`<button>`) | The trigger that opens the menu (implicit via `<button>` element) |
+| `menu`     | Container (`<ul>`)   | A widget offering a list of choices to the user                   |
+| `menuitem` | Each item (`<li>`)   | An option in a menu                                               |
+
+### WAI-ARIA Properties
+
+#### `aria-haspopup`
+
+Indicates the button opens a menu
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`menu`</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-controls`
+
+References the menu element
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References the button that opens the menu
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-label)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Provides an accessible name for the menu
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes (or aria-labelledby)</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+Indicates the menu item is disabled
+
+<KeyValueList>
+  <KeyValueListItem term="Values">true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">button</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Open/close menu</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+#### Button (Closed Menu)
+
+| Key                      | Action                         |
+| ------------------------ | ------------------------------ |
+| <kbd>Enter / Space</kbd> | Open menu and focus first item |
+| <kbd>Down Arrow</kbd>    | Open menu and focus first item |
+| <kbd>Up Arrow</kbd>      | Open menu and focus last item  |
+
+#### Menu (Open)
+
+| Key                       | Action                                                  |
+| ------------------------- | ------------------------------------------------------- |
+| <kbd>Down Arrow</kbd>     | Move focus to next item (wraps to first)                |
+| <kbd>Up Arrow</kbd>       | Move focus to previous item (wraps to last)             |
+| <kbd>Home</kbd>           | Move focus to first item                                |
+| <kbd>End</kbd>            | Move focus to last item                                 |
+| <kbd>Escape</kbd>         | Close menu and return focus to button                   |
+| <kbd>Tab</kbd>            | Close menu and move focus to next focusable element     |
+| <kbd>Enter / Space</kbd>  | Activate focused item and close menu                    |
+| <kbd>Type character</kbd> | Type-ahead: focus item starting with typed character(s) |
+
+- When closed, the menu uses both hidden and inert attributes to hide the menu from visual display, remove it from the accessibility tree, and prevent keyboard and mouse interaction with hidden items.
+
+### Focus Management
+
+| Event                | Behavior                                |
+| -------------------- | --------------------------------------- |
+| Focused menu item    | `tabIndex="0"`                          |
+| Other menu items     | `tabIndex="-1"`                         |
+| Arrow key navigation | Wraps from last to first and vice versa |
+| Disabled items       | Skipped during navigation               |
+| Menu closes          | Focus returns to button                 |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#menu">WAI-ARIA menu role</ExternalLink>

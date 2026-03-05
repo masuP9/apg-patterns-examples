@@ -21,8 +21,8 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
     {
       name: 'navigation',
       element: {
-        en: '<nav> element',
-        ja: '<nav> 要素',
+        en: '<code>&lt;nav&gt;</code> element',
+        ja: '<code>&lt;nav&gt;</code> 要素',
       },
       description: {
         en: 'Provides a navigation landmark for assistive technology (implicit role of <code>&lt;nav&gt;</code>)',
@@ -35,7 +35,7 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
   properties: [
     {
       attribute: 'aria-label',
-      element: '<nav>',
+      element: '<code>&lt;nav&gt;</code>',
       values: {
         en: '"Breadcrumb" (or localized)',
         ja: '"Breadcrumb"（またはローカライズされた値）',
@@ -169,8 +169,8 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
           {
             name: 'nav element',
             description: {
-              en: 'Uses semantic <nav> element',
-              ja: 'セマンティックな<nav>要素を使用します',
+              en: 'Uses semantic <code>&lt;nav&gt;</code> element',
+              ja: 'セマンティックな<code>&lt;nav&gt;</code>要素を使用します',
             },
           },
           {
@@ -357,17 +357,29 @@ export const breadcrumbAccessibilityData: PatternAccessibilityData = {
   // --- Test Checklist (for llm.md) ---
   testChecklist: [
     // High Priority: ARIA
-    { description: '<nav> element is used', priority: 'high', category: 'aria' },
+    { description: '<code>&lt;nav&gt;</code> element is used', priority: 'high', category: 'aria' },
     {
-      description: '<nav> has aria-label="Breadcrumb" (or localized)',
+      description: '<code>&lt;nav&gt;</code> has aria-label="Breadcrumb" (or localized)',
       priority: 'high',
       category: 'aria',
     },
     { description: 'Last item has aria-current="page"', priority: 'high', category: 'aria' },
-    { description: 'Links use native <a> elements', priority: 'high', category: 'aria' },
+    {
+      description: 'Links use native <code>&lt;a&gt;</code> elements',
+      priority: 'high',
+      category: 'aria',
+    },
     // High Priority: Structure
-    { description: 'Uses ordered list (<ol>) for hierarchy', priority: 'high', category: 'aria' },
-    { description: 'Each breadcrumb is a list item (<li>)', priority: 'high', category: 'aria' },
+    {
+      description: 'Uses ordered list (<code>&lt;ol&gt;</code>) for hierarchy',
+      priority: 'high',
+      category: 'aria',
+    },
+    {
+      description: 'Each breadcrumb is a list item (<code>&lt;li&gt;</code>)',
+      priority: 'high',
+      category: 'aria',
+    },
     {
       description: 'Current page is identifiable (text or aria-current)',
       priority: 'high',

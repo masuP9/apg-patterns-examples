@@ -1,0 +1,120 @@
+---
+pattern: slider-multithumb
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール   | 対象要素       | 説明                                                         |
+| -------- | -------------- | ------------------------------------------------------------ |
+| `slider` | 下限つまみ要素 | 範囲の下限を選択するためのスライダーとして要素を識別します。 |
+| `slider` | 上限つまみ要素 | 範囲の上限を選択するためのスライダーとして要素を識別します。 |
+| `group`  | コンテナ要素   | 2つのスライダーをグループ化し、共通のラベルに関連付けます。  |
+
+### WAI-ARIA プロパティ
+
+#### `aria-valuenow`
+
+キーボードまたはポインターによる値変更時に動的に更新
+
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemin`
+
+下限つまみは静的（絶対最小値）、上限つまみは動的（下限値 + minDistance）
+
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemax`
+
+下限つまみは動的（上限値 - minDistance）、上限つまみは静的（絶対最大値）
+
+<KeyValueList>
+  <KeyValueListItem term="値">Number</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuetext`
+
+例: "$20", "$80", "20% - 80%"
+
+<KeyValueList>
+  <KeyValueListItem term="値">String</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ（値にコンテキストが必要な場合は推奨）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-orientation`
+
+デフォルト: horizontal（暗黙的）。垂直スライダーの場合のみ設定。
+
+<KeyValueList>
+  <KeyValueListItem term="値">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+無効化時のみ設定
+
+<KeyValueList>
+  <KeyValueListItem term="値">true | undefined</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー                   | アクション                                               |
+| ---------------------- | -------------------------------------------------------- |
+| <kbd>Tab</kbd>         | つまみ間でフォーカスを移動（下限から上限へ）             |
+| <kbd>Shift + Tab</kbd> | つまみ間でフォーカスを移動（上限から下限へ）             |
+| <kbd>Right Arrow</kbd> | 値を1ステップ増加させる                                  |
+| <kbd>Up Arrow</kbd>    | 値を1ステップ増加させる                                  |
+| <kbd>Left Arrow</kbd>  | 値を1ステップ減少させる                                  |
+| <kbd>Down Arrow</kbd>  | 値を1ステップ減少させる                                  |
+| <kbd>Home</kbd>        | つまみを許容最小値に設定（上限つまみは動的）             |
+| <kbd>End</kbd>         | つまみを許容最大値に設定（下限つまみは動的）             |
+| <kbd>Page Up</kbd>     | 値を大きいステップで増加させる（デフォルト: step \* 10） |
+| <kbd>Page Down</kbd>   | 値を大きいステップで減少させる（デフォルト: step \* 10） |
+
+- 各つまみは独自のARIA属性を持つ独立したスライダー要素です。groupロールが2つのスライダー間のセマンティックな関係を確立します。
+- マルチサムスライダーでは、2つのつまみを区別するために慎重なラベル付けが必要です。aria-labelタプル、aria-labelledbyタプル、またはgetAriaLabel関数を使用してください。
+- 動的な境界: APG仕様に従い、一方のスライダーの範囲が他方の値に依存する場合、aria-valuemin/aria-valuemaxは動的に更新する必要があります。
+
+### フォーカス管理
+
+| イベント         | 振る舞い                                                         |
+| ---------------- | ---------------------------------------------------------------- |
+| タブ順序         | 両方のつまみがタブ順序に含まれる（`tabindex="0"`）               |
+| 固定順序         | 値に関係なく、下限つまみが常にタブ順序で先に来る                 |
+| トラッククリック | トラックをクリックすると最も近いつまみが移動してフォーカスされる |
+
+### マウス/ポインター動作
+
+- トラックをクリック: 最も近いつまみをクリック位置に移動
+- つまみをドラッグ: ドラッグ中の連続的な調整が可能
+- ポインターキャプチャ: ポインターがスライダーの外に出てもインタラクションを維持
+
+### ビジュアルデザイン
+
+- フォーカスインジケーター: 各つまみ要素に可視のフォーカスリング
+- 範囲インジケーター: つまみ間の選択範囲の視覚的表現
+- ホバー状態: ホバー時の視覚的フィードバック
+- 無効状態: スライダーが無効な時の明確な視覚的表示
+- 強制カラーモード: Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/">
+    WAI-ARIA APG: Slider (Multi-Thumb) Pattern
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#slider">W3C ARIA: slider role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#group">W3C ARIA: group role</ExternalLink>

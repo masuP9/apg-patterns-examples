@@ -1,0 +1,131 @@
+---
+pattern: spinbutton
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA ロール
+
+| ロール       | 対象要素 | 説明                                                                                                                                        |
+| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `spinbutton` | 入力要素 | ユーザーがインクリメント/デクリメントまたは直接入力によって、離散的なセットまたは範囲から値を選択できるスピンボタンとして要素を識別します。 |
+
+### WAI-ARIA プロパティ
+
+#### `aria-valuenow`
+
+値が変更されたとき（キーボード、ボタンクリック、またはテキスト入力）、即座に更新する必要があります
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値（現在の値）</KeyValueListItem>
+  <KeyValueListItem term="必須">はい</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemin`
+
+最小値が定義されている場合のみ設定します。最小制限が存在しない場合は、属性を完全に省略してください。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuemax`
+
+最大値が定義されている場合のみ設定します。最大制限が存在しない場合は、属性を完全に省略してください。
+
+<KeyValueList>
+  <KeyValueListItem term="値">数値</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-valuetext`
+
+現在の値に対する人間が読めるテキストの代替を提供します。数値だけでは十分な意味を伝えられない場合に使用します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列（例: `5 items`, `3 of 10`）</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-disabled`
+
+スピンボタンが無効化されており、インタラクティブでないことを示します。
+
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-readonly`
+
+スピンボタンが読み取り専用であることを示します。ユーザーはHome/Endキーでナビゲーションできますが、値を変更することはできません。
+
+<KeyValueList>
+  <KeyValueListItem term="値">true | false</KeyValueListItem>
+  <KeyValueListItem term="必須">いいえ</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+スピンボタンに不可視のラベルを提供します
+
+<KeyValueList>
+  <KeyValueListItem term="値">文字列</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルがない場合は必須）</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+外部要素をラベルとして参照します
+
+<KeyValueList>
+  <KeyValueListItem term="値">ID参照</KeyValueListItem>
+  <KeyValueListItem term="必須">条件付き（表示されるラベルが存在する場合は必須）</KeyValueListItem>
+</KeyValueList>
+
+### キーボードサポート
+
+| キー                 | アクション                                               |
+| -------------------- | -------------------------------------------------------- |
+| <kbd>ArrowUp</kbd>   | 値を1ステップ増やします                                  |
+| <kbd>ArrowDown</kbd> | 値を1ステップ減らします                                  |
+| <kbd>Home</kbd>      | 値を最小値に設定します（最小値が定義されている場合のみ） |
+| <kbd>End</kbd>       | 値を最大値に設定します（最大値が定義されている場合のみ） |
+| <kbd>Page Up</kbd>   | 値を大きなステップで増やします（デフォルト: step × 10）  |
+| <kbd>Page Down</kbd> | 値を大きなステップで減らします（デフォルト: step × 10）  |
+
+- spinbuttonロールは、ユーザーがインクリメント/デクリメントボタン、矢印キー、または直接入力によって数値を選択できる入力コントロールに使用されます。テキスト入力と値の上下調整機能を組み合わせたものです。
+- スライダーパターンとは異なり、スピンボタンは上下矢印キーのみを使用します（左右矢印キーは使用しません）。これにより、ユーザーはテキスト入力を使用して直接数値を入力できます。
+- スピンボタンにはアクセシブルな名前が必要です。これはlabelプロパティを使用した表示されるラベル、見えないラベルのためのaria-label、または外部要素を参照するaria-labelledbyによって提供できます。
+
+### フォーカス管理
+
+| イベント         | 振る舞い                                                       |
+| ---------------- | -------------------------------------------------------------- |
+| 入力要素         | `tabindex="0"`                                                 |
+| 無効化された入力 | `tabindex="-1"`                                                |
+| 増加/減少ボタン  | `tabindex="-1"`（タブ順序に含まれない）                        |
+| ボタンクリック   | フォーカスはスピンボタンに留まります（ボタンには移動しません） |
+
+### ビジュアルデザイン
+
+- フォーカスインジケーター - コントロールコンテナ全体（ボタンを含む）に可視のフォーカスリングを表示
+- ボタンの状態 - ホバーおよびアクティブ状態での視覚的フィードバック
+- 無効化状態 - スピンボタンが無効化されているときの明確な視覚的表示
+- 読み取り専用状態 - 読み取り専用モードの明確な視覚的スタイル
+- 強制カラーモード - Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/">
+    WAI-ARIA APG: Spinbutton Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number">
+    MDN: &lt;input type="number"&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#spinbutton">
+    W3C ARIA: spinbutton role
+  </ExternalLink>

@@ -18,8 +18,8 @@ export const buttonAccessibilityData: PatternAccessibilityData = {
 
   // --- Native HTML Considerations ---
   nativeHtmlConsiderations: [
-    { useCase: 'Simple action button', recommended: 'Native <button>' },
-    { useCase: 'Form submission', recommended: 'Native <button type="submit">' },
+    { useCase: 'Simple action button', recommended: 'Native <code>&lt;button&gt;</code>' },
+    { useCase: 'Form submission', recommended: 'Native <code>&lt;button type="submit"&gt;</code>' },
     { useCase: 'Educational purposes (demonstrating ARIA)', recommended: 'Custom role="button"' },
     {
       useCase: 'Legacy constraints (non-button must act as button)',
@@ -51,8 +51,8 @@ export const buttonAccessibilityData: PatternAccessibilityData = {
     {
       name: 'button',
       element: {
-        en: '<button> or element with role="button"',
-        ja: '<button> または role="button" を持つ要素',
+        en: '<code>&lt;button&gt;</code> or element with role="button"',
+        ja: '<code>&lt;button&gt;</code> または role="button" を持つ要素',
       },
       description: {
         en: 'Identifies the element as a button widget. Native <code>&lt;button&gt;</code> has this role implicitly.',

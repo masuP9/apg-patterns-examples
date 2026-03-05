@@ -1,0 +1,58 @@
+---
+/**
+ * KeyValueList component for displaying key-value pairs in a grid layout.
+ *
+ * Used in MDX content for WAI-ARIA property details (Values, Required, etc.)
+ * where a full table with headers is unnecessary.
+ *
+ * Usage in MDX:
+ *   import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+ *
+ *   <KeyValueList>
+ *     <KeyValueListItem term="Values">true | false</KeyValueListItem>
+ *     <KeyValueListItem term="Required">Yes</KeyValueListItem>
+ *   </KeyValueList>
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<dl class:list={['kv-list', className]}>
+  <slot />
+</dl>
+
+<style>
+  .kv-list {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    overflow: hidden;
+  }
+
+  .kv-list :global(.kv-item-term) {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    background-color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .kv-list :global(.kv-item-value) {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .kv-list :global(.kv-item-term:last-of-type),
+  .kv-list :global(.kv-item-value:last-of-type) {
+    border-bottom: none;
+  }
+</style>

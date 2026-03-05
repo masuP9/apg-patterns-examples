@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Listbox from '@patterns/listbox/Listbox.astro';
-import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -11,6 +12,8 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/listbox/Listbox.astro?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('listbox', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -118,7 +121,9 @@ const colorOptions = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -231,7 +236,7 @@ const options = [
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>selectionchange</code></td>
             <td class="text-muted-foreground py-2 pr-4"
-              ><code>{'{ selectedIds: string[] }'}</code></td
+              ><code>{'{'} selectedIds: string[] {'}'}</code></td
             >
             <td class="py-2">Fired when selection changes</td>
           </tr>

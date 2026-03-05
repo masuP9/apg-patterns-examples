@@ -10,8 +10,8 @@ A disclosure is a button that controls visibility of a section of content. It is
 
 | Use Case | Recommended |
 | --- | --- |
-| Simple toggle content | Native <details>/<summary> |
-| JavaScript disabled support | Native <details>/<summary> |
+| Simple toggle content | Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> |
+| JavaScript disabled support | Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> |
 | Smooth animations | Custom implementation |
 | External state control | Custom implementation |
 | Custom styling | Custom implementation |
@@ -32,7 +32,7 @@ A disclosure is a button that controls visibility of a section of content. It is
 
 | Role | Element | Description |
 | --- | --- | --- |
-| `button` | Trigger element | Interactive element that toggles panel visibility (use native <button>) |
+| `button` | Trigger element | Interactive element that toggles panel visibility (use native <code>&lt;button&gt;</code>) |
 
 ### Properties
 
@@ -58,7 +58,7 @@ A disclosure is a button that controls visibility of a section of content. It is
 
 ### High Priority: ARIA
 
-- [ ] Trigger is a <button> element
+- [ ] Trigger is a <code>&lt;button&gt;</code> element
 - [ ] Button has aria-expanded attribute
 - [ ] aria-expanded toggles between true and false
 - [ ] Button has aria-controls referencing panel id

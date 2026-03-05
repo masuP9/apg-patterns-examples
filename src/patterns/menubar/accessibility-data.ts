@@ -13,8 +13,8 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
     {
       name: 'menubar',
       element: {
-        en: 'Horizontal container (<ul>)',
-        ja: '水平コンテナ（<ul>）',
+        en: 'Horizontal container (<code>&lt;ul&gt;</code>)',
+        ja: '水平コンテナ（<code>&lt;ul&gt;</code>）',
       },
       description: {
         en: 'Top-level menu bar, always visible',
@@ -24,8 +24,8 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
     {
       name: 'menu',
       element: {
-        en: 'Vertical container (<ul>)',
-        ja: '垂直コンテナ（<ul>）',
+        en: 'Vertical container (<code>&lt;ul&gt;</code>)',
+        ja: '垂直コンテナ（<code>&lt;ul&gt;</code>）',
       },
       description: {
         en: 'Dropdown menu or submenu',
@@ -35,8 +35,8 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
     {
       name: 'menuitem',
       element: {
-        en: 'Item (<span>)',
-        ja: 'アイテム（<span>）',
+        en: 'Item (<code>&lt;span&gt;</code>)',
+        ja: 'アイテム（<code>&lt;span&gt;</code>）',
       },
       description: {
         en: 'Standard action item',
@@ -68,8 +68,8 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
     {
       name: 'separator',
       element: {
-        en: 'Divider (<hr>)',
-        ja: '区切り線（<hr>）',
+        en: 'Divider (<code>&lt;hr&gt;</code>)',
+        ja: '区切り線（<code>&lt;hr&gt;</code>）',
       },
       description: {
         en: 'Visual separator (not focusable)',
@@ -89,7 +89,7 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'none',
-      element: '<li> elements',
+      element: '<code>&lt;li&gt;</code> elements',
       description: {
         en: 'Hides list semantics from screen readers',
         ja: 'スクリーンリーダーからリストセマンティクスを隠す',
@@ -907,7 +907,11 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
       priority: 'high',
       category: 'aria',
     },
-    { description: 'All <li> have role="none"', priority: 'high', category: 'aria' },
+    {
+      description: 'All <code>&lt;li&gt;</code> have role="none"',
+      priority: 'high',
+      category: 'aria',
+    },
     { description: 'Submenu holder has aria-haspopup="menu"', priority: 'high', category: 'aria' },
     { description: 'Submenu holder has aria-expanded', priority: 'high', category: 'aria' },
     {

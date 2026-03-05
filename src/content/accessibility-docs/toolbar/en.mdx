@@ -1,0 +1,82 @@
+---
+pattern: toolbar
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role        | Target Element  | Description                                  |
+| ----------- | --------------- | -------------------------------------------- |
+| `toolbar`   | Container       | Container for grouping controls              |
+| `button`    | Button elements | Implicit role for `<button>` elements        |
+| `separator` | Separator       | Visual and semantic separator between groups |
+
+### WAI-ARIA Properties
+
+#### `aria-label`
+
+Accessible name for the toolbar
+
+<KeyValueList>
+  <KeyValueListItem term="Values">String</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+Alternative to aria-label (takes precedence)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes*</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-orientation`
+
+Orientation of the toolbar (default: horizontal)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">`horizontal` | `vertical`</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-pressed`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">ToolbarToggleButton</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Click, Enter, Space</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                                 | Action                                               |
+| ----------------------------------- | ---------------------------------------------------- |
+| <kbd>Tab</kbd>                      | Move focus into/out of the toolbar (single tab stop) |
+| <kbd>Arrow Right / Arrow Left</kbd> | Navigate between controls (horizontal toolbar)       |
+| <kbd>Arrow Down / Arrow Up</kbd>    | Navigate between controls (vertical toolbar)         |
+| <kbd>Home</kbd>                     | Move focus to first control                          |
+| <kbd>End</kbd>                      | Move focus to last control                           |
+| <kbd>Enter / Space</kbd>            | Activate button / toggle pressed state               |
+
+- Either aria-label or aria-labelledby is required on the toolbar container.
+
+### Focus Management
+
+| Event              | Behavior                                      |
+| ------------------ | --------------------------------------------- |
+| Roving Tabindex    | Only one control has `tabindex="0"` at a time |
+| Other controls     | Other controls have `tabindex="-1"`           |
+| Arrow keys         | Arrow keys move focus between controls        |
+| Disabled/Separator | Disabled controls and separators are skipped  |
+| No wrap            | Focus does not wrap (stops at edges)          |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#toolbar">WAI-ARIA toolbar role</ExternalLink>

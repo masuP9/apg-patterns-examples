@@ -24,8 +24,8 @@
 | --- | --- | --- | --- | --- |
 | `aria-rowcount` | grid | 総行数 | いいえ | 行が仮想化されている場合に必須 |
 | `aria-colcount` | grid | 総列数 | いいえ | 列が非表示または仮想化されている場合に必須 |
-| `aria-rowindex` | [object Object] | グリッド内の行の位置 | いいえ | 行が仮想化されている場合に必須 |
-| `aria-colindex` | [object Object] | グリッド内の列の位置 | いいえ | 列が非表示または仮想化されている場合に必須 |
+| `aria-rowindex` | row または gridcell | グリッド内の行の位置 | いいえ | 行が仮想化されている場合に必須 |
+| `aria-colindex` | gridcell または columnheader | グリッド内の列の位置 | いいえ | 列が非表示または仮想化されている場合に必須 |
 | `aria-sort` | columnheader | `"ascending"` \| `"descending"` \| `"none"` \| `"other"` | いいえ | 列のソート状態を示します |
 | `aria-describedby` | grid | 説明要素へのID参照 | いいえ | グリッドに関する追加のコンテキストを提供します |
 

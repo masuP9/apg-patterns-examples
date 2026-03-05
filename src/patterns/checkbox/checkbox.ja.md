@@ -22,14 +22,14 @@
 
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
-| `checkbox` | <input type="checkbox"> または role="checkbox" を持つ要素 | 要素をチェックボックスとして識別します。ネイティブの <input type="checkbox"> はこのロールを暗黙的に持ちます。 |
+| `checkbox` | <code>&lt;input type="checkbox"&gt;</code> または role="checkbox" を持つ要素 | 要素をチェックボックスとして識別します。ネイティブの <code>&lt;input type="checkbox"&gt;</code> はこのロールを暗黙的に持ちます。 |
 
 ### プロパティ
 
 | 属性 | 要素 | 値 | 必須 | 備考 |
 | --- | --- | --- | --- | --- |
-| `aria-label` | Control | string | はい | アクセシブルな名前を提供 |
-| `aria-labelledby` | Control | ID 参照 | はい | 外部テキストをラベルとして参照 |
+| `aria-label` | Control | string | 可視ラベルがない場合 | アクセシブルな名前を提供 |
+| `aria-labelledby` | Control | ID 参照 | 可視ラベルがない場合 | 外部テキストをラベルとして参照 |
 | `aria-describedby` | Control | ID 参照 | いいえ | 追加の説明 |
 
 ### ステート
@@ -37,7 +37,7 @@
 | 属性 | 要素 | 値 | 必須 | 変更トリガー |
 | --- | --- | --- | --- | --- |
 | `aria-checked / checked` | チェックボックス要素 | `true` \| `false` \| `mixed` | はい | クリック、Space キー |
-| `indeterminate` | ネイティブチェックボックス（<input>） | `true` \| `false` | いいえ | 親子同期、ユーザー操作時に自動的にクリア |
+| `indeterminate` | ネイティブチェックボックス（<code>&lt;input&gt;</code>） | `true` \| `false` | いいえ | 親子同期、ユーザー操作時に自動的にクリア |
 | `disabled` | チェックボックス要素 | `present` \| `absent` | いいえ | プログラムによる変更 |
 
 ## キーボードサポート
@@ -64,7 +64,7 @@
 - [ ] indeterminate property settable
 - [ ] Disabled state prevents interaction
 - [ ] Accessible name via aria-label
-- [ ] Accessible name via external <label>
+- [ ] Accessible name via external <code>&lt;label&gt;</code>
 - [ ] name attribute for form submission
 - [ ] value attribute set correctly
 

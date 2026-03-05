@@ -1,0 +1,92 @@
+---
+pattern: link
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
+
+### WAI-ARIA Roles
+
+| Role   | Target Element                         | Description                                                                        |
+| ------ | -------------------------------------- | ---------------------------------------------------------------------------------- |
+| `link` | `<a href>` or element with role="link" | Identifies the element as a hyperlink. Native `<a href>` has this role implicitly. |
+
+### WAI-ARIA Properties
+
+#### `tabindex`
+
+Required for custom implementations. Native `<a href>` is focusable by default. Set to -1 when disabled.
+
+<KeyValueList>
+  <KeyValueListItem term="Values">0 (focusable) | -1 (not focusable)</KeyValueListItem>
+  <KeyValueListItem term="Required">Yes</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-label`
+
+Provides an invisible label for the link when no visible text
+
+<KeyValueList>
+  <KeyValueListItem term="Values">string</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-labelledby`
+
+References an external element as the label
+
+<KeyValueList>
+  <KeyValueListItem term="Values">ID reference</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+#### `aria-current`
+
+Indicates the current item within a set (e.g., current page in navigation)
+
+<KeyValueList>
+  <KeyValueListItem term="Values">page | step | location | date | time | true</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+</KeyValueList>
+
+### WAI-ARIA States
+
+#### `aria-disabled`
+
+<KeyValueList>
+  <KeyValueListItem term="Target Element">Link element</KeyValueListItem>
+  <KeyValueListItem term="Values">true | false</KeyValueListItem>
+  <KeyValueListItem term="Required">No</KeyValueListItem>
+  <KeyValueListItem term="Change Trigger">Disabled state change</KeyValueListItem>
+</KeyValueList>
+
+### Keyboard Support
+
+| Key                    | Action                                                |
+| ---------------------- | ----------------------------------------------------- |
+| <kbd>Enter</kbd>       | Activate the link and navigate to the target resource |
+| <kbd>Tab</kbd>         | Move focus to the next focusable element              |
+| <kbd>Shift + Tab</kbd> | Move focus to the previous focusable element          |
+
+- This implementation uses `<span role="link">` for educational purposes. For production use, prefer native `<a href>` elements.
+- Unlike buttons, the Space key does NOT activate links. This is a key distinction between the link and button roles.
+- Links must have an accessible name from text content, aria-label, or aria-labelledby.
+
+### Focus Management
+
+| Event             | Behavior                                     |
+| ----------------- | -------------------------------------------- |
+| Native `<a href>` | Focusable by default                         |
+| Custom links      | Require `tabindex="0"`                       |
+| Disabled links    | Use `tabindex="-1"` (removed from tab order) |
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/link/">
+    WAI-ARIA APG: Link Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a">
+    MDN: &lt;a&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#link">W3C ARIA: link role</ExternalLink>

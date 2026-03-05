@@ -12,7 +12,7 @@ export const comboboxAccessibilityData: PatternAccessibilityData = {
   roles: [
     {
       name: 'combobox',
-      element: 'Input (`<input>`)',
+      element: 'Input (`<code>&lt;input&gt;</code>`)',
       description: {
         en: 'The text input element that users type into',
         ja: 'ユーザーが入力するテキスト入力要素',
@@ -20,7 +20,7 @@ export const comboboxAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'listbox',
-      element: 'Popup (`<ul>`)',
+      element: 'Popup (`<code>&lt;ul&gt;</code>`)',
       description: {
         en: 'The popup containing selectable options',
         ja: '選択可能なオプションを含むポップアップ',
@@ -28,7 +28,7 @@ export const comboboxAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'option',
-      element: 'Each item (`<li>`)',
+      element: 'Each item (`<code>&lt;li&gt;</code>`)',
       description: {
         en: 'An individual selectable option',
         ja: '個々の選択可能なオプション',
