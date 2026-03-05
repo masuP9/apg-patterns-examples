@@ -1,0 +1,111 @@
+---
+pattern: checkbox
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `checkbox` | `<input type="checkbox">` または role="checkbox" を持つ要素 | 要素をチェックボックスとして識別します。ネイティブの `<input type="checkbox">` はこのロールを暗黙的に持ちます。 |
+
+### WAI-ARIA プロパティ
+
+#### `aria-label`
+
+アクセシブルな名前を提供
+
+| | |
+|---|---|
+| **値** | string |
+| **必須** | 可視ラベルがない場合 |
+
+#### `aria-labelledby`
+
+外部テキストをラベルとして参照
+
+| | |
+|---|---|
+| **値** | ID 参照 |
+| **必須** | 可視ラベルがない場合 |
+
+#### `aria-describedby`
+
+追加の説明
+
+| | |
+|---|---|
+| **値** | ID 参照 |
+| **必須** | いいえ |
+
+### WAI-ARIA ステート
+
+#### `aria-checked / checked`
+
+| | |
+|---|---|
+| **対象要素** | チェックボックス要素 |
+| **値** | true \| false \| mixed |
+| **必須** | はい |
+| **変更トリガー** | クリック、Space キー |
+
+#### `indeterminate`
+
+| | |
+|---|---|
+| **対象要素** | ネイティブチェックボックス（`<input>`） |
+| **値** | true \| false |
+| **必須** | いいえ |
+| **変更トリガー** | 親子同期、ユーザー操作時に自動的にクリア |
+
+#### `disabled`
+
+| | |
+|---|---|
+| **対象要素** | チェックボックス要素 |
+| **値** | present \| absent |
+| **必須** | いいえ |
+| **変更トリガー** | プログラムによる変更 |
+
+### キーボードサポート
+
+| キー | アクション |
+|------|------|
+| <kbd>Space</kbd> | チェックボックスの状態を切り替える（チェック/未チェック） |
+| <kbd>Tab</kbd> | 次のフォーカス可能な要素にフォーカスを移動 |
+| <kbd>Shift + Tab</kbd> | 前のフォーカス可能な要素にフォーカスを移動 |
+
+> Switchパターンとは異なり、Enterキーではチェックボックスが切り替わりません。
+
+### アクセシブルな名前
+
+チェックボックスにはアクセシブルな名前が必要です。これは以下の方法で提供できます:
+
+- **label要素（推奨）** — `<label>` を for 属性で使用するか、inputをラップします
+- **aria-label** — チェックボックスに非表示のラベルを提供します
+- **aria-labelledby** — 外部要素をラベルとして参照します
+
+### フォーカス管理
+
+| イベント | 振る舞い |
+|------|------|
+| ネイティブチェックボックス | デフォルトでフォーカス可能 |
+| カスタム実装 | tabindex="0" が必要 |
+| 無効なチェックボックス | Tab 順序でスキップ |
+
+### ビジュアルデザイン
+
+この実装は、色のみに依存せずに状態を示すことで、WCAG 1.4.1（色の使用）に準拠しています:
+
+- **チェック時** — チェックマークアイコン
+- **不確定状態時** — ダッシュ/マイナスアイコン
+- **未チェック時** — 空のボックス
+- **強制カラーモード** — Windowsハイコントラストモードでのアクセシビリティのためにシステムカラーを使用
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">WAI-ARIA APG Checkbox Pattern</ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">MDN: &lt;input type="checkbox"&gt;</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#checkbox">W3C ARIA: checkbox role</ExternalLink>

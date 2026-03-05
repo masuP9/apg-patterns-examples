@@ -5,12 +5,15 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/accordion/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/accordion/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/accordion/Accordion.astro?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('accordion', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -145,7 +148,9 @@ const disabledItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -289,7 +294,7 @@ const items = [
   <!-- Implementation Notes -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Implementation Notes</Heading>
-    <div class="prose dark:prose-invert max-w-none">
+    <Prose>
       <p>
         This Astro implementation uses Web Components (<code>customElements.define</code>) for
         client-side interactivity. The accordion is rendered as static HTML on the server, and the

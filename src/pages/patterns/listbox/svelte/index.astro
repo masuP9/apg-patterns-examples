@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import ListboxDemo from '@patterns/listbox/ListboxDemo.svelte';
-import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -11,6 +12,8 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/listbox/Listbox.svelte?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('listbox', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -115,7 +118,9 @@ const colorOptions = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

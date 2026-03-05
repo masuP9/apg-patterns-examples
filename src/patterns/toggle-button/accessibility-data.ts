@@ -196,8 +196,8 @@ Tri-state (rare):
           {
             name: 'role="button"',
             description: {
-              en: 'Has implicit button role (via <button>)',
-              ja: '暗黙的なbuttonロールを持つ（<button> 要素経由）',
+              en: 'Has implicit button role (via <code>&lt;button&gt;</code>)',
+              ja: '暗黙的なbuttonロールを持つ（<code>&lt;button&gt;</code> 要素経由）',
             },
           },
           {
@@ -333,7 +333,7 @@ Tri-state (rare):
 
     // ARIA - High Priority
     {
-      description: 'Has role="button" (implicit for <button>)',
+      description: 'Has role="button" (implicit for <code>&lt;button&gt;</code>)',
       priority: 'high',
       category: 'aria',
     },

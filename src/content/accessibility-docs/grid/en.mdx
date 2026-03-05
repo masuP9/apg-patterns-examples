@@ -1,0 +1,162 @@
+---
+pattern: grid
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `grid` | Container | The grid container (composite widget) |
+| `row` | Row container | Groups cells horizontally |
+| `columnheader` | Header cells | Column headers (not focusable in this implementation) |
+| `rowheader` | Row header cell | Row headers (optional) |
+| `gridcell` | Data cells | Interactive cells (focusable) |
+
+### WAI-ARIA Properties
+
+#### `role="grid"`
+
+Identifies the container as a grid
+
+| | |
+|---|---|
+| **Values** | - |
+| **Required** | Yes |
+
+#### `aria-label`
+
+Accessible name for the grid
+
+| | |
+|---|---|
+| **Values** | String |
+| **Required** | Yes* (either aria-label or aria-labelledby) |
+
+#### `aria-labelledby`
+
+Alternative to aria-label
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes* (either aria-label or aria-labelledby) |
+
+#### `aria-multiselectable`
+
+Only present for multi-select mode
+
+| | |
+|---|---|
+| **Values** | true |
+| **Required** | No |
+
+#### `aria-rowcount`
+
+Total rows (for virtualization)
+
+| | |
+|---|---|
+| **Values** | Number |
+| **Required** | No |
+
+#### `aria-colcount`
+
+Total columns (for virtualization)
+
+| | |
+|---|---|
+| **Values** | Number |
+| **Required** | No |
+
+### WAI-ARIA States
+
+#### `tabindex`
+
+| | |
+|---|---|
+| **Target Element** | gridcell |
+| **Values** | 0 \| -1 |
+| **Required** | Yes |
+| **Change Trigger** | Roving tabindex for focus management |
+
+#### `aria-selected`
+
+| | |
+|---|---|
+| **Target Element** | gridcell |
+| **Values** | true \| false |
+| **Required** | No |
+| **Change Trigger** | Present when grid supports selection. When selection is supported, ALL gridcells should have aria-selected. |
+
+#### `aria-disabled`
+
+| | |
+|---|---|
+| **Target Element** | gridcell |
+| **Values** | true |
+| **Required** | No |
+| **Change Trigger** | Indicates the cell is disabled |
+
+#### `aria-rowindex`
+
+| | |
+|---|---|
+| **Target Element** | row, gridcell |
+| **Values** | Number |
+| **Required** | No |
+| **Change Trigger** | Row position (for virtualization) |
+
+#### `aria-colindex`
+
+| | |
+|---|---|
+| **Target Element** | gridcell |
+| **Values** | Number |
+| **Required** | No |
+| **Change Trigger** | Column position (for virtualization) |
+
+### Keyboard Support
+
+#### 2D Navigation
+
+| Key | Action |
+|------|------|
+| <kbd>→</kbd> | Move focus one cell right |
+| <kbd>←</kbd> | Move focus one cell left |
+| <kbd>↓</kbd> | Move focus one row down |
+| <kbd>↑</kbd> | Move focus one row up |
+| <kbd>Home</kbd> | Move focus to first cell in row |
+| <kbd>End</kbd> | Move focus to last cell in row |
+| <kbd>Ctrl + Home</kbd> | Move focus to first cell in grid |
+| <kbd>Ctrl + End</kbd> | Move focus to last cell in grid |
+| <kbd>PageDown</kbd> | Move focus down by page size (default 5) |
+| <kbd>PageUp</kbd> | Move focus up by page size (default 5) |
+
+#### Selection & Activation
+
+| Key | Action |
+|------|------|
+| <kbd>Space</kbd> | Select/deselect focused cell (when selectable) |
+| <kbd>Enter</kbd> | Activate focused cell (trigger onCellActivate) |
+
+> Either aria-label or aria-labelledby is required on the grid container.
+
+> Disabled cells have aria-disabled="true", are focusable (included in keyboard navigation), cannot be selected or activated, and are visually distinct (e.g., grayed out).
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Roving tabindex | Only one cell has tabindex="0" (the focused cell), all others have tabindex="-1" |
+| Single Tab stop | Grid is a single Tab stop (Tab enters grid, Shift+Tab exits) |
+| Header cells | Header cells (columnheader) are NOT focusable (no sort functionality in this implementation) |
+| Data cells only | Only gridcells in the data rows are included in keyboard navigation |
+| Focus memory | Last focused cell is remembered when leaving and re-entering the grid |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#grid">WAI-ARIA grid role</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">WAI-ARIA APG Grid Pattern</ExternalLink>

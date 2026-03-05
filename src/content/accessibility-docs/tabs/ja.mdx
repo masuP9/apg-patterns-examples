@@ -1,0 +1,116 @@
+---
+pattern: tabs
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `tablist` | コンテナ | タブ要素のコンテナ |
+| `tab` | 各タブ | 個々のタブ要素 |
+| `tabpanel` | パネル | 各タブのコンテンツエリア |
+
+### WAI-ARIA プロパティ
+
+#### `aria-orientation`
+
+orientation プロパティ
+
+| | |
+|---|---|
+| **値** | "horizontal" \| "vertical" |
+| **必須** | いいえ |
+
+#### `aria-controls`
+
+自動生成
+
+| | |
+|---|---|
+| **値** | 関連するパネルへのID参照 |
+| **必須** | はい |
+
+#### `aria-labelledby`
+
+自動生成
+
+| | |
+|---|---|
+| **値** | 関連するタブへのID参照 |
+| **必須** | はい |
+
+### WAI-ARIA ステート
+
+#### `aria-selected`
+
+| | |
+|---|---|
+| **対象要素** | tab 要素 |
+| **値** | true \| false |
+| **必須** | はい |
+| **変更トリガー** | タブクリック、矢印キー（自動）、Enter/Space（手動） |
+
+### キーボードサポート
+
+#### 水平方向
+
+| キー | アクション |
+|------|------|
+| <kbd>Tab</kbd> | タブリスト内にフォーカスを移動、またはタブリストから移動 |
+| <kbd>ArrowRight</kbd> | 次のタブに移動（末尾でループ） |
+| <kbd>ArrowLeft</kbd> | 前のタブに移動（先頭でループ） |
+| <kbd>Home</kbd> | 最初のタブに移動 |
+| <kbd>End</kbd> | 最後のタブに移動 |
+| <kbd>Enter / Space</kbd> | タブをアクティブ化（手動モードのみ） |
+
+#### 垂直方向
+
+| キー | アクション |
+|------|------|
+| <kbd>ArrowDown</kbd> | 次のタブに移動（末尾でループ） |
+| <kbd>ArrowUp</kbd> | 前のタブに移動（先頭でループ） |
+
+### フォーカス管理
+
+| イベント | 振る舞い |
+|------|------|
+| 選択中/フォーカス中のタブ | tabIndex="0" |
+| 他のタブ | tabIndex="-1" |
+| タブパネル | tabIndex="0"（フォーカス可能） |
+| 無効化されたタブ | キーボードナビゲーションでスキップ |
+
+### 実装ノート
+
+#### 自動モード（デフォルト）
+
+- 矢印キーでフォーカス移動とタブ選択を同時に行う
+- パネルの内容が即座に変更される
+
+#### 手動モード
+
+- 矢印キーはフォーカス移動のみ
+- タブ選択にはEnter/Spaceが必要
+- 明示的なアクティベーションでパネル内容が変更される
+
+```
+┌─────────────────────────────────────────┐
+│ [Tab 1] [Tab 2] [Tab 3]   ← tablist     │
+├─────────────────────────────────────────┤
+│                                         │
+│  Panel content here        ← tabpanel   │
+│                                         │
+└─────────────────────────────────────────┘
+
+ID Relationships:
+- Tab: id="tab-1", aria-controls="panel-1"
+- Panel: id="panel-1", aria-labelledby="tab-1"
+```
+
+ID関連を含むTabsコンポーネントの構造
+
+### 参考資料
+
+- <ExternalLink href="https://w3c.github.io/aria/#tablist">WAI-ARIA tablist role</ExternalLink>

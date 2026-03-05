@@ -168,8 +168,8 @@ export const radioGroupAccessibilityData: PatternAccessibilityData = {
       ja: '無効化されたラジオはナビゲーション中にスキップされます。',
     },
     {
-      en: 'This implementation uses custom role="radiogroup" and role="radio" for consistent cross-browser keyboard behavior. Native <input type="radio"> provides these roles implicitly.',
-      ja: 'この実装は、一貫したクロスブラウザキーボード動作のためにカスタムrole="radiogroup"とrole="radio"を使用します。ネイティブ<input type="radio">はこれらのロールを暗黙的に提供します。',
+      en: 'This implementation uses custom role="radiogroup" and role="radio" for consistent cross-browser keyboard behavior. Native <code>&lt;input type="radio"&gt;</code> provides these roles implicitly.',
+      ja: 'この実装は、一貫したクロスブラウザキーボード動作のためにカスタムrole="radiogroup"とrole="radio"を使用します。ネイティブ<code>&lt;input type="radio"&gt;</code>はこれらのロールを暗黙的に提供します。',
     },
   ],
 

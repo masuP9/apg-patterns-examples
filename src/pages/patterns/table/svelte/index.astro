@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import TableDemo from '@patterns/table/TableDemo.svelte';
-import AccessibilityDocs from '@patterns/table/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/table/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/table/NativeHtmlNotice.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
@@ -13,6 +14,8 @@ import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/table/Table.svelte?raw';
 import testCode from '@patterns/table/Table.test.svelte.ts?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('table', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -113,7 +116,9 @@ const tocItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

@@ -1,0 +1,56 @@
+---
+pattern: breadcrumb
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `navigation` | `<nav>` element | Provides a navigation landmark for assistive technology (implicit role of `<nav>`) |
+
+### WAI-ARIA Properties
+
+#### `aria-label`
+
+Labels the navigation landmark for screen readers
+
+| | |
+|---|---|
+| **Values** | "Breadcrumb" (or localized) |
+| **Required** | Yes |
+
+#### `aria-current`
+
+Identifies the current page within the breadcrumb trail
+
+| | |
+|---|---|
+| **Values** | "page" |
+| **Required** | Yes (on last item) |
+
+### WAI-ARIA States
+
+#### `aria-current`
+
+| | |
+|---|---|
+| **Target Element** | Last item in the breadcrumb (current page) |
+| **Values** | "page" |
+| **Required** | Yes |
+| **Change Trigger** | Indicates the current page location within the breadcrumb navigation. |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Tab</kbd> | Move focus between breadcrumb links |
+| <kbd>Enter</kbd> | Activate the focused link |
+
+> Breadcrumb uses native `<a>` element behavior for keyboard interaction. No additional keyboard handlers are required.
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">WAI-ARIA Breadcrumb Pattern</ExternalLink>

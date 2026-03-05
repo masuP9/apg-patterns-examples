@@ -1,0 +1,126 @@
+---
+pattern: combobox
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `combobox` | Input (``<input>``) | The text input element that users type into |
+| `listbox` | Popup (``<ul>``) | The popup containing selectable options |
+| `option` | Each item (``<li>``) | An individual selectable option |
+
+### WAI-ARIA Properties
+
+#### `role="combobox"`
+
+Identifies the input as a combobox
+
+| | |
+|---|---|
+| **Values** | - |
+| **Required** | Yes |
+
+#### `aria-controls`
+
+References the listbox popup (even when closed)
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes |
+
+#### `aria-expanded`
+
+Indicates whether the popup is open
+
+| | |
+|---|---|
+| **Values** | `true` \| `false` |
+| **Required** | Yes |
+
+#### `aria-autocomplete`
+
+Describes the autocomplete behavior
+
+| | |
+|---|---|
+| **Values** | `list` \| `none` \| `both` |
+| **Required** | Yes |
+
+#### `aria-activedescendant`
+
+References the currently focused option in the popup
+
+| | |
+|---|---|
+| **Values** | ID reference \| empty |
+| **Required** | Yes |
+
+#### `aria-labelledby`
+
+References the label element
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes* |
+
+#### `aria-selected`
+
+Indicates the currently focused option
+
+| | |
+|---|---|
+| **Values** | `true` \| `false` |
+| **Required** | Yes |
+
+#### `aria-disabled`
+
+Indicates the option is disabled
+
+| | |
+|---|---|
+| **Values** | `true` |
+| **Required** | No |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Down Arrow</kbd> | Open popup and focus first option |
+| <kbd>Up Arrow</kbd> | Open popup and focus last option |
+| <kbd>Alt + Down Arrow</kbd> | Open popup without changing focus position |
+| <kbd>Type characters</kbd> | Filter options and open popup |
+| <kbd>Down Arrow</kbd> | Move focus to next enabled option (no wrap) |
+| <kbd>Up Arrow</kbd> | Move focus to previous enabled option (no wrap) |
+| <kbd>Home</kbd> | Move focus to first enabled option |
+| <kbd>End</kbd> | Move focus to last enabled option |
+| <kbd>Enter</kbd> | Select focused option and close popup |
+| <kbd>Escape</kbd> | Close popup and restore previous input value |
+| <kbd>Alt + Up Arrow</kbd> | Select focused option and close popup |
+| <kbd>Tab</kbd> | Close popup and move to next focusable element |
+
+> **Listbox always in DOM**: Keep listbox in DOM with `hidden` attribute when closed (for `aria-controls` reference)
+
+> **IME Handling**: Track composition state to prevent filtering during IME input
+
+> **Click Outside**: Use event listener to close popup on outside clicks
+
+> **Value Restoration**: Store pre-edit value to restore on Escape
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Navigation via arrow keys | DOM focus remains on input; aria-activedescendant references the visually focused option |
+| Popup closes or filter results are empty | aria-activedescendant is cleared |
+| Disabled option encountered | Disabled options are skipped during navigation |
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/">WAI-ARIA APG: Combobox Pattern</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#combobox">WAI-ARIA: combobox role</ExternalLink>

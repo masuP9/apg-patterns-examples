@@ -1,0 +1,126 @@
+---
+pattern: combobox
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `combobox` | Input (``<input>``) | ユーザーが入力するテキスト入力要素 |
+| `listbox` | Popup (``<ul>``) | 選択可能なオプションを含むポップアップ |
+| `option` | Each item (``<li>``) | 個々の選択可能なオプション |
+
+### WAI-ARIA プロパティ
+
+#### `role="combobox"`
+
+入力をコンボボックスとして識別
+
+| | |
+|---|---|
+| **値** | - |
+| **必須** | はい |
+
+#### `aria-controls`
+
+リストボックスポップアップを参照（閉じている時も）
+
+| | |
+|---|---|
+| **値** | ID reference |
+| **必須** | はい |
+
+#### `aria-expanded`
+
+ポップアップが開いているかどうかを示す
+
+| | |
+|---|---|
+| **値** | `true` \| `false` |
+| **必須** | はい |
+
+#### `aria-autocomplete`
+
+オートコンプリートの動作を説明
+
+| | |
+|---|---|
+| **値** | `list` \| `none` \| `both` |
+| **必須** | はい |
+
+#### `aria-activedescendant`
+
+ポップアップ内で現在フォーカスされているオプションを参照
+
+| | |
+|---|---|
+| **値** | ID reference \| empty |
+| **必須** | はい |
+
+#### `aria-labelledby`
+
+ラベル要素を参照
+
+| | |
+|---|---|
+| **値** | ID reference |
+| **必須** | はい* |
+
+#### `aria-selected`
+
+現在フォーカスされているオプションを示す
+
+| | |
+|---|---|
+| **値** | `true` \| `false` |
+| **必須** | はい |
+
+#### `aria-disabled`
+
+オプションが無効であることを示す
+
+| | |
+|---|---|
+| **値** | `true` |
+| **必須** | いいえ |
+
+### キーボードサポート
+
+| キー | アクション |
+|------|------|
+| <kbd>Down Arrow</kbd> | ポップアップを開き、最初のオプションにフォーカス |
+| <kbd>Up Arrow</kbd> | ポップアップを開き、最後のオプションにフォーカス |
+| <kbd>Alt + Down Arrow</kbd> | フォーカス位置を変更せずにポップアップを開く |
+| <kbd>文字入力</kbd> | オプションをフィルタリングしてポップアップを開く |
+| <kbd>Down Arrow</kbd> | 次の有効なオプションにフォーカスを移動（折り返しなし） |
+| <kbd>Up Arrow</kbd> | 前の有効なオプションにフォーカスを移動（折り返しなし） |
+| <kbd>Home</kbd> | 最初の有効なオプションにフォーカスを移動 |
+| <kbd>End</kbd> | 最後の有効なオプションにフォーカスを移動 |
+| <kbd>Enter</kbd> | フォーカス中のオプションを選択しポップアップを閉じる |
+| <kbd>Escape</kbd> | ポップアップを閉じ、以前の入力値を復元 |
+| <kbd>Alt + Up Arrow</kbd> | フォーカス中のオプションを選択しポップアップを閉じる |
+| <kbd>Tab</kbd> | ポップアップを閉じ、次のフォーカス可能な要素に移動 |
+
+> **リストボックスは常にDOMに存在**: `aria-controls`参照のため、閉じている時も`hidden`属性を使用してリストボックスをDOMに保持
+
+> **IME処理**: IME入力中のフィルタリングを防ぐため、変換状態を追跡
+
+> **外側クリック**: イベントリスナーを使用して外側クリック時にポップアップを閉じる
+
+> **値の復元**: Escapeキーで復元するため、編集前の値を保存
+
+### フォーカス管理
+
+| イベント | 振る舞い |
+|------|------|
+| 矢印キーでナビゲーション | DOMフォーカスはinputに留まり、aria-activedescendantが視覚的にフォーカスされているオプションを参照 |
+| ポップアップが閉じるかフィルタ結果が空 | aria-activedescendantがクリアされる |
+| 無効なオプションに遭遇 | ナビゲーション中に無効なオプションはスキップされる |
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/">WAI-ARIA APG: Combobox Pattern</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#combobox">WAI-ARIA: combobox role</ExternalLink>

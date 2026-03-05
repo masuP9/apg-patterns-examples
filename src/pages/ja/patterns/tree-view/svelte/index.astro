@@ -6,7 +6,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/tree-view/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/tree-view/TestingDocs.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
@@ -16,6 +17,7 @@ import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('tree-view', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -140,7 +142,9 @@ const disabledNodes = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

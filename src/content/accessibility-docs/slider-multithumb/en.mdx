@@ -1,0 +1,119 @@
+---
+pattern: slider-multithumb
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `slider` | Lower thumb element | Identifies the element as a slider for selecting the lower bound of the range. |
+| `slider` | Upper thumb element | Identifies the element as a slider for selecting the upper bound of the range. |
+| `group` | Container element | Groups the two sliders together and associates them with a common label. |
+
+### WAI-ARIA Properties
+
+#### `aria-valuenow`
+
+Updated dynamically when value changes via keyboard or pointer
+
+| | |
+|---|---|
+| **Values** | Number |
+| **Required** | Yes |
+
+#### `aria-valuemin`
+
+Static for lower thumb (absolute min), dynamic for upper thumb (lower value + minDistance)
+
+| | |
+|---|---|
+| **Values** | Number |
+| **Required** | Yes |
+
+#### `aria-valuemax`
+
+Dynamic for lower thumb (upper value - minDistance), static for upper thumb (absolute max)
+
+| | |
+|---|---|
+| **Values** | Number |
+| **Required** | Yes |
+
+#### `aria-valuetext`
+
+Example: "$20", "$80", "20% - 80%"
+
+| | |
+|---|---|
+| **Values** | String |
+| **Required** | No (recommended when value needs context) |
+
+#### `aria-orientation`
+
+Default: horizontal (implicit). Only set for vertical sliders.
+
+| | |
+|---|---|
+| **Values** | "horizontal" \| "vertical" |
+| **Required** | No |
+
+#### `aria-disabled`
+
+Set only when disabled
+
+| | |
+|---|---|
+| **Values** | true \| undefined |
+| **Required** | No |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Tab</kbd> | Moves focus between thumbs (lower to upper) |
+| <kbd>Shift + Tab</kbd> | Moves focus between thumbs (upper to lower) |
+| <kbd>Right Arrow</kbd> | Increases the value by one step |
+| <kbd>Up Arrow</kbd> | Increases the value by one step |
+| <kbd>Left Arrow</kbd> | Decreases the value by one step |
+| <kbd>Down Arrow</kbd> | Decreases the value by one step |
+| <kbd>Home</kbd> | Sets the thumb to its minimum allowed value (dynamic for upper thumb) |
+| <kbd>End</kbd> | Sets the thumb to its maximum allowed value (dynamic for lower thumb) |
+| <kbd>Page Up</kbd> | Increases the value by a large step (default: step * 10) |
+| <kbd>Page Down</kbd> | Decreases the value by a large step (default: step * 10) |
+
+> Each thumb is an independent slider element with its own ARIA attributes. The group role establishes the semantic relationship between the two sliders.
+
+> Multi-thumb sliders require careful labeling to distinguish between the two thumbs. Use aria-label tuple, aria-labelledby tuple, or getAriaLabel function.
+
+> Dynamic bounds: Per the APG specification, when the range of one slider depends on the value of another, aria-valuemin/aria-valuemax must update dynamically.
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Tab order | Both thumbs are in the tab order (tabindex="0") |
+| Constant order | Lower thumb always comes first in tab order, regardless of values |
+| Track click | Clicking the track moves the nearest thumb and focuses it |
+
+### Mouse/Pointer Behavior
+
+- Click on track: Moves the nearest thumb to the clicked position
+- Drag thumb: Allows continuous adjustment while dragging
+- Pointer capture: Maintains interaction even when pointer moves outside the slider
+
+### Visual Design
+
+- Focus indicator: Visible focus ring on each thumb element
+- Range indicator: Visual representation of the selected range between thumbs
+- Hover states: Visual feedback on hover
+- Disabled state: Clear visual indication when slider is disabled
+- Forced colors mode: Uses system colors for accessibility in Windows High Contrast Mode
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/slider-multithumb/">WAI-ARIA APG: Slider (Multi-Thumb) Pattern</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#slider">W3C ARIA: slider role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#group">W3C ARIA: group role</ExternalLink>

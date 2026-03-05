@@ -1,0 +1,111 @@
+---
+pattern: menu-button
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `button` | Trigger (`<button>`) | The trigger that opens the menu (implicit via `<button>` element) |
+| `menu` | Container (`<ul>`) | A widget offering a list of choices to the user |
+| `menuitem` | Each item (`<li>`) | An option in a menu |
+
+### WAI-ARIA Properties
+
+#### `aria-haspopup`
+
+Indicates the button opens a menu
+
+| | |
+|---|---|
+| **Values** | "menu" |
+| **Required** | Yes |
+
+#### `aria-controls`
+
+References the menu element
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | No |
+
+#### `aria-labelledby`
+
+References the button that opens the menu
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes (or aria-label) |
+
+#### `aria-label`
+
+Provides an accessible name for the menu
+
+| | |
+|---|---|
+| **Values** | String |
+| **Required** | Yes (or aria-labelledby) |
+
+#### `aria-disabled`
+
+Indicates the menu item is disabled
+
+| | |
+|---|---|
+| **Values** | true |
+| **Required** | No |
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+| | |
+|---|---|
+| **Target Element** | button |
+| **Values** | true \| false |
+| **Required** | Yes |
+| **Change Trigger** | Open/close menu |
+
+### Keyboard Support
+
+#### Button (Closed Menu)
+
+| Key | Action |
+|------|------|
+| <kbd>Enter / Space</kbd> | Open menu and focus first item |
+| <kbd>Down Arrow</kbd> | Open menu and focus first item |
+| <kbd>Up Arrow</kbd> | Open menu and focus last item |
+
+#### Menu (Open)
+
+| Key | Action |
+|------|------|
+| <kbd>Down Arrow</kbd> | Move focus to next item (wraps to first) |
+| <kbd>Up Arrow</kbd> | Move focus to previous item (wraps to last) |
+| <kbd>Home</kbd> | Move focus to first item |
+| <kbd>End</kbd> | Move focus to last item |
+| <kbd>Escape</kbd> | Close menu and return focus to button |
+| <kbd>Tab</kbd> | Close menu and move focus to next focusable element |
+| <kbd>Enter / Space</kbd> | Activate focused item and close menu |
+| <kbd>Type character</kbd> | Type-ahead: focus item starting with typed character(s) |
+
+> When closed, the menu uses both hidden and inert attributes to hide the menu from visual display, remove it from the accessibility tree, and prevent keyboard and mouse interaction with hidden items.
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Focused menu item | tabIndex="0" |
+| Other menu items | tabIndex="-1" |
+| Arrow key navigation | Wraps from last to first and vice versa |
+| Disabled items | Skipped during navigation |
+| Menu closes | Focus returns to button |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#menu">WAI-ARIA menu role</ExternalLink>

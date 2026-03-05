@@ -261,8 +261,8 @@ export const dataGridAccessibilityData: PatternAccessibilityData = {
 
   additionalNotes: [
     {
-      en: 'Use role="grid" only when the table is interactive. For static data, use native <table> elements.',
-      ja: 'テーブルがインタラクティブな場合にのみ role="grid" を使用してください。静的なデータにはネイティブの <table> 要素を使用してください。',
+      en: 'Use role="grid" only when the table is interactive. For static data, use native <code>&lt;table&gt;</code> elements.',
+      ja: 'テーブルがインタラクティブな場合にのみ role="grid" を使用してください。静的なデータにはネイティブの <code>&lt;table&gt;</code> 要素を使用してください。',
     },
     {
       en: 'Roving tabindex is recommended for efficient keyboard navigation.',

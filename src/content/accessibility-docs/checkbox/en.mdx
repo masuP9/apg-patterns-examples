@@ -1,0 +1,111 @@
+---
+pattern: checkbox
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `checkbox` | `<input type="checkbox">` or element with role="checkbox" | Identifies the element as a checkbox. Native `<input type="checkbox">` has this role implicitly. |
+
+### WAI-ARIA Properties
+
+#### `aria-label`
+
+Provides accessible name
+
+| | |
+|---|---|
+| **Values** | string |
+| **Required** | When no visible label |
+
+#### `aria-labelledby`
+
+References external text as label
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | When no visible label |
+
+#### `aria-describedby`
+
+Additional description
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | No |
+
+### WAI-ARIA States
+
+#### `aria-checked / checked`
+
+| | |
+|---|---|
+| **Target Element** | Checkbox element |
+| **Values** | true \| false \| mixed |
+| **Required** | Yes |
+| **Change Trigger** | Click, Space key |
+
+#### `indeterminate`
+
+| | |
+|---|---|
+| **Target Element** | Native checkbox (`<input>`) |
+| **Values** | true \| false |
+| **Required** | No |
+| **Change Trigger** | Parent-child sync, automatically cleared on user interaction |
+
+#### `disabled`
+
+| | |
+|---|---|
+| **Target Element** | Checkbox element |
+| **Values** | present \| absent |
+| **Required** | No |
+| **Change Trigger** | Programmatic change |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Space</kbd> | Toggle the checkbox state (checked/unchecked) |
+| <kbd>Tab</kbd> | Move focus to the next focusable element |
+| <kbd>Shift + Tab</kbd> | Move focus to the previous focusable element |
+
+> Unlike the Switch pattern, the Enter key does not toggle the checkbox.
+
+### Accessible Naming
+
+Checkboxes must have an accessible name. This can be provided through:
+
+- **Label element (recommended)** — Using `<label>` with for attribute or wrapping the input
+- **aria-label** — Provides an invisible label for the checkbox
+- **aria-labelledby** — References an external element as the label
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Native checkbox | Focusable by default |
+| Custom implementation | Requires tabindex="0" |
+| Disabled checkbox | Skipped in Tab order |
+
+### Visual Design
+
+This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state:
+
+- **Checked** — Checkmark icon
+- **Indeterminate** — Dash/minus icon
+- **Unchecked** — Empty box
+- **Forced colors mode** — Uses system colors for accessibility in Windows High Contrast Mode
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">WAI-ARIA APG Checkbox Pattern</ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">MDN: &lt;input type="checkbox"&gt;</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#checkbox">W3C ARIA: checkbox role</ExternalLink>

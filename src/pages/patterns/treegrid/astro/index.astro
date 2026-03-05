@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import TreeGrid from '@patterns/treegrid/TreeGrid.astro';
-import AccessibilityDocs from '@patterns/treegrid/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -10,6 +11,8 @@ import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/treegrid/TreeGrid.astro?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('treegrid', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -147,7 +150,9 @@ const nodes = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

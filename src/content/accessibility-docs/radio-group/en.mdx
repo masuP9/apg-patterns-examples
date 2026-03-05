@@ -1,0 +1,113 @@
+---
+pattern: radio-group
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `radiogroup` | Container element | Groups radio buttons together. Must have an accessible name via aria-label or aria-labelledby. |
+| `radio` | Each option element | Identifies the element as a radio button. Only one radio in a group can be checked at a time. |
+
+### WAI-ARIA Properties
+
+#### `aria-orientation`
+
+Indicates the orientation of the radio group. Vertical is the default. Only set when horizontal.
+
+| | |
+|---|---|
+| **Values** | horizontal \| vertical |
+| **Required** | No |
+
+#### `aria-label`
+
+Accessible name for the radio group
+
+| | |
+|---|---|
+| **Values** | String |
+| **Required** | Yes (or aria-labelledby) |
+
+#### `aria-labelledby`
+
+Alternative to aria-label
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes (or aria-label) |
+
+### WAI-ARIA States
+
+#### `aria-checked`
+
+| | |
+|---|---|
+| **Target Element** | Each radio |
+| **Values** | true \| false |
+| **Required** | Yes |
+| **Change Trigger** | Click, Space, Arrow keys |
+
+#### `aria-disabled`
+
+| | |
+|---|---|
+| **Target Element** | Disabled radio |
+| **Values** | true |
+| **Required** | No |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Tab</kbd> | Move focus into the group (to selected or first radio) |
+| <kbd>Shift + Tab</kbd> | Move focus out of the group |
+| <kbd>Space</kbd> | Select the focused radio (does not unselect) |
+| <kbd>ArrowDown / ArrowRight</kbd> | Move to next radio and select (wraps to first) |
+| <kbd>ArrowUp / ArrowLeft</kbd> | Move to previous radio and select (wraps to last) |
+| <kbd>Home</kbd> | Move to first radio and select |
+| <kbd>End</kbd> | Move to last radio and select |
+
+> Unlike Checkbox, arrow keys both move focus AND change selection.
+
+> Disabled radios are skipped during navigation.
+
+> This implementation uses custom role="radiogroup" and role="radio" for consistent cross-browser keyboard behavior. Native `<input type="radio">` provides these roles implicitly.
+
+### Accessible Naming
+
+Both the radio group and individual radios must have accessible names:
+
+- **Radio group** — Use `aria-label` or `aria-labelledby` on the container
+- **Individual radios** — Each radio is labeled by its visible text content via `aria-labelledby`
+- **Native alternative** — Use `<fieldset>` with `<legend>` for group labeling
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Roving tabindex | Only one radio in the group is tabbable at any time |
+| Selected radio | Has `tabindex="0"` |
+| If none selected | First enabled radio has `tabindex="0"` |
+| All other radios | Have `tabindex="-1"` |
+| Disabled radios | Always have `tabindex="-1"` |
+
+### Visual Design
+
+This implementation follows WCAG 1.4.1 (Use of Color) by not relying solely on color to indicate state:
+
+- **Selected** — Filled circle
+- **Unselected** — Empty circle
+- **Disabled** — Reduced opacity
+- **Forced colors mode** — Uses system colors for accessibility in Windows High Contrast Mode
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">WAI-ARIA APG: Radio Group Pattern</ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio">MDN: &lt;input type="radio"&gt;</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#radiogroup">W3C ARIA: radiogroup role</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#radio">W3C ARIA: radio role</ExternalLink>

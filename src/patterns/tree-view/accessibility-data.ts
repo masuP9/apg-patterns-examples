@@ -12,7 +12,7 @@ export const treeViewAccessibilityData: PatternAccessibilityData = {
   roles: [
     {
       name: 'tree',
-      element: { en: 'Container (<ul>)', ja: 'コンテナ（<ul>）' },
+      element: { en: 'Container (<code>&lt;ul&gt;</code>)', ja: 'コンテナ（<code>&lt;ul&gt;</code>）' },
       description: {
         en: 'The tree widget container',
         ja: 'ツリーウィジェットのコンテナ',
@@ -20,7 +20,7 @@ export const treeViewAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'treeitem',
-      element: { en: 'Each node (<li>)', ja: '各ノード（<li>）' },
+      element: { en: 'Each node (<code>&lt;li&gt;</code>)', ja: '各ノード（<code>&lt;li&gt;</code>）' },
       description: {
         en: 'Individual tree nodes (both parent and leaf)',
         ja: '個々のツリーノード（親ノードとリーフノードの両方）',
@@ -28,7 +28,7 @@ export const treeViewAccessibilityData: PatternAccessibilityData = {
     },
     {
       name: 'group',
-      element: { en: 'Child container (<ul>)', ja: '子コンテナ（<ul>）' },
+      element: { en: 'Child container (<code>&lt;ul&gt;</code>)', ja: '子コンテナ（<code>&lt;ul&gt;</code>）' },
       description: {
         en: 'Container for child nodes of an expanded parent',
         ja: '展開された親の子ノードのコンテナ',

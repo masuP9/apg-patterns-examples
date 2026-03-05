@@ -14,11 +14,11 @@ export const linkAccessibilityData: PatternAccessibilityData = {
   nativeHtmlConsiderations: [
     {
       useCase: 'Standard navigation',
-      recommended: 'Native `<a href>`',
+      recommended: 'Native `<code>&lt;a href&gt;</code>`',
     },
     {
       useCase: 'JavaScript-driven navigation',
-      recommended: 'Native `<a href>` with `event.preventDefault()`',
+      recommended: 'Native `<code>&lt;a href&gt;</code>` with `event.preventDefault()`',
     },
     {
       useCase: 'Non-link element that navigates',
@@ -75,12 +75,12 @@ export const linkAccessibilityData: PatternAccessibilityData = {
     {
       name: 'link',
       element: {
-        en: '<a href> or element with role="link"',
-        ja: '<a href> または role="link" を持つ要素',
+        en: '<code>&lt;a href&gt;</code> or element with role="link"',
+        ja: '<code>&lt;a href&gt;</code> または role="link" を持つ要素',
       },
       description: {
-        en: 'Identifies the element as a hyperlink. Native <a href> has this role implicitly.',
-        ja: '要素をハイパーリンクとして識別します。ネイティブの <a href> は暗黙的にこのロールを持ちます。',
+        en: 'Identifies the element as a hyperlink. Native <code>&lt;a href&gt;</code> has this role implicitly.',
+        ja: '要素をハイパーリンクとして識別します。ネイティブの <code>&lt;a href&gt;</code> は暗黙的にこのロールを持ちます。',
       },
     },
   ],
@@ -92,8 +92,8 @@ export const linkAccessibilityData: PatternAccessibilityData = {
       values: '0 (focusable) | -1 (not focusable)',
       required: true,
       notes: {
-        en: 'Required for custom implementations. Native <a href> is focusable by default. Set to -1 when disabled.',
-        ja: 'カスタム実装では必須。ネイティブの <a href> はデフォルトでフォーカス可能。無効時は -1 に設定。',
+        en: 'Required for custom implementations. Native <code>&lt;a href&gt;</code> is focusable by default. Set to -1 when disabled.',
+        ja: 'カスタム実装では必須。ネイティブの <code>&lt;a href&gt;</code> はデフォルトでフォーカス可能。無効時は -1 に設定。',
       },
     },
     {
@@ -173,8 +173,8 @@ export const linkAccessibilityData: PatternAccessibilityData = {
   focusManagement: [
     {
       event: {
-        en: 'Native <a href>',
-        ja: 'ネイティブ <a href>',
+        en: 'Native <code>&lt;a href&gt;</code>',
+        ja: 'ネイティブ <code>&lt;a href&gt;</code>',
       },
       behavior: {
         en: 'Focusable by default',
@@ -207,8 +207,8 @@ export const linkAccessibilityData: PatternAccessibilityData = {
 
   additionalNotes: [
     {
-      en: 'This implementation uses <span role="link"> for educational purposes. For production use, prefer native <a href> elements.',
-      ja: 'この実装は教育目的で <span role="link"> を使用しています。本番環境では、ネイティブの <a href> 要素を優先してください。',
+      en: 'This implementation uses <code>&lt;span role="link"&gt;</code> for educational purposes. For production use, prefer native <code>&lt;a href&gt;</code> elements.',
+      ja: 'この実装は教育目的で <code>&lt;span role="link"&gt;</code> を使用しています。本番環境では、ネイティブの <code>&lt;a href&gt;</code> 要素を優先してください。',
     },
     {
       en: 'Unlike buttons, the Space key does NOT activate links. This is a key distinction between the link and button roles.',

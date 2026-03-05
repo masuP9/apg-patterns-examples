@@ -15,19 +15,19 @@ export const menuButtonAccessibilityData: PatternAccessibilityData = {
     {
       name: 'button',
       element: {
-        en: 'Trigger (<button>)',
-        ja: 'トリガー（<button>）',
+        en: 'Trigger (<code>&lt;button&gt;</code>)',
+        ja: 'トリガー（<code>&lt;button&gt;</code>）',
       },
       description: {
-        en: 'The trigger that opens the menu (implicit via <button> element)',
-        ja: 'メニューを開くトリガー（<button>要素による暗黙的なロール）',
+        en: 'The trigger that opens the menu (implicit via <code>&lt;button&gt;</code> element)',
+        ja: 'メニューを開くトリガー（<code>&lt;button&gt;</code>要素による暗黙的なロール）',
       },
     },
     {
       name: 'menu',
       element: {
-        en: 'Container (<ul>)',
-        ja: 'コンテナ（<ul>）',
+        en: 'Container (<code>&lt;ul&gt;</code>)',
+        ja: 'コンテナ（<code>&lt;ul&gt;</code>）',
       },
       description: {
         en: 'A widget offering a list of choices to the user',
@@ -37,8 +37,8 @@ export const menuButtonAccessibilityData: PatternAccessibilityData = {
     {
       name: 'menuitem',
       element: {
-        en: 'Each item (<li>)',
-        ja: '各アイテム（<li>）',
+        en: 'Each item (<code>&lt;li&gt;</code>)',
+        ja: '各アイテム（<code>&lt;li&gt;</code>）',
       },
       description: {
         en: 'An option in a menu',

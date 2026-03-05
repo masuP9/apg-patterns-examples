@@ -5,8 +5,8 @@ export const listboxAccessibilityData: PatternAccessibilityData = {
   apgUrl: 'https://www.w3.org/WAI/ARIA/apg/patterns/listbox/',
 
   overview: {
-    en: 'A listbox widget presents a list of options and allows selection of one or more items. It provides custom selection behavior beyond native `<select>`.',
-    ja: 'リストボックスウィジェットは、オプションのリストを表示し、1つまたは複数のアイテムの選択を可能にします。ネイティブの `<select>` を超えたカスタム選択動作を提供します。',
+    en: 'A listbox widget presents a list of options and allows selection of one or more items. It provides custom selection behavior beyond native `<code>&lt;select&gt;</code>`.',
+    ja: 'リストボックスウィジェットは、オプションのリストを表示し、1つまたは複数のアイテムの選択を可能にします。ネイティブの `<code>&lt;select&gt;</code>` を超えたカスタム選択動作を提供します。',
   },
 
   roles: [

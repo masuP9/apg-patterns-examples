@@ -1,0 +1,128 @@
+---
+pattern: window-splitter
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `separator` | スプリッター要素 | ペインサイズを制御するフォーカス可能なセパレーター |
+
+### WAI-ARIA プロパティ
+
+#### `aria-valuenow`
+
+プライマリペインのサイズ（パーセンテージ）
+
+| | |
+|---|---|
+| **値** | 0-100 |
+| **必須** | はい |
+
+#### `aria-valuemin`
+
+最小値（デフォルト: 10）
+
+| | |
+|---|---|
+| **値** | number |
+| **必須** | はい |
+
+#### `aria-valuemax`
+
+最大値（デフォルト: 90）
+
+| | |
+|---|---|
+| **値** | number |
+| **必須** | はい |
+
+#### `aria-controls`
+
+プライマリペインのID（+ セカンダリペインのIDは任意）
+
+| | |
+|---|---|
+| **値** | ID reference(s) |
+| **必須** | はい |
+
+#### `aria-label`
+
+アクセシブルな名前
+
+| | |
+|---|---|
+| **値** | string |
+| **必須** | 条件付き（aria-labelledbyがない場合は必須） |
+
+#### `aria-labelledby`
+
+表示されるラベル要素への参照
+
+| | |
+|---|---|
+| **値** | ID reference |
+| **必須** | 条件付き（aria-labelがない場合は必須） |
+
+#### `aria-orientation`
+
+デフォルト: horizontal（左右分割）
+
+| | |
+|---|---|
+| **値** | "horizontal" \| "vertical" |
+| **必須** | いいえ |
+
+#### `aria-disabled`
+
+無効状態
+
+| | |
+|---|---|
+| **値** | true \| false |
+| **必須** | いいえ |
+
+### WAI-ARIA ステート
+
+#### `aria-valuenow`
+
+| | |
+|---|---|
+| **対象要素** | separator要素 |
+| **値** | 0-100（0 = 折り畳み、50 = 半分、100 = 完全展開） |
+| **必須** | はい |
+| **変更トリガー** | 矢印キー、Home/End、Enter（折り畳み/展開）、ポインタードラッグ |
+
+### キーボードサポート
+
+| キー | アクション |
+|------|------|
+| <kbd>Arrow Right / Arrow Left</kbd> | 水平スプリッターを移動（増加/減少） |
+| <kbd>Arrow Up / Arrow Down</kbd> | 垂直スプリッターを移動（増加/減少） |
+| <kbd>Shift + Arrow</kbd> | 大きなステップで移動（デフォルト: 10%） |
+| <kbd>Home</kbd> | 最小位置に移動 |
+| <kbd>End</kbd> | 最大位置に移動 |
+| <kbd>Enter</kbd> | プライマリペインの折り畳み/展開を切り替え |
+
+> 矢印キーは向きに基づいて方向が制限されます。水平スプリッターはLeft/Rightのみに、垂直スプリッターはUp/Downのみに応答します。
+
+> RTLモードでは、水平スプリッターでArrowLeftが増加、ArrowRightが減少になります。
+
+> aria-readonlyはrole="separator"には有効ではありません。読み取り専用の動作はJavaScriptのみで強制する必要があります。
+
+### フォーカス管理
+
+| イベント | 振る舞い |
+|------|------|
+| Tab | スプリッターは通常のタブ順序でフォーカスを受け取る |
+| 無効時 | スプリッターはフォーカス不可（tabindex="-1"） |
+| 読み取り専用時 | スプリッターはフォーカス可能だが操作不可 |
+| 折り畳み/展開後 | フォーカスはスプリッターに残る |
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/">WAI-ARIA APG: Window Splitter Pattern</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#separator">W3C ARIA: separator role</ExternalLink>

@@ -5,7 +5,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/link/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/link/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/link/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -13,6 +14,8 @@ import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/link/Link.astro?raw';
 import testCode from '@patterns/link/Link.test.astro.ts?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('link', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -64,7 +67,9 @@ const tocItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -164,7 +169,7 @@ import Link from './Link.astro';
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>link-activate</code></td>
             <td class="text-muted-foreground py-2 pr-4">
-              <code>{'{ href, target }'}</code>
+              <code>{'{'} href, target {'}'}</code>
             </td>
             <td class="py-2">Fired when link is activated (click or Enter)</td>
           </tr>

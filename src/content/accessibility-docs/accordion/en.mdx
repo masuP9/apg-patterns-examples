@@ -1,0 +1,112 @@
+---
+pattern: accordion
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `heading` | Header wrapper (h2-h6) | Contains the accordion trigger button |
+| `button` | Header trigger | Interactive element that toggles panel visibility |
+| `region` | Panel (optional) | Content area associated with header (omit for 6+ panels) |
+
+### WAI-ARIA Properties
+
+#### `aria-level`
+
+headingLevel prop
+
+| | |
+|---|---|
+| **Values** | 2 - 6 |
+| **Required** | Yes |
+
+#### `aria-controls`
+
+Auto-generated
+
+| | |
+|---|---|
+| **Values** | ID reference to associated panel |
+| **Required** | Yes |
+
+#### `aria-labelledby`
+
+Auto-generated
+
+| | |
+|---|---|
+| **Values** | ID reference to header button |
+| **Required** | Yes (if region used) |
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+| | |
+|---|---|
+| **Target Element** | button element |
+| **Values** | true \| false |
+| **Required** | Yes |
+| **Change Trigger** | Click, Enter, Space |
+
+#### `aria-disabled`
+
+| | |
+|---|---|
+| **Target Element** | button element |
+| **Values** | true \| false |
+| **Required** | No |
+| **Change Trigger** | Only when disabled |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Tab</kbd> | Move focus to the next focusable element |
+| <kbd>Space / Enter</kbd> | Toggle the expansion of the focused accordion header |
+| <kbd>Arrow Down</kbd> | Move focus to the next accordion header (optional) |
+| <kbd>Arrow Up</kbd> | Move focus to the previous accordion header (optional) |
+| <kbd>Home</kbd> | Move focus to the first accordion header (optional) |
+| <kbd>End</kbd> | Move focus to the last accordion header (optional) |
+
+> Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Header buttons | Focusable via their button elements |
+| Arrow keys | Navigate between headers (skip disabled) |
+| Edges | Focus does not wrap at edges |
+
+### Implementation Notes
+
+```
+┌─────────────────────────────────────┐
+│ [▼] Section 1                       │  ← button (aria-expanded="true")
+├─────────────────────────────────────┤
+│ Panel 1 content...                  │  ← region (aria-labelledby)
+├─────────────────────────────────────┤
+│ [▶] Section 2                       │  ← button (aria-expanded="false")
+├─────────────────────────────────────┤
+│ [▶] Section 3                       │  ← button (aria-expanded="false")
+└─────────────────────────────────────┘
+
+ID Relationships:
+- Button: id="header-1", aria-controls="panel-1"
+- Panel: id="panel-1", aria-labelledby="header-1"
+
+Region Role Rule:
+- ≤6 panels: use role="region" on panels
+- >6 panels: omit role="region" (too many landmarks)
+```
+
+Accordion component structure with ID relationships
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/">WAI-ARIA Accordion Pattern</ExternalLink>

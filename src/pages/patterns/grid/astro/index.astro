@@ -1,7 +1,8 @@
 ---
 import PatternLayout from '../../../../layouts/PatternLayout.astro';
 import Grid, { type GridCellData } from '@patterns/grid/Grid.astro';
-import AccessibilityDocs from '@patterns/grid/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
@@ -11,6 +12,8 @@ import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/grid/Grid.astro?raw';
 import testCode from '@patterns/grid/Grid.test.astro.ts?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('grid', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -166,7 +169,9 @@ const renderCell = (cell: GridCellData, rowId: string, colId: string) => {
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

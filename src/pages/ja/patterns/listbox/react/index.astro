@@ -5,7 +5,8 @@ import {
   MultiSelectListboxDemo,
   HorizontalListboxDemo,
 } from '@patterns/listbox/ListboxDemo';
-import AccessibilityDocs from '@patterns/listbox/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/listbox/TestingDocs.astro';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
@@ -19,6 +20,7 @@ import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('listbox', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -95,7 +97,9 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

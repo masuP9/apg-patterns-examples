@@ -1,0 +1,56 @@
+---
+pattern: disclosure
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `button` | Trigger element | Interactive element that toggles panel visibility (use native `<button>`) |
+
+### WAI-ARIA Properties
+
+#### `aria-controls`
+
+Associates the button with the panel it controls
+
+| | |
+|---|---|
+| **Values** | ID reference to panel |
+| **Required** | Yes |
+
+#### `aria-hidden`
+
+Hides panel from assistive technology when collapsed
+
+| | |
+|---|---|
+| **Values** | true \| false |
+| **Required** | No |
+
+### WAI-ARIA States
+
+#### `aria-expanded`
+
+| | |
+|---|---|
+| **Target Element** | button element |
+| **Values** | true \| false |
+| **Required** | Yes |
+| **Change Trigger** | Click, Enter, Space |
+
+### Keyboard Support
+
+| Key | Action |
+|------|------|
+| <kbd>Tab</kbd> | Move focus to the disclosure button |
+| <kbd>Space / Enter</kbd> | Toggle the visibility of the disclosure panel |
+
+> Disclosure uses native `<button>` element behavior for keyboard interaction. No additional keyboard handlers are required.
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">WAI-ARIA Disclosure Pattern</ExternalLink>

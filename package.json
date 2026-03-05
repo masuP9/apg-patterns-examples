@@ -67,6 +67,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:ci": "npm run test:unit",
+    "validate:html": "html-validate 'dist/**/*.html'",
     "astro": "astro"
   },
   "engines": {
@@ -127,6 +128,7 @@
     "eslint-plugin-svelte": "^3.14.0",
     "eslint-plugin-vue": "^10.6.2",
     "globals": "^17.0.0",
+    "html-validate": "^10.11.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^27.3.0",
     "npm-run-all2": "^8.0.4",

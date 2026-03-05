@@ -1,0 +1,84 @@
+---
+pattern: alert
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `alert` | アラートコンテナ | ユーザーのタスクを中断することなく、ユーザーの注意を引く簡潔で重要なメッセージを表示する要素 |
+
+### 暗黙の ARIA プロパティ
+
+| 属性 | 暗黙の値 | 説明 |
+|------|------|------|
+| `aria-live` | `assertive` | スクリーンリーダーを中断して即座にアナウンス |
+| `aria-atomic` | `true` | 変更された部分だけでなく、アラート全体のコンテンツをアナウンス |
+
+### キーボードサポート
+
+| キー | アクション |
+|------|------|
+| <kbd>Enter</kbd> | 閉じるボタンをアクティブ化（存在する場合） |
+| <kbd>Space</kbd> | 閉じるボタンをアクティブ化（存在する場合） |
+
+> スクリーンリーダーは、ライブリージョン内の DOM の変更を検知してアナウンスします。ライブリージョン自体が動的に追加される場合、一部のスクリーンリーダーではコンテンツが確実にアナウンスされない可能性があります。
+
+### フォーカス管理
+
+| イベント | 振る舞い |
+|------|------|
+| アラートはフォーカスを移動してはいけません | アラートは非モーダルであり、フォーカスを奪うことでユーザーのワークフローを中断してはいけません |
+| アラートコンテナはフォーカス不可 | アラート要素は tabindex を持たず、キーボードフォーカスを受け取ってはいけません |
+| 閉じるボタンはフォーカス可能 | 存在する場合、閉じるボタンは Tab ナビゲーションで到達可能です |
+
+### 実装ノート
+
+```
+<!-- Container always in DOM -->
+<div role="alert">
+  <!-- Content added dynamically -->
+  <span>Your changes have been saved.</span>
+</div>
+
+Announcement Behavior:
+- Page load content: NOT announced
+- Dynamic changes: ANNOUNCED immediately
+- aria-live="assertive": interrupts current speech
+
+Alert vs Status:
+┌─────────────┬──────────────────────┐
+│ role="alert"│ role="status"        │
+├─────────────┼──────────────────────┤
+│ assertive   │ polite               │
+│ interrupts  │ waits for pause      │
+│ urgent info │ non-urgent updates   │
+└─────────────┴──────────────────────┘
+```
+
+アラートコンポーネントの構造とアナウンス動作
+
+#### Alert を使用する場合
+
+- メッセージが情報提供のみでユーザーアクションを必要としない
+- ユーザーのワークフローを中断すべきでない
+- フォーカスは現在のタスクに留まるべき
+
+#### Alert Dialog (role="alertdialog") を使用する場合
+
+- メッセージが即座のユーザー応答を必要とする
+- ユーザーが続行する前に確認またはアクションをとる必要がある
+- フォーカスをダイアログに移動すべき（モーダル動作）
+
+### 重要な注意事項
+
+> ライブリージョンのコンテナ（role="alert"）は、ページ読み込み時から DOM に存在している必要があります。コンテナ自体を動的に追加・削除しないでください。コンテナ内のコンテンツのみを動的に変更するようにしてください。
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">WAI-ARIA APG: Alert Pattern</ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#alert">WAI-ARIA: alert role</ExternalLink>
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/">WAI-ARIA APG: Alert Dialog Pattern</ExternalLink>

@@ -1,0 +1,132 @@
+---
+pattern: menubar
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role | Target Element | Description |
+|------|------|------|
+| `menubar` | Horizontal container (`<ul>`) | Top-level menu bar, always visible |
+| `menu` | Vertical container (`<ul>`) | Dropdown menu or submenu |
+| `menuitem` | Item (`<span>`) | Standard action item |
+| `menuitemcheckbox` | Checkbox item | Toggleable option |
+| `menuitemradio` | Radio item | Exclusive option in a group |
+| `separator` | Divider (`<hr>`) | Visual separator (not focusable) |
+| `group` | Group container | Groups radio items with a label |
+| `none` | `<li>` elements | Hides list semantics from screen readers |
+
+### WAI-ARIA Properties
+
+#### `aria-haspopup`
+
+Indicates the item opens a menu (use "menu", not "true")
+
+| | |
+|---|---|
+| **Values** | "menu" |
+| **Required** | Yes* |
+
+#### `aria-expanded`
+
+Indicates whether the menu is open
+
+| | |
+|---|---|
+| **Values** | true \| false |
+| **Required** | Yes* |
+
+#### `aria-labelledby`
+
+References the parent menuitem
+
+| | |
+|---|---|
+| **Values** | ID reference |
+| **Required** | Yes** |
+
+#### `aria-label`
+
+Provides an accessible name
+
+| | |
+|---|---|
+| **Values** | String |
+| **Required** | Yes** |
+
+#### `aria-checked`
+
+Indicates checked state
+
+| | |
+|---|---|
+| **Values** | true \| false |
+| **Required** | Yes |
+
+#### `aria-disabled`
+
+Indicates the item is disabled
+
+| | |
+|---|---|
+| **Values** | true |
+| **Required** | No |
+
+#### `aria-hidden`
+
+Hides menu from screen readers when closed
+
+| | |
+|---|---|
+| **Values** | true \| false |
+| **Required** | Yes |
+
+### Keyboard Support
+
+#### Menubar Navigation
+
+| Key | Action |
+|------|------|
+| <kbd>Right Arrow</kbd> | Move focus to next menubar item (wraps to first) |
+| <kbd>Left Arrow</kbd> | Move focus to previous menubar item (wraps to last) |
+| <kbd>Down Arrow</kbd> | Open submenu and focus first item |
+| <kbd>Up Arrow</kbd> | Open submenu and focus last item |
+| <kbd>Enter / Space</kbd> | Open submenu and focus first item |
+| <kbd>Home</kbd> | Move focus to first menubar item |
+| <kbd>End</kbd> | Move focus to last menubar item |
+| <kbd>Tab</kbd> | Close all menus and move focus out |
+
+#### Menu/Submenu Navigation
+
+| Key | Action |
+|------|------|
+| <kbd>Down Arrow</kbd> | Move focus to next item (wraps to first) |
+| <kbd>Up Arrow</kbd> | Move focus to previous item (wraps to last) |
+| <kbd>Right Arrow</kbd> | Open submenu if present, or move to next menubar item's menu (in top-level menu) |
+| <kbd>Left Arrow</kbd> | Close submenu and return to parent, or move to previous menubar item's menu (in top-level menu) |
+| <kbd>Enter / Space</kbd> | Activate item and close menu; for checkbox/radio, toggle state and keep menu open |
+| <kbd>Escape</kbd> | Close menu and return focus to parent (menubar item or parent menuitem) |
+| <kbd>Home</kbd> | Move focus to first item |
+| <kbd>End</kbd> | Move focus to last item |
+| <kbd>Character</kbd> | Type-ahead: focus item starting with typed character(s) |
+
+> When closed, the menu uses aria-hidden="true" with CSS to hide from screen readers (aria-hidden), hide visually (visibility: hidden), prevent pointer interaction (pointer-events: none), and enable smooth CSS animations on open/close.
+
+> When open, the menu has aria-hidden="false" with visibility: visible.
+
+### Focus Management
+
+| Event | Behavior |
+|------|------|
+| Initial focus | Only one menubar item has tabindex="0" at a time |
+| Other items | Other items have tabindex="-1" |
+| Arrow key navigation | Arrow keys move focus between items with wrapping |
+| Disabled items | Disabled items are focusable but not activatable (per APG recommendation) |
+| Separator | Separators are not focusable |
+| Menu close | Focus returns to invoker when menu closes |
+
+### References
+
+- <ExternalLink href="https://w3c.github.io/aria/#menubar">WAI-ARIA menubar role</ExternalLink>

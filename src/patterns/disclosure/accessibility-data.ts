@@ -11,8 +11,8 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
 
   // Native HTML considerations for disclosure
   nativeHtmlConsiderations: [
-    { useCase: 'Simple toggle content', recommended: 'Native <details>/<summary>' },
-    { useCase: 'JavaScript disabled support', recommended: 'Native <details>/<summary>' },
+    { useCase: 'Simple toggle content', recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>' },
+    { useCase: 'JavaScript disabled support', recommended: 'Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>' },
     { useCase: 'Smooth animations', recommended: 'Custom implementation' },
     { useCase: 'External state control', recommended: 'Custom implementation' },
     { useCase: 'Custom styling', recommended: 'Custom implementation' },
@@ -51,8 +51,8 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
       name: 'button',
       element: { en: 'Trigger element', ja: 'トリガー要素' },
       description: {
-        en: 'Interactive element that toggles panel visibility (use native <button>)',
-        ja: 'パネルの表示を切り替えるインタラクティブな要素（ネイティブの<button>を使用）',
+        en: 'Interactive element that toggles panel visibility (use native <code>&lt;button&gt;</code>)',
+        ja: 'パネルの表示を切り替えるインタラクティブな要素（ネイティブの<code>&lt;button&gt;</code>を使用）',
       },
     },
   ],
@@ -110,8 +110,8 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
 
   additionalNotes: [
     {
-      en: 'Disclosure uses native <button> element behavior for keyboard interaction. No additional keyboard handlers are required.',
-      ja: 'ディスクロージャーはネイティブの<button>要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは必要ありません。',
+      en: 'Disclosure uses native <code>&lt;button&gt;</code> element behavior for keyboard interaction. No additional keyboard handlers are required.',
+      ja: 'ディスクロージャーはネイティブの<code>&lt;button&gt;</code>要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは必要ありません。',
     },
   ],
 
@@ -152,8 +152,8 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
           {
             name: 'button element',
             description: {
-              en: 'Trigger is a semantic <button> element',
-              ja: 'トリガーがセマンティックな<button>要素である',
+              en: 'Trigger is a semantic <code>&lt;button&gt;</code> element',
+              ja: 'トリガーがセマンティックな<code>&lt;button&gt;</code>要素である',
             },
           },
           {
@@ -344,7 +344,7 @@ export const disclosureAccessibilityData: PatternAccessibilityData = {
   // llm.md specific data
   testChecklist: [
     // ARIA - High Priority
-    { description: 'Trigger is a <button> element', priority: 'high', category: 'aria' },
+    { description: 'Trigger is a <code>&lt;button&gt;</code> element', priority: 'high', category: 'aria' },
     { description: 'Button has aria-expanded attribute', priority: 'high', category: 'aria' },
     {
       description: 'aria-expanded toggles between true and false',

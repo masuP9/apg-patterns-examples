@@ -1,0 +1,56 @@
+---
+pattern: disclosure
+locale: ja
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA ロール
+
+| ロール | 対象要素 | 説明 |
+|------|------|------|
+| `button` | トリガー要素 | パネルの表示を切り替えるインタラクティブな要素（ネイティブの`<button>`を使用） |
+
+### WAI-ARIA プロパティ
+
+#### `aria-controls`
+
+ボタンと制御対象のパネルを関連付けます
+
+| | |
+|---|---|
+| **値** | パネルへのID参照 |
+| **必須** | はい |
+
+#### `aria-hidden`
+
+折りたたまれた際にパネルを支援技術から隠します
+
+| | |
+|---|---|
+| **値** | true \| false |
+| **必須** | いいえ |
+
+### WAI-ARIA ステート
+
+#### `aria-expanded`
+
+| | |
+|---|---|
+| **対象要素** | button 要素 |
+| **値** | true \| false |
+| **必須** | はい |
+| **変更トリガー** | Click、Enter、Space |
+
+### キーボードサポート
+
+| キー | アクション |
+|------|------|
+| <kbd>Tab</kbd> | ディスクロージャーボタンにフォーカスを移動します |
+| <kbd>Space / Enter</kbd> | ディスクロージャーパネルの表示を切り替えます |
+
+> ディスクロージャーはネイティブの`<button>`要素の動作をキーボードインタラクションに使用します。追加のキーボードハンドラーは必要ありません。
+
+### 参考資料
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">WAI-ARIA Disclosure Pattern</ExternalLink>

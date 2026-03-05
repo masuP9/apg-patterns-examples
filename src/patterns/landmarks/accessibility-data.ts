@@ -123,8 +123,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
   nativeVsCustom: [
     {
       useCase: {
-        en: '`<header>`',
-        ja: '`<header>`',
+        en: '`<code>&lt;header&gt;</code>`',
+        ja: '`<code>&lt;header&gt;</code>`',
       },
       native: 'banner',
       custom: {
@@ -134,8 +134,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<nav>`',
-        ja: '`<nav>`',
+        en: '`<code>&lt;nav&gt;</code>`',
+        ja: '`<code>&lt;nav&gt;</code>`',
       },
       native: 'navigation',
       custom: {
@@ -145,8 +145,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<main>`',
-        ja: '`<main>`',
+        en: '`<code>&lt;main&gt;</code>`',
+        ja: '`<code>&lt;main&gt;</code>`',
       },
       native: 'main',
       custom: {
@@ -156,8 +156,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<footer>`',
-        ja: '`<footer>`',
+        en: '`<code>&lt;footer&gt;</code>`',
+        ja: '`<code>&lt;footer&gt;</code>`',
       },
       native: 'contentinfo',
       custom: {
@@ -167,8 +167,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<aside>`',
-        ja: '`<aside>`',
+        en: '`<code>&lt;aside&gt;</code>`',
+        ja: '`<code>&lt;aside&gt;</code>`',
       },
       native: 'complementary',
       custom: {
@@ -178,8 +178,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<section>`',
-        ja: '`<section>`',
+        en: '`<code>&lt;section&gt;</code>`',
+        ja: '`<code>&lt;section&gt;</code>`',
       },
       native: 'region',
       custom: {
@@ -189,8 +189,8 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
     },
     {
       useCase: {
-        en: '`<form>`',
-        ja: '`<form>`',
+        en: '`<code>&lt;form&gt;</code>`',
+        ja: '`<code>&lt;form&gt;</code>`',
       },
       native: 'form',
       custom: {
@@ -555,22 +555,22 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
   // Test checklist for llm.md
   testChecklist: [
     {
-      description: 'Has banner landmark (`<header>` or `role="banner"`)',
+      description: 'Has banner landmark (`<code>&lt;header&gt;</code>` or `role="banner"`)',
       priority: 'high',
       category: 'aria',
     },
     {
-      description: 'Has navigation landmark (`<nav>` or `role="navigation"`)',
+      description: 'Has navigation landmark (`<code>&lt;nav&gt;</code>` or `role="navigation"`)',
       priority: 'high',
       category: 'aria',
     },
     {
-      description: 'Has main landmark (`<main>` or `role="main"`)',
+      description: 'Has main landmark (`<code>&lt;main&gt;</code>` or `role="main"`)',
       priority: 'high',
       category: 'aria',
     },
     {
-      description: 'Has contentinfo landmark (`<footer>` or `role="contentinfo"`)',
+      description: 'Has contentinfo landmark (`<code>&lt;footer&gt;</code>` or `role="contentinfo"`)',
       priority: 'high',
       category: 'aria',
     },

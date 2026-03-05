@@ -5,13 +5,16 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/landmarks/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/landmarks/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/landmarks/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import Heading from '@/components/ui/Heading.astro';
 import sourceCode from '@patterns/landmarks/LandmarkDemo.svelte?raw';
 import testCode from '@patterns/landmarks/LandmarkDemo.test.svelte.ts?raw';
+
+const { Content: AccessibilityContent } = await getAccessibilityContent('landmarks', 'en');
 
 const tocItems = [
   { id: 'demo', text: 'Demo' },
@@ -67,7 +70,9 @@ const tocItems = [
   <!-- Accessibility Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Accessibility Features</Heading>
-    <AccessibilityDocs />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->

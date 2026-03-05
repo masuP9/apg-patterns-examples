@@ -1,0 +1,84 @@
+---
+pattern: button
+locale: en
+---
+
+import ExternalLink from '@/components/ui/ExternalLink.astro';
+
+### WAI-ARIA Roles
+
+| Role     | Target Element                           | Description                                                                            |
+| -------- | ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| `button` | `<button>` or element with role="button" | Identifies the element as a button widget. Native `<button>` has this role implicitly. |
+
+This implementation uses `<span role="button">` for educational purposes. For production use, prefer native `<button>` elements.
+
+### WAI-ARIA Properties
+
+#### `tabindex`
+
+Makes the custom button element focusable via keyboard navigation. Native `<button>` is focusable by default. Set to -1 when disabled.
+
+|              |                                  |
+| ------------ | -------------------------------- |
+| **Values**   | `"0"` \| `"-1"`                  |
+| **Required** | Yes (for custom implementations) |
+
+#### `aria-disabled`
+
+Indicates the button is not interactive and cannot be activated. Native `<button disabled>` automatically handles this.
+
+|              |                         |
+| ------------ | ----------------------- |
+| **Values**   | `"true"` \| `"false"`   |
+| **Required** | No (only when disabled) |
+
+#### `aria-label`
+
+Provides an accessible name for icon-only buttons or when visible text is insufficient.
+
+|              |                                   |
+| ------------ | --------------------------------- |
+| **Values**   | Text string describing the action |
+| **Required** | No (only for icon-only buttons)   |
+
+### Keyboard Support
+
+| Key                    | Action                                       |
+| ---------------------- | -------------------------------------------- |
+| <kbd>Space</kbd>       | Activate the button                          |
+| <kbd>Enter</kbd>       | Activate the button                          |
+| <kbd>Tab</kbd>         | Move focus to the next focusable element     |
+| <kbd>Shift + Tab</kbd> | Move focus to the previous focusable element |
+
+**Important:** Both Space and Enter keys activate buttons. This differs from links, which only respond to Enter. Custom implementations must call `event.preventDefault()` on Space to prevent page scrolling.
+
+### Accessible Naming
+
+Buttons must have an accessible name. This can be provided through:
+
+- **Text content (recommended)** — The visible text inside the button
+- **aria-label** — Provides an invisible label for icon-only buttons
+- **aria-labelledby** — References an external element as the label
+
+### Focus Styles
+
+This implementation provides clear focus indicators:
+
+- **Focus ring** — Visible outline when focused via keyboard
+- **Cursor style** — Pointer cursor to indicate interactivity
+- **Disabled appearance** — Reduced opacity and not-allowed cursor when disabled
+
+### Button vs Toggle Button
+
+This pattern is for simple action buttons. For buttons that toggle between pressed and unpressed states, see the [Toggle Button pattern](/patterns/toggle-button/react/) which uses `aria-pressed`.
+
+### References
+
+- <ExternalLink href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">
+    WAI-ARIA APG: Button Pattern
+  </ExternalLink>
+- <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button">
+    MDN: &lt;button&gt; element
+  </ExternalLink>
+- <ExternalLink href="https://w3c.github.io/aria/#button">W3C ARIA: button role</ExternalLink>

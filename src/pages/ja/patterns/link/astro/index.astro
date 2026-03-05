@@ -5,7 +5,8 @@ import CodeBlock from '@/components/ui/CodeBlock.astro';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
 import AiGuideActions from '@/components/ui/AiGuideActions.astro';
 import AiGuideResourceItem from '@/components/ui/AiGuideResourceItem.astro';
-import AccessibilityDocs from '@patterns/link/AccessibilityDocs.astro';
+import { getAccessibilityContent } from '@/lib/content-helpers';
+import Prose from '@/components/ui/Prose.astro';
 import TestingDocs from '@patterns/link/TestingDocs.astro';
 import NativeHtmlNotice from '@patterns/link/NativeHtmlNotice.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
@@ -17,6 +18,7 @@ import { useTranslation } from '@/i18n';
 
 const locale = 'ja';
 const t = useTranslation(locale);
+const { Content: AccessibilityContent } = await getAccessibilityContent('link', locale);
 
 const tocItems = [
   { id: 'demo', text: t('pattern.demo') },
@@ -76,7 +78,9 @@ const tocItems = [
     <Heading level={2} id="accessibility-features" class="mb-4 text-xl font-semibold"
       >{t('pattern.accessibility')}</Heading
     >
-    <AccessibilityDocs locale="ja" />
+    <Prose>
+      <AccessibilityContent />
+    </Prose>
   </section>
 
   <!-- Source Code Section -->
@@ -178,7 +182,7 @@ import Link from './Link.astro';
           <tr class="border-border border-b">
             <td class="py-2 pr-4"><code>link-activate</code></td>
             <td class="text-muted-foreground py-2 pr-4">
-              <code>{'{ href, target }'}</code>
+              <code>{'{'} href, target {'}'}</code>
             </td>
             <td class="py-2">リンクがアクティベートされたとき（クリックまたは Enter）に発火</td>
           </tr>

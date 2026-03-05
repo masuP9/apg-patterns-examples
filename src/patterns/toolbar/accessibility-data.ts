@@ -22,8 +22,8 @@ export const toolbarAccessibilityData: PatternAccessibilityData = {
       name: 'button',
       element: { en: 'Button elements', ja: 'ボタン要素' },
       description: {
-        en: 'Implicit role for <button> elements',
-        ja: '<button>要素の暗黙的なロール',
+        en: 'Implicit role for <code>&lt;button&gt;</code> elements',
+        ja: '<code>&lt;button&gt;</code>要素の暗黙的なロール',
       },
     },
     {

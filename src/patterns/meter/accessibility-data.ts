@@ -11,9 +11,9 @@ export const meterAccessibilityData: PatternAccessibilityData = {
 
   // Native HTML considerations for meter
   nativeHtmlConsiderations: [
-    { useCase: 'Simple value display', recommended: 'Native <meter>' },
+    { useCase: 'Simple value display', recommended: 'Native <code>&lt;meter&gt;</code>' },
     { useCase: 'Custom styling needed', recommended: 'Custom role="meter"' },
-    { useCase: 'low/high/optimum thresholds', recommended: 'Native <meter>' },
+    { useCase: 'low/high/optimum thresholds', recommended: 'Native <code>&lt;meter&gt;</code>' },
     { useCase: 'Full visual control', recommended: 'Custom implementation' },
   ],
 
