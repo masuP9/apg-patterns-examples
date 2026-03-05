@@ -284,8 +284,8 @@ const { class: className, collapsedLines = 5 } = Astro.props;
       const collapsedLines = parseInt(prose.getAttribute('data-collapsed-lines') || '5', 10);
 
       prose.querySelectorAll('pre').forEach((pre) => {
-        // Skip if already wrapped
-        if (pre.closest('.code-block-wrapper')) return;
+        // Skip if already wrapped or inside a CodeBlock component
+        if (pre.closest('.code-block-wrapper') || pre.closest('.code-block')) return;
 
         const code = pre.querySelector('code');
         if (!code) return;
