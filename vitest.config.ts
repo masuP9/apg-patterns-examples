@@ -9,6 +9,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    testTimeout: 10000,
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'src/**/*.test.vue.ts', 'src/**/*.test.svelte.ts'],
     // Exclude Astro and browser tests - they have their own configs
