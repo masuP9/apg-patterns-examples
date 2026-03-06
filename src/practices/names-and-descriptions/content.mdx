@@ -80,17 +80,15 @@ Provide a description directly (newer; support may vary across browser and assis
 />
 
 <CodeFigure
-  code={`<button>Button</button>`}
+  code={`<img src="hero.jpg" alt="image" />`}
   lang="html"
-  caption="Bad: Redundant — screen readers announce &quot;button button&quot; since the role is already conveyed."
+  caption="Bad: Redundant — screen readers announce &quot;image image&quot; since the role is already conveyed."
 />
 
 <CodeFigure
-  code={`<button aria-label="Add to cart">
-  <svg aria-hidden="true">...</svg>
-</button>`}
+  code={`<img src="hero.jpg" alt="Tokyo Tower glowing at sunset" />`}
   lang="html"
-  caption="Good: Descriptive name that clearly identifies the button's action."
+  caption="Good: Descriptive name that clearly identifies the image content."
 />
 
 ### Placeholder as Label
@@ -113,13 +111,13 @@ Provide a description directly (newer; support may vary across browser and assis
 <CodeFigure
   code={`<p aria-label="Important">This is a paragraph</p>`}
   lang="html"
-  caption="Bad: aria-label on non-interactive element — paragraphs are not named by aria-label in the accessible name computation."
+  caption="Bad: aria-label on non-interactive element — paragraphs are not named by aria-label in the accessible name computation, so &quot;Important&quot; is ignored and only &quot;This is a paragraph&quot; is announced."
 />
 
 <CodeFigure
-  code={`<p>This is a paragraph</p>`}
+  code={`<p><strong>Important:</strong> This is a paragraph</p>`}
   lang="html"
-  caption="Good: Let the text content serve as the accessible content for paragraphs."
+  caption="Good: Include the important information as text content — paragraph text naturally serves as accessible content."
 />
 
 ## Implementation Tips
@@ -131,7 +129,7 @@ When multiple naming methods are present, browsers use this priority:
 1. `aria-labelledby` (highest)
 2. `aria-label`
 3. Native HTML (label, alt, button text, etc.)
-4. `title` attribute (lowest, avoid for accessibility)
+4. `title` attribute (not intended for naming, so typically yields low-quality accessible names — avoid where possible)
 
 ### Test Your Names
 

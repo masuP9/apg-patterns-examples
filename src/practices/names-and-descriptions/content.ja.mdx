@@ -80,17 +80,15 @@ import CodeFigure from '@/components/ui/CodeFigure.astro';
 />
 
 <CodeFigure
-  code={`<button>ボタン</button>`}
+  code={`<img src="hero.jpg" alt="画像" />`}
   lang="html"
-  caption="悪い例: 冗長 — ロールは自動的に伝えられるため「ボタン ボタン」と読み上げられます。"
+  caption="悪い例: 冗長 — ロールは自動的に伝えられるため「画像 画像」と読み上げられます。"
 />
 
 <CodeFigure
-  code={`<button aria-label="カートに追加">
-  <svg aria-hidden="true">...</svg>
-</button>`}
+  code={`<img src="hero.jpg" alt="夕焼けに染まる東京タワー" />`}
   lang="html"
-  caption="良い例: ボタンの動作を明確に識別する説明的な名前です。"
+  caption="良い例: 画像の内容を具体的に説明する名前です。"
 />
 
 ### プレースホルダーをラベルとして使用
@@ -113,13 +111,13 @@ import CodeFigure from '@/components/ui/CodeFigure.astro';
 <CodeFigure
   code={`<p aria-label="重要">これは段落です</p>`}
   lang="html"
-  caption="悪い例: 非インタラクティブ要素に aria-label — 段落はアクセシブルな名前の計算で aria-label の対象外です。"
+  caption="悪い例: 非インタラクティブ要素に aria-label — 段落はアクセシブルな名前の計算で aria-label の対象外のため、「重要」は無視され「これは段落です」がそのまま読み上げられます。"
 />
 
 <CodeFigure
-  code={`<p>これは段落です</p>`}
+  code={`<p><strong>重要:</strong> これは段落です</p>`}
   lang="html"
-  caption="良い例: 段落はテキストコンテンツがそのままアクセシブルなコンテンツになります。"
+  caption="良い例: 強調したい情報はテキストコンテンツとして含め、段落のテキストがそのままアクセシブルなコンテンツになります。"
 />
 
 ## 実装のポイント
@@ -128,10 +126,10 @@ import CodeFigure from '@/components/ui/CodeFigure.astro';
 
 複数の命名方法が存在する場合、ブラウザは以下の優先順位を使用します：
 
-1. `aria-labelledby`（最高優先）
+1. `aria-labelledby`（最優先）
 2. `aria-label`
 3. ネイティブHTML（label、alt、ボタンテキストなど）
-4. `title` 属性（最低優先、アクセシビリティには避ける）
+4. `title` 属性（本来の目的が名前付けではないため、アクセシブルな名前として質が低くなりがち。できる限り避ける）
 
 ### 名前をテストする
 
