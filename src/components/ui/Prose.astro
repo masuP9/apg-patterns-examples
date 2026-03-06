@@ -332,7 +332,12 @@ const { class: className, collapsedLines = 5 } = Astro.props;
 
       prose.querySelectorAll('pre').forEach((pre) => {
         // Skip if already wrapped or inside a CodeBlock component
-        if (pre.closest('.code-block-wrapper') || pre.closest('.code-block') || pre.closest('.code-figure')) return;
+        if (
+          pre.closest('.code-block-wrapper') ||
+          pre.closest('.code-block') ||
+          pre.closest('.code-figure')
+        )
+          return;
 
         const code = pre.querySelector('code');
         if (!code) return;
