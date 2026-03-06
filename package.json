@@ -94,7 +94,7 @@
     "lucide-vue-next": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "shiki": "^3.20.0",
+    "shiki": "^4.0.1",
     "simple-icons": "^16.2.0",
     "svelte": "^5.46.1",
     "tailwind-merge": "^3.4.0",
