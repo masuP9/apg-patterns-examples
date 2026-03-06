@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 Range widgets allow users to set or view a value within a defined range. ARIA defines roles for four types: slider, spinbutton, scrollbar, and meter. Each requires specific properties to communicate the current value and its limits to assistive technology.
@@ -37,7 +39,6 @@ Range widgets allow users to set or view a value within a defined range. ARIA de
 When the value isn't meaningful as a number:
 
 ```html
-<!-- Time slider -->
 <div
   role="slider"
   aria-valuenow="120"
@@ -47,7 +48,6 @@ When the value isn't meaningful as a number:
   aria-label="Meeting start time"
 ></div>
 
-<!-- Priority slider -->
 <div
   role="slider"
   aria-valuenow="2"
@@ -62,19 +62,15 @@ When the value isn't meaningful as a number:
 Consider native HTML elements first:
 
 ```html
-<!-- Native range input -->
 <label for="volume">Volume</label>
 <input type="range" id="volume" min="0" max="100" value="50" />
 
-<!-- Native number input (spinbutton semantics) -->
 <label for="quantity">Quantity</label>
 <input type="number" id="quantity" min="1" max="99" value="1" />
 
-<!-- Native meter -->
 <label for="disk-usage">Disk usage</label>
 <meter id="disk-usage" min="0" max="100" low="33" high="66" optimum="20" value="75">75%</meter>
 
-<!-- Native progress -->
 <label for="upload">Upload progress</label>
 <progress id="upload" max="100" value="70">70%</progress>
 ```
@@ -138,37 +134,49 @@ Meters are inherently read-only. Use `meter` role for display-only gauges:
 
 ### Missing valuetext for Complex Values
 
-```html
-<!-- Bad: Screen reader announces "50" for a time -->
-<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="480" aria-label="Time"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="480" aria-label="Time"></div>`}
+  lang="html"
+  caption="Bad: Screen reader announces &quot;50&quot; — meaningless as a time value."
+/>
 
-<!-- Good: Screen reader announces "8:30 AM" -->
-<div
+<CodeFigure
+  code={`<div
   role="slider"
   aria-valuenow="50"
   aria-valuemin="0"
   aria-valuemax="480"
   aria-valuetext="8:30 AM"
   aria-label="Time"
-></div>
-```
+></div>`}
+  lang="html"
+  caption="Good: Screen reader announces &quot;8:30 AM&quot; — meaningful to users."
+/>
 
 ### Inconsistent Min/Max/Now
 
-```html
-<!-- Bad: valuenow outside range -->
-<div role="slider" aria-valuenow="150" aria-valuemin="0" aria-valuemax="100"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="150" aria-valuemin="0" aria-valuemax="100"></div>`}
+  lang="html"
+  caption="Bad: valuenow (150) is outside the range (0–100)."
+/>
 
-<!-- Good: valuenow within range -->
-<div role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-```
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>`}
+  lang="html"
+  caption="Good: valuenow is within the valid range."
+/>
 
 ### Using Slider for Read-only Display
 
-```html
-<!-- Bad: Slider for display-only value -->
-<div role="slider" aria-valuenow="75" aria-readonly="true"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="75" aria-readonly="true"></div>`}
+  lang="html"
+  caption="Bad: Slider implies interactivity — aria-readonly does not change that expectation."
+/>
 
-<!-- Good: Meter for display-only gauge -->
-<div role="meter" aria-valuenow="75"></div>
-```
+<CodeFigure
+  code={`<div role="meter" aria-valuenow="75"></div>`}
+  lang="html"
+  caption="Good: Meter role clearly communicates a display-only gauge."
+/>

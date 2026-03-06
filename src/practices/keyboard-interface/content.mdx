@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 Keyboard accessibility is essential for users who cannot use a mouse, including people with motor disabilities, blind users, and power users who prefer keyboard navigation. Unlike native HTML form elements, browsers do not provide built-in keyboard support for custom widgets—authors must implement it themselves.
@@ -83,22 +85,25 @@ For composite widgets like toolbars, tablists, and menus, the entire group is tr
 - All other elements have `tabindex="-1"`
 - When focus moves via arrow keys, swap the `tabindex` values
 
-```html
-<!-- Initial state: only first button has tabindex="0" -->
-<div role="toolbar" aria-label="Text formatting">
+<CodeFigure
+  code={`<div role="toolbar" aria-label="Text formatting">
   <button tabindex="0">Bold</button>
   <button tabindex="-1">Italic</button>
   <button tabindex="-1">Underline</button>
-</div>
+</div>`}
+  lang="html"
+  caption="Initial state: only the first button has tabindex=&quot;0&quot; and is included in the tab order."
+/>
 
-<!-- After pressing → key: second button now has tabindex="0" -->
-<div role="toolbar" aria-label="Text formatting">
+<CodeFigure
+  code={`<div role="toolbar" aria-label="Text formatting">
   <button tabindex="-1">Bold</button>
   <button tabindex="0">Italic</button>
-  <!-- focus is here -->
   <button tabindex="-1">Underline</button>
-</div>
-```
+</div>`}
+  lang="html"
+  caption="After pressing the → key: the second button now has tabindex=&quot;0&quot; and receives focus."
+/>
 
 #### Implementation Pattern
 
@@ -182,15 +187,15 @@ As an alternative to roving tabindex, you can use `aria-activedescendant` for fo
 - Set the container's `aria-activedescendant` attribute to the `id` of the active child
 - Update `aria-activedescendant` value when navigating with arrow keys
 
-```html
-<!-- Listbox using aria-activedescendant -->
-<ul role="listbox" tabindex="0" aria-activedescendant="option-2" aria-label="Select a fruit">
+<CodeFigure
+  code={`<ul role="listbox" tabindex="0" aria-activedescendant="option-2" aria-label="Select a fruit">
   <li id="option-1" role="option">Apple</li>
   <li id="option-2" role="option" aria-selected="true">Banana</li>
-  <!-- ↑ currently active -->
   <li id="option-3" role="option">Orange</li>
-</ul>
-```
+</ul>`}
+  lang="html"
+  caption="Listbox using aria-activedescendant — DOM focus stays on the ul, while option-2 (Banana) is the currently active item."
+/>
 
 #### Implementation Pattern
 
@@ -300,15 +305,12 @@ class ActiveDescendant {
 
 ### Focus Trap for Modals
 
-Keep focus within modal dialogs:
+Keep focus within modal dialogs. On modal open:
 
-```javascript
-// On modal open:
-// 1. Save the element that had focus
-// 2. Move focus to the first focusable element in modal
-// 3. Trap Tab/Shift+Tab within modal
-// 4. On close, restore focus to saved element
-```
+1. Save the element that had focus
+2. Move focus to the first focusable element in the modal
+3. Trap Tab/Shift+Tab within the modal
+4. On close, restore focus to the saved element
 
 ## Essential Key Bindings
 

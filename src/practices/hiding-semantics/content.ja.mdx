@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## 概要
 
 `presentation` ロール（およびその同義語 `none`）は、要素の暗黙的なARIAセマンティクスをアクセシビリティツリーから削除します。これは要素の視覚的な外観がセマンティックな意味と一致しない場合に便利ですが、支援技術ユーザーから重要な情報を隠さないよう注意して使用する必要があります。
@@ -8,13 +10,17 @@
 
 コンテンツを伝えない画像：
 
-```html
-<!-- 装飾的な画像には空のaltが推奨 -->
-<img src="decorative-border.png" alt="" />
+<CodeFigure
+  code={`<img src="decorative-border.png" alt="" />`}
+  lang="html"
+  caption="装飾的な画像には空のaltが推奨されます。"
+/>
 
-<!-- または presentation ロールを使用 -->
-<img src="decorative-border.png" role="presentation" />
-```
+<CodeFigure
+  code={`<img src="decorative-border.png" role="presentation" />`}
+  lang="html"
+  caption="または presentation ロールを使用します。"
+/>
 
 ### レイアウトテーブル
 
@@ -33,9 +39,8 @@
 
 親要素のロールが冗長な場合：
 
-```html
-<!-- スタイリングのために ul/li を使用したタブパネル -->
-<div role="tablist">
+<CodeFigure
+  code={`<div role="tablist">
   <ul role="presentation">
     <li role="presentation">
       <button role="tab">タブ1</button>
@@ -44,18 +49,21 @@
       <button role="tab">タブ2</button>
     </li>
   </ul>
-</div>
-```
+</div>`}
+  lang="html"
+  caption="スタイリングのために ul/li を使用したタブパネル — ul と li のロールは presentation で削除されます。"
+/>
 
 ## presentation vs none
 
 これらのロールは同義です：
 
-```html
-<!-- 両方とも同等 -->
-<div role="presentation">...</div>
-<div role="none">...</div>
-```
+<CodeFigure
+  code={`<div role="presentation">...</div>
+<div role="none">...</div>`}
+  lang="html"
+  caption="両方とも同等です。"
+/>
 
 `role="none"` は意図を明確にするために導入されました。`role="presentation"` は古い支援技術でより広くサポートされています。
 
@@ -74,17 +82,21 @@
 
 一部のロールには自動的に非表示になる必須の子要素があります：
 
-```html
-<table role="presentation">
-  <!-- tbody, tr, td のロールも削除される -->
-  <!-- tableの必須の子要素であるため -->
-</table>
+<CodeFigure
+  code={`<table role="presentation">
+  <tr><td>...</td></tr>
+</table>`}
+  lang="html"
+  caption="tbody, tr, td のロールも削除されます。table の必須の子要素であるためです。"
+/>
 
-<ul role="presentation">
-  <!-- li のロールも削除される -->
-  <!-- listitem は list の必須所有要素であるため -->
-</ul>
-```
+<CodeFigure
+  code={`<ul role="presentation">
+  <li>...</li>
+</ul>`}
+  lang="html"
+  caption="li のロールも削除されます。listitem は list の必須所有要素であるためです。"
+/>
 
 ## presentation/none が非表示にできないもの
 
@@ -92,76 +104,90 @@
 
 要素がフォーカス可能な場合、`role="presentation"` は無視されます：
 
-```html
-<!-- tabindex があるため role="presentation" は無視される -->
-<button role="presentation" tabindex="0">まだボタン</button>
+<CodeFigure
+  code={`<button role="presentation" tabindex="0">まだボタン</button>`}
+  lang="html"
+  caption="tabindex があるため role=&quot;presentation&quot; は無視されます。"
+/>
 
-<!-- href付きのリンクはフォーカス可能 -->
-<a href="/page" role="presentation">まだリンク</a>
-```
+<CodeFigure
+  code={`<a href="/page" role="presentation">まだリンク</a>`}
+  lang="html"
+  caption="href 付きのリンクはフォーカス可能なため、ロールは無視されます。"
+/>
 
 ### グローバルARIA属性を持つ要素
 
 aria-label、aria-describedby、その他のグローバルARIA属性が存在する場合：
 
-```html
-<!-- role="presentation" は無視される -->
-<img role="presentation" aria-label="重要な情報" />
-```
+<CodeFigure
+  code={`<img role="presentation" aria-label="重要な情報" />`}
+  lang="html"
+  caption="グローバルARIA属性が存在する場合、role=&quot;presentation&quot; は無視されます。"
+/>
 
 ## 実装のポイント
 
 ### 装飾的なアイコンボタンを非表示にする
 
-```html
-<button type="button" aria-label="閉じる">
-  <!-- アイコンは装飾的、ATから非表示 -->
+<CodeFigure
+  code={`<button type="button" aria-label="閉じる">
   <svg aria-hidden="true">...</svg>
-</button>
-```
+</button>`}
+  lang="html"
+  caption="アイコンは装飾的です — aria-hidden=&quot;true&quot; で支援技術から非表示にします。"
+/>
 
 支援技術から完全に非表示にしたいコンテンツには、`role="presentation"` ではなく `aria-hidden="true"` を使用します。
 
 ### 冗長なテキストを非表示にする
 
-```html
-<button>
+<CodeFigure
+  code={`<button>
   <svg aria-hidden="true">...</svg>
   <span class="visually-hidden">閉じる</span>
-  <!-- 可視テキスト「閉じる」がアクセシブルな名前を提供 -->
   閉じる
-</button>
-```
+</button>`}
+  lang="html"
+  caption="可視テキスト「閉じる」がアクセシブルな名前を提供します。"
+/>
 
 ## よくある間違い
 
 ### 意味のあるコンテンツを非表示にする
 
-```html
-<!-- 悪い例: 重要な画像を非表示にする -->
-<img src="chart.png" role="presentation" alt="売上チャート" />
+<CodeFigure
+  code={`<img src="chart.png" role="presentation" alt="売上チャート" />`}
+  lang="html"
+  caption="悪い例: コンテンツを伝える重要な画像を非表示にしています。"
+/>
 
-<!-- 良い例: 意味のある画像はアクセシブルに保つ -->
-<img src="chart.png" alt="20%成長を示す売上チャート" />
-```
+<CodeFigure
+  code={`<img src="chart.png" alt="20%成長を示す売上チャート" />`}
+  lang="html"
+  caption="良い例: 意味のある画像は説明的な alt テキストでアクセシブルに保ちます。"
+/>
 
 ### インタラクティブ要素に presentation を使用
 
-```html
-<!-- 悪い例: ボタンのセマンティクスを非表示にしようとする -->
-<button role="presentation">クリック</button>
-
-<!-- ボタンはフォーカス可能なのでロールは無視される -->
-```
+<CodeFigure
+  code={`<button role="presentation">クリック</button>`}
+  lang="html"
+  caption="悪い例: ボタンはフォーカス可能なのでロールは無視されます。"
+/>
 
 ### 完全な非表示に aria-hidden を忘れる
 
-```html
-<!-- これはまだアクセシビリティツリーに表示される -->
-<div role="presentation">テキストコンテンツ</div>
+<CodeFigure
+  code={`<div role="presentation">テキストコンテンツ</div>`}
+  lang="html"
+  caption="これはまだアクセシビリティツリーに表示されます — ロールのみが削除されます。"
+/>
 
-<!-- これは完全に非表示 -->
-<div aria-hidden="true">テキストコンテンツ</div>
-```
+<CodeFigure
+  code={`<div aria-hidden="true">テキストコンテンツ</div>`}
+  lang="html"
+  caption="これは支援技術から完全に非表示になります。"
+/>
 
 要素とそのコンテンツの両方を支援技術から非表示にしたい場合は `aria-hidden="true"` を使用します。

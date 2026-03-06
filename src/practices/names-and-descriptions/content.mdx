@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 Every interactive element needs an accessible name that assistive technology can announce to users. Some elements also benefit from an accessible description that provides additional context. This practice explains how to provide these correctly.
@@ -16,17 +18,13 @@ Every interactive element needs an accessible name that assistive technology can
 The most robust approach is using native HTML:
 
 ```html
-<!-- Visible label (preferred) -->
 <label for="email">Email address</label>
 <input type="email" id="email" />
 
-<!-- Button with text content -->
 <button type="submit">Send message</button>
 
-<!-- Link with text content -->
 <a href="/about">About us</a>
 
-<!-- Image with alt text -->
 <img src="logo.png" alt="Company logo" />
 ```
 
@@ -35,12 +33,10 @@ The most robust approach is using native HTML:
 For elements without visible text, use `aria-label`:
 
 ```html
-<!-- Icon button -->
 <button type="button" aria-label="Close">
   <svg aria-hidden="true">...</svg>
 </button>
 
-<!-- Search landmark -->
 <search aria-label="Site search">...</search>
 ```
 
@@ -77,39 +73,54 @@ Provide a description directly (newer; support may vary across browser and assis
 
 ### Empty or Redundant Names
 
-```html
-<!-- Bad: No accessible name -->
-<button><svg>...</svg></button>
+<CodeFigure
+  code={`<button><svg>...</svg></button>`}
+  lang="html"
+  caption="Bad: No accessible name — screen readers cannot announce the button's purpose."
+/>
 
-<!-- Bad: Redundant - "button button" -->
-<button>Button</button>
+<CodeFigure
+  code={`<button>Button</button>`}
+  lang="html"
+  caption="Bad: Redundant — screen readers announce &quot;button button&quot; since the role is already conveyed."
+/>
 
-<!-- Good: Descriptive name -->
-<button aria-label="Add to cart">
+<CodeFigure
+  code={`<button aria-label="Add to cart">
   <svg aria-hidden="true">...</svg>
-</button>
-```
+</button>`}
+  lang="html"
+  caption="Good: Descriptive name that clearly identifies the button's action."
+/>
 
 ### Placeholder as Label
 
-```html
-<!-- Bad: Placeholder disappears -->
-<input type="text" placeholder="Email" />
+<CodeFigure
+  code={`<input type="text" placeholder="Email" />`}
+  lang="html"
+  caption="Bad: Placeholder text disappears when the user starts typing, leaving no visible label."
+/>
 
-<!-- Good: Persistent label -->
-<label for="email">Email</label>
-<input type="text" id="email" placeholder="you@example.com" />
-```
+<CodeFigure
+  code={`<label for="email">Email</label>
+<input type="text" id="email" placeholder="you@example.com" />`}
+  lang="html"
+  caption="Good: Persistent label that remains visible while typing."
+/>
 
 ### Overriding Native Semantics
 
-```html
-<!-- Bad: aria-label on non-interactive element -->
-<p aria-label="Important">This is a paragraph</p>
+<CodeFigure
+  code={`<p aria-label="Important">This is a paragraph</p>`}
+  lang="html"
+  caption="Bad: aria-label on non-interactive element — paragraphs are not named by aria-label in the accessible name computation."
+/>
 
-<!-- Good: Let content be the accessible name for paragraphs -->
-<p>This is a paragraph</p>
-```
+<CodeFigure
+  code={`<p>This is a paragraph</p>`}
+  lang="html"
+  caption="Good: Let the text content serve as the accessible content for paragraphs."
+/>
 
 ## Implementation Tips
 

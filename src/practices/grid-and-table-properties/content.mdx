@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 Grids and tables are used to present structured data. For screen reader users to navigate and understand this data, proper ARIA properties must convey the structure—row and column counts, headers, and cell relationships. This practice explains how to set these properties correctly.
@@ -16,14 +18,15 @@ Grids and tables are used to present structured data. For screen reader users to
 
 When using virtual scrolling or showing partial data:
 
-```html
-<div role="grid" aria-rowcount="1000" aria-colcount="5">
-  <!-- Only showing rows 10-20 -->
+<CodeFigure
+  code={`<div role="grid" aria-rowcount="1000" aria-colcount="5">
   <div role="row" aria-rowindex="10">
     <div role="gridcell" aria-colindex="1">...</div>
   </div>
-</div>
-```
+</div>`}
+  lang="html"
+  caption="Only rows 10–20 are rendered in the DOM. aria-rowcount and aria-rowindex communicate the full data set size and position to screen readers."
+/>
 
 | Property        | Purpose                                    |
 | --------------- | ------------------------------------------ |
@@ -62,25 +65,24 @@ Use `columnheader` and `rowheader` roles:
 
 When using native `<table>` elements, most properties are implicit:
 
-```html
-<table>
+<CodeFigure
+  code={`<table>
   <thead>
     <tr>
       <th scope="col">Product</th>
-      <!-- columnheader -->
       <th scope="col">Price</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th scope="row">Widget</th>
-      <!-- rowheader -->
       <td>$10.00</td>
-      <!-- cell -->
     </tr>
   </tbody>
-</table>
-```
+</table>`}
+  lang="html"
+  caption="th with scope=&quot;col&quot; implicitly receives the columnheader role, th with scope=&quot;row&quot; receives rowheader, and td receives cell."
+/>
 
 Add ARIA only when needed (virtual scrolling, dynamic updates):
 
@@ -114,13 +116,17 @@ Indicate sortable columns and current sort:
 
 ### Read-only and Disabled States
 
-```html
-<!-- Read-only cell -->
-<div role="gridcell" aria-readonly="true">Fixed value</div>
+<CodeFigure
+  code={`<div role="gridcell" aria-readonly="true">Fixed value</div>`}
+  lang="html"
+  caption="Read-only cell — value cannot be edited."
+/>
 
-<!-- Disabled cell -->
-<div role="gridcell" aria-disabled="true">Unavailable</div>
-```
+<CodeFigure
+  code={`<div role="gridcell" aria-disabled="true">Unavailable</div>`}
+  lang="html"
+  caption="Disabled cell — interaction is not available."
+/>
 
 ### Selection State
 
@@ -139,24 +145,32 @@ For grids with selectable rows or cells:
 
 When using virtual scrolling, always provide indices so screen readers know the cell's position:
 
-```html
-<!-- Bad: No position information -->
-<div role="row">...</div>
+<CodeFigure
+  code={`<div role="row">...</div>`}
+  lang="html"
+  caption="Bad: No position information — screen readers cannot determine where this row is in the data set."
+/>
 
-<!-- Good: Clear position -->
-<div role="row" aria-rowindex="50">...</div>
-```
+<CodeFigure
+  code={`<div role="row" aria-rowindex="50">...</div>`}
+  lang="html"
+  caption="Good: Clear position — screen readers can announce &quot;row 50&quot;."
+/>
 
 ### Incorrect Scope in Native Tables
 
-```html
-<!-- Bad: Missing scope -->
-<th>Name</th>
+<CodeFigure
+  code={`<th>Name</th>`}
+  lang="html"
+  caption="Bad: Missing scope — screen readers may not correctly associate the header with its column or row."
+/>
 
-<!-- Good: Explicit scope -->
-<th scope="col">Name</th>
-<th scope="row">John</th>
-```
+<CodeFigure
+  code={`<th scope="col">Name</th>
+<th scope="row">John</th>`}
+  lang="html"
+  caption="Good: Explicit scope clarifies the header's direction (column or row)."
+/>
 
 ### Using Grid for Non-interactive Tables
 

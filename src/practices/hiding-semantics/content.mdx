@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 The `presentation` role (and its synonym `none`) removes the implicit ARIA semantics of an element from the accessibility tree. This can be useful when an element's visual appearance doesn't match its semantic meaning, but it must be used carefully to avoid hiding important information from assistive technology users.
@@ -8,13 +10,17 @@ The `presentation` role (and its synonym `none`) removes the implicit ARIA seman
 
 Images that don't convey content:
 
-```html
-<!-- Empty alt is preferred for decorative images -->
-<img src="decorative-border.png" alt="" />
+<CodeFigure
+  code={`<img src="decorative-border.png" alt="" />`}
+  lang="html"
+  caption="Empty alt is preferred for decorative images."
+/>
 
-<!-- Or use presentation role -->
-<img src="decorative-border.png" role="presentation" />
-```
+<CodeFigure
+  code={`<img src="decorative-border.png" role="presentation" />`}
+  lang="html"
+  caption="Alternatively, use the presentation role."
+/>
 
 ### Layout Tables
 
@@ -33,9 +39,8 @@ Tables used only for visual layout:
 
 When a parent element's role is redundant:
 
-```html
-<!-- Tab panels using ul/li for styling -->
-<div role="tablist">
+<CodeFigure
+  code={`<div role="tablist">
   <ul role="presentation">
     <li role="presentation">
       <button role="tab">Tab 1</button>
@@ -44,18 +49,21 @@ When a parent element's role is redundant:
       <button role="tab">Tab 2</button>
     </li>
   </ul>
-</div>
-```
+</div>`}
+  lang="html"
+  caption="Tab panels using ul/li for styling — ul and li roles are removed with presentation."
+/>
 
 ## presentation vs none
 
 These roles are synonymous:
 
-```html
-<!-- Both are equivalent -->
-<div role="presentation">...</div>
-<div role="none">...</div>
-```
+<CodeFigure
+  code={`<div role="presentation">...</div>
+<div role="none">...</div>`}
+  lang="html"
+  caption="Both are equivalent."
+/>
 
 `role="none"` was introduced to clarify intent. `role="presentation"` is more widely supported in older assistive technology.
 
@@ -74,17 +82,21 @@ These roles are synonymous:
 
 Some roles have required children that are automatically hidden:
 
-```html
-<table role="presentation">
-  <!-- tbody, tr, td roles are also removed -->
-  <!-- because they're required children of table -->
-</table>
+<CodeFigure
+  code={`<table role="presentation">
+  <tr><td>...</td></tr>
+</table>`}
+  lang="html"
+  caption="tbody, tr, td roles are also removed because they are required children of table."
+/>
 
-<ul role="presentation">
-  <!-- li roles are also removed -->
-  <!-- because listitem is a required owned element of list -->
-</ul>
-```
+<CodeFigure
+  code={`<ul role="presentation">
+  <li>...</li>
+</ul>`}
+  lang="html"
+  caption="li roles are also removed because listitem is a required owned element of list."
+/>
 
 ## What presentation/none Cannot Hide
 
@@ -92,76 +104,90 @@ Some roles have required children that are automatically hidden:
 
 If an element is focusable, `role="presentation"` is ignored:
 
-```html
-<!-- role="presentation" is ignored because of tabindex -->
-<button role="presentation" tabindex="0">Still a button</button>
+<CodeFigure
+  code={`<button role="presentation" tabindex="0">Still a button</button>`}
+  lang="html"
+  caption="role=&quot;presentation&quot; is ignored because the element has tabindex."
+/>
 
-<!-- Links with href are focusable -->
-<a href="/page" role="presentation">Still a link</a>
-```
+<CodeFigure
+  code={`<a href="/page" role="presentation">Still a link</a>`}
+  lang="html"
+  caption="Links with href are focusable, so the role is ignored."
+/>
 
 ### Elements with Global ARIA Attributes
 
 If aria-label, aria-describedby, or other global ARIA attributes are present:
 
-```html
-<!-- role="presentation" is ignored -->
-<img role="presentation" aria-label="Important info" />
-```
+<CodeFigure
+  code={`<img role="presentation" aria-label="Important info" />`}
+  lang="html"
+  caption="role=&quot;presentation&quot; is ignored when global ARIA attributes are present."
+/>
 
 ## Implementation Tips
 
 ### Hiding Decorative Icon Buttons
 
-```html
-<button type="button" aria-label="Close">
-  <!-- Icon is decorative, hide from AT -->
+<CodeFigure
+  code={`<button type="button" aria-label="Close">
   <svg aria-hidden="true">...</svg>
-</button>
-```
+</button>`}
+  lang="html"
+  caption="The icon is decorative — aria-hidden=&quot;true&quot; hides it from assistive technology."
+/>
 
 Use `aria-hidden="true"` instead of `role="presentation"` for content that should be completely hidden from assistive technology.
 
 ### Hiding Redundant Text
 
-```html
-<button>
+<CodeFigure
+  code={`<button>
   <svg aria-hidden="true">...</svg>
   <span class="visually-hidden">Close</span>
-  <!-- Visible text "Close" provides the accessible name -->
   Close
-</button>
-```
+</button>`}
+  lang="html"
+  caption="The visible text &quot;Close&quot; provides the accessible name."
+/>
 
 ## Common Pitfalls
 
 ### Hiding Meaningful Content
 
-```html
-<!-- Bad: Hiding important image -->
-<img src="chart.png" role="presentation" alt="Sales chart" />
+<CodeFigure
+  code={`<img src="chart.png" role="presentation" alt="Sales chart" />`}
+  lang="html"
+  caption="Bad: Hiding an important image that conveys content."
+/>
 
-<!-- Good: Keep meaningful images accessible -->
-<img src="chart.png" alt="Sales chart showing 20% growth" />
-```
+<CodeFigure
+  code={`<img src="chart.png" alt="Sales chart showing 20% growth" />`}
+  lang="html"
+  caption="Good: Keep meaningful images accessible with descriptive alt text."
+/>
 
 ### Using presentation on Interactive Elements
 
-```html
-<!-- Bad: Trying to hide button semantics -->
-<button role="presentation">Click me</button>
-
-<!-- The role is ignored because button is focusable -->
-```
+<CodeFigure
+  code={`<button role="presentation">Click me</button>`}
+  lang="html"
+  caption="Bad: The role is ignored because button is focusable."
+/>
 
 ### Forgetting aria-hidden for Complete Hiding
 
-```html
-<!-- This still appears in accessibility tree -->
-<div role="presentation">Text content</div>
+<CodeFigure
+  code={`<div role="presentation">Text content</div>`}
+  lang="html"
+  caption="This still appears in the accessibility tree — only the role is removed."
+/>
 
-<!-- This is completely hidden -->
-<div aria-hidden="true">Text content</div>
-```
+<CodeFigure
+  code={`<div aria-hidden="true">Text content</div>`}
+  lang="html"
+  caption="This is completely hidden from assistive technology."
+/>
 
 Use `aria-hidden="true"` when you want to hide both the element and its content from assistive technology.
