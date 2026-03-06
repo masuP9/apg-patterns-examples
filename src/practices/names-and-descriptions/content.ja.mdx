@@ -111,13 +111,13 @@ import CodeFigure from '@/components/ui/CodeFigure.astro';
 <CodeFigure
   code={`<p aria-label="重要">これは段落です</p>`}
   lang="html"
-  caption="悪い例: 非インタラクティブ要素に aria-label — 段落はアクセシブルな名前の計算で aria-label の対象外です。"
+  caption="悪い例: 非インタラクティブ要素に aria-label — 段落はアクセシブルな名前の計算で aria-label の対象外のため、「重要」は無視され「これは段落です」がそのまま読み上げられます。"
 />
 
 <CodeFigure
-  code={`<p>これは段落です</p>`}
+  code={`<p><strong>重要:</strong> これは段落です</p>`}
   lang="html"
-  caption="良い例: 段落はテキストコンテンツがそのままアクセシブルなコンテンツになります。"
+  caption="良い例: 強調したい情報はテキストコンテンツとして含め、段落のテキストがそのままアクセシブルなコンテンツになります。"
 />
 
 ## 実装のポイント

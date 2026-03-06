@@ -111,13 +111,13 @@ Provide a description directly (newer; support may vary across browser and assis
 <CodeFigure
   code={`<p aria-label="Important">This is a paragraph</p>`}
   lang="html"
-  caption="Bad: aria-label on non-interactive element — paragraphs are not named by aria-label in the accessible name computation."
+  caption="Bad: aria-label on non-interactive element — paragraphs are not named by aria-label in the accessible name computation, so &quot;Important&quot; is ignored and only &quot;This is a paragraph&quot; is announced."
 />
 
 <CodeFigure
-  code={`<p>This is a paragraph</p>`}
+  code={`<p><strong>Important:</strong> This is a paragraph</p>`}
   lang="html"
-  caption="Good: Let the text content serve as the accessible content for paragraphs."
+  caption="Good: Include the important information as text content — paragraph text naturally serves as accessible content."
 />
 
 ## Implementation Tips
