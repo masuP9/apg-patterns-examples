@@ -80,17 +80,15 @@ Provide a description directly (newer; support may vary across browser and assis
 />
 
 <CodeFigure
-  code={`<button>Button</button>`}
+  code={`<img src="hero.jpg" alt="image" />`}
   lang="html"
-  caption="Bad: Redundant — screen readers announce &quot;button button&quot; since the role is already conveyed."
+  caption="Bad: Redundant — screen readers announce &quot;image image&quot; since the role is already conveyed."
 />
 
 <CodeFigure
-  code={`<button aria-label="Add to cart">
-  <svg aria-hidden="true">...</svg>
-</button>`}
+  code={`<img src="hero.jpg" alt="Tokyo Tower glowing at sunset" />`}
   lang="html"
-  caption="Good: Descriptive name that clearly identifies the button's action."
+  caption="Good: Descriptive name that clearly identifies the image content."
 />
 
 ### Placeholder as Label

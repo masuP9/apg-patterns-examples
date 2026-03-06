@@ -80,17 +80,15 @@ import CodeFigure from '@/components/ui/CodeFigure.astro';
 />
 
 <CodeFigure
-  code={`<button>ボタン</button>`}
+  code={`<img src="hero.jpg" alt="画像" />`}
   lang="html"
-  caption="悪い例: 冗長 — ロールは自動的に伝えられるため「ボタン ボタン」と読み上げられます。"
+  caption="悪い例: 冗長 — ロールは自動的に伝えられるため「画像 画像」と読み上げられます。"
 />
 
 <CodeFigure
-  code={`<button aria-label="カートに追加">
-  <svg aria-hidden="true">...</svg>
-</button>`}
+  code={`<img src="hero.jpg" alt="夕焼けに染まる東京タワー" />`}
   lang="html"
-  caption="良い例: ボタンの動作を明確に識別する説明的な名前です。"
+  caption="良い例: 画像の内容を具体的に説明する名前です。"
 />
 
 ### プレースホルダーをラベルとして使用
