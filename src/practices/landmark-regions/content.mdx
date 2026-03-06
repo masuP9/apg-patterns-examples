@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## Overview
 
 ARIA landmark roles allow assistive technology users to quickly navigate to and identify different sections of a page. This practice explains how to use the eight landmark roles effectively.
@@ -21,13 +23,15 @@ ARIA landmark roles allow assistive technology users to quickly navigate to and 
 
 The easiest way to create landmarks is to use HTML5 semantic elements. Browsers automatically assign the appropriate landmark role:
 
-```html
-<header><!-- banner --></header>
-<nav><!-- navigation --></nav>
-<main><!-- main --></main>
-<aside><!-- complementary --></aside>
-<footer><!-- contentinfo --></footer>
-```
+<CodeFigure
+  code={`<header>...</header>
+<nav>...</nav>
+<main>...</main>
+<aside>...</aside>
+<footer>...</footer>`}
+  lang="html"
+  caption="Each element automatically receives its landmark role: header → banner, nav → navigation, main → main, aside → complementary, footer → contentinfo."
+/>
 
 ### Label Multiple Landmarks of the Same Type
 

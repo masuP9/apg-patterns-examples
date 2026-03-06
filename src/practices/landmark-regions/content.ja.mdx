@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## 概要
 
 ARIA ランドマークロールを使用すると、支援技術のユーザーがページの異なるセクションにすばやく移動し、識別できるようになります。このプラクティスでは、8つのランドマークロールを効果的に使用する方法を説明します。
@@ -21,13 +23,15 @@ ARIA ランドマークロールを使用すると、支援技術のユーザー
 
 ランドマークを作成する最も簡単な方法は、HTML5 セマンティック要素を使用することです。ブラウザは自動的に適切なランドマークロールを割り当てます：
 
-```html
-<header><!-- banner --></header>
-<nav><!-- navigation --></nav>
-<main><!-- main --></main>
-<aside><!-- complementary --></aside>
-<footer><!-- contentinfo --></footer>
-```
+<CodeFigure
+  code={`<header>...</header>
+<nav>...</nav>
+<main>...</main>
+<aside>...</aside>
+<footer>...</footer>`}
+  lang="html"
+  caption="各要素は自動的にランドマークロールを受け取ります: header → banner, nav → navigation, main → main, aside → complementary, footer → contentinfo"
+/>
 
 ### 同じタイプの複数のランドマークにラベルを付ける
 

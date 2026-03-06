@@ -1,0 +1,33 @@
+---
+/**
+ * CodeFigure component - wraps a code block with a figcaption
+ *
+ * Use this instead of code comments that serve as explanatory content.
+ * Renders as <figure> > (<pre><code>) + <figcaption> for proper semantics
+ * and better contrast than syntax-highlighted comments.
+ */
+import { Code } from 'astro:components';
+
+interface Props {
+  code: string;
+  lang?:
+    | 'html'
+    | 'css'
+    | 'javascript'
+    | 'typescript'
+    | 'tsx'
+    | 'vue'
+    | 'svelte'
+    | 'astro';
+  caption: string;
+}
+
+const { code, lang = 'html', caption } = Astro.props;
+---
+
+<figure class="code-figure">
+  <div class="code-figure-content">
+    <Code code={code.trim()} lang={lang} theme="github-dark" />
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

@@ -1,3 +1,5 @@
+import CodeFigure from '@/components/ui/CodeFigure.astro';
+
 ## 概要
 
 範囲ウィジェットは、定義された範囲内の値を設定または表示するためのものです。ARIAは4種類のロールを定義しています：slider、spinbutton、scrollbar、meter。それぞれに、現在の値とその範囲を支援技術に伝えるための特定のプロパティが必要です。
@@ -31,7 +33,6 @@
 値が数字として意味をなさない場合：
 
 ```html
-<!-- 時刻スライダー -->
 <div
   role="slider"
   aria-valuenow="120"
@@ -41,7 +42,6 @@
   aria-label="会議開始時刻"
 ></div>
 
-<!-- 優先度スライダー -->
 <div
   role="slider"
   aria-valuenow="2"
@@ -56,19 +56,15 @@
 まずネイティブHTML要素を検討する：
 
 ```html
-<!-- ネイティブrangeインプット -->
 <label for="volume">音量</label>
 <input type="range" id="volume" min="0" max="100" value="50" />
 
-<!-- ネイティブnumberインプット（spinbuttonセマンティクス） -->
 <label for="quantity">数量</label>
 <input type="number" id="quantity" min="1" max="99" value="1" />
 
-<!-- ネイティブmeter -->
 <label for="disk-usage">ディスク使用量</label>
 <meter id="disk-usage" min="0" max="100" low="33" high="66" optimum="20" value="75">75%</meter>
 
-<!-- ネイティブprogress -->
 <label for="upload">アップロード進行状況</label>
 <progress id="upload" max="100" value="70">70%</progress>
 ```
@@ -132,37 +128,49 @@
 
 ### 複雑な値に valuetext がない
 
-```html
-<!-- 悪い例: スクリーンリーダーが時刻として「50」と読み上げる -->
-<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="480" aria-label="時刻"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="480" aria-label="時刻"></div>`}
+  lang="html"
+  caption="悪い例: スクリーンリーダーが「50」と読み上げます — 時刻としては意味がありません。"
+/>
 
-<!-- 良い例: スクリーンリーダーが「8:30」と読み上げる -->
-<div
+<CodeFigure
+  code={`<div
   role="slider"
   aria-valuenow="50"
   aria-valuemin="0"
   aria-valuemax="480"
   aria-valuetext="8:30"
   aria-label="時刻"
-></div>
-```
+></div>`}
+  lang="html"
+  caption="良い例: スクリーンリーダーが「8:30」と読み上げます — ユーザーに意味のある値です。"
+/>
 
 ### min/max/now の不整合
 
-```html
-<!-- 悪い例: valuenow が範囲外 -->
-<div role="slider" aria-valuenow="150" aria-valuemin="0" aria-valuemax="100"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="150" aria-valuemin="0" aria-valuemax="100"></div>`}
+  lang="html"
+  caption="悪い例: valuenow (150) が範囲 (0–100) の外にあります。"
+/>
 
-<!-- 良い例: valuenow が範囲内 -->
-<div role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-```
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>`}
+  lang="html"
+  caption="良い例: valuenow が有効な範囲内にあります。"
+/>
 
 ### 読み取り専用の表示に slider を使用
 
-```html
-<!-- 悪い例: 表示専用の値に slider -->
-<div role="slider" aria-valuenow="75" aria-readonly="true"></div>
+<CodeFigure
+  code={`<div role="slider" aria-valuenow="75" aria-readonly="true"></div>`}
+  lang="html"
+  caption="悪い例: slider はインタラクティブな操作を暗示します — aria-readonly ではその期待を変えられません。"
+/>
 
-<!-- 良い例: 表示専用のゲージに meter -->
-<div role="meter" aria-valuenow="75"></div>
-```
+<CodeFigure
+  code={`<div role="meter" aria-valuenow="75"></div>`}
+  lang="html"
+  caption="良い例: meter ロールが表示専用のゲージであることを明確に伝えます。"
+/>

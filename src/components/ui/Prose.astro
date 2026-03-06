@@ -291,6 +291,38 @@ const { class: className, collapsedLines = 5 } = Astro.props;
   .prose :global(.code-toggle[aria-expanded='true'] .code-toggle-icon) {
     transform: rotate(180deg);
   }
+
+  /* CodeFigure component */
+  .prose :global(.code-figure) {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .prose :global(.code-figure-content) {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 #1f2937;
+  }
+
+  .prose :global(.code-figure-content pre) {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    background-color: #24292e;
+    color: #e1e4e8;
+  }
+
+  .prose :global(.code-figure figcaption) {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--foreground);
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
 </style>
 
 <script>
@@ -300,7 +332,7 @@ const { class: className, collapsedLines = 5 } = Astro.props;
 
       prose.querySelectorAll('pre').forEach((pre) => {
         // Skip if already wrapped or inside a CodeBlock component
-        if (pre.closest('.code-block-wrapper') || pre.closest('.code-block')) return;
+        if (pre.closest('.code-block-wrapper') || pre.closest('.code-block') || pre.closest('.code-figure')) return;
 
         const code = pre.querySelector('code');
         if (!code) return;
