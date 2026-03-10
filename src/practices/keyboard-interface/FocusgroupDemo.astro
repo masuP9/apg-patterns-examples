@@ -7,8 +7,8 @@
  * 2. Wrapping focusgroup
  * 3. Grid focusgroup (2D navigation)
  *
- * Each demo includes a JavaScript roving tabindex fallback
- * for browsers that do not yet support the focusgroup attribute.
+ * Requires a browser with native focusgroup support (Chromium 133+).
+ * A browser support notice is shown dynamically via feature detection.
  */
 ---
 
@@ -22,9 +22,9 @@
       Your browser does not support the <code>focusgroup</code> attribute yet.
     </p>
     <p class="text-muted-foreground mt-1">
-      The demos below use a <strong>JavaScript roving tabindex fallback</strong> so
-      you can still try the keyboard navigation. In browsers with native support
-      (Chromium 133+), no JavaScript is needed.
+      The <code>focusgroup</code> attribute is currently supported in
+      Chromium-based browsers (Chrome 133+, Edge 133+). The demos below show
+      the intended markup, but arrow key navigation requires browser support.
     </p>
   </div>
   <div
@@ -35,8 +35,9 @@
       Your browser supports the <code>focusgroup</code> attribute!
     </p>
     <p class="text-muted-foreground mt-1">
-      The demos below use the native <code>focusgroup</code> attribute — no
-      JavaScript needed. Try tabbing in and using arrow keys.
+      Try tabbing into each demo below and using arrow keys to navigate.
+      Notice how the browser handles roving tabindex automatically — no
+      JavaScript needed.
     </p>
   </div>
 
@@ -48,30 +49,29 @@
       >)
     </figcaption>
     <div
-      class="focusgroup-toolbar flex gap-2"
+      class="flex gap-2"
       role="toolbar"
       aria-label="Text formatting (focusgroup demo)"
       focusgroup="horizontal"
-      data-focusgroup="horizontal"
     >
       <button
         type="button"
-        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         >Bold</button
       >
       <button
         type="button"
-        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         >Italic</button
       >
       <button
         type="button"
-        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         >Underline</button
       >
       <button
         type="button"
-        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         >Strikethrough</button
       >
     </div>
@@ -89,35 +89,34 @@
       >)
     </figcaption>
     <div
-      class="focusgroup-toolbar flex gap-2"
+      class="flex gap-2"
       role="toolbar"
       aria-label="Color palette (focusgroup wrap demo)"
       focusgroup="horizontal wrap"
-      data-focusgroup="horizontal wrap"
     >
       <button
         type="button"
-        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #ef4444;"
         aria-label="Red"></button>
       <button
         type="button"
-        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #f97316;"
         aria-label="Orange"></button>
       <button
         type="button"
-        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #eab308;"
         aria-label="Yellow"></button>
       <button
         type="button"
-        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #22c55e;"
         aria-label="Green"></button>
       <button
         type="button"
-        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #3b82f6;"
         aria-label="Blue"></button>
     </div>
@@ -135,29 +134,28 @@
       >)
     </figcaption>
     <div
-      class="focusgroup-grid grid grid-cols-3 gap-1"
+      class="grid grid-cols-3 gap-1"
       role="grid"
       aria-label="Emoji picker (focusgroup grid demo)"
       focusgroup="grid"
-      data-focusgroup="grid"
     >
       <div role="row" class="contents">
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F600;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F602;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F970;</button
         >
       </div>
@@ -165,19 +163,19 @@
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F60E;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F914;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F44D;</button
         >
       </div>
@@ -185,19 +183,19 @@
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F389;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x2764;&#xFE0F;</button
         >
         <button
           type="button"
           role="gridcell"
-          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
           >&#x1F525;</button
         >
       </div>
@@ -210,156 +208,13 @@
 </div>
 
 <script>
-  /**
-   * Feature detection: check if the browser natively supports the focusgroup attribute.
-   * Uses the IDL property on HTMLElement.prototype as the reliable signal.
-   */
-  const supportsFocusgroup = 'focusGroup' in HTMLElement.prototype;
-
-  // Show the appropriate browser support notice
+  const supported = 'focusGroup' in HTMLElement.prototype;
   const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
   const noticeSupported = document.querySelector('.focusgroup-supported-notice');
 
-  if (supportsFocusgroup) {
+  if (supported) {
     noticeSupported?.removeAttribute('hidden');
   } else {
     noticeUnsupported?.removeAttribute('hidden');
-    // Apply JS-based roving tabindex fallback for each demo
-    initLinearFocusgroup();
-    initGridFocusgroup();
-  }
-
-  /**
-   * Roving tabindex fallback for linear (horizontal/vertical) focusgroups.
-   * Reads data-focusgroup to determine direction and wrap behavior.
-   */
-  function initLinearFocusgroup(): void {
-    const toolbars =
-      document.querySelectorAll<HTMLElement>('.focusgroup-toolbar');
-
-    toolbars.forEach((toolbar) => {
-      const config = toolbar.dataset.focusgroup ?? '';
-      const isVertical = config.includes('vertical');
-      const shouldWrap = config.includes('wrap');
-      const items = [
-        ...toolbar.querySelectorAll<HTMLElement>('button:not([disabled])'),
-      ];
-
-      if (items.length === 0) return;
-
-      // Set initial tabindex: first item = 0, others = -1
-      items.forEach((item, i) => {
-        item.setAttribute('tabindex', i === 0 ? '0' : '-1');
-      });
-
-      toolbar.addEventListener('keydown', (e: KeyboardEvent) => {
-        const target = e.target as HTMLElement;
-        const currentIndex = items.indexOf(target);
-
-        if (currentIndex === -1) return;
-
-        const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
-        const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
-        let newIndex = currentIndex;
-
-        switch (e.key) {
-          case nextKey:
-            if (shouldWrap) {
-              newIndex = (currentIndex + 1) % items.length;
-            } else {
-              newIndex = Math.min(currentIndex + 1, items.length - 1);
-            }
-            break;
-          case prevKey:
-            if (shouldWrap) {
-              newIndex = (currentIndex - 1 + items.length) % items.length;
-            } else {
-              newIndex = Math.max(currentIndex - 1, 0);
-            }
-            break;
-          case 'Home':
-            newIndex = 0;
-            break;
-          case 'End':
-            newIndex = items.length - 1;
-            break;
-          default:
-            return;
-        }
-
-        e.preventDefault();
-        items[currentIndex].setAttribute('tabindex', '-1');
-        items[newIndex].setAttribute('tabindex', '0');
-        items[newIndex].focus();
-      });
-    });
-  }
-
-  /**
-   * Roving tabindex fallback for grid focusgroups.
-   * Supports 2D arrow key navigation across rows and columns.
-   */
-  function initGridFocusgroup(): void {
-    const grids =
-      document.querySelectorAll<HTMLElement>('.focusgroup-grid');
-
-    grids.forEach((grid) => {
-      const rows = [...grid.querySelectorAll<HTMLElement>('[role="row"]')];
-      const cells: HTMLElement[][] = rows.map((row) => [
-        ...row.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [role="gridcell"]:not([disabled])'
-        ),
-      ]);
-
-      const colCount = cells[0]?.length ?? 0;
-      if (colCount === 0) return;
-
-      // Set initial tabindex
-      cells.forEach((row, ri) => {
-        row.forEach((cell, ci) => {
-          cell.setAttribute('tabindex', ri === 0 && ci === 0 ? '0' : '-1');
-        });
-      });
-
-      let currentRow = 0;
-      let currentCol = 0;
-
-      grid.addEventListener('keydown', (e: KeyboardEvent) => {
-        let newRow = currentRow;
-        let newCol = currentCol;
-
-        switch (e.key) {
-          case 'ArrowRight':
-            newCol = Math.min(currentCol + 1, colCount - 1);
-            break;
-          case 'ArrowLeft':
-            newCol = Math.max(currentCol - 1, 0);
-            break;
-          case 'ArrowDown':
-            newRow = Math.min(currentRow + 1, cells.length - 1);
-            break;
-          case 'ArrowUp':
-            newRow = Math.max(currentRow - 1, 0);
-            break;
-          case 'Home':
-            newRow = 0;
-            newCol = 0;
-            break;
-          case 'End':
-            newRow = cells.length - 1;
-            newCol = colCount - 1;
-            break;
-          default:
-            return;
-        }
-
-        e.preventDefault();
-        cells[currentRow][currentCol].setAttribute('tabindex', '-1');
-        currentRow = newRow;
-        currentCol = newCol;
-        cells[currentRow][currentCol].setAttribute('tabindex', '0');
-        cells[currentRow][currentCol].focus();
-      });
-    });
   }
 </script>
