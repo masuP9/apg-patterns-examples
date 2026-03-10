@@ -2,207 +2,364 @@
 /**
  * Interactive demo for the focusgroup HTML attribute.
  *
- * Shows three demos side-by-side:
- * 1. Linear focusgroup (toolbar-like)
+ * Shows three demos:
+ * 1. Linear focusgroup (toolbar-like, no wrap)
  * 2. Wrapping focusgroup
- * 3. Grid focusgroup
+ * 3. Grid focusgroup (2D navigation)
  *
- * Each demo includes a fallback for browsers that do not support focusgroup.
+ * Each demo includes a JavaScript roving tabindex fallback
+ * for browsers that do not yet support the focusgroup attribute.
  */
 ---
 
 <div class="focusgroup-demo space-y-8">
-  {/* Demo 1: Linear focusgroup */}
+  {/* Browser support notice — shown dynamically */}
+  <div
+    class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm"
+    hidden
+  >
+    <p class="font-semibold">
+      Your browser does not support the <code>focusgroup</code> attribute yet.
+    </p>
+    <p class="text-muted-foreground mt-1">
+      The demos below use a <strong>JavaScript roving tabindex fallback</strong> so
+      you can still try the keyboard navigation. In browsers with native support
+      (Chromium 133+), no JavaScript is needed.
+    </p>
+  </div>
+  <div
+    class="focusgroup-supported-notice rounded-lg border border-green-200 bg-green-50 p-4 text-sm dark:border-green-800 dark:bg-green-950/20"
+    hidden
+  >
+    <p class="font-semibold text-green-800 dark:text-green-200">
+      Your browser supports the <code>focusgroup</code> attribute!
+    </p>
+    <p class="text-muted-foreground mt-1">
+      The demos below use the native <code>focusgroup</code> attribute — no
+      JavaScript needed. Try tabbing in and using arrow keys.
+    </p>
+  </div>
+
+  {/* Demo 1: Linear focusgroup (no wrap) */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Linear Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="horizontal"</code>)
+      Linear Focusgroup (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="horizontal"</code
+      >)
     </figcaption>
     <div
       class="focusgroup-toolbar flex gap-2"
       role="toolbar"
       aria-label="Text formatting (focusgroup demo)"
       focusgroup="horizontal"
+      data-focusgroup="horizontal"
     >
       <button
         type="button"
         class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-      >Bold</button>
+        >Bold</button
+      >
       <button
         type="button"
         class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-      >Italic</button>
+        >Italic</button
+      >
       <button
         type="button"
         class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-      >Underline</button>
+        >Underline</button
+      >
       <button
         type="button"
         class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-      >Strikethrough</button>
+        >Strikethrough</button
+      >
     </div>
     <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>←</kbd> <kbd>→</kbd> arrow keys to navigate. Focus stops at the edges.
+      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys to navigate. Focus
+      stops at the edges.
     </p>
   </figure>
 
   {/* Demo 2: Wrapping focusgroup */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Wrapping Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="horizontal wrap"</code>)
+      Wrapping Focusgroup (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="horizontal wrap"</code
+      >)
     </figcaption>
     <div
       class="focusgroup-toolbar flex gap-2"
       role="toolbar"
       aria-label="Color palette (focusgroup wrap demo)"
       focusgroup="horizontal wrap"
+      data-focusgroup="horizontal wrap"
     >
       <button
         type="button"
         class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #ef4444;"
-        aria-label="Red"
-      ></button>
+        aria-label="Red"></button>
       <button
         type="button"
         class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #f97316;"
-        aria-label="Orange"
-      ></button>
+        aria-label="Orange"></button>
       <button
         type="button"
         class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #eab308;"
-        aria-label="Yellow"
-      ></button>
+        aria-label="Yellow"></button>
       <button
         type="button"
         class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #22c55e;"
-        aria-label="Green"
-      ></button>
+        aria-label="Green"></button>
       <button
         type="button"
         class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
         style="background-color: #3b82f6;"
-        aria-label="Blue"
-      ></button>
+        aria-label="Blue"></button>
     </div>
     <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>←</kbd> <kbd>→</kbd> arrow keys. Focus wraps around from last to first and vice versa.
+      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys. Focus wraps around
+      from last to first and vice versa.
     </p>
   </figure>
 
   {/* Demo 3: Grid focusgroup */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Grid Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="grid"</code>)
+      Grid Focusgroup (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="grid"</code
+      >)
     </figcaption>
     <div
       class="focusgroup-grid grid grid-cols-3 gap-1"
       role="grid"
       aria-label="Emoji picker (focusgroup grid demo)"
       focusgroup="grid"
+      data-focusgroup="grid"
     >
       <div role="row" class="contents">
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >😀</button>
+          >&#x1F600;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >😂</button>
+          >&#x1F602;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >🥰</button>
+          >&#x1F970;</button
+        >
       </div>
       <div role="row" class="contents">
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >😎</button>
+          >&#x1F60E;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >🤔</button>
+          >&#x1F914;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >👍</button>
+          >&#x1F44D;</button
+        >
       </div>
       <div role="row" class="contents">
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >🎉</button>
+          >&#x1F389;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >❤️</button>
+          >&#x2764;&#xFE0F;</button
+        >
         <button
           type="button"
           role="gridcell"
           class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >🔥</button>
+          >&#x1F525;</button
+        >
       </div>
     </div>
     <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> arrow keys to navigate the 2D grid.
+      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> <kbd>&#8593;</kbd>
+      <kbd>&#8595;</kbd> arrow keys to navigate the 2D grid.
     </p>
   </figure>
-
-  {/* Browser support notice */}
-  <div class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm" hidden>
-    <p class="font-semibold">Your browser does not support the <code>focusgroup</code> attribute yet.</p>
-    <p class="text-muted-foreground mt-1">
-      The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers
-      (Chrome 133+, Edge 133+) behind a flag or origin trial.
-      The demos above show the intended markup, but arrow key navigation will not work without
-      JavaScript polyfill or browser support.
-    </p>
-  </div>
-  <div class="focusgroup-supported-notice bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800 p-4 text-sm" hidden>
-    <p class="font-semibold text-green-800 dark:text-green-200">
-      Your browser supports the <code>focusgroup</code> attribute!
-    </p>
-    <p class="text-muted-foreground mt-1">
-      Try tabbing into each demo above and using arrow keys to navigate.
-      Notice how the browser handles roving tabindex automatically — no JavaScript needed.
-    </p>
-  </div>
 </div>
 
 <script>
-  // Feature detection for focusgroup
-  function detectFocusgroupSupport(): boolean {
-    const testEl = document.createElement('div');
-    testEl.setAttribute('focusgroup', '');
-    // If the browser understands focusgroup, it will be reflected as a property or attribute
-    // We check by creating a test element and seeing if the browser processes the attribute
-    return 'focusGroup' in testEl || testEl.getAttribute('focusgroup') !== null;
+  /**
+   * Feature detection: check if the browser natively supports the focusgroup attribute.
+   * Uses the IDL property on HTMLElement.prototype as the reliable signal.
+   */
+  const supportsFocusgroup = 'focusGroup' in HTMLElement.prototype;
+
+  // Show the appropriate browser support notice
+  const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
+  const noticeSupported = document.querySelector('.focusgroup-supported-notice');
+
+  if (supportsFocusgroup) {
+    noticeSupported?.removeAttribute('hidden');
+  } else {
+    noticeUnsupported?.removeAttribute('hidden');
+    // Apply JS-based roving tabindex fallback for each demo
+    initLinearFocusgroup();
+    initGridFocusgroup();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    // Simple heuristic: if the browser parses focusgroup as a known attribute
-    // For now, we use a more reliable check
-    const supported = 'focusGroup' in HTMLElement.prototype;
+  /**
+   * Roving tabindex fallback for linear (horizontal/vertical) focusgroups.
+   * Reads data-focusgroup to determine direction and wrap behavior.
+   */
+  function initLinearFocusgroup(): void {
+    const toolbars =
+      document.querySelectorAll<HTMLElement>('.focusgroup-toolbar');
 
-    const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
-    const noticeSupported = document.querySelector('.focusgroup-supported-notice');
+    toolbars.forEach((toolbar) => {
+      const config = toolbar.dataset.focusgroup ?? '';
+      const isVertical = config.includes('vertical');
+      const shouldWrap = config.includes('wrap');
+      const items = [
+        ...toolbar.querySelectorAll<HTMLElement>('button:not([disabled])'),
+      ];
 
-    if (supported) {
-      if (noticeSupported) noticeSupported.removeAttribute('hidden');
-    } else {
-      if (noticeUnsupported) noticeUnsupported.removeAttribute('hidden');
-    }
-  });
+      if (items.length === 0) return;
+
+      // Set initial tabindex: first item = 0, others = -1
+      items.forEach((item, i) => {
+        item.setAttribute('tabindex', i === 0 ? '0' : '-1');
+      });
+
+      toolbar.addEventListener('keydown', (e: KeyboardEvent) => {
+        const target = e.target as HTMLElement;
+        const currentIndex = items.indexOf(target);
+
+        if (currentIndex === -1) return;
+
+        const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
+        const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
+        let newIndex = currentIndex;
+
+        switch (e.key) {
+          case nextKey:
+            if (shouldWrap) {
+              newIndex = (currentIndex + 1) % items.length;
+            } else {
+              newIndex = Math.min(currentIndex + 1, items.length - 1);
+            }
+            break;
+          case prevKey:
+            if (shouldWrap) {
+              newIndex = (currentIndex - 1 + items.length) % items.length;
+            } else {
+              newIndex = Math.max(currentIndex - 1, 0);
+            }
+            break;
+          case 'Home':
+            newIndex = 0;
+            break;
+          case 'End':
+            newIndex = items.length - 1;
+            break;
+          default:
+            return;
+        }
+
+        e.preventDefault();
+        items[currentIndex].setAttribute('tabindex', '-1');
+        items[newIndex].setAttribute('tabindex', '0');
+        items[newIndex].focus();
+      });
+    });
+  }
+
+  /**
+   * Roving tabindex fallback for grid focusgroups.
+   * Supports 2D arrow key navigation across rows and columns.
+   */
+  function initGridFocusgroup(): void {
+    const grids =
+      document.querySelectorAll<HTMLElement>('.focusgroup-grid');
+
+    grids.forEach((grid) => {
+      const rows = [...grid.querySelectorAll<HTMLElement>('[role="row"]')];
+      const cells: HTMLElement[][] = rows.map((row) => [
+        ...row.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [role="gridcell"]:not([disabled])'
+        ),
+      ]);
+
+      const colCount = cells[0]?.length ?? 0;
+      if (colCount === 0) return;
+
+      // Set initial tabindex
+      cells.forEach((row, ri) => {
+        row.forEach((cell, ci) => {
+          cell.setAttribute('tabindex', ri === 0 && ci === 0 ? '0' : '-1');
+        });
+      });
+
+      let currentRow = 0;
+      let currentCol = 0;
+
+      grid.addEventListener('keydown', (e: KeyboardEvent) => {
+        let newRow = currentRow;
+        let newCol = currentCol;
+
+        switch (e.key) {
+          case 'ArrowRight':
+            newCol = Math.min(currentCol + 1, colCount - 1);
+            break;
+          case 'ArrowLeft':
+            newCol = Math.max(currentCol - 1, 0);
+            break;
+          case 'ArrowDown':
+            newRow = Math.min(currentRow + 1, cells.length - 1);
+            break;
+          case 'ArrowUp':
+            newRow = Math.max(currentRow - 1, 0);
+            break;
+          case 'Home':
+            newRow = 0;
+            newCol = 0;
+            break;
+          case 'End':
+            newRow = cells.length - 1;
+            newCol = colCount - 1;
+            break;
+          default:
+            return;
+        }
+
+        e.preventDefault();
+        cells[currentRow][currentCol].setAttribute('tabindex', '-1');
+        currentRow = newRow;
+        currentCol = newCol;
+        cells[currentRow][currentCol].setAttribute('tabindex', '0');
+        cells[currentRow][currentCol].focus();
+      });
+    });
+  }
 </script>
