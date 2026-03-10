@@ -2,13 +2,15 @@
 /**
  * Interactive demo for the focusgroup HTML attribute.
  *
- * Shows three demos:
- * 1. Linear focusgroup (toolbar-like, no wrap)
- * 2. Wrapping focusgroup
- * 3. Grid focusgroup (2D navigation)
+ * Shows three demos based on the Microsoft Edge focusgroup demos:
+ * 1. Basic toolbar (focusgroup="toolbar")
+ * 2. Wrapping toolbar (focusgroup="toolbar wrap")
+ * 3. Vertical toolbar (focusgroup="toolbar block")
  *
  * Requires a browser with native focusgroup support (Chromium 133+).
  * A browser support notice is shown dynamically via feature detection.
+ *
+ * @see https://microsoftedge.github.io/Demos/focusgroup/
  */
 ---
 
@@ -41,18 +43,18 @@
     </p>
   </div>
 
-  {/* Demo 1: Linear focusgroup (no wrap) */}
+  {/* Demo 1: Basic toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Linear Focusgroup (<code class="bg-muted rounded px-1 text-xs"
-        >focusgroup="horizontal"</code
+      Basic Toolbar (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar"</code
       >)
     </figcaption>
     <div
       class="flex gap-2"
       role="toolbar"
       aria-label="Text formatting (focusgroup demo)"
-      focusgroup="horizontal"
+      focusgroup="toolbar"
     >
       <button
         type="button"
@@ -76,23 +78,23 @@
       >
     </div>
     <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys to navigate. Focus
-      stops at the edges.
+      Tab to enter the toolbar, then use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd>
+      arrow keys to navigate. Tab again to exit. Focus stops at the edges.
     </p>
   </figure>
 
-  {/* Demo 2: Wrapping focusgroup */}
+  {/* Demo 2: Wrapping toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Wrapping Focusgroup (<code class="bg-muted rounded px-1 text-xs"
-        >focusgroup="horizontal wrap"</code
+      Wrapping Toolbar (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar wrap"</code
       >)
     </figcaption>
     <div
       class="flex gap-2"
       role="toolbar"
       aria-label="Color palette (focusgroup wrap demo)"
-      focusgroup="horizontal wrap"
+      focusgroup="toolbar wrap"
     >
       <button
         type="button"
@@ -126,89 +128,46 @@
     </p>
   </figure>
 
-  {/* Demo 3: Grid focusgroup */}
+  {/* Demo 3: Vertical toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Grid Focusgroup (<code class="bg-muted rounded px-1 text-xs"
-        >focusgroup="grid"</code
+      Vertical Toolbar (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar block"</code
       >)
     </figcaption>
     <div
-      class="grid grid-cols-3 gap-1"
-      role="grid"
-      aria-label="Emoji picker (focusgroup grid demo)"
-      focusgroup="grid"
+      class="flex flex-col gap-1 w-fit"
+      role="toolbar"
+      aria-label="Document actions (focusgroup vertical demo)"
+      aria-orientation="vertical"
+      focusgroup="toolbar block"
     >
-      <div role="row" class="contents">
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F600;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F602;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F970;</button
-        >
-      </div>
-      <div role="row" class="contents">
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F60E;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F914;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F44D;</button
-        >
-      </div>
-      <div role="row" class="contents">
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F389;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x2764;&#xFE0F;</button
-        >
-        <button
-          type="button"
-          role="gridcell"
-          class="rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-          >&#x1F525;</button
-        >
-      </div>
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Cut</button
+      >
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Copy</button
+      >
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Paste</button
+      >
     </div>
     <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> <kbd>&#8593;</kbd>
-      <kbd>&#8595;</kbd> arrow keys to navigate the 2D grid.
+      Use <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> arrow keys to navigate.
+      <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> do nothing.
+      <code>block</code> overrides <code>toolbar</code>'s default inline axis.
     </p>
   </figure>
 </div>
 
 <script>
-  const supported = 'focusGroup' in HTMLElement.prototype;
+  const supported = 'focusgroup' in HTMLElement.prototype;
   const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
   const noticeSupported = document.querySelector('.focusgroup-supported-notice');
 

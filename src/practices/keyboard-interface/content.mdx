@@ -327,7 +327,7 @@ Adding `focusgroup` to a container element tells the browser to:
 </div>
 
 <!-- After: Declarative focusgroup (no JavaScript needed) -->
-<div role="toolbar" aria-label="Formatting" focusgroup="horizontal">
+<div role="toolbar" aria-label="Formatting" focusgroup="toolbar">
   <button>Bold</button>
   <button>Italic</button>
   <button>Underline</button>
@@ -340,43 +340,32 @@ Adding `focusgroup` to a container element tells the browser to:
 
 The `focusgroup` attribute accepts space-separated tokens to control navigation behavior:
 
-| Value        | Behavior                                                                             |
-| ------------ | ------------------------------------------------------------------------------------ |
-| `horizontal` | Only left/right arrow keys navigate (suitable for horizontal toolbars, tablists)     |
-| `vertical`   | Only up/down arrow keys navigate (suitable for vertical menus, listboxes)            |
-| `wrap`       | Focus wraps from last item to first (and vice versa) instead of stopping at the edge |
-| `grid`       | Enables 2D navigation with all four arrow keys (suitable for grids, date pickers)    |
-| `extend`     | Joins a nested focusgroup into its ancestor's focusgroup as a single logical group   |
+| Value      | Behavior                                                                             |
+| ---------- | ------------------------------------------------------------------------------------ |
+| `toolbar`  | Creates a focusgroup; defaults to inline (horizontal) arrow-key navigation           |
+| `inline`   | Only inline-axis (left/right in LTR) arrow keys navigate                             |
+| `block`    | Only block-axis (up/down) arrow keys navigate; overrides `toolbar`'s default inline  |
+| `wrap`     | Focus wraps from last item to first (and vice versa) instead of stopping at the edge |
+| `nomemory` | Tab always enters at the start (or `focusgroupstart`), ignoring focus history        |
+| `extend`   | Joins a nested focusgroup into its ancestor's focusgroup as a single logical group   |
+| `none`     | Opts a subtree out of an ancestor's focusgroup                                       |
 
 These values can be combined:
 
 <CodeFigure
   code={`<!-- Horizontal toolbar that wraps -->
-<div role="toolbar" focusgroup="horizontal wrap">
+<div role="toolbar" focusgroup="toolbar wrap">
   <button>Cut</button>
   <button>Copy</button>
   <button>Paste</button>
 </div>
 
-<!-- Vertical menu -->
-<ul role="menu" focusgroup="vertical">
-  <li role="menuitem" tabindex="0">File</li>
-  <li role="menuitem" tabindex="-1">Edit</li>
-  <li role="menuitem" tabindex="-1">View</li>
-</ul>
-
-<!-- 2D grid navigation (e.g., emoji picker, calendar) -->
-<div role="grid" focusgroup="grid">
-  <div role="row">
-    <button role="gridcell">1</button>
-    <button role="gridcell">2</button>
-    <button role="gridcell">3</button>
-  </div>
-  <div role="row">
-    <button role="gridcell">4</button>
-    <button role="gridcell">5</button>
-    <button role="gridcell">6</button>
-  </div>
+<!-- Vertical toolbar -->
+<div role="toolbar" focusgroup="toolbar block"
+     aria-orientation="vertical">
+  <button>File</button>
+  <button>Edit</button>
+  <button>View</button>
 </div>`}
   lang="html"
   caption="Combining focusgroup values for different navigation patterns."
@@ -388,20 +377,22 @@ When focusgroups are nested, each creates an independent navigation scope by def
 
 <CodeFigure
   code={`<!-- Independent nested focusgroups -->
-<div focusgroup="horizontal">
-  <button>A1</button>
-  <div focusgroup="horizontal">
+<div focusgroup="toolbar" aria-label="Main toolbar">
+  <button>Save</button>
+  <button>Print</button>
+  <div role="group" focusgroup="toolbar" tabindex="0"
+       aria-label="Text formatting">
     <!-- Separate scope: Tab to enter, arrows within -->
-    <button>B1</button>
-    <button>B2</button>
+    <button>Bold</button>
+    <button>Italic</button>
   </div>
-  <button>A2</button>
+  <button>Close</button>
 </div>
 
 <!-- Merged with extend -->
-<div focusgroup="horizontal">
+<div focusgroup="toolbar" aria-label="Flat toolbar">
   <button>A1</button>
-  <div focusgroup="extend horizontal">
+  <div focusgroup="extend">
     <!-- Same scope as parent: A1 → B1 → B2 → A2 -->
     <button>B1</button>
     <button>B2</button>
@@ -409,7 +400,7 @@ When focusgroups are nested, each creates an independent navigation scope by def
   <button>A2</button>
 </div>`}
   lang="html"
-  caption="Without extend, nested focusgroups are independent. With extend, they merge into the parent focusgroup."
+  caption="Without extend, nested focusgroups are independent Tab stops. With extend, child items merge into the parent's arrow-key navigation."
 />
 
 #### Shadow DOM Integration
@@ -438,7 +429,7 @@ As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/E
   code={`<div
   role="toolbar"
   aria-label="Formatting"
-  focusgroup="horizontal wrap"
+  focusgroup="toolbar wrap"
 >
   <button>Bold</button>
   <button>Italic</button>
@@ -447,7 +438,7 @@ As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/E
 
 <script>
   // Only add JS-based roving tabindex if focusgroup is not supported
-  if (!('focusGroup' in HTMLElement.prototype)) {
+  if (!('focusgroup' in HTMLElement.prototype)) {
     // Fallback: initialize roving tabindex via JavaScript
     initRovingTabIndex(toolbar, 'button');
   }

@@ -21,7 +21,7 @@ const rows: Row[] = isJa
       { aspect: '矢印キーの処理', roving: 'カスタム keydown ハンドラ', activedesc: 'カスタム keydown ハンドラ', focusgroup: 'ブラウザ組み込み' },
       { aspect: 'フォーカス記憶', roving: '手動実装が必要', activedesc: '手動実装が必要', focusgroup: '組み込み（デフォルト動作）' },
       { aspect: 'ラップ動作', roving: '手動実装が必要', activedesc: '手動実装が必要', focusgroup: 'wrap キーワード' },
-      { aspect: 'グリッドナビゲーション', roving: '複雑な実装が必要', activedesc: '複雑な実装が必要', focusgroup: 'grid キーワード' },
+      { aspect: '垂直ナビゲーション', roving: '手動でキー方向を切替', activedesc: '手動でキー方向を切替', focusgroup: 'block キーワード' },
       { aspect: 'ブラウザサポート', roving: '全ブラウザ', activedesc: '全ブラウザ', focusgroup: 'Chromium 133+（実験的）' },
       { aspect: 'スクリーンリーダー対応', roving: '広く対応', activedesc: '対応状況にばらつき', focusgroup: 'ロービング tabindex と同等' },
     ]
@@ -31,7 +31,7 @@ const rows: Row[] = isJa
       { aspect: 'Arrow key handling', roving: 'Custom keydown handler', activedesc: 'Custom keydown handler', focusgroup: 'Built-in' },
       { aspect: 'Focus memory', roving: 'Must implement manually', activedesc: 'Must implement manually', focusgroup: 'Built-in (default behavior)' },
       { aspect: 'Wrap behavior', roving: 'Must implement manually', activedesc: 'Must implement manually', focusgroup: 'wrap keyword' },
-      { aspect: 'Grid navigation', roving: 'Complex implementation', activedesc: 'Complex implementation', focusgroup: 'grid keyword' },
+      { aspect: 'Vertical navigation', roving: 'Manual key direction switch', activedesc: 'Manual key direction switch', focusgroup: 'block keyword' },
       { aspect: 'Browser support', roving: 'All browsers', activedesc: 'All browsers', focusgroup: 'Chromium 133+ (experimental)' },
       { aspect: 'Screen reader support', roving: 'Widely supported', activedesc: 'Varies', focusgroup: 'Aligned with roving tabindex' },
     ];
