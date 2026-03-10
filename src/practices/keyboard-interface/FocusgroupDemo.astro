@@ -1,0 +1,208 @@
+---
+/**
+ * Interactive demo for the focusgroup HTML attribute.
+ *
+ * Shows three demos side-by-side:
+ * 1. Linear focusgroup (toolbar-like)
+ * 2. Wrapping focusgroup
+ * 3. Grid focusgroup
+ *
+ * Each demo includes a fallback for browsers that do not support focusgroup.
+ */
+---
+
+<div class="focusgroup-demo space-y-8">
+  {/* Demo 1: Linear focusgroup */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      Linear Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="horizontal"</code>)
+    </figcaption>
+    <div
+      class="focusgroup-toolbar flex gap-2"
+      role="toolbar"
+      aria-label="Text formatting (focusgroup demo)"
+      focusgroup="horizontal"
+    >
+      <button
+        type="button"
+        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+      >Bold</button>
+      <button
+        type="button"
+        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+      >Italic</button>
+      <button
+        type="button"
+        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+      >Underline</button>
+      <button
+        type="button"
+        class="focusgroup-btn rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+      >Strikethrough</button>
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs">
+      Use <kbd>←</kbd> <kbd>→</kbd> arrow keys to navigate. Focus stops at the edges.
+    </p>
+  </figure>
+
+  {/* Demo 2: Wrapping focusgroup */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      Wrapping Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="horizontal wrap"</code>)
+    </figcaption>
+    <div
+      class="focusgroup-toolbar flex gap-2"
+      role="toolbar"
+      aria-label="Color palette (focusgroup wrap demo)"
+      focusgroup="horizontal wrap"
+    >
+      <button
+        type="button"
+        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #ef4444;"
+        aria-label="Red"
+      ></button>
+      <button
+        type="button"
+        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #f97316;"
+        aria-label="Orange"
+      ></button>
+      <button
+        type="button"
+        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #eab308;"
+        aria-label="Yellow"
+      ></button>
+      <button
+        type="button"
+        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #22c55e;"
+        aria-label="Green"
+      ></button>
+      <button
+        type="button"
+        class="focusgroup-btn h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #3b82f6;"
+        aria-label="Blue"
+      ></button>
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs">
+      Use <kbd>←</kbd> <kbd>→</kbd> arrow keys. Focus wraps around from last to first and vice versa.
+    </p>
+  </figure>
+
+  {/* Demo 3: Grid focusgroup */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      Grid Focusgroup (<code class="bg-muted rounded px-1 text-xs">focusgroup="grid"</code>)
+    </figcaption>
+    <div
+      class="focusgroup-grid grid grid-cols-3 gap-1"
+      role="grid"
+      aria-label="Emoji picker (focusgroup grid demo)"
+      focusgroup="grid"
+    >
+      <div role="row" class="contents">
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >😀</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >😂</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >🥰</button>
+      </div>
+      <div role="row" class="contents">
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >😎</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >🤔</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >👍</button>
+      </div>
+      <div role="row" class="contents">
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >🎉</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >❤️</button>
+        <button
+          type="button"
+          role="gridcell"
+          class="focusgroup-btn rounded border px-3 py-2 text-center text-lg transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >🔥</button>
+      </div>
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs">
+      Use <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> arrow keys to navigate the 2D grid.
+    </p>
+  </figure>
+
+  {/* Browser support notice */}
+  <div class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm" hidden>
+    <p class="font-semibold">Your browser does not support the <code>focusgroup</code> attribute yet.</p>
+    <p class="text-muted-foreground mt-1">
+      The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers
+      (Chrome 133+, Edge 133+) behind a flag or origin trial.
+      The demos above show the intended markup, but arrow key navigation will not work without
+      JavaScript polyfill or browser support.
+    </p>
+  </div>
+  <div class="focusgroup-supported-notice bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800 p-4 text-sm" hidden>
+    <p class="font-semibold text-green-800 dark:text-green-200">
+      Your browser supports the <code>focusgroup</code> attribute!
+    </p>
+    <p class="text-muted-foreground mt-1">
+      Try tabbing into each demo above and using arrow keys to navigate.
+      Notice how the browser handles roving tabindex automatically — no JavaScript needed.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Feature detection for focusgroup
+  function detectFocusgroupSupport(): boolean {
+    const testEl = document.createElement('div');
+    testEl.setAttribute('focusgroup', '');
+    // If the browser understands focusgroup, it will be reflected as a property or attribute
+    // We check by creating a test element and seeing if the browser processes the attribute
+    return 'focusGroup' in testEl || testEl.getAttribute('focusgroup') !== null;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Simple heuristic: if the browser parses focusgroup as a known attribute
+    // For now, we use a more reliable check
+    const supported = 'focusGroup' in HTMLElement.prototype;
+
+    const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
+    const noticeSupported = document.querySelector('.focusgroup-supported-notice');
+
+    if (supported) {
+      if (noticeSupported) noticeSupported.removeAttribute('hidden');
+    } else {
+      if (noticeUnsupported) noticeUnsupported.removeAttribute('hidden');
+    }
+  });
+</script>

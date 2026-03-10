@@ -1,4 +1,5 @@
 import CodeFigure from '@/components/ui/CodeFigure.astro';
+import FocusgroupDemo from './FocusgroupDemo.astro';
 
 ## 概要
 
@@ -302,6 +303,173 @@ class ActiveDescendant {
   </ul>
 </div>
 ```
+
+### focusgroup 属性（新しい標準仕様）
+
+`focusgroup` HTML属性は、**JavaScriptなしで矢印キーナビゲーションを宣言的に実現する**新しいWeb標準です。従来、複合ウィジェット（ツールバー、タブリスト、グリッドなど）のキーボードナビゲーションを実装するには、ロービング tabindex や `aria-activedescendant` を管理するための大量のJavaScriptが必要でした。`focusgroup` 属性は、これをブラウザにネイティブで処理させることを目指しています。
+
+#### 動作の仕組み
+
+コンテナ要素に `focusgroup` を追加すると、ブラウザが以下を自動的に行います：
+
+1. **フォーカス可能な子孫要素を1つのTabストップに集約** — 複数の `<button>` があっても、Tabで到達できるのは1つだけ
+2. **子要素間の矢印キーナビゲーションを有効化**
+3. **ロービング tabindex を自動管理** — ブラウザが内部的に `tabindex` 値を制御
+4. **最後にフォーカスした要素を記憶** — TabでグループToリーブし戻ると、前回フォーカスした要素に戻る
+
+<CodeFigure
+  code={`<!-- 従来: 手動ロービング tabindex（JavaScript が必要） -->
+<div role="toolbar" aria-label="書式設定">
+  <button tabindex="0">太字</button>
+  <button tabindex="-1">斜体</button>
+  <button tabindex="-1">下線</button>
+</div>
+
+<!-- focusgroup: 宣言的（JavaScript 不要） -->
+<div role="toolbar" aria-label="書式設定" focusgroup="horizontal">
+  <button>太字</button>
+  <button>斜体</button>
+  <button>下線</button>
+</div>`}
+  lang="html"
+  caption="focusgroup 属性は手動のロービング tabindex 管理を置き換えます。ブラウザがボタンを1つの Tab ストップに自動的に集約し、矢印キーナビゲーションを有効にします。"
+/>
+
+#### 利用可能な値
+
+`focusgroup` 属性はスペース区切りのトークンでナビゲーション動作を制御します：
+
+| 値           | 動作                                                                           |
+| ------------ | ------------------------------------------------------------------------------ |
+| `horizontal` | 左右矢印キーのみでナビゲート（水平ツールバー、タブリストに適用）               |
+| `vertical`   | 上下矢印キーのみでナビゲート（縦メニュー、リストボックスに適用）               |
+| `wrap`       | 最後の項目から最初の項目へ（またはその逆に）フォーカスがラップする              |
+| `grid`       | 4方向の矢印キーで2Dナビゲーション（グリッド、日付ピッカーに適用）              |
+| `extend`     | ネストされたfocusgroupを親のfocusgroupに統合し、1つの論理グループとして機能する |
+
+これらの値を組み合わせることができます：
+
+<CodeFigure
+  code={`<!-- ラップする水平ツールバー -->
+<div role="toolbar" focusgroup="horizontal wrap">
+  <button>切り取り</button>
+  <button>コピー</button>
+  <button>貼り付け</button>
+</div>
+
+<!-- 垂直メニュー -->
+<ul role="menu" focusgroup="vertical">
+  <li role="menuitem" tabindex="0">ファイル</li>
+  <li role="menuitem" tabindex="-1">編集</li>
+  <li role="menuitem" tabindex="-1">表示</li>
+</ul>
+
+<!-- 2Dグリッドナビゲーション（絵文字ピッカー、カレンダーなど） -->
+<div role="grid" focusgroup="grid">
+  <div role="row">
+    <button role="gridcell">1</button>
+    <button role="gridcell">2</button>
+    <button role="gridcell">3</button>
+  </div>
+  <div role="row">
+    <button role="gridcell">4</button>
+    <button role="gridcell">5</button>
+    <button role="gridcell">6</button>
+  </div>
+</div>`}
+  lang="html"
+  caption="異なるナビゲーションパターンに対する focusgroup 値の組み合わせ。"
+/>
+
+#### ネストされた focusgroup と extend
+
+focusgroupがネストされている場合、デフォルトではそれぞれが独立したナビゲーションスコープを作成します。`extend` キーワードを使うと、子のfocusgroupが親に統合され、1つの論理グループとして機能します：
+
+<CodeFigure
+  code={`<!-- 独立したネスト focusgroup -->
+<div focusgroup="horizontal">
+  <button>A1</button>
+  <div focusgroup="horizontal">
+    <!-- 別スコープ: Tab で入り、矢印キーで内部を移動 -->
+    <button>B1</button>
+    <button>B2</button>
+  </div>
+  <button>A2</button>
+</div>
+
+<!-- extend で統合 -->
+<div focusgroup="horizontal">
+  <button>A1</button>
+  <div focusgroup="extend horizontal">
+    <!-- 親と同じスコープ: A1 → B1 → B2 → A2 -->
+    <button>B1</button>
+    <button>B2</button>
+  </div>
+  <button>A2</button>
+</div>`}
+  lang="html"
+  caption="extend なしではネストされた focusgroup は独立します。extend を使うと親の focusgroup に統合されます。"
+/>
+
+#### Shadow DOM との連携
+
+`focusgroup` 属性はデフォルトで Shadow DOM 境界を越えて動作します。シャドウホストに宣言されたfocusgroupは、そのホストのシャドウツリー内のフォーカス可能な要素を含みます。シャドウツリー内で除外したい場合は `focusgroup="none"` を使用します。
+
+#### キーの競合処理
+
+focusgroup内に `<input>` や `<textarea>` のようなフォーカス可能な子要素がある場合、矢印キーはインタラクティブ要素のネイティブな用途（カーソル移動など）に使用されます。Tab または Shift+Tab でfocusgroupナビゲーションに戻ることができます。
+
+#### インタラクティブデモ
+
+<FocusgroupDemo />
+
+#### JavaScript ベースのアプローチとの比較
+
+| 観点                     | ロービング tabindex（JS） | aria-activedescendant（JS） | focusgroup（HTML）            |
+| ------------------------ | ------------------------- | --------------------------- | ----------------------------- |
+| JavaScript の必要性      | あり                      | あり                        | なし                          |
+| Tab ストップ管理         | 手動で tabindex を入替え  | コンテナがフォーカスを保持  | 自動                          |
+| 矢印キーの処理           | カスタム keydown ハンドラ | カスタム keydown ハンドラ   | ブラウザ組み込み              |
+| フォーカス記憶           | 手動実装が必要            | 手動実装が必要              | 組み込み（デフォルト動作）    |
+| ラップ動作               | 手動実装が必要            | 手動実装が必要              | `wrap` キーワード             |
+| グリッドナビゲーション   | 複雑な実装が必要          | 複雑な実装が必要            | `grid` キーワード             |
+| ブラウザサポート         | 全ブラウザ                | 全ブラウザ                  | Chromium 133+（実験的）       |
+| スクリーンリーダー対応   | 広く対応                  | 対応状況にばらつき          | ロービング tabindex と同等    |
+
+#### ブラウザサポートとプログレッシブエンハンスメント
+
+2026年初頭時点で、`focusgroup` はChromiumベースのブラウザ（Chrome/Edge 133+）でフラグまたはオリジントライアルとして利用可能です。Firefox や Safari ではまだサポートされていません。
+
+**推奨アプローチ**: 既存のJavaScriptベースのキーボードナビゲーションと併用して、`focusgroup` をプログレッシブエンハンスメントとして使用します。これにより、サポートされたブラウザではネイティブ動作が得られ、それ以外はJavaScript実装にフォールバックします：
+
+<CodeFigure
+  code={`<div
+  role="toolbar"
+  aria-label="書式設定"
+  focusgroup="horizontal wrap"
+>
+  <button>太字</button>
+  <button>斜体</button>
+  <button>下線</button>
+</div>
+
+<script>
+  // focusgroup がサポートされていない場合のみ
+  // JS ベースのロービング tabindex を追加
+  if (!('focusGroup' in HTMLElement.prototype)) {
+    initRovingTabIndex(toolbar, 'button');
+  }
+</script>`}
+  lang="html"
+  caption="プログレッシブエンハンスメント: サポートされている場合は focusgroup を使用し、それ以外は JavaScript ベースのロービング tabindex にフォールバック。"
+/>
+
+#### リソース
+
+- [Request for developer feedback: focusgroup — Chrome for Developers](https://developer.chrome.com/blog/focusgroup-rfc)
+- [focusgroup Explainer — Open UI](https://open-ui.org/components/focusgroup.explainer/)
+- [Focusgroup Explainer — Microsoft Edge](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/Focusgroup/explainer.md)
+- [Focusgroup Interactive Demos — Microsoft Edge](https://microsoftedge.github.io/Demos/focusgroup/)
 
 ### モーダル用のフォーカストラップ
 

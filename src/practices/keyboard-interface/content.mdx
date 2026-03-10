@@ -1,4 +1,5 @@
 import CodeFigure from '@/components/ui/CodeFigure.astro';
+import FocusgroupDemo from './FocusgroupDemo.astro';
 
 ## Overview
 
@@ -302,6 +303,173 @@ class ActiveDescendant {
   </ul>
 </div>
 ```
+
+### The focusgroup Attribute (Emerging Standard)
+
+The `focusgroup` HTML attribute is an emerging web standard that enables **declarative arrow-key navigation** without any JavaScript. Traditionally, implementing keyboard navigation for composite widgets (toolbars, tablists, grids, etc.) requires extensive JavaScript to manage roving tabindex or `aria-activedescendant`. The `focusgroup` attribute aims to let browsers handle this natively.
+
+#### How It Works
+
+Adding `focusgroup` to a container element tells the browser to:
+
+1. **Collapse all focusable descendants into a single Tab stop** — even if multiple `<button>` elements are present, only one is reachable via Tab
+2. **Enable arrow-key navigation** between focusable children within the group
+3. **Automatically manage roving tabindex** — the browser handles `tabindex` values internally
+4. **Remember the last-focused item** — when a user Tabs away and back, focus returns to the previously focused item
+
+<CodeFigure
+  code={`<!-- Before: Manual roving tabindex (JavaScript required) -->
+<div role="toolbar" aria-label="Formatting">
+  <button tabindex="0">Bold</button>
+  <button tabindex="-1">Italic</button>
+  <button tabindex="-1">Underline</button>
+</div>
+
+<!-- After: Declarative focusgroup (no JavaScript needed) -->
+<div role="toolbar" aria-label="Formatting" focusgroup="horizontal">
+  <button>Bold</button>
+  <button>Italic</button>
+  <button>Underline</button>
+</div>`}
+  lang="html"
+  caption="The focusgroup attribute replaces manual roving tabindex management. The browser automatically collapses the buttons into a single Tab stop and enables arrow-key navigation."
+/>
+
+#### Available Values
+
+The `focusgroup` attribute accepts space-separated tokens to control navigation behavior:
+
+| Value        | Behavior                                                                             |
+| ------------ | ------------------------------------------------------------------------------------ |
+| `horizontal` | Only left/right arrow keys navigate (suitable for horizontal toolbars, tablists)     |
+| `vertical`   | Only up/down arrow keys navigate (suitable for vertical menus, listboxes)            |
+| `wrap`       | Focus wraps from last item to first (and vice versa) instead of stopping at the edge |
+| `grid`       | Enables 2D navigation with all four arrow keys (suitable for grids, date pickers)    |
+| `extend`     | Joins a nested focusgroup into its ancestor's focusgroup as a single logical group   |
+
+These values can be combined:
+
+<CodeFigure
+  code={`<!-- Horizontal toolbar that wraps -->
+<div role="toolbar" focusgroup="horizontal wrap">
+  <button>Cut</button>
+  <button>Copy</button>
+  <button>Paste</button>
+</div>
+
+<!-- Vertical menu -->
+<ul role="menu" focusgroup="vertical">
+  <li role="menuitem" tabindex="0">File</li>
+  <li role="menuitem" tabindex="-1">Edit</li>
+  <li role="menuitem" tabindex="-1">View</li>
+</ul>
+
+<!-- 2D grid navigation (e.g., emoji picker, calendar) -->
+<div role="grid" focusgroup="grid">
+  <div role="row">
+    <button role="gridcell">1</button>
+    <button role="gridcell">2</button>
+    <button role="gridcell">3</button>
+  </div>
+  <div role="row">
+    <button role="gridcell">4</button>
+    <button role="gridcell">5</button>
+    <button role="gridcell">6</button>
+  </div>
+</div>`}
+  lang="html"
+  caption="Combining focusgroup values for different navigation patterns."
+/>
+
+#### Nested Focusgroups and extend
+
+When focusgroups are nested, each creates an independent navigation scope by default. The `extend` keyword merges a child focusgroup into its parent, so they act as a single logical group:
+
+<CodeFigure
+  code={`<!-- Independent nested focusgroups -->
+<div focusgroup="horizontal">
+  <button>A1</button>
+  <div focusgroup="horizontal">
+    <!-- Separate scope: Tab to enter, arrows within -->
+    <button>B1</button>
+    <button>B2</button>
+  </div>
+  <button>A2</button>
+</div>
+
+<!-- Merged with extend -->
+<div focusgroup="horizontal">
+  <button>A1</button>
+  <div focusgroup="extend horizontal">
+    <!-- Same scope as parent: A1 → B1 → B2 → A2 -->
+    <button>B1</button>
+    <button>B2</button>
+  </div>
+  <button>A2</button>
+</div>`}
+  lang="html"
+  caption="Without extend, nested focusgroups are independent. With extend, they merge into the parent focusgroup."
+/>
+
+#### Shadow DOM Integration
+
+The `focusgroup` attribute works across Shadow DOM boundaries by default. A focusgroup declared on a shadow host includes focusable elements inside that host's shadow tree. You can opt out with `focusgroup="none"` inside the shadow tree if needed.
+
+#### Key Conflict Handling
+
+When focusable children like `<input>` or `<textarea>` exist inside a focusgroup, arrow keys are consumed by the interactive element for their native purpose (e.g., cursor movement). Tab or Shift+Tab provides an escape mechanism to re-enter the focusgroup navigation.
+
+#### Interactive Demo
+
+<FocusgroupDemo />
+
+#### Comparison with JavaScript-based Approaches
+
+| Aspect                | Roving tabindex (JS)          | aria-activedescendant (JS)   | focusgroup (HTML)           |
+| --------------------- | ----------------------------- | ---------------------------- | --------------------------- |
+| JavaScript required   | Yes                           | Yes                          | No                          |
+| Tab stop management   | Manual tabindex swapping      | Container holds focus        | Automatic                   |
+| Arrow key handling    | Custom keydown handler        | Custom keydown handler       | Built-in                    |
+| Focus memory          | Must implement manually       | Must implement manually      | Built-in (default behavior) |
+| Wrap behavior         | Must implement manually       | Must implement manually      | `wrap` keyword              |
+| Grid navigation       | Complex implementation        | Complex implementation       | `grid` keyword              |
+| Browser support       | All browsers                  | All browsers                 | Chromium 133+ (experimental)|
+| Screen reader support | Widely supported              | Varies                       | Aligned with roving tabindex|
+
+#### Browser Support and Progressive Enhancement
+
+As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/Edge 133+) behind a flag or origin trial. It is not yet supported in Firefox or Safari.
+
+**Recommended approach**: Use `focusgroup` as a progressive enhancement alongside existing JavaScript-based keyboard navigation. This way, supported browsers get the native behavior while others fall back to your JavaScript implementation:
+
+<CodeFigure
+  code={`<div
+  role="toolbar"
+  aria-label="Formatting"
+  focusgroup="horizontal wrap"
+>
+  <button>Bold</button>
+  <button>Italic</button>
+  <button>Underline</button>
+</div>
+
+<script>
+  // Only add JS-based roving tabindex if focusgroup is not supported
+  if (!('focusGroup' in HTMLElement.prototype)) {
+    // Fallback: initialize roving tabindex via JavaScript
+    initRovingTabIndex(toolbar, 'button');
+  }
+</script>`}
+  lang="html"
+  caption="Progressive enhancement: use focusgroup where supported, fall back to JavaScript-based roving tabindex elsewhere."
+/>
+
+#### Resources
+
+- [Request for developer feedback: focusgroup — Chrome for Developers](https://developer.chrome.com/blog/focusgroup-rfc)
+- [focusgroup Explainer — Open UI](https://open-ui.org/components/focusgroup.explainer/)
+- [Focusgroup Explainer — Microsoft Edge](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/Focusgroup/explainer.md)
+- [Focusgroup Interactive Demos — Microsoft Edge](https://microsoftedge.github.io/Demos/focusgroup/)
 
 ### Focus Trap for Modals
 
