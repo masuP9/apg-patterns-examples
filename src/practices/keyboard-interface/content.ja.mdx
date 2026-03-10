@@ -1,5 +1,6 @@
 import CodeFigure from '@/components/ui/CodeFigure.astro';
 import FocusgroupDemo from './FocusgroupDemo.astro';
+import FocusgroupComparisonTable from './FocusgroupComparisonTable.astro';
 
 ## 概要
 
@@ -425,16 +426,7 @@ focusgroup内に `<input>` や `<textarea>` のようなフォーカス可能な
 
 #### JavaScript ベースのアプローチとの比較
 
-| 観点                     | ロービング tabindex（JS） | aria-activedescendant（JS） | focusgroup（HTML）            |
-| ------------------------ | ------------------------- | --------------------------- | ----------------------------- |
-| JavaScript の必要性      | あり                      | あり                        | なし                          |
-| Tab ストップ管理         | 手動で tabindex を入替え  | コンテナがフォーカスを保持  | 自動                          |
-| 矢印キーの処理           | カスタム keydown ハンドラ | カスタム keydown ハンドラ   | ブラウザ組み込み              |
-| フォーカス記憶           | 手動実装が必要            | 手動実装が必要              | 組み込み（デフォルト動作）    |
-| ラップ動作               | 手動実装が必要            | 手動実装が必要              | `wrap` キーワード             |
-| グリッドナビゲーション   | 複雑な実装が必要          | 複雑な実装が必要            | `grid` キーワード             |
-| ブラウザサポート         | 全ブラウザ                | 全ブラウザ                  | Chromium 133+（実験的）       |
-| スクリーンリーダー対応   | 広く対応                  | 対応状況にばらつき          | ロービング tabindex と同等    |
+<FocusgroupComparisonTable locale="ja" />
 
 #### ブラウザサポートとプログレッシブエンハンスメント
 

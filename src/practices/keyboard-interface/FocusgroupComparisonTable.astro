@@ -1,0 +1,89 @@
+---
+/**
+ * Responsive comparison table: Roving tabindex vs aria-activedescendant vs focusgroup.
+ *
+ * - Desktop (md+): standard HTML table
+ * - Mobile (<md): stacked card layout per approach
+ */
+interface Props {
+  locale?: 'en' | 'ja';
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+type Row = { aspect: string; roving: string; activedesc: string; focusgroup: string };
+
+const rows: Row[] = isJa
+  ? [
+      { aspect: 'JavaScript の必要性', roving: 'あり', activedesc: 'あり', focusgroup: 'なし' },
+      { aspect: 'Tab ストップ管理', roving: '手動で tabindex を入替え', activedesc: 'コンテナがフォーカスを保持', focusgroup: '自動' },
+      { aspect: '矢印キーの処理', roving: 'カスタム keydown ハンドラ', activedesc: 'カスタム keydown ハンドラ', focusgroup: 'ブラウザ組み込み' },
+      { aspect: 'フォーカス記憶', roving: '手動実装が必要', activedesc: '手動実装が必要', focusgroup: '組み込み（デフォルト動作）' },
+      { aspect: 'ラップ動作', roving: '手動実装が必要', activedesc: '手動実装が必要', focusgroup: 'wrap キーワード' },
+      { aspect: 'グリッドナビゲーション', roving: '複雑な実装が必要', activedesc: '複雑な実装が必要', focusgroup: 'grid キーワード' },
+      { aspect: 'ブラウザサポート', roving: '全ブラウザ', activedesc: '全ブラウザ', focusgroup: 'Chromium 133+（実験的）' },
+      { aspect: 'スクリーンリーダー対応', roving: '広く対応', activedesc: '対応状況にばらつき', focusgroup: 'ロービング tabindex と同等' },
+    ]
+  : [
+      { aspect: 'JavaScript required', roving: 'Yes', activedesc: 'Yes', focusgroup: 'No' },
+      { aspect: 'Tab stop management', roving: 'Manual tabindex swapping', activedesc: 'Container holds focus', focusgroup: 'Automatic' },
+      { aspect: 'Arrow key handling', roving: 'Custom keydown handler', activedesc: 'Custom keydown handler', focusgroup: 'Built-in' },
+      { aspect: 'Focus memory', roving: 'Must implement manually', activedesc: 'Must implement manually', focusgroup: 'Built-in (default behavior)' },
+      { aspect: 'Wrap behavior', roving: 'Must implement manually', activedesc: 'Must implement manually', focusgroup: 'wrap keyword' },
+      { aspect: 'Grid navigation', roving: 'Complex implementation', activedesc: 'Complex implementation', focusgroup: 'grid keyword' },
+      { aspect: 'Browser support', roving: 'All browsers', activedesc: 'All browsers', focusgroup: 'Chromium 133+ (experimental)' },
+      { aspect: 'Screen reader support', roving: 'Widely supported', activedesc: 'Varies', focusgroup: 'Aligned with roving tabindex' },
+    ];
+
+const colHeaders = isJa
+  ? { roving: 'ロービング tabindex（JS）', activedesc: 'aria-activedescendant（JS）', focusgroup: 'focusgroup（HTML）' }
+  : { roving: 'Roving tabindex (JS)', activedesc: 'aria-activedescendant (JS)', focusgroup: 'focusgroup (HTML)' };
+
+const aspectHeader = isJa ? '観点' : 'Aspect';
+---
+
+{/* Desktop: standard table */}
+<div class="hidden md:block overflow-x-auto">
+  <table class="w-full border-collapse text-sm">
+    <thead>
+      <tr class="border-border border-b">
+        <th class="bg-muted py-2 pr-4 text-left font-semibold">{aspectHeader}</th>
+        <th class="bg-muted py-2 pr-4 text-left font-semibold">{colHeaders.roving}</th>
+        <th class="bg-muted py-2 pr-4 text-left font-semibold">{colHeaders.activedesc}</th>
+        <th class="bg-muted py-2 text-left font-semibold">{colHeaders.focusgroup}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr class="border-border border-b">
+          <td class="py-2 pr-4 font-medium">{row.aspect}</td>
+          <td class="py-2 pr-4">{row.roving}</td>
+          <td class="py-2 pr-4">{row.activedesc}</td>
+          <td class="py-2">{row.focusgroup}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+{/* Mobile: stacked cards per approach */}
+<div class="flex flex-col gap-4 md:hidden">
+  {([
+    { key: 'roving' as const, header: colHeaders.roving },
+    { key: 'activedesc' as const, header: colHeaders.activedesc },
+    { key: 'focusgroup' as const, header: colHeaders.focusgroup },
+  ]).map(({ key, header }) => (
+    <div class="rounded-lg border p-4">
+      <h5 class="mb-3 text-sm font-semibold">{header}</h5>
+      <dl class="space-y-2 text-sm">
+        {rows.map((row) => (
+          <div class="flex flex-col">
+            <dt class="text-muted-foreground text-xs font-medium">{row.aspect}</dt>
+            <dd class="mt-0.5">{row[key]}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  ))}
+</div>

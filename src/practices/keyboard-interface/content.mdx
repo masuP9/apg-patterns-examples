@@ -1,5 +1,6 @@
 import CodeFigure from '@/components/ui/CodeFigure.astro';
 import FocusgroupDemo from './FocusgroupDemo.astro';
+import FocusgroupComparisonTable from './FocusgroupComparisonTable.astro';
 
 ## Overview
 
@@ -425,16 +426,7 @@ When focusable children like `<input>` or `<textarea>` exist inside a focusgroup
 
 #### Comparison with JavaScript-based Approaches
 
-| Aspect                | Roving tabindex (JS)          | aria-activedescendant (JS)   | focusgroup (HTML)           |
-| --------------------- | ----------------------------- | ---------------------------- | --------------------------- |
-| JavaScript required   | Yes                           | Yes                          | No                          |
-| Tab stop management   | Manual tabindex swapping      | Container holds focus        | Automatic                   |
-| Arrow key handling    | Custom keydown handler        | Custom keydown handler       | Built-in                    |
-| Focus memory          | Must implement manually       | Must implement manually      | Built-in (default behavior) |
-| Wrap behavior         | Must implement manually       | Must implement manually      | `wrap` keyword              |
-| Grid navigation       | Complex implementation        | Complex implementation       | `grid` keyword              |
-| Browser support       | All browsers                  | All browsers                 | Chromium 133+ (experimental)|
-| Screen reader support | Widely supported              | Varies                       | Aligned with roving tabindex|
+<FocusgroupComparisonTable locale="en" />
 
 #### Browser Support and Progressive Enhancement
 
