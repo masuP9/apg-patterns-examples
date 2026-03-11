@@ -12,43 +12,59 @@
  *
  * @see https://microsoftedge.github.io/Demos/focusgroup/
  */
+interface Props {
+  locale?: 'en' | 'ja';
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const t = {
+  unsupportedTitle: isJa
+    ? 'お使いのブラウザは focusgroup 属性にまだ対応していません。'
+    : 'Your browser does not support the <code>focusgroup</code> attribute yet.',
+  unsupportedDesc: isJa
+    ? '<code>focusgroup</code> 属性は現在、Chromium ベースのブラウザ（Chrome 133+、Edge 133+）でサポートされています。以下のデモは意図されたマークアップを示していますが、矢印キーによるナビゲーションにはブラウザのサポートが必要です。'
+    : 'The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers (Chrome 133+, Edge 133+). The demos below show the intended markup, but arrow key navigation requires browser support.',
+  supportedTitle: isJa
+    ? 'お使いのブラウザは <code>focusgroup</code> 属性に対応しています！'
+    : 'Your browser supports the <code>focusgroup</code> attribute!',
+  supportedDesc: isJa
+    ? '以下の各デモに Tab キーで移動し、矢印キーでナビゲートしてみてください。ブラウザが自動的にロービング tabindex を処理するため、JavaScript は不要です。'
+    : 'Try tabbing into each demo below and using arrow keys to navigate. Notice how the browser handles roving tabindex automatically — no JavaScript needed.',
+  basicToolbar: isJa ? '基本ツールバー' : 'Basic Toolbar',
+  wrappingToolbar: isJa ? 'ラップツールバー' : 'Wrapping Toolbar',
+  verticalToolbar: isJa ? '垂直ツールバー' : 'Vertical Toolbar',
+  basicDesc: isJa
+    ? 'Tab キーでツールバーに入り、<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> 矢印キーでナビゲートします。もう一度 Tab を押すと離脱します。端でフォーカスが止まります。'
+    : 'Tab to enter the toolbar, then use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys to navigate. Tab again to exit. Focus stops at the edges.',
+  wrapDesc: isJa
+    ? '<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> 矢印キーを使用します。最後から最初へ、またはその逆にフォーカスがラップします。'
+    : 'Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys. Focus wraps around from last to first and vice versa.',
+  verticalDesc: isJa
+    ? '<kbd>&#8593;</kbd> <kbd>&#8595;</kbd> 矢印キーでナビゲートします。<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> は無効です。<code>block</code> は <code>toolbar</code> のデフォルトのインライン軸を上書きします。'
+    : "Use <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> arrow keys to navigate. <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> do nothing. <code>block</code> overrides <code>toolbar</code>'s default inline axis.",
+};
 ---
 
 <div class="focusgroup-demo space-y-8">
   {/* Browser support notice — shown dynamically */}
-  <div
-    class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm"
-    hidden
-  >
-    <p class="font-semibold">
-      Your browser does not support the <code>focusgroup</code> attribute yet.
-    </p>
-    <p class="text-muted-foreground mt-1">
-      The <code>focusgroup</code> attribute is currently supported in
-      Chromium-based browsers (Chrome 133+, Edge 133+). The demos below show
-      the intended markup, but arrow key navigation requires browser support.
-    </p>
+  <div class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm" hidden>
+    <p class="font-semibold" set:html={t.unsupportedTitle} />
+    <p class="text-muted-foreground mt-1" set:html={t.unsupportedDesc} />
   </div>
   <div
     class="focusgroup-supported-notice rounded-lg border border-green-200 bg-green-50 p-4 text-sm dark:border-green-800 dark:bg-green-950/20"
     hidden
   >
-    <p class="font-semibold text-green-800 dark:text-green-200">
-      Your browser supports the <code>focusgroup</code> attribute!
-    </p>
-    <p class="text-muted-foreground mt-1">
-      Try tabbing into each demo below and using arrow keys to navigate.
-      Notice how the browser handles roving tabindex automatically — no
-      JavaScript needed.
-    </p>
+    <p class="font-semibold text-green-800 dark:text-green-200" set:html={t.supportedTitle} />
+    <p class="text-muted-foreground mt-1" set:html={t.supportedDesc} />
   </div>
 
   {/* Demo 1: Basic toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Basic Toolbar (<code class="bg-muted rounded px-1 text-xs"
-        >focusgroup="toolbar"</code
-      >)
+      {t.basicToolbar} (<code class="bg-muted rounded px-1 text-xs">focusgroup="toolbar"</code>)
     </figcaption>
     <div
       class="flex gap-2"
@@ -77,16 +93,13 @@
         >Strikethrough</button
       >
     </div>
-    <p class="text-muted-foreground mt-2 text-xs">
-      Tab to enter the toolbar, then use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd>
-      arrow keys to navigate. Tab again to exit. Focus stops at the edges.
-    </p>
+    <p class="text-muted-foreground mt-2 text-xs" set:html={t.basicDesc} />
   </figure>
 
   {/* Demo 2: Wrapping toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Wrapping Toolbar (<code class="bg-muted rounded px-1 text-xs"
+      {t.wrappingToolbar} (<code class="bg-muted rounded px-1 text-xs"
         >focusgroup="toolbar wrap"</code
       >)
     </figcaption>
@@ -122,21 +135,18 @@
         style="background-color: #3b82f6;"
         aria-label="Blue"></button>
     </div>
-    <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys. Focus wraps around
-      from last to first and vice versa.
-    </p>
+    <p class="text-muted-foreground mt-2 text-xs" set:html={t.wrapDesc} />
   </figure>
 
   {/* Demo 3: Vertical toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
-      Vertical Toolbar (<code class="bg-muted rounded px-1 text-xs"
+      {t.verticalToolbar} (<code class="bg-muted rounded px-1 text-xs"
         >focusgroup="toolbar block"</code
       >)
     </figcaption>
     <div
-      class="flex flex-col gap-1 w-fit"
+      class="flex w-fit flex-col gap-1"
       role="toolbar"
       aria-label="Document actions (focusgroup vertical demo)"
       aria-orientation="vertical"
@@ -158,11 +168,7 @@
         >Paste</button
       >
     </div>
-    <p class="text-muted-foreground mt-2 text-xs">
-      Use <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> arrow keys to navigate.
-      <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> do nothing.
-      <code>block</code> overrides <code>toolbar</code>'s default inline axis.
-    </p>
+    <p class="text-muted-foreground mt-2 text-xs" set:html={t.verticalDesc} />
   </figure>
 </div>
 
