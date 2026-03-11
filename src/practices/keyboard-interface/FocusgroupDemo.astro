@@ -49,12 +49,6 @@ const t = {
   noMemoryDesc: isJa
     ? '矢印キーで3番目以降のボタンへ移動してから Tab で離脱し、再度 Tab で戻ります。<code>no-memory</code> が効いていれば常に先頭ボタンにフォーカスが戻ります。記憶されていれば前回のボタンに戻ります。'
     : 'Move to the 3rd+ button with arrow keys, Tab out, then Tab back in. With <code>no-memory</code>, focus should always return to the first button. If memory is retained, focus returns to the previously focused button.',
-  nomemoryToolbar: isJa
-    ? 'nomemory ツールバー（旧トークン比較用）'
-    : 'nomemory Toolbar (legacy token comparison)',
-  nomemoryDesc: isJa
-    ? '上の <code>no-memory</code> と同じ手順で試してください。<code>nomemory</code>（ハイフンなし）が認識されるかを比較します。'
-    : 'Try the same steps as the <code>no-memory</code> demo above. Compare whether <code>nomemory</code> (no hyphen) is also recognized.',
 };
 ---
 
@@ -107,41 +101,6 @@ const t = {
       >
     </div>
     <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.noMemoryDesc} /></p>
-  </figure>
-
-  {/* Demo 1b: nomemory toolbar (no hyphen) — compare with no-memory */}
-  <figure class="rounded-lg border p-4">
-    <figcaption class="mb-3 text-sm font-semibold">
-      {t.nomemoryToolbar} (<code class="bg-muted rounded px-1 text-xs">focusgroup="toolbar nomemory"</code>)
-    </figcaption>
-    <div
-      class="flex gap-2"
-      role="toolbar"
-      aria-label="Navigation (focusgroup nomemory demo)"
-      focusgroup="toolbar nomemory"
-    >
-      <button
-        type="button"
-        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >Home</button
-      >
-      <button
-        type="button"
-        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >About</button
-      >
-      <button
-        type="button"
-        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >Blog</button
-      >
-      <button
-        type="button"
-        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
-        >Contact</button
-      >
-    </div>
-    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.nomemoryDesc} /></p>
   </figure>
 
   {/* Demo 2: Basic toolbar */}
