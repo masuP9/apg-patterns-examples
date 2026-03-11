@@ -50,15 +50,17 @@ const t = {
 <div class="focusgroup-demo space-y-8">
   {/* Browser support notice — shown dynamically */}
   <div class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm" hidden>
-    <p class="font-semibold" set:html={t.unsupportedTitle} />
-    <p class="text-muted-foreground mt-1" set:html={t.unsupportedDesc} />
+    <p class="font-semibold"><Fragment set:html={t.unsupportedTitle} /></p>
+    <p class="text-muted-foreground mt-1"><Fragment set:html={t.unsupportedDesc} /></p>
   </div>
   <div
     class="focusgroup-supported-notice rounded-lg border border-green-200 bg-green-50 p-4 text-sm dark:border-green-800 dark:bg-green-950/20"
     hidden
   >
-    <p class="font-semibold text-green-800 dark:text-green-200" set:html={t.supportedTitle} />
-    <p class="text-muted-foreground mt-1" set:html={t.supportedDesc} />
+    <p class="font-semibold text-green-800 dark:text-green-200">
+      <Fragment set:html={t.supportedTitle} />
+    </p>
+    <p class="text-muted-foreground mt-1"><Fragment set:html={t.supportedDesc} /></p>
   </div>
 
   {/* Demo 1: Basic toolbar */}
@@ -93,7 +95,7 @@ const t = {
         >Strikethrough</button
       >
     </div>
-    <p class="text-muted-foreground mt-2 text-xs" set:html={t.basicDesc} />
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.basicDesc} /></p>
   </figure>
 
   {/* Demo 2: Wrapping toolbar */}
@@ -135,7 +137,7 @@ const t = {
         style="background-color: #3b82f6;"
         aria-label="Blue"></button>
     </div>
-    <p class="text-muted-foreground mt-2 text-xs" set:html={t.wrapDesc} />
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.wrapDesc} /></p>
   </figure>
 
   {/* Demo 3: Vertical toolbar */}
@@ -168,7 +170,7 @@ const t = {
         >Paste</button
       >
     </div>
-    <p class="text-muted-foreground mt-2 text-xs" set:html={t.verticalDesc} />
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.verticalDesc} /></p>
   </figure>
 </div>
 
