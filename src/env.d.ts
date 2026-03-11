@@ -5,3 +5,10 @@ declare module '*.astro' {
   const component: AstroComponentFactory;
   export default component;
 }
+
+declare namespace astroHTML.JSX {
+  interface HTMLAttributes {
+    /** @see https://open-ui.org/components/focusgroup.explainer/ */
+    focusgroup?: string;
+  }
+}

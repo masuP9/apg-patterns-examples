@@ -1,0 +1,229 @@
+---
+/**
+ * Interactive demo for the focusgroup HTML attribute.
+ *
+ * Shows four demos based on the Microsoft Edge focusgroup demos:
+ * 1. No-memory toolbar (focusgroup="toolbar no-memory") — verify token spelling
+ * 2. Basic toolbar (focusgroup="toolbar")
+ * 3. Wrapping toolbar (focusgroup="toolbar wrap")
+ * 4. Vertical toolbar (focusgroup="toolbar block")
+ *
+ * Requires a browser with native focusgroup support (Chromium 146+ origin trial, or 133+ with flag).
+ * A browser support notice is shown dynamically via feature detection.
+ *
+ * @see https://microsoftedge.github.io/Demos/focusgroup/
+ */
+interface Props {
+  locale?: 'en' | 'ja';
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const t = {
+  unsupportedTitle: isJa
+    ? 'お使いのブラウザは focusgroup 属性にまだ対応していません。'
+    : 'Your browser does not support the <code>focusgroup</code> attribute yet.',
+  unsupportedDesc: isJa
+    ? '<code>focusgroup</code> 属性は現在、Chromium ベースのブラウザ（Chrome/Edge 146+ オリジントライアル、または 133+ フラグ付き）でサポートされています。以下のデモは意図されたマークアップを示していますが、矢印キーによるナビゲーションにはブラウザのサポートが必要です。'
+    : 'The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers (Chrome/Edge 146+ origin trial, or 133+ with flag). The demos below show the intended markup, but arrow key navigation requires browser support.',
+  supportedTitle: isJa
+    ? 'お使いのブラウザは <code>focusgroup</code> 属性に対応しています！'
+    : 'Your browser supports the <code>focusgroup</code> attribute!',
+  supportedDesc: isJa
+    ? '以下の各デモに Tab キーで移動し、矢印キーでナビゲートしてみてください。ブラウザが自動的にロービング tabindex を処理するため、JavaScript は不要です。'
+    : 'Try tabbing into each demo below and using arrow keys to navigate. Notice how the browser handles roving tabindex automatically — no JavaScript needed.',
+  basicToolbar: isJa ? '基本ツールバー' : 'Basic Toolbar',
+  wrappingToolbar: isJa ? 'ラップツールバー' : 'Wrapping Toolbar',
+  verticalToolbar: isJa ? '垂直ツールバー' : 'Vertical Toolbar',
+  basicDesc: isJa
+    ? 'Tab キーでツールバーに入り、<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> 矢印キーでナビゲートします。もう一度 Tab を押すと離脱します。端でフォーカスが止まります。'
+    : 'Tab to enter the toolbar, then use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys to navigate. Tab again to exit. Focus stops at the edges.',
+  wrapDesc: isJa
+    ? '<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> 矢印キーを使用します。最後から最初へ、またはその逆にフォーカスがラップします。'
+    : 'Use <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys. Focus wraps around from last to first and vice versa.',
+  verticalDesc: isJa
+    ? '<kbd>&#8593;</kbd> <kbd>&#8595;</kbd> 矢印キーでナビゲートします。<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> は無効です。<code>block</code> は <code>toolbar</code> のデフォルトのインライン軸を上書きします。'
+    : "Use <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> arrow keys to navigate. <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> do nothing. <code>block</code> overrides <code>toolbar</code>'s default inline axis.",
+  noMemoryToolbar: isJa ? 'No-memory ツールバー' : 'No-memory Toolbar',
+  noMemoryDesc: isJa
+    ? '矢印キーで3番目以降のボタンへ移動してから Tab で離脱し、再度 Tab で戻ります。<code>no-memory</code> が効いていれば常に先頭ボタンにフォーカスが戻ります。記憶されていれば前回のボタンに戻ります。'
+    : 'Move to the 3rd+ button with arrow keys, Tab out, then Tab back in. With <code>no-memory</code>, focus should always return to the first button. If memory is retained, focus returns to the previously focused button.',
+};
+---
+
+<div class="focusgroup-demo space-y-8">
+  {/* Browser support notice — shown dynamically */}
+  <div class="focusgroup-support-notice bg-muted/50 rounded-lg border p-4 text-sm" hidden>
+    <p class="font-semibold"><Fragment set:html={t.unsupportedTitle} /></p>
+    <p class="text-muted-foreground mt-1"><Fragment set:html={t.unsupportedDesc} /></p>
+  </div>
+  <div
+    class="focusgroup-supported-notice rounded-lg border border-green-200 bg-green-50 p-4 text-sm dark:border-green-800 dark:bg-green-950/20"
+    hidden
+  >
+    <p class="font-semibold text-green-800 dark:text-green-200">
+      <Fragment set:html={t.supportedTitle} />
+    </p>
+    <p class="text-muted-foreground mt-1"><Fragment set:html={t.supportedDesc} /></p>
+  </div>
+
+  {/* Demo 1: No-memory toolbar — verify no-memory token spelling */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      {t.noMemoryToolbar} (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar no-memory"</code
+      >)
+    </figcaption>
+    <div
+      class="flex gap-2"
+      role="toolbar"
+      aria-label="Navigation (focusgroup no-memory demo)"
+      focusgroup="toolbar no-memory"
+    >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Home</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >About</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Blog</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Contact</button
+      >
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.noMemoryDesc} /></p>
+  </figure>
+
+  {/* Demo 2: Basic toolbar */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      {t.basicToolbar} (<code class="bg-muted rounded px-1 text-xs">focusgroup="toolbar"</code>)
+    </figcaption>
+    <div
+      class="flex gap-2"
+      role="toolbar"
+      aria-label="Text formatting (focusgroup demo)"
+      focusgroup="toolbar"
+    >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Bold</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Italic</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Underline</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Strikethrough</button
+      >
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.basicDesc} /></p>
+  </figure>
+
+  {/* Demo 3: Wrapping toolbar */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      {t.wrappingToolbar} (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar wrap"</code
+      >)
+    </figcaption>
+    <div
+      class="flex gap-2"
+      role="toolbar"
+      aria-label="Color palette (focusgroup wrap demo)"
+      focusgroup="toolbar wrap"
+    >
+      <button
+        type="button"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #ef4444;"
+        aria-label="Red"></button>
+      <button
+        type="button"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #f97316;"
+        aria-label="Orange"></button>
+      <button
+        type="button"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #eab308;"
+        aria-label="Yellow"></button>
+      <button
+        type="button"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #22c55e;"
+        aria-label="Green"></button>
+      <button
+        type="button"
+        class="h-8 w-8 rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        style="background-color: #3b82f6;"
+        aria-label="Blue"></button>
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.wrapDesc} /></p>
+  </figure>
+
+  {/* Demo 4: Vertical toolbar */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      {t.verticalToolbar} (<code class="bg-muted rounded px-1 text-xs"
+        >focusgroup="toolbar block"</code
+      >)
+    </figcaption>
+    <div
+      class="flex w-fit flex-col gap-1"
+      role="toolbar"
+      aria-label="Document actions (focusgroup vertical demo)"
+      aria-orientation="vertical"
+      focusgroup="toolbar block"
+    >
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Cut</button
+      >
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Copy</button
+      >
+      <button
+        type="button"
+        class="rounded border px-4 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Paste</button
+      >
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.verticalDesc} /></p>
+  </figure>
+</div>
+
+<script>
+  const supported = 'focusgroup' in document.createElement('div');
+  const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
+  const noticeSupported = document.querySelector('.focusgroup-supported-notice');
+
+  if (supported) {
+    noticeSupported?.removeAttribute('hidden');
+  } else {
+    noticeUnsupported?.removeAttribute('hidden');
+  }
+</script>
