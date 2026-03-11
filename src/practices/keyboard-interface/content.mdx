@@ -346,7 +346,7 @@ The `focusgroup` attribute accepts space-separated tokens to control navigation 
 | `inline`   | Only inline-axis (left/right in LTR) arrow keys navigate                             |
 | `block`    | Only block-axis (up/down) arrow keys navigate; overrides `toolbar`'s default inline  |
 | `wrap`     | Focus wraps from last item to first (and vice versa) instead of stopping at the edge |
-| `nomemory` | Tab always enters at the start (or `focusgroupstart`), ignoring focus history        |
+| `no-memory` | Tab always enters at the start, ignoring focus history                              |
 | `extend`   | Joins a nested focusgroup into its ancestor's focusgroup as a single logical group   |
 | `none`     | Opts a subtree out of an ancestor's focusgroup                                       |
 
@@ -421,7 +421,7 @@ When focusable children like `<input>` or `<textarea>` exist inside a focusgroup
 
 #### Browser Support and Progressive Enhancement
 
-As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/Edge 133+) behind a flag or origin trial. It is not yet supported in Firefox or Safari.
+As of early 2026, the scoped `focusgroup` attribute is available in Chromium-based browsers (Chrome/Edge 146+) as an origin trial. An earlier unscoped prototype shipped behind a flag in Chrome 133. It is not yet supported in Firefox or Safari.
 
 **Recommended approach**: Use `focusgroup` as a progressive enhancement alongside existing JavaScript-based keyboard navigation. This way, supported browsers get the native behavior while others fall back to your JavaScript implementation:
 
@@ -438,7 +438,7 @@ As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/E
 
 <script>
   // Only add JS-based roving tabindex if focusgroup is not supported
-  if (!('focusgroup' in HTMLElement.prototype)) {
+  if (!('focusgroup' in document.createElement('div'))) {
     // Fallback: initialize roving tabindex via JavaScript
     initRovingTabIndex(toolbar, 'button');
   }
@@ -450,7 +450,9 @@ As of early 2026, `focusgroup` is available in Chromium-based browsers (Chrome/E
 #### Resources
 
 - [Request for developer feedback: focusgroup — Chrome for Developers](https://developer.chrome.com/blog/focusgroup-rfc)
-- [focusgroup Explainer — Open UI](https://open-ui.org/components/focusgroup.explainer/)
+- [Scoped Focusgroup Explainer — Open UI](https://open-ui.org/components/scoped-focusgroup.explainer/)
+- [focusgroup Explainer (original) — Open UI](https://open-ui.org/components/focusgroup.explainer/)
+- [WHATWG HTML Issue #11641 — Focusgroup proposal](https://github.com/whatwg/html/issues/11641)
 - [Focusgroup Explainer — Microsoft Edge](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/Focusgroup/explainer.md)
 - [Focusgroup Interactive Demos — Microsoft Edge](https://microsoftedge.github.io/Demos/focusgroup/)
 

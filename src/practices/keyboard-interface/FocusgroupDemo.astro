@@ -7,7 +7,7 @@
  * 2. Wrapping toolbar (focusgroup="toolbar wrap")
  * 3. Vertical toolbar (focusgroup="toolbar block")
  *
- * Requires a browser with native focusgroup support (Chromium 133+).
+ * Requires a browser with native focusgroup support (Chromium 146+ origin trial, or 133+ with flag).
  * A browser support notice is shown dynamically via feature detection.
  *
  * @see https://microsoftedge.github.io/Demos/focusgroup/
@@ -24,8 +24,8 @@ const t = {
     ? 'お使いのブラウザは focusgroup 属性にまだ対応していません。'
     : 'Your browser does not support the <code>focusgroup</code> attribute yet.',
   unsupportedDesc: isJa
-    ? '<code>focusgroup</code> 属性は現在、Chromium ベースのブラウザ（Chrome 133+、Edge 133+）でサポートされています。以下のデモは意図されたマークアップを示していますが、矢印キーによるナビゲーションにはブラウザのサポートが必要です。'
-    : 'The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers (Chrome 133+, Edge 133+). The demos below show the intended markup, but arrow key navigation requires browser support.',
+    ? '<code>focusgroup</code> 属性は現在、Chromium ベースのブラウザ（Chrome/Edge 146+ オリジントライアル、または 133+ フラグ付き）でサポートされています。以下のデモは意図されたマークアップを示していますが、矢印キーによるナビゲーションにはブラウザのサポートが必要です。'
+    : 'The <code>focusgroup</code> attribute is currently supported in Chromium-based browsers (Chrome/Edge 146+ origin trial, or 133+ with flag). The demos below show the intended markup, but arrow key navigation requires browser support.',
   supportedTitle: isJa
     ? 'お使いのブラウザは <code>focusgroup</code> 属性に対応しています！'
     : 'Your browser supports the <code>focusgroup</code> attribute!',
@@ -175,7 +175,7 @@ const t = {
 </div>
 
 <script>
-  const supported = 'focusgroup' in HTMLElement.prototype;
+  const supported = 'focusgroup' in document.createElement('div');
   const noticeUnsupported = document.querySelector('.focusgroup-support-notice');
   const noticeSupported = document.querySelector('.focusgroup-supported-notice');
 
