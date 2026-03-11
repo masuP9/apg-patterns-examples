@@ -2,10 +2,11 @@
 /**
  * Interactive demo for the focusgroup HTML attribute.
  *
- * Shows three demos based on the Microsoft Edge focusgroup demos:
- * 1. Basic toolbar (focusgroup="toolbar")
- * 2. Wrapping toolbar (focusgroup="toolbar wrap")
- * 3. Vertical toolbar (focusgroup="toolbar block")
+ * Shows four demos based on the Microsoft Edge focusgroup demos:
+ * 1. No-memory toolbar (focusgroup="toolbar no-memory") — verify token spelling
+ * 2. Basic toolbar (focusgroup="toolbar")
+ * 3. Wrapping toolbar (focusgroup="toolbar wrap")
+ * 4. Vertical toolbar (focusgroup="toolbar block")
  *
  * Requires a browser with native focusgroup support (Chromium 146+ origin trial, or 133+ with flag).
  * A browser support notice is shown dynamically via feature detection.
@@ -44,6 +45,10 @@ const t = {
   verticalDesc: isJa
     ? '<kbd>&#8593;</kbd> <kbd>&#8595;</kbd> 矢印キーでナビゲートします。<kbd>&#8592;</kbd> <kbd>&#8594;</kbd> は無効です。<code>block</code> は <code>toolbar</code> のデフォルトのインライン軸を上書きします。'
     : "Use <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> arrow keys to navigate. <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> do nothing. <code>block</code> overrides <code>toolbar</code>'s default inline axis.",
+  noMemoryToolbar: isJa ? 'No-memory ツールバー' : 'No-memory Toolbar',
+  noMemoryDesc: isJa
+    ? '矢印キーで3番目以降のボタンへ移動してから Tab で離脱し、再度 Tab で戻ります。<code>no-memory</code> が効いていれば常に先頭ボタンにフォーカスが戻ります。記憶されていれば前回のボタンに戻ります。'
+    : 'Move to the 3rd+ button with arrow keys, Tab out, then Tab back in. With <code>no-memory</code>, focus should always return to the first button. If memory is retained, focus returns to the previously focused button.',
 };
 ---
 
@@ -63,7 +68,42 @@ const t = {
     <p class="text-muted-foreground mt-1"><Fragment set:html={t.supportedDesc} /></p>
   </div>
 
-  {/* Demo 1: Basic toolbar */}
+  {/* Demo 1: No-memory toolbar — verify no-memory token spelling */}
+  <figure class="rounded-lg border p-4">
+    <figcaption class="mb-3 text-sm font-semibold">
+      {t.noMemoryToolbar} (<code class="bg-muted rounded px-1 text-xs">focusgroup="toolbar no-memory"</code>)
+    </figcaption>
+    <div
+      class="flex gap-2"
+      role="toolbar"
+      aria-label="Navigation (focusgroup no-memory demo)"
+      focusgroup="toolbar no-memory"
+    >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Home</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >About</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Blog</button
+      >
+      <button
+        type="button"
+        class="rounded border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+        >Contact</button
+      >
+    </div>
+    <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.noMemoryDesc} /></p>
+  </figure>
+
+  {/* Demo 2: Basic toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
       {t.basicToolbar} (<code class="bg-muted rounded px-1 text-xs">focusgroup="toolbar"</code>)
@@ -98,7 +138,7 @@ const t = {
     <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.basicDesc} /></p>
   </figure>
 
-  {/* Demo 2: Wrapping toolbar */}
+  {/* Demo 3: Wrapping toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
       {t.wrappingToolbar} (<code class="bg-muted rounded px-1 text-xs"
@@ -140,7 +180,7 @@ const t = {
     <p class="text-muted-foreground mt-2 text-xs"><Fragment set:html={t.wrapDesc} /></p>
   </figure>
 
-  {/* Demo 3: Vertical toolbar */}
+  {/* Demo 4: Vertical toolbar */}
   <figure class="rounded-lg border p-4">
     <figcaption class="mb-3 text-sm font-semibold">
       {t.verticalToolbar} (<code class="bg-muted rounded px-1 text-xs"
