@@ -43,7 +43,7 @@ const { title, description = t('site.description'), ogImage } = Astro.props;
 
 // Generate absolute URLs for OGP
 const siteUrl =
-  Astro.site?.toString().replace(/\/$/, '') ?? 'https://masup9.github.io/apg-patterns-examples';
+  import.meta.env.SITE?.replace(/\/$/, '') ?? 'https://masup9.github.io/apg-patterns-examples';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageUrl = ogImage
   ? new URL(ogImage, siteUrl).toString()
