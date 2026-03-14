@@ -92,7 +92,7 @@ export default defineConfig({
         // TODO: Remove when lucide-svelte fixes ESM exports (upstream issue).
         'lucide-svelte': path.resolve(
           __dirname,
-          'node_modules/lucide-svelte/dist/lucide-svelte.js',
+          'node_modules/lucide-svelte/dist/lucide-svelte.js'
         ),
       },
     },
