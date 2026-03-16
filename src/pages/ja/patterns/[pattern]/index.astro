@@ -27,7 +27,18 @@ const defaultRedirectUrl = withBase(
   <head>
     <meta charset="UTF-8" />
     <title>リダイレクト中...</title>
-    <script is:inline define:vars={{ pattern, defaultFramework, validFrameworks, basePath }}>
+    <script
+      is:inline
+      data-pattern={pattern}
+      data-default-framework={defaultFramework}
+      data-valid-frameworks={JSON.stringify(validFrameworks)}
+      data-base-path={basePath}
+    >
+      const el = document.currentScript;
+      const pattern = el.dataset.pattern;
+      const defaultFramework = el.dataset.defaultFramework;
+      const validFrameworks = JSON.parse(el.dataset.validFrameworks);
+      const basePath = el.dataset.basePath;
       const framework = localStorage.getItem('apg-selected-framework') || defaultFramework;
       const selectedFramework = validFrameworks.includes(framework) ? framework : defaultFramework;
       window.location.replace(`${basePath}/ja/patterns/${pattern}/${selectedFramework}/`);
