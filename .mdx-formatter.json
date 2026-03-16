@@ -1,7 +1,4 @@
 {
-  "addEmptyLineBetweenElements": {
-    "enabled": false
-  },
   "formatMultiLineJsx": {
     "ignoreComponents": ["KeyValueListItem"]
   }
