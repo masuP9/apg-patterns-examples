@@ -22,6 +22,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
   class:list={['practice-download relative inline-flex', className]}
   data-practice={practice}
   data-filename={mdFileName}
+  data-copied-text={t('ai.copied')}
 >
   <div
     class="button-group inline-flex items-center rounded-md border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
@@ -129,10 +130,11 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
   }
 </style>
 
-<script define:vars={{ copiedText: t('ai.copied') }}>
+<script is:inline>
   function initPracticeDownload() {
     document.querySelectorAll('.practice-download').forEach((container) => {
       const filename = container.dataset.filename;
+      const copiedText = container.dataset.copiedText;
       const template = container.querySelector('template.md-content');
       const contentScript = template?.content.querySelector('script[type="text/markdown"]');
       const content = contentScript?.textContent || '';
