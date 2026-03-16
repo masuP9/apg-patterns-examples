@@ -27,6 +27,8 @@ const llmMdUrl = withBase(
   class:list={['ai-guide-actions relative inline-flex', className]}
   data-pattern={pattern}
   data-llm-url={llmMdUrl}
+  data-copied-text={t('ai.copied')}
+  data-download-file-name={mdFileName}
 >
   <div
     class="button-group inline-flex items-center rounded-md border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
@@ -141,10 +143,12 @@ const llmMdUrl = withBase(
   }
 </style>
 
-<script define:vars={{ copiedText: t('ai.copied'), downloadFileName: mdFileName }}>
+<script>
   function initAiGuideActions() {
     document.querySelectorAll('.ai-guide-actions').forEach((container) => {
       const llmUrl = container.dataset.llmUrl;
+      const copiedText = container.dataset.copiedText;
+      const downloadFileName = container.dataset.downloadFileName;
       const feedback = container.querySelector('.copied-feedback');
       const dropdown = container.querySelector('details.dropdown');
 

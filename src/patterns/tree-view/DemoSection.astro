@@ -84,7 +84,11 @@ const activatedPlaceholder = isJa
 const activatedPrefix = isJa ? 'アクティベート: ' : 'Activated: ';
 ---
 
-<div class="border-border bg-background rounded-lg border p-6">
+<div
+  class="border-border bg-background rounded-lg border p-6"
+  data-file-system-nodes={JSON.stringify(fileSystemNodes)}
+  data-activated-placeholder={activatedPlaceholder}
+>
   <div class="flex flex-col gap-8">
     {
       framework === 'react' && (
@@ -244,7 +248,10 @@ const activatedPrefix = isJa ? 'アクティベート: ' : 'Activated: ';
   </div>
 </div>
 
-<script define:vars={{ fileSystemNodes, activatedPlaceholder }}>
+<script>
+  const demoContainer = document.currentScript?.previousElementSibling;
+  const fileSystemNodes = JSON.parse(demoContainer?.dataset.fileSystemNodes || '[]');
+  const activatedPlaceholder = demoContainer?.dataset.activatedPlaceholder || '';
   const treeview = document.querySelector('apg-treeview');
   const activatedLabel = document.getElementById('activated-label');
   const resetButton = document.getElementById('reset-button');
