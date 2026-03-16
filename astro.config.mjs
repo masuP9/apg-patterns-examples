@@ -68,6 +68,10 @@ export default defineConfig({
   site,
   base,
 
+  experimental: {
+    rustCompiler: true,
+  },
+
   server: {
     port: devPort,
   },
