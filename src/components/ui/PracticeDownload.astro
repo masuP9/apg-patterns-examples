@@ -130,7 +130,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
   }
 </style>
 
-<script>
+<script is:inline>
   function initPracticeDownload() {
     document.querySelectorAll('.practice-download').forEach((container) => {
       const filename = container.dataset.filename;

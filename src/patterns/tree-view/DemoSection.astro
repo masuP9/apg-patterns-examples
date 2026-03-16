@@ -248,7 +248,7 @@ const activatedPrefix = isJa ? 'アクティベート: ' : 'Activated: ';
   </div>
 </div>
 
-<script>
+<script is:inline>
   const demoContainer = document.currentScript?.previousElementSibling;
   const fileSystemNodes = JSON.parse(demoContainer?.dataset.fileSystemNodes || '[]');
   const activatedPlaceholder = demoContainer?.dataset.activatedPlaceholder || '';
