@@ -47,11 +47,13 @@ const titles = sectionTitles[locale];
     {titles.title}
   </h2>
   <p class="mb-4">
-    <strong class="text-red-700 dark:text-red-400"
-      >{
-        nativeHtmlConsiderations?.recommendation ? t(nativeHtmlConsiderations.recommendation) : ''
-      }</strong
-    >
+    {
+      nativeHtmlConsiderations?.recommendation && (
+        <strong class="text-red-700 dark:text-red-400">
+          <Fragment set:html={t(nativeHtmlConsiderations.recommendation)} />
+        </strong>
+      )
+    }
     {nativeHtmlConsiderations?.benefits ? t(nativeHtmlConsiderations.benefits) : ''}
   </p>
   <div class="bg-muted mb-4 rounded-md p-3">
