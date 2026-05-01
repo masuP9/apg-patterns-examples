@@ -1,15 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
 
 import react from '@astrojs/react';
 import vue from '@astrojs/vue';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @typedef {'github-pages' | 'cloudflare-pages' | 'local'} DeployTarget */
 
@@ -68,10 +64,6 @@ export default defineConfig({
   site,
   base,
 
-  experimental: {
-    rustCompiler: true,
-  },
-
   server: {
     port: devPort,
   },
@@ -88,28 +80,22 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      alias: {
-        // WORKAROUND: lucide-svelte barrel export uses extensionless internal
-        // import (`export * from './icons/index'`) which fails with Node.js
-        // strict ESM resolution via Tailwind's ESM cache loader in Vite 7.
-        // TODO: Remove when lucide-svelte fixes ESM exports (upstream issue).
-        'lucide-svelte': path.resolve(
-          __dirname,
-          'node_modules/lucide-svelte/dist/lucide-svelte.js'
-        ),
-      },
-    },
     environments: {
       client: {
         build: {
           rollupOptions: {
             output: {
-              // Split framework vendor chunks for better caching and build performance
-              manualChunks: {
-                'react-vendor': ['react', 'react-dom'],
-                'vue-vendor': ['vue'],
-                'svelte-vendor': ['svelte'],
+              // Split framework vendor chunks for better caching and build performance.
+              // Vite 8 removed the object form of manualChunks; use the function form.
+              manualChunks(id) {
+                if (
+                  id.includes('/node_modules/react/') ||
+                  id.includes('/node_modules/react-dom/')
+                ) {
+                  return 'react-vendor';
+                }
+                if (id.includes('/node_modules/vue/')) return 'vue-vendor';
+                if (id.includes('/node_modules/svelte/')) return 'svelte-vendor';
               },
             },
           },

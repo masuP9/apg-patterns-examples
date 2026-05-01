@@ -34,8 +34,7 @@ import type { Component } from 'vue';
 const DialogComponent = shallowRef<Component | null>(null);
 
 onMounted(async () => {
-  // @vite-ignore - Disable HMR for this dynamic import to avoid __VUE_HMR_RUNTIME__ error
-  const module = await import(/* @vite-ignore */ './Dialog.vue');
+  const module = await import('./Dialog.vue');
   DialogComponent.value = module.default;
 });
 
