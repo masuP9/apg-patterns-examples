@@ -7,7 +7,7 @@ import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 
-/** @typedef {'github-pages' | 'cloudflare-pages' | 'local'} DeployTarget */
+/** @typedef {'github-pages' | 'cloudflare-pages'} DeployTarget */
 
 /**
  * Get dev server port from environment variable or generate from worktree path
@@ -30,7 +30,6 @@ function getDevPort() {
   return 4321 + (hash % 79);
 }
 
-// Get port early so it can be used in siteConfig
 const devPort = getDevPort();
 
 /** @type {Record<DeployTarget, { site: string; base: string }>} */
@@ -43,19 +42,13 @@ const siteConfig = {
     site: process.env.CF_PAGES_URL || 'https://apg-patterns-examples.pages.dev',
     base: '/',
   },
-  local: {
-    site: `http://localhost:${devPort}`,
-    base: '/',
-  },
 };
 
-// Deploy target: 'github-pages' (default for production) or 'cloudflare-pages'
-const deployTargetEnv =
-  process.env.DEPLOY_TARGET || (process.env.NODE_ENV === 'production' ? 'github-pages' : 'local');
+const deployTargetEnv = process.env.DEPLOY_TARGET || 'github-pages';
 
 /** @type {DeployTarget} */
 const deployTarget =
-  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'local';
+  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'github-pages';
 
 const { site, base } = siteConfig[deployTarget];
 
@@ -80,35 +73,10 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    environments: {
-      client: {
-        build: {
-          rollupOptions: {
-            output: {
-              // Split framework vendor chunks for better caching and build performance.
-              // Vite 8 removed the object form of manualChunks; use the function form.
-              manualChunks(id) {
-                if (
-                  id.includes('/node_modules/react/') ||
-                  id.includes('/node_modules/react-dom/')
-                ) {
-                  return 'react-vendor';
-                }
-                if (id.includes('/node_modules/vue/')) return 'vue-vendor';
-                if (id.includes('/node_modules/svelte/')) return 'svelte-vendor';
-              },
-            },
-          },
-        },
-      },
-    },
   },
 
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'ja'],
-    routing: {
-      prefixDefaultLocale: false,
-    },
   },
 });

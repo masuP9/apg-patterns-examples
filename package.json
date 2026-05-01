@@ -151,5 +151,8 @@
     "typescript-eslint": "^8.53.0",
     "vitest": "^4.1.5",
     "vue-eslint-parser": "^10.4.0"
+  },
+  "overrides": {
+    "@sveltejs/vite-plugin-svelte": "^7.0.0"
   }
 }
