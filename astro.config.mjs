@@ -48,9 +48,7 @@ const deployTargetEnv = process.env.DEPLOY_TARGET || 'github-pages';
 
 /** @type {DeployTarget} */
 const deployTarget =
-  deployTargetEnv in siteConfig
-    ? /** @type {DeployTarget} */ (deployTargetEnv)
-    : 'github-pages';
+  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'github-pages';
 
 const { site, base } = siteConfig[deployTarget];
 
