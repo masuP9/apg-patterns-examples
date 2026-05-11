@@ -1,0 +1,12 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import AlertDialogDemoVue from './AlertDialogDemo.vue';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+---
+
+<AlertDialogDemoVue client:only="vue" />

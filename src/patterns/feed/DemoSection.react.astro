@@ -1,0 +1,18 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { FeedDemo as FeedDemoReact } from './FeedDemo';
+import { FeedDemoJa as FeedDemoJaReact } from './FeedDemoJa';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {isJa ? <FeedDemoJaReact client:load /> : <FeedDemoReact client:load />}
+</div>

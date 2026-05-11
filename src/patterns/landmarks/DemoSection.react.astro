@@ -1,0 +1,12 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import { LandmarkDemo as LandmarkDemoReact } from './LandmarkDemo';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <LandmarkDemoReact client:load showLabels={true} />
+</div>

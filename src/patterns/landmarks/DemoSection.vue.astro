@@ -1,0 +1,12 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import LandmarkDemoVue from './LandmarkDemo.vue';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <LandmarkDemoVue client:load showLabels={true} />
+</div>

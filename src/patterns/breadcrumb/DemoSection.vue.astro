@@ -1,24 +1,14 @@
 ---
-/**
- * Breadcrumb Demo Section
- *
- * Renders the breadcrumb demo for each framework variant.
- * Each framework's component is statically imported to support
- * Astro's client:load directive for hydration.
- */
 import type { Framework } from '@/lib/frameworks';
 import type { Locale } from '@/i18n/ui';
-import { Breadcrumb as BreadcrumbReact } from './Breadcrumb';
 import BreadcrumbVue from './Breadcrumb.vue';
-import BreadcrumbSvelte from './Breadcrumb.svelte';
-import BreadcrumbAstro from './Breadcrumb.astro';
 
 interface Props {
-  framework: Framework;
+  framework?: Framework;
   locale?: Locale;
 }
 
-const { framework, locale = 'en' } = Astro.props;
+const { locale = 'en' } = Astro.props;
 const isJa = locale === 'ja';
 
 const basicItems = [
@@ -50,10 +40,7 @@ const longPathItems = [
             : 'A simple breadcrumb trail showing the path to the current page.'
         }
       </p>
-      {framework === 'react' && <BreadcrumbReact client:load items={basicItems} />}
-      {framework === 'vue' && <BreadcrumbVue client:load items={basicItems} />}
-      {framework === 'svelte' && <BreadcrumbSvelte client:load items={basicItems} />}
-      {framework === 'astro' && <BreadcrumbAstro items={basicItems} />}
+      <BreadcrumbVue client:load items={basicItems} />
     </div>
 
     <div>
@@ -65,10 +52,7 @@ const longPathItems = [
             : 'A deeper navigation path with multiple levels of hierarchy.'
         }
       </p>
-      {framework === 'react' && <BreadcrumbReact client:load items={longPathItems} />}
-      {framework === 'vue' && <BreadcrumbVue client:load items={longPathItems} />}
-      {framework === 'svelte' && <BreadcrumbSvelte client:load items={longPathItems} />}
-      {framework === 'astro' && <BreadcrumbAstro items={longPathItems} />}
+      <BreadcrumbVue client:load items={longPathItems} />
     </div>
   </div>
 </div>

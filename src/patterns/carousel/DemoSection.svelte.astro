@@ -1,28 +1,18 @@
 ---
-/**
- * Carousel Demo Section
- *
- * Renders carousel demos for each framework variant.
- * Includes both manual navigation and auto-rotation demos.
- */
 import type { Framework } from '@/lib/frameworks';
 import type { Locale } from '@/i18n/ui';
-import { CarouselDemo as CarouselDemoReact } from './CarouselDemo';
-import CarouselDemoVue from './CarouselDemo.vue';
 import CarouselDemoSvelte from './CarouselDemo.svelte';
-import CarouselDemoAstro from './CarouselDemo.astro';
 
 interface Props {
-  framework: Framework;
+  framework?: Framework;
   locale?: Locale;
 }
 
-const { framework, locale = 'en' } = Astro.props;
+const { locale = 'en' } = Astro.props;
 const isJa = locale === 'ja';
 const basePath = import.meta.env.BASE_URL;
 ---
 
-<!-- Manual Navigation -->
 <div class="mb-8">
   <h3 class="mb-3 text-lg font-medium">{isJa ? '手動ナビゲーション' : 'Manual Navigation'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
@@ -33,14 +23,10 @@ const basePath = import.meta.env.BASE_URL;
     }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
-    {framework === 'react' && <CarouselDemoReact client:load basePath={basePath} />}
-    {framework === 'vue' && <CarouselDemoVue client:load basePath={basePath} />}
-    {framework === 'svelte' && <CarouselDemoSvelte client:load basePath={basePath} />}
-    {framework === 'astro' && <CarouselDemoAstro />}
+    <CarouselDemoSvelte client:load basePath={basePath} />
   </div>
 </div>
 
-<!-- Auto-Rotation -->
 <div>
   <h3 class="mb-3 text-lg font-medium">{isJa ? '自動回転' : 'Auto-Rotation'}</h3>
   <p class="text-muted-foreground mb-4 text-sm">
@@ -51,21 +37,6 @@ const basePath = import.meta.env.BASE_URL;
     }
   </p>
   <div class="border-border bg-background rounded-lg border p-6">
-    {
-      framework === 'react' && (
-        <CarouselDemoReact client:load variant="auto-rotate" basePath={basePath} />
-      )
-    }
-    {
-      framework === 'vue' && (
-        <CarouselDemoVue client:load variant="auto-rotate" basePath={basePath} />
-      )
-    }
-    {
-      framework === 'svelte' && (
-        <CarouselDemoSvelte client:load variant="auto-rotate" basePath={basePath} />
-      )
-    }
-    {framework === 'astro' && <CarouselDemoAstro variant="auto-rotate" />}
+    <CarouselDemoSvelte client:load variant="auto-rotate" basePath={basePath} />
   </div>
 </div>
