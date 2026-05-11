@@ -1,0 +1,61 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import AccordionAstro from './Accordion.astro';
+import { defaultItems, multipleItems, disabledItems } from './accordion-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="mb-8">
+    <h3 class="mb-3 text-lg font-medium">
+      {isJa ? '単一展開（デフォルト）' : 'Single Expansion (Default)'}
+    </h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa
+          ? '同時に1つのパネルのみ展開できます。新しいパネルを開くと、前に開いていたパネルが閉じます。'
+          : 'Only one panel can be expanded at a time. Opening a new panel closes the previously open one.'
+      }
+    </p>
+    <AccordionAstro items={defaultItems} headingLevel={3} />
+  </div>
+
+  <div class="mb-8">
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '複数展開' : 'Multiple Expansion'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa ? (
+          <Fragment>
+            <code>allowMultiple</code> プロパティを使用して、複数のパネルを同時に展開できます。
+          </Fragment>
+        ) : (
+          <Fragment>
+            Multiple panels can be expanded simultaneously using the <code>allowMultiple</code>{' '}
+            prop.
+          </Fragment>
+        )
+      }
+    </p>
+    <AccordionAstro items={multipleItems} allowMultiple={true} headingLevel={3} />
+  </div>
+
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目あり' : 'With Disabled Items'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa
+          ? '個別のアコーディオン項目を無効にできます。キーボードナビゲーションは無効な項目を自動的にスキップします。'
+          : 'Individual accordion items can be disabled. Keyboard navigation automatically skips disabled items.'
+      }
+    </p>
+    <AccordionAstro items={disabledItems} headingLevel={3} />
+  </div>
+</div>
