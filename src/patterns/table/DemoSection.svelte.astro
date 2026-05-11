@@ -1,0 +1,101 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import TableDemoSvelte from './TableDemo.svelte';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本テーブル' : 'Basic Table'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'データを表示するシンプルな静的テーブル。インタラクティブな機能はありません。'
+        : 'A simple static table displaying data. No interactive features.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TableDemoSvelte variant="basic" />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? 'ソート可能なテーブル' : 'Sortable Table'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '列ヘッダーをクリックしてソートします。' : 'Click column headers to sort.'} Uses{' '}
+    <code>aria-sort</code>
+    {isJa ? 'でソート方向を示します。' : 'to indicate sort direction.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TableDemoSvelte variant="sortable" client:load />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '行ヘッダー付き' : 'With Row Headers'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '各行の最初のセルが' : 'First cell in each row uses'}
+    <code>role="rowheader"</code>{' '}
+    {
+      isJa
+        ? 'を使用し、スクリーンリーダーのナビゲーションを改善します。'
+        : 'for better screen reader navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TableDemoSvelte variant="rowHeader" />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '仮想化対応' : 'Virtualization Support'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '大規模なデータセットでは、' : 'For large datasets, use'}
+    <code>aria-rowcount</code>
+    {isJa ? '、' : ','}
+    <code>aria-colcount</code>
+    {isJa ? '、' : ', and'}
+    <code>aria-rowindex</code>{' '}
+    {isJa ? 'を使用してテーブル全体の構造を伝えます。' : 'to communicate the full table structure.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TableDemoSvelte variant="virtualized" />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? 'セル結合' : 'Spanning Cells'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'セルは複数の列や行にまたがることができます。この実装では、視覚的な結合に CSS Grid の'
+        : 'Cells can span multiple columns or rows using'
+    }{' '}
+    <code>colspan</code>
+    {isJa ? 'と' : 'and'}
+    <code>rowspan</code>
+    {isJa ? ' を使用し、CSS Grid の' : '. This implementation uses CSS Grid with'}{' '}
+    <code>grid-column: span N</code>
+    {isJa ? 'と' : 'and'}
+    <code>grid-row: span N</code>{' '}
+    {
+      isJa
+        ? 'で視覚的な結合を行い、スクリーンリーダーのアクセシビリティのために'
+        : 'for visual spanning, plus'
+    }{' '}
+    <code>aria-colspan</code>
+    {isJa ? 'と' : 'and'}
+    <code>aria-rowspan</code>{' '}
+    {isJa ? 'を使用しています。' : 'for screen reader accessibility.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TableDemoSvelte variant="spanning" />
+  </div>
+</div>
