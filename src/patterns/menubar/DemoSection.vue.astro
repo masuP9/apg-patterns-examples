@@ -1,0 +1,13 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import MenubarDemoVue from './MenubarDemo.vue';
+import '@patterns/menubar/menubar.css';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <MenubarDemoVue client:load />
+</div>

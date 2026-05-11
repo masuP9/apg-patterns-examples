@@ -25,6 +25,28 @@ import type { PatternMeta } from '@/lib/pattern-meta-types';
 
 // Glob imports for dynamic content loading
 const demoModules = import.meta.glob<{ default: any }>('/src/patterns/*/DemoSection.astro');
+const demoReactModules = import.meta.glob<{ default: any }>(
+  '/src/patterns/*/DemoSection.react.astro'
+);
+const demoVueModules = import.meta.glob<{ default: any }>('/src/patterns/*/DemoSection.vue.astro');
+const demoSvelteModules = import.meta.glob<{ default: any }>(
+  '/src/patterns/*/DemoSection.svelte.astro'
+);
+const demoWebComponentModules = import.meta.glob<{ default: any }>(
+  '/src/patterns/*/DemoSection.web-component.astro'
+);
+const frameworkDemoModules = {
+  react: demoReactModules,
+  vue: demoVueModules,
+  svelte: demoSvelteModules,
+  astro: demoWebComponentModules,
+} as const;
+const frameworkDemoKey = {
+  react: 'react',
+  vue: 'vue',
+  svelte: 'svelte',
+  astro: 'web-component',
+} as const;
 const testingModules = import.meta.glob<{ default: any }>('/src/patterns/*/TestingDocs.astro');
 const nativeHtmlModules = import.meta.glob<{ default: any }>(
   '/src/patterns/*/NativeHtmlNotice.astro'
@@ -78,8 +100,16 @@ if (!fwMeta) {
 const fwInfo = FRAMEWORK_INFO[framework];
 
 // Load dynamic components
-const DemoSection = (await demoModules[`/src/patterns/${pattern}/DemoSection.astro`]?.())
-  ?.default as any;
+// Prefer framework-specific DemoSection (DemoSection.{framework}.astro) if present,
+// fall back to the legacy unified DemoSection.astro during migration.
+const newDemoLoader =
+  frameworkDemoModules[framework][
+    `/src/patterns/${pattern}/DemoSection.${frameworkDemoKey[framework]}.astro`
+  ];
+const legacyDemoLoader = demoModules[`/src/patterns/${pattern}/DemoSection.astro`];
+const DemoSection = newDemoLoader
+  ? ((await newDemoLoader()).default as any)
+  : ((await legacyDemoLoader?.())?.default as any);
 const TestingDocs = (await testingModules[`/src/patterns/${pattern}/TestingDocs.astro`]?.())
   ?.default as any;
 const NativeHtmlNotice = meta.hasNativeHtmlNotice

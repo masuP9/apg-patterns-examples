@@ -1,0 +1,26 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { AlertDemo as AlertDemoReact } from './AlertDemo';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div>
+    <p class="text-muted-foreground mb-4">
+      {
+        isJa
+          ? 'ボタンをクリックすると、さまざまなバリアントのアラートが表示されます。ライブリージョンコンテナはページ読み込み時からDOMに存在し、コンテンツのみが変更されます。'
+          : 'Click the buttons below to show alerts with different variants. The live region container exists in the DOM from page load - only the content changes.'
+      }
+    </p>
+    <AlertDemoReact client:load />
+  </div>
+</div>

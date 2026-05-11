@@ -1,0 +1,54 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import MultiThumbSliderSvelte from './MultiThumbSlider.svelte';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-8">
+    <div>
+      <MultiThumbSliderSvelte
+        client:load
+        defaultValue={[20, 80]}
+        label="Price Range"
+        format={'${value}'}
+        ariaLabel={['Minimum Price', 'Maximum Price']}
+      />
+    </div>
+    <div>
+      <MultiThumbSliderSvelte
+        client:load
+        defaultValue={[25, 75]}
+        label="Temperature Range"
+        format={'{value}°C'}
+        ariaLabel={['Minimum Temperature', 'Maximum Temperature']}
+      />
+    </div>
+    <div>
+      <MultiThumbSliderSvelte
+        client:load
+        defaultValue={[30, 70]}
+        min={0}
+        max={100}
+        step={5}
+        minDistance={10}
+        label="Budget Range (with minDistance)"
+        format={'${value}'}
+        ariaLabel={['Minimum Budget', 'Maximum Budget']}
+      />
+    </div>
+    <div>
+      <MultiThumbSliderSvelte
+        client:load
+        defaultValue={[40, 60]}
+        label="Disabled"
+        disabled
+        format={'{value}%'}
+        ariaLabel={['Lower Value', 'Upper Value']}
+      />
+    </div>
+  </div>
+</div>

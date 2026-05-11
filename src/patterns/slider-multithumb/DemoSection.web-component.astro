@@ -1,0 +1,54 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import MultiThumbSliderAstro from './MultiThumbSlider.astro';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-8">
+    <div>
+      <MultiThumbSliderAstro
+        defaultValue={[20, 80]}
+        label="Price Range"
+        format={'${value}'}
+        aria-label-lower="Minimum Price"
+        aria-label-upper="Maximum Price"
+      />
+    </div>
+    <div>
+      <MultiThumbSliderAstro
+        defaultValue={[25, 75]}
+        label="Temperature Range"
+        format={'{value}°C'}
+        aria-label-lower="Minimum Temperature"
+        aria-label-upper="Maximum Temperature"
+      />
+    </div>
+    <div>
+      <MultiThumbSliderAstro
+        defaultValue={[30, 70]}
+        min={0}
+        max={100}
+        step={5}
+        minDistance={10}
+        label="Budget Range (with minDistance)"
+        format={'${value}'}
+        aria-label-lower="Minimum Budget"
+        aria-label-upper="Maximum Budget"
+      />
+    </div>
+    <div>
+      <MultiThumbSliderAstro
+        defaultValue={[40, 60]}
+        label="Disabled"
+        disabled
+        format={'{value}%'}
+        aria-label-lower="Lower Value"
+        aria-label-upper="Upper Value"
+      />
+    </div>
+  </div>
+</div>

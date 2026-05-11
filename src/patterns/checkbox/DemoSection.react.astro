@@ -1,0 +1,28 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import { Checkbox as CheckboxReact } from './Checkbox';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+      <CheckboxReact client:load id="demo-terms" />I agree to the terms and conditions
+    </label>
+    <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+      <CheckboxReact client:load id="demo-newsletter" initialChecked={true} />
+      Subscribe to newsletter
+    </label>
+    <label class="inline-flex cursor-pointer items-center gap-2 font-medium">
+      <CheckboxReact client:load id="demo-select-all" indeterminate={true} />
+      Select all items
+    </label>
+    <label class="inline-flex cursor-not-allowed items-center gap-2 font-medium opacity-50">
+      <CheckboxReact client:load id="demo-disabled" disabled />
+      Unavailable option (disabled)
+    </label>
+  </div>
+</div>

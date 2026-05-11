@@ -1,23 +1,11 @@
 ---
-/**
- * Menubar Demo Section
- *
- * Renders the menubar demo for each framework variant.
- * React/Vue/Svelte use their respective MenubarDemo components.
- * Astro uses the Menubar component directly with inline data.
- */
 import type { Framework } from '@/lib/frameworks';
-import { BasicMenubarDemo } from './MenubarDemo';
-import MenubarDemoVue from './MenubarDemo.vue';
-import MenubarDemoSvelte from './MenubarDemo.svelte';
 import Menubar, { type MenubarItem } from './Menubar.astro';
 import '@patterns/menubar/menubar.css';
 
 interface Props {
-  framework: Framework;
+  framework?: Framework;
 }
-
-const { framework } = Astro.props;
 
 const menubarItems: MenubarItem[] = [
   {
@@ -89,8 +77,5 @@ const menubarItems: MenubarItem[] = [
 ---
 
 <div class="border-border bg-background rounded-lg border p-6">
-  {framework === 'react' && <BasicMenubarDemo client:load />}
-  {framework === 'vue' && <MenubarDemoVue client:load />}
-  {framework === 'svelte' && <MenubarDemoSvelte client:load />}
-  {framework === 'astro' && <Menubar items={menubarItems} aria-label="Application" />}
+  <Menubar items={menubarItems} aria-label="Application" />
 </div>
