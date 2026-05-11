@@ -1,0 +1,50 @@
+---
+import DataGrid from './DataGrid.astro';
+
+interface Props {}
+
+const columns = [
+  { id: 'name', header: 'Name', sortable: true, sortDirection: 'ascending' as const },
+  { id: 'email', header: 'Email', sortable: true },
+  { id: 'department', header: 'Department', sortable: true },
+];
+
+const rows = [
+  {
+    id: 'row1',
+    cells: [
+      { id: 'row1-name', value: 'Alice Johnson', editable: true },
+      { id: 'row1-email', value: 'alice@example.com', editable: true },
+      { id: 'row1-dept', value: 'Engineering' },
+    ],
+  },
+  {
+    id: 'row2',
+    cells: [
+      { id: 'row2-name', value: 'Bob Smith', editable: true },
+      { id: 'row2-email', value: 'bob@example.com', editable: true },
+      { id: 'row2-dept', value: 'Marketing' },
+    ],
+  },
+  {
+    id: 'row3',
+    cells: [
+      { id: 'row3-name', value: 'Carol Williams', editable: true },
+      { id: 'row3-email', value: 'carol@example.com', editable: true },
+      { id: 'row3-dept', value: 'Sales' },
+    ],
+  },
+];
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <DataGrid
+    columns={columns}
+    rows={rows}
+    ariaLabel="Employee list"
+    rowSelectable
+    rowMultiselectable
+    enableRangeSelection
+    editable
+  />
+</div>

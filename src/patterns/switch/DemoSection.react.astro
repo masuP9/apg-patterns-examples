@@ -1,0 +1,13 @@
+---
+import { Switch as SwitchReact } from './Switch';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <SwitchReact client:load>Wi-Fi</SwitchReact>
+    <SwitchReact client:load initialChecked={true}>Bluetooth</SwitchReact>
+    <SwitchReact client:load disabled>Airplane Mode (disabled)</SwitchReact>
+  </div>
+</div>

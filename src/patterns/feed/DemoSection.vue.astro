@@ -1,0 +1,16 @@
+---
+import type { Locale } from '@/i18n/ui';
+import FeedDemoVue from './FeedDemo.vue';
+import FeedDemoJaVue from './FeedDemoJa.vue';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  {isJa ? <FeedDemoJaVue client:load /> : <FeedDemoVue client:load />}
+</div>

@@ -1,0 +1,22 @@
+---
+import type { Locale } from '@/i18n/ui';
+import { WindowSplitterDemo as WindowSplitterDemoReact } from './WindowSplitterDemo';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '矢印キーでスプリッターを移動します。Enter キーで折りたたみ/展開します。Shift+矢印キーで大きなステップで移動します。Home/End キーで最小/最大位置に移動します。'
+        : 'Use Arrow keys to move the splitter. Press Enter to collapse/expand. Shift+Arrow moves by a larger step. Home/End moves to min/max position.'
+    }
+  </p>
+  <WindowSplitterDemoReact client:load />
+</div>

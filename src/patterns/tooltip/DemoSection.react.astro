@@ -1,0 +1,35 @@
+---
+import { Tooltip as TooltipReact } from './Tooltip';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap items-center gap-8">
+    <TooltipReact content="Save your changes" client:load>
+      <button class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2">
+        Save
+      </button>
+    </TooltipReact>
+
+    <TooltipReact content="This appears on the right" placement="right" client:load>
+      <button
+        class="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-4 py-2"
+      >
+        Right tooltip
+      </button>
+    </TooltipReact>
+
+    <TooltipReact content="This appears below" placement="bottom" client:load>
+      <button
+        class="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-4 py-2"
+      >
+        Bottom tooltip
+      </button>
+    </TooltipReact>
+
+    <TooltipReact content="This tooltip is disabled" disabled client:load>
+      <button class="bg-muted text-muted-foreground rounded-md px-4 py-2">Disabled tooltip</button>
+    </TooltipReact>
+  </div>
+</div>

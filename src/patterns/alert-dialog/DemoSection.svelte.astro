@@ -1,0 +1,10 @@
+---
+import type { Locale } from '@/i18n/ui';
+import AlertDialogDemoSvelte from './AlertDialogDemo.svelte';
+
+interface Props {
+  locale?: Locale;
+}
+---
+
+<AlertDialogDemoSvelte client:only="svelte" />

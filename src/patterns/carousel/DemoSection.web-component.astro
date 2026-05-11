@@ -1,0 +1,39 @@
+---
+import type { Locale } from '@/i18n/ui';
+import CarouselDemoAstro from './CarouselDemo.astro';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '手動ナビゲーション' : 'Manual Navigation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'タブインジケーター、前へ/次へボタン、またはキーボードの矢印キーで操作できます。'
+        : 'Navigate using the tab indicators, previous/next buttons, or keyboard arrows.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <CarouselDemoAstro />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '自動回転' : 'Auto-Rotation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'スライドを自動的に切り替えます。ホバー、フォーカス、または一時停止ボタンのクリックで停止します。prefers-reduced-motion を尊重します。'
+        : 'Automatically rotates through slides. Pauses on hover, focus, or when the user clicks the pause button. Respects prefers-reduced-motion.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <CarouselDemoAstro variant="auto-rotate" />
+  </div>
+</div>

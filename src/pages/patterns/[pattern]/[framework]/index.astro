@@ -26,7 +26,6 @@ import { getPatterns } from '@/lib/patterns';
 import type { PatternMeta } from '@/lib/pattern-meta-types';
 
 // Glob imports for dynamic content loading
-const demoModules = import.meta.glob<{ default: any }>('/src/patterns/*/DemoSection.astro');
 const demoReactModules = import.meta.glob<{ default: any }>(
   '/src/patterns/*/DemoSection.react.astro'
 );
@@ -101,16 +100,12 @@ if (!fwMeta) {
 const fwInfo = FRAMEWORK_INFO[framework];
 
 // Load dynamic components
-// Prefer framework-specific DemoSection (DemoSection.{framework}.astro) if present,
-// fall back to the legacy unified DemoSection.astro during migration.
-const newDemoLoader =
-  frameworkDemoModules[framework][
-    `/src/patterns/${pattern}/DemoSection.${frameworkDemoKey[framework]}.astro`
-  ];
-const legacyDemoLoader = demoModules[`/src/patterns/${pattern}/DemoSection.astro`];
-const DemoSection = newDemoLoader
-  ? ((await newDemoLoader()).default as any)
-  : ((await legacyDemoLoader?.())?.default as any);
+const demoLoaderPath = `/src/patterns/${pattern}/DemoSection.${frameworkDemoKey[framework]}.astro`;
+const demoLoader = frameworkDemoModules[framework][demoLoaderPath];
+if (!demoLoader) {
+  throw new Error(`DemoSection not found: ${demoLoaderPath}`);
+}
+const DemoSection = (await demoLoader()).default as any;
 const TestingDocs = (await testingModules[`/src/patterns/${pattern}/TestingDocs.astro`]?.())
   ?.default as any;
 const NativeHtmlNotice = meta.hasNativeHtmlNotice
@@ -166,7 +161,7 @@ const { Content: AccessibilityContent } = await getAccessibilityContent(pattern,
   <!-- Demo Section -->
   <section class="mb-12">
     <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
-    {DemoSection && <DemoSection framework={framework} locale={locale} />}
+    <DemoSection locale={locale} />
     <p class="text-muted-foreground mt-2 text-sm">
       <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
     </p>

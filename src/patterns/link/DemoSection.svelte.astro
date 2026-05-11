@@ -1,0 +1,17 @@
+---
+import LinkSvelte from './Link.svelte';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <LinkSvelte client:load href="https://www.w3.org/WAI/ARIA/apg/">
+      WAI-ARIA APG Documentation
+    </LinkSvelte>
+    <LinkSvelte client:load href="https://example.com" target="_blank">
+      External Link (opens in new tab)
+    </LinkSvelte>
+    <LinkSvelte client:load href="#" disabled>Disabled Link</LinkSvelte>
+  </div>
+</div>

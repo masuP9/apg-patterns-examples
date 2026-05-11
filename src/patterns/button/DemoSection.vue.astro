@@ -1,0 +1,12 @@
+---
+import ButtonVue from './Button.vue';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap gap-4">
+    <ButtonVue client:load>Click me</ButtonVue>
+    <ButtonVue client:load disabled>Disabled Button</ButtonVue>
+  </div>
+</div>

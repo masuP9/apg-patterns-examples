@@ -1,0 +1,10 @@
+---
+import type { Locale } from '@/i18n/ui';
+import AlertDialogDemoReact from './AlertDialogDemo';
+
+interface Props {
+  locale?: Locale;
+}
+---
+
+<AlertDialogDemoReact client:only="react" />

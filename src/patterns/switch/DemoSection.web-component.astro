@@ -1,0 +1,13 @@
+---
+import SwitchAstro from './Switch.astro';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <SwitchAstro>Wi-Fi</SwitchAstro>
+    <SwitchAstro initialChecked={true}>Bluetooth</SwitchAstro>
+    <SwitchAstro disabled>Airplane Mode (disabled)</SwitchAstro>
+  </div>
+</div>

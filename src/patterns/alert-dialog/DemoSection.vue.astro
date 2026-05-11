@@ -1,0 +1,10 @@
+---
+import type { Locale } from '@/i18n/ui';
+import AlertDialogDemoVue from './AlertDialogDemo.vue';
+
+interface Props {
+  locale?: Locale;
+}
+---
+
+<AlertDialogDemoVue client:only="vue" />

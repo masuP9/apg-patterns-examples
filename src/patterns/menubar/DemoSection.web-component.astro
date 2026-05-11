@@ -1,11 +1,8 @@
 ---
-import type { Framework } from '@/lib/frameworks';
 import Menubar, { type MenubarItem } from './Menubar.astro';
 import '@patterns/menubar/menubar.css';
 
-interface Props {
-  framework?: Framework;
-}
+interface Props {}
 
 const menubarItems: MenubarItem[] = [
   {

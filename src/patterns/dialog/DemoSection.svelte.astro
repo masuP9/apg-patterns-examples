@@ -1,0 +1,48 @@
+---
+import type { Locale } from '@/i18n/ui';
+import DialogDemoSvelte from './DialogDemo.svelte';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ダイアログ' : 'Basic Dialog'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'タイトル、説明、閉じる機能を備えたシンプルなモーダルダイアログ。'
+        : 'A simple modal dialog with title, description, and close functionality.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <DialogDemoSvelte
+      client:load
+      title="Dialog Title"
+      description="This is a description of the dialog content. It provides additional context for users."
+      triggerText="Open Dialog"
+      triggerClass="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+      contentHtml={`<p class="mb-4">This is the main content of the dialog. You can place any content here, such as text, forms, or other components.</p><p>Press <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-sm">Escape</kbd> or click outside to close.</p>`}
+    />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '説明なし' : 'Without Description'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? 'タイトルとコンテンツのみのダイアログ。' : 'A dialog with only a title and content.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <DialogDemoSvelte
+      client:load
+      title="Simple Dialog"
+      triggerText="Open Simple Dialog"
+      triggerClass="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
+      contentHtml="<p>This dialog has no description, only a title and content.</p>"
+    />
+  </div>
+</div>

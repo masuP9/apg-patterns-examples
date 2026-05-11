@@ -1,0 +1,16 @@
+---
+import MeterSvelte from './Meter.svelte';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-6">
+    <div><MeterSvelte value={75} label="CPU Usage" format="{value}%" /></div>
+    <div><MeterSvelte value={3.5} min={0} max={5} label="Rating" format="{value} / {max}" /></div>
+    <div>
+      <MeterSvelte value={-10} min={-50} max={50} label="Temperature" valueText="-10°C" />
+    </div>
+    <div><MeterSvelte value={65} min={0} max={100} label="Progress" format="{value}%" /></div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+---
+import ButtonSvelte from './Button.svelte';
+
+interface Props {}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap gap-4">
+    <ButtonSvelte client:load onClick={() => alert('Clicked!')}>Click me</ButtonSvelte>
+    <ButtonSvelte client:load disabled onClick={() => alert('This should not fire!')}>
+      Disabled Button
+    </ButtonSvelte>
+  </div>
+</div>
