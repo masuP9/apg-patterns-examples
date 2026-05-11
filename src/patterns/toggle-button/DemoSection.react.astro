@@ -1,0 +1,16 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import { MuteDemo, DarkModeDemo, NotificationsDemo } from './ToggleButtonDemo';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap gap-4">
+    <MuteDemo client:load />
+    <DarkModeDemo client:load />
+    <NotificationsDemo client:load />
+  </div>
+</div>

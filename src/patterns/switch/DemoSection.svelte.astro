@@ -1,0 +1,16 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import SwitchSvelte from './Switch.svelte';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <SwitchSvelte client:load>Wi-Fi</SwitchSvelte>
+    <SwitchSvelte client:load initialChecked={true}>Bluetooth</SwitchSvelte>
+    <SwitchSvelte client:load disabled>Airplane Mode (disabled)</SwitchSvelte>
+  </div>
+</div>

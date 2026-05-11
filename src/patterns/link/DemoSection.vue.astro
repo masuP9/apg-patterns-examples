@@ -1,0 +1,20 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import LinkVue from './Link.vue';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <LinkVue client:load href="https://www.w3.org/WAI/ARIA/apg/">
+      WAI-ARIA APG Documentation
+    </LinkVue>
+    <LinkVue client:load href="https://example.com" target="_blank">
+      External Link (opens in new tab)
+    </LinkVue>
+    <LinkVue client:load href="#" disabled>Disabled Link</LinkVue>
+  </div>
+</div>

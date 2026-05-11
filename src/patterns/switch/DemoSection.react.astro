@@ -1,0 +1,16 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import { Switch as SwitchReact } from './Switch';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col items-start gap-4">
+    <SwitchReact client:load>Wi-Fi</SwitchReact>
+    <SwitchReact client:load initialChecked={true}>Bluetooth</SwitchReact>
+    <SwitchReact client:load disabled>Airplane Mode (disabled)</SwitchReact>
+  </div>
+</div>

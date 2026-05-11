@@ -1,0 +1,12 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import ToggleButtonDemoVue from './ToggleButtonDemo.vue';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <ToggleButtonDemoVue client:load />
+</div>

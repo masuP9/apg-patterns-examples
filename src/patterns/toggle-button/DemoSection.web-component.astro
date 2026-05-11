@@ -1,0 +1,29 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import ToggleButton from './ToggleButton.astro';
+import Icon from '@/components/ui/icon/icon.astro';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-wrap gap-4">
+    <ToggleButton>
+      <Icon name="volume-off" slot="pressed-indicator" />
+      <Icon name="volume-2" slot="unpressed-indicator" />
+      Mute
+    </ToggleButton>
+    <ToggleButton initialPressed={true}>
+      <Icon name="moon" slot="pressed-indicator" />
+      <Icon name="sun" slot="unpressed-indicator" />
+      Dark Mode
+    </ToggleButton>
+    <ToggleButton disabled>
+      <Icon name="bell-off" slot="pressed-indicator" />
+      <Icon name="bell" slot="unpressed-indicator" />
+      Notifications
+    </ToggleButton>
+  </div>
+</div>
