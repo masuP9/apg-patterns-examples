@@ -1,0 +1,63 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import TabsSvelte from './Tabs.svelte';
+import { demoTabs, manualTabs, verticalTabs } from './tabs-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? '自動アクティベーション（デフォルト）' : 'Automatic Activation (Default)'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '矢印キーでフォーカスすると、タブが自動的にアクティブになります。'
+        : 'Tabs are activated automatically when focused with arrow keys.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TabsSvelte client:load tabs={demoTabs} label="Example tabs" />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '手動アクティベーション' : 'Manual Activation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'フォーカス後に Enter または Space キーでタブをアクティブにします。'
+        : 'Tabs require Enter or Space to activate after focusing.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TabsSvelte
+      client:load
+      tabs={manualTabs}
+      label="Manual activation tabs"
+      activationMode="manual"
+    />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直方向' : 'Vertical Orientation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '上下矢印キーで操作する縦並びのタブ。'
+        : 'Tabs arranged vertically with Up/Down arrow navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TabsSvelte client:load tabs={verticalTabs} label="Vertical tabs" orientation="vertical" />
+  </div>
+</div>
