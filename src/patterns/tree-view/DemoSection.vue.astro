@@ -1,0 +1,59 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import TreeViewVue from './TreeView.vue';
+import TreeViewActivationDemoVue from './TreeViewActivationDemo.vue';
+import { fileSystemNodes, disabledNodes } from './tree-view-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const singleSelectLabel = isJa ? '単一選択 + アクティベーション' : 'Single-Select with Activation';
+const multiSelectLabel = isJa ? '複数選択' : 'Multi-Select';
+const disabledLabel = isJa ? '無効化されたノード' : 'With Disabled Nodes';
+const fileExplorerAriaLabel = isJa ? 'ファイルエクスプローラー' : 'File Explorer';
+const multiSelectAriaLabel = isJa
+  ? '複数選択ファイルエクスプローラー'
+  : 'Multi-select File Explorer';
+const restrictedAriaLabel = isJa
+  ? 'アクセス制限付きファイルエクスプローラー'
+  : 'File Explorer with Restricted Access';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-8">
+    <div>
+      <h3 class="mb-3 text-sm font-medium">{singleSelectLabel}</h3>
+      <TreeViewActivationDemoVue
+        client:load
+        nodes={fileSystemNodes}
+        ariaLabel={fileExplorerAriaLabel}
+        defaultExpandedIds={['documents']}
+      />
+    </div>
+    <div>
+      <h3 class="mb-3 text-sm font-medium">{multiSelectLabel}</h3>
+      <TreeViewVue
+        client:load
+        nodes={fileSystemNodes}
+        aria-label={multiSelectAriaLabel}
+        multiselectable
+        defaultExpandedIds={['documents', 'images']}
+      />
+    </div>
+    <div>
+      <h3 class="mb-3 text-sm font-medium">{disabledLabel}</h3>
+      <TreeViewVue
+        client:load
+        nodes={disabledNodes}
+        aria-label={restrictedAriaLabel}
+        defaultExpandedIds={['folder1']}
+      />
+    </div>
+  </div>
+</div>
