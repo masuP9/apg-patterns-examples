@@ -1,0 +1,41 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import MenuButtonDemoSvelte from './MenuButtonDemo.svelte';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本的なメニューボタン' : 'Basic Menu Button'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'ボタンをクリックするか、キーボードでメニューを開きます。'
+        : 'Click the button or use keyboard to open the menu.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <MenuButtonDemoSvelte variant="basic" client:load />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目を含む場合' : 'With Disabled Items'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '無効な項目はキーボード操作時にスキップされます。'
+        : 'Disabled items are skipped during keyboard navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <MenuButtonDemoSvelte variant="disabled-items" client:load />
+  </div>
+</div>

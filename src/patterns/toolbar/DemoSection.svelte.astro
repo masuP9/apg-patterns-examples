@@ -1,0 +1,91 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import TextFormattingToolbarDemoSvelte from './TextFormattingToolbarDemo.svelte';
+import VerticalToolbarDemoSvelte from './VerticalToolbarDemo.svelte';
+import DisabledItemsToolbarDemoSvelte from './DisabledItemsToolbarDemo.svelte';
+import ToolbarToggleDemoSvelte from './ToolbarToggleDemo.svelte';
+import ToolbarToggleDefaultDemoSvelte from './ToolbarToggleDefaultDemo.svelte';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? 'テキスト書式ツールバー' : 'Text Formatting Toolbar'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'トグルボタンと通常のボタンを持つ水平ツールバー。'
+        : 'A horizontal toolbar with toggle buttons and regular buttons.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <TextFormattingToolbarDemoSvelte client:load />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '垂直ツールバー' : 'Vertical Toolbar'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '上下矢印キーで操作します。' : 'Use arrow up/down keys to navigate.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <VerticalToolbarDemoSvelte client:load />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '無効な項目付き' : 'With Disabled Items'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '無効な項目はキーボードナビゲーション中にスキップされます。'
+        : 'Disabled items are skipped during keyboard navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <DisabledItemsToolbarDemoSvelte client:load />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? '制御されたトグルボタン' : 'Controlled Toggle Buttons'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '制御された状態を持つトグルボタン。現在の状態が表示され、サンプルテキストに適用されます。'
+        : 'Toggle buttons with controlled state. The current state is displayed and applied to the sample text.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <ToolbarToggleDemoSvelte client:load />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? 'デフォルトの押下状態' : 'Default Pressed States'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '初期状態に' : 'Toggle buttons with'}
+    <code>defaultPressed</code>{' '}
+    {
+      isJa
+        ? 'を使用したトグルボタン。無効状態を含みます。'
+        : 'for initial state, including disabled states.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <ToolbarToggleDefaultDemoSvelte client:load />
+  </div>
+</div>

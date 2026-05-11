@@ -1,0 +1,86 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { Disclosure as DisclosureReact } from './Disclosure';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="space-y-8">
+  <!-- Basic Disclosure -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '基本ディスクロージャー' : 'Basic Disclosure'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa
+          ? 'クリックでコンテンツの表示・非表示を切り替えるシンプルなディスクロージャー。'
+          : 'A simple disclosure that toggles the visibility of content when clicked.'
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DisclosureReact client:load trigger="What is a Disclosure?">
+        <p>
+          A disclosure is a button that controls the visibility of a section of content. It is
+          commonly used for FAQ sections, additional details, or expandable navigation.
+        </p>
+      </DisclosureReact>
+    </div>
+  </div>
+
+  <!-- Initially Expanded -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '初期展開状態' : 'Initially Expanded'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa ? (
+          <Fragment>
+            <code>defaultExpanded</code> プロパティを使用して、初期表示時にコンテンツを表示します。
+          </Fragment>
+        ) : (
+          <Fragment>
+            Use the <code>defaultExpanded</code> prop to show the content on initial render.
+          </Fragment>
+        )
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DisclosureReact client:load trigger="This section is open by default" defaultExpanded={true}>
+        <p>
+          This content is visible when the page loads because <code>defaultExpanded</code> is set to{
+            ' '
+          }
+          <code>true</code>.
+        </p>
+      </DisclosureReact>
+    </div>
+  </div>
+
+  <!-- Disabled -->
+  <div>
+    <h3 class="mb-3 text-lg font-medium">{isJa ? '無効状態' : 'Disabled State'}</h3>
+    <p class="text-muted-foreground mb-4 text-sm">
+      {
+        isJa ? (
+          <Fragment>
+            <code>disabled</code> プロパティを使用して、ディスクロージャーの操作を無効にします。
+          </Fragment>
+        ) : (
+          <Fragment>
+            Use the <code>disabled</code> prop to prevent interaction with the disclosure.
+          </Fragment>
+        )
+      }
+    </p>
+    <div class="border-border bg-background rounded-lg border p-6">
+      <DisclosureReact client:load trigger="This disclosure is disabled" disabled={true}>
+        <p>This content cannot be revealed because the disclosure is disabled.</p>
+      </DisclosureReact>
+    </div>
+  </div>
+</div>

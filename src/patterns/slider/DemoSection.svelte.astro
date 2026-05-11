@@ -1,0 +1,42 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import SliderSvelte from './Slider.svelte';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-6">
+    <div>
+      <SliderSvelte client:load defaultValue={50} label="Volume" format="{value}%" />
+    </div>
+    <div>
+      <SliderSvelte client:load defaultValue={75} label="Progress" format="{value}%" />
+    </div>
+    <div>
+      <SliderSvelte
+        client:load
+        defaultValue={3}
+        min={1}
+        max={5}
+        step={1}
+        label="Rating"
+        format="{value} of {max}"
+      />
+    </div>
+    <div>
+      <SliderSvelte
+        client:load
+        defaultValue={50}
+        label="Vertical"
+        orientation="vertical"
+        format="{value}%"
+      />
+    </div>
+    <div>
+      <SliderSvelte client:load defaultValue={50} label="Disabled" disabled format="{value}%" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import { BasicMenubarDemo } from './MenubarDemo';
+import '@patterns/menubar/menubar.css';
+
+interface Props {
+  framework?: Framework;
+}
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <BasicMenubarDemo client:load />
+</div>

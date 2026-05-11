@@ -1,0 +1,121 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import ComboboxAstro from './Combobox.astro';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const fruitOptions = isJa
+  ? [
+      { id: 'apple', label: 'りんご' },
+      { id: 'banana', label: 'バナナ' },
+      { id: 'cherry', label: 'さくらんぼ' },
+      { id: 'date', label: 'デーツ' },
+      { id: 'elderberry', label: 'エルダーベリー' },
+      { id: 'fig', label: 'いちじく' },
+      { id: 'grape', label: 'ぶどう' },
+    ]
+  : [
+      { id: 'apple', label: 'Apple' },
+      { id: 'banana', label: 'Banana' },
+      { id: 'cherry', label: 'Cherry' },
+      { id: 'date', label: 'Date' },
+      { id: 'elderberry', label: 'Elderberry' },
+      { id: 'fig', label: 'Fig' },
+      { id: 'grape', label: 'Grape' },
+    ];
+
+const countryOptions = isJa
+  ? [
+      { id: 'jp', label: '日本' },
+      { id: 'us', label: 'アメリカ' },
+      { id: 'uk', label: 'イギリス' },
+      { id: 'de', label: 'ドイツ', disabled: true },
+      { id: 'fr', label: 'フランス' },
+      { id: 'it', label: 'イタリア' },
+      { id: 'es', label: 'スペイン', disabled: true },
+      { id: 'au', label: 'オーストラリア' },
+    ]
+  : [
+      { id: 'jp', label: 'Japan' },
+      { id: 'us', label: 'United States' },
+      { id: 'uk', label: 'United Kingdom' },
+      { id: 'de', label: 'Germany', disabled: true },
+      { id: 'fr', label: 'France' },
+      { id: 'it', label: 'Italy' },
+      { id: 'es', label: 'Spain', disabled: true },
+      { id: 'au', label: 'Australia' },
+    ];
+
+const labels = isJa
+  ? {
+      fruit: 'お気に入りのフルーツ',
+      fruitPlaceholder: '検索...',
+      defaultValue: 'デフォルト値あり',
+      country: '国（無効なオプションあり）',
+      countryPlaceholder: '国を選択...',
+      noFilter: "フィルタなし (autocomplete='none')",
+      noFilterPlaceholder: 'すべてのオプションを表示...',
+      disabled: '無効なコンボボックス',
+      disabledPlaceholder: '操作不可',
+    }
+  : {
+      fruit: 'Favorite Fruit',
+      fruitPlaceholder: 'Type to search...',
+      defaultValue: 'With Default Value',
+      country: 'Country (with disabled options)',
+      countryPlaceholder: 'Select a country...',
+      noFilter: "No Filter (autocomplete='none')",
+      noFilterPlaceholder: 'All options shown...',
+      disabled: 'Disabled Combobox',
+      disabledPlaceholder: 'Cannot interact',
+    };
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <div class="flex flex-col gap-6">
+    <div>
+      <ComboboxAstro
+        options={fruitOptions}
+        label={labels.fruit}
+        placeholder={labels.fruitPlaceholder}
+      />
+    </div>
+    <div>
+      <ComboboxAstro
+        options={fruitOptions}
+        label={labels.defaultValue}
+        defaultSelectedOptionId="cherry"
+      />
+    </div>
+    <div>
+      <ComboboxAstro
+        options={countryOptions}
+        label={labels.country}
+        placeholder={labels.countryPlaceholder}
+      />
+    </div>
+    <div>
+      <ComboboxAstro
+        options={fruitOptions}
+        label={labels.noFilter}
+        autocomplete="none"
+        placeholder={labels.noFilterPlaceholder}
+      />
+    </div>
+    <div>
+      <ComboboxAstro
+        options={fruitOptions}
+        label={labels.disabled}
+        disabled
+        placeholder={labels.disabledPlaceholder}
+      />
+    </div>
+  </div>
+</div>
