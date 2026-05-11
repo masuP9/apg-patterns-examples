@@ -1,38 +1,19 @@
----
 /**
- * TreeGrid Demo Section
+ * Shared demo data for the TreeGrid pattern (Astro Web Component variant).
  *
- * Renders the treegrid demo for each framework variant.
- * Uses locale-specific demo components for Japanese pages.
+ * The React / Vue / Svelte demos use locale-specific wrapper components
+ * (`TreeGridDemo` / `TreeGridDemoJa`); only the Astro Web Component variant
+ * consumes the raw data, but exposing both locales here keeps demo data
+ * colocated and avoids inlining ~130 lines into a single .astro file.
  */
-import type { Framework } from '@/lib/frameworks';
-import TreeGridDemoReact from './TreeGridDemo';
-import { TreeGridDemoJa as TreeGridDemoJaReact } from './TreeGridDemoJa';
-import TreeGridDemoVue from './TreeGridDemo.vue';
-import TreeGridDemoJaVue from './TreeGridDemoJa.vue';
-import TreeGridDemoSvelte from './TreeGridDemo.svelte';
-import TreeGridDemoJaSvelte from './TreeGridDemoJa.svelte';
-import TreeGridAstro from './TreeGrid.astro';
 
-interface Props {
-  framework: Framework;
-}
-
-const { framework } = Astro.props;
-const isJa = Astro.url.pathname.startsWith('/ja/');
-
-const demoDescription = isJa
-  ? '矢印キーで移動。rowheaderでArrowRight/Leftで展開/折りたたみ。Spaceで行を選択。'
-  : 'Navigate with arrow keys. At rowheader, use ArrowRight/Left to expand/collapse. Press Space to select rows.';
-
-// Astro demo data (English)
-const columnsEn = [
+export const columnsEn = [
   { id: 'name', header: 'Name', isRowHeader: true },
   { id: 'size', header: 'Size' },
   { id: 'date', header: 'Date Modified' },
 ];
 
-const nodesEn = [
+export const nodesEn = [
   {
     id: 'docs',
     cells: [
@@ -71,14 +52,13 @@ const nodesEn = [
   },
 ];
 
-// Astro demo data (Japanese)
-const columnsJa = [
+export const columnsJa = [
   { id: 'name', header: '名前', isRowHeader: true },
   { id: 'size', header: 'サイズ' },
   { id: 'date', header: '更新日' },
 ];
 
-const nodesJa = [
+export const nodesJa = [
   {
     id: 'docs',
     cells: [
@@ -160,32 +140,3 @@ const nodesJa = [
     ],
   },
 ];
-
-const columns = isJa ? columnsJa : columnsEn;
-const nodes = isJa ? nodesJa : nodesEn;
-const ariaLabel = isJa ? 'ファイルブラウザ' : 'File browser';
----
-
-<div class="border-border bg-background rounded-lg border p-6">
-  <p class="text-muted-foreground mb-4 text-sm">
-    {demoDescription}
-  </p>
-  {framework === 'react' && !isJa && <TreeGridDemoReact client:load />}
-  {framework === 'react' && isJa && <TreeGridDemoJaReact client:load />}
-  {framework === 'vue' && !isJa && <TreeGridDemoVue client:load />}
-  {framework === 'vue' && isJa && <TreeGridDemoJaVue client:load />}
-  {framework === 'svelte' && !isJa && <TreeGridDemoSvelte client:load />}
-  {framework === 'svelte' && isJa && <TreeGridDemoJaSvelte client:load />}
-  {
-    framework === 'astro' && (
-      <TreeGridAstro
-        columns={columns}
-        nodes={nodes}
-        ariaLabel={ariaLabel}
-        selectable
-        multiselectable
-        defaultExpandedIds={['docs']}
-      />
-    )
-  }
-</div>

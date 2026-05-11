@@ -1,0 +1,36 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import TreeGridAstro from './TreeGrid.astro';
+import { columnsEn, columnsJa, nodesEn, nodesJa } from './treegrid-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+
+const demoDescription = isJa
+  ? '矢印キーで移動。rowheaderでArrowRight/Leftで展開/折りたたみ。Spaceで行を選択。'
+  : 'Navigate with arrow keys. At rowheader, use ArrowRight/Left to expand/collapse. Press Space to select rows.';
+
+const columns = isJa ? columnsJa : columnsEn;
+const nodes = isJa ? nodesJa : nodesEn;
+const ariaLabel = isJa ? 'ファイルブラウザ' : 'File browser';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <p class="text-muted-foreground mb-4 text-sm">
+    {demoDescription}
+  </p>
+  <TreeGridAstro
+    columns={columns}
+    nodes={nodes}
+    ariaLabel={ariaLabel}
+    selectable
+    multiselectable
+    defaultExpandedIds={['docs']}
+  />
+</div>
