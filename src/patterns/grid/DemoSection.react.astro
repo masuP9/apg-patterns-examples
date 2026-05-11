@@ -1,0 +1,24 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import { GridDemo as GridDemoReact } from './GridDemo';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="border-border bg-background rounded-lg border p-6">
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '矢印キーで移動します。スペースキーでセルを選択します。Enterキーでアクティブにします。'
+        : 'Navigate with arrow keys. Press Space to select cells. Press Enter to activate.'
+    }
+  </p>
+  <GridDemoReact client:load />
+</div>

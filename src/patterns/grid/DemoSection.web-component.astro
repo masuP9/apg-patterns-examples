@@ -1,24 +1,14 @@
 ---
-/**
- * Grid Demo Section
- *
- * Renders the grid demo for each framework variant.
- * React, Vue, and Svelte use their respective GridDemo wrapper components.
- * Astro uses the Grid component directly with inline data.
- */
 import type { Framework } from '@/lib/frameworks';
 import type { Locale } from '@/i18n/ui';
-import { GridDemo as GridDemoReact } from './GridDemo';
-import GridDemoVue from './GridDemo.vue';
-import GridDemoSvelte from './GridDemo.svelte';
 import Grid, { type GridCellData } from './Grid.astro';
 
 interface Props {
-  framework: Framework;
+  framework?: Framework;
   locale?: Locale;
 }
 
-const { framework, locale = 'en' } = Astro.props;
+const { locale = 'en' } = Astro.props;
 const isJa = locale === 'ja';
 
 const columns = [
@@ -92,19 +82,12 @@ const renderCell = (cell: GridCellData, rowId: string, colId: string) => {
         : 'Navigate with arrow keys. Press Space to select cells. Press Enter to activate.'
     }
   </p>
-  {framework === 'react' && <GridDemoReact client:load />}
-  {framework === 'vue' && <GridDemoVue client:load />}
-  {framework === 'svelte' && <GridDemoSvelte client:load />}
-  {
-    framework === 'astro' && (
-      <Grid
-        columns={columns}
-        rows={rows}
-        ariaLabel="User list"
-        selectable
-        multiselectable
-        renderCell={renderCell}
-      />
-    )
-  }
+  <Grid
+    columns={columns}
+    rows={rows}
+    ariaLabel="User list"
+    selectable
+    multiselectable
+    renderCell={renderCell}
+  />
 </div>

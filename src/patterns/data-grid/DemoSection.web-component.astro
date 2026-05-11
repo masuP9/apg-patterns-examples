@@ -1,24 +1,11 @@
 ---
-/**
- * Data Grid Demo Section
- *
- * Renders the data grid demo for each framework variant.
- * React, Vue, and Svelte use dedicated Demo wrapper components.
- * Astro uses the DataGrid component directly with inline demo data.
- */
 import type { Framework } from '@/lib/frameworks';
-import { DataGridDemo as DataGridDemoReact } from './DataGridDemo';
-import DataGridDemoVue from './DataGridDemo.vue';
-import DataGridDemoSvelte from './DataGridDemo.svelte';
 import DataGrid from './DataGrid.astro';
 
 interface Props {
-  framework: Framework;
+  framework?: Framework;
 }
 
-const { framework } = Astro.props;
-
-// Demo data for Astro variant
 const columns = [
   { id: 'name', header: 'Name', sortable: true, sortDirection: 'ascending' as const },
   { id: 'email', header: 'Email', sortable: true },
@@ -54,20 +41,13 @@ const rows = [
 ---
 
 <div class="border-border bg-background rounded-lg border p-6">
-  {framework === 'react' && <DataGridDemoReact client:load />}
-  {framework === 'vue' && <DataGridDemoVue client:load />}
-  {framework === 'svelte' && <DataGridDemoSvelte client:load />}
-  {
-    framework === 'astro' && (
-      <DataGrid
-        columns={columns}
-        rows={rows}
-        ariaLabel="Employee list"
-        rowSelectable
-        rowMultiselectable
-        enableRangeSelection
-        editable
-      />
-    )
-  }
+  <DataGrid
+    columns={columns}
+    rows={rows}
+    ariaLabel="Employee list"
+    rowSelectable
+    rowMultiselectable
+    enableRangeSelection
+    editable
+  />
 </div>
