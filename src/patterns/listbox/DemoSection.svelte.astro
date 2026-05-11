@@ -1,0 +1,70 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import ListboxDemoSvelte from './ListboxDemo.svelte';
+import { fruitOptions, colorOptions } from './listbox-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? '単一選択（デフォルト）' : 'Single-Select (Default)'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '選択がフォーカスに追従します。矢印キーで移動・選択できます。'
+        : 'Selection follows focus. Use arrow keys to navigate and select.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <ListboxDemoSvelte
+      client:load
+      options={fruitOptions}
+      label="Choose a fruit:"
+      defaultSelectedIds={['apple']}
+    />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '複数選択' : 'Multi-Select'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? 'フォーカスと選択は独立しています。Spaceで切り替え、Shift+矢印キーで選択を拡張します。'
+        : 'Focus and selection are independent. Use Space to toggle, Shift+Arrow to extend selection.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <ListboxDemoSvelte
+      client:load
+      options={colorOptions}
+      label="Choose colors (multiple):"
+      multiselectable
+    />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '水平方向' : 'Horizontal Orientation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {isJa ? '左右の矢印キーで移動します。' : 'Use Left/Right arrow keys for navigation.'}
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <ListboxDemoSvelte
+      client:load
+      options={fruitOptions.slice(0, 5)}
+      label="Choose a fruit (horizontal):"
+      orientation="horizontal"
+      defaultSelectedIds={['apple']}
+    />
+  </div>
+</div>

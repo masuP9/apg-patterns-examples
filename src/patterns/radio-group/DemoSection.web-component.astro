@@ -1,0 +1,94 @@
+---
+import type { Framework } from '@/lib/frameworks';
+import type { Locale } from '@/i18n/ui';
+import RadioGroupAstro from './RadioGroup.astro';
+import { colorOptions, sizeOptions, planOptions, ratingOptions } from './radio-group-demo-data';
+
+interface Props {
+  framework?: Framework;
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const isJa = locale === 'ja';
+---
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '基本的なラジオグループ' : 'Basic Radio Group'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '矢印キーで移動・選択します。Tabでグループの内外にフォーカスを移動します。'
+        : 'Use arrow keys to navigate and select. Tab moves focus in/out of the group.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <RadioGroupAstro options={colorOptions} name="color" aria-label="Favorite color" />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">{isJa ? 'デフォルト値あり' : 'With Default Value'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa ? (
+        <Fragment>
+          <code>defaultValue</code> propで事前に選択されたオプション。
+        </Fragment>
+      ) : (
+        <Fragment>
+          Pre-selected option using the <code>defaultValue</code> prop.
+        </Fragment>
+      )
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <RadioGroupAstro
+      options={sizeOptions}
+      name="size"
+      aria-label="T-shirt size"
+      defaultValue="medium"
+    />
+  </div>
+</div>
+
+<div class="mb-8">
+  <h3 class="mb-3 text-lg font-medium">
+    {isJa ? '無効なオプションを含む場合' : 'With Disabled Option'}
+  </h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa
+        ? '無効なオプションはキーボード操作時にスキップされます。'
+        : 'Disabled options are skipped during keyboard navigation.'
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <RadioGroupAstro options={planOptions} name="plan" aria-label="Subscription plan" />
+  </div>
+</div>
+
+<div>
+  <h3 class="mb-3 text-lg font-medium">{isJa ? '水平方向' : 'Horizontal Orientation'}</h3>
+  <p class="text-muted-foreground mb-4 text-sm">
+    {
+      isJa ? (
+        <Fragment>
+          <code>orientation="horizontal"</code> による水平レイアウト。
+        </Fragment>
+      ) : (
+        <Fragment>
+          Horizontal layout with <code>orientation="horizontal"</code>.
+        </Fragment>
+      )
+    }
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <RadioGroupAstro
+      options={ratingOptions}
+      name="rating"
+      aria-label="Rating"
+      orientation="horizontal"
+    />
+  </div>
+</div>

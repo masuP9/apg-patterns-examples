@@ -84,7 +84,9 @@ src/
 
 - **`meta.ts`**: タイトル、説明、TOC、リソース、フレームワーク別メタデータ（ソースファイル、API Props/Events/Slots）を `PatternMeta` 型で定義。全テキストは `Record<Locale, string>` で i18n 対応
 - **`DemoSection.*.astro`** (推奨): framework ごとに分割した薄い Astro。`DemoSection.{react,vue,svelte,web-component}.astro` が、それぞれ自分の framework の実装ファイルだけを静的 import する。ページ側 dispatcher が `framework` から該当ファイルを選んで呼ぶ
+- **`{pattern}-demo-data.ts`** (任意): 4 framework で内容が完全に同一かつ概ね 8 行以上の純 data (配列/オブジェクトリテラル) を切り出した共通ファイル。framework 固有の prop 名 (Vue `ariaLabel` ↔ React/Astro `aria-label`) や関数 (`renderCell` など) は含めず、各 `DemoSection.{framework}.astro` 側で吸収する
 - **`DemoSection.astro`** (legacy): 4 framework の実装を 1 ファイルで静的 import する旧形式。dispatcher にフォールバックとして残してあり、まだ移行していない pattern で使われている。**注意**: legacy 形式は `@vitejs/plugin-react v6` + Vite 8 + Vue SFC `<script setup lang="ts">` の組み合わせで dev 限定の `$RefreshSig$` エラーを引き起こすことがあるため、Vue SFC を含むパターンは新形式に移行することを推奨
+- **移行状況** (transitional): PR #169 で 9 pattern (alert / checkbox / combobox / disclosure / menu-button / menubar / slider / slider-multithumb / toolbar)、PR-A で 7 pattern (accordion / listbox / radio-group / tabs / tree-view / table / treegrid) を分割済み。残り 16 pattern は legacy のまま (PR-B で対応予定)。最終的に legacy 形式と dispatcher fallback は撤去する
 - **動的ルーティング**: `[pattern]/[framework]/index.astro` が `import.meta.glob()` で全パターンの `meta.ts` を検出し、`getStaticPaths()` でビルド時にページ生成。同じファイル内の dispatcher が `DemoSection.{framework}.astro` を優先し、無ければ legacy `DemoSection.astro` にフォールバック
 
 **パスエイリアス**（tsconfig.json）:
