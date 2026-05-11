@@ -183,9 +183,13 @@ Each pattern should include:
 
 ```
 src/patterns/{pattern}/
-├── meta.ts                    # Pattern metadata (single source of truth)
-├── DemoSection.astro          # Unified demo for all frameworks
-├── TestingDocs.astro          # Test documentation
+├── meta.ts                          # Pattern metadata (single source of truth)
+├── DemoSection.react.astro          # React demo
+├── DemoSection.vue.astro            # Vue demo
+├── DemoSection.svelte.astro         # Svelte demo
+├── DemoSection.web-component.astro  # Astro Web Component demo
+├── {pattern}-demo-data.ts           # Shared demo data (optional)
+├── TestingDocs.astro                # Test documentation
 ├── {Pattern}.tsx              # React implementation
 ├── {Pattern}.vue              # Vue implementation
 ├── {Pattern}.svelte           # Svelte implementation

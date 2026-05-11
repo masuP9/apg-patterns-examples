@@ -221,7 +221,11 @@ src/
 ├── patterns/                        # APG パターン実装
 │   └── button/                      # 例: button パターン
 │       ├── meta.ts                  # パターンメタデータ（単一の真実源）
-│       ├── DemoSection.astro        # 全フレームワーク統合デモ
+│       ├── DemoSection.react.astro          # React 用デモ
+│       ├── DemoSection.vue.astro            # Vue 用デモ
+│       ├── DemoSection.svelte.astro         # Svelte 用デモ
+│       ├── DemoSection.web-component.astro  # Astro Web Component 用デモ
+│       ├── {pattern}-demo-data.ts   # 共通 demo data（必要なときのみ）
 │       ├── TestingDocs.astro        # テストドキュメント
 │       ├── Button.tsx               # React 実装
 │       ├── Button.vue               # Vue 実装
@@ -266,7 +270,8 @@ src/
 各パターンの `meta.ts` が `PatternMeta` 型でメタデータを一元定義する。動的ルーティング（`[pattern]/[framework]/index.astro`）が `import.meta.glob()` で全パターンの `meta.ts` を検出し、`getStaticPaths()` で 4フレームワーク × 2言語 のページをビルド時に生成する。
 
 - **`meta.ts`**: タイトル、説明、TOC、リソース、フレームワーク別 API ドキュメント。全テキストは `Record<Locale, string>` で i18n 対応
-- **`DemoSection.astro`**: 4フレームワークの実装を静的 import し、`framework` prop で切り替え表示
+- **`DemoSection.{react,vue,svelte,web-component}.astro`**: framework ごとに分割した薄い Astro。それぞれ自分の framework の実装ファイルだけを静的 import する。ページ側 dispatcher が `framework` から該当ファイルを選んで動的 import で呼ぶ
+- **`{pattern}-demo-data.ts`** (任意): 4 framework で内容が完全に同一かつ概ね 8 行以上の純 data を切り出した共通ファイル
 - **`content/accessibility-docs/`**: MDX でアクセシビリティ解説を記述。frontmatter は `pattern` と `locale` のみ
 
 ---

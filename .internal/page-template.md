@@ -2,7 +2,7 @@
 
 このテンプレートは、APG パターンページの構成を統一するためのガイドラインです。
 
-> **Note**: ページは動的ルーティング（`[pattern]/[framework]/index.astro`）で自動生成される。個別のページファイル作成は不要。新しいパターンを追加するには `meta.ts` と `DemoSection.astro` を作成すればよい。
+> **Note**: ページは動的ルーティング（`[pattern]/[framework]/index.astro`）で自動生成される。個別のページファイル作成は不要。新しいパターンを追加するには `meta.ts` と framework 別の `DemoSection.{react,vue,svelte,web-component}.astro` 4 ファイルを作成すればよい。
 
 ## 章構成 (tocItems)
 
@@ -49,7 +49,8 @@ const tocItems = [
 | ファイル | 役割 | 検出パターン |
 |---------|------|-------------|
 | `meta.ts` | メタデータ定義 | `/src/patterns/*/meta.ts` |
-| `DemoSection.astro` | デモ表示 | `/src/patterns/*/DemoSection.astro` |
+| `DemoSection.{react,vue,svelte,web-component}.astro` | framework 別デモ表示 | `/src/patterns/*/DemoSection.{react,vue,svelte,web-component}.astro` |
+| `{pattern}-demo-data.ts` | 共通 demo data（任意） | `/src/patterns/{pattern}/{pattern}-demo-data.ts` |
 | `TestingDocs.astro` | テスト解説 | `/src/patterns/*/TestingDocs.astro` |
 | `{Component}.{tsx,vue,svelte,astro}` | ソースコード表示 | `/src/patterns/**/*.{tsx,vue,svelte,astro}` (`?raw`) |
 | `{Component}.test.*` | テストコード表示 | `/src/patterns/**/*.test.*` (`?raw`) |
@@ -58,7 +59,9 @@ const tocItems = [
 ## 章の説明
 
 ### 1. Demo
-- `DemoSection.astro` コンポーネントが `framework` prop に基づいて適切なフレームワーク実装を表示
+- ページ側 dispatcher が `framework` 値から `DemoSection.{react,vue,svelte,web-component}.astro` の該当ファイルを動的 import して呼ぶ（`Astro Web Component` は `web-component` キー）
+- 各 framework 別ファイルは `locale` prop だけを受け取り、自分の framework の実装ファイルだけを静的 import する
+- 4 framework で内容が完全に同一かつ概ね 8 行以上の純 data は `{pattern}-demo-data.ts` に切り出して全 4 ファイルから import する
 - 複数のバリエーションがある場合は DemoSection 内で `<h3>` 小見出しで分割
 
 ### 2. Native HTML（条件付き）
@@ -108,7 +111,10 @@ const tocItems = [
 
 ### 必須ファイル
 - [ ] `src/patterns/{pattern}/meta.ts` - パターンメタデータ（`PatternMeta` 型）
-- [ ] `src/patterns/{pattern}/DemoSection.astro` - 全フレームワーク統合デモ
+- [ ] `src/patterns/{pattern}/DemoSection.react.astro` - React 用デモ
+- [ ] `src/patterns/{pattern}/DemoSection.vue.astro` - Vue 用デモ
+- [ ] `src/patterns/{pattern}/DemoSection.svelte.astro` - Svelte 用デモ
+- [ ] `src/patterns/{pattern}/DemoSection.web-component.astro` - Astro Web Component 用デモ
 - [ ] `src/patterns/{pattern}/{Component}.tsx` - React 実装
 - [ ] `src/patterns/{pattern}/{Component}.vue` - Vue 実装
 - [ ] `src/patterns/{pattern}/{Component}.svelte` - Svelte 実装
@@ -119,6 +125,7 @@ const tocItems = [
 - [ ] `src/content/accessibility-docs/{pattern}/ja.mdx` - アクセシビリティ解説（日本語）
 - [ ] `src/patterns/{pattern}/{pattern}.md` - AI 向けガイド
 - [ ] `src/patterns/{pattern}/NativeHtmlNotice.astro` - Native HTML 説明（該当パターンのみ）
+- [ ] `src/patterns/{pattern}/{pattern}-demo-data.ts` - 共通 demo data（4 framework で完全一致する 8 行以上の純 data がある場合のみ）
 
 ### meta.ts 構成確認
 - [ ] `PatternMeta` 型に準拠している
