@@ -51,8 +51,12 @@
 
 .apg-combobox-input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.apg-combobox-input:focus-visible {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 30%, transparent);
 }
 
 .apg-combobox-input:disabled {
@@ -196,13 +200,6 @@
   .apg-combobox-option {
     transition: none;
   }
-}
-
-/* Focus Enhancement for Keyboard Users */
-.apg-combobox-input:focus-visible {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
 }
 
 /* Windows High Contrast Mode */

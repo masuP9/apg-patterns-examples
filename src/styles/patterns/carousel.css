@@ -201,8 +201,7 @@
 }
 
 .apg-carousel-play-pause:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .apg-carousel-play-pause[data-playing='true'] {
@@ -237,9 +236,7 @@
 }
 
 .apg-carousel-tab:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 50%;
+  outline: none;
 }
 
 /* Tab Indicator (Visual Dot) */
@@ -298,8 +295,7 @@
 
 .apg-carousel-prev:focus,
 .apg-carousel-next:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .apg-carousel-prev:active,
@@ -336,14 +332,15 @@
 
 /* Focus Enhancement for Keyboard Users */
 .apg-carousel-tab:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
+  border-radius: 50%;
 }
 
 .apg-carousel-play-pause:focus-visible,
 .apg-carousel-prev:focus-visible,
 .apg-carousel-next:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 

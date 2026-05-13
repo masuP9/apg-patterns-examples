@@ -21,7 +21,7 @@ apg-switch {
 }
 
 .apg-switch:focus-visible .apg-switch-track {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 

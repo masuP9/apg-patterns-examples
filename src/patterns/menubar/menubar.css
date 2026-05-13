@@ -92,6 +92,11 @@
 
 .apg-menubar-trigger:focus,
 .apg-menubar [data-menubar-trigger]:focus {
+  outline: none;
+}
+
+.apg-menubar-trigger:focus-visible,
+.apg-menubar [data-menubar-trigger]:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: -2px;
 }
@@ -236,9 +241,19 @@
 .apg-menubar [data-menubar-menu] [role='menuitem']:focus,
 .apg-menubar [data-menubar-menu] [role='menuitemcheckbox']:focus,
 .apg-menubar [data-menubar-menu] [role='menuitemradio']:focus {
+  outline: none;
+  background-color: oklch(0.95 0 0);
+}
+
+.apg-menubar-menuitem:focus-visible,
+.apg-menubar-menu [role='menuitem']:focus-visible,
+.apg-menubar-menu [role='menuitemcheckbox']:focus-visible,
+.apg-menubar-menu [role='menuitemradio']:focus-visible,
+.apg-menubar [data-menubar-menu] [role='menuitem']:focus-visible,
+.apg-menubar [data-menubar-menu] [role='menuitemcheckbox']:focus-visible,
+.apg-menubar [data-menubar-menu] [role='menuitemradio']:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: -2px;
-  background-color: oklch(0.95 0 0);
 }
 
 /* Active state - pressed */
@@ -325,9 +340,14 @@
 
 .apg-menubar-submenu-trigger:focus,
 .apg-menubar [data-submenu-trigger]:focus {
+  outline: none;
+  background-color: oklch(0.95 0 0);
+}
+
+.apg-menubar-submenu-trigger:focus-visible,
+.apg-menubar [data-submenu-trigger]:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: -2px;
-  background-color: oklch(0.95 0 0);
 }
 
 /* Active state - pressed or submenu open */

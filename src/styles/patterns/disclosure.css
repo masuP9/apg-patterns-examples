@@ -37,8 +37,12 @@
   background: color-mix(in srgb, var(--background) 90%, var(--foreground));
 }
 
+.apg-disclosure-trigger:focus {
+  outline: none;
+}
+
 .apg-disclosure-trigger:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
   z-index: 1;
   position: relative;

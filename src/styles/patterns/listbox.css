@@ -89,9 +89,7 @@
 }
 
 .apg-listbox-option:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: -2px;
-  z-index: 1;
+  outline: none;
 }
 
 .apg-listbox-option[aria-selected='true'] {
@@ -121,8 +119,9 @@
 
 /* Focus Enhancement for Keyboard Users */
 .apg-listbox-option:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+  z-index: 1;
 }
 
 /* Windows High Contrast Mode */

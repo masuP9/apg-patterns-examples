@@ -52,8 +52,7 @@
 }
 
 .apg-menu-button-trigger:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .apg-menu-button-trigger:active {
@@ -107,9 +106,7 @@
 }
 
 .apg-menu-button-item:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: -2px;
-  z-index: 1;
+  outline: none;
   background: color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
@@ -138,13 +135,14 @@
 
 /* Focus Enhancement for Keyboard Users */
 .apg-menu-button-trigger:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 .apg-menu-button-item:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: -2px;
+  z-index: 1;
 }
 
 /* Windows High Contrast Mode */

@@ -60,7 +60,7 @@ apg-radio-group {
 
 /* Focus state */
 .apg-radio:focus-visible .apg-radio-control {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 

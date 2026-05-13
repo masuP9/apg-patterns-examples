@@ -48,7 +48,7 @@ apg-checkbox {
 
 /* Focus state */
 .apg-checkbox-input:focus-visible + .apg-checkbox-control {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 

@@ -132,8 +132,12 @@
   color: var(--foreground);
 }
 
+.apg-tab:focus {
+  outline: none;
+}
+
 .apg-tab:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: -2px;
   z-index: 1;
 }
@@ -201,8 +205,12 @@
   min-height: 200px;
 }
 
+.apg-tabpanel:focus {
+  outline: none;
+}
+
 .apg-tabpanel:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: -2px;
 }
 
@@ -223,12 +231,6 @@
   .apg-tab {
     transition: none;
   }
-}
-
-/* Focus Enhancement for Keyboard Users */
-.apg-tab:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
 }
 
 /* Windows High Contrast Mode */
