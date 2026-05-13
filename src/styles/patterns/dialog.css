@@ -151,18 +151,6 @@ dialog.apg-dialog:not([open]) {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-dialog {
-    border-width: 2px;
-  }
-
-  .apg-dialog-overlay,
-  dialog.apg-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.8);
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-dialog-overlay,

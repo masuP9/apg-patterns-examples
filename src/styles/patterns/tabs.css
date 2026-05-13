@@ -30,13 +30,14 @@
   display: flex;
   background: transparent;
   overflow-x: auto;
-  padding: 4px; /* フォーカスインジケーター用の余白 */
-  margin: -4px; /* レイアウトへの影響を相殺 */
+  padding: 4px;
+  /* フォーカスインジケーター用の余白 */
+  margin: -4px;
+  /* レイアウトへの影響を相殺 */
 }
 
 .apg-tablist--horizontal {
   flex-direction: row;
-  border-bottom: 1px solid var(--border);
 }
 
 /* Horizontal: 最初と最後のタブに角丸を適用 */
@@ -96,9 +97,8 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--muted-foreground);
-  cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
   min-height: 44px;
 }
 
@@ -132,7 +132,7 @@
   color: var(--foreground);
 }
 
-.apg-tab:focus {
+.apg-tab:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;
   z-index: 1;
@@ -201,7 +201,7 @@
   min-height: 200px;
 }
 
-.apg-tabpanel:focus {
+.apg-tabpanel:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;
 }
@@ -217,32 +217,6 @@
 /* =============================================================================
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-tabs {
-    border-width: 4px;
-  }
-
-  .apg-tab--selected {
-    background: black;
-    color: white;
-  }
-
-  .apg-tab--selected.apg-tab--horizontal {
-    border-bottom-color: #facc15;
-  }
-
-  .apg-tab--selected.apg-tab--vertical {
-    border-right-color: #facc15;
-  }
-
-  .apg-tab:not(.apg-tab--selected):not(.apg-tab--disabled) {
-    background: white;
-    color: black;
-    border-color: black;
-  }
-}
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
@@ -262,27 +236,51 @@
   .apg-tabs {
     border: 2px solid ButtonBorder;
     background: ButtonFace;
+    overflow: hidden;
   }
 
   .apg-tablist {
-    background: ButtonFace;
-    border-color: ButtonBorder;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid ButtonBorder;
   }
 
   .apg-tab {
     border-color: ButtonBorder;
     background: ButtonFace;
     color: ButtonText;
+    border-bottom-width: 1px;
+    border-radius: 0 !important;
   }
 
   .apg-tab--selected {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
+    background: ButtonFace;
+    color: ButtonText;
   }
 
-  .apg-tab:focus {
-    outline: 2px solid Highlight;
+  .apg-tab--selected.apg-tab--horizontal {
+    border-bottom-color: SelectedItem;
+    border-bottom-width: 4px;
+    padding-block-end: calc(0.75rem - 3px);
+    /* 増加したボーダー分のスペースを相殺 */
+  }
+
+  .apg-tab.apg-tab--vertical {
+    border-right-width: 0;
+    border-bottom: 1px solid ButtonBorder;
+  }
+
+  .apg-tab--selected.apg-tab--vertical {
+    border-right-style: solid;
+    border-right-color: SelectedItem;
+    border-right-width: 4px;
+    padding-inline-end: calc(1rem - 3px);
+    /* 増加したボーダー分のスペースを相殺 */
+  }
+
+  .apg-tab:focus-visible {
+    outline: 2px inset SelectedItem;
+    outline-offset: -4px;
   }
 
   .apg-tabpanels {

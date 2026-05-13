@@ -120,23 +120,6 @@ apg-checkbox {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-checkbox-control {
-    border-width: 3px;
-  }
-
-  .apg-checkbox-input:checked + .apg-checkbox-control,
-  .apg-checkbox-input:indeterminate + .apg-checkbox-control {
-    background-color: black;
-    border-color: black;
-  }
-
-  .apg-checkbox-icon {
-    color: white;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-checkbox-control,

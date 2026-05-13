@@ -90,23 +90,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-toolbar {
-    border-width: 2px;
-  }
-
-  .apg-toolbar-button {
-    border-width: 2px;
-  }
-
-  .apg-toolbar-button[aria-pressed='true'] {
-    background-color: black;
-    color: white;
-    border-color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-toolbar-button {

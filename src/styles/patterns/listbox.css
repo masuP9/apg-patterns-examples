@@ -112,22 +112,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-listbox {
-    border-width: 2px;
-  }
-
-  .apg-listbox-option-icon {
-    color: black;
-  }
-
-  .apg-listbox-option:focus {
-    outline: 3px solid #facc15;
-    outline-offset: -3px;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-listbox-option {

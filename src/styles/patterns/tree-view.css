@@ -150,21 +150,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-treeview {
-    border-width: 2px;
-  }
-
-  .apg-treeview-item:focus > .apg-treeview-item-content {
-    box-shadow: inset 0 0 0 3px #facc15;
-  }
-
-  .apg-treeview-item-icon {
-    color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-treeview-item-content,

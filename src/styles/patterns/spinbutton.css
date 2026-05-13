@@ -134,27 +134,6 @@ apg-spinbutton {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-spinbutton-controls {
-    border-width: 2px;
-    border-color: var(--foreground);
-  }
-
-  .apg-spinbutton-input {
-    font-weight: 700;
-  }
-
-  .apg-spinbutton-button {
-    border-width: 2px;
-    font-weight: 700;
-  }
-
-  .apg-spinbutton-label {
-    font-weight: 700;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-spinbutton-button {

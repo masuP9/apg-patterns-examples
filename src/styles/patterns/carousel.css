@@ -311,26 +311,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-carousel-tab-indicator {
-    opacity: 1;
-    background: black;
-  }
-
-  .apg-carousel-tab--selected .apg-carousel-tab-indicator {
-    background: #facc15;
-  }
-
-  .apg-carousel-play-pause,
-  .apg-carousel-prev,
-  .apg-carousel-next {
-    border-width: 2px;
-    background: white;
-    color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-carousel-tab,

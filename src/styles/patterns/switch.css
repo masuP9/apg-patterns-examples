@@ -93,7 +93,7 @@ apg-switch {
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
-  background: white;
+  background: var(--background);
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
   transition: transform 0.2s;
 }
@@ -110,35 +110,6 @@ apg-switch {
 /* =============================================================================
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-switch-track {
-    border-width: 3px;
-  }
-
-  .apg-switch[aria-checked='true'] .apg-switch-track {
-    background-color: black;
-    border-color: black;
-  }
-
-  .apg-switch[aria-checked='false'] .apg-switch-track {
-    background-color: white;
-    border-color: black;
-  }
-
-  .apg-switch-thumb {
-    background-color: black;
-  }
-
-  .apg-switch[aria-checked='true'] .apg-switch-thumb {
-    background-color: white;
-  }
-
-  .apg-switch-icon {
-    color: white;
-  }
-}
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {

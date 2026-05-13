@@ -162,27 +162,6 @@ apg-slider {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-slider-track {
-    border: 2px solid var(--foreground);
-  }
-
-  .apg-slider-fill {
-    background: var(--foreground);
-  }
-
-  .apg-slider-thumb {
-    border-width: 3px;
-    border-color: var(--foreground);
-  }
-
-  .apg-slider-label,
-  .apg-slider-value {
-    font-weight: 700;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-slider-thumb {
