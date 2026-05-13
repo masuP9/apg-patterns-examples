@@ -293,6 +293,7 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
         (cell) => {
           cell.addEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
           cell.addEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+          cell.addEventListener('click', this.handleCellClick.bind(this) as EventListener);
         }
       );
     }
@@ -302,6 +303,7 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
         (cell) => {
           cell.removeEventListener('keydown', this.handleKeyDown.bind(this) as EventListener);
           cell.removeEventListener('focusin', this.handleFocus.bind(this) as EventListener);
+          cell.removeEventListener('click', this.handleCellClick.bind(this) as EventListener);
         }
       );
     }
@@ -353,6 +355,39 @@ function getRowAriaSelected(flatRow: FlatRow): 'true' | 'false' | undefined {
       cell.setAttribute('tabindex', '0');
       cell.classList.add('focused');
       this.focusedCellId = cell.dataset.cellId ?? null;
+    }
+
+    // Non-APG extension: mouse click moves cell focus; clicking a rowheader of
+    // an expandable, non-disabled row toggles its expansion. Row selection
+    // (aria-selected) is intentionally not changed — that remains a Space-only
+    // operation, matching the APG cell-only focus model.
+    private handleCellClick(event: MouseEvent) {
+      const target = event.target;
+      if (target instanceof Element && target.closest('button, a, input, select, textarea')) {
+        return;
+      }
+
+      const cell = event.currentTarget as HTMLElement;
+      const { rowId, isRowHeader, disabled, colIndex: colIndexStr } = cell.dataset;
+      if (!rowId) return;
+
+      const row = this.querySelector<HTMLElement>(`[role="row"][data-row-id="${rowId}"]`);
+      const rowDisabled = row?.getAttribute('aria-disabled') === 'true';
+
+      // Focus moves regardless of disabled state, matching arrow-key navigation.
+      this.focusCell(cell);
+
+      // Expansion toggle is suppressed for disabled rows/cells.
+      if (disabled === 'true' || rowDisabled) return;
+
+      if (isRowHeader === 'true' && row?.dataset.hasChildren === 'true') {
+        const colIndex = Number(colIndexStr ?? 0);
+        if (this.expandedIds.has(rowId)) {
+          this.collapseRow(rowId, colIndex);
+        } else {
+          this.expandRow(rowId);
+        }
+      }
     }
 
     private expandRow(rowId: string) {

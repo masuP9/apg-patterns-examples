@@ -69,6 +69,20 @@ A treegrid combines Grid 2D keyboard navigation with TreeView hierarchical expan
 | `Enter` | Activate focused cell (does NOT expand/collapse) |
 | `Ctrl + A` | Select all visible rows (when multiselectable) |
 
+## Mouse Support (non-APG extension)
+
+APG does not specify mouse behavior for treegrid. This implementation adds a minimal mouse layer that does NOT alter the cell-only focus model or the keyboard semantics:
+
+| Action | Behavior |
+| --- | --- |
+| Click any cell | Move focus to that cell (updates roving tabindex). Row selection (`aria-selected`) is NOT changed |
+| Click a rowheader of an expandable, non-disabled row | Above, plus toggle expand/collapse |
+| Click on a row whose `aria-disabled="true"` | Focus may move, but expansion is NOT toggled (matches arrow-key behavior on disabled rows) |
+| Click on an interactive descendant inside a cell (`<button>`, `<a>`, `<input>`, `<select>`, `<textarea>`) | Treegrid mouse handler defers to the descendant; no focus shuffle or expansion toggle |
+| Double-click | No additional behavior (cell activation remains `Enter`-only) |
+
+Row selection is intentionally kept as a `Space`-only operation to preserve the APG cell-only focus model.
+
 ## Focus Management
 
 - Focus model: Roving tabindex - only one cell has tabindex="0"

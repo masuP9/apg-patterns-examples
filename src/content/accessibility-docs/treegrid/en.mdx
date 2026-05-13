@@ -158,6 +158,20 @@ Total columns (for virtualization)
 - Tree operations (expand/collapse) only work at the rowheader column
 - Rows have aria-level to indicate hierarchy depth
 
+### Mouse Support (non-APG extension)
+
+APG does not specify mouse behavior for the treegrid pattern. This implementation adds a minimal mouse layer that preserves the cell-only focus model and keyboard semantics defined above.
+
+| Action                                                                                   | Behavior                                                                                       |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Click any cell                                                                           | Move focus to the cell (updates roving tabindex). Row selection (`aria-selected`) is unchanged |
+| Click a rowheader of an expandable, non-disabled row                                     | Above, plus toggle expand/collapse                                                             |
+| Click on a row with `aria-disabled="true"`                                               | Focus may move, but expansion is not toggled (matches arrow-key behavior on disabled rows)     |
+| Click on an interactive descendant (`<button>`, `<a>`, `<input>`, `<select>`, `<textarea>`) | The treegrid mouse handler defers to the descendant; no focus shuffle or expansion toggle      |
+| Double-click                                                                             | No additional behavior. Cell activation remains <kbd>Enter</kbd>-only                          |
+
+Row selection is intentionally kept as a <kbd>Space</kbd>-only operation so that the APG cell-only focus model is preserved.
+
 ### Focus Management
 
 | Event              | Behavior                                           |

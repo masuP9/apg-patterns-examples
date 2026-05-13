@@ -1165,4 +1165,141 @@ describe('TreeGrid', () => {
       expect(onFocusChange).toHaveBeenCalled();
     });
   });
+
+  // ===========================================================================
+  // Mouse (non-APG extension)
+  // ===========================================================================
+  describe('Mouse interactions', () => {
+    it('clicking a rowheader of a collapsed parent expands it', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid columns={createBasicColumns()} nodes={createBasicNodes()} ariaLabel="Files" />
+      );
+
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(docsRowheader);
+
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('rowheader', { name: 'report.pdf' })).toBeInTheDocument();
+    });
+
+    it('clicking a rowheader of an expanded parent collapses it', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid
+          columns={createBasicColumns()}
+          nodes={createBasicNodes()}
+          ariaLabel="Files"
+          defaultExpandedIds={['docs']}
+        />
+      );
+
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'true');
+
+      await user.click(docsRowheader);
+
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.queryByRole('rowheader', { name: 'report.pdf' })).not.toBeInTheDocument();
+    });
+
+    it('clicking a non-rowheader cell does not toggle expansion', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid columns={createBasicColumns()} nodes={createBasicNodes()} ariaLabel="Files" />
+      );
+
+      const sizeCell = screen
+        .getAllByRole('gridcell')
+        .find(
+          (el) =>
+            el.textContent === '--' &&
+            el.closest('[role="row"]')?.getAttribute('aria-level') === '1'
+        );
+      expect(sizeCell).toBeDefined();
+
+      await user.click(sizeCell!);
+
+      expect(sizeCell!.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'false');
+      // Focus moves to the clicked cell
+      expect(sizeCell).toHaveAttribute('tabindex', '0');
+    });
+
+    it('clicking a cell moves focus and roving tabindex to it', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid columns={createBasicColumns()} nodes={createBasicNodes()} ariaLabel="Files" />
+      );
+
+      const readmeRowheader = screen.getByRole('rowheader', { name: 'README.md' });
+      await user.click(readmeRowheader);
+
+      expect(readmeRowheader).toHaveAttribute('tabindex', '0');
+      expect(document.activeElement).toBe(readmeRowheader);
+      // The previously focusable cell should now be tabindex="-1"
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      expect(docsRowheader).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('clicking a rowheader of a disabled row does not toggle expansion', async () => {
+      // Focus IS allowed to move into a disabled cell (matches arrow-key
+      // navigation: disabled cells are focusable per APG). Only the
+      // expansion toggle is suppressed.
+      const user = userEvent.setup();
+      const onExpandedChange = vi.fn();
+      render(
+        <TreeGrid
+          columns={createBasicColumns()}
+          nodes={createNodesWithDisabled()}
+          ariaLabel="Files"
+          onExpandedChange={onExpandedChange}
+        />
+      );
+
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(docsRowheader);
+
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'false');
+      expect(onExpandedChange).not.toHaveBeenCalled();
+    });
+
+    it('clicking the chevron icon inside a rowheader also toggles expansion', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid columns={createBasicColumns()} nodes={createBasicNodes()} ariaLabel="Files" />
+      );
+
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      const chevron = docsRowheader.querySelector('.apg-treegrid-expand-icon');
+      expect(chevron).not.toBeNull();
+
+      await user.click(chevron as Element);
+
+      expect(docsRowheader.closest('[role="row"]')).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('clicking does not change row selection (aria-selected)', async () => {
+      const user = userEvent.setup();
+      render(
+        <TreeGrid
+          columns={createBasicColumns()}
+          nodes={createBasicNodes()}
+          ariaLabel="Files"
+          selectable
+        />
+      );
+
+      const docsRowheader = screen.getByRole('rowheader', { name: 'Documents' });
+      const row = docsRowheader.closest('[role="row"]')!;
+      expect(row).toHaveAttribute('aria-selected', 'false');
+
+      await user.click(docsRowheader);
+
+      expect(row).toHaveAttribute('aria-selected', 'false');
+    });
+  });
 });

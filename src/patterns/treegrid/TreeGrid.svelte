@@ -490,6 +490,39 @@
     }
   }
 
+  // Non-APG extension: mouse click moves cell focus; clicking a rowheader of an
+  // expandable, non-disabled row toggles its expansion. Row selection
+  // (aria-selected) is intentionally not changed — that remains a Space-only
+  // operation, matching the APG cell-only focus model.
+  function handleCellClick(event: MouseEvent, cell: TreeGridCellData, rowId: string) {
+    if (
+      event.target instanceof Element &&
+      event.target.closest('button, a, input, select, textarea')
+    ) {
+      return;
+    }
+
+    const pos = cellPositionMap.get(cell.id);
+    if (!pos) return;
+
+    const flatRow = visibleRows[pos.rowIndex];
+    if (!flatRow) return;
+
+    // Focus moves regardless of disabled state, matching arrow-key navigation.
+    focusCell(cell.id);
+
+    // Expansion toggle is suppressed for disabled rows/cells.
+    if (cell.disabled || flatRow.node.disabled) return;
+
+    if (pos.isRowHeader && flatRow.hasChildren) {
+      if (expandedIds.has(rowId)) {
+        collapseRow(rowId, cell.id);
+      } else {
+        expandRow(rowId);
+      }
+    }
+  }
+
   // =============================================================================
   // Helper Functions
   // =============================================================================
@@ -561,6 +594,7 @@
           class:disabled={cell.disabled || flatRow.node.disabled}
           style:padding-left={getCellPaddingLeft(flatRow, colIndex)}
           onkeydown={(e) => handleKeyDown(e, cell, flatRow.node.id)}
+          onclick={(e) => handleCellClick(e, cell, flatRow.node.id)}
           onfocusin={() => setFocusedCellId(cell.id)}
           use:registerCell={cell.id}
         >
