@@ -558,6 +558,46 @@ export function TreeGrid({
   );
 
   // ==========================================================================
+  // Mouse Handling
+  // ==========================================================================
+  // Non-APG extension: mouse click moves cell focus; clicking a rowheader of an
+  // expandable, non-disabled row toggles its expansion. Row selection
+  // (aria-selected) is intentionally not changed — that remains a Space-only
+  // operation, matching the APG cell-only focus model.
+
+  const handleCellClick = useCallback(
+    (event: React.MouseEvent, cell: TreeGridCellData, rowId: string, colIndex: number) => {
+      // Let interactive descendants (links, buttons, form controls) handle their own clicks.
+      if (
+        event.target instanceof Element &&
+        event.target.closest('button, a, input, select, textarea')
+      ) {
+        return;
+      }
+
+      const flatRow = rowMap.get(rowId);
+      if (!flatRow) return;
+
+      // Focus moves regardless of disabled state, matching arrow-key navigation
+      // (disabled cells are focusable per APG).
+      focusCell(cell.id);
+
+      // Expansion toggle is suppressed for disabled rows/cells.
+      if (cell.disabled || flatRow.node.disabled) return;
+
+      const rowHeaderColIndex = getRowHeaderColumnIndex();
+      if (colIndex === rowHeaderColIndex && flatRow.hasChildren) {
+        if (expandedSet.has(rowId)) {
+          collapseNode(rowId);
+        } else {
+          expandNode(rowId);
+        }
+      }
+    },
+    [rowMap, focusCell, getRowHeaderColumnIndex, expandedSet, expandNode, collapseNode]
+  );
+
+  // ==========================================================================
   // Effects
   // ==========================================================================
 
@@ -640,6 +680,7 @@ export function TreeGrid({
                   aria-colindex={totalColumns ? startColIndex + colIndex : undefined}
                   aria-colspan={cell.colspan}
                   onKeyDown={(e) => handleKeyDown(e, cell, node.id, colIndex)}
+                  onClick={(e) => handleCellClick(e, cell, node.id, colIndex)}
                   onFocus={() => setFocusedCellId(cell.id)}
                   className={`apg-treegrid-cell ${isFocused ? 'focused' : ''} ${cell.disabled ? 'disabled' : ''}`}
                 >

@@ -51,9 +51,13 @@ async function expectCellOrChildFocused(_page: Page, cell: Locator): Promise<voi
 /**
  * Helper to focus a cell, handling cells that contain links/buttons.
  * Returns the focused element (either the cell or a focusable child).
+ *
+ * Uses programmatic focus (HTMLElement.focus()) rather than a mouse click so
+ * that click-side effects (e.g., the rowheader click handler toggling row
+ * expansion) do not fire just because a test wants to seed focus.
  */
 async function focusCell(_page: Page, cell: Locator): Promise<Locator> {
-  await cell.click({ position: { x: 5, y: 5 } });
+  await cell.evaluate((el: HTMLElement) => el.focus());
 
   // Check if focus is on the cell or a child element
   const cellIsFocused = await cell.evaluate((el) => document.activeElement === el);
