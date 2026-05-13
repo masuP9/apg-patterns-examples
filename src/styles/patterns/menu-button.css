@@ -40,6 +40,7 @@
   border-top: 4px solid currentColor;
   margin-left: 0.25rem;
   transition: transform 0.15s ease;
+  forced-color-adjust: none;
 }
 
 .apg-menu-button-trigger[aria-expanded='true']::after {
