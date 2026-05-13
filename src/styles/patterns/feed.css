@@ -78,6 +78,10 @@
 }
 
 .apg-feed-article-link:focus {
+  outline: none;
+}
+
+.apg-feed-article-link:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
   border-radius: 0.25rem;
@@ -138,6 +142,10 @@
 }
 
 .apg-feed-demo-button:focus {
+  outline: none;
+}
+
+.apg-feed-demo-button:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
@@ -166,6 +174,10 @@
 }
 
 .apg-feed-search-input:focus {
+  outline: none;
+}
+
+.apg-feed-search-input:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
   border-color: var(--ring);

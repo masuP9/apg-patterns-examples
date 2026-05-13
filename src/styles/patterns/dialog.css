@@ -104,12 +104,11 @@ dialog.apg-dialog:not([open]) {
 }
 
 .apg-dialog-close:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .apg-dialog-close:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -133,12 +132,11 @@ dialog.apg-dialog:not([open]) {
 }
 
 .apg-dialog-trigger:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .apg-dialog-trigger:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 

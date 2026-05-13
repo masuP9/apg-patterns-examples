@@ -118,13 +118,14 @@
 
 /* Focus state - only show when cell actually has focus */
 .apg-treegrid-cell:focus {
-  box-shadow: inset 0 0 0 2px var(--focus-color, #3b82f6);
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--ring);
   background-color: var(--focus-bg, #eff6ff);
 }
 
 /* Show focused class styling only when treegrid has focus */
 .apg-treegrid:focus-within .apg-treegrid-cell.focused {
-  box-shadow: inset 0 0 0 2px var(--focus-color, #3b82f6);
+  box-shadow: inset 0 0 0 2px var(--ring);
   background-color: var(--focus-bg, #eff6ff);
 }
 
@@ -212,7 +213,6 @@
     --border-color: #374151;
     --header-bg: #1f2937;
     --row-header-bg: #1f2937;
-    --focus-color: #60a5fa;
     --focus-bg: #1e3a5f;
     --selected-bg: #1e3a5f;
     --selected-focus-bg: #1e4a7f;
@@ -228,7 +228,6 @@
   --border-color: #374151;
   --header-bg: #1f2937;
   --row-header-bg: #1f2937;
-  --focus-color: #60a5fa;
   --focus-bg: #1e3a5f;
   --selected-bg: #1e3a5f;
   --selected-focus-bg: #1e4a7f;

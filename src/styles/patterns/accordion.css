@@ -65,15 +65,14 @@
 }
 
 .apg-accordion-trigger:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: -2px;
-  z-index: 1;
-  position: relative;
+  outline: none;
 }
 
 .apg-accordion-trigger:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
+  z-index: 1;
+  position: relative;
 }
 
 .apg-accordion-trigger:disabled {
@@ -135,7 +134,11 @@
 }
 
 .apg-accordion-panel:focus {
-  outline: 2px solid var(--primary);
+  outline: none;
+}
+
+.apg-accordion-panel:focus-visible {
+  outline: 2px solid var(--ring);
   outline-offset: -2px;
 }
 
