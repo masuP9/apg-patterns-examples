@@ -160,7 +160,23 @@ apg-table.apg-table > [role='table'] {
 
   .apg-table-cell,
   .apg-table-rowheader {
+    color: CanvasText;
     background: Canvas;
+  }
+
+  .apg-table-cell:hover,
+  .apg-table-rowheader:hover {
+    background: Canvas;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .apg-table-sort-button {
+    color: ButtonText;
+  }
+
+  .apg-table-sort-button:hover {
+    color: Highlight;
   }
 
   .apg-table-sort-button:focus-visible {
