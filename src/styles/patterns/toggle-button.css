@@ -192,29 +192,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-toggle-button {
-    border-width: 4px;
-  }
-
-  .apg-toggle-button[aria-pressed='true'] {
-    background-color: black;
-    color: white;
-    border-color: black;
-  }
-
-  .apg-toggle-button[aria-pressed='false'] {
-    background-color: white;
-    color: black;
-    border-color: black;
-  }
-
-  .apg-toggle-button[aria-pressed='true'] .apg-toggle-indicator {
-    color: #facc15;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-toggle-button,

@@ -236,17 +236,6 @@ apg-window-splitter {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-window-splitter__separator {
-    border: 2px solid var(--foreground, #111827);
-  }
-
-  .apg-window-splitter-demo-container {
-    border-width: 2px;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-window-splitter__separator {

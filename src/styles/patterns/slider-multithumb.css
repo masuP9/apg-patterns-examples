@@ -257,27 +257,6 @@ apg-slider-multithumb {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-slider-multithumb-track {
-    border: 2px solid var(--foreground);
-  }
-
-  .apg-slider-multithumb-range {
-    background: var(--foreground);
-  }
-
-  .apg-slider-multithumb-thumb {
-    border-width: 3px;
-    border-color: var(--foreground);
-  }
-
-  .apg-slider-multithumb-label,
-  .apg-slider-multithumb-values {
-    font-weight: 700;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-slider-multithumb-thumb {

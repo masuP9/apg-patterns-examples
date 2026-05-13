@@ -115,23 +115,6 @@ apg-table.apg-table > [role='table'] {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-table {
-    border-width: 2px;
-    gap: 2px;
-  }
-
-  .apg-table-header,
-  .apg-table-body {
-    gap: 2px;
-  }
-
-  .apg-table-sort-button:focus-visible {
-    outline-width: 3px;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-table-body > .apg-table-row:hover > .apg-table-cell,

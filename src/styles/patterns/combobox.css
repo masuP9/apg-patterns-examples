@@ -190,32 +190,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-combobox-input {
-    border-width: 2px;
-  }
-
-  .apg-combobox-listbox {
-    border-width: 2px;
-  }
-
-  .apg-combobox-input:focus {
-    outline: 3px solid #facc15;
-    outline-offset: 2px;
-    box-shadow: none;
-  }
-
-  .apg-combobox-option[aria-selected='true'] {
-    outline: 2px solid #facc15;
-    outline-offset: -2px;
-  }
-
-  .apg-combobox-option-icon {
-    color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-combobox-input,

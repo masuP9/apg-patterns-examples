@@ -41,17 +41,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-link {
-    text-decoration-thickness: 2px;
-  }
-
-  .apg-link[aria-disabled='true'] {
-    text-decoration: line-through;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-link {

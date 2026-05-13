@@ -565,31 +565,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-menubar[role='menubar'],
-  .apg-menubar [role='menubar'] {
-    border: 2px solid currentColor;
-  }
-
-  .apg-menubar-menu,
-  .apg-menubar [data-menubar-menu],
-  .apg-menubar-submenu,
-  .apg-menubar [data-submenu] {
-    border-width: 2px;
-  }
-
-  .apg-menubar-trigger:focus,
-  .apg-menubar [data-menubar-trigger]:focus,
-  .apg-menubar-menuitem:focus,
-  .apg-menubar-menu [role='menuitem']:focus,
-  .apg-menubar-menu [role='menuitemcheckbox']:focus,
-  .apg-menubar-menu [role='menuitemradio']:focus {
-    outline: 3px solid #facc15;
-    outline-offset: -3px;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-menubar-trigger,

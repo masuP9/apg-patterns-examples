@@ -187,17 +187,6 @@ body:has(dialog.apg-alert-dialog[open]) {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-alert-dialog {
-    border-width: 2px;
-  }
-
-  dialog.apg-alert-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.8);
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-alert-dialog,

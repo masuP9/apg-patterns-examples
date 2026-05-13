@@ -127,23 +127,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-menu-button-trigger {
-    border-width: 2px;
-  }
-
-  .apg-menu-button-menu {
-    border-width: 2px;
-  }
-
-  .apg-menu-button-trigger:focus,
-  .apg-menu-button-item:focus {
-    outline: 3px solid #facc15;
-    outline-offset: -3px;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-menu-button-trigger,

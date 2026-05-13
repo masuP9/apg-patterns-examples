@@ -143,23 +143,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-accordion {
-    border-width: 4px;
-  }
-
-  .apg-accordion-trigger--expanded {
-    background: black;
-    color: white;
-  }
-
-  .apg-accordion-trigger:not(.apg-accordion-trigger--expanded):not(:disabled) {
-    background: white;
-    color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-accordion-trigger,

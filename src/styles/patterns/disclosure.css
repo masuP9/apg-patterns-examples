@@ -101,23 +101,6 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-disclosure {
-    border-width: 4px;
-  }
-
-  .apg-disclosure-trigger[aria-expanded='true'] {
-    background: black;
-    color: white;
-  }
-
-  .apg-disclosure-trigger[aria-expanded='false']:not(:disabled) {
-    background: white;
-    color: black;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-disclosure-trigger,

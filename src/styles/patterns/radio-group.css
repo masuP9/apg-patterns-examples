@@ -105,22 +105,6 @@ apg-radio-group {
    ACCESSIBILITY ENHANCEMENTS
    ============================================================================= */
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .apg-radio-control {
-    border-width: 3px;
-  }
-
-  .apg-radio--selected .apg-radio-control {
-    background-color: black;
-    border-color: black;
-  }
-
-  .apg-radio-indicator {
-    background: white;
-  }
-}
-
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .apg-radio-control,
