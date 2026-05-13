@@ -188,8 +188,8 @@
   }
 
   .apg-accordion-trigger--expanded {
-    background: Highlight;
-    color: HighlightText;
+    background: ButtonFace;
+    color: ButtonText;
   }
 
   .apg-accordion-trigger:focus {

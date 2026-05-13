@@ -164,4 +164,13 @@ apg-radio-group {
     background: GrayText;
     border-color: GrayText;
   }
+
+  .apg-radio:not(.apg-radio--disabled):hover .apg-radio-control {
+    border-color: Highlight;
+  }
+
+  .apg-radio--selected:not(.apg-radio--disabled):hover .apg-radio-control {
+    background: Highlight;
+    border-color: Highlight;
+  }
 }

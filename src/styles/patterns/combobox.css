@@ -253,9 +253,10 @@
     border-color: Highlight;
   }
 
-  .apg-combobox-option[aria-selected='true'] {
-    background: Highlight;
-    color: HighlightText;
+  .apg-combobox-option[aria-selected='true'],
+  .apg-combobox-option:hover:not([aria-disabled='true']) {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
   }
 
   .apg-combobox-option[aria-disabled='true'] {

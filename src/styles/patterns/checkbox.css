@@ -182,4 +182,24 @@ apg-checkbox {
     background: GrayText;
     border-color: GrayText;
   }
+
+  .apg-checkbox:hover .apg-checkbox-control {
+    border-color: Highlight;
+  }
+
+  .apg-checkbox-input:checked:hover + .apg-checkbox-control,
+  .apg-checkbox-input:indeterminate:hover + .apg-checkbox-control {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .apg-checkbox:has(.apg-checkbox-input:disabled):hover .apg-checkbox-control {
+    border-color: GrayText;
+  }
+
+  .apg-checkbox-input:disabled:checked:hover + .apg-checkbox-control,
+  .apg-checkbox-input:disabled:indeterminate:hover + .apg-checkbox-control {
+    background: GrayText;
+    border-color: GrayText;
+  }
 }

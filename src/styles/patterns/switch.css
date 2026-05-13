@@ -200,4 +200,13 @@ apg-switch {
   .apg-switch:disabled .apg-switch-label {
     color: GrayText;
   }
+
+  .apg-switch:hover:not(:disabled) .apg-switch-track {
+    border-color: Highlight;
+  }
+
+  .apg-switch[aria-checked='true']:hover:not(:disabled) .apg-switch-track {
+    background: Highlight;
+    border-color: Highlight;
+  }
 }
