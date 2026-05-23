@@ -34,7 +34,7 @@ const dialogVariants = cva(
 
 const contentVariants = cva(
   [
-    'w-3/4 fixed z-50 bg-background flex h-full flex-col gap-4 shadow-lg',
+    'fixed z-50 bg-background flex h-full flex-col gap-4 shadow-lg',
     'transition transition-transform ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
     // Open state: on-screen
     'group-data-[state=open]/sheet:translate-x-0 group-data-[state=open]/sheet:translate-y-0',
@@ -42,11 +42,12 @@ const contentVariants = cva(
   {
     variants: {
       side: {
-        // Default off-screen position + border
-        right: 'border-l translate-x-full',
-        left: 'border-r -translate-x-full',
-        top: 'border-b -translate-y-full',
-        bottom: 'border-t translate-y-full',
+        // Default off-screen position + border. Width must mirror dialogVariants
+        // so the fixed-positioned content doesn't exceed the dialog's max width.
+        right: 'border-l translate-x-full w-3/4 sm:max-w-sm',
+        left: 'border-r -translate-x-full w-3/4 sm:max-w-sm',
+        top: 'border-b -translate-y-full w-full',
+        bottom: 'border-t translate-y-full w-full',
       },
     },
     defaultVariants: {
