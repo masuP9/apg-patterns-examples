@@ -91,6 +91,7 @@ async function main(): Promise<void> {
   });
 
   let createdOrCommented = 0;
+  let skippedActions = 0;
   let baselined = 0;
   let unchanged = 0;
   const errors: string[] = [];
@@ -156,14 +157,18 @@ async function main(): Promise<void> {
     });
 
     try {
-      await manager.createOrComment({
+      const action = await manager.createOrComment({
         apgSlug,
         latestSha: latest.sha,
         draft,
         followupBody,
       });
       recordSeen(state, apgSlug, latest.sha, latest.committerDate);
-      createdOrCommented++;
+      if (action.kind === 'skip') {
+        skippedActions++;
+      } else {
+        createdOrCommented++;
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       errors.push(`[${apgSlug}] issue write failed: ${msg}`);
@@ -182,7 +187,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `\nSummary: created/commented=${createdOrCommented}, baselined=${baselined}, unchanged=${unchanged}, errors=${errors.length}`
+    `\nSummary: created/commented=${createdOrCommented}, skipped=${skippedActions}, baselined=${baselined}, unchanged=${unchanged}, errors=${errors.length}`
   );
   if (errors.length > 0) {
     console.error('\nErrors:');

@@ -45,6 +45,15 @@ export function markerFor(apgSlug: string): string {
 }
 
 /**
+ * Marker embedded in the issue body that records the latest commit SHA the
+ * issue covers. Used by issue-manager to detect "this exact SHA was already
+ * processed" — works across runs and survives the issue being closed.
+ */
+export function latestMarkerFor(latestSha: string): string {
+  return `<!-- apg-upstream:latest=${latestSha} -->`;
+}
+
+/**
  * Per-batch marker embedded in each follow-up comment. Used by issue-manager
  * to detect "we already posted a comment for this exact latest SHA" and skip
  * re-posting on workflow retries where state push failed.
@@ -73,9 +82,10 @@ export function formatIssue(params: FormatIssueParams): IssueDraft {
   const today = formatDate(until);
   const title = `[APG Upstream] ${primary.name} に ${commits.length} 件の更新 (${today})`;
 
-  const marker = markerFor(slug);
+  const slugMarker = markerFor(slug);
   const upstreamPath = `content/patterns/${slug}`;
   const latestSha = commits[0]?.sha;
+  const latestMarker = latestSha ? latestMarkerFor(latestSha) : '';
   const compareUrl =
     previousSha && latestSha
       ? `https://github.com/${upstreamRepo}/compare/${previousSha}...${latestSha}`
@@ -104,7 +114,8 @@ export function formatIssue(params: FormatIssueParams): IssueDraft {
 
   const compareLine = compareUrl ? `- 比較: ${compareUrl}` : '';
 
-  const body = `${marker}
+  const body = `${slugMarker}
+${latestMarker}
 
 ## 概要
 W3C aria-practices の \`${upstreamPath}/\` 配下に ${commits.length} 件の新規コミットを検知しました。
@@ -131,7 +142,7 @@ ${mapping.relatedPatterns.length > 0 ? '- [ ] 関連パターンへの影響を�
 ${compareLine}
 `.trimEnd();
 
-  return { title, body, markerComment: marker };
+  return { title, body, markerComment: slugMarker };
 }
 
 /**
