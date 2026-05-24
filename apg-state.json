@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "lastRun": "2026-05-24T08:45:53.998Z",
+  "patterns": {
+    "accordion": {
+      "lastSeenSha": "7b134ce6d19497cce8a67db4a9f59980baf853dc",
+      "lastSeenDate": "2026-04-29T13:51:16Z"
+    },
+    "alert": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "alertdialog": {
+      "lastSeenSha": "a4cfe32d25412299d2e77a336307e12e3472be38",
+      "lastSeenDate": "2026-04-29T13:48:05Z"
+    },
+    "button": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "dialog-modal": {
+      "lastSeenSha": "a44ade58dfd392615da497cebdc4d745ef60a1e5",
+      "lastSeenDate": "2026-03-04T18:44:41Z"
+    },
+    "disclosure": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "landmarks": {
+      "lastSeenSha": "b5c817ddc922d0476a8c273dd2e03f55f9070cce",
+      "lastSeenDate": "2026-04-05T00:20:03Z"
+    },
+    "link": {
+      "lastSeenSha": "ea2d3de8b87b6031d65e3f178d183c9cb9238208",
+      "lastSeenDate": "2026-03-04T18:28:27Z"
+    },
+    "menu-button": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "radio": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "slider": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "switch": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "tabs": {
+      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
+      "lastSeenDate": "2026-01-20T06:18:35Z"
+    }
+  }
+}
