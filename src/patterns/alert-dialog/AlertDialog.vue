@@ -12,9 +12,9 @@
       @cancel="handleCancel2"
       @close="handleClose"
     >
-      <h2 :id="titleId" class="apg-alert-dialog-title">
+      <h1 :id="titleId" class="apg-alert-dialog-title">
         {{ title }}
-      </h2>
+      </h1>
       <p :id="messageId" class="apg-alert-dialog-message">
         {{ message }}
       </p>

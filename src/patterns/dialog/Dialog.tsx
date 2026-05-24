@@ -188,9 +188,9 @@ export function Dialog({
       onClick={handleDialogClick}
     >
       <div className="apg-dialog-header">
-        <h2 id={titleId} className="apg-dialog-title">
+        <h1 id={titleId} className="apg-dialog-title">
           {title}
-        </h2>
+        </h1>
         <button
           type="button"
           className="apg-dialog-close"

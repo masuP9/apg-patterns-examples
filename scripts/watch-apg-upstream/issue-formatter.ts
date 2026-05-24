@@ -134,8 +134,27 @@ ${commitsTable}
 ## 判定用チェックリスト
 - [ ] 各コミットの diff を確認した
 - [ ] 仕様レベルの変更か、エディトリアル（typo / リンク修正等）かを判別した
-- [ ] 主担当パターンへの反映が必要か判断した
-${mapping.relatedPatterns.length > 0 ? '- [ ] 関連パターンへの影響を確認した\n' : ''}- [ ] 反映が必要なら別 Issue を起票、不要ならこの Issue を close
+- [ ] 主担当パターン${mapping.relatedPatterns.length > 0 ? '・関連パターン' : ''}への反映要否を判断した
+- [ ] 反映が必要なら、本 Issue 本体に下記「反映方針メモ」セクションを追記して反映タスクをここで追跡する（別 Issue は起票しない）。不要ならこの Issue を close
+
+## 反映方針メモ
+
+> 反映が必要と判断したらこのセクションを編集して使う。不要なら削除して close で OK。
+
+### 対象コミット
+
+- <short SHA> — 概要 / 背景
+
+### 影響を受けるパターン・ファイル
+
+- \`src/patterns/${primary.id}/...\` — 該当箇所（行番号付きが望ましい）
+
+### 反映タスク（チェックリスト）
+
+- [ ] 4 framework 実装の追従 (\`*.tsx\` / \`*.astro\` / \`*.svelte\` / \`*.vue\`)
+- [ ] テスト（ユニット / E2E）の追従
+- [ ] llm.md / accessibility-docs / accessibility-data の追従
+- [ ] スクリーンショットや構造図サンプルの追従
 
 ## 関連リンク
 - 上流 doc: https://www.w3.org/WAI/ARIA/apg/patterns/${slug}/
