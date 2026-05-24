@@ -24,6 +24,7 @@ import {
   UPSTREAM_REPO,
   UPSTREAM_REPO_FULL,
 } from './watch-apg-upstream/config';
+import { readEnv } from './watch-apg-upstream/env';
 import { GitHubClient } from './watch-apg-upstream/github-client';
 import { formatFollowupComment, formatIssue } from './watch-apg-upstream/issue-formatter';
 import { IssueManager } from './watch-apg-upstream/issue-manager';
@@ -36,30 +37,6 @@ import {
   STATE_FILE,
   STATE_SCHEMA_VERSION,
 } from './watch-apg-upstream/state';
-
-interface Env {
-  token: string;
-  dryRun: boolean;
-  sinceOverride: string | null;
-  patternsFilter: Set<string> | null;
-}
-
-function readEnv(): Env {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) throw new Error('GITHUB_TOKEN is required');
-  const dryRun = process.env.DRY_RUN === 'true';
-  const sinceOverride = process.env.SINCE_OVERRIDE?.trim() || null;
-  const patternsFilterRaw = process.env.PATTERNS_FILTER?.trim();
-  const patternsFilter = patternsFilterRaw
-    ? new Set(
-        patternsFilterRaw
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean)
-      )
-    : null;
-  return { token, dryRun, sinceOverride, patternsFilter };
-}
 
 function shouldProcess(mapping: SlugMapping, filter: Set<string> | null): boolean {
   if (!filter) return true;
@@ -197,6 +174,21 @@ async function main(): Promise<void> {
   console.log(
     `\nSummary: created/commented=${createdOrCommented}, skipped=${skippedActions}, baselined=${baselined}, unchanged=${unchanged}, errors=${errors.length}`
   );
+
+  // Defense-in-depth: readEnv() already rejects unknown patternIds. A
+  // remaining failure mode is "all requested patternIds are valid but have no
+  // APG URL in their meta" (so buildSlugMap skipped them and the loop matched
+  // zero slugs). Treat that as a hard failure for manual dispatch so the user
+  // sees the typo / config gap immediately.
+  const processedCount = createdOrCommented + skippedActions + baselined + unchanged;
+  if (env.patternsFilter && processedCount === 0) {
+    console.error(
+      `\nPATTERNS_FILTER=${[...env.patternsFilter].join(',')} matched 0 slugs with APG URLs. ` +
+        `Check that the requested patterns have an apgUrl defined in their meta.ts.`
+    );
+    process.exit(1);
+  }
+
   if (errors.length > 0) {
     console.error('\nErrors:');
     for (const e of errors) console.error(`  - ${e}`);

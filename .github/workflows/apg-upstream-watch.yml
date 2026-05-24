@@ -12,11 +12,11 @@ on:
         type: boolean
         default: false
       since_override:
-        description: 'state 無視で全 slug に適用する ISO8601 since (初回 backfill 用)'
+        description: 'state 無視で全 slug に適用する ISO 8601 date/time (例: 2026-01-01T00:00:00Z または 2026-01-01)。Date として parse できない値は fail'
         type: string
         required: false
       patterns:
-        description: '対象 patternId をカンマ区切りで指定 (省略時は全件)'
+        description: '対象 patternId をカンマ区切り (例: button,toggle-button) で指定。未知の patternId を含むと fail。省略時は全件'
         type: string
         required: false
 
