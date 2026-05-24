@@ -84,6 +84,39 @@
 - アクセシビリティ機能を徹底的にドキュメント化する
 - セマンティックなコミットメッセージを使用する
 
+## APG 上流追従ウォッチャー
+
+[`w3c/aria-practices`](https://github.com/w3c/aria-practices) を日次でポーリングし、追跡対象のパターンパスに新規コミットが入ったら APG slug ごとに 1 Issue を起票する GitHub Actions ワークフローを用意しています。レビュアーは各上流変更をこのサイトに反映すべきか、1 か所で判断できます。
+
+### 初期セットアップ（1 度だけ）
+
+1. **リポジトリ設定**: Settings → Actions → General → Workflow permissions → "Read and write permissions" を有効化（state 更新の commit と Issue 作成のため）。
+2. **ラベル**: `apg-upstream` という名前のラベルを 1 個作成。
+
+### 実行
+
+- **スケジュール**: 毎日 JST 08:17 (UTC 23:17) に `.github/workflows/apg-upstream-watch.yml` から自動実行。
+- **手動 / dry-run**: GitHub UI → Actions → APG Upstream Watch → "Run workflow"。入力（すべて任意）:
+  - `dry_run=true`: 副作用なしで意図したアクションのみ表示。
+  - `since_override=<ISO8601>`: 全 slug に対して指定時刻以降のコミットを取得（初回 backfill 用）。
+  - `patterns=<id,id,...>`: 指定 patternId のみ対象にする。
+
+### State
+
+`.github/apg-state.json` に APG slug ごとに「watcher が Issue 化済みの最後のコミット SHA と日時」を記録します。bot ユーザーが `[skip ci]` 付きで state 更新を commit します。初回検知時は最新コミットを baseline として記録するのみで Issue は作成しません（過去 N 年分の流入を防ぐため）。
+
+### Issue 識別
+
+各 Issue 本文に隠し marker `<!-- apg-upstream:slug=<apg-slug> -->` が埋め込まれています。watcher はタイトルではなくこの marker で既存 open Issue を見つけてコメント追記するため、タイトル変更は安全です。
+
+### ローカル実行
+
+```bash
+GITHUB_TOKEN=$(gh auth token) DRY_RUN=true PATTERNS_FILTER=button \
+  SINCE_OVERRIDE=2025-12-01T00:00:00Z \
+  npm run watch:apg
+```
+
 ## セキュリティ
 
 セキュリティに関する懸念や脆弱性の報告については、[Security Policy](./SECURITY.md) をご覧ください。
