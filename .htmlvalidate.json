@@ -30,6 +30,7 @@
     "attr-case": "off",
     "no-multiple-main": "off",
     "empty-heading": "off",
-    "long-title": "off"
+    "long-title": "off",
+    "doctype-style": "off"
   }
 }
