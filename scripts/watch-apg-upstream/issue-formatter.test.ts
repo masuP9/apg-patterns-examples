@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { batchMarkerFor, formatFollowupComment, formatIssue, markerFor } from './issue-formatter';
+import {
+  batchMarkerFor,
+  formatFollowupComment,
+  formatIssue,
+  latestMarkerFor,
+  markerFor,
+} from './issue-formatter';
 import type { CommitSummary } from './github-client';
 import type { SlugMapping } from './slug-resolver';
 
@@ -35,6 +41,10 @@ describe('markerFor / batchMarkerFor', () => {
       '<!-- apg-upstream-batch:slug=button;latest=abc1234 -->'
     );
   });
+
+  it('embeds the latest SHA in body-level marker (for dedup across runs)', () => {
+    expect(latestMarkerFor('abc1234')).toBe('<!-- apg-upstream:latest=abc1234 -->');
+  });
 });
 
 describe('formatIssue', () => {
@@ -50,6 +60,9 @@ describe('formatIssue', () => {
     expect(draft.title).toContain('Button');
     expect(draft.title).toContain('1 件');
     expect(draft.body).toContain('<!-- apg-upstream:slug=button -->');
+    expect(draft.body).toContain(
+      '<!-- apg-upstream:latest=abc1234def5678abc1234def5678abc1234def56 -->'
+    );
     expect(draft.body).toContain('[Button](/patterns/button/)');
     expect(draft.body).toContain('Fix focus order in arrow nav');
     expect(draft.body).toContain('[abc1234]');

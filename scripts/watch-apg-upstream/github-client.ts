@@ -29,6 +29,7 @@ export interface IssueSummary {
   number: number;
   title: string;
   body: string;
+  state: 'open' | 'closed';
   htmlUrl: string;
 }
 
@@ -154,13 +155,16 @@ export class GitHubClient {
     return json.map((c) => ({ id: c.id, body: c.body ?? '' }));
   }
 
-  async searchOpenIssuesWithLabel(params: {
+  async searchIssuesWithLabel(params: {
     owner: string;
     repo: string;
     label: string;
+    /** 'open' | 'closed' | 'all'. Default 'all' so that issues that the user
+     *  closed as "no action needed" still match for dedup. */
+    state?: 'open' | 'closed' | 'all';
   }): Promise<IssueSummary[]> {
     const qs = new URLSearchParams({
-      state: 'open',
+      state: params.state ?? 'all',
       labels: params.label,
       per_page: '100',
     });
@@ -170,6 +174,7 @@ export class GitHubClient {
       number: number;
       title: string;
       body: string | null;
+      state: 'open' | 'closed';
       html_url: string;
       pull_request?: unknown;
     }>;
@@ -179,6 +184,7 @@ export class GitHubClient {
         number: i.number,
         title: i.title,
         body: i.body ?? '',
+        state: i.state,
         htmlUrl: i.html_url,
       }));
   }
@@ -199,12 +205,14 @@ export class GitHubClient {
       number: number;
       title: string;
       body: string | null;
+      state: 'open' | 'closed';
       html_url: string;
     };
     return {
       number: json.number,
       title: json.title,
       body: json.body ?? '',
+      state: json.state,
       htmlUrl: json.html_url,
     };
   }
