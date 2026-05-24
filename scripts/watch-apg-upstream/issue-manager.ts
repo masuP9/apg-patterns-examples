@@ -7,7 +7,7 @@
  */
 import type { GitHubClient } from './github-client';
 import type { IssueDraft } from './issue-formatter';
-import { markerFor } from './issue-formatter';
+import { batchMarkerFor, markerFor } from './issue-formatter';
 
 export interface IssueAction {
   kind: 'create' | 'comment' | 'skip';
@@ -55,13 +55,19 @@ export class IssueManager {
   /**
    * For a slug with detected new commits, decide and execute the action.
    * Returns the planned action even in dry-run mode.
+   *
+   * `latestSha` is the newest commit SHA in this batch; we use it together
+   * with the slug as a batch marker on the follow-up comment to avoid
+   * re-posting the same comment when a previous run failed before persisting
+   * state.
    */
   async createOrComment(params: {
     apgSlug: string;
+    latestSha: string;
     draft: IssueDraft;
     followupBody: string;
   }): Promise<IssueAction> {
-    const { apgSlug, draft, followupBody } = params;
+    const { apgSlug, latestSha, draft, followupBody } = params;
     const existing = await this.findExisting(apgSlug);
 
     if (existing.length === 0) {
@@ -82,17 +88,39 @@ export class IssueManager {
     }
 
     const target = existing[0];
+    if (existing.length > 1) {
+      this.log(
+        `[${apgSlug}]   WARN: ${existing.length} open issues match marker. Operating on oldest only.`
+      );
+    }
+
+    // Idempotency check: if a previous run already commented for this exact
+    // latest SHA (state push failed afterwards, so we're seeing the slug
+    // again), skip re-posting.
+    const batchMarker = batchMarkerFor(apgSlug, latestSha);
+    const comments = await this.client.listIssueComments({
+      owner: this.opts.owner,
+      repo: this.opts.repo,
+      issueNumber: target.number,
+    });
+    if (comments.some((c) => c.body.includes(batchMarker))) {
+      this.log(
+        `[${apgSlug}] SKIP: #${target.number} already has a comment for latest=${latestSha.slice(0, 7)}`
+      );
+      return {
+        kind: 'skip',
+        apgSlug,
+        issueNumber: target.number,
+        reason: 'duplicate-batch-marker',
+      };
+    }
+
     const action: IssueAction = {
       kind: 'comment',
       apgSlug,
       issueNumber: target.number,
     };
     this.log(`[${apgSlug}] would COMMENT on existing #${target.number}: "${target.title}"`);
-    if (existing.length > 1) {
-      this.log(
-        `[${apgSlug}]   WARN: ${existing.length} open issues match marker. Commenting on oldest only.`
-      );
-    }
     if (!this.opts.dryRun) {
       await this.client.addIssueComment({
         owner: this.opts.owner,

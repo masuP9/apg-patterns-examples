@@ -134,7 +134,7 @@ async function main(): Promise<void> {
         `[${apgSlug}] first encounter, recording baseline ${latest.sha.slice(0, 7)} ` +
           `(skipping ${newCommits.length} historical commits)`
       );
-      recordSeen(state, apgSlug, latest.sha, latest.authorDate);
+      recordSeen(state, apgSlug, latest.sha, latest.committerDate);
       baselined++;
       continue;
     }
@@ -149,14 +149,20 @@ async function main(): Promise<void> {
       upstreamRepo: UPSTREAM_REPO_FULL,
     });
     const followupBody = formatFollowupComment({
+      apgSlug,
       commits: newCommits,
       since: since ?? 'baseline',
       until,
     });
 
     try {
-      await manager.createOrComment({ apgSlug, draft, followupBody });
-      recordSeen(state, apgSlug, latest.sha, latest.authorDate);
+      await manager.createOrComment({
+        apgSlug,
+        latestSha: latest.sha,
+        draft,
+        followupBody,
+      });
+      recordSeen(state, apgSlug, latest.sha, latest.committerDate);
       createdOrCommented++;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

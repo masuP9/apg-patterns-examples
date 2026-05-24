@@ -12,8 +12,17 @@ export interface CommitSummary {
   sha: string;
   message: string;
   authorName: string;
-  authorDate: string; // ISO 8601
+  authorDate: string; // ISO 8601, display only
+  /** Committer date in ISO 8601. Used as the watermark for the GitHub commits
+   *  API `since` parameter because GitHub orders/filters commits by committer
+   *  date, not author date. */
+  committerDate: string;
   htmlUrl: string;
+}
+
+export interface IssueCommentSummary {
+  id: number;
+  body: string;
 }
 
 export interface IssueSummary {
@@ -108,15 +117,41 @@ export class GitHubClient {
     const json = (await res.json()) as Array<{
       sha: string;
       html_url: string;
-      commit: { message: string; author: { name: string; date: string } | null };
+      commit: {
+        message: string;
+        author: { name: string; date: string } | null;
+        committer: { name: string; date: string } | null;
+      };
     }>;
-    return json.map((c) => ({
-      sha: c.sha,
-      message: c.commit.message,
-      authorName: c.commit.author?.name ?? 'unknown',
-      authorDate: c.commit.author?.date ?? new Date().toISOString(),
-      htmlUrl: c.html_url,
-    }));
+    return json.map((c) => {
+      const fallbackDate = new Date().toISOString();
+      const authorDate = c.commit.author?.date ?? fallbackDate;
+      // Prefer committer date for the watermark; fall back to author date when
+      // the upstream commit lacks committer info (rare for real GitHub commits).
+      const committerDate = c.commit.committer?.date ?? authorDate;
+      return {
+        sha: c.sha,
+        message: c.commit.message,
+        authorName: c.commit.author?.name ?? 'unknown',
+        authorDate,
+        committerDate,
+        htmlUrl: c.html_url,
+      };
+    });
+  }
+
+  async listIssueComments(params: {
+    owner: string;
+    repo: string;
+    issueNumber: number;
+  }): Promise<IssueCommentSummary[]> {
+    const res = await this.request(
+      'GET',
+      `/repos/${params.owner}/${params.repo}/issues/${params.issueNumber}/comments?per_page=100`
+    );
+    if (res.status === 404) return [];
+    const json = (await res.json()) as Array<{ id: number; body: string | null }>;
+    return json.map((c) => ({ id: c.id, body: c.body ?? '' }));
   }
 
   async searchOpenIssuesWithLabel(params: {

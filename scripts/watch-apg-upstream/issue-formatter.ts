@@ -44,6 +44,15 @@ export function markerFor(apgSlug: string): string {
   return `<!-- apg-upstream:slug=${apgSlug} -->`;
 }
 
+/**
+ * Per-batch marker embedded in each follow-up comment. Used by issue-manager
+ * to detect "we already posted a comment for this exact latest SHA" and skip
+ * re-posting on workflow retries where state push failed.
+ */
+export function batchMarkerFor(apgSlug: string, latestSha: string): string {
+  return `<!-- apg-upstream-batch:slug=${apgSlug};latest=${latestSha} -->`;
+}
+
 export interface FormatIssueParams {
   mapping: SlugMapping;
   commits: CommitSummary[];
@@ -127,13 +136,18 @@ ${compareLine}
 
 /**
  * Format a follow-up comment for an existing open issue when more commits land.
+ * Embeds a batch marker (apg-slug + latest SHA) so we can detect duplicates
+ * when a previous run failed before persisting state.
  */
 export function formatFollowupComment(params: {
+  apgSlug: string;
   commits: CommitSummary[];
   since: string;
   until: string;
 }): string {
-  const { commits, since, until } = params;
+  const { apgSlug, commits, since, until } = params;
+  const latestSha = commits[0]?.sha ?? '';
+  const marker = batchMarkerFor(apgSlug, latestSha);
   const table = [
     '| 日付 | 著者 | メッセージ | リンク |',
     '|---|---|---|---|',
@@ -143,7 +157,9 @@ export function formatFollowupComment(params: {
     }),
   ].join('\n');
 
-  return `### 追加コミット ${commits.length} 件 (${formatDate(until)})
+  return `${marker}
+
+### 追加コミット ${commits.length} 件 (${formatDate(until)})
 
 - since: ${since}
 - until: ${until}
