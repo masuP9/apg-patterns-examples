@@ -93,9 +93,9 @@
   onclose={handleClose}
 >
   <div class="apg-dialog-header">
-    <h2 id={titleId} class="apg-dialog-title">
+    <h1 id={titleId} class="apg-dialog-title">
       {title}
-    </h2>
+    </h1>
     <button type="button" class="apg-dialog-close" onclick={close} aria-label="Close dialog">
       <svg
         xmlns="http://www.w3.org/2000/svg"

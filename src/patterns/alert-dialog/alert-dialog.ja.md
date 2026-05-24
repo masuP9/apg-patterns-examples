@@ -80,7 +80,7 @@ Structure (uses native <dialog> element):
 │   aria-labelledby="title-id"                    │
 │   aria-describedby="message-id"                 │
 │ ┌─────────────────────────────────────────────┐ │
-│ │ <h2 id="title-id">Confirm Delete</h2>       │ │
+│ │ <h1 id="title-id">Confirm Delete</h1>       │ │
 │ ├─────────────────────────────────────────────┤ │
 │ │ <p id="message-id">                         │ │
 │ │   This action cannot be undone.             │ │

@@ -117,7 +117,7 @@ describe('AlertDialog (Web Component)', () => {
           class="apg-alert-dialog"
           ${open ? 'open' : ''}
         >
-          <h2 id="${titleId}" class="apg-alert-dialog-title">${title}</h2>
+          <h1 id="${titleId}" class="apg-alert-dialog-title">${title}</h1>
           <p id="${messageId}" class="apg-alert-dialog-message">${message}</p>
           <div class="apg-alert-dialog-actions">
             <button type="button" data-cancel class="apg-alert-dialog-cancel">${cancelLabel}</button>
