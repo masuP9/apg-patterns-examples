@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: '副作用を出さずに実行内容を表示するか'
+        description: 'Dry run mode: state 変更を push せず Issue 作成もスキップ (watcher のみ実行)'
         type: boolean
         default: false
       since_override:
@@ -20,8 +20,9 @@ on:
         type: string
         required: false
 
-# Top-level は最小権限。state push に必要な contents:write は push step だけに
-# 限定して付与する。Issue 作成は watcher step に必要なので issues:write は付与。
+# Top-level は最小権限の default。state push に contents:write が必要だが、
+# その権限は watch job だけに付与する (job-level permissions で write に上書き)。
+# 他のジョブが将来追加されても contents:read が default として効く。
 permissions:
   contents: read
   issues: write
@@ -34,8 +35,12 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
+    # job レベルでは state push のため contents:write が必要。token は
+    # persist-credentials: false により git config には残らず、
+    # push step だけ env 経由で受け取って remote URL に inline で渡す。
+    # `npm ci --ignore-scripts` で install scripts からの token 取得もブロック。
     permissions:
-      contents: read
+      contents: write
       issues: write
     steps:
       - uses: actions/checkout@v4
