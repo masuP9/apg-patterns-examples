@@ -11,7 +11,12 @@ export default defineConfig({
     globals: true,
     testTimeout: 10000,
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.test.vue.ts', 'src/**/*.test.svelte.ts'],
+    include: [
+      'src/**/*.test.{ts,tsx}',
+      'src/**/*.test.vue.ts',
+      'src/**/*.test.svelte.ts',
+      'scripts/**/*.test.ts',
+    ],
     // Exclude Astro and browser tests - they have their own configs
     // - Astro: vitest.astro.config.ts (Container API)
     // - Browser: vitest.browser.config.ts (real browser with getBoundingClientRect)
