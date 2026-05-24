@@ -20,8 +20,10 @@ on:
         type: string
         required: false
 
+# Top-level は最小権限。state push に必要な contents:write は push step だけに
+# 限定して付与する。Issue 作成は watcher step に必要なので issues:write は付与。
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 concurrency:
@@ -32,15 +34,25 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          # GITHUB_TOKEN を git config に永続化しない。state push step で
+          # 必要なときだけ remote URL に inline credential として渡す。
+          # これにより npm install scripts などからの token 漏えいを防ぐ。
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
-      - run: npm ci
+      # --ignore-scripts: install 時の postinstall (sharp/esbuild 等) が
+      # 環境変数や git config 上の token を読めないようにする。watcher が
+      # 実行する tsx は npm 7+ で esbuild の platform 別 optional dep が
+      # 自動選択されるため、scripts なしで動作する。
+      - run: npm ci --ignore-scripts
       - name: Run watcher
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,6 +62,10 @@ jobs:
         run: npx tsx scripts/watch-apg-upstream.ts
       - name: Commit state changes
         if: ${{ inputs.dry_run != true }}
+        env:
+          # state push step だけ token を環境変数として受け取り、git remote
+          # の URL に inline で埋め込む。git config には残さない。
+          GH_TOKEN_FOR_PUSH: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if git diff --quiet .github/apg-state.json; then
             echo "no state change"
@@ -61,5 +77,10 @@ jobs:
           # GITHUB_TOKEN 由来の push は通常 workflow を再トリガーしないので
           # [skip ci] は保険程度の付与。
           git commit -m "chore: update apg-state [skip ci]"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          # Inline credential. The remote URL with the token only lives in
+          # .git/config for the lifetime of this step and is discarded with
+          # the runner. This is the recommended pattern when checkout used
+          # persist-credentials: false.
+          AUTH_URL="https://x-access-token:${GH_TOKEN_FOR_PUSH}@github.com/${GITHUB_REPOSITORY}.git"
+          git pull --rebase "${AUTH_URL}" "${GITHUB_REF_NAME}"
+          git push "${AUTH_URL}" "HEAD:${GITHUB_REF_NAME}"
