@@ -3,7 +3,6 @@
     <div v-for="item in items" :key="item.id" :class="getItemClass(item)">
       <component :is="`h${headingLevel}`" class="apg-accordion-header">
         <button
-          :ref="(el) => setButtonRef(item.id, el)"
           type="button"
           :id="`${instanceId}-header-${item.id}`"
           :aria-expanded="isExpanded(item.id)"
@@ -12,7 +11,6 @@
           :disabled="item.disabled"
           :class="getTriggerClass(item)"
           @click="handleToggle(item.id)"
-          @keydown="handleKeyDown($event, item.id)"
         >
           <span class="apg-accordion-trigger-content">{{ item.header }}</span>
           <span :class="getIconClass(item)" aria-hidden="true">
@@ -86,8 +84,6 @@ export interface AccordionProps {
   allowMultiple?: boolean;
   /** Heading level for accessibility (h2-h6) @default 3 */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
-  /** Enable arrow key navigation @default true */
-  enableArrowKeys?: boolean;
   /** Additional CSS class @default "" */
   className?: string;
 }
@@ -95,7 +91,6 @@ export interface AccordionProps {
 const props = withDefaults(defineProps<AccordionProps>(), {
   allowMultiple: false,
   headingLevel: 3,
-  enableArrowKeys: true,
   className: '',
 });
 
@@ -112,15 +107,6 @@ const getInitialExpandedIds = () => {
 
 const expandedIds = ref<string[]>(getInitialExpandedIds());
 const instanceId = ref(`accordion-${Math.random().toString(36).substr(2, 9)}`);
-const buttonRefs = ref<Record<string, HTMLButtonElement>>({});
-
-const setButtonRef = (id: string, el: unknown) => {
-  if (el instanceof HTMLButtonElement) {
-    buttonRefs.value[id] = el;
-  }
-};
-
-const availableItems = computed(() => props.items.filter((item) => !item.disabled));
 
 // Use role="region" only for 6 or fewer panels (APG recommendation)
 const useRegion = computed(() => props.items.length <= 6);
@@ -167,53 +153,5 @@ const handleToggle = (itemId: string) => {
   }
 
   emit('expandedChange', expandedIds.value);
-};
-
-const handleKeyDown = (event: KeyboardEvent, currentItemId: string) => {
-  if (!props.enableArrowKeys) return;
-
-  const currentIndex = availableItems.value.findIndex((item) => item.id === currentItemId);
-  if (currentIndex === -1) return;
-
-  let newIndex = currentIndex;
-  let shouldPreventDefault = false;
-
-  switch (event.key) {
-    case 'ArrowDown':
-      // Move to next, but don't wrap (APG compliant)
-      if (currentIndex < availableItems.value.length - 1) {
-        newIndex = currentIndex + 1;
-      }
-      shouldPreventDefault = true;
-      break;
-
-    case 'ArrowUp':
-      // Move to previous, but don't wrap (APG compliant)
-      if (currentIndex > 0) {
-        newIndex = currentIndex - 1;
-      }
-      shouldPreventDefault = true;
-      break;
-
-    case 'Home':
-      newIndex = 0;
-      shouldPreventDefault = true;
-      break;
-
-    case 'End':
-      newIndex = availableItems.value.length - 1;
-      shouldPreventDefault = true;
-      break;
-  }
-
-  if (shouldPreventDefault) {
-    event.preventDefault();
-    if (newIndex !== currentIndex) {
-      const newItem = availableItems.value[newIndex];
-      if (newItem && buttonRefs.value[newItem.id]) {
-        buttonRefs.value[newItem.id].focus();
-      }
-    }
-  }
 };
 </script>

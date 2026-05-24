@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 
 /**
  * Accordion item configuration
@@ -53,12 +53,6 @@ export interface AccordionProps {
    */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
   /**
-   * Enable arrow key navigation between accordion headers
-   * When enabled: Arrow Up/Down, Home, End keys navigate between headers
-   * @default true
-   */
-  enableArrowKeys?: boolean;
-  /**
    * Callback fired when the expanded panels change
    * @param expandedIds - Array of currently expanded item IDs
    */
@@ -74,19 +68,15 @@ export function Accordion({
   items,
   allowMultiple = false,
   headingLevel = 3,
-  enableArrowKeys = true,
   onExpandedChange,
   className = '',
 }: AccordionProps): React.ReactElement {
   const instanceId = useId();
-  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // Initialize with defaultExpanded items
   const [expandedIds, setExpandedIds] = useState<string[]>(() =>
     items.filter((item) => item.defaultExpanded && !item.disabled).map((item) => item.id)
   );
-
-  const availableItems = items.filter((item) => !item.disabled);
 
   const handleToggle = useCallback(
     (itemId: string) => {
@@ -110,57 +100,6 @@ export function Accordion({
       onExpandedChange?.(newExpandedIds);
     },
     [expandedIds, allowMultiple, items, onExpandedChange]
-  );
-
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent, currentItemId: string) => {
-      if (!enableArrowKeys) return;
-
-      const currentIndex = availableItems.findIndex((item) => item.id === currentItemId);
-      if (currentIndex === -1) return;
-
-      let newIndex = currentIndex;
-      let shouldPreventDefault = false;
-
-      switch (event.key) {
-        case 'ArrowDown':
-          // Move to next, but don't wrap (APG compliant)
-          if (currentIndex < availableItems.length - 1) {
-            newIndex = currentIndex + 1;
-          }
-          shouldPreventDefault = true;
-          break;
-
-        case 'ArrowUp':
-          // Move to previous, but don't wrap (APG compliant)
-          if (currentIndex > 0) {
-            newIndex = currentIndex - 1;
-          }
-          shouldPreventDefault = true;
-          break;
-
-        case 'Home':
-          newIndex = 0;
-          shouldPreventDefault = true;
-          break;
-
-        case 'End':
-          newIndex = availableItems.length - 1;
-          shouldPreventDefault = true;
-          break;
-      }
-
-      if (shouldPreventDefault) {
-        event.preventDefault();
-        if (newIndex !== currentIndex) {
-          const newItem = availableItems[newIndex];
-          if (newItem && buttonRefs.current[newItem.id]) {
-            buttonRefs.current[newItem.id]?.focus();
-          }
-        }
-      }
-    },
-    [enableArrowKeys, availableItems]
   );
 
   // Use role="region" only for 6 or fewer panels (APG recommendation)
@@ -203,9 +142,6 @@ export function Accordion({
           <div key={item.id} className={itemClass}>
             <HeadingTag className="apg-accordion-header">
               <button
-                ref={(el) => {
-                  buttonRefs.current[item.id] = el;
-                }}
                 type="button"
                 id={headerId}
                 aria-expanded={isExpanded}
@@ -214,7 +150,6 @@ export function Accordion({
                 disabled={item.disabled}
                 className={triggerClass}
                 onClick={() => handleToggle(item.id)}
-                onKeyDown={(e) => handleKeyDown(e, item.id)}
               >
                 <span className="apg-accordion-trigger-content">{item.header}</span>
                 <span className={iconClass} aria-hidden="true">

@@ -31,7 +31,6 @@
     items: AccordionItem[];
     allowMultiple?: boolean;
     headingLevel?: 2 | 3 | 4 | 5 | 6;
-    enableArrowKeys?: boolean;
     onExpandedChange?: (expandedIds: string[]) => void;
     className?: string;
   }
@@ -40,14 +39,12 @@
     items = [],
     allowMultiple = false,
     headingLevel = 3,
-    enableArrowKeys = true,
     onExpandedChange = () => {},
     className = '',
   }: AccordionProps = $props();
 
   let expandedIds = $state<string[]>([]);
   let instanceId = $state('');
-  let buttonRefs = $state<Record<string, HTMLButtonElement | undefined>>({});
 
   onMount(() => {
     instanceId = `accordion-${Math.random().toString(36).substring(2, 11)}`;
@@ -61,7 +58,6 @@
 
   // Derived values
   let safeItems = $derived(Array.isArray(items) ? items : []);
-  let availableItems = $derived(safeItems.filter((item) => !item.disabled));
   let useRegion = $derived(safeItems.length <= 6);
 
   function isExpanded(itemId: string): boolean {
@@ -85,52 +81,6 @@
     }
 
     onExpandedChange(expandedIds);
-  }
-
-  function handleKeyDown(event: KeyboardEvent, currentItemId: string) {
-    if (!enableArrowKeys) return;
-
-    const currentIndex = availableItems.findIndex((item) => item.id === currentItemId);
-    if (currentIndex === -1) return;
-
-    let newIndex = currentIndex;
-    let shouldPreventDefault = false;
-
-    switch (event.key) {
-      case 'ArrowDown':
-        if (currentIndex < availableItems.length - 1) {
-          newIndex = currentIndex + 1;
-        }
-        shouldPreventDefault = true;
-        break;
-
-      case 'ArrowUp':
-        if (currentIndex > 0) {
-          newIndex = currentIndex - 1;
-        }
-        shouldPreventDefault = true;
-        break;
-
-      case 'Home':
-        newIndex = 0;
-        shouldPreventDefault = true;
-        break;
-
-      case 'End':
-        newIndex = availableItems.length - 1;
-        shouldPreventDefault = true;
-        break;
-    }
-
-    if (shouldPreventDefault) {
-      event.preventDefault();
-      if (newIndex !== currentIndex) {
-        const newItem = availableItems[newIndex];
-        if (newItem) {
-          buttonRefs[newItem.id]?.focus();
-        }
-      }
-    }
   }
 
   function getItemClass(item: AccordionItem): string {
@@ -169,7 +119,6 @@
         {#if headingLevel === 2}
           <h2 class="apg-accordion-header">
             <button
-              bind:this={buttonRefs[item.id]}
               type="button"
               id={headerId}
               aria-expanded={isExpanded(item.id)}
@@ -178,7 +127,6 @@
               disabled={item.disabled}
               class={getTriggerClass(item.id)}
               onclick={() => handleToggle(item.id)}
-              onkeydown={(e) => handleKeyDown(e, item.id)}
             >
               <span class="apg-accordion-trigger-content">{item.header}</span>
               <span class={getIconClass(item.id)} aria-hidden="true">
@@ -191,7 +139,6 @@
         {:else if headingLevel === 3}
           <h3 class="apg-accordion-header">
             <button
-              bind:this={buttonRefs[item.id]}
               type="button"
               id={headerId}
               aria-expanded={isExpanded(item.id)}
@@ -200,7 +147,6 @@
               disabled={item.disabled}
               class={getTriggerClass(item.id)}
               onclick={() => handleToggle(item.id)}
-              onkeydown={(e) => handleKeyDown(e, item.id)}
             >
               <span class="apg-accordion-trigger-content">{item.header}</span>
               <span class={getIconClass(item.id)} aria-hidden="true">
@@ -213,7 +159,6 @@
         {:else if headingLevel === 4}
           <h4 class="apg-accordion-header">
             <button
-              bind:this={buttonRefs[item.id]}
               type="button"
               id={headerId}
               aria-expanded={isExpanded(item.id)}
@@ -222,7 +167,6 @@
               disabled={item.disabled}
               class={getTriggerClass(item.id)}
               onclick={() => handleToggle(item.id)}
-              onkeydown={(e) => handleKeyDown(e, item.id)}
             >
               <span class="apg-accordion-trigger-content">{item.header}</span>
               <span class={getIconClass(item.id)} aria-hidden="true">
@@ -235,7 +179,6 @@
         {:else if headingLevel === 5}
           <h5 class="apg-accordion-header">
             <button
-              bind:this={buttonRefs[item.id]}
               type="button"
               id={headerId}
               aria-expanded={isExpanded(item.id)}
@@ -244,7 +187,6 @@
               disabled={item.disabled}
               class={getTriggerClass(item.id)}
               onclick={() => handleToggle(item.id)}
-              onkeydown={(e) => handleKeyDown(e, item.id)}
             >
               <span class="apg-accordion-trigger-content">{item.header}</span>
               <span class={getIconClass(item.id)} aria-hidden="true">
@@ -257,7 +199,6 @@
         {:else}
           <h6 class="apg-accordion-header">
             <button
-              bind:this={buttonRefs[item.id]}
               type="button"
               id={headerId}
               aria-expanded={isExpanded(item.id)}
@@ -266,7 +207,6 @@
               disabled={item.disabled}
               class={getTriggerClass(item.id)}
               onclick={() => handleToggle(item.id)}
-              onkeydown={(e) => handleKeyDown(e, item.id)}
             >
               <span class="apg-accordion-trigger-content">{item.header}</span>
               <span class={getIconClass(item.id)} aria-hidden="true">

@@ -23,19 +23,11 @@ export interface Props {
   allowMultiple?: boolean;
   /** Heading level for accessibility (2-6) */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
-  /** Enable arrow key navigation between headers */
-  enableArrowKeys?: boolean;
   /** Additional CSS class */
   class?: string;
 }
 
-const {
-  items,
-  allowMultiple = false,
-  headingLevel = 3,
-  enableArrowKeys = true,
-  class: className = '',
-} = Astro.props;
+const { items, allowMultiple = false, headingLevel = 3, class: className = '' } = Astro.props;
 
 // Generate unique ID for this instance
 const instanceId = `accordion-${Math.random().toString(36).substring(2, 11)}`;
@@ -55,7 +47,6 @@ const HeadingTag = `h${headingLevel}`;
 <apg-accordion
   class={`apg-accordion ${className}`.trim()}
   data-allow-multiple={allowMultiple}
-  data-enable-arrow-keys={enableArrowKeys}
   data-expanded={JSON.stringify(initialExpanded)}
 >
   {
@@ -122,10 +113,8 @@ const HeadingTag = `h${headingLevel}`;
   class ApgAccordion extends HTMLElement {
     private buttons: HTMLButtonElement[] = [];
     private panels: HTMLElement[] = [];
-    private availableButtons: HTMLButtonElement[] = [];
     private expandedIds: string[] = [];
     private allowMultiple = false;
-    private enableArrowKeys = true;
     private rafId: number | null = null;
 
     connectedCallback() {
@@ -143,19 +132,13 @@ const HeadingTag = `h${headingLevel}`;
         return;
       }
 
-      this.availableButtons = this.buttons.filter((btn) => !btn.disabled);
       this.allowMultiple = this.dataset.allowMultiple === 'true';
-      this.enableArrowKeys = this.dataset.enableArrowKeys !== 'false';
       this.expandedIds = JSON.parse(this.dataset.expanded || '[]');
 
       // Attach event listeners
       this.buttons.forEach((button) => {
         button.addEventListener('click', this.handleClick);
       });
-
-      if (this.enableArrowKeys) {
-        this.addEventListener('keydown', this.handleKeyDown);
-      }
     }
 
     disconnectedCallback() {
@@ -168,11 +151,9 @@ const HeadingTag = `h${headingLevel}`;
       this.buttons.forEach((button) => {
         button.removeEventListener('click', this.handleClick);
       });
-      this.removeEventListener('keydown', this.handleKeyDown);
       // Clean up references
       this.buttons = [];
       this.panels = [];
-      this.availableButtons = [];
     }
 
     private togglePanel(itemId: string) {
@@ -229,52 +210,6 @@ const HeadingTag = `h${headingLevel}`;
       const button = e.currentTarget as HTMLButtonElement;
       if (button.disabled) return;
       this.togglePanel(button.dataset.itemId!);
-    };
-
-    private handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.classList.contains('apg-accordion-trigger')) return;
-
-      const currentIndex = this.availableButtons.indexOf(target as HTMLButtonElement);
-      if (currentIndex === -1) return;
-
-      let newIndex = currentIndex;
-      let shouldPreventDefault = false;
-
-      switch (e.key) {
-        case 'ArrowDown':
-          // Move to next, but don't wrap (APG compliant)
-          if (currentIndex < this.availableButtons.length - 1) {
-            newIndex = currentIndex + 1;
-          }
-          shouldPreventDefault = true;
-          break;
-
-        case 'ArrowUp':
-          // Move to previous, but don't wrap (APG compliant)
-          if (currentIndex > 0) {
-            newIndex = currentIndex - 1;
-          }
-          shouldPreventDefault = true;
-          break;
-
-        case 'Home':
-          newIndex = 0;
-          shouldPreventDefault = true;
-          break;
-
-        case 'End':
-          newIndex = this.availableButtons.length - 1;
-          shouldPreventDefault = true;
-          break;
-      }
-
-      if (shouldPreventDefault) {
-        e.preventDefault();
-        if (newIndex !== currentIndex) {
-          this.availableButtons[newIndex]?.focus();
-        }
-      }
     };
   }
 

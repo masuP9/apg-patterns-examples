@@ -59,6 +59,6 @@ export const disabledItems = [
     id: 'dis3',
     header: 'Another Available Section',
     content:
-      'This section can also be expanded. Notice that arrow key navigation skips the disabled section.',
+      'This section can also be expanded. The disabled section is removed from the Tab order, so Tab moves directly between the enabled sections.',
   },
 ];

@@ -169,63 +169,6 @@ for (const framework of frameworks) {
         await header.press('Space');
         await expect(header).toHaveAttribute('aria-expanded', 'true');
       });
-
-      test('ArrowDown moves focus to next header', async ({ page }) => {
-        const accordion = getAccordion(page).first();
-        const headers = accordion.locator('.apg-accordion-trigger');
-
-        // Click to set focus
-        const firstHeader = headers.first();
-        await firstHeader.click();
-        await expect(firstHeader).toBeFocused();
-
-        await firstHeader.press('ArrowDown');
-
-        await expect(headers.nth(1)).toBeFocused();
-      });
-
-      test('ArrowUp moves focus to previous header', async ({ page }) => {
-        const accordion = getAccordion(page).first();
-        const headers = accordion.locator('.apg-accordion-trigger');
-
-        // Click to ensure focus is properly set
-        const secondHeader = headers.nth(1);
-        await secondHeader.click();
-        await expect(secondHeader).toBeFocused();
-
-        await secondHeader.press('ArrowUp');
-
-        await expect(headers.first()).toBeFocused();
-      });
-
-      test('Home moves focus to first header', async ({ page }) => {
-        const accordion = getAccordion(page).first();
-        const headers = accordion.locator('.apg-accordion-trigger');
-
-        // Click to set focus
-        const thirdHeader = headers.nth(2);
-        await thirdHeader.click();
-        await expect(thirdHeader).toBeFocused();
-
-        await thirdHeader.press('Home');
-
-        await expect(headers.first()).toBeFocused();
-      });
-
-      test('End moves focus to last header', async ({ page }) => {
-        const accordion = getAccordion(page).first();
-        const headers = accordion.locator('.apg-accordion-trigger');
-        const count = await headers.count();
-
-        // Click to set focus
-        const firstHeader = headers.first();
-        await firstHeader.click();
-        await expect(firstHeader).toBeFocused();
-
-        await firstHeader.press('End');
-
-        await expect(headers.nth(count - 1)).toBeFocused();
-      });
     });
 
     // ------------------------------------------
@@ -250,33 +193,6 @@ for (const framework of frameworks) {
 
             // State should not change
             await expect(header).toHaveAttribute('aria-expanded', initialExpanded!);
-            break;
-          }
-        }
-      });
-
-      test('arrow key navigation skips disabled headers', async ({ page }) => {
-        // Find accordion with disabled item (third accordion)
-        const accordions = getAccordion(page);
-        const count = await accordions.count();
-
-        for (let i = 0; i < count; i++) {
-          const accordion = accordions.nth(i);
-          const disabledHeader = accordion.locator('.apg-accordion-trigger[disabled]');
-
-          if ((await disabledHeader.count()) > 0) {
-            const headers = accordion.locator('.apg-accordion-trigger:not([disabled])');
-            const firstEnabled = headers.first();
-
-            // Click to set focus reliably
-            await firstEnabled.click();
-            await expect(firstEnabled).toBeFocused();
-
-            await firstEnabled.press('ArrowDown');
-
-            // Should skip disabled and go to next enabled
-            const secondEnabled = headers.nth(1);
-            await expect(secondEnabled).toBeFocused();
             break;
           }
         }
