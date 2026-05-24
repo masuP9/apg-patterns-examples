@@ -84,6 +84,39 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 - Document accessibility features thoroughly
 - Use semantic commit messages
 
+## APG Upstream Watcher
+
+A daily GitHub Actions workflow polls [`w3c/aria-practices`](https://github.com/w3c/aria-practices) and opens one issue per APG slug whenever new commits land on a tracked pattern path. Reviewers can decide in a single place whether each upstream change needs reflecting in this site.
+
+### Setup (one-time)
+
+1. **Repository settings**: enable Settings → Actions → General → Workflow permissions → "Read and write permissions" so the workflow can commit state updates and create issues.
+2. **Label**: create a single repo label named `apg-upstream`.
+
+### How it runs
+
+- **Scheduled**: daily at JST 08:17 (UTC 23:17) via `.github/workflows/apg-upstream-watch.yml`.
+- **Manual / dry-run**: GitHub UI → Actions → APG Upstream Watch → "Run workflow". Inputs (all optional):
+  - `dry_run=true`: print intended actions, no issue creation, no state commit.
+  - `since_override=<ISO8601>`: process commits since the given time for all slugs (useful for first backfill).
+  - `patterns=<id,id,...>`: limit to the given site patternIds.
+
+### State
+
+`.github/apg-state.json` records, per APG slug, the last commit SHA and timestamp the watcher has already turned into an issue. The bot user commits state updates with `[skip ci]`. On first encounter of a slug, the watcher records the latest commit as a baseline and creates no issue (so we don't drown in years of history).
+
+### Issue identity
+
+Each issue body contains a hidden marker `<!-- apg-upstream:slug=<apg-slug> -->`. The watcher uses this marker (not the title) to find existing open issues for follow-up comments, so renaming the title is safe.
+
+### Local execution
+
+```bash
+GITHUB_TOKEN=$(gh auth token) DRY_RUN=true PATTERNS_FILTER=button \
+  SINCE_OVERRIDE=2025-12-01T00:00:00Z \
+  npm run watch:apg
+```
+
 ## Security
 
 For security concerns or to report vulnerabilities, please see our [Security Policy](./SECURITY.md).
