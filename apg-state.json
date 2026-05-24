@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "lastRun": "2026-05-24T08:45:53.998Z",
+  "lastRun": "2026-05-24T23:38:58.210Z",
   "patterns": {
     "accordion": {
       "lastSeenSha": "7b134ce6d19497cce8a67db4a9f59980baf853dc",
@@ -14,9 +14,25 @@
       "lastSeenSha": "a4cfe32d25412299d2e77a336307e12e3472be38",
       "lastSeenDate": "2026-04-29T13:48:05Z"
     },
+    "breadcrumb": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
     "button": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "carousel": {
+      "lastSeenSha": "59a55b3b8812a6aaffafaf760ce401b7cadb0609",
+      "lastSeenDate": "2025-09-18T01:41:18Z"
+    },
+    "checkbox": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "combobox": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
     },
     "dialog-modal": {
       "lastSeenSha": "a44ade58dfd392615da497cebdc4d745ef60a1e5",
@@ -26,6 +42,14 @@
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
     },
+    "feed": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "grid": {
+      "lastSeenSha": "219f52615d93e94787420af37be029a3d40ccd7d",
+      "lastSeenDate": "2025-09-16T17:20:15Z"
+    },
     "landmarks": {
       "lastSeenSha": "b5c817ddc922d0476a8c273dd2e03f55f9070cce",
       "lastSeenDate": "2026-04-05T00:20:03Z"
@@ -34,9 +58,21 @@
       "lastSeenSha": "ea2d3de8b87b6031d65e3f178d183c9cb9238208",
       "lastSeenDate": "2026-03-04T18:28:27Z"
     },
+    "listbox": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
     "menu-button": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "menubar": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "meter": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
     },
     "radio": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
@@ -46,13 +82,45 @@
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
     },
+    "slider-multithumb": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "spinbutton": {
+      "lastSeenSha": "84b921a0c6646d2ddabaa94d918e165a1093daeb",
+      "lastSeenDate": "2025-10-28T16:52:34Z"
+    },
     "switch": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
     },
+    "table": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
     "tabs": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
       "lastSeenDate": "2026-01-20T06:18:35Z"
+    },
+    "toolbar": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "tooltip": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "treegrid": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "treeview": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
+    },
+    "windowsplitter": {
+      "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
+      "lastSeenDate": "2025-09-02T16:41:49Z"
     }
   }
 }
