@@ -96,94 +96,100 @@ async function main(): Promise<void> {
   let unchanged = 0;
   const errors: string[] = [];
 
-  for (const [apgSlug, mapping] of map) {
-    if (!shouldProcess(mapping, env.patternsFilter)) continue;
+  try {
+    for (const [apgSlug, mapping] of map) {
+      if (!shouldProcess(mapping, env.patternsFilter)) continue;
 
-    const previousSha = state.patterns[apgSlug]?.lastSeenSha ?? null;
-    const since = env.sinceOverride ?? sinceFor(state, apgSlug);
-    const firstEncounter = previousSha === null && !env.sinceOverride;
+      const previousSha = state.patterns[apgSlug]?.lastSeenSha ?? null;
+      const since = env.sinceOverride ?? sinceFor(state, apgSlug);
+      const firstEncounter = previousSha === null && !env.sinceOverride;
 
-    let commits;
-    try {
-      commits = await client.listCommitsForPath({
-        owner: UPSTREAM_OWNER,
-        repo: UPSTREAM_REPO,
-        path: `${UPSTREAM_PATH_PREFIX}/${apgSlug}`,
-        since: since ?? undefined,
-      });
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`[${apgSlug}] ${msg}`);
-      console.error(`[${apgSlug}] API error: ${msg}`);
-      continue;
-    }
-
-    // Filter out any commit equal to lastSeenSha as a defensive cross-check
-    // (since the `since` filter is inclusive at second-resolution).
-    const newCommits = previousSha ? commits.filter((c) => c.sha !== previousSha) : commits;
-
-    if (newCommits.length === 0) {
-      console.log(`[${apgSlug}] no new commits`);
-      unchanged++;
-      continue;
-    }
-
-    const latest = newCommits[0]; // GitHub returns newest first
-
-    if (firstEncounter) {
-      console.log(
-        `[${apgSlug}] first encounter, recording baseline ${latest.sha.slice(0, 7)} ` +
-          `(skipping ${newCommits.length} historical commits)`
-      );
-      recordSeen(state, apgSlug, latest.sha, latest.committerDate);
-      baselined++;
-      continue;
-    }
-
-    const until = new Date().toISOString();
-    const draft = formatIssue({
-      mapping,
-      commits: newCommits,
-      since: since ?? 'baseline',
-      until,
-      previousSha,
-      upstreamRepo: UPSTREAM_REPO_FULL,
-    });
-    const followupBody = formatFollowupComment({
-      apgSlug,
-      commits: newCommits,
-      since: since ?? 'baseline',
-      until,
-    });
-
-    try {
-      const action = await manager.createOrComment({
-        apgSlug,
-        latestSha: latest.sha,
-        draft,
-        followupBody,
-      });
-      recordSeen(state, apgSlug, latest.sha, latest.committerDate);
-      if (action.kind === 'skip') {
-        skippedActions++;
-      } else {
-        createdOrCommented++;
+      let commits;
+      try {
+        commits = await client.listCommitsForPath({
+          owner: UPSTREAM_OWNER,
+          repo: UPSTREAM_REPO,
+          path: `${UPSTREAM_PATH_PREFIX}/${apgSlug}`,
+          since: since ?? undefined,
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`[${apgSlug}] ${msg}`);
+        console.error(`[${apgSlug}] API error: ${msg}`);
+        continue;
       }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`[${apgSlug}] issue write failed: ${msg}`);
-      console.error(`[${apgSlug}] issue write error: ${msg}`);
+
+      // Filter out any commit equal to lastSeenSha as a defensive cross-check
+      // (since the `since` filter is inclusive at second-resolution).
+      const newCommits = previousSha ? commits.filter((c) => c.sha !== previousSha) : commits;
+
+      if (newCommits.length === 0) {
+        console.log(`[${apgSlug}] no new commits`);
+        unchanged++;
+        continue;
+      }
+
+      const latest = newCommits[0]; // GitHub returns newest first
+
+      if (firstEncounter) {
+        console.log(
+          `[${apgSlug}] first encounter, recording baseline ${latest.sha.slice(0, 7)} ` +
+            `(skipping ${newCommits.length} historical commits)`
+        );
+        recordSeen(state, apgSlug, latest.sha, latest.committerDate);
+        baselined++;
+        continue;
+      }
+
+      const until = new Date().toISOString();
+      const draft = formatIssue({
+        mapping,
+        commits: newCommits,
+        since: since ?? 'baseline',
+        until,
+        previousSha,
+        upstreamRepo: UPSTREAM_REPO_FULL,
+      });
+      const followupBody = formatFollowupComment({
+        apgSlug,
+        commits: newCommits,
+        since: since ?? 'baseline',
+        until,
+      });
+
+      try {
+        const action = await manager.createOrComment({
+          apgSlug,
+          latestSha: latest.sha,
+          draft,
+          followupBody,
+        });
+        recordSeen(state, apgSlug, latest.sha, latest.committerDate);
+        if (action.kind === 'skip') {
+          skippedActions++;
+        } else {
+          createdOrCommented++;
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`[${apgSlug}] issue write failed: ${msg}`);
+        console.error(`[${apgSlug}] issue write error: ${msg}`);
+      }
     }
-  }
+  } finally {
+    // Always persist state so that any side-effects already produced during the
+    // loop (created issues / posted comments) are reflected on disk, even if
+    // the run ends with errors (#206). The subsequent workflow step pushes the
+    // file with `if: always() && !cancelled()` to keep this guarantee end-to-end.
+    state.lastRun = new Date().toISOString();
+    state.schemaVersion = STATE_SCHEMA_VERSION;
 
-  state.lastRun = new Date().toISOString();
-  state.schemaVersion = STATE_SCHEMA_VERSION;
-
-  if (env.dryRun) {
-    console.log('\n[dry-run] would not write state file');
-  } else {
-    saveState(state);
-    console.log(`\nState written to ${STATE_FILE}`);
+    if (env.dryRun) {
+      console.log('\n[dry-run] would not write state file');
+    } else {
+      saveState(state);
+      console.log(`\nState written to ${STATE_FILE}`);
+    }
   }
 
   console.log(
