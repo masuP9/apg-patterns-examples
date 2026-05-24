@@ -119,8 +119,10 @@ async function main(): Promise<void> {
         continue;
       }
 
-      // Filter out any commit equal to lastSeenSha as a defensive cross-check
-      // (since the `since` filter is inclusive at second-resolution).
+      // Defensive watermark check for the exact lastSeenSha only. sinceFor()
+      // advances past lastSeenDate by one second so the same commit is not
+      // normally re-yielded; IssueManager's latest-SHA body marker covers
+      // duplicate Issue/comment creation for the latest batch SHA.
       const newCommits = previousSha ? commits.filter((c) => c.sha !== previousSha) : commits;
 
       if (newCommits.length === 0) {

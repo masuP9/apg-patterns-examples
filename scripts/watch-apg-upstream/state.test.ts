@@ -80,6 +80,16 @@ describe('sinceFor', () => {
     recordSeen(state, 'button', 'abc', '2026-05-23T10:00:00.000Z');
     expect(sinceFor(state, 'button')).toBe('2026-05-23T10:00:01.000Z');
   });
+
+  it('preserves milliseconds when advancing the watermark by one second', () => {
+    // Regression guard: GitHub's `since` is second-resolution so the offset
+    // must be exactly +1s. If this is ever changed (e.g., +1ms or rounded to
+    // whole seconds), duplicate notifications for commits sharing the same
+    // second as lastSeenDate become much more likely (Issue #207 context).
+    const state = loadState(statePath);
+    recordSeen(state, 'button', 'abc', '2026-05-23T10:00:00.500Z');
+    expect(sinceFor(state, 'button')).toBe('2026-05-23T10:00:01.500Z');
+  });
 });
 
 describe('recordSeen', () => {
