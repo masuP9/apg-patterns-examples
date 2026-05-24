@@ -1,0 +1,99 @@
+---
+/**
+ * Demo-only Page: Tree View (Svelte)
+ *
+ * This page renders the Tree View component in isolation without
+ * the site layout. This ensures clean E2E testing environment.
+ */
+import '@/styles/global.css';
+import TreeView from '@patterns/treeview/TreeView.svelte';
+import TreeViewActivationDemo from '@patterns/treeview/TreeViewActivationDemo.svelte';
+
+const fileSystemNodes = [
+  {
+    id: 'documents',
+    label: 'Documents',
+    children: [
+      { id: 'report', label: 'report.pdf' },
+      { id: 'notes', label: 'notes.txt' },
+      {
+        id: 'projects',
+        label: 'Projects',
+        children: [
+          { id: 'project-a', label: 'Project A' },
+          { id: 'project-b', label: 'Project B' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'images',
+    label: 'Images',
+    children: [
+      { id: 'vacation', label: 'vacation.jpg' },
+      { id: 'profile', label: 'profile.png' },
+    ],
+  },
+  { id: 'readme', label: 'readme.md' },
+];
+
+const disabledNodes = [
+  {
+    id: 'folder1',
+    label: 'Accessible Folder',
+    children: [
+      { id: 'file1', label: 'file1.txt' },
+      { id: 'file2', label: 'file2.txt', disabled: true },
+    ],
+  },
+  {
+    id: 'folder2',
+    label: 'Restricted Folder',
+    disabled: true,
+    children: [{ id: 'secret', label: 'secret.txt' }],
+  },
+  { id: 'public', label: 'public.txt' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Tree View (Svelte)</title>
+  </head>
+  <body class="p-8">
+    <div class="flex flex-col gap-8">
+      <div>
+        <h3 class="mb-3 text-sm font-medium">Single-Select with Activation</h3>
+        <TreeViewActivationDemo
+          client:load
+          nodes={fileSystemNodes}
+          ariaLabel="File Explorer"
+          defaultExpandedIds={['documents']}
+        />
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-medium">Multi-Select</h3>
+        <TreeView
+          client:load
+          nodes={fileSystemNodes}
+          ariaLabel="Multi-select File Explorer"
+          multiselectable
+          defaultExpandedIds={['documents', 'images']}
+        />
+      </div>
+      <div>
+        <h3 class="mb-3 text-sm font-medium">With Disabled Nodes</h3>
+        <TreeView
+          client:load
+          nodes={disabledNodes}
+          ariaLabel="File Explorer with Restricted Access"
+          defaultExpandedIds={['folder1']}
+        />
+      </div>
+    </div>
+  </body>
+</html>

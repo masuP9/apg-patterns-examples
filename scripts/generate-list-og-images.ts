@@ -45,7 +45,7 @@ const PATTERN_ICONS: Record<string, string> = {
   'menu-button': 'menu',
   menubar: 'panel-top-open',
   meter: 'gauge',
-  'radio-group': 'circle-dot',
+  radio: 'circle-dot',
   slider: 'sliders-horizontal',
   'slider-multithumb': 'sliders-horizontal',
   spinbutton: 'plus-minus',
@@ -55,9 +55,9 @@ const PATTERN_ICONS: Record<string, string> = {
   'toggle-button': 'toggle-right',
   toolbar: 'panel-top',
   tooltip: 'message-circle',
-  'tree-view': 'folder-tree',
+  treeview: 'folder-tree',
   treegrid: 'git-branch',
-  'window-splitter': 'columns-2',
+  windowsplitter: 'columns-2',
 };
 
 // Practice ID to Lucide icon name mapping

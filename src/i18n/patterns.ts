@@ -107,7 +107,7 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
       name: 'メーター',
       description: '定義された範囲内で変化する数値のグラフィカル表示。',
     },
-    'radio-group': {
+    radio: {
       name: 'ラジオグループ',
       description:
         'ラジオボタンと呼ばれるチェック可能なボタンのセットで、一度に1つだけチェックできます。',
@@ -148,7 +148,7 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
       description:
         '要素がキーボードフォーカスを受けたとき、またはマウスがホバーしたときに、要素に関連する情報を表示するポップアップ。',
     },
-    'tree-view': {
+    treeview: {
       name: 'ツリービュー',
       description:
         '折りたたみや展開が可能なネストされたグループを持つ階層的なリストを表示するウィジェット。',
@@ -158,7 +158,7 @@ const patternTranslations: Record<Locale, PatternTranslations> = {
       description:
         '編集可能またはインタラクティブな表形式の情報で構成される階層的なデータグリッドを表示するウィジェット。',
     },
-    'window-splitter': {
+    windowsplitter: {
       name: 'ウィンドウスプリッター',
       description:
         '2つのセクションまたはペイン間の移動可能なセパレーターで、ユーザーがペインの相対サイズを変更できます。',

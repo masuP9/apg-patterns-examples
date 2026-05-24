@@ -147,7 +147,7 @@ export const PATTERNS: Pattern[] = [
     icon: '📶',
   },
   {
-    id: 'radio-group',
+    id: 'radio',
     name: 'Radio Group',
     description:
       'A set of checkable buttons, known as radio buttons, where only one can be checked at a time.',
@@ -209,7 +209,7 @@ export const PATTERNS: Pattern[] = [
     icon: '💡',
   },
   {
-    id: 'tree-view',
+    id: 'treeview',
     name: 'Tree View',
     description:
       'A widget that presents a hierarchical list with nested groups that can be collapsed and expanded.',
@@ -230,7 +230,7 @@ export const PATTERNS: Pattern[] = [
     icon: '📋',
   },
   {
-    id: 'window-splitter',
+    id: 'windowsplitter',
     name: 'Window Splitter',
     description:
       'A moveable separator between two sections, or panes, that enables users to change the relative size of the panes.',

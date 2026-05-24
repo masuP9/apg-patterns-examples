@@ -4,7 +4,7 @@
  * This file defines the visual silhouette used in the OGP image for this pattern.
  * The silhouette is rendered as a background element with low opacity.
  *
- * Design: Hierarchical grid combining tree-view and grid patterns
+ * Design: Hierarchical grid combining treeview and grid patterns
  * - Header row
  * - Expanded parent row with arrow indicator
  * - Indented child rows

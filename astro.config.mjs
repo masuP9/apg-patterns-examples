@@ -79,4 +79,41 @@ export default defineConfig({
     defaultLocale: 'en',
     locales: ['en', 'ja'],
   },
+
+  redirects: buildPatternRedirects(
+    [
+      ['radio-group', 'radio'],
+      ['tree-view', 'treeview'],
+      ['window-splitter', 'windowsplitter'],
+    ],
+    base
+  ),
 });
+
+/**
+ * Build redirects for old → new pattern slugs across all framework / locale / demo combinations.
+ * Astro requires destinations to match concrete routes, so every framework is expanded explicitly.
+ * The destination needs the base path prefix because Astro does not inject it into the generated
+ * `<meta http-equiv="refresh">` URL.
+ * @param {Array<[string, string]>} pairs
+ * @param {string} basePath
+ */
+function buildPatternRedirects(pairs, basePath) {
+  const frameworks = ['react', 'vue', 'svelte', 'astro'];
+  const localePrefixes = ['', '/ja'];
+  const baseSegment = basePath === '/' ? '' : basePath.replace(/\/$/, '');
+  /** @type {Record<string, string>} */
+  const map = {};
+  for (const [oldSlug, newSlug] of pairs) {
+    for (const locale of localePrefixes) {
+      map[`${locale}/patterns/${oldSlug}`] = `${baseSegment}${locale}/patterns/${newSlug}`;
+      for (const fw of frameworks) {
+        map[`${locale}/patterns/${oldSlug}/${fw}`] =
+          `${baseSegment}${locale}/patterns/${newSlug}/${fw}`;
+        map[`${locale}/patterns/${oldSlug}/${fw}/demo`] =
+          `${baseSegment}${locale}/patterns/${newSlug}/${fw}/demo`;
+      }
+    }
+  }
+  return map;
+}
