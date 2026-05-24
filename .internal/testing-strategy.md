@@ -545,7 +545,7 @@ for (const framework of frameworks) {
 
 | カテゴリ            | テスト観点                                                         |
 | ------------------- | ------------------------------------------------------------------ |
-| 🔴 APG: キーボード  | Enter/Space で開閉、Arrow でナビゲーション（オプション）、Home/End |
+| 🔴 APG: キーボード  | Enter/Space で開閉（ヘッダー間は Tab 順序で移動）                  |
 | 🔴 APG: ARIA        | aria-expanded、aria-controls/labelledby、role="region" の条件      |
 | 🔴 見出し構造       | headingLevel で h2-h6                                              |
 | 🟡 アクセシビリティ | axe 違反なし                                                       |

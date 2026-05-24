@@ -140,15 +140,6 @@ function App() {
           },
         },
         {
-          name: 'enableArrowKeys',
-          type: 'boolean',
-          default: 'true',
-          description: {
-            en: 'Enable arrow key navigation',
-            ja: '矢印キーナビゲーションを有効化',
-          },
-        },
-        {
           name: 'onExpandedChange',
           type: '(ids: string[]) => void',
           default: '-',
@@ -227,15 +218,6 @@ const items = [
             ja: 'アクセシビリティのための見出しレベル',
           },
         },
-        {
-          name: 'enableArrowKeys',
-          type: 'boolean',
-          default: 'true',
-          description: {
-            en: 'Enable arrow key navigation',
-            ja: '矢印キーナビゲーションを有効化',
-          },
-        },
       ],
       apiEvents: [
         {
@@ -310,15 +292,6 @@ const items = [
           },
         },
         {
-          name: 'enableArrowKeys',
-          type: 'boolean',
-          default: 'true',
-          description: {
-            en: 'Enable arrow key navigation',
-            ja: '矢印キーナビゲーションを有効化',
-          },
-        },
-        {
           name: 'onExpandedChange',
           type: '(ids: string[]) => void',
           default: '-',
@@ -382,15 +355,6 @@ const items = [
           description: {
             en: 'Heading level for accessibility',
             ja: 'アクセシビリティのための見出しレベル',
-          },
-        },
-        {
-          name: 'enableArrowKeys',
-          type: 'boolean',
-          default: 'true',
-          description: {
-            en: 'Enable arrow key navigation',
-            ja: '矢印キーナビゲーションを有効化',
           },
         },
         {

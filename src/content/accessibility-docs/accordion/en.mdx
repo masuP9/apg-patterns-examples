@@ -65,24 +65,20 @@ Auto-generated
 
 ### Keyboard Support
 
-| Key                      | Action                                                 |
-| ------------------------ | ------------------------------------------------------ |
-| <kbd>Tab</kbd>           | Move focus to the next focusable element               |
-| <kbd>Space / Enter</kbd> | Toggle the expansion of the focused accordion header   |
-| <kbd>Arrow Down</kbd>    | Move focus to the next accordion header (optional)     |
-| <kbd>Arrow Up</kbd>      | Move focus to the previous accordion header (optional) |
-| <kbd>Home</kbd>          | Move focus to the first accordion header (optional)    |
-| <kbd>End</kbd>           | Move focus to the last accordion header (optional)     |
+| Key                       | Action                                               |
+| ------------------------- | ---------------------------------------------------- |
+| <kbd>Tab</kbd>            | Move focus to the next focusable element             |
+| <kbd>Shift + Tab</kbd>    | Move focus to the previous focusable element         |
+| <kbd>Space / Enter</kbd>  | Toggle the expansion of the focused accordion header |
 
-- Arrow key navigation is optional but recommended. Focus does not wrap around at the end of the list.
+- Header navigation uses the standard Tab order; arrow / Home / End key navigation is no longer part of the APG Accordion keyboard interaction.
 
 ### Focus Management
 
-| Event          | Behavior                                 |
-| -------------- | ---------------------------------------- |
-| Header buttons | Focusable via their button elements      |
-| Arrow keys     | Navigate between headers (skip disabled) |
-| Edges          | Focus does not wrap at edges             |
+| Event          | Behavior                                                                                            |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| Header buttons | Focusable via their button elements                                                                 |
+| Tab order      | Headers participate in the page Tab sequence; navigate between headers with Tab / Shift+Tab        |
 
 ### Implementation Notes
 

@@ -37,27 +37,17 @@
 | --- | --- |
 | `Tab` | 次のフォーカス可能な要素にフォーカスを移動 |
 | `Space / Enter` | フォーカスされたアコーディオンヘッダーの展開/折り畳みを切り替え |
-| `Arrow Down` | 次のアコーディオンヘッダーにフォーカスを移動 (オプション) |
-| `Arrow Up` | 前のアコーディオンヘッダーにフォーカスを移動 (オプション) |
-| `Home` | 最初のアコーディオンヘッダーにフォーカスを移動 (オプション) |
-| `End` | 最後のアコーディオンヘッダーにフォーカスを移動 (オプション) |
 
 ## フォーカス管理
 
 - ヘッダーボタン: ボタン要素経由でフォーカス可能
-- 矢印キー: ヘッダー間をナビゲート（無効化されたものはスキップ）
-- 端: フォーカスは端でループしない
+- Tab 順序: ヘッダーはページの Tab 順序に含まれ、Tab / Shift+Tab でヘッダー間を移動する
 
 ## テストチェックリスト
 
 ### 高優先度: キーボード
 
 - [ ] Enter/Space toggles panel expansion
-- [ ] ArrowDown moves to next header
-- [ ] ArrowUp moves to previous header
-- [ ] Home moves to first header
-- [ ] End moves to last header
-- [ ] Disabled headers are skipped
 
 ### 高優先度: ARIA
 
@@ -71,7 +61,7 @@
 ### 高優先度: フォーカス管理
 
 - [ ] Focus stays on header after toggle
-- [ ] Arrow keys skip disabled headers
+- [ ] Headers participate in the page Tab sequence
 
 ### 中優先度: アクセシビリティ
 
@@ -120,31 +110,16 @@ it('toggles panel on Enter/Space', async () => {
   expect(header).toHaveAttribute('aria-expanded', 'true');
 });
 
-// Arrow navigation test
-it('ArrowDown moves to next header', async () => {
-  const user = userEvent.setup();
-  render(<Accordion items={items} />);
-
-  const header1 = screen.getByRole('button', { name: 'Section 1' });
-  header1.focus();
-
-  await user.keyboard('{ArrowDown}');
-
-  const header2 = screen.getByRole('button', { name: 'Section 2' });
-  expect(header2).toHaveFocus();
-});
-
-// Skip disabled
-it('skips disabled headers', async () => {
+// Disabled headers do not toggle
+it('disabled header does not toggle on click', async () => {
   const user = userEvent.setup();
   render(<Accordion items={itemsWithDisabled} />);
 
-  const header1 = screen.getByRole('button', { name: 'Section 1' });
-  header1.focus();
+  const disabled = screen.getByRole('button', { name: 'Section 2' });
+  expect(disabled).toHaveAttribute('aria-expanded', 'false');
 
-  await user.keyboard('{ArrowDown}');
-  // Section 2 is disabled, should skip to Section 3
-  expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
+  await user.click(disabled);
+  expect(disabled).toHaveAttribute('aria-expanded', 'false');
 });
 ```
 
@@ -174,23 +149,20 @@ test('accordion has proper ARIA structure', async ({ page }) => {
   await expect(panel).toHaveRole('region');
 });
 
-// Keyboard navigation test
-test('arrow keys navigate between headers', async ({ page }) => {
+// Keyboard toggle test
+test('Enter/Space toggles panel expansion', async ({ page }) => {
   await page.goto('patterns/accordion/react/demo/');
   const accordion = page.locator('.apg-accordion').first();
-  const headers = accordion.locator('.apg-accordion-trigger');
+  const header = accordion.locator('.apg-accordion-trigger').nth(1);
 
-  await headers.first().click();
-  await expect(headers.first()).toBeFocused();
+  await expect(header).toHaveAttribute('aria-expanded', 'false');
 
-  await page.keyboard.press('ArrowDown');
-  await expect(headers.nth(1)).toBeFocused();
+  await header.click();
+  await header.press('Enter');
+  await expect(header).toHaveAttribute('aria-expanded', 'false');
 
-  await page.keyboard.press('Home');
-  await expect(headers.first()).toBeFocused();
-
-  await page.keyboard.press('End');
-  await expect(headers.last()).toBeFocused();
+  await header.press('Space');
+  await expect(header).toHaveAttribute('aria-expanded', 'true');
 });
 
 // Accessibility test
