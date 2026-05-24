@@ -93,7 +93,11 @@ jobs:
         run: npx tsx scripts/watch-apg-upstream.ts
 
       - name: Push state to apg-state branch
-        if: ${{ inputs.dry_run != true }}
+        # always() && !cancelled() ensures we still push state when Run watcher
+        # exits 1 after producing side-effects (issues/comments), so the same
+        # commits are not re-detected on the next run (#206). Skipped on manual
+        # cancellation and on dry-run.
+        if: ${{ always() && !cancelled() && inputs.dry_run != true }}
         env:
           GH_TOKEN_FOR_PUSH: ${{ secrets.GITHUB_TOKEN }}
         run: |
