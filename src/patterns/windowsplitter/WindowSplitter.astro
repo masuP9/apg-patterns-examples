@@ -124,26 +124,153 @@ const isVertical = orientation === 'vertical';
       class="apg-window-splitter__separator"
     >
     </div>
+    {
+      !disabled && !readonly && (
+        <div
+          class="apg-window-splitter__popup"
+          role="group"
+          aria-label={`Adjust ${ariaLabel || ''}`}
+        >
+          <button
+            type="button"
+            class="apg-window-splitter__popup-button"
+            tabindex="-1"
+            aria-label={`Collapse ${ariaLabel || ''}`}
+            data-adjust="collapse"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              style={`transform: translate(${isVertical ? '0px, -1px' : '-1px, 0px'})`}
+            >
+              <path d={isVertical ? 'M2 9L6 5L10 9M2 5L6 1L10 5' : 'M5 2L1 6L5 10M9 2L5 6L9 10'} />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="apg-window-splitter__popup-button"
+            tabindex="-1"
+            aria-label={`Shrink ${ariaLabel || ''}`}
+            data-adjust="decrease"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              style={`transform: translate(${isVertical ? '0px, -1px' : '-1px, 0px'})`}
+            >
+              <path d={isVertical ? 'M2 8L6 4L10 8' : 'M8 2L4 6L8 10'} />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="apg-window-splitter__popup-button"
+            tabindex="-1"
+            aria-label={`Expand ${ariaLabel || ''}`}
+            data-adjust="increase"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              style={`transform: translate(${isVertical ? '0px, 1px' : '1px, 0px'})`}
+            >
+              <path d={isVertical ? 'M2 4L6 8L10 4' : 'M4 2L8 6L4 10'} />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="apg-window-splitter__popup-button"
+            tabindex="-1"
+            aria-label={`Expand ${ariaLabel || ''} to maximum`}
+            data-adjust="maximize"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              style={`transform: translate(${isVertical ? '0px, 1px' : '1px, 0px'})`}
+            >
+              <path
+                d={isVertical ? 'M2 3L6 7L10 3M2 7L6 11L10 7' : 'M3 2L7 6L3 10M7 2L11 6L7 10'}
+              />
+            </svg>
+          </button>
+        </div>
+      )
+    }
   </div>
 </apg-window-splitter>
 
 <script>
+  const HOVER_DELAY = 300;
+  const DISMISS_DELAY = 300;
+  const ACTIVE_SETTLE_DELAY = 500;
+  const TAP_DISTANCE_THRESHOLD = 5;
+  const POPUP_OFFSET = 8;
+
   class ApgWindowSplitter extends HTMLElement {
     private separator: HTMLElement | null = null;
     private container: HTMLElement | null = null;
+    private popup: HTMLElement | null = null;
     private isDragging = false;
     private previousPosition: number | null = null;
     private collapsed = false;
+
+    private popupState: 'hidden' | 'showing' | 'active' = 'hidden';
+    private popupPos: { x: number; y: number } | null = null;
+    private hoverTimer: ReturnType<typeof setTimeout> | null = null;
+    private dismissTimer: ReturnType<typeof setTimeout> | null = null;
+    private activeSettleTimer: ReturnType<typeof setTimeout> | null = null;
+    private pointerStart: { x: number; y: number } | null = null;
+    private isMouseOverPopup = false;
+    private hoverPos: { x: number; y: number } | null = null;
 
     // Bound event handlers (stored to properly remove listeners)
     private boundHandleKeyDown = this.handleKeyDown.bind(this);
     private boundHandlePointerDown = this.handlePointerDown.bind(this);
     private boundHandlePointerMove = this.handlePointerMove.bind(this);
     private boundHandlePointerUp = this.handlePointerUp.bind(this);
+    private boundHandleSeparatorMouseEnter = this.handleSeparatorMouseEnter.bind(this);
+    private boundHandleSeparatorMouseLeave = this.handleSeparatorMouseLeave.bind(this);
+    private boundHandleSeparatorMouseMove = this.handleSeparatorMouseMove.bind(this);
+    private boundHandleSeparatorFocus = this.handleSeparatorFocus.bind(this);
+    private boundHandleSeparatorBlur = this.handleSeparatorBlur.bind(this);
+    private boundHandlePopupMouseEnter = this.handlePopupMouseEnter.bind(this);
+    private boundHandlePopupMouseLeave = this.handlePopupMouseLeave.bind(this);
+    private boundHandlePopupKeyDown = this.handlePopupKeyDown.bind(this);
+    private boundHandlePopupButtonClick = this.handlePopupButtonClick.bind(this);
+    private boundHandleOutsidePointerDown = this.handleOutsidePointerDown.bind(this);
 
     connectedCallback() {
       this.separator = this.querySelector('[role="separator"]');
       this.container = this.querySelector('.apg-window-splitter');
+      this.popup = this.querySelector('.apg-window-splitter__popup');
 
       // Initialize state from data attributes
       this.collapsed = this.dataset.collapsed === 'true';
@@ -156,6 +283,18 @@ const isVertical = orientation === 'vertical';
         this.separator.addEventListener('pointerdown', this.boundHandlePointerDown);
         this.separator.addEventListener('pointermove', this.boundHandlePointerMove);
         this.separator.addEventListener('pointerup', this.boundHandlePointerUp);
+        this.separator.addEventListener('mouseenter', this.boundHandleSeparatorMouseEnter);
+        this.separator.addEventListener('mouseleave', this.boundHandleSeparatorMouseLeave);
+        this.separator.addEventListener('mousemove', this.boundHandleSeparatorMouseMove);
+        this.separator.addEventListener('focus', this.boundHandleSeparatorFocus);
+        this.separator.addEventListener('blur', this.boundHandleSeparatorBlur);
+      }
+
+      if (this.popup) {
+        this.popup.addEventListener('mouseenter', this.boundHandlePopupMouseEnter);
+        this.popup.addEventListener('mouseleave', this.boundHandlePopupMouseLeave);
+        this.popup.addEventListener('keydown', this.boundHandlePopupKeyDown);
+        this.popup.addEventListener('click', this.boundHandlePopupButtonClick);
       }
     }
 
@@ -165,7 +304,22 @@ const isVertical = orientation === 'vertical';
         this.separator.removeEventListener('pointerdown', this.boundHandlePointerDown);
         this.separator.removeEventListener('pointermove', this.boundHandlePointerMove);
         this.separator.removeEventListener('pointerup', this.boundHandlePointerUp);
+        this.separator.removeEventListener('mouseenter', this.boundHandleSeparatorMouseEnter);
+        this.separator.removeEventListener('mouseleave', this.boundHandleSeparatorMouseLeave);
+        this.separator.removeEventListener('mousemove', this.boundHandleSeparatorMouseMove);
+        this.separator.removeEventListener('focus', this.boundHandleSeparatorFocus);
+        this.separator.removeEventListener('blur', this.boundHandleSeparatorBlur);
       }
+
+      if (this.popup) {
+        this.popup.removeEventListener('mouseenter', this.boundHandlePopupMouseEnter);
+        this.popup.removeEventListener('mouseleave', this.boundHandlePopupMouseLeave);
+        this.popup.removeEventListener('keydown', this.boundHandlePopupKeyDown);
+        this.popup.removeEventListener('click', this.boundHandlePopupButtonClick);
+      }
+
+      document.removeEventListener('pointerdown', this.boundHandleOutsidePointerDown);
+      this.clearAllTimers();
     }
 
     private get min(): number {
@@ -235,6 +389,36 @@ const isVertical = orientation === 'vertical';
       return Math.min(this.max, Math.max(this.min, value));
     }
 
+    private clearAllTimers() {
+      if (this.hoverTimer) clearTimeout(this.hoverTimer);
+      if (this.dismissTimer) clearTimeout(this.dismissTimer);
+      if (this.activeSettleTimer) clearTimeout(this.activeSettleTimer);
+      this.hoverTimer = null;
+      this.dismissTimer = null;
+      this.activeSettleTimer = null;
+    }
+
+    private updatePopupButtonStates() {
+      if (!this.popup) return;
+      const pos = this.currentPosition;
+      const collapseBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="collapse"]');
+      const decreaseBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="decrease"]');
+      const increaseBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="increase"]');
+      const maximizeBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="maximize"]');
+      if (collapseBtn) {
+        collapseBtn.setAttribute('aria-disabled', String(pos <= this.min));
+      }
+      if (decreaseBtn) {
+        decreaseBtn.setAttribute('aria-disabled', String(pos <= this.min));
+      }
+      if (increaseBtn) {
+        increaseBtn.setAttribute('aria-disabled', String(pos >= this.max));
+      }
+      if (maximizeBtn) {
+        maximizeBtn.setAttribute('aria-disabled', String(pos >= this.max));
+      }
+    }
+
     private updatePosition(newPosition: number) {
       if (!this.separator || this.isDisabled) return;
 
@@ -258,6 +442,9 @@ const isVertical = orientation === 'vertical';
           (clampedPosition / 100) *
           (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
       }
+
+      // Update popup button disabled states
+      this.updatePopupButtonStates();
 
       // Dispatch event
       this.dispatchEvent(
@@ -299,6 +486,8 @@ const isVertical = orientation === 'vertical';
             (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
         }
 
+        this.updatePopupButtonStates();
+
         this.dispatchEvent(
           new CustomEvent('positionchange', {
             detail: { position: clampedRestore, sizeInPx },
@@ -323,6 +512,8 @@ const isVertical = orientation === 'vertical';
           this.container.style.setProperty('--splitter-position', '0%');
         }
 
+        this.updatePopupButtonStates();
+
         this.dispatchEvent(
           new CustomEvent('positionchange', {
             detail: { position: 0, sizeInPx: 0 },
@@ -332,8 +523,94 @@ const isVertical = orientation === 'vertical';
       }
     }
 
+    private calcPopupPosition(clientX: number, clientY: number): { x: number; y: number } | null {
+      if (!this.separator) return null;
+      const rect = this.separator.getBoundingClientRect();
+      const popupWidth = this.popup?.offsetWidth || (this.isVertical ? 34 : 120);
+      const popupHeight = this.popup?.offsetHeight || (this.isVertical ? 120 : 34);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let x: number;
+      let y: number;
+
+      if (this.isHorizontal) {
+        x = clientX - popupWidth / 2;
+        const belowY = clientY + POPUP_OFFSET;
+        const aboveY = clientY - POPUP_OFFSET - popupHeight;
+        y = belowY + popupHeight <= vh ? belowY : aboveY;
+      } else {
+        y = clientY - popupHeight / 2;
+        const rightX = clientX + POPUP_OFFSET;
+        const leftX = clientX - POPUP_OFFSET - popupWidth;
+        x = rightX + popupWidth <= vw ? rightX : leftX;
+      }
+
+      x = Math.min(vw - popupWidth, Math.max(0, x));
+      y = Math.min(vh - popupHeight, Math.max(0, y));
+
+      return { x, y };
+    }
+
+    private showPopup(clientX: number, clientY: number) {
+      if (this.isDisabled || this.isReadonly || !this.popup) return;
+
+      if (this.dismissTimer) {
+        clearTimeout(this.dismissTimer);
+        this.dismissTimer = null;
+      }
+
+      const pos = this.calcPopupPosition(clientX, clientY);
+      if (pos) {
+        this.popupPos = pos;
+        this.popup.style.left = `${pos.x}px`;
+        this.popup.style.top = `${pos.y}px`;
+        this.popup.style.flexDirection = this.isVertical ? 'column' : 'row';
+        this.popup.classList.add('apg-window-splitter__popup--visible');
+        this.popupState = 'showing';
+        this.updatePopupButtonStates();
+      }
+    }
+
+    private hidePopup() {
+      this.clearAllTimers();
+      document.removeEventListener('pointerdown', this.boundHandleOutsidePointerDown);
+      this.popupState = 'hidden';
+      this.popupPos = null;
+      if (this.popup) {
+        this.popup.classList.remove('apg-window-splitter__popup--visible');
+      }
+    }
+
+    private handleOutsidePointerDown(event: PointerEvent) {
+      if (this.popup && !this.popup.contains(event.target as Node)) {
+        this.hidePopup();
+      }
+    }
+
+    private scheduleDismiss() {
+      if (this.dismissTimer) clearTimeout(this.dismissTimer);
+      this.dismissTimer = setTimeout(() => {
+        const hasFocusInside =
+          this.popup?.contains(document.activeElement) || this.separator === document.activeElement;
+        if (!hasFocusInside) {
+          this.hidePopup();
+        }
+      }, DISMISS_DELAY);
+    }
+
     private handleKeyDown(event: KeyboardEvent) {
       if (this.isDisabled || this.isReadonly) return;
+
+      // Tab to popup buttons when popup is visible
+      if (event.key === 'Tab' && !event.shiftKey && this.popupState !== 'hidden') {
+        const firstBtn = this.popup?.querySelector<HTMLButtonElement>('button');
+        if (firstBtn) {
+          event.preventDefault();
+          firstBtn.focus();
+          return;
+        }
+      }
 
       const hasShift = event.shiftKey;
       const currentStep = hasShift ? this.largeStep : this.step;
@@ -356,13 +633,13 @@ const isVertical = orientation === 'vertical';
 
         case 'ArrowUp':
           if (!this.isVertical) break;
-          delta = currentStep;
+          delta = -currentStep;
           handled = true;
           break;
 
         case 'ArrowDown':
           if (!this.isVertical) break;
-          delta = -currentStep;
+          delta = currentStep;
           handled = true;
           break;
 
@@ -395,15 +672,38 @@ const isVertical = orientation === 'vertical';
 
       event.preventDefault();
 
+      this.pointerStart = { x: event.clientX, y: event.clientY };
+      this.isDragging = false;
+
       if (typeof this.separator.setPointerCapture === 'function') {
         this.separator.setPointerCapture(event.pointerId);
       }
-      this.isDragging = true;
+
+      if (this.hoverTimer) {
+        clearTimeout(this.hoverTimer);
+        this.hoverTimer = null;
+      }
+
       this.separator.focus();
     }
 
     private handlePointerMove(event: PointerEvent) {
-      if (!this.isDragging || !this.container) return;
+      const start = this.pointerStart;
+      if (!start) return;
+
+      if (!this.isDragging) {
+        const dx = event.clientX - start.x;
+        const dy = event.clientY - start.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance >= TAP_DISTANCE_THRESHOLD) {
+          this.isDragging = true;
+          if (this.popupState !== 'hidden') this.hidePopup();
+        } else {
+          return;
+        }
+      }
+
+      if (!this.container) return;
 
       // Use demo container for stable measurement if available
       const demoContainer = this.container.closest(
@@ -418,7 +718,6 @@ const isVertical = orientation === 'vertical';
         percent = (x / rect.width) * 100;
       } else {
         const y = event.clientY - rect.top;
-        // For vertical, y position corresponds to primary pane height
         percent = (y / rect.height) * 100;
       }
 
@@ -441,7 +740,146 @@ const isVertical = orientation === 'vertical';
           // Ignore
         }
       }
+
+      const start = this.pointerStart;
+      if (start && !this.isDragging) {
+        this.showPopup(start.x, start.y);
+      }
+
       this.isDragging = false;
+      this.pointerStart = null;
+    }
+
+    private handleSeparatorMouseEnter(event: MouseEvent) {
+      if (this.isDisabled || this.isReadonly || this.isDragging) return;
+      this.hoverPos = { x: event.clientX, y: event.clientY };
+      if (this.popupState === 'hidden') {
+        if (this.hoverTimer) clearTimeout(this.hoverTimer);
+        this.hoverTimer = setTimeout(() => {
+          const pos = this.hoverPos;
+          if (pos) this.showPopup(pos.x, pos.y);
+        }, HOVER_DELAY);
+      }
+      if (this.dismissTimer) {
+        clearTimeout(this.dismissTimer);
+        this.dismissTimer = null;
+      }
+    }
+
+    private handleSeparatorMouseLeave() {
+      if (this.hoverTimer) {
+        clearTimeout(this.hoverTimer);
+        this.hoverTimer = null;
+      }
+      if (this.popupState !== 'hidden') this.scheduleDismiss();
+    }
+
+    private handleSeparatorMouseMove(event: MouseEvent) {
+      this.hoverPos = { x: event.clientX, y: event.clientY };
+    }
+
+    private handleSeparatorFocus() {
+      if (this.isDisabled || this.isReadonly) return;
+      if (this.popupState === 'hidden') {
+        if (this.separator) {
+          const rect = this.separator.getBoundingClientRect();
+          this.showPopup(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        }
+      }
+      if (this.dismissTimer) {
+        clearTimeout(this.dismissTimer);
+        this.dismissTimer = null;
+      }
+    }
+
+    private handleSeparatorBlur() {
+      if (this.popupState !== 'hidden') {
+        setTimeout(() => {
+          if (
+            !this.popup?.contains(document.activeElement) &&
+            this.separator !== document.activeElement
+          ) {
+            this.scheduleDismiss();
+          }
+        }, 0);
+      }
+    }
+
+    private handlePopupMouseEnter() {
+      this.isMouseOverPopup = true;
+      if (this.dismissTimer) {
+        clearTimeout(this.dismissTimer);
+        this.dismissTimer = null;
+      }
+    }
+
+    private handlePopupMouseLeave() {
+      this.isMouseOverPopup = false;
+      if (this.popupState !== 'hidden') this.scheduleDismiss();
+    }
+
+    private handlePopupKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.hidePopup();
+        this.separator?.focus();
+      }
+      if (event.key === 'Tab' && event.shiftKey) {
+        event.preventDefault();
+        this.hidePopup();
+        this.separator?.focus();
+      }
+    }
+
+    private handlePopupButtonClick(event: Event) {
+      const target = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-adjust]');
+      if (!target) return;
+      if (this.isDisabled || this.isReadonly) return;
+
+      const adjustType = target.dataset.adjust;
+      let delta: number;
+      switch (adjustType) {
+        case 'collapse':
+          delta = this.min - this.currentPosition;
+          break;
+        case 'decrease':
+          delta = -this.step;
+          break;
+        case 'increase':
+          delta = this.step;
+          break;
+        case 'maximize':
+          delta = this.max - this.currentPosition;
+          break;
+        default:
+          return;
+      }
+      const newPos = this.currentPosition + delta;
+
+      if (newPos < this.min || newPos > this.max) return;
+
+      this.updatePosition(newPos);
+      if (this.popupState !== 'active') {
+        this.popupState = 'active';
+        document.addEventListener('pointerdown', this.boundHandleOutsidePointerDown);
+      }
+
+      if (this.activeSettleTimer) clearTimeout(this.activeSettleTimer);
+      this.activeSettleTimer = setTimeout(() => {
+        if (this.popupState === 'active') {
+          if (!this.isMouseOverPopup) {
+            const pos = this.hoverPos;
+            if (pos && this.popup) {
+              const newPopupPos = this.calcPopupPosition(pos.x, pos.y);
+              if (newPopupPos) {
+                this.popup.style.left = `${newPopupPos.x}px`;
+                this.popup.style.top = `${newPopupPos.y}px`;
+              }
+            }
+          }
+          this.popupState = 'showing';
+        }
+      }, ACTIVE_SETTLE_DELAY);
     }
 
     // Public method to update position programmatically
