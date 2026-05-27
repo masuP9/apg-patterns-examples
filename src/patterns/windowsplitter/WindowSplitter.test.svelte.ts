@@ -306,7 +306,7 @@ describe('WindowSplitter (Svelte)', () => {
 
   // 🔴 High Priority: Keyboard Interaction - Vertical
   describe('Keyboard Interaction - Vertical', () => {
-    it('increases value by step on ArrowUp', async () => {
+    it('moves separator up on ArrowUp', async () => {
       const user = userEvent.setup();
       render(WindowSplitter, {
         props: {
@@ -322,10 +322,10 @@ describe('WindowSplitter (Svelte)', () => {
       await user.click(separator);
       await user.keyboard('{ArrowUp}');
 
-      expect(separator).toHaveAttribute('aria-valuenow', '55');
+      expect(separator).toHaveAttribute('aria-valuenow', '45');
     });
 
-    it('decreases value by step on ArrowDown', async () => {
+    it('moves separator down on ArrowDown', async () => {
       const user = userEvent.setup();
       render(WindowSplitter, {
         props: {
@@ -341,7 +341,7 @@ describe('WindowSplitter (Svelte)', () => {
       await user.click(separator);
       await user.keyboard('{ArrowDown}');
 
-      expect(separator).toHaveAttribute('aria-valuenow', '45');
+      expect(separator).toHaveAttribute('aria-valuenow', '55');
     });
 
     it('ignores ArrowLeft on vertical splitter', async () => {

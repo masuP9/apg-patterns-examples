@@ -246,7 +246,7 @@ describe('WindowSplitter', () => {
 
   // 🔴 High Priority: Keyboard Interaction - Vertical Splitter
   describe('Keyboard Interaction - Vertical Splitter', () => {
-    it('increases value by step on ArrowUp', async () => {
+    it('moves separator up on ArrowUp', async () => {
       const user = userEvent.setup();
       render(
         <WindowSplitter
@@ -262,10 +262,10 @@ describe('WindowSplitter', () => {
       await user.click(splitter);
       await user.keyboard('{ArrowUp}');
 
-      expect(splitter).toHaveAttribute('aria-valuenow', '55');
+      expect(splitter).toHaveAttribute('aria-valuenow', '45');
     });
 
-    it('decreases value by step on ArrowDown', async () => {
+    it('moves separator down on ArrowDown', async () => {
       const user = userEvent.setup();
       render(
         <WindowSplitter
@@ -281,7 +281,7 @@ describe('WindowSplitter', () => {
       await user.click(splitter);
       await user.keyboard('{ArrowDown}');
 
-      expect(splitter).toHaveAttribute('aria-valuenow', '45');
+      expect(splitter).toHaveAttribute('aria-valuenow', '55');
     });
 
     it('ArrowLeft does nothing on vertical splitter', async () => {
@@ -320,7 +320,7 @@ describe('WindowSplitter', () => {
       expect(splitter).toHaveAttribute('aria-valuenow', '50');
     });
 
-    it('increases value by largeStep on Shift+ArrowUp', async () => {
+    it('moves separator up by largeStep on Shift+ArrowUp', async () => {
       const user = userEvent.setup();
       render(
         <WindowSplitter
@@ -337,7 +337,7 @@ describe('WindowSplitter', () => {
       await user.click(splitter);
       await user.keyboard('{Shift>}{ArrowUp}{/Shift}');
 
-      expect(splitter).toHaveAttribute('aria-valuenow', '60');
+      expect(splitter).toHaveAttribute('aria-valuenow', '40');
     });
   });
 

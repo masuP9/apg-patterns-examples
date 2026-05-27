@@ -134,7 +134,7 @@ for (const framework of frameworks) {
         expect(newValue).toBe('45');
       });
 
-      test('ArrowUp increases position on vertical splitter', async ({ page }) => {
+      test('ArrowUp moves separator up on vertical splitter', async ({ page }) => {
         const splitter = page.locator('[data-testid="vertical-splitter"]');
 
         await splitter.focus();
@@ -145,10 +145,10 @@ for (const framework of frameworks) {
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
-        expect(newValue).toBe('55');
+        expect(newValue).toBe('45');
       });
 
-      test('ArrowDown decreases position on vertical splitter', async ({ page }) => {
+      test('ArrowDown moves separator down on vertical splitter', async ({ page }) => {
         const splitter = page.locator('[data-testid="vertical-splitter"]');
 
         await splitter.focus();
@@ -159,7 +159,7 @@ for (const framework of frameworks) {
         await page.waitForTimeout(50);
 
         const newValue = await splitter.getAttribute('aria-valuenow');
-        expect(newValue).toBe('45');
+        expect(newValue).toBe('55');
       });
 
       test('Arrow keys are ignored for wrong orientation', async ({ page }) => {

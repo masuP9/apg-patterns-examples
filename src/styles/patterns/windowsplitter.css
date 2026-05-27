@@ -23,9 +23,10 @@ apg-window-splitter {
 
 /* Separator (the draggable divider) */
 .apg-window-splitter__separator {
+  box-sizing: content-box;
   position: relative;
   flex-shrink: 0;
-  background: var(--border, #e5e7eb);
+  background-color: var(--border, #e5e7eb);
   cursor: col-resize;
   touch-action: none;
   outline: none;
@@ -38,6 +39,9 @@ apg-window-splitter {
 .apg-window-splitter:not(.apg-window-splitter--vertical) .apg-window-splitter__separator {
   width: 4px;
   align-self: stretch;
+  padding-inline: 10px;
+  margin-inline: -10px;
+  background-clip: content-box;
 }
 
 /* Vertical separator */
@@ -45,18 +49,86 @@ apg-window-splitter {
   height: 4px;
   align-self: stretch;
   cursor: row-resize;
+  padding-block: 10px;
+  margin-block: -10px;
+  background-clip: content-box;
 }
 
 /* Separator Hover State */
 .apg-window-splitter__separator:hover {
-  background: var(--primary, #3b82f6);
+  background-color: var(--primary, #3b82f6);
 }
 
 /* Separator Focus State */
 .apg-window-splitter__separator:focus-visible {
-  background: var(--ring, #3b82f6);
-  box-shadow: 0 0 0 2px var(--ring, #3b82f6);
+  background-color: var(--ring, #3b82f6);
   z-index: 1;
+}
+
+.apg-window-splitter__separator:focus-visible::after {
+  content: '';
+  position: absolute;
+  box-shadow: 0 0 0 2px var(--ring, #3b82f6);
+  pointer-events: none;
+}
+
+.apg-window-splitter:not(.apg-window-splitter--vertical)
+  .apg-window-splitter__separator:focus-visible::after {
+  inset-block: 0;
+  inset-inline: 10px;
+}
+
+.apg-window-splitter--vertical .apg-window-splitter__separator:focus-visible::after {
+  inset-block: 10px;
+  inset-inline: 0;
+}
+
+/* =============================================================================
+   ADJUST POPUP (WCAG 2.5.7 Dragging Movements alternative)
+   ============================================================================= */
+
+.apg-window-splitter__popup {
+  position: fixed;
+  display: none;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  z-index: 10;
+}
+
+.apg-window-splitter__popup--visible {
+  display: flex;
+}
+
+.apg-window-splitter__popup-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 50%;
+  background-color: var(--background, #ffffff);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  color: var(--foreground, #111827);
+  font-size: 0.625rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.apg-window-splitter__popup-button:hover {
+  background-color: var(--muted, #f3f4f6);
+}
+
+.apg-window-splitter__popup-button:active {
+  background-color: var(--border, #e5e7eb);
+}
+
+.apg-window-splitter__popup-button[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: default;
 }
 
 /* =============================================================================
@@ -221,7 +293,7 @@ apg-window-splitter {
    ============================================================================= */
 
 .dark .apg-window-splitter__separator {
-  background: var(--border, #374151);
+  background-color: var(--border, #374151);
 }
 
 .dark .apg-window-splitter-pane {
@@ -230,6 +302,24 @@ apg-window-splitter {
 
 .dark .apg-window-splitter-keyboard-hints {
   background: var(--muted, #1f2937);
+}
+
+.dark .apg-window-splitter__popup {
+  background: transparent;
+}
+
+.dark .apg-window-splitter__popup-button {
+  background-color: var(--background, #111827);
+  border-color: var(--border, #374151);
+  color: var(--foreground, #f9fafb);
+}
+
+.dark .apg-window-splitter__popup-button:hover {
+  background-color: var(--muted, #1f2937);
+}
+
+.dark .apg-window-splitter__popup-button:active {
+  background-color: var(--border, #374151);
 }
 
 /* =============================================================================
@@ -241,31 +331,63 @@ apg-window-splitter {
   .apg-window-splitter__separator {
     transition: none;
   }
+
+  .apg-window-splitter__popup-button {
+    transition: none;
+  }
 }
 
 /* Windows High Contrast Mode (Forced Colors) */
 @media (forced-colors: active) {
   .apg-window-splitter__separator {
-    background: ButtonBorder;
+    background-color: ButtonBorder;
     forced-color-adjust: none;
   }
 
   .apg-window-splitter__separator:hover {
-    background: Highlight;
+    background-color: Highlight;
   }
 
   .apg-window-splitter__separator:focus-visible {
+    box-shadow: none;
+  }
+
+  .apg-window-splitter__separator:focus-visible::after {
     outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;
   }
 
   .apg-window-splitter--disabled .apg-window-splitter__separator {
-    background: GrayText;
+    background-color: GrayText;
   }
 
   .apg-window-splitter-pane {
     background: Canvas;
     border: 1px solid CanvasText;
+  }
+
+  .apg-window-splitter__popup {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .apg-window-splitter__popup-button {
+    background-color: Canvas;
+    border: 1px solid ButtonBorder;
+    color: ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .apg-window-splitter__popup-button:hover {
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .apg-window-splitter__popup-button:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }
