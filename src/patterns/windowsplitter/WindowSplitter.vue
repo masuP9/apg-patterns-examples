@@ -274,7 +274,8 @@ const ariaControls = computed(() => {
 });
 
 const splitterLabel = computed(() => {
-  return (instance?.attrs['aria-label'] as string) || '';
+  const label = instance?.attrs['aria-label'];
+  return typeof label === 'string' ? label : '';
 });
 
 const isAtMin = computed(() => position.value <= props.min);
@@ -323,9 +324,7 @@ watch(popupState, (state, _, onCleanup) => {
 
 // Popup position calculation
 const calcPopupPosition = (clientX: number, clientY: number) => {
-  const splitter = splitterRef.value;
-  if (!splitter) return null;
-  const rect = splitter.getBoundingClientRect();
+  if (!splitterRef.value) return null;
   const popupEl = popupRef.value;
   const popupWidth = popupEl?.offsetWidth || (isVertical.value ? 34 : 120);
   const popupHeight = popupEl?.offsetHeight || (isVertical.value ? 120 : 34);

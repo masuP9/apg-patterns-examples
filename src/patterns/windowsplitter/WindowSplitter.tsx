@@ -39,6 +39,23 @@ const clamp = (value: number, min: number, max: number): number => {
   return Math.min(max, Math.max(min, value));
 };
 
+const ChevronIcon = ({ d, dx = 0, dy = 0 }: { d: string; dx?: number; dy?: number }) => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    style={dx || dy ? { transform: `translate(${dx}px, ${dy}px)` } : undefined}
+  >
+    <path d={d} />
+  </svg>
+);
+
 const HOVER_DELAY = 300;
 const DISMISS_DELAY = 300;
 const ACTIVE_SETTLE_DELAY = 500;
@@ -101,23 +118,6 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
   const splitterLabel = ariaLabel || '';
 
-  const ChevronIcon = ({ d, dx = 0, dy = 0 }: { d: string; dx?: number; dy?: number }) => (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      style={dx || dy ? { transform: `translate(${dx}px, ${dy}px)` } : undefined}
-    >
-      <path d={d} />
-    </svg>
-  );
-
   const icons = isVertical
     ? {
         collapse: { d: 'M2 9L6 5L10 9M2 5L6 1L10 5', dx: 0, dy: -1 },
@@ -147,9 +147,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
   const calcPopupPosition = useCallback(
     (clientX: number, clientY: number) => {
-      const splitter = splitterRef.current;
-      if (!splitter) return null;
-      const rect = splitter.getBoundingClientRect();
+      if (!splitterRef.current) return null;
       const popupEl = popupRef.current;
       const popupWidth = popupEl?.offsetWidth || (isVertical ? 34 : 120);
       const popupHeight = popupEl?.offsetHeight || (isVertical ? 120 : 34);
@@ -176,7 +174,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
       return { x, y };
     },
-    [isHorizontal]
+    [isHorizontal, isVertical]
   );
 
   const showPopup = useCallback(
@@ -205,7 +203,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
     if (popupState !== 'active') return;
     const handleOutsidePointerDown = (e: PointerEvent) => {
       const popup = popupRef.current;
-      if (popup && !popup.contains(e.target as Node)) {
+      if (popup && e.target instanceof Node && !popup.contains(e.target)) {
         hidePopup();
       }
     };
@@ -613,6 +611,7 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
         onBlur={handleSeparatorBlur}
       />
       {!disabled && !readonly && (
+        /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */
         <div
           ref={popupRef}
           role="group"

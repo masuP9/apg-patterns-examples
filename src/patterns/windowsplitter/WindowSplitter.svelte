@@ -163,7 +163,6 @@
   // Calculate popup position
   function calcPopupPosition(clientX: number, clientY: number): { x: number; y: number } | null {
     if (!splitterEl) return null;
-    const rect = splitterEl.getBoundingClientRect();
     const popupWidth = popupEl?.offsetWidth || (isVertical ? 34 : 120);
     const popupHeight = popupEl?.offsetHeight || (isVertical ? 120 : 34);
     const vw = window.innerWidth;

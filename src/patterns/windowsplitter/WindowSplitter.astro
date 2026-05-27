@@ -525,7 +525,6 @@ const isVertical = orientation === 'vertical';
 
     private calcPopupPosition(clientX: number, clientY: number): { x: number; y: number } | null {
       if (!this.separator) return null;
-      const rect = this.separator.getBoundingClientRect();
       const popupWidth = this.popup?.offsetWidth || (this.isVertical ? 34 : 120);
       const popupHeight = this.popup?.offsetHeight || (this.isVertical ? 120 : 34);
       const vw = window.innerWidth;
