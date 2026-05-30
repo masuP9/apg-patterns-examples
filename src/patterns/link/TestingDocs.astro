@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { linkAccessibilityData } from './accessibility-data';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
@@ -124,11 +125,5 @@ const priorityLabels = {
     }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    {locale === 'ja' ? '詳細なドキュメントは ' : 'See '}
-    <ExternalLink href={testing.documentationLink || ''} class="text-primary hover:underline">
-      testing-strategy.md
-    </ExternalLink>
-    {locale === 'ja' ? ' を参照してください。' : ' for full documentation.'}
-  </p>
+  <TestingStrategyLink locale={locale} />
 </Prose>

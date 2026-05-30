@@ -388,7 +388,7 @@ const DEFAULT_FRAMEWORK: Framework = 'react';
 
 ### 設計方針
 
-- DAMP 原則（詳細は `.internal/testing-strategy.md` 参照）
+- DAMP 原則（詳細はサイト内ページ `/testing-strategy/`。真実源は `src/testing-strategy/content.mdx`）
 
 ---
 

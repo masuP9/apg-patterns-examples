@@ -1,0 +1,35 @@
+---
+import { type Locale, getLocalizedPath, useTranslation } from '@/i18n';
+import { withBase } from '@/lib/utils';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = useTranslation(locale);
+const href = withBase(getLocalizedPath('/testing-strategy/', locale));
+const label = t('testingStrategy.title');
+---
+
+<p class="text-muted-foreground text-sm">
+  {
+    locale === 'ja' ? (
+      <>
+        詳細は
+        <a href={href} class="text-primary hover:underline">
+          {label}
+        </a>
+        ガイドを参照してください。
+      </>
+    ) : (
+      <>
+        See the{' '}
+        <a href={href} class="text-primary hover:underline">
+          {label}
+        </a>{' '}
+        guide for details.
+      </>
+    )
+  }
+</p>

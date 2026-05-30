@@ -257,7 +257,7 @@ All components must have tests for:
    - `jest-axe` automated checks
    - Screen reader announcements (where applicable)
 
-See [.internal/testing-strategy.md](.internal/testing-strategy.md) for detailed testing guidelines.
+See the [Testing Strategy](https://masup9.github.io/apg-patterns-examples/testing-strategy/) page for detailed testing guidelines (source: [src/testing-strategy/content.mdx](src/testing-strategy/content.mdx)).
 
 ## Pull Request Process
 

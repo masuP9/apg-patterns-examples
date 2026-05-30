@@ -8,6 +8,7 @@ import { toolbarAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
 import Prose from '@/components/ui/Prose.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 
 interface Props {
   locale?: Locale;
@@ -20,7 +21,7 @@ if (!testing) {
   throw new Error('Testing data not found in accessibility-data.ts');
 }
 
-const { strategies, categories, commands, tools, documentationLink } = testing;
+const { strategies, categories, commands, tools } = testing;
 
 // Localization helper
 const t = localize(locale);
@@ -43,8 +44,6 @@ const sectionTitles = {
     exampleE2ETestCodeDesc: 'The following is the actual E2E test file',
     runningTests: 'Running Tests',
     testingTools: 'Testing Tools',
-    seeFullDocs: 'See',
-    forFullDocs: 'for full documentation.',
   },
   ja: {
     intro:
@@ -55,8 +54,6 @@ const sectionTitles = {
     exampleE2ETestCodeDesc: '以下は実際のE2Eテストファイルです',
     runningTests: 'テストの実行',
     testingTools: 'テストツール',
-    seeFullDocs: '詳細は',
-    forFullDocs: 'を参照してください。',
   },
 };
 
@@ -175,15 +172,5 @@ const e2eTestCode = fs.readFileSync(e2eTestPath, 'utf-8');
     }
   </ul>
 
-  {
-    documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {titles.seeFullDocs}{' '}
-        <ExternalLink href={documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {titles.forFullDocs}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

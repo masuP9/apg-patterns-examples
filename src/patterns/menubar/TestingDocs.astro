@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import { menubarAccessibilityData } from './accessibility-data';
@@ -24,9 +25,6 @@ const translations = {
     strategyTitle: 'Testing Strategy',
     categoriesTitle: 'Test Categories',
     toolsTitle: 'Testing Tools',
-    docLink: 'See',
-    docLinkText: 'testing-strategy.md',
-    docLinkSuffix: 'for full documentation.',
   },
   ja: {
     intro:
@@ -34,9 +32,6 @@ const translations = {
     strategyTitle: 'テスト戦略',
     categoriesTitle: 'テストカテゴリ',
     toolsTitle: 'テストツール',
-    docLink: '詳細は',
-    docLinkText: 'testing-strategy.md',
-    docLinkSuffix: 'を参照してください。',
   },
 };
 
@@ -129,15 +124,5 @@ const priorityLabels: Record<string, Record<string, string>> = {
     }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    {tt.docLink}
-    <ExternalLink
-      href={testing?.documentationLink ??
-        'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md'}
-      class="text-primary hover:underline"
-    >
-      {tt.docLinkText}
-    </ExternalLink>
-    {tt.docLinkSuffix}
-  </p>
+  <TestingStrategyLink locale={locale} />
 </Prose>

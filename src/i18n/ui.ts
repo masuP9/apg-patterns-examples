@@ -52,6 +52,11 @@ export const ui = {
     'practices.relatedPatterns': 'Related Patterns',
     'practices.viewApg': 'View APG documentation',
 
+    // Testing strategy page
+    'testingStrategy.title': 'Testing Strategy',
+    'testingStrategy.description':
+      'Testing strategy for the accessible components in APG Patterns Examples.',
+
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA Roles',
     'a11y.ariaStates': 'WAI-ARIA States / Properties',
@@ -123,6 +128,11 @@ export const ui = {
     'practices.available': '利用可能なプラクティス',
     'practices.relatedPatterns': '関連パターン',
     'practices.viewApg': 'APG ドキュメントを見る',
+
+    // Testing strategy page
+    'testingStrategy.title': 'テスト戦略',
+    'testingStrategy.description':
+      'APG Patterns Examples のアクセシブルなコンポーネントのテスト戦略。',
 
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA ロール',

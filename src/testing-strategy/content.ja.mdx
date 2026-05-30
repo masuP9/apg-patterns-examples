@@ -1,7 +1,3 @@
-# テスト設計方針
-
-> APG Patterns Examples のテスト戦略
-
 ## 設計原則: DAMP (Descriptive And Meaningful Phrases)
 
 テストコードでは **DRY より DAMP を優先** する。
@@ -49,8 +45,6 @@ it('aria-pressed が false から true に変わる', async () => {
 });
 ```
 
----
-
 ## テストの2つの軸
 
 ### 1. 基本動作テスト
@@ -67,20 +61,18 @@ it('aria-pressed が false から true に変わる', async () => {
 
 WAI-ARIA APG 仕様に準拠しているかを検証。
 
-- ARIA 属性（role, aria-\*）
+- ARIA 属性（role, `aria-*`）
 - キーボード操作
 - フォーカス管理
 - axe-core 自動チェック
-
----
 
 ## APG 準拠テストの観点
 
 ### A. ARIA 属性
 
 - 正しい role が設定されている
-- 必須の aria-\* 属性が存在する
-- 状態変化で aria-\* 属性が更新される
+- 必須の `aria-*` 属性が存在する
+- 状態変化で `aria-*` 属性が更新される
 - 関連要素の参照（aria-controls, aria-labelledby）が正しい
 
 ### B. キーボード操作
@@ -100,8 +92,6 @@ WAI-ARIA APG 仕様に準拠しているかを検証。
 
 - WCAG 2.1 AA 準拠
 - 自動検出可能な違反がないこと
-
----
 
 ## パターン間で重複するテスト観点
 
@@ -130,8 +120,6 @@ Tabs, RadioGroup, Menu は矢印キーナビゲーションを持つ。
 | 矢印キー      | ← → (水平) / ↑ ↓ (垂直) | ← → ↑ ↓      | ↑ ↓      |
 | ループ        | あり                    | あり         | あり     |
 
----
-
 ## ファイル構成
 
 ```
@@ -149,8 +137,6 @@ src/patterns/
 
 1つのテストファイルに全カテゴリをまとめる。
 テストを見れば、そのコンポーネントの仕様が分かるようにする。
-
----
 
 ## テストファイルの構成
 
@@ -187,13 +173,11 @@ describe('ComponentName', () => {
 **注意**: APG: ARIA 属性で状態変化（クリック、初期状態）をテストするため、
 「基本動作」カテゴリは Props に限定し、重複を避ける。
 
----
-
 ## 新規パターン追加時のガイド
 
 1. **APG 仕様を確認**
    - https://www.w3.org/WAI/ARIA/apg/patterns/
-   - 必須の role と aria-\* 属性
+   - 必須の role と `aria-*` 属性
    - キーボード操作の仕様
    - フォーカス管理の要件
 
@@ -204,8 +188,6 @@ describe('ComponentName', () => {
 3. **DAMP で書く**
    - 各テストは自己完結
    - 重複を恐れず、明確さを優先
-
----
 
 ## マルチフレームワークテスト
 
@@ -552,8 +534,6 @@ for (const framework of frameworks) {
 | Props               | defaultExpanded、allowMultiple                                     |
 | 🟢 HTML 属性継承    | className 適用                                                     |
 
----
-
 ## E2E テストの安定化
 
 E2E テストは実際のブラウザで動作するため、タイミングに依存したフラキーテストが発生しやすい。
@@ -681,8 +661,6 @@ test('ArrowRight moves focus to next tab', async ({ page }) => {
 });
 ```
 
----
-
 ## 使用ツール
 
 | ツール                      | 用途                                    |
@@ -709,8 +687,6 @@ import { expect } from 'vitest';
 
 expect.extend(toHaveNoViolations);
 ```
-
----
 
 ## 参考リンク
 

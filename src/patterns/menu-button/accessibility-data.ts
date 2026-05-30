@@ -730,8 +730,6 @@ export const menuButtonAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-    documentationLink:
-      'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md',
   },
 
   // --- llm.md Specific Data ---

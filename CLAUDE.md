@@ -89,7 +89,7 @@ src/
 | ---------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------- |
 | [CODING_RULES.md](CODING_RULES.md)                                     | コーディングスタイル規約                                   | コード実装時     |
 | [.internal/site-specification.md](.internal/site-specification.md)     | サイト仕様書（技術選定、URL設計、実装方針）                | 実装時           |
-| [.internal/testing-strategy.md](.internal/testing-strategy.md)         | テスト設計方針（DAMP原則、APG準拠テストの観点）。※各パターンの `TestingDocs.astro` から GitHub 公開リンクされているため、リネーム・パス変更は不可 | テスト実装時     |
+| [src/testing-strategy/content.mdx](src/testing-strategy/content.mdx) / [content.ja.mdx](src/testing-strategy/content.ja.mdx) | テスト設計方針（DAMP原則、APG準拠テストの観点）。サイト内ページ `/testing-strategy/` として公開され、各パターンの `TestingDocs.astro` からリンクされる真実源 | テスト実装時     |
 | [.internal/pattern-planning-prompt.md](.internal/pattern-planning-prompt.md) | パターン実装計画を策定するためのプロンプト                 | 計画策定時       |
 | [.internal/page-template.md](.internal/page-template.md)               | パターンページ作成チェックリスト・テンプレート             | パターン追加時   |
 | [.internal/llm-md-template.md](.internal/llm-md-template.md)           | AI向け定義ファイル（`{pattern}.md` / `{pattern}.ja.md`）の構造リファレンス | パターン追加時   |

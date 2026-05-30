@@ -5,6 +5,7 @@ import { toggleButtonAccessibilityData } from './accessibility-data';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
 import Prose from '@/components/ui/Prose.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 
 interface Props {
   locale?: Locale;
@@ -101,11 +102,5 @@ const priorityLabels = {
     }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    {locale === 'ja' ? '詳細は ' : 'See '}
-    <ExternalLink href={testing.documentationLink || ''} class="text-primary hover:underline">
-      testing-strategy.md
-    </ExternalLink>
-    {locale === 'ja' ? ' を参照してください。' : ' for full documentation.'}
-  </p>
+  <TestingStrategyLink locale={locale} />
 </Prose>

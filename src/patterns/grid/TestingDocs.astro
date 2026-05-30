@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { gridAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
@@ -37,8 +38,6 @@ const sectionTitles = {
     testingStrategy: 'Testing Strategy',
     testCategories: 'Test Categories',
     testingTools: 'Testing Tools',
-    seeFullDoc: 'See',
-    forFullDocumentation: 'for full documentation.',
     highPriority: 'High Priority',
     mediumPriority: 'Medium Priority',
     lowPriority: 'Low Priority',
@@ -51,8 +50,6 @@ const sectionTitles = {
     testingStrategy: 'テスト戦略',
     testCategories: 'テストカテゴリー',
     testingTools: 'テストツール',
-    seeFullDoc: '詳細は',
-    forFullDocumentation: 'を参照してください。',
     highPriority: '高優先度',
     mediumPriority: '中優先度',
     lowPriority: '低優先度',
@@ -137,14 +134,5 @@ const titles = sectionTitles[locale];
     }
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    {titles.seeFullDoc}
-    <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline"
-    >
-      testing-strategy.md
-    </ExternalLink>
-    {titles.forFullDocumentation}
-  </p>
+  <TestingStrategyLink locale={locale} />
 </Prose>

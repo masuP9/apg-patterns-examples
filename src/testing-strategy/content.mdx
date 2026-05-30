@@ -1,0 +1,697 @@
+## Design Principle: DAMP (Descriptive And Meaningful Phrases)
+
+In test code, **prefer DAMP over DRY**.
+
+### Why DAMP
+
+The most important thing about a test is that you can tell at a glance *what* it is testing. We prioritize readability and self-containment over reducing code through abstraction.
+
+| Aspect          | DRY                                   | DAMP                              |
+| --------------- | ------------------------------------- | --------------------------------- |
+| Readability     | Intent is hidden behind abstraction   | The test speaks for itself        |
+| Debugging       | Must trace shared code                | Self-contained in the test        |
+| Maintainability | A shared change affects everything    | Can be changed independently      |
+| Learning curve  | Requires understanding the abstraction| Add new tests by copy-paste       |
+
+### What to abstract
+
+**OK to abstract (How-to):**
+
+- Test utilities: `createMockTabs()`
+- Custom matchers: `toHaveNoViolations()`
+- Setup routines: shared environment construction
+
+**Do NOT abstract (What-to):**
+
+- The body of a test case
+- Assertions (write expected values explicitly)
+- Test data (define it within the test)
+
+### Example
+
+```typescript
+// ❌ Over-abstracted
+testToggleBehavior(ToggleButton, { stateAttr: 'aria-pressed' });
+
+// ✅ DAMP: explicit and self-contained
+it('changes aria-pressed from false to true', async () => {
+  render(<ToggleButton>Mute</ToggleButton>);
+  const button = screen.getByRole('button');
+
+  expect(button).toHaveAttribute('aria-pressed', 'false');
+  await userEvent.click(button);
+  expect(button).toHaveAttribute('aria-pressed', 'true');
+});
+```
+
+## Two Axes of Testing
+
+### 1. Basic behavior tests
+
+Verify that the component works correctly.
+
+- Rendering
+- User interactions (click, input)
+- State changes
+- Callback invocation
+- Passing props through
+
+### 2. APG conformance tests
+
+Verify conformance to the WAI-ARIA APG specification.
+
+- ARIA attributes (role, `aria-*`)
+- Keyboard interaction
+- Focus management
+- axe-core automated checks
+
+## APG Conformance Test Considerations
+
+### A. ARIA attributes
+
+- The correct role is set
+- Required `aria-*` attributes are present
+- `aria-*` attributes update on state change
+- References to related elements (aria-controls, aria-labelledby) are correct
+
+### B. Keyboard interaction
+
+- Activation keys (Space, Enter)
+- Navigation keys (arrow keys, Home, End)
+- Close / cancel (Escape)
+- Special operations (Delete, Tab)
+
+### C. Focus management
+
+- Roving tabindex (only the selected element has tabIndex=0)
+- Focus trap (modal-type components)
+- Focus restoration (where focus returns after closing)
+
+### D. axe-core
+
+- WCAG 2.1 AA conformance
+- No automatically detectable violations
+
+## Test Considerations Shared Across Patterns
+
+Even for different patterns, you end up writing tests for the same "perspectives".
+However, the test code itself is not abstracted — it is written explicitly for each component.
+
+### Example: toggle-type components
+
+ToggleButton, Switch, and Checkbox behave similarly, but their tests are written individually.
+
+| Consideration  | ToggleButton | Switch       | Checkbox         |
+| -------------- | ------------ | ------------ | ---------------- |
+| State attribute| aria-pressed | aria-checked | aria-checked     |
+| Activation     | Space, Enter | Space, Enter | Space            |
+| State change   | true/false   | true/false   | true/false/mixed |
+
+### Example: navigation-type components
+
+Tabs, RadioGroup, and Menu have arrow-key navigation.
+
+| Consideration  | Tabs                          | RadioGroup   | Menu     |
+| -------------- | ----------------------------- | ------------ | -------- |
+| Container role | tablist                       | radiogroup   | menu     |
+| Child role     | tab                           | radio        | menuitem |
+| Selection attr | aria-selected                 | aria-checked | -        |
+| Arrow keys     | ← → (horizontal) / ↑ ↓ (vertical) | ← → ↑ ↓   | ↑ ↓      |
+| Looping        | yes                           | yes          | yes      |
+
+## File Layout
+
+```
+src/patterns/
+├── button/
+│   ├── ToggleButton.tsx
+│   └── ToggleButton.test.tsx
+├── tabs/
+│   ├── Tabs.tsx
+│   └── Tabs.test.tsx
+└── accordion/
+    ├── Accordion.tsx
+    └── Accordion.test.tsx
+```
+
+Keep all categories in a single test file.
+Reading the test file should reveal the component's specification.
+
+## Structure of a Test File
+
+Organize categories by risk-based priority.
+
+```typescript
+describe('ComponentName', () => {
+  // 🔴 High Priority: the core of APG conformance
+  describe('APG: keyboard interaction', () => {
+    it('...', () => {});
+  });
+
+  describe('APG: ARIA attributes', () => {
+    it('...', () => {});
+  });
+
+  // 🟡 Medium Priority: accessibility verification
+  describe('Accessibility', () => {
+    it('has no axe violations', async () => {});
+  });
+
+  describe('Props', () => {
+    // Props-specific tests not covered elsewhere
+    it('...', () => {});
+  });
+
+  // 🟢 Low Priority: extensibility
+  describe('HTML attribute inheritance', () => {
+    it('...', () => {});
+  });
+});
+```
+
+**Note**: Because the "APG: ARIA attributes" category already tests state changes (click, initial state), the "basic behavior" category is limited to Props to avoid duplication.
+
+## Guide for Adding a New Pattern
+
+1. **Check the APG specification**
+   - https://www.w3.org/WAI/ARIA/apg/patterns/
+   - Required roles and `aria-*` attributes
+   - Keyboard interaction spec
+   - Focus management requirements
+
+2. **Create the test file**
+   - Use existing tests as a reference and follow the same structure
+   - Write specific, descriptive test names
+
+3. **Write it DAMP**
+   - Each test is self-contained
+   - Don't fear duplication; prioritize clarity
+
+## Multi-Framework Testing
+
+### Approach
+
+Each framework (React, Vue, Svelte, Astro) has its **own independent test file**.
+The test perspectives are shared, but the test code itself follows the DAMP principle and is written explicitly per framework.
+
+```
+src/patterns/button/
+├── ToggleButton.tsx
+├── ToggleButton.test.tsx        # React unit tests
+├── ToggleButton.vue
+├── ToggleButton.test.vue.ts     # Vue unit tests
+├── ToggleButton.svelte
+├── ToggleButton.test.svelte.ts  # Svelte unit tests
+├── ToggleButton.astro
+└── ToggleButton.test.astro.ts   # Astro unit tests (Container API)
+
+e2e/
+└── table-visual-spanning.spec.ts  # E2E tests (shared across frameworks)
+```
+
+### Kinds of tests
+
+| Test kind | Target             | Tools                      | Command             |
+| --------- | ------------------ | -------------------------- | ------------------- |
+| Unit      | React/Vue/Svelte   | @testing-library + jsdom   | `npm run test:unit` |
+| Unit      | Astro              | Container API + JSDOM      | `npm run test:astro`|
+| E2E       | All frameworks     | Playwright                 | `npm run test:e2e`  |
+
+### Per-framework unit tests
+
+| Framework | Test library            | Environment          | Command              |
+| --------- | ----------------------- | -------------------- | -------------------- |
+| React     | @testing-library/react  | Vitest + jsdom       | `npm run test:react` |
+| Vue       | @testing-library/vue    | Vitest + jsdom       | `npm run test:vue`   |
+| Svelte    | @testing-library/svelte | Vitest + jsdom       | `npm run test:svelte`|
+| Astro     | Container API           | Vitest + JSDOM       | `npm run test:astro` |
+
+### E2E tests
+
+E2E tests live in the `e2e/` directory and use Playwright to test behavior across all frameworks.
+Use them to verify visual rendering (such as CSS Grid spanning) and real browser behavior.
+
+```typescript
+// e2e/table-visual-spanning.spec.ts
+const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
+
+for (const framework of frameworks) {
+  test.describe(`Table Visual Spanning (${framework})`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(`/patterns/table/${framework}/`);
+    });
+    // ...
+  });
+}
+```
+
+### Two-Layer Test Strategy for Astro Web Component Patterns
+
+When an Astro component uses a Web Component (a `class extends HTMLElement` inside a `<script>` block),
+the tests must be split into **two layers**.
+
+#### Why two layers
+
+An Astro component consists of two parts:
+
+1. **Template part** — the HTML output rendered on the server side
+2. **Web Component part** — the JavaScript that runs on the client side
+
+The Container API runs in a Node.js environment where `HTMLElement` is not defined,
+so it cannot test the client-side behavior of the Web Component.
+
+#### Test split approach
+
+| Test layer | Target | Tools | What it tests |
+|---------|------|--------|-----------|
+| **Unit (Container API)** | Template output | Vitest + JSDOM | HTML structure, attributes, CSS classes |
+| **E2E (Playwright)** | Web Component behavior | Playwright | Click, keyboard, events, focus |
+
+#### What the Container API can test
+
+- Existence and hierarchy of HTML elements
+- Initial attribute values (`checked`, `disabled`, `aria-*`, etc.)
+- Attributes generated from props
+- Application of CSS classes
+- Conditional rendering
+
+#### What should be tested with E2E
+
+- State changes from click and keyboard interaction
+- Dispatching of custom events
+- States set by JavaScript such as `indeterminate`
+- Focus management and tab navigation
+- Toggle behavior when clicking a label
+
+#### Example: Checkbox
+
+```
+src/patterns/checkbox/
+├── Checkbox.astro           # The component itself
+├── Checkbox.test.astro.ts   # Container API test (template output)
+
+e2e/
+└── checkbox.spec.ts         # E2E test (Web Component behavior)
+```
+
+**Container API test (verifying template output):**
+
+```typescript
+// Checkbox.test.astro.ts
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import Checkbox from './Checkbox.astro';
+
+describe('Checkbox (Astro Container API)', () => {
+  let container: AstroContainer;
+
+  beforeEach(async () => {
+    container = await AstroContainer.create();
+  });
+
+  it('renders input with type="checkbox"', async () => {
+    const html = await container.renderToString(Checkbox, { props: {} });
+    const doc = new JSDOM(html).window.document;
+    expect(doc.querySelector('input[type="checkbox"]')).not.toBeNull();
+  });
+
+  it('renders with checked attribute when initialChecked is true', async () => {
+    const html = await container.renderToString(Checkbox, {
+      props: { initialChecked: true }
+    });
+    const doc = new JSDOM(html).window.document;
+    expect(doc.querySelector('input')?.hasAttribute('checked')).toBe(true);
+  });
+});
+```
+
+**E2E test (verifying Web Component behavior):**
+
+```typescript
+// e2e/checkbox.spec.ts
+const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
+
+for (const framework of frameworks) {
+  test.describe(`Checkbox (${framework})`, () => {
+    // Helper to get checkbox and its visual control
+    const getCheckbox = (page, id: string) => {
+      const checkbox = page.locator(`#${id}`);
+      // The visual control is a sibling of the input
+      const control = checkbox.locator('~ .apg-checkbox-control');
+      return { checkbox, control };
+    };
+
+    test('toggles checked state on click', async ({ page }) => {
+      await page.goto(`patterns/checkbox/${framework}/`);
+      // Note: The input is visually hidden (1x1px), so we click
+      // the visual control instead of the input directly
+      const { checkbox, control } = getCheckbox(page, 'demo-terms');
+
+      await expect(checkbox).not.toBeChecked();
+      await control.click();
+      await expect(checkbox).toBeChecked();
+    });
+
+    test('clicking label toggles checkbox', async ({ page }) => {
+      // Label association test - clicks label, not the control
+      const { checkbox } = getCheckbox(page, 'demo-terms');
+      const label = page.locator('label').filter({ has: checkbox });
+
+      await expect(checkbox).not.toBeChecked();
+      await label.click();
+      await expect(checkbox).toBeChecked();
+    });
+
+    test('dispatches checkedchange event', async ({ page }) => {
+      // Custom event tests are done in E2E (Astro only)
+    });
+  });
+}
+```
+
+#### Astro patterns that do not use a Web Component
+
+Patterns that do not use a Web Component and are purely template-based, like Table,
+can be fully covered by Container API tests alone.
+
+### Why independent tests
+
+1. **Follows the DAMP principle** — each test is self-contained
+2. **Pinpoints framework-specific issues immediately** — e.g. Vue's `v-bind` / Svelte's `$props()`
+3. **Can run in parallel** — efficient in CI
+4. **Useful as a learning resource** — demonstrates the testing approach for each framework
+
+### Standalone Demo Page (for E2E testing)
+
+For some patterns (Landmarks in particular), the semantics can change when a component is
+embedded inside the page layout. For example, a `<header>` element loses its implicit `banner`
+role when nested inside the page's `<main>`.
+
+For such patterns, we create a **standalone demo page**. This page:
+- Is used in E2E tests to verify exact semantics
+- Is also offered as a link for users who want to view only the demo
+
+#### Directory layout
+
+```
+src/pages/patterns/landmarks/
+├── react/
+│   ├── index.astro      # Normal pattern page (with layout)
+│   └── demo/
+│       └── index.astro  # Standalone demo page (no layout)
+├── vue/
+│   ├── index.astro
+│   └── demo/
+│       └── index.astro
+├── svelte/
+│   ├── index.astro
+│   └── demo/
+│       └── index.astro
+└── astro/
+    ├── index.astro
+    └── demo/
+        └── index.astro
+```
+
+#### Implementing the standalone demo page
+
+```astro
+---
+// src/pages/patterns/landmarks/react/demo/index.astro
+/**
+ * Demo-only Page: LandmarkDemo (React)
+ *
+ * This page renders the LandmarkDemo component in isolation without
+ * the site layout. This ensures proper landmark semantics are preserved
+ * (e.g., <header> retains its implicit banner role).
+ *
+ * Used for:
+ * - E2E testing with correct landmark structure
+ * - Standalone demo viewing
+ */
+import '@/styles/global.css';
+import LandmarkDemo from '@patterns/landmarks/LandmarkDemo.tsx';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Demo: Landmarks (React)</title>
+  </head>
+  <body>
+    <LandmarkDemo client:load showLabels={true} />
+  </body>
+</html>
+```
+
+#### Linking from the pattern page to the standalone demo
+
+Add an "Open demo only" link to the demo section of the pattern page:
+
+```astro
+<!-- Demo Section -->
+<section class="mb-12">
+  <Heading level={2} class="mb-4 text-xl font-semibold">Demo</Heading>
+  <p class="text-muted-foreground mb-4">
+    This demo visualizes the 8 landmark regions with distinct colored borders.
+  </p>
+  <div class="border-border bg-background rounded-lg border p-6">
+    <LandmarkDemo showLabels={true} />
+  </div>
+  <p class="text-muted-foreground mt-2 text-sm">
+    <a href="./demo/" class="text-primary hover:underline">Open demo only →</a>
+  </p>
+</section>
+```
+
+#### E2E test path
+
+```typescript
+// e2e/landmarks.spec.ts
+for (const framework of frameworks) {
+  test.describe(`Landmarks (${framework})`, () => {
+    test.beforeEach(async ({ page }) => {
+      // Use the standalone demo page
+      await page.goto(`patterns/landmarks/${framework}/demo/`);
+    });
+    // ...
+  });
+}
+```
+
+#### Patterns that should use this approach
+
+| Pattern    | Reason                                                            |
+| ---------- | ----------------------------------------------------------------- |
+| Landmarks  | `<header>`/`<footer>` lose their role inside the page `<main>`    |
+| Dialog     | The focus trap may interfere with page elements                   |
+| Others     | When the page layout affects the component's behavior             |
+
+#### Notes
+
+- Standalone demo pages are excluded from search engines with a `robots: noindex, nofollow` meta tag
+- The path structure `/patterns/{pattern}/{framework}/demo/` is clear and meaningful as a URL
+- Accessible from the pattern page via the "Open demo only" link
+- Recommended because it does not increase CI time (no separate build required)
+
+### Shared Test Considerations
+
+Even across different frameworks, APG-conformant components are tested with the same considerations.
+
+#### ToggleButton
+
+| Category            | Test consideration                                          |
+| ------------------- | --------------------------------------------------------- |
+| 🔴 APG: keyboard    | Toggle with Space, toggle with Enter, move focus with Tab |
+| 🔴 APG: ARIA        | role="button", aria-pressed state change, type="button"   |
+| 🟡 Accessibility    | No axe violations, accessible name                        |
+| Props               | initialPressed, onPressedChange                           |
+| 🟢 HTML attribute inheritance | className merge, data-\* inheritance                      |
+
+#### Tabs
+
+| Category            | Test consideration                                                     |
+| ------------------- | -------------------------------------------------------------------- |
+| 🔴 APG: keyboard    | Arrow navigation, Home/End, looping, manual activation               |
+| 🔴 APG: ARIA        | role="tablist/tab/tabpanel", aria-selected, aria-controls/labelledby |
+| 🔴 Focus management | Roving tabindex, Tab moves to the panel                              |
+| 🟡 Accessibility    | No axe violations                                                    |
+| Props               | defaultSelectedId, orientation, activationMode                       |
+| 🟢 HTML attribute inheritance | className applied                                                    |
+
+#### Accordion
+
+| Category            | Test consideration                                                   |
+| ------------------- | ------------------------------------------------------------------ |
+| 🔴 APG: keyboard    | Open/close with Enter/Space (move between headers via Tab order)   |
+| 🔴 APG: ARIA        | aria-expanded, aria-controls/labelledby, conditions for role="region" |
+| 🔴 Heading structure| h2-h6 via headingLevel                                             |
+| 🟡 Accessibility    | No axe violations                                                  |
+| Props               | defaultExpanded, allowMultiple                                     |
+| 🟢 HTML attribute inheritance | className applied                                                  |
+
+## Stabilizing E2E Tests
+
+Because E2E tests run in a real browser, timing-dependent flaky tests are easy to introduce.
+Knowing the following patterns and countermeasures helps you write stable tests.
+
+### Causes of flaky tests and countermeasures
+
+#### 1. Focus race condition
+
+**Problem**: Using `page.keyboard.press()` after `click()` can send the key event to an
+unintended element, because focus may momentarily move to another element.
+
+```typescript
+// ❌ Flaky: focus after click() is unstable
+await secondTab.click();
+await page.keyboard.press('ArrowLeft'); // focus may not be on secondTab
+
+// ✅ Stable: use element.press()
+await secondTab.click();
+await secondTab.press('ArrowLeft'); // sends the key directly to the element
+```
+
+**Countermeasure**:
+- Use `element.press()` instead of `page.keyboard.press()`
+- `element.press()` sends the key event directly to the element, so it is unaffected by focus races
+
+#### 2. Calling focus() on a non-selected tab
+
+**Problem**: In the Roving tabindex pattern, non-selected elements have `tabindex="-1"`.
+Calling `focus()` on these elements may not stay in sync with the component's internal state,
+so it does not behave as expected.
+
+```typescript
+// ❌ Unstable: focus() on a tabindex="-1" element
+const secondTab = tabs.getByRole('tab').nth(1); // tabindex="-1"
+await secondTab.focus(); // behaves unreliably
+await page.keyboard.press('ArrowLeft');
+
+// ✅ Stable: move via keyboard navigation
+const firstTab = tabs.getByRole('tab').first(); // tabindex="0" (selected)
+await firstTab.focus();
+await expect(firstTab).toBeFocused();
+await firstTab.press('ArrowRight'); // move to secondTab with the keyboard
+await expect(secondTab).toBeFocused();
+await secondTab.press('ArrowLeft'); // test the intended operation
+```
+
+**Countermeasure**:
+- `focus()` the selected tab (`tabindex="0"`) first, then navigate to the target tab with the keyboard
+- Only call `focus()` directly on elements that have `tabindex="0"`
+
+#### 3. Insufficient waiting for hydration
+
+**Problem**: Framework components (React in particular) do not become interactive until
+JavaScript hydration completes, even after the HTML has rendered.
+
+```typescript
+// ❌ Insufficient: only waiting for the element to exist
+await getTabs(page).first().waitFor();
+
+// ✅ Sufficient: also check attributes that indicate hydration is complete
+await getTabs(page).first().waitFor();
+const firstTab = getTabButtons(page).first();
+// Is the ID set correctly? (a hydration indicator)
+await expect.poll(async () => {
+  const id = await firstTab.getAttribute('id');
+  return id && id.length > 1 && !id.startsWith('-');
+}).toBe(true);
+// Is it in an interactive state?
+await expect(firstTab).toHaveAttribute('tabindex', '0');
+await expect(firstTab).toHaveAttribute('aria-selected', 'true');
+```
+
+**Countermeasure**:
+- In `beforeEach`, wait for attributes that indicate hydration is complete (`id`, `aria-controls`, etc.)
+- Confirm that the initial-state ARIA attributes (`tabindex`, `aria-selected`, etc.) are set
+
+### Choosing between unit tests and E2E
+
+The jsdom/happy-dom environment can behave differently from a real browser when it comes to focus.
+
+| Test target | Recommended environment | Reason |
+|-----------|---------|------|
+| Initial values of ARIA attributes | Unit | Can be verified with DOM operations alone |
+| Keyboard navigation | E2E | Focus movement is accurate |
+| Focus trap | E2E | Tab key behavior is unstable in jsdom |
+| Focus restoration | E2E | Complex focus management is verified in a real browser |
+
+**Example**: when a focus-trap test is flaky in jsdom
+
+```typescript
+// Remove from unit tests and cover with E2E
+// src/patterns/alert-dialog/AlertDialog.test.vue.ts
+
+// Note: the "Tab wraps from last to first" test is guaranteed by E2E
+// (e2e/alert-dialog.spec.ts: "Tab wraps from last to first element")
+// Removed from unit tests because focus operations are unstable in jsdom
+```
+
+### Playwright keyboard interaction best practices
+
+| Method | Use | Stability |
+|---------|------|--------|
+| `element.focus()` | Set focus on an element | ✅ only for `tabindex="0"` elements |
+| `element.press(key)` | Send a key directly to an element | ✅ stable |
+| `element.click()` | Click an element | ⚠️ watch out for keyboard.press() after focus moves |
+| `page.keyboard.press(key)` | Send a key to the currently focused element | ⚠️ possible focus race |
+
+**Recommended pattern**:
+
+```typescript
+// Testing keyboard navigation
+test('ArrowRight moves focus to next tab', async ({ page }) => {
+  const firstTab = tabs.getByRole('tab').first();
+  const secondTab = tabs.getByRole('tab').nth(1);
+
+  // 1. Focus the selected element
+  await firstTab.focus();
+  await expect(firstTab).toBeFocused();
+
+  // 2. Send the key with element.press()
+  await firstTab.press('ArrowRight');
+
+  // 3. Verify focus moved
+  await expect(secondTab).toBeFocused();
+});
+```
+
+## Tools Used
+
+| Tool                        | Use                                     |
+| --------------------------- | --------------------------------------- |
+| Vitest                      | Test runner                             |
+| @testing-library/react      | React component testing                 |
+| @testing-library/vue        | Vue component testing                   |
+| @testing-library/svelte     | Svelte component testing                |
+| @testing-library/user-event | User interaction                        |
+| @testing-library/jest-dom   | Custom matchers                         |
+| jest-axe                    | Automated accessibility testing         |
+| Astro Container API         | Astro component testing                 |
+| Playwright                  | E2E testing (all frameworks)            |
+| @vitest/coverage-v8         | Coverage measurement                    |
+
+### Setup file
+
+Extend the matchers in `src/test/setup.ts`:
+
+```typescript
+import '@testing-library/jest-dom/vitest';
+import { toHaveNoViolations } from 'jest-axe';
+import { expect } from 'vitest';
+
+expect.extend(toHaveNoViolations);
+```
+
+## References
+
+- [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/)
+- [DRY vs DAMP in Unit Tests](https://enterprisecraftsmanship.com/posts/dry-damp-unit-tests/)
+- [Testing Library](https://testing-library.com/)
+- [jest-axe](https://github.com/nickcolley/jest-axe)
+- [Playwright Locators](https://playwright.dev/docs/locators) — the difference between `element.press()` and `page.keyboard.press()`
+- [Playwright Best Practices](https://playwright.dev/docs/best-practices)
