@@ -83,14 +83,14 @@ Verify conformance to the WAI-ARIA APG specification.
 
 ### C. Focus management
 
-- Roving tabindex (only the selected element has tabIndex=0)
+- Roving tabindex (only one item is in the tab sequence with `tabindex="0"`)
 - Focus trap (modal-type components)
 - Focus restoration (where focus returns after closing)
 
 ### D. axe-core
 
-- WCAG 2.1 AA conformance
-- No automatically detectable violations
+- Automated checks for detectable WCAG 2.1 AA violations
+- No violations detectable by axe-core
 
 ## Test Considerations Shared Across Patterns
 
@@ -257,8 +257,9 @@ An Astro component consists of two parts:
 1. **Template part** — the HTML output rendered on the server side
 2. **Web Component part** — the JavaScript that runs on the client side
 
-The Container API runs in a Node.js environment where `HTMLElement` is not defined,
-so it cannot test the client-side behavior of the Web Component.
+The Container API renders template output on the server and does not execute browser-side
+Web Component scripts. In addition, browser globals such as `HTMLElement` are not available
+in a plain Node.js environment. Use E2E tests for client-side Web Component behavior.
 
 #### Test split approach
 
@@ -549,14 +550,14 @@ unintended element, because focus may momentarily move to another element.
 await secondTab.click();
 await page.keyboard.press('ArrowLeft'); // focus may not be on secondTab
 
-// ✅ Stable: use element.press()
+// ✅ Stable: use locator.press()
 await secondTab.click();
-await secondTab.press('ArrowLeft'); // sends the key directly to the element
+await secondTab.press('ArrowLeft'); // sends the key to the locator (focuses it first)
 ```
 
 **Countermeasure**:
-- Use `element.press()` instead of `page.keyboard.press()`
-- `element.press()` sends the key event directly to the element, so it is unaffected by focus races
+- Use `locator.press()` instead of `page.keyboard.press()`
+- `locator.press()` focuses the target locator before dispatching the key event, reducing dependence on whichever element currently has focus
 
 #### 2. Calling focus() on a non-selected tab
 
@@ -580,8 +581,8 @@ await secondTab.press('ArrowLeft'); // test the intended operation
 ```
 
 **Countermeasure**:
-- `focus()` the selected tab (`tabindex="0"`) first, then navigate to the target tab with the keyboard
-- Only call `focus()` directly on elements that have `tabindex="0"`
+- For these tests, focus the active tab (`tabindex="0"`) first, then navigate to the target tab with the keyboard
+- Avoid focusing a `tabindex="-1"` tab directly unless the test specifically covers programmatic focus
 
 #### 3. Insufficient waiting for hydration
 
@@ -595,7 +596,7 @@ await getTabs(page).first().waitFor();
 // ✅ Sufficient: also check attributes that indicate hydration is complete
 await getTabs(page).first().waitFor();
 const firstTab = getTabButtons(page).first();
-// Is the ID set correctly? (a hydration indicator)
+// Is the ID set correctly? (an application-specific hydration indicator)
 await expect.poll(async () => {
   const id = await firstTab.getAttribute('id');
   return id && id.length > 1 && !id.startsWith('-');
@@ -635,9 +636,9 @@ The jsdom/happy-dom environment can behave differently from a real browser when 
 
 | Method | Use | Stability |
 |---------|------|--------|
-| `element.focus()` | Set focus on an element | ✅ only for `tabindex="0"` elements |
-| `element.press(key)` | Send a key directly to an element | ✅ stable |
-| `element.click()` | Click an element | ⚠️ watch out for keyboard.press() after focus moves |
+| `locator.focus()` | Set focus on a locator | ✅ best for `tabindex="0"` elements |
+| `locator.press(key)` | Focus the locator, then send a key | ✅ stable |
+| `locator.click()` | Click a locator | ⚠️ watch out for keyboard.press() after focus moves |
 | `page.keyboard.press(key)` | Send a key to the currently focused element | ⚠️ possible focus race |
 
 **Recommended pattern**:
@@ -652,7 +653,7 @@ test('ArrowRight moves focus to next tab', async ({ page }) => {
   await firstTab.focus();
   await expect(firstTab).toBeFocused();
 
-  // 2. Send the key with element.press()
+  // 2. Send the key with locator.press()
   await firstTab.press('ArrowRight');
 
   // 3. Verify focus moved
@@ -693,5 +694,5 @@ expect.extend(toHaveNoViolations);
 - [DRY vs DAMP in Unit Tests](https://enterprisecraftsmanship.com/posts/dry-damp-unit-tests/)
 - [Testing Library](https://testing-library.com/)
 - [jest-axe](https://github.com/nickcolley/jest-axe)
-- [Playwright Locators](https://playwright.dev/docs/locators) — the difference between `element.press()` and `page.keyboard.press()`
+- [Playwright Locators](https://playwright.dev/docs/locators) — the difference between `locator.press()` and `page.keyboard.press()`
 - [Playwright Best Practices](https://playwright.dev/docs/best-practices)
