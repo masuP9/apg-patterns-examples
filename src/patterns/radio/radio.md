@@ -1,4 +1,4 @@
-# Radio Group Pattern - AI Implementation Guide
+# Radio Pattern - AI Implementation Guide
 
 > APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/radio/
 

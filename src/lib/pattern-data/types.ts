@@ -2,7 +2,8 @@
  * Pattern Accessibility Data Types
  *
  * These types define the structure for accessibility data that is shared between
- * AccessibilityDocs.astro (HTML rendering) and llm.md generation (Markdown).
+ * HTML rendering components (TestingDocs.astro, NativeHtmlNotice.astro,
+ * ComparisonSection.astro) and llm.md generation (Markdown).
  */
 
 import type { Locale } from '@/i18n';
@@ -33,15 +34,8 @@ export type PatternTranslations = {
   [K in Locale]: Record<string, string>;
 };
 
-/**
- * Type guard to check if a value is LocalizedText
- */
-export function isLocalizedText(value: LocalizedField): value is LocalizedText {
-  return typeof value === 'object' && value !== null && 'en' in value;
-}
-
 // =============================================================================
-// Core ARIA Data Types (used by both AccessibilityDocs and llm.md)
+// Core ARIA Data Types (used by both HTML rendering components and llm.md)
 // =============================================================================
 
 /**
@@ -126,66 +120,6 @@ export interface FocusRule {
   event: LocalizedField;
   /** Focus behavior description */
   behavior: LocalizedField;
-}
-
-// =============================================================================
-// Implementation Notes Types
-// =============================================================================
-
-/**
- * Activation mode description for patterns with multiple modes
- */
-export interface ActivationMode {
-  /** Mode identifier */
-  mode: string;
-  /** Mode title (e.g., 'Automatic (default)', 'Manual') */
-  title: LocalizedField;
-  /** Description points for this mode */
-  points: LocalizedField[];
-}
-
-/**
- * Structure diagram for visual representation
- */
-export interface StructureDiagram {
-  /** ASCII art or code block showing structure */
-  diagram: string;
-  /** Caption or description */
-  caption?: LocalizedField;
-}
-
-/**
- * Comparison option (for patterns with variations like alert vs alertdialog)
- */
-export interface ComparisonOption {
-  /** Option title */
-  title: LocalizedField;
-  /** Points describing when to use this option */
-  points: LocalizedField[];
-}
-
-/**
- * Alert vs AlertDialog comparison (for alert pattern)
- */
-export interface AlertVsAlertDialogComparison {
-  /** Alert usage */
-  alert: ComparisonOption;
-  /** AlertDialog usage */
-  alertDialog: ComparisonOption;
-}
-
-/**
- * Implementation notes for a pattern
- */
-export interface PatternImplementationNotes {
-  /** Activation modes (for patterns with multiple modes) */
-  activationModes?: ActivationMode[];
-  /** Structure diagram */
-  structure?: StructureDiagram;
-  /** Additional implementation tips */
-  tips?: LocalizedField[];
-  /** Alert vs AlertDialog comparison (for alert pattern) */
-  alertVsAlertDialog?: AlertVsAlertDialogComparison;
 }
 
 // =============================================================================
@@ -312,20 +246,20 @@ export interface TestCheckItem {
 
 /**
  * Native HTML consideration (for patterns where native elements are preferred)
- * Extended version with localization support for AccessibilityDocs
+ * Extended version with localization support for NativeHtmlNotice.astro
  */
 export interface NativeHtmlConsideration {
-  /** Use case description (can be string for llm.md or LocalizedField for AccessibilityDocs) */
+  /** Use case description (can be string for llm.md or LocalizedField for NativeHtmlNotice.astro) */
   useCase?: LocalizedField;
-  /** Recommended approach (can be string for llm.md or LocalizedField for AccessibilityDocs) */
+  /** Recommended approach (can be string for llm.md or LocalizedField for NativeHtmlNotice.astro) */
   recommended?: LocalizedField;
-  /** Recommendation text (localized, for AccessibilityDocs) */
+  /** Recommendation text (localized, for NativeHtmlNotice.astro) */
   recommendation?: LocalizedField;
-  /** Benefits of using native HTML (localized, for AccessibilityDocs) */
+  /** Benefits of using native HTML (localized, for NativeHtmlNotice.astro) */
   benefits?: LocalizedField;
   /** Code example showing native HTML */
   codeExample?: string;
-  /** Cases where custom implementation is needed (localized, for AccessibilityDocs) */
+  /** Cases where custom implementation is needed (localized, for NativeHtmlNotice.astro) */
   customUseCases?: LocalizedField;
 }
 
@@ -335,7 +269,7 @@ export interface NativeHtmlConsideration {
 export interface NativeVsCustomRow {
   /** Feature name (simple version for llm.md) */
   feature?: string;
-  /** Use case description (localized, for AccessibilityDocs) */
+  /** Use case description (localized, for NativeHtmlNotice.astro) */
   useCase?: LocalizedField;
   /** Native element behavior */
   native: LocalizedField;
@@ -436,7 +370,7 @@ export interface PatternAccessibilityData {
 
   // --- Native HTML Considerations (optional) ---
 
-  /** Native HTML recommendations - can be either an array (for llm.md) or a single object (for AccessibilityDocs) */
+  /** Native HTML recommendations - can be either an array (for llm.md) or a single object (for NativeHtmlNotice.astro) */
   nativeHtmlConsiderations?: NativeHtmlConsideration[] | NativeHtmlConsideration;
 
   /** Native vs Custom comparison table */
@@ -503,17 +437,12 @@ export interface PatternAccessibilityData {
   /** Testing documentation data (for TestingDocs) */
   testing?: PatternTestingData;
 
-  // --- Implementation Notes ---
-
-  /** Structured implementation notes (for AccessibilityDocs) */
-  implementationNotesData?: PatternImplementationNotes;
-
   // --- llm.md Specific Data ---
 
   /** Test checklist items (for llm.md) */
   testChecklist?: TestCheckItem[];
 
-  /** Implementation notes (Markdown content for llm.md) - deprecated, use implementationNotesData */
+  /** Implementation notes (Markdown content for llm.md) */
   implementationNotes?: string;
 
   /** Example test code - React + Testing Library (for llm.md) */
@@ -522,28 +451,3 @@ export interface PatternAccessibilityData {
   /** Example test code - Playwright E2E (for llm.md) */
   exampleTestCodeE2E?: string;
 }
-
-// =============================================================================
-// Helper Type Guards
-// =============================================================================
-
-export function hasKeyboardSections(
-  data: PatternAccessibilityData
-): data is PatternAccessibilityData & { keyboardSections: KeyboardSection[] } {
-  return Array.isArray(data.keyboardSections) && data.keyboardSections.length > 0;
-}
-
-export function hasSimpleKeyboardSupport(
-  data: PatternAccessibilityData
-): data is PatternAccessibilityData & { keyboardSupport: KeyboardShortcut[] } {
-  return Array.isArray(data.keyboardSupport) && data.keyboardSupport.length > 0;
-}
-
-// =============================================================================
-// Pattern Registry Type
-// =============================================================================
-
-/**
- * Registry of all pattern accessibility data
- */
-export type PatternRegistry = Record<string, PatternAccessibilityData>;

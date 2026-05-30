@@ -85,33 +85,6 @@ export const toggleButtonAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    structure: {
-      diagram: `Structure:
-<button type="button" aria-pressed="false">
-  Mute
-</button>
-
-State Changes:
-- Initial: aria-pressed="false" (not pressed)
-- After click: aria-pressed="true" (pressed)
-
-Use type="button":
-- Prevents accidental form submission
-- Native <button> defaults to type="submit"
-
-Tri-state (rare):
-- aria-pressed="mixed" for partially selected state
-- Example: "Select All" when some items selected`,
-      caption: {
-        en: 'Toggle Button structure and state changes',
-        ja: 'トグルボタンの構造と状態変化',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {

@@ -156,9 +156,9 @@ defineOptions({ inheritAttrs: false })
 - スクリーンリーダー対応
 - フォーカス管理
 
-#### 3. AccessibilityDocs 構成
+#### 3. アクセシビリティドキュメント (MDX) 構成
 
-各パターンのアクセシビリティ解説は `src/content/accessibility-docs/{pattern}/{en,ja}.mdx` に MDX で記述する。`TestingDocs.astro` がこれを読み込んで表示する。以下のセクション構成で作成する:
+各パターンのアクセシビリティ解説は `src/content/accessibility-docs/{pattern}/{en,ja}.mdx` に MDX で記述する。Pattern ページ (`src/pages/patterns/[pattern]/[framework]/index.astro` および日本語版) が `getAccessibilityContent()` 経由でこの MDX を読み込み、Accessibility Features セクションに表示する。以下のセクション構成で作成する:
 
 1. **Native HTML Considerations** (該当パターンのみ)
    - ネイティブ HTML 要素の推奨（例: `<a>`, `<table>`, `<input type="number">`）

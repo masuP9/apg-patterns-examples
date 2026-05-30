@@ -170,7 +170,7 @@ const { Content: AccessibilityContent } = await getAccessibilityContent(pattern,
   <!-- Native HTML Section (conditional) -->
   {
     NativeHtmlNotice && (
-      <section class="mb-12">
+      <section class="mb-12" data-section="native-html">
         <Heading level={2} class="mb-4 text-xl font-semibold">
           Native HTML
         </Heading>
@@ -182,7 +182,7 @@ const { Content: AccessibilityContent } = await getAccessibilityContent(pattern,
   <!-- Comparison Section (conditional) -->
   {
     ComparisonSection && (
-      <section class="mb-12">
+      <section class="mb-12" data-section="comparison">
         <ComparisonSection />
       </section>
     )
@@ -353,7 +353,7 @@ const { Content: AccessibilityContent } = await getAccessibilityContent(pattern,
   </section>
 
   <!-- Testing Section -->
-  <section class="mb-12">
+  <section class="mb-12" data-section="testing-docs">
     <Heading level={2} class="mb-4 text-xl font-semibold">Testing</Heading>
     {TestingDocs && <TestingDocs />}
     {

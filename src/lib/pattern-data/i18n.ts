@@ -38,7 +38,7 @@ export function localize(locale: Locale) {
 
 /**
  * Common table headers used across all patterns
- * These are used by AccessibilityDocs components for table column headers
+ * These are used by TestingDocs and NativeHtmlNotice components for table column headers
  */
 export const commonTableHeaders: PatternTranslations = {
   en: {

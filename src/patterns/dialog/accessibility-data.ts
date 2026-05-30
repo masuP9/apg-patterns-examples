@@ -145,31 +145,6 @@ export const dialogAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    structure: {
-      diagram: `Structure:
-+-------------------------------------+
-| Dialog Title          [X]           |  <- aria-labelledby target
-+-------------------------------------+
-|                                     |
-| Dialog content...                   |  <- aria-describedby target (optional)
-|                                     |
-| [Cancel]  [Confirm]                 |  <- focusable elements
-+-------------------------------------+
-
-Focus Trap:
-- First focusable -> ... -> Last focusable -> First focusable (loop)
-- Store trigger element reference before opening
-- Restore focus to trigger on close`,
-      caption: {
-        en: 'Dialog component structure and focus management',
-        ja: 'Dialogコンポーネントの構造とフォーカス管理',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {

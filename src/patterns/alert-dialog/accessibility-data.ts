@@ -2,7 +2,7 @@
  * Alert Dialog Pattern - Accessibility Data
  *
  * Single source of truth for accessibility documentation.
- * Used by AccessibilityDocs.astro and for generating alert-dialog.md / alert-dialog.ja.md
+ * Used by TestingDocs.astro and for generating alert-dialog.md / alert-dialog.ja.md
  */
 
 import type { PatternAccessibilityData } from '@/lib/pattern-data/types';
@@ -730,62 +730,4 @@ test('focuses Cancel button on open and traps focus', async ({ page }) => {
   await page.keyboard.press('Tab');
   await expect(cancelButton).toBeFocused();
 });`,
-};
-
-// Differences from Dialog data (for AccessibilityDocs)
-export const dialogVsAlertDialogDifferences = {
-  en: {
-    header: {
-      feature: 'Feature',
-      dialog: 'Dialog',
-      alertDialog: 'Alert Dialog',
-    },
-    rows: [
-      { feature: 'Role', dialog: 'dialog', alertDialog: 'alertdialog' },
-      {
-        feature: 'Message (aria-describedby)',
-        dialog: 'Optional',
-        alertDialog: 'Required',
-      },
-      { feature: 'Escape key', dialog: 'Enabled by default', alertDialog: 'Disabled by default' },
-      {
-        feature: 'Initial focus',
-        dialog: 'First focusable element',
-        alertDialog: 'Cancel button (safest action)',
-      },
-      {
-        feature: 'Close button',
-        dialog: 'Yes (×)',
-        alertDialog: 'No (explicit response required)',
-      },
-      {
-        feature: 'Overlay click',
-        dialog: 'Closes dialog',
-        alertDialog: 'Does not close (explicit response required)',
-      },
-    ],
-  },
-  ja: {
-    header: {
-      feature: '機能',
-      dialog: 'Dialog',
-      alertDialog: 'Alert Dialog',
-    },
-    rows: [
-      { feature: 'ロール', dialog: 'dialog', alertDialog: 'alertdialog' },
-      { feature: 'メッセージ（aria-describedby）', dialog: '任意', alertDialog: '必須' },
-      { feature: 'Escape キー', dialog: 'デフォルトで有効', alertDialog: 'デフォルトで無効' },
-      {
-        feature: '初期フォーカス',
-        dialog: '最初のフォーカス可能な要素',
-        alertDialog: 'キャンセルボタン（最も安全なアクション）',
-      },
-      { feature: '閉じるボタン', dialog: 'あり（×）', alertDialog: 'なし（明示的な応答が必要）' },
-      {
-        feature: 'オーバーレイクリック',
-        dialog: 'ダイアログを閉じる',
-        alertDialog: '閉じない（明示的な応答が必要）',
-      },
-    ],
-  },
 };

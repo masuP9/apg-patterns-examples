@@ -134,34 +134,6 @@ export const accordionAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    structure: {
-      diagram: `┌─────────────────────────────────────┐
-│ [▼] Section 1                       │  ← button (aria-expanded="true")
-├─────────────────────────────────────┤
-│ Panel 1 content...                  │  ← region (aria-labelledby)
-├─────────────────────────────────────┤
-│ [▶] Section 2                       │  ← button (aria-expanded="false")
-├─────────────────────────────────────┤
-│ [▶] Section 3                       │  ← button (aria-expanded="false")
-└─────────────────────────────────────┘
-
-ID Relationships:
-- Button: id="header-1", aria-controls="panel-1"
-- Panel: id="panel-1", aria-labelledby="header-1"
-
-Region Role Rule:
-- ≤6 panels: use role="region" on panels
-- >6 panels: omit role="region" (too many landmarks)`,
-      caption: {
-        en: 'Accordion component structure with ID relationships',
-        ja: 'ID関連を含むアコーディオンコンポーネントの構造',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {

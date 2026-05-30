@@ -96,41 +96,6 @@ export const switchAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    structure: {
-      diagram: `Structure:
-<button role="switch" aria-checked="false">
-  <span class="switch-track">
-    <span class="switch-thumb" />
-  </span>
-  Enable notifications
-</button>
-
-Visual States:
-┌─────────┬────────────┐
-│ OFF     │ ON         │
-├─────────┼────────────┤
-│ [○    ] │ [    ✓]   │
-│ Left    │ Right+icon │
-└─────────┴────────────┘
-
-Switch vs Checkbox:
-- Switch: immediate effect, on/off semantics
-- Checkbox: may require form submit, checked/unchecked semantics
-
-Use Switch when:
-- Action takes effect immediately
-- Represents on/off, enable/disable
-- Similar to a physical switch`,
-      caption: {
-        en: 'Switch component structure and visual states',
-        ja: 'Switchコンポーネントの構造と視覚的な状態',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {

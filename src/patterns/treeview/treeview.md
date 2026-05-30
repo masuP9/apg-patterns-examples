@@ -1,4 +1,4 @@
-# Tree View Pattern - AI Implementation Guide
+# Treeview Pattern - AI Implementation Guide
 
 > APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
 

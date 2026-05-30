@@ -34,7 +34,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "generate:og": "node scripts/generate-og-image.mjs && npx tsx scripts/generate-pattern-og-images.ts && npx tsx scripts/generate-practice-og-images.ts && npx tsx scripts/generate-list-og-images.ts",
-    "generate:llm-md": "tsx scripts/generate-llm-md.ts",
+    "generate:llm-md": "tsx scripts/generate-pattern-md.ts --all-locales",
     "watch:apg": "tsx scripts/watch-apg-upstream.ts",
     "preview": "astro preview",
     "lint": "run-p lint:astro lint:types lint:eslint",
