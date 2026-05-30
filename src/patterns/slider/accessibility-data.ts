@@ -187,48 +187,6 @@ export const sliderAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    structure: {
-      diagram: `Structure:
-<div class="slider-container">
-  <label id="label">Volume</label>
-  <div class="slider-track">
-    <div class="slider-fill" />
-    <div
-      role="slider"
-      tabindex="0"
-      aria-valuenow="50"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      aria-labelledby="label"
-      class="slider-thumb"
-    />
-  </div>
-</div>
-
-Visual Layout:
-┌─────────────────────────────────────┐
-│ Volume                               │
-│ ├─────────●─────────────────────────┤
-│ 0        50                     100  │
-└─────────────────────────────────────┘
-
-Keyboard Navigation:
-← / ↓  = Decrease by step
-→ / ↑  = Increase by step
-Home   = Set to min
-End    = Set to max
-PgUp   = Increase by large step
-PgDn   = Decrease by large step`,
-      caption: {
-        en: 'Slider component structure and visual layout',
-        ja: 'Sliderコンポーネントの構造と視覚的なレイアウト',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {

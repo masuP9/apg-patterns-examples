@@ -63,9 +63,26 @@ async function loadPatternData(pattern: string): Promise<PatternAccessibilityDat
     // Dynamic import of the TypeScript file
     const module = await import(dataFile);
 
-    // Find the exported data (should be named `{pattern}AccessibilityData`)
-    const expectedName = `${pattern.replace(/-/g, '')}AccessibilityData`;
-    const data = module[expectedName] || module.default || Object.values(module)[0];
+    // Find the exported data — first try `{camelCasePattern}AccessibilityData`,
+    // then `default`, then any single `*AccessibilityData` named export
+    // (handles cases like radio→radioGroupAccessibilityData where the export
+    // name differs from the pattern directory).
+    const camelPattern = pattern.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+    const expectedName = `${camelPattern}AccessibilityData`;
+    let data: unknown = module[expectedName] ?? module.default;
+
+    if (!data) {
+      const candidates = Object.keys(module).filter(
+        (k) => k !== 'default' && k.endsWith('AccessibilityData')
+      );
+      if (candidates.length === 1) {
+        data = module[candidates[0]];
+      } else if (candidates.length > 1) {
+        console.warn(
+          `Warning: Multiple *AccessibilityData exports in ${dataFile}: ${candidates.join(', ')}`
+        );
+      }
+    }
 
     if (!data || typeof data !== 'object') {
       console.warn(`Warning: Could not find accessibility data in ${dataFile}`);

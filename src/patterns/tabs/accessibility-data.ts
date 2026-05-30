@@ -150,53 +150,6 @@ export const tabsAccessibilityData: PatternAccessibilityData = {
     },
   ],
 
-  // --- Implementation Notes ---
-
-  implementationNotesData: {
-    activationModes: [
-      {
-        mode: 'automatic',
-        title: { en: 'Automatic (default)', ja: '自動モード（デフォルト）' },
-        points: [
-          {
-            en: 'Arrow keys move focus AND select tab',
-            ja: '矢印キーでフォーカス移動とタブ選択を同時に行う',
-          },
-          { en: 'Panel content changes immediately', ja: 'パネルの内容が即座に変更される' },
-        ],
-      },
-      {
-        mode: 'manual',
-        title: { en: 'Manual', ja: '手動モード' },
-        points: [
-          { en: 'Arrow keys move focus only', ja: '矢印キーはフォーカス移動のみ' },
-          { en: 'Enter/Space required to select tab', ja: 'タブ選択にはEnter/Spaceが必要' },
-          {
-            en: 'Panel content changes on explicit activation',
-            ja: '明示的なアクティベーションでパネル内容が変更される',
-          },
-        ],
-      },
-    ],
-    structure: {
-      diagram: `┌─────────────────────────────────────────┐
-│ [Tab 1] [Tab 2] [Tab 3]   ← tablist     │
-├─────────────────────────────────────────┤
-│                                         │
-│  Panel content here        ← tabpanel   │
-│                                         │
-└─────────────────────────────────────────┘
-
-ID Relationships:
-- Tab: id="tab-1", aria-controls="panel-1"
-- Panel: id="panel-1", aria-labelledby="tab-1"`,
-      caption: {
-        en: 'Tabs component structure with ID relationships',
-        ja: 'ID関連を含むTabsコンポーネントの構造',
-      },
-    },
-  },
-
   // --- Testing Documentation ---
 
   testing: {
