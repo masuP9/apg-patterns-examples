@@ -2,7 +2,7 @@
  * Button Pattern - Accessibility Data
  *
  * Single source of truth for accessibility documentation.
- * Used by AccessibilityDocs.astro and for generating button.md / button.ja.md
+ * Used by TestingDocs.astro and for generating button.md / button.ja.md
  */
 
 import type { PatternAccessibilityData } from '@/lib/pattern-data/types';

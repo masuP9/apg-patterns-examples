@@ -202,7 +202,7 @@ function generateMarkdown(data: PatternAccessibilityData, options: GenerateOptio
   }
 
   // Native HTML Considerations (if present)
-  // Handle both array format (llm.md style) and object format (AccessibilityDocs style)
+  // Handle both array format (llm.md style) and object format (localized HTML rendering style)
   if (data.nativeHtmlConsiderations) {
     const considerations = Array.isArray(data.nativeHtmlConsiderations)
       ? data.nativeHtmlConsiderations

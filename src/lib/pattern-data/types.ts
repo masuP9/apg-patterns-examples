@@ -2,7 +2,8 @@
  * Pattern Accessibility Data Types
  *
  * These types define the structure for accessibility data that is shared between
- * AccessibilityDocs.astro (HTML rendering) and llm.md generation (Markdown).
+ * HTML rendering components (TestingDocs.astro, NativeHtmlNotice.astro,
+ * ComparisonSection.astro) and llm.md generation (Markdown).
  */
 
 import type { Locale } from '@/i18n';
@@ -41,7 +42,7 @@ export function isLocalizedText(value: LocalizedField): value is LocalizedText {
 }
 
 // =============================================================================
-// Core ARIA Data Types (used by both AccessibilityDocs and llm.md)
+// Core ARIA Data Types (used by both HTML rendering components and llm.md)
 // =============================================================================
 
 /**
@@ -312,20 +313,20 @@ export interface TestCheckItem {
 
 /**
  * Native HTML consideration (for patterns where native elements are preferred)
- * Extended version with localization support for AccessibilityDocs
+ * Extended version with localization support for NativeHtmlNotice.astro
  */
 export interface NativeHtmlConsideration {
-  /** Use case description (can be string for llm.md or LocalizedField for AccessibilityDocs) */
+  /** Use case description (can be string for llm.md or LocalizedField for NativeHtmlNotice.astro) */
   useCase?: LocalizedField;
-  /** Recommended approach (can be string for llm.md or LocalizedField for AccessibilityDocs) */
+  /** Recommended approach (can be string for llm.md or LocalizedField for NativeHtmlNotice.astro) */
   recommended?: LocalizedField;
-  /** Recommendation text (localized, for AccessibilityDocs) */
+  /** Recommendation text (localized, for NativeHtmlNotice.astro) */
   recommendation?: LocalizedField;
-  /** Benefits of using native HTML (localized, for AccessibilityDocs) */
+  /** Benefits of using native HTML (localized, for NativeHtmlNotice.astro) */
   benefits?: LocalizedField;
   /** Code example showing native HTML */
   codeExample?: string;
-  /** Cases where custom implementation is needed (localized, for AccessibilityDocs) */
+  /** Cases where custom implementation is needed (localized, for NativeHtmlNotice.astro) */
   customUseCases?: LocalizedField;
 }
 
@@ -335,7 +336,7 @@ export interface NativeHtmlConsideration {
 export interface NativeVsCustomRow {
   /** Feature name (simple version for llm.md) */
   feature?: string;
-  /** Use case description (localized, for AccessibilityDocs) */
+  /** Use case description (localized, for NativeHtmlNotice.astro) */
   useCase?: LocalizedField;
   /** Native element behavior */
   native: LocalizedField;
@@ -436,7 +437,7 @@ export interface PatternAccessibilityData {
 
   // --- Native HTML Considerations (optional) ---
 
-  /** Native HTML recommendations - can be either an array (for llm.md) or a single object (for AccessibilityDocs) */
+  /** Native HTML recommendations - can be either an array (for llm.md) or a single object (for NativeHtmlNotice.astro) */
   nativeHtmlConsiderations?: NativeHtmlConsideration[] | NativeHtmlConsideration;
 
   /** Native vs Custom comparison table */
@@ -505,7 +506,7 @@ export interface PatternAccessibilityData {
 
   // --- Implementation Notes ---
 
-  /** Structured implementation notes (for AccessibilityDocs) */
+  /** Structured implementation notes (legacy, currently unconsumed) */
   implementationNotesData?: PatternImplementationNotes;
 
   // --- llm.md Specific Data ---

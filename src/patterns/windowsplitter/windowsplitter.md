@@ -1,4 +1,4 @@
-# Window Splitter Pattern - AI Implementation Guide
+# Windowsplitter Pattern - AI Implementation Guide
 
 > APG Reference: https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/
 
