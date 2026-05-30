@@ -13,7 +13,7 @@ plans/
 
 ## Completed Plans
 
-All patterns have been implemented. Archived plans are in `completed/` for reference:
+`completed/` には、計画書を作成して実装が完了したパターン・機能のプランをアーカイブしている。これは**計画書を残したものだけのアーカイブであり、実装済みパターンの網羅リストではない**（パターンの全一覧は `src/patterns/` を参照）。多くのパターンは計画書を経ずに実装されている。
 
 - `checkbox-implementation-plan.md`
 - `combobox-plan.md`
@@ -23,9 +23,11 @@ All patterns have been implemented. Archived plans are in `completed/` for refer
 - `grid-patterns-roadmap.md`
 - `i18n-implementation-plan.md`
 - `landmarks-plan.md`
+- `llm-md-generation-plan.md`
 - `menu-button-implementation-plan.md`
 - `menu-menubar-implementation-plan.md`
 - `radio-group-implementation-plan.md`
+- `slider-multithumb-implementation-plan.md`
 - `treegrid-implementation-plan.md`
 
 ## Creating New Plans

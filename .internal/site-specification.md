@@ -233,7 +233,9 @@ src/
 │       ├── Button.astro             # Astro 実装（Web Components）
 │       ├── ButtonDemo.tsx           # デモラッパー（必要時）
 │       ├── Button.test.tsx          # テスト
-│       └── button.md               # AI向け定義ファイル
+│       ├── accessibility-data.ts    # アクセシビリティの真実源（TestingDocs・AI向けファイル生成元）
+│       ├── button.md                # AI向け定義ファイル（英語、自動生成）
+│       └── button.ja.md             # AI向け定義ファイル（日本語、自動生成）
 ├── content/
 │   └── accessibility-docs/          # アクセシビリティ解説（MDX）
 │       └── button/
@@ -272,7 +274,9 @@ src/
 - **`meta.ts`**: タイトル、説明、TOC、リソース、フレームワーク別 API ドキュメント。全テキストは `Record<Locale, string>` で i18n 対応
 - **`DemoSection.{react,vue,svelte,web-component}.astro`**: framework ごとに分割した薄い Astro。それぞれ自分の framework の実装ファイルだけを静的 import する。ページ側 dispatcher が `framework` から該当ファイルを選んで動的 import で呼ぶ
 - **`{pattern}-demo-data.ts`** (任意): 4 framework で内容が完全に同一かつ概ね 8 行以上の純 data を切り出した共通ファイル
-- **`content/accessibility-docs/`**: MDX でアクセシビリティ解説を記述。frontmatter は `pattern` と `locale` のみ
+- **`accessibility-data.ts`**: アクセシビリティ情報（Roles / Properties / States / Keyboard / Test Checklist 等）の真実源。型は `src/lib/pattern-data/types.ts` の `PatternAccessibilityData`。`TestingDocs.astro` の表示と、AI 向け定義ファイル `{pattern}.md` / `{pattern}.ja.md` の生成（`scripts/generate-pattern-md.ts`、npm `generate:llm-md`）の両方がこれを参照する
+- **`{pattern}.md` / `{pattern}.ja.md`**: AI コーディングアシスタント向け定義ファイル。`accessibility-data.ts` から自動生成されるため直接編集しない
+- **`content/accessibility-docs/`**: MDX でアクセシビリティ解説を記述（ページ表示用の散文）。frontmatter は `pattern` と `locale` のみ。構造化データの `accessibility-data.ts` とは役割が異なる
 
 ---
 

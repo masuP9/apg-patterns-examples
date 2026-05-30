@@ -1,8 +1,13 @@
-# LLM.md Template
+# AI 向け定義ファイル（`{pattern}.md`）構造リファレンス
 
-このテンプレートは、APG パターンの AI 向け定義ファイル (`llm.md`) を作成する際のガイドラインです。
+APG パターンの AI 向け定義ファイルは **手書きしません**。各パターンの `accessibility-data.ts`（型は `src/lib/pattern-data/types.ts` の `PatternAccessibilityData`）を真実源として、`scripts/generate-pattern-md.ts`（npm スクリプト `npm run generate:llm-md`）が以下を自動生成します:
 
-## ファイル構造
+- `src/patterns/{pattern}/{pattern}.md` … 英語版
+- `src/patterns/{pattern}/{pattern}.ja.md` … 日本語版
+
+このドキュメントは、生成される `{pattern}.md` がどのような構造になるかを把握するための**構造リファレンス**です。記載内容を変えたい場合は md を直接編集せず、`accessibility-data.ts` か生成スクリプトを更新してください。
+
+## 生成される構造
 
 ````markdown
 # {Pattern Name} Pattern - AI Implementation Guide
@@ -77,14 +82,18 @@
 
 ## ガイドライン
 
+`accessibility-data.ts` に内容を記述する際の方針:
+
 1. **簡潔さ**: トークン効率を考慮し、冗長な説明は避ける
 2. **表形式**: ARIA 属性やキーボード操作は表で整理
 3. **テストチェックリスト**: AI がテストを生成する際のチェックリストを提供
 4. **実装例**: フレームワーク非依存で理解しやすいコード例
 5. **APG リンク**: 公式ドキュメントへの参照を含める
 
-## 命名規則
+## 命名規則・生成
 
-- ファイル名: `llm.md`
-- 配置場所: `src/patterns/{pattern}/llm.md`
+- 真実源: `src/patterns/{pattern}/accessibility-data.ts`
+- 生成物: `src/patterns/{pattern}/{pattern}.md`（英語）、`src/patterns/{pattern}/{pattern}.ja.md`（日本語）
+- 生成コマンド: `npm run generate:llm-md`（`scripts/generate-pattern-md.ts --all-locales`）
+- 生成された `.md` は直接編集しない（再生成で上書きされる）
 ```
