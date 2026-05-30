@@ -278,6 +278,30 @@ src/
 - **`{pattern}.md` / `{pattern}.ja.md`**: AI コーディングアシスタント向け定義ファイル。`accessibility-data.ts` から自動生成されるため直接編集しない
 - **`content/accessibility-docs/`**: MDX でアクセシビリティ解説を記述（ページ表示用の散文）。frontmatter は `pattern` と `locale` のみ。構造化データの `accessibility-data.ts` とは役割が異なる
 
+### ページ実装方式の判断基準
+
+サイトには「MDX 方式」と「静的 `.astro` 方式」の2系統がある。**ページの目的**で使い分ける（「解説ページだから MDX」のような曖昧な分類はしない）。
+
+| ページ種別        | 実装方式                                            | 条件・例                                                              |
+| ----------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
+| 線形ドキュメント  | MDX (`content.mdx` / `content.ja.mdx`) + `DocLayout` + `Prose` | 散文・見出し・表・コード例が中心で TOC が有用。例: `/testing-strategy/` |
+| Practice 詳細     | MDX + `PracticeLayout` + `Prose`                    | practice サイドバーと practice 固有 OG 画像が必要。例: `/practices/{id}/` |
+| ランディング・一覧 | `.astro` + `BaseLayout`                             | カード・CTA・データ駆動 UI が中心。例: `/guide/`, `/about/`, トップページ |
+| パターン詳細      | 既存の動的 `.astro`（`[pattern]/[framework]`）       | framework 切替・デモ・API・コード表示が必要                            |
+
+**補足ルール:**
+
+- MDX 内でサイト UI コンポーネント（`Tile` など）を大量に組み立てない。UI 比率が高くなるなら `.astro` を使う
+- パターン等の一覧は手書きせず、`getPatterns()` など既存のデータ源から生成する（件数も `.length` から導出し、ハードコードしない）
+- en/ja で DOM 構造が同じページは、共有 `.astro` コンポーネントに構造を寄せ、文言だけを i18n データ（`getPatternName()` / `getPatternDescription()` 等）で分離する
+- 3つ目の類似レイアウトを足す前に、既存レイアウトの再利用、または「TOC 付き本文枠」だけの内部コンポーネント抽出を検討する
+
+**レイアウトの責務:**
+
+- **`DocLayout`**: サイドバーなしの汎用文書レイアウト（`BaseLayout` + `Prose` + 右 TOC）。独立した長文ドキュメント向け
+- **`PracticeLayout`**: practice 専用（必須 `practice` prop + `PracticeSidebar` + practice 固有 OG + 左サイドバー前提のグリッド）
+- 両者は責務が異なるため統合しない。`showSidebar` 的な boolean prop での統合は practice 固有知識を汎用レイアウトに漏らすため避ける
+
 ---
 
 ## コード表示

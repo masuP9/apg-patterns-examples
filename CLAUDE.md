@@ -100,6 +100,21 @@ src/
 
 ## 開発ガイド
 
+### ページ実装方式の選択
+
+ページは目的に応じて2系統を使い分ける（詳細・正本は [.internal/site-specification.md](.internal/site-specification.md) の「ページ実装方式の判断基準」を参照）。
+
+| ページ種別                                                  | 実装方式                          |
+| ----------------------------------------------------------- | --------------------------------- |
+| 線形ドキュメント（散文・TOC が有用。例: testing-strategy）   | MDX + `DocLayout` + `Prose`       |
+| Practice 詳細                                               | MDX + `PracticeLayout` + `Prose`  |
+| ランディング・一覧（カード・データ駆動 UI。例: guide, about, top） | `.astro` + `BaseLayout`     |
+| パターン詳細                                                | 既存の動的 `.astro`               |
+
+- 一覧は手書きせず `getPatterns()` 等のデータ源から生成する（件数もハードコードしない）
+- MDX にサイト UI を組み立てすぎない（UI 中心なら `.astro` を使う）
+- `DocLayout`（サイドバーなし汎用文書）と `PracticeLayout`（practice 専用）は責務が異なるため統合しない
+
 ### コンポーネント設計原則
 
 #### 1. HTML属性継承パターン
