@@ -817,8 +817,6 @@ export const treeViewAccessibilityData: PatternAccessibilityData = {
         description: { en: 'Automated accessibility testing', ja: '自動アクセシビリティテスト' },
       },
     ],
-    documentationLink:
-      'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md',
   },
 
   testChecklist: [

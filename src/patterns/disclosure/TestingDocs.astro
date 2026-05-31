@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { disclosureAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
@@ -17,7 +18,7 @@ if (!testing) {
   throw new Error('Testing data not found in accessibility-data.ts');
 }
 
-const { strategies, categories, commands, tools, documentationLink } = testing;
+const { strategies, categories, commands, tools } = testing;
 
 // Localization helper
 const t = localize(locale);
@@ -38,8 +39,6 @@ const sectionTitles = {
     testCategories: 'Test Categories',
     runningTests: 'Running Tests',
     testingTools: 'Testing Tools',
-    seeFullDocs: 'See',
-    forFullDocs: 'for full documentation.',
   },
   ja: {
     intro:
@@ -48,8 +47,6 @@ const sectionTitles = {
     testCategories: 'テストカテゴリ',
     runningTests: 'テストの実行',
     testingTools: 'テストツール',
-    seeFullDocs: '詳細は',
-    forFullDocs: 'を参照してください。',
   },
 };
 
@@ -152,15 +149,5 @@ const titles = sectionTitles[locale];
     }
   </ul>
 
-  {
-    documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {titles.seeFullDocs}{' '}
-        <ExternalLink href={documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {titles.forFullDocs}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

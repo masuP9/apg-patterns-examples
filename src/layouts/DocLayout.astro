@@ -1,0 +1,38 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { TableOfContents, type TocItem } from '@/components/ui/toc';
+import { type Locale, getLocaleFromUrl } from '@/i18n';
+
+interface Props {
+  title: string;
+  description?: string;
+  tocItems?: TocItem[];
+  locale?: Locale;
+}
+
+const { title, description, tocItems = [] } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const hasToc = tocItems.length > 0;
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <div class="mx-auto max-w-4xl">
+    <div class:list={['lg:grid lg:gap-16 xl:gap-20', hasToc ? 'xl:grid-cols-[1fr_200px]' : '']}>
+      <!-- Main content -->
+      <div class="max-w-3xl min-w-0">
+        <slot />
+      </div>
+
+      <!-- Right Sidebar: TOC (xl and above) -->
+      {
+        hasToc && (
+          <aside class="hidden xl:block">
+            <div class="sticky top-4">
+              <TableOfContents items={tocItems} locale={locale} />
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

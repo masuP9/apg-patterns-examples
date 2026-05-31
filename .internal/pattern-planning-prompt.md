@@ -1078,7 +1078,7 @@ export interface {ComponentName}Props extends Omit<
 |--------------|------|
 | [llm-md-template.md](.internal/llm-md-template.md) | llm.md のテンプレート |
 | [TestingDocs-template.astro](.internal/TestingDocs-template.astro) | TestingDocs のテンプレート（Unit + E2E の2層構造） |
-| [testing-strategy.md](.internal/testing-strategy.md) | テスト設計方針 |
+| [テスト戦略ページ](../src/testing-strategy/content.mdx) | テスト設計方針（サイト内ページ `/testing-strategy/` の真実源） |
 | [site-specification.md](.internal/site-specification.md) | サイト仕様書 |
 | [CLAUDE.md](../CLAUDE.md) | プロジェクト概要 |
 

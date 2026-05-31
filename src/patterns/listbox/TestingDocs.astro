@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import type { Locale } from '@/i18n';
@@ -36,8 +37,6 @@ const labels = {
   testCategories: locale === 'ja' ? 'テストカテゴリ' : 'Test Categories',
   exampleTestCode: locale === 'ja' ? 'テストコード例' : 'Example Test Code',
   testingTools: locale === 'ja' ? 'テストツール' : 'Testing Tools',
-  seeFullDocs: locale === 'ja' ? '完全なドキュメントは' : 'See',
-  forFullDocs: locale === 'ja' ? 'を参照してください。' : 'for full documentation.',
   e2eTestFileDesc:
     locale === 'ja'
       ? `以下は実際のE2Eテストファイル（${testing.e2eTestFile}）です。`
@@ -140,15 +139,5 @@ const priorityLabels: Record<string, Record<string, string>> = {
     }
   </ul>
 
-  {
-    testing.documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {labels.seeFullDocs}{' '}
-        <ExternalLink href={testing.documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {labels.forFullDocs}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

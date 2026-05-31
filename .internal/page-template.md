@@ -123,7 +123,9 @@ const tocItems = [
 - [ ] `src/patterns/{pattern}/TestingDocs.astro` - テストドキュメント
 - [ ] `src/content/accessibility-docs/{pattern}/en.mdx` - アクセシビリティ解説（英語）
 - [ ] `src/content/accessibility-docs/{pattern}/ja.mdx` - アクセシビリティ解説（日本語）
-- [ ] `src/patterns/{pattern}/{pattern}.md` - AI 向けガイド
+- [ ] `src/patterns/{pattern}/accessibility-data.ts` - アクセシビリティの真実源（`PatternAccessibilityData` 型。TestingDocs と AI 向けガイドの生成元）
+- [ ] `src/patterns/{pattern}/{pattern}.md` - AI 向けガイド（英語、`npm run generate:llm-md` で自動生成）
+- [ ] `src/patterns/{pattern}/{pattern}.ja.md` - AI 向けガイド（日本語、同上で自動生成）
 - [ ] `src/patterns/{pattern}/NativeHtmlNotice.astro` - Native HTML 説明（該当パターンのみ）
 - [ ] `src/patterns/{pattern}/{pattern}-demo-data.ts` - 共通 demo data（4 framework で完全一致する 8 行以上の純 data がある場合のみ）
 

@@ -222,8 +222,6 @@ export interface PatternTestingData {
   commands: TestCommand[];
   /** Testing tools used */
   tools: TestingTool[];
-  /** Link to full testing documentation */
-  documentationLink?: string;
   /** Screen reader testing information (for patterns where screen reader testing is important) */
   screenReaderTesting?: ScreenReaderTesting;
 }

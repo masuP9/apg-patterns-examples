@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { meterAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
@@ -21,8 +22,6 @@ const translations = {
     testingStrategy: 'Testing Strategy',
     testCategories: 'Test Categories',
     testingTools: 'Testing Tools',
-    documentation: 'See',
-    documentationText: 'for full documentation.',
     priorityHigh: 'High Priority',
     priorityMedium: 'Medium Priority',
     priorityLow: 'Low Priority',
@@ -35,8 +34,6 @@ const translations = {
     testingStrategy: 'テスト戦略',
     testCategories: 'テストカテゴリ',
     testingTools: 'テストツール',
-    documentation: '完全なドキュメントについては',
-    documentationText: 'を参照してください。',
     priorityHigh: '高優先度',
     priorityMedium: '中優先度',
     priorityLow: '低優先度',
@@ -128,15 +125,5 @@ const priorityLabels = {
     }
   </ul>
 
-  {
-    data.documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {tr.documentation}{' '}
-        <ExternalLink href={data.documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {tr.documentationText}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

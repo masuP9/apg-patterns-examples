@@ -1,5 +1,9 @@
 # ARIA ドキュメント構成ガイド
 
+> ⚠️ **歴史的資料（ARCHIVED）**
+>
+> このガイドが想定する手書き構成は、現行アーキテクチャに置き換えられています。現在は各パターンの `accessibility-data.ts`（型は `src/lib/pattern-data/types.ts` の `PatternAccessibilityData`）が Role / Property / State の真実源で、そこから `TestingDocs.astro` や `{pattern}.md` が生成されます。解説 MDX のセクション構成は [CLAUDE.md](../CLAUDE.md) の「3. アクセシビリティドキュメント (MDX) 構成」を参照してください。以下は当時の設計思想の記録です。
+
 各コンポーネントのドキュメントに記載する WAI-ARIA の Role / Property / State 情報の構成ガイド。
 
 ---

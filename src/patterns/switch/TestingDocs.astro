@@ -8,6 +8,7 @@ import { switchAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
 import type { Locale } from '@/i18n';
 import Prose from '@/components/ui/Prose.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 
 interface Props {
   locale?: Locale;
@@ -20,7 +21,7 @@ if (!testing) {
   throw new Error('Testing data not found in accessibility-data.ts');
 }
 
-const { strategies, categories, e2eTestFile, commands, tools, documentationLink } = testing;
+const { strategies, categories, e2eTestFile, commands, tools } = testing;
 
 // Read actual test file at build time
 const e2eTestCode = e2eTestFile
@@ -54,8 +55,6 @@ const sectionTitles = {
     exampleTestCodeDesc: 'The following is the actual E2E test file',
     runningTests: 'Running Tests',
     testingTools: 'Testing Tools',
-    seeFullDocs: 'See',
-    forFullDocs: 'for full documentation.',
     test: 'Test',
     description: 'Description',
     highPriority: 'High Priority',
@@ -71,8 +70,6 @@ const sectionTitles = {
     exampleTestCodeDesc: '以下は実際のE2Eテストファイルです',
     runningTests: 'テストの実行',
     testingTools: 'テストツール',
-    seeFullDocs: '完全なドキュメントは',
-    forFullDocs: 'を参照してください。',
     test: 'テスト',
     description: '説明',
     highPriority: '高優先度',
@@ -203,15 +200,5 @@ const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
     }
   </ul>
 
-  {
-    documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {titles.seeFullDocs}{' '}
-        <ExternalLink href={documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {titles.forFullDocs}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

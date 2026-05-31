@@ -547,9 +547,6 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-
-    documentationLink:
-      'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md',
   },
 
   // Test checklist for llm.md

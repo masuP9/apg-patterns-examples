@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import type { Locale } from '@/i18n';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
@@ -35,8 +36,6 @@ const labels = {
   testingStrategy: locale === 'ja' ? 'テスト戦略' : 'Testing Strategy',
   testCategories: locale === 'ja' ? 'テストカテゴリ' : 'Test Categories',
   testingTools: locale === 'ja' ? 'テストツール' : 'Testing Tools',
-  seeFullDocs: locale === 'ja' ? '詳細なドキュメントは' : 'See',
-  forFullDocs: locale === 'ja' ? 'を参照してください。' : 'for full documentation.',
   test: locale === 'ja' ? 'テスト' : 'Test',
   description: locale === 'ja' ? '説明' : 'Description',
   intro:
@@ -114,15 +113,5 @@ const labels = {
     }
   </ul>
 
-  {
-    testing.documentationLink && (
-      <p class="text-muted-foreground text-sm">
-        {labels.seeFullDocs}{' '}
-        <ExternalLink href={testing.documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {labels.forFullDocs}
-      </p>
-    )
-  }
+  <TestingStrategyLink locale={locale} />
 </Prose>

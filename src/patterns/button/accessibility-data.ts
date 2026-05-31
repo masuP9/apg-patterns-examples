@@ -533,8 +533,6 @@ export const buttonAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-    documentationLink:
-      'https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md',
   },
 
   // --- Test Checklist (for llm.md) ---

@@ -52,6 +52,11 @@ export const ui = {
     'practices.relatedPatterns': 'Related Patterns',
     'practices.viewApg': 'View APG documentation',
 
+    // Testing strategy page
+    'testingStrategy.title': 'Testing Strategy',
+    'testingStrategy.description':
+      'Testing strategy for the accessible components in APG Patterns Examples.',
+
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA Roles',
     'a11y.ariaStates': 'WAI-ARIA States / Properties',
@@ -87,6 +92,10 @@ export const ui = {
     'ai.copyOpenClaude': 'Copy & Open Claude',
     'ai.copied': 'Copied!',
     'ai.moreActions': 'More actions',
+
+    // Table of contents
+    'toc.onThisPage': 'On this page',
+    'toc.label': 'Table of contents',
   },
   ja: {
     // Navigation
@@ -124,6 +133,11 @@ export const ui = {
     'practices.relatedPatterns': '関連パターン',
     'practices.viewApg': 'APG ドキュメントを見る',
 
+    // Testing strategy page
+    'testingStrategy.title': 'テスト戦略',
+    'testingStrategy.description':
+      'APG Patterns Examples のアクセシブルなコンポーネントのテスト戦略。',
+
     // Accessibility docs sections
     'a11y.ariaRoles': 'WAI-ARIA ロール',
     'a11y.ariaStates': 'WAI-ARIA ステート / プロパティ',
@@ -159,6 +173,10 @@ export const ui = {
     'ai.copyOpenClaude': 'コピーして Claude を開く',
     'ai.copied': 'コピーしました！',
     'ai.moreActions': 'その他の操作',
+
+    // Table of contents
+    'toc.onThisPage': 'このページの内容',
+    'toc.label': '目次',
   },
 } as const;
 

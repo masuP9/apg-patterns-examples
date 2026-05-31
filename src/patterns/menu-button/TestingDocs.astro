@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
@@ -20,7 +21,7 @@ if (!testing) {
   throw new Error('Testing data not found in accessibility-data.ts');
 }
 
-const { strategies, categories, e2eTestFile, commands, tools, documentationLink } = testing;
+const { strategies, categories, e2eTestFile, commands, tools } = testing;
 
 // Read actual test file at build time
 const e2eTestCode = e2eTestFile
@@ -47,8 +48,6 @@ const sectionTitles = {
     exampleTestCodeDesc: 'The following is the actual E2E test file',
     runningTests: 'Running Tests',
     testingTools: 'Testing Tools',
-    seeFullDocs: 'See',
-    forFullDocs: 'for full documentation.',
     e2eTests: 'E2E tests',
   },
   ja: {
@@ -59,8 +58,6 @@ const sectionTitles = {
     exampleTestCodeDesc: '以下は実際のE2Eテストファイルです',
     runningTests: 'テストの実行',
     testingTools: 'テストツール',
-    seeFullDocs: '詳細なドキュメントについては、',
-    forFullDocs: 'を参照してください。',
     e2eTests: 'E2Eテスト',
   },
 };
@@ -158,7 +155,7 @@ const titles = sectionTitles[locale];
   </ul>
 
   {
-    documentationLink && e2eTestFile && (
+    e2eTestFile && (
       <p class="text-muted-foreground text-sm">
         {titles.e2eTests}:{' '}
         <ExternalLink
@@ -167,13 +164,9 @@ const titles = sectionTitles[locale];
         >
           {e2eTestFile}
         </ExternalLink>
-        <br />
-        {titles.seeFullDocs}{' '}
-        <ExternalLink href={documentationLink} class="text-primary hover:underline">
-          testing-strategy.md
-        </ExternalLink>{' '}
-        {titles.forFullDocs}
       </p>
     )
   }
+
+  <TestingStrategyLink locale={locale} />
 </Prose>

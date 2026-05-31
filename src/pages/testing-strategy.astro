@@ -1,0 +1,29 @@
+---
+import DocLayout from '../layouts/DocLayout.astro';
+import Prose from '@/components/ui/Prose.astro';
+import { useTranslation } from '@/i18n';
+import type { TocItem } from '@/components/ui/toc';
+import Content, { getHeadings } from '../testing-strategy/content.mdx';
+
+const locale = 'en';
+const t = useTranslation(locale);
+
+const title = t('testingStrategy.title');
+const description = t('testingStrategy.description');
+
+// Build TOC from MDX headings (h2 only)
+const headings = getHeadings ? await getHeadings() : [];
+const tocItems: TocItem[] = headings
+  .filter((h: { depth: number }) => h.depth === 2)
+  .map((h: { slug: string; text: string }) => ({ id: h.slug, text: h.text }));
+---
+
+<DocLayout title={title} description={description} locale={locale} tocItems={tocItems}>
+  <Prose>
+    <header class="mb-8">
+      <h1 class="text-2xl font-bold sm:text-3xl">{title}</h1>
+      <p class="text-muted-foreground">{description}</p>
+    </header>
+    <Content />
+  </Prose>
+</DocLayout>

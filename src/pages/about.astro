@@ -1,142 +1,150 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import DocLayout from '../layouts/DocLayout.astro';
+import type { TocItem } from '@/components/ui/toc';
+
+const tocItems: TocItem[] = [
+  { id: 'overview', text: 'Overview' },
+  { id: 'pattern-coverage', text: 'Pattern Coverage' },
+  { id: 'styling', text: 'Styling' },
+  { id: 'contributing', text: 'Contributing' },
+  { id: 'links', text: 'Links' },
+];
 ---
 
-<BaseLayout title="About">
-  <div class="mx-auto max-w-3xl">
-    <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">About APG Patterns Examples</h1>
-      <p class="text-muted-foreground text-lg">
-        Accessible UI component implementations across React, Vue, Svelte, and Astro following
-        WAI-ARIA APG patterns
-      </p>
-    </header>
+<DocLayout title="About" locale="en" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">About APG Patterns Examples</h1>
+    <p class="text-muted-foreground text-lg">
+      Accessible UI component implementations across React, Vue, Svelte, and Astro following
+      WAI-ARIA APG patterns
+    </p>
+  </header>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Overview</h2>
-      <div class="text-muted-foreground space-y-4">
-        <p>
-          This project provides accessible UI components and test cases that follow the
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA Authoring Practices Guide (APG)
-          </a>
-          patterns.
-        </p>
-        <p>
-          Each component is implemented across four major frontend frameworks: <strong>React</strong
-          >, <strong>Vue</strong>, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components),
-          providing familiar implementation examples to help you learn about accessibility and WAI-ARIA.
-        </p>
-        <p>
-          Each component includes tests to verify APG pattern compliance, which you can use directly
-          to ensure accessibility of your own components. The test documentation is also designed in
-          an AI-friendly format, making it easy to generate test cases.
-        </p>
-        <p>
-          Additionally, we provide styling that supports dark mode, high contrast mode, and forced
-          colors mode to further assist in developing accessible components.
-        </p>
-      </div>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Pattern Coverage</h2>
-      <div class="text-muted-foreground space-y-4">
-        <p>
-          This project provides implementations for <strong>all 30 patterns</strong> defined in the
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA APG
-          </a>, plus 2 additional patterns (Toggle Button and Data Grid) — <strong
-            >32 patterns in total</strong
-          >.
-        </p>
-        <p>
-          Each pattern is implemented across all four frameworks: <strong>React</strong>, <strong
-            >Vue</strong
-          >, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components).
-        </p>
-      </div>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Styling</h2>
-      <ul class="text-muted-foreground list-inside list-disc space-y-2">
-        <li>High contrast mode support</li>
-        <li>Reduced motion preferences support</li>
-        <li>Forced colors mode support</li>
-      </ul>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
-      <p class="text-muted-foreground mb-4">
-        We welcome contributions! Please see our
+  <section class="mb-12">
+    <h2 id="overview" class="mb-4 text-2xl font-semibold">Overview</h2>
+    <div class="text-muted-foreground space-y-4">
+      <p>
+        This project provides accessible UI components and test cases that follow the
         <a
-          href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/"
           target="_blank"
           rel="noopener noreferrer"
           class="text-primary hover:underline"
         >
-          Contributing Guide
+          WAI-ARIA Authoring Practices Guide (APG)
         </a>
-        for details.
+        patterns.
       </p>
-    </section>
+      <p>
+        Each component is implemented across four major frontend frameworks: <strong>React</strong>, <strong
+          >Vue</strong
+        >, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components), providing familiar implementation
+        examples to help you learn about accessibility and WAI-ARIA.
+      </p>
+      <p>
+        Each component includes tests to verify APG pattern compliance, which you can use directly
+        to ensure accessibility of your own components. The test documentation is also designed in
+        an AI-friendly format, making it easy to generate test cases.
+      </p>
+      <p>
+        Additionally, we provide styling that supports dark mode, high contrast mode, and forced
+        colors mode to further assist in developing accessible components.
+      </p>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">Links</h2>
-      <ul class="text-muted-foreground list-inside list-disc space-y-2">
-        <li>
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA Authoring Practices Guide
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            GitHub Repository
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            Issue Tracker
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples/discussions"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            Discussions
-          </a>
-        </li>
-      </ul>
-    </section>
-  </div>
-</BaseLayout>
+  <section class="mb-12">
+    <h2 id="pattern-coverage" class="mb-4 text-2xl font-semibold">Pattern Coverage</h2>
+    <div class="text-muted-foreground space-y-4">
+      <p>
+        This project provides implementations for <strong>all 30 patterns</strong> defined in the
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG
+        </a>, plus 2 additional patterns (Toggle Button and Data Grid) — <strong
+          >32 patterns in total</strong
+        >.
+      </p>
+      <p>
+        Each pattern is implemented across all four frameworks: <strong>React</strong>, <strong
+          >Vue</strong
+        >, <strong>Svelte</strong>, and <strong>Astro</strong> (Web Components).
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="styling" class="mb-4 text-2xl font-semibold">Styling</h2>
+    <ul class="text-muted-foreground list-inside list-disc space-y-2">
+      <li>High contrast mode support</li>
+      <li>Reduced motion preferences support</li>
+      <li>Forced colors mode support</li>
+    </ul>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="contributing" class="mb-4 text-2xl font-semibold">Contributing</h2>
+    <p class="text-muted-foreground mb-4">
+      We welcome contributions! Please see our
+      <a
+        href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline"
+      >
+        Contributing Guide
+      </a>
+      for details.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="links" class="mb-4 text-2xl font-semibold">Links</h2>
+    <ul class="text-muted-foreground list-inside list-disc space-y-2">
+      <li>
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA Authoring Practices Guide
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          GitHub Repository
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          Issue Tracker
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples/discussions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          Discussions
+        </a>
+      </li>
+    </ul>
+  </section>
+</DocLayout>

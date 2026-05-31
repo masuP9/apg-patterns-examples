@@ -1,4 +1,5 @@
 ---
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { feedAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
@@ -140,4 +141,6 @@ const commandsText = commands
   {/* prettier-ignore */}
   <pre
     class="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm dark:bg-gray-800"><code>{commandsText}</code></pre>
+
+  <TestingStrategyLink locale={locale} />
 </Prose>

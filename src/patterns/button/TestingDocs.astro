@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '@/i18n';
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { localize, createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
 import { buttonAccessibilityData } from './accessibility-data';
@@ -23,7 +24,6 @@ const sectionTitles = {
     strategy: 'Testing Strategy',
     categories: 'Test Categories',
     tools: 'Testing Tools',
-    docLink: 'for full documentation.',
   },
   ja: {
     intro:
@@ -31,7 +31,6 @@ const sectionTitles = {
     strategy: 'テスト戦略',
     categories: 'テストカテゴリ',
     tools: 'テストツール',
-    docLink: 'を参照してください。',
   },
 };
 
@@ -136,15 +135,7 @@ const priorityLabels: Record<string, Record<string, string>> = {
         ))}
       </ul>
 
-      {testing.documentationLink && (
-        <p class="text-muted-foreground text-sm">
-          {locale === 'ja' ? '詳細なドキュメントは' : 'See '}
-          <ExternalLink href={testing.documentationLink} class="text-primary hover:underline">
-            testing-strategy.md
-          </ExternalLink>
-          {titles.docLink}
-        </p>
-      )}
+      <TestingStrategyLink locale={locale} />
     </Prose>
   )
 }

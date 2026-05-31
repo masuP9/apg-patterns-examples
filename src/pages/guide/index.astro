@@ -1,474 +1,469 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import DocLayout from '../../layouts/DocLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
+import type { TocItem } from '@/components/ui/toc';
+
+const tocItems: TocItem[] = [
+  { id: 'ai-code-assistants', text: 'Using with AI Code Assistants' },
+  { id: 'available-patterns', text: 'Available Patterns' },
+  { id: 'direct-links', text: 'Direct Links to Pattern Definitions' },
+  { id: 'contributing', text: 'Contributing' },
+];
 ---
 
-<BaseLayout title="Guide">
-  <div class="mx-auto max-w-3xl">
-    <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">Guide</h1>
-      <p class="text-muted-foreground text-lg">
-        How to use APG Patterns Examples for building accessible components.
-      </p>
-    </header>
+<DocLayout title="Guide" locale="en" tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">Guide</h1>
+    <p class="text-muted-foreground text-lg">
+      How to use APG Patterns Examples for building accessible components.
+    </p>
+  </header>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Using with AI Code Assistants</h2>
-      <p class="text-muted-foreground mb-4">
-        Each pattern includes an AI-friendly definition file (<code
-          class="bg-muted rounded px-1.5 py-0.5 text-sm">{'{pattern}.md'}</code
-        >) that can be used as context when implementing similar components with AI coding
-        assistants like Claude, Cursor, or GitHub Copilot.
-      </p>
+  <section class="mb-12">
+    <h2 id="ai-code-assistants" class="mb-4 text-2xl font-semibold">
+      Using with AI Code Assistants
+    </h2>
+    <p class="text-muted-foreground mb-4">
+      Each pattern includes an AI-friendly definition file (<code
+        class="bg-muted rounded px-1.5 py-0.5 text-sm">{'{pattern}.md'}</code
+      >) that can be used as context when implementing similar components with AI coding assistants
+      like Claude, Cursor, or GitHub Copilot.
+    </p>
 
-      <h3 class="mt-6 mb-3 text-xl font-medium">What's included in definition files</h3>
-      <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-        <li>ARIA roles, properties, and states requirements</li>
-        <li>Keyboard interaction specifications</li>
-        <li>Focus management rules</li>
-        <li>Test checklist for verification</li>
-        <li>Example test code snippets</li>
-      </ul>
+    <h3 class="mt-6 mb-3 text-xl font-medium">What's included in definition files</h3>
+    <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+      <li>ARIA roles, properties, and states requirements</li>
+      <li>Keyboard interaction specifications</li>
+      <li>Focus management rules</li>
+      <li>Test checklist for verification</li>
+      <li>Example test code snippets</li>
+    </ul>
 
-      <h3 class="mt-6 mb-3 text-xl font-medium">How to use</h3>
+    <h3 class="mt-6 mb-3 text-xl font-medium">How to use</h3>
 
-      <div class="space-y-6">
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">1. Copy & paste into prompt</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            Copy the content and include it in your prompt when asking AI to implement a component.
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>Implement a Tabs component in Angular following this specification:
+    <div class="space-y-6">
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">1. Copy & paste into prompt</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          Copy the content and include it in your prompt when asking AI to implement a component.
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>Implement a Tabs component in Angular following this specification:
 
 [paste definition file content here]</code></pre>
-          </div>
         </div>
+      </div>
 
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">2. Add to project context</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            For Claude Code or Cursor, place definition files in your project for automatic context.
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>my-project/
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">2. Add to project context</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          For Claude Code or Cursor, place definition files in your project for automatic context.
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>my-project/
 ├── .ai/
 │   └── apg-patterns/
 │       ├── tabs.md
 │       ├── dialog.md
 │       └── accordion.md
 └── src/</code></pre>
-          </div>
         </div>
+      </div>
 
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">3. Use for test generation</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            The test checklist helps AI generate comprehensive accessibility tests.
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>Generate Jest tests for my Tabs component based on this checklist:
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">3. Use for test generation</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          The test checklist helps AI generate comprehensive accessibility tests.
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>Generate Jest tests for my Tabs component based on this checklist:
 
 ## Test Checklist
 - [ ] ArrowRight moves to next tab
 - [ ] Selected tab has aria-selected="true"
 - [ ] Only selected tab has tabIndex="0"</code></pre>
-          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Available Patterns</h2>
-      <p class="text-muted-foreground mb-4">All 28 patterns have AI-friendly definition files:</p>
-      <div class="grid gap-4 md:grid-cols-2">
-        <Tile variant="floating" href={withBase('/patterns/accordion/react/')}>
-          <TileContent>
-            <TileTitle>Accordion</TileTitle>
-            <TileDescription>
-              Vertically stacked headings that reveal content sections.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/alert/react/')}>
-          <TileContent>
-            <TileTitle>Alert</TileTitle>
-            <TileDescription> Live region for important, time-sensitive messages. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/alert-dialog/react/')}>
-          <TileContent>
-            <TileTitle>Alert Dialog</TileTitle>
-            <TileDescription>
-              Modal dialog requiring user response with accessible focus management.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/breadcrumb/react/')}>
-          <TileContent>
-            <TileTitle>Breadcrumb</TileTitle>
-            <TileDescription>
-              Navigation trail showing page location in hierarchy.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/button/react/')}>
-          <TileContent>
-            <TileTitle>Toggle Button</TileTitle>
-            <TileDescription>
-              Two-state button with aria-pressed for toggle actions.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/carousel/react/')}>
-          <TileContent>
-            <TileTitle>Carousel</TileTitle>
-            <TileDescription>
-              Rotating content with accessible navigation controls.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/checkbox/react/')}>
-          <TileContent>
-            <TileTitle>Checkbox</TileTitle>
-            <TileDescription> Single checkbox with optional tri-state support. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/combobox/react/')}>
-          <TileContent>
-            <TileTitle>Combobox</TileTitle>
-            <TileDescription>
-              Text input with dropdown suggestions and autocomplete.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/dialog/react/')}>
-          <TileContent>
-            <TileTitle>Dialog</TileTitle>
-            <TileDescription> Modal window with focus trap and keyboard support. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/disclosure/react/')}>
-          <TileContent>
-            <TileTitle>Disclosure</TileTitle>
-            <TileDescription> Simple show/hide toggle for content visibility. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/feed/react/')}>
-          <TileContent>
-            <TileTitle>Feed</TileTitle>
-            <TileDescription>
-              Scrollable list of articles with accessible navigation.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/grid/react/')}>
-          <TileContent>
-            <TileTitle>Grid</TileTitle>
-            <TileDescription> Interactive grid with keyboard navigation support. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/landmarks/react/')}>
-          <TileContent>
-            <TileTitle>Landmarks</TileTitle>
-            <TileDescription> Page regions for assistive technology navigation. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/link/react/')}>
-          <TileContent>
-            <TileTitle>Link</TileTitle>
-            <TileDescription> Accessible links with proper semantics and states. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/listbox/react/')}>
-          <TileContent>
-            <TileTitle>Listbox</TileTitle>
-            <TileDescription>
-              Selection widget with single and multi-select modes.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/menu-button/react/')}>
-          <TileContent>
-            <TileTitle>Menu Button</TileTitle>
-            <TileDescription>
-              Button that opens a menu with accessible keyboard support.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/menubar/react/')}>
-          <TileContent>
-            <TileTitle>Menubar</TileTitle>
-            <TileDescription>
-              Horizontal menu with submenus and keyboard navigation.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/meter/react/')}>
-          <TileContent>
-            <TileTitle>Meter</TileTitle>
-            <TileDescription> Visual indicator of a value within a known range. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/radio/react/')}>
-          <TileContent>
-            <TileTitle>Radio Group</TileTitle>
-            <TileDescription> Single selection from mutually exclusive options. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/slider/react/')}>
-          <TileContent>
-            <TileTitle>Slider</TileTitle>
-            <TileDescription> Input for selecting a value from a range. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/spinbutton/react/')}>
-          <TileContent>
-            <TileTitle>Spinbutton</TileTitle>
-            <TileDescription> Numeric input with increment/decrement controls. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/switch/react/')}>
-          <TileContent>
-            <TileTitle>Switch</TileTitle>
-            <TileDescription> On/off toggle with aria-checked state. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/table/react/')}>
-          <TileContent>
-            <TileTitle>Table</TileTitle>
-            <TileDescription> Data table with proper headers and structure. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/tabs/react/')}>
-          <TileContent>
-            <TileTitle>Tabs</TileTitle>
-            <TileDescription> Layered content sections with roving tabindex. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/toolbar/react/')}>
-          <TileContent>
-            <TileTitle>Toolbar</TileTitle>
-            <TileDescription>
-              Container for grouped controls with arrow key navigation.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/tooltip/react/')}>
-          <TileContent>
-            <TileTitle>Tooltip</TileTitle>
-            <TileDescription> Contextual popup for element descriptions. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/treegrid/react/')}>
-          <TileContent>
-            <TileTitle>Treegrid</TileTitle>
-            <TileDescription> Grid with expandable rows and tree-like hierarchy. </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/treeview/react/')}>
-          <TileContent>
-            <TileTitle>Tree View</TileTitle>
-            <TileDescription>
-              Hierarchical list with expandable/collapsible nodes.
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/patterns/windowsplitter/react/')}>
-          <TileContent>
-            <TileTitle>Window Splitter</TileTitle>
-            <TileDescription> Resizable panes with keyboard-accessible separator. </TileDescription>
-          </TileContent>
-        </Tile>
-      </div>
-    </section>
+  <section class="mb-12">
+    <h2 id="available-patterns" class="mb-4 text-2xl font-semibold">Available Patterns</h2>
+    <p class="text-muted-foreground mb-4">All 28 patterns have AI-friendly definition files:</p>
+    <div class="grid gap-4 md:grid-cols-2">
+      <Tile variant="floating" href={withBase('/patterns/accordion/react/')}>
+        <TileContent>
+          <TileTitle>Accordion</TileTitle>
+          <TileDescription>
+            Vertically stacked headings that reveal content sections.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/alert/react/')}>
+        <TileContent>
+          <TileTitle>Alert</TileTitle>
+          <TileDescription> Live region for important, time-sensitive messages. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/alert-dialog/react/')}>
+        <TileContent>
+          <TileTitle>Alert Dialog</TileTitle>
+          <TileDescription>
+            Modal dialog requiring user response with accessible focus management.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/breadcrumb/react/')}>
+        <TileContent>
+          <TileTitle>Breadcrumb</TileTitle>
+          <TileDescription> Navigation trail showing page location in hierarchy. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/button/react/')}>
+        <TileContent>
+          <TileTitle>Toggle Button</TileTitle>
+          <TileDescription>
+            Two-state button with aria-pressed for toggle actions.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/carousel/react/')}>
+        <TileContent>
+          <TileTitle>Carousel</TileTitle>
+          <TileDescription> Rotating content with accessible navigation controls. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/checkbox/react/')}>
+        <TileContent>
+          <TileTitle>Checkbox</TileTitle>
+          <TileDescription> Single checkbox with optional tri-state support. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/combobox/react/')}>
+        <TileContent>
+          <TileTitle>Combobox</TileTitle>
+          <TileDescription>
+            Text input with dropdown suggestions and autocomplete.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/dialog/react/')}>
+        <TileContent>
+          <TileTitle>Dialog</TileTitle>
+          <TileDescription> Modal window with focus trap and keyboard support. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/disclosure/react/')}>
+        <TileContent>
+          <TileTitle>Disclosure</TileTitle>
+          <TileDescription> Simple show/hide toggle for content visibility. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/feed/react/')}>
+        <TileContent>
+          <TileTitle>Feed</TileTitle>
+          <TileDescription>
+            Scrollable list of articles with accessible navigation.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/grid/react/')}>
+        <TileContent>
+          <TileTitle>Grid</TileTitle>
+          <TileDescription> Interactive grid with keyboard navigation support. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/landmarks/react/')}>
+        <TileContent>
+          <TileTitle>Landmarks</TileTitle>
+          <TileDescription> Page regions for assistive technology navigation. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/link/react/')}>
+        <TileContent>
+          <TileTitle>Link</TileTitle>
+          <TileDescription> Accessible links with proper semantics and states. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/listbox/react/')}>
+        <TileContent>
+          <TileTitle>Listbox</TileTitle>
+          <TileDescription> Selection widget with single and multi-select modes. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/menu-button/react/')}>
+        <TileContent>
+          <TileTitle>Menu Button</TileTitle>
+          <TileDescription>
+            Button that opens a menu with accessible keyboard support.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/menubar/react/')}>
+        <TileContent>
+          <TileTitle>Menubar</TileTitle>
+          <TileDescription>
+            Horizontal menu with submenus and keyboard navigation.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/meter/react/')}>
+        <TileContent>
+          <TileTitle>Meter</TileTitle>
+          <TileDescription> Visual indicator of a value within a known range. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/radio/react/')}>
+        <TileContent>
+          <TileTitle>Radio Group</TileTitle>
+          <TileDescription> Single selection from mutually exclusive options. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/slider/react/')}>
+        <TileContent>
+          <TileTitle>Slider</TileTitle>
+          <TileDescription> Input for selecting a value from a range. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/spinbutton/react/')}>
+        <TileContent>
+          <TileTitle>Spinbutton</TileTitle>
+          <TileDescription> Numeric input with increment/decrement controls. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/switch/react/')}>
+        <TileContent>
+          <TileTitle>Switch</TileTitle>
+          <TileDescription> On/off toggle with aria-checked state. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/table/react/')}>
+        <TileContent>
+          <TileTitle>Table</TileTitle>
+          <TileDescription> Data table with proper headers and structure. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/tabs/react/')}>
+        <TileContent>
+          <TileTitle>Tabs</TileTitle>
+          <TileDescription> Layered content sections with roving tabindex. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/toolbar/react/')}>
+        <TileContent>
+          <TileTitle>Toolbar</TileTitle>
+          <TileDescription>
+            Container for grouped controls with arrow key navigation.
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/tooltip/react/')}>
+        <TileContent>
+          <TileTitle>Tooltip</TileTitle>
+          <TileDescription> Contextual popup for element descriptions. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/treegrid/react/')}>
+        <TileContent>
+          <TileTitle>Treegrid</TileTitle>
+          <TileDescription> Grid with expandable rows and tree-like hierarchy. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/treeview/react/')}>
+        <TileContent>
+          <TileTitle>Tree View</TileTitle>
+          <TileDescription> Hierarchical list with expandable/collapsible nodes. </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/patterns/windowsplitter/react/')}>
+        <TileContent>
+          <TileTitle>Window Splitter</TileTitle>
+          <TileDescription> Resizable panes with keyboard-accessible separator. </TileDescription>
+        </TileContent>
+      </Tile>
+    </div>
+  </section>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">Direct Links to Pattern Definitions</h2>
-      <p class="text-muted-foreground mb-4">
-        Copy these URLs directly or fetch them with AI tools:
-      </p>
-      <div class="bg-muted rounded-md p-4">
-        <ul class="space-y-1 text-sm">
-          <li>
-            <a
-              href={withBase('/patterns/accordion/accordion.md')}
-              class="text-primary hover:underline">/patterns/accordion/accordion.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/alert/alert.md')} class="text-primary hover:underline"
-              >/patterns/alert/alert.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/alert-dialog/alert-dialog.md')}
-              class="text-primary hover:underline">/patterns/alert-dialog/alert-dialog.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/breadcrumb/breadcrumb.md')}
-              class="text-primary hover:underline">/patterns/breadcrumb/breadcrumb.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/button/button.md')} class="text-primary hover:underline"
-              >/patterns/button/button.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/carousel/carousel.md')}
-              class="text-primary hover:underline">/patterns/carousel/carousel.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/checkbox/checkbox.md')}
-              class="text-primary hover:underline">/patterns/checkbox/checkbox.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/combobox/combobox.md')}
-              class="text-primary hover:underline">/patterns/combobox/combobox.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/dialog/dialog.md')} class="text-primary hover:underline"
-              >/patterns/dialog/dialog.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/disclosure/disclosure.md')}
-              class="text-primary hover:underline">/patterns/disclosure/disclosure.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/feed/feed.md')} class="text-primary hover:underline"
-              >/patterns/feed/feed.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/grid/grid.md')} class="text-primary hover:underline"
-              >/patterns/grid/grid.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/landmarks/landmarks.md')}
-              class="text-primary hover:underline">/patterns/landmarks/landmarks.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/link/link.md')} class="text-primary hover:underline"
-              >/patterns/link/link.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/listbox/listbox.md')} class="text-primary hover:underline"
-              >/patterns/listbox/listbox.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/menu-button/menu-button.md')}
-              class="text-primary hover:underline">/patterns/menu-button/menu-button.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/menubar/menubar.md')} class="text-primary hover:underline"
-              >/patterns/menubar/menubar.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/meter/meter.md')} class="text-primary hover:underline"
-              >/patterns/meter/meter.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/radio/radio.md')} class="text-primary hover:underline"
-              >/patterns/radio/radio.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/slider/slider.md')} class="text-primary hover:underline"
-              >/patterns/slider/slider.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/spinbutton/spinbutton.md')}
-              class="text-primary hover:underline">/patterns/spinbutton/spinbutton.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/switch/switch.md')} class="text-primary hover:underline"
-              >/patterns/switch/switch.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/table/table.md')} class="text-primary hover:underline"
-              >/patterns/table/table.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/tabs/tabs.md')} class="text-primary hover:underline"
-              >/patterns/tabs/tabs.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/toolbar/toolbar.md')} class="text-primary hover:underline"
-              >/patterns/toolbar/toolbar.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/patterns/tooltip/tooltip.md')} class="text-primary hover:underline"
-              >/patterns/tooltip/tooltip.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/treegrid/treegrid.md')}
-              class="text-primary hover:underline">/patterns/treegrid/treegrid.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/treeview/treeview.md')}
-              class="text-primary hover:underline">/patterns/treeview/treeview.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/patterns/windowsplitter/windowsplitter.md')}
-              class="text-primary hover:underline">/patterns/windowsplitter/windowsplitter.md</a
-            >
-          </li>
-        </ul>
-      </div>
-    </section>
+  <section class="mb-12">
+    <h2 id="direct-links" class="mb-4 text-2xl font-semibold">
+      Direct Links to Pattern Definitions
+    </h2>
+    <p class="text-muted-foreground mb-4">Copy these URLs directly or fetch them with AI tools:</p>
+    <div class="bg-muted rounded-md p-4">
+      <ul class="space-y-1 text-sm">
+        <li>
+          <a
+            href={withBase('/patterns/accordion/accordion.md')}
+            class="text-primary hover:underline">/patterns/accordion/accordion.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/alert/alert.md')} class="text-primary hover:underline"
+            >/patterns/alert/alert.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/alert-dialog/alert-dialog.md')}
+            class="text-primary hover:underline">/patterns/alert-dialog/alert-dialog.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/breadcrumb/breadcrumb.md')}
+            class="text-primary hover:underline">/patterns/breadcrumb/breadcrumb.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/button/button.md')} class="text-primary hover:underline"
+            >/patterns/button/button.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/carousel/carousel.md')} class="text-primary hover:underline"
+            >/patterns/carousel/carousel.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/checkbox/checkbox.md')} class="text-primary hover:underline"
+            >/patterns/checkbox/checkbox.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/combobox/combobox.md')} class="text-primary hover:underline"
+            >/patterns/combobox/combobox.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/dialog/dialog.md')} class="text-primary hover:underline"
+            >/patterns/dialog/dialog.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/disclosure/disclosure.md')}
+            class="text-primary hover:underline">/patterns/disclosure/disclosure.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/feed/feed.md')} class="text-primary hover:underline"
+            >/patterns/feed/feed.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/grid/grid.md')} class="text-primary hover:underline"
+            >/patterns/grid/grid.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/landmarks/landmarks.md')}
+            class="text-primary hover:underline">/patterns/landmarks/landmarks.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/link/link.md')} class="text-primary hover:underline"
+            >/patterns/link/link.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/listbox/listbox.md')} class="text-primary hover:underline"
+            >/patterns/listbox/listbox.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/menu-button/menu-button.md')}
+            class="text-primary hover:underline">/patterns/menu-button/menu-button.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/menubar/menubar.md')} class="text-primary hover:underline"
+            >/patterns/menubar/menubar.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/meter/meter.md')} class="text-primary hover:underline"
+            >/patterns/meter/meter.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/radio/radio.md')} class="text-primary hover:underline"
+            >/patterns/radio/radio.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/slider/slider.md')} class="text-primary hover:underline"
+            >/patterns/slider/slider.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/spinbutton/spinbutton.md')}
+            class="text-primary hover:underline">/patterns/spinbutton/spinbutton.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/switch/switch.md')} class="text-primary hover:underline"
+            >/patterns/switch/switch.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/table/table.md')} class="text-primary hover:underline"
+            >/patterns/table/table.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/tabs/tabs.md')} class="text-primary hover:underline"
+            >/patterns/tabs/tabs.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/toolbar/toolbar.md')} class="text-primary hover:underline"
+            >/patterns/toolbar/toolbar.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/tooltip/tooltip.md')} class="text-primary hover:underline"
+            >/patterns/tooltip/tooltip.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/treegrid/treegrid.md')} class="text-primary hover:underline"
+            >/patterns/treegrid/treegrid.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/patterns/treeview/treeview.md')} class="text-primary hover:underline"
+            >/patterns/treeview/treeview.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/patterns/windowsplitter/windowsplitter.md')}
+            class="text-primary hover:underline">/patterns/windowsplitter/windowsplitter.md</a
+          >
+        </li>
+      </ul>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">Contributing</h2>
-      <p class="text-muted-foreground">
-        Help us add more AI-friendly definitions! Visit our
-        <a
-          href="https://github.com/masuP9/apg-patterns-examples"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary hover:underline"
-        >
-          GitHub repository
-        </a> to contribute.
-      </p>
-    </section>
-  </div>
-</BaseLayout>
+  <section>
+    <h2 id="contributing" class="mb-4 text-2xl font-semibold">Contributing</h2>
+    <p class="text-muted-foreground">
+      Help us add more AI-friendly definitions! Visit our
+      <a
+        href="https://github.com/masuP9/apg-patterns-examples"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline"
+      >
+        GitHub repository
+      </a> to contribute.
+    </p>
+  </section>
+</DocLayout>

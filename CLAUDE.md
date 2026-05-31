@@ -85,17 +85,36 @@ src/
 
 ## 内部ドキュメント
 
-| ファイル                                                             | 内容                                            | 参照タイミング |
-| -------------------------------------------------------------------- | ----------------------------------------------- | -------------- |
-| [CODING_RULES.md](CODING_RULES.md)                                   | コーディングスタイル規約                        | コード実装時   |
-| [.internal/site-specification.md](.internal/site-specification.md)   | サイト仕様書（技術選定、URL設計、実装方針）     | 実装時         |
-| [.internal/testing-strategy.md](.internal/testing-strategy.md)       | テスト設計方針（DAMP原則、APG準拠テストの観点） | テスト実装時   |
-| [.internal/architecture-review.md](.internal/architecture-review.md) | アーキテクチャレビュー（現状課題、改善選択肢）  | 参考資料       |
-| [.internal/llm-md-template.md](.internal/llm-md-template.md)         | AI向け定義ファイル（llm.md）のテンプレート      | パターン追加時 |
+| ファイル                                                               | 内容                                                       | 参照タイミング   |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------- |
+| [CODING_RULES.md](CODING_RULES.md)                                     | コーディングスタイル規約                                   | コード実装時     |
+| [.internal/site-specification.md](.internal/site-specification.md)     | サイト仕様書（技術選定、URL設計、実装方針）                | 実装時           |
+| [src/testing-strategy/content.mdx](src/testing-strategy/content.mdx) / [content.ja.mdx](src/testing-strategy/content.ja.mdx) | テスト設計方針（DAMP原則、APG準拠テストの観点）。サイト内ページ `/testing-strategy/` として公開され、各パターンの `TestingDocs.astro` からリンクされる真実源 | テスト実装時     |
+| [.internal/pattern-planning-prompt.md](.internal/pattern-planning-prompt.md) | パターン実装計画を策定するためのプロンプト                 | 計画策定時       |
+| [.internal/page-template.md](.internal/page-template.md)               | パターンページ作成チェックリスト・テンプレート             | パターン追加時   |
+| [.internal/llm-md-template.md](.internal/llm-md-template.md)           | AI向け定義ファイル（`{pattern}.md` / `{pattern}.ja.md`）の構造リファレンス | パターン追加時   |
+
+> 過去の実装計画は [.internal/plans/completed/](.internal/plans/completed/) にアーカイブされている。
 
 ---
 
 ## 開発ガイド
+
+### ページ実装方式の選択
+
+ページは目的に応じて2系統を使い分ける（詳細・正本は [.internal/site-specification.md](.internal/site-specification.md) の「ページ実装方式の判断基準」を参照）。
+
+| ページ種別                                                  | 実装方式                          |
+| ----------------------------------------------------------- | --------------------------------- |
+| 線形ドキュメント（散文・TOC が有用。例: testing-strategy）   | MDX + `DocLayout` + `Prose`       |
+| カード・一覧でページ内 TOC が有用（例: guide, about）        | `.astro` + `DocLayout`（`tocItems` 手動定義） |
+| Practice 詳細                                               | MDX + `PracticeLayout` + `Prose`  |
+| ランディング・一覧で TOC 不要（例: top, patterns 一覧）      | `.astro` + `BaseLayout`           |
+| パターン詳細                                                | 既存の動的 `.astro`               |
+
+- 一覧は手書きせず `getPatterns()` 等のデータ源から生成する（件数もハードコードしない）
+- MDX にサイト UI を組み立てすぎない（UI 中心なら `.astro` を使う）
+- `DocLayout`（サイドバーなし汎用文書）と `PracticeLayout`（practice 専用）は責務が異なるため統合しない
 
 ### コンポーネント設計原則
 

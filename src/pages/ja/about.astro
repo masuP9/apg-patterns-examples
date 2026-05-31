@@ -1,144 +1,151 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import DocLayout from '../../layouts/DocLayout.astro';
+import type { TocItem } from '@/components/ui/toc';
 
 const locale = 'ja';
+
+const tocItems: TocItem[] = [
+  { id: 'overview', text: '概要' },
+  { id: 'pattern-coverage', text: 'パターン対応状況' },
+  { id: 'styling', text: 'スタイリング' },
+  { id: 'contributing', text: 'コントリビューション' },
+  { id: 'links', text: 'リンク' },
+];
 ---
 
-<BaseLayout title="このサイトについて" locale={locale}>
-  <div class="mx-auto max-w-3xl">
-    <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">APG パターン実装例について</h1>
-      <p class="text-muted-foreground text-lg">
-        WAI-ARIA APG パターンに準拠した、React、Vue、Svelte、Astro で実装されたアクセシブルな UI
-        コンポーネント
-      </p>
-    </header>
+<DocLayout title="このサイトについて" locale={locale} tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">APG パターン実装例について</h1>
+    <p class="text-muted-foreground text-lg">
+      WAI-ARIA APG パターンに準拠した、React、Vue、Svelte、Astro で実装されたアクセシブルな UI
+      コンポーネント
+    </p>
+  </header>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">概要</h2>
-      <div class="text-muted-foreground space-y-4">
-        <p>
-          このプロジェクトでは、
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA Authoring Practices Guide（APG）
-          </a>
-          パターンに準拠したアクセシブルな UI コンポーネントとテストケースを提供しています。
-        </p>
-        <p>
-          各コンポーネントは <strong>React</strong>、<strong>Vue</strong>、<strong>Svelte</strong
-          >、<strong>Astro</strong>（Web Components）の 4
-          つの主要フロントエンドフレームワークで実装されており、アクセシビリティと WAI-ARIA
-          を学ぶための実装例を提供しています。
-        </p>
-        <p>
-          各コンポーネントには APG
-          パターンへの準拠を検証するテストが含まれています。これらのテストを活用することで、あなた自身のコンポーネントのアクセシビリティを確認できます。また、テストドキュメントは
-          AI フレンドリーなフォーマットで設計されており、テストケースの生成が容易です。
-        </p>
-        <p>
-          さらに、ダークモード、ハイコントラストモード、強制カラーモードをサポートしたスタイリングを提供し、アクセシブルなコンポーネント開発をより一層支援します。
-        </p>
-      </div>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">パターン対応状況</h2>
-      <div class="text-muted-foreground space-y-4">
-        <p>
-          このプロジェクトでは、
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/patterns/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA APG
-          </a>
-          で定義されている<strong>全 30 パターン</strong>に加え、2 つの追加パターン（Toggle
-          Button、Data Grid）を実装しています — <strong>合計 32 パターン</strong>。
-        </p>
-        <p>
-          各パターンは <strong>React</strong>、<strong>Vue</strong>、<strong>Svelte</strong
-          >、<strong>Astro</strong>（Web Components）の 4
-          つのフレームワークすべてで実装されています。
-        </p>
-      </div>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">スタイリング</h2>
-      <ul class="text-muted-foreground list-inside list-disc space-y-2">
-        <li>ハイコントラストモード対応</li>
-        <li>視覚効果軽減設定（prefers-reduced-motion）対応</li>
-        <li>強制カラーモード対応</li>
-      </ul>
-    </section>
-
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">コントリビューション</h2>
-      <p class="text-muted-foreground mb-4">
-        コントリビューションを歓迎します！詳細は
+  <section class="mb-12">
+    <h2 id="overview" class="mb-4 text-2xl font-semibold">概要</h2>
+    <div class="text-muted-foreground space-y-4">
+      <p>
+        このプロジェクトでは、
         <a
-          href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/"
           target="_blank"
           rel="noopener noreferrer"
           class="text-primary hover:underline"
         >
-          コントリビューションガイド
+          WAI-ARIA Authoring Practices Guide（APG）
         </a>
-        をご覧ください。
+        パターンに準拠したアクセシブルな UI コンポーネントとテストケースを提供しています。
       </p>
-    </section>
+      <p>
+        各コンポーネントは <strong>React</strong>、<strong>Vue</strong>、<strong>Svelte</strong
+        >、<strong>Astro</strong>（Web Components）の 4
+        つの主要フロントエンドフレームワークで実装されており、アクセシビリティと WAI-ARIA
+        を学ぶための実装例を提供しています。
+      </p>
+      <p>
+        各コンポーネントには APG
+        パターンへの準拠を検証するテストが含まれています。これらのテストを活用することで、あなた自身のコンポーネントのアクセシビリティを確認できます。また、テストドキュメントは
+        AI フレンドリーなフォーマットで設計されており、テストケースの生成が容易です。
+      </p>
+      <p>
+        さらに、ダークモード、ハイコントラストモード、強制カラーモードをサポートしたスタイリングを提供し、アクセシブルなコンポーネント開発をより一層支援します。
+      </p>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">リンク</h2>
-      <ul class="text-muted-foreground list-inside list-disc space-y-2">
-        <li>
-          <a
-            href="https://www.w3.org/WAI/ARIA/apg/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            WAI-ARIA Authoring Practices Guide
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            GitHub リポジトリ
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            Issue トラッカー
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/masuP9/apg-patterns-examples/discussions"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline"
-          >
-            ディスカッション
-          </a>
-        </li>
-      </ul>
-    </section>
-  </div>
-</BaseLayout>
+  <section class="mb-12">
+    <h2 id="pattern-coverage" class="mb-4 text-2xl font-semibold">パターン対応状況</h2>
+    <div class="text-muted-foreground space-y-4">
+      <p>
+        このプロジェクトでは、
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/patterns/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA APG
+        </a>
+        で定義されている<strong>全 30 パターン</strong>に加え、2 つの追加パターン（Toggle
+        Button、Data Grid）を実装しています — <strong>合計 32 パターン</strong>。
+      </p>
+      <p>
+        各パターンは <strong>React</strong>、<strong>Vue</strong>、<strong>Svelte</strong>、<strong
+          >Astro</strong
+        >（Web Components）の 4 つのフレームワークすべてで実装されています。
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="styling" class="mb-4 text-2xl font-semibold">スタイリング</h2>
+    <ul class="text-muted-foreground list-inside list-disc space-y-2">
+      <li>ハイコントラストモード対応</li>
+      <li>視覚効果軽減設定（prefers-reduced-motion）対応</li>
+      <li>強制カラーモード対応</li>
+    </ul>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="contributing" class="mb-4 text-2xl font-semibold">コントリビューション</h2>
+    <p class="text-muted-foreground mb-4">
+      コントリビューションを歓迎します！詳細は
+      <a
+        href="https://github.com/masuP9/apg-patterns-examples/blob/main/CONTRIBUTING.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline"
+      >
+        コントリビューションガイド
+      </a>
+      をご覧ください。
+    </p>
+  </section>
+
+  <section>
+    <h2 id="links" class="mb-4 text-2xl font-semibold">リンク</h2>
+    <ul class="text-muted-foreground list-inside list-disc space-y-2">
+      <li>
+        <a
+          href="https://www.w3.org/WAI/ARIA/apg/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          WAI-ARIA Authoring Practices Guide
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          GitHub リポジトリ
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          Issue トラッカー
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/masuP9/apg-patterns-examples/discussions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary hover:underline"
+        >
+          ディスカッション
+        </a>
+      </li>
+    </ul>
+  </section>
+</DocLayout>

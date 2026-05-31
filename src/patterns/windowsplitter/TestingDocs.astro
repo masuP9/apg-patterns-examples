@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { windowSplitterAccessibilityData } from './accessibility-data';
 import { localize } from '@/lib/pattern-data/i18n';
@@ -154,4 +155,6 @@ npm run test:e2e:ui -- windowsplitter.spec.ts</code></pre>
       ))
     }
   </ul>
+
+  <TestingStrategyLink locale={locale} />
 </Prose>

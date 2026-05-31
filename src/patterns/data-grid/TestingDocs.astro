@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import { dataGridAccessibilityData } from './accessibility-data';
 import { createTableHeaderTranslator } from '@/lib/pattern-data/i18n';
@@ -53,8 +54,6 @@ const translations = {
     mediumPriorityVirtualization: 'Medium Priority: Virtualization Support',
     mediumPriorityAccessibility: 'Medium Priority: Accessibility',
     testingTools: 'Testing Tools',
-    seeDocumentation: 'See',
-    forFullDocumentation: 'for full documentation.',
     testColumn: 'Test',
     descColumn: 'Description',
     // ARIA tests
@@ -156,8 +155,6 @@ const translations = {
     mediumPriorityVirtualization: '中優先度: 仮想化サポート',
     mediumPriorityAccessibility: '中優先度: アクセシビリティ',
     testingTools: 'テストツール',
-    seeDocumentation: '',
-    forFullDocumentation: 'を参照して完全なドキュメントをご覧ください。',
     testColumn: 'テスト',
     descColumn: '説明',
     // ARIA tests
@@ -609,14 +606,5 @@ const text = translations[locale];
     </li>
   </ul>
 
-  <p class="text-muted-foreground text-sm">
-    {text.seeDocumentation}
-    <ExternalLink
-      href="https://github.com/masuP9/apg-patterns-examples/blob/main/.internal/testing-strategy.md"
-      class="text-primary hover:underline"
-    >
-      testing-strategy.md
-    </ExternalLink>
-    {text.forFullDocumentation}
-  </p>
+  <TestingStrategyLink locale={locale} />
 </Prose>
