@@ -92,6 +92,10 @@ export const ui = {
     'ai.copyOpenClaude': 'Copy & Open Claude',
     'ai.copied': 'Copied!',
     'ai.moreActions': 'More actions',
+
+    // Table of contents
+    'toc.onThisPage': 'On this page',
+    'toc.label': 'Table of contents',
   },
   ja: {
     // Navigation
@@ -169,6 +173,10 @@ export const ui = {
     'ai.copyOpenClaude': 'コピーして Claude を開く',
     'ai.copied': 'コピーしました！',
     'ai.moreActions': 'その他の操作',
+
+    // Table of contents
+    'toc.onThisPage': 'このページの内容',
+    'toc.label': '目次',
   },
 } as const;
 

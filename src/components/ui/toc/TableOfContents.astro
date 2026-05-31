@@ -1,4 +1,6 @@
 ---
+import { type Locale, getLocaleFromUrl, useTranslation } from '@/i18n';
+
 export interface TocItem {
   id: string;
   text: string;
@@ -6,13 +8,16 @@ export interface TocItem {
 
 interface Props {
   items: TocItem[];
+  locale?: Locale;
 }
 
 const { items } = Astro.props;
+const locale = Astro.props.locale ?? getLocaleFromUrl(Astro.url);
+const t = useTranslation(locale);
 ---
 
-<nav aria-label="Table of contents" class="toc">
-  <h2 class="text-foreground mb-3 text-sm font-semibold">On this page</h2>
+<nav aria-label={t('toc.label')} class="toc">
+  <h2 class="text-foreground mb-3 text-sm font-semibold">{t('toc.onThisPage')}</h2>
   <ul class="space-y-1 text-sm">
     {
       items.map((item) => (

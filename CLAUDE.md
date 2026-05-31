@@ -107,8 +107,9 @@ src/
 | ページ種別                                                  | 実装方式                          |
 | ----------------------------------------------------------- | --------------------------------- |
 | 線形ドキュメント（散文・TOC が有用。例: testing-strategy）   | MDX + `DocLayout` + `Prose`       |
+| カード・一覧でページ内 TOC が有用（例: guide, about）        | `.astro` + `DocLayout`（`tocItems` 手動定義） |
 | Practice 詳細                                               | MDX + `PracticeLayout` + `Prose`  |
-| ランディング・一覧（カード・データ駆動 UI。例: guide, about, top） | `.astro` + `BaseLayout`     |
+| ランディング・一覧で TOC 不要（例: top, patterns 一覧）      | `.astro` + `BaseLayout`           |
 | パターン詳細                                                | 既存の動的 `.astro`               |
 
 - 一覧は手書きせず `getPatterns()` 等のデータ源から生成する（件数もハードコードしない）

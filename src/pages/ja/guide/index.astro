@@ -1,508 +1,509 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DocLayout from '../../../layouts/DocLayout.astro';
 import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
 import { withBase } from '@/lib/utils';
+import type { TocItem } from '@/components/ui/toc';
 
 const locale = 'ja';
+
+const tocItems: TocItem[] = [
+  { id: 'ai-code-assistants', text: 'AI コーディングアシスタントとの連携' },
+  { id: 'available-patterns', text: '利用可能なパターン' },
+  { id: 'direct-links', text: 'パターン定義への直接リンク' },
+  { id: 'contributing', text: 'コントリビューション' },
+];
 ---
 
-<BaseLayout title="ガイド" locale={locale}>
-  <div class="mx-auto max-w-3xl">
-    <header class="mb-8">
-      <h1 class="mb-4 text-3xl font-bold">ガイド</h1>
-      <p class="text-muted-foreground text-lg">
-        APG パターン実装例を使って、アクセシブルなコンポーネントを構築する方法を紹介します。
-      </p>
-    </header>
+<DocLayout title="ガイド" locale={locale} tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">ガイド</h1>
+    <p class="text-muted-foreground text-lg">
+      APG パターン実装例を使って、アクセシブルなコンポーネントを構築する方法を紹介します。
+    </p>
+  </header>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">AI コーディングアシスタントとの連携</h2>
-      <p class="text-muted-foreground mb-4">
-        各パターンには AI 向けの定義ファイル（<code class="bg-muted rounded px-1.5 py-0.5 text-sm"
-          >{'{pattern}.ja.md'}</code
-        >）が含まれており、Claude、Cursor、GitHub Copilot などの AI
-        コーディングアシスタントで類似コンポーネントを実装する際のコンテキストとして利用できます。
-      </p>
+  <section class="mb-12">
+    <h2 id="ai-code-assistants" class="mb-4 text-2xl font-semibold">
+      AI コーディングアシスタントとの連携
+    </h2>
+    <p class="text-muted-foreground mb-4">
+      各パターンには AI 向けの定義ファイル（<code class="bg-muted rounded px-1.5 py-0.5 text-sm"
+        >{'{pattern}.ja.md'}</code
+      >）が含まれており、Claude、Cursor、GitHub Copilot などの AI
+      コーディングアシスタントで類似コンポーネントを実装する際のコンテキストとして利用できます。
+    </p>
 
-      <h3 class="mt-6 mb-3 text-xl font-medium">定義ファイルに含まれる内容</h3>
-      <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
-        <li>ARIA role、property、state の要件</li>
-        <li>キーボード操作の仕様</li>
-        <li>フォーカス管理のルール</li>
-        <li>検証用のテストチェックリスト</li>
-        <li>テストコードのサンプル</li>
-      </ul>
+    <h3 class="mt-6 mb-3 text-xl font-medium">定義ファイルに含まれる内容</h3>
+    <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+      <li>ARIA role、property、state の要件</li>
+      <li>キーボード操作の仕様</li>
+      <li>フォーカス管理のルール</li>
+      <li>検証用のテストチェックリスト</li>
+      <li>テストコードのサンプル</li>
+    </ul>
 
-      <h3 class="mt-6 mb-3 text-xl font-medium">使い方</h3>
+    <h3 class="mt-6 mb-3 text-xl font-medium">使い方</h3>
 
-      <div class="space-y-6">
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">1. プロンプトにコピー&ペースト</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            内容をコピーして、AI にコンポーネント実装を依頼する際のプロンプトに含めます。
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>以下の仕様に従って Angular で Tabs コンポーネントを実装してください:
+    <div class="space-y-6">
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">1. プロンプトにコピー&ペースト</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          内容をコピーして、AI にコンポーネント実装を依頼する際のプロンプトに含めます。
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>以下の仕様に従って Angular で Tabs コンポーネントを実装してください:
 
 [定義ファイルの内容をここにペースト]</code></pre>
-          </div>
         </div>
+      </div>
 
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">2. プロジェクトコンテキストに追加</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            Claude Code や Cursor
-            では、定義ファイルをプロジェクトに配置することで自動的にコンテキストとして参照されます。
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>my-project/
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">2. プロジェクトコンテキストに追加</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          Claude Code や Cursor
+          では、定義ファイルをプロジェクトに配置することで自動的にコンテキストとして参照されます。
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>my-project/
 ├── .ai/
 │   └── apg-patterns/
 │       ├── tabs.md
 │       ├── dialog.md
 │       └── accordion.md
 └── src/</code></pre>
-          </div>
         </div>
+      </div>
 
-        <div class="border-border rounded-lg border p-4">
-          <h4 class="mb-2 font-medium">3. テスト生成に活用</h4>
-          <p class="text-muted-foreground mb-3 text-sm">
-            テストチェックリストを使って、AI
-            に包括的なアクセシビリティテストを生成させることができます。
-          </p>
-          <div class="bg-muted rounded-md p-3">
-            <pre
-              class="overflow-x-auto text-sm"><code>以下のチェックリストに基づいて Tabs コンポーネントの Jest テストを生成してください:
+      <div class="border-border rounded-lg border p-4">
+        <h4 class="mb-2 font-medium">3. テスト生成に活用</h4>
+        <p class="text-muted-foreground mb-3 text-sm">
+          テストチェックリストを使って、AI
+          に包括的なアクセシビリティテストを生成させることができます。
+        </p>
+        <div class="bg-muted rounded-md p-3">
+          <pre
+            class="overflow-x-auto text-sm"><code>以下のチェックリストに基づいて Tabs コンポーネントの Jest テストを生成してください:
 
 ## Test Checklist
 - [ ] ArrowRight で次のタブに移動する
 - [ ] 選択中のタブは aria-selected="true" を持つ
 - [ ] 選択中のタブのみ tabIndex="0" を持つ</code></pre>
-          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">利用可能なパターン</h2>
-      <p class="text-muted-foreground mb-4">
-        全 28 パターンに AI 向け定義ファイルが用意されています:
-      </p>
-      <div class="grid gap-4 md:grid-cols-2">
-        <Tile variant="floating" href={withBase('/ja/patterns/accordion/react/')}>
-          <TileContent>
-            <TileTitle>Accordion</TileTitle>
-            <TileDescription>
-              垂直に積み重ねられた見出しで、コンテンツセクションを表示・非表示できます。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/alert/react/')}>
-          <TileContent>
-            <TileTitle>Alert</TileTitle>
-            <TileDescription>
-              重要でタイムセンシティブなメッセージを通知するライブリージョンです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/alert-dialog/react/')}>
-          <TileContent>
-            <TileTitle>Alert Dialog</TileTitle>
-            <TileDescription>
-              ユーザーの応答が必要なモーダルダイアログで、アクセシブルなフォーカス管理を備えています。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/breadcrumb/react/')}>
-          <TileContent>
-            <TileTitle>Breadcrumb</TileTitle>
-            <TileDescription>
-              階層内のページ位置を示すナビゲーショントレイルです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/button/react/')}>
-          <TileContent>
-            <TileTitle>Toggle Button</TileTitle>
-            <TileDescription>
-              aria-pressed でトグル動作を表現する 2 状態ボタンです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/carousel/react/')}>
-          <TileContent>
-            <TileTitle>Carousel</TileTitle>
-            <TileDescription>
-              アクセシブルなナビゲーションコントロールを持つ回転コンテンツです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/checkbox/react/')}>
-          <TileContent>
-            <TileTitle>Checkbox</TileTitle>
-            <TileDescription>
-              オプションの3状態サポートを持つ単一チェックボックスです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/combobox/react/')}>
-          <TileContent>
-            <TileTitle>Combobox</TileTitle>
-            <TileDescription>
-              ドロップダウン候補とオートコンプリート機能を持つテキスト入力です。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/dialog/react/')}>
-          <TileContent>
-            <TileTitle>Dialog</TileTitle>
-            <TileDescription>
-              フォーカストラップとキーボードサポートを備えたモーダルウィンドウです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/disclosure/react/')}>
-          <TileContent>
-            <TileTitle>Disclosure</TileTitle>
-            <TileDescription>
-              コンテンツの表示・非表示を切り替えるシンプルなトグルです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/feed/react/')}>
-          <TileContent>
-            <TileTitle>Feed</TileTitle>
-            <TileDescription>
-              アクセシブルなナビゲーションを持つスクロール可能な記事リストです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/grid/react/')}>
-          <TileContent>
-            <TileTitle>Grid</TileTitle>
-            <TileDescription>
-              キーボードナビゲーションサポートを持つインタラクティブなグリッドです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/landmarks/react/')}>
-          <TileContent>
-            <TileTitle>Landmarks</TileTitle>
-            <TileDescription> 支援技術のナビゲーション用のページ領域です。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/link/react/')}>
-          <TileContent>
-            <TileTitle>Link</TileTitle>
-            <TileDescription>
-              適切なセマンティクスと状態を持つアクセシブルなリンクです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/listbox/react/')}>
-          <TileContent>
-            <TileTitle>Listbox</TileTitle>
-            <TileDescription>
-              単一選択および複数選択モードを持つ選択ウィジェットです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/menu-button/react/')}>
-          <TileContent>
-            <TileTitle>Menu Button</TileTitle>
-            <TileDescription>
-              アクセシブルなキーボードサポートを持つメニューを開くボタンです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/menubar/react/')}>
-          <TileContent>
-            <TileTitle>Menubar</TileTitle>
-            <TileDescription>
-              サブメニューとキーボードナビゲーションを持つ水平メニューです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/meter/react/')}>
-          <TileContent>
-            <TileTitle>Meter</TileTitle>
-            <TileDescription> 既知の範囲内の値を視覚的に示すインジケーターです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/radio/react/')}>
-          <TileContent>
-            <TileTitle>Radio Group</TileTitle>
-            <TileDescription> 相互に排他的なオプションからの単一選択です。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/slider/react/')}>
-          <TileContent>
-            <TileTitle>Slider</TileTitle>
-            <TileDescription> 範囲から値を選択するための入力です。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/spinbutton/react/')}>
-          <TileContent>
-            <TileTitle>Spinbutton</TileTitle>
-            <TileDescription> 増減コントロールを持つ数値入力です。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/switch/react/')}>
-          <TileContent>
-            <TileTitle>Switch</TileTitle>
-            <TileDescription> aria-checked 状態を持つオン・オフトグルです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/table/react/')}>
-          <TileContent>
-            <TileTitle>Table</TileTitle>
-            <TileDescription> 適切なヘッダーと構造を持つデータテーブルです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/tabs/react/')}>
-          <TileContent>
-            <TileTitle>Tabs</TileTitle>
-            <TileDescription>
-              roving tabindex を使った階層化されたコンテンツセクションです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/toolbar/react/')}>
-          <TileContent>
-            <TileTitle>Toolbar</TileTitle>
-            <TileDescription>
-              矢印キーナビゲーションを持つグループ化されたコントロールのコンテナです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/tooltip/react/')}>
-          <TileContent>
-            <TileTitle>Tooltip</TileTitle>
-            <TileDescription> 要素の説明を表示するコンテキストポップアップです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/treegrid/react/')}>
-          <TileContent>
-            <TileTitle>Treegrid</TileTitle>
-            <TileDescription> 展開可能な行とツリー状の階層を持つグリッドです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/treeview/react/')}>
-          <TileContent>
-            <TileTitle>Tree View</TileTitle>
-            <TileDescription> 展開・折りたたみ可能なノードを持つ階層リストです。 </TileDescription>
-          </TileContent>
-        </Tile>
-        <Tile variant="floating" href={withBase('/ja/patterns/windowsplitter/react/')}>
-          <TileContent>
-            <TileTitle>Window Splitter</TileTitle>
-            <TileDescription>
-              キーボードでアクセス可能なセパレーターを持つリサイズ可能なペインです。
-            </TileDescription>
-          </TileContent>
-        </Tile>
-      </div>
-    </section>
+  <section class="mb-12">
+    <h2 id="available-patterns" class="mb-4 text-2xl font-semibold">利用可能なパターン</h2>
+    <p class="text-muted-foreground mb-4">
+      全 28 パターンに AI 向け定義ファイルが用意されています:
+    </p>
+    <div class="grid gap-4 md:grid-cols-2">
+      <Tile variant="floating" href={withBase('/ja/patterns/accordion/react/')}>
+        <TileContent>
+          <TileTitle>Accordion</TileTitle>
+          <TileDescription>
+            垂直に積み重ねられた見出しで、コンテンツセクションを表示・非表示できます。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/alert/react/')}>
+        <TileContent>
+          <TileTitle>Alert</TileTitle>
+          <TileDescription>
+            重要でタイムセンシティブなメッセージを通知するライブリージョンです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/alert-dialog/react/')}>
+        <TileContent>
+          <TileTitle>Alert Dialog</TileTitle>
+          <TileDescription>
+            ユーザーの応答が必要なモーダルダイアログで、アクセシブルなフォーカス管理を備えています。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/breadcrumb/react/')}>
+        <TileContent>
+          <TileTitle>Breadcrumb</TileTitle>
+          <TileDescription> 階層内のページ位置を示すナビゲーショントレイルです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/button/react/')}>
+        <TileContent>
+          <TileTitle>Toggle Button</TileTitle>
+          <TileDescription>
+            aria-pressed でトグル動作を表現する 2 状態ボタンです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/carousel/react/')}>
+        <TileContent>
+          <TileTitle>Carousel</TileTitle>
+          <TileDescription>
+            アクセシブルなナビゲーションコントロールを持つ回転コンテンツです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/checkbox/react/')}>
+        <TileContent>
+          <TileTitle>Checkbox</TileTitle>
+          <TileDescription>
+            オプションの3状態サポートを持つ単一チェックボックスです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/combobox/react/')}>
+        <TileContent>
+          <TileTitle>Combobox</TileTitle>
+          <TileDescription>
+            ドロップダウン候補とオートコンプリート機能を持つテキスト入力です。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/dialog/react/')}>
+        <TileContent>
+          <TileTitle>Dialog</TileTitle>
+          <TileDescription>
+            フォーカストラップとキーボードサポートを備えたモーダルウィンドウです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/disclosure/react/')}>
+        <TileContent>
+          <TileTitle>Disclosure</TileTitle>
+          <TileDescription>
+            コンテンツの表示・非表示を切り替えるシンプルなトグルです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/feed/react/')}>
+        <TileContent>
+          <TileTitle>Feed</TileTitle>
+          <TileDescription>
+            アクセシブルなナビゲーションを持つスクロール可能な記事リストです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/grid/react/')}>
+        <TileContent>
+          <TileTitle>Grid</TileTitle>
+          <TileDescription>
+            キーボードナビゲーションサポートを持つインタラクティブなグリッドです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/landmarks/react/')}>
+        <TileContent>
+          <TileTitle>Landmarks</TileTitle>
+          <TileDescription> 支援技術のナビゲーション用のページ領域です。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/link/react/')}>
+        <TileContent>
+          <TileTitle>Link</TileTitle>
+          <TileDescription>
+            適切なセマンティクスと状態を持つアクセシブルなリンクです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/listbox/react/')}>
+        <TileContent>
+          <TileTitle>Listbox</TileTitle>
+          <TileDescription>
+            単一選択および複数選択モードを持つ選択ウィジェットです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/menu-button/react/')}>
+        <TileContent>
+          <TileTitle>Menu Button</TileTitle>
+          <TileDescription>
+            アクセシブルなキーボードサポートを持つメニューを開くボタンです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/menubar/react/')}>
+        <TileContent>
+          <TileTitle>Menubar</TileTitle>
+          <TileDescription>
+            サブメニューとキーボードナビゲーションを持つ水平メニューです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/meter/react/')}>
+        <TileContent>
+          <TileTitle>Meter</TileTitle>
+          <TileDescription> 既知の範囲内の値を視覚的に示すインジケーターです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/radio/react/')}>
+        <TileContent>
+          <TileTitle>Radio Group</TileTitle>
+          <TileDescription> 相互に排他的なオプションからの単一選択です。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/slider/react/')}>
+        <TileContent>
+          <TileTitle>Slider</TileTitle>
+          <TileDescription> 範囲から値を選択するための入力です。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/spinbutton/react/')}>
+        <TileContent>
+          <TileTitle>Spinbutton</TileTitle>
+          <TileDescription> 増減コントロールを持つ数値入力です。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/switch/react/')}>
+        <TileContent>
+          <TileTitle>Switch</TileTitle>
+          <TileDescription> aria-checked 状態を持つオン・オフトグルです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/table/react/')}>
+        <TileContent>
+          <TileTitle>Table</TileTitle>
+          <TileDescription> 適切なヘッダーと構造を持つデータテーブルです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/tabs/react/')}>
+        <TileContent>
+          <TileTitle>Tabs</TileTitle>
+          <TileDescription>
+            roving tabindex を使った階層化されたコンテンツセクションです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/toolbar/react/')}>
+        <TileContent>
+          <TileTitle>Toolbar</TileTitle>
+          <TileDescription>
+            矢印キーナビゲーションを持つグループ化されたコントロールのコンテナです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/tooltip/react/')}>
+        <TileContent>
+          <TileTitle>Tooltip</TileTitle>
+          <TileDescription> 要素の説明を表示するコンテキストポップアップです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/treegrid/react/')}>
+        <TileContent>
+          <TileTitle>Treegrid</TileTitle>
+          <TileDescription> 展開可能な行とツリー状の階層を持つグリッドです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/treeview/react/')}>
+        <TileContent>
+          <TileTitle>Tree View</TileTitle>
+          <TileDescription> 展開・折りたたみ可能なノードを持つ階層リストです。 </TileDescription>
+        </TileContent>
+      </Tile>
+      <Tile variant="floating" href={withBase('/ja/patterns/windowsplitter/react/')}>
+        <TileContent>
+          <TileTitle>Window Splitter</TileTitle>
+          <TileDescription>
+            キーボードでアクセス可能なセパレーターを持つリサイズ可能なペインです。
+          </TileDescription>
+        </TileContent>
+      </Tile>
+    </div>
+  </section>
 
-    <section class="mb-12">
-      <h2 class="mb-4 text-2xl font-semibold">パターン定義への直接リンク</h2>
-      <p class="text-muted-foreground mb-4">
-        これらの URL を直接コピーするか、AI ツールでフェッチできます:
-      </p>
-      <div class="bg-muted rounded-md p-4">
-        <ul class="space-y-1 text-sm">
-          <li>
-            <a
-              href={withBase('/ja/patterns/accordion/accordion.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/accordion/accordion.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/alert/alert.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/alert/alert.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/alert-dialog/alert-dialog.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/alert-dialog/alert-dialog.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/breadcrumb/breadcrumb.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/breadcrumb/breadcrumb.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/button/button.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/button/button.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/carousel/carousel.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/carousel/carousel.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/checkbox/checkbox.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/checkbox/checkbox.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/combobox/combobox.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/combobox/combobox.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/dialog/dialog.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/dialog/dialog.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/disclosure/disclosure.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/disclosure/disclosure.ja.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/ja/patterns/feed/feed.ja.md')} class="text-primary hover:underline"
-              >/ja/patterns/feed/feed.ja.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/ja/patterns/grid/grid.ja.md')} class="text-primary hover:underline"
-              >/ja/patterns/grid/grid.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/landmarks/landmarks.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/landmarks/landmarks.ja.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/ja/patterns/link/link.ja.md')} class="text-primary hover:underline"
-              >/ja/patterns/link/link.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/listbox/listbox.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/listbox/listbox.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/menu-button/menu-button.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/menu-button/menu-button.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/menubar/menubar.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/menubar/menubar.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/meter/meter.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/meter/meter.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/radio/radio.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/radio/radio.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/slider/slider.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/slider/slider.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/spinbutton/spinbutton.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/spinbutton/spinbutton.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/switch/switch.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/switch/switch.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/table/table.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/table/table.ja.md</a
-            >
-          </li>
-          <li>
-            <a href={withBase('/ja/patterns/tabs/tabs.ja.md')} class="text-primary hover:underline"
-              >/ja/patterns/tabs/tabs.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/toolbar/toolbar.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/toolbar/toolbar.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/tooltip/tooltip.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/tooltip/tooltip.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/treegrid/treegrid.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/treegrid/treegrid.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/treeview/treeview.ja.md')}
-              class="text-primary hover:underline">/ja/patterns/treeview/treeview.ja.md</a
-            >
-          </li>
-          <li>
-            <a
-              href={withBase('/ja/patterns/windowsplitter/windowsplitter.ja.md')}
-              class="text-primary hover:underline"
-              >/ja/patterns/windowsplitter/windowsplitter.ja.md</a
-            >
-          </li>
-        </ul>
-      </div>
-    </section>
+  <section class="mb-12">
+    <h2 id="direct-links" class="mb-4 text-2xl font-semibold">パターン定義への直接リンク</h2>
+    <p class="text-muted-foreground mb-4">
+      これらの URL を直接コピーするか、AI ツールでフェッチできます:
+    </p>
+    <div class="bg-muted rounded-md p-4">
+      <ul class="space-y-1 text-sm">
+        <li>
+          <a
+            href={withBase('/ja/patterns/accordion/accordion.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/accordion/accordion.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/alert/alert.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/alert/alert.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/alert-dialog/alert-dialog.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/alert-dialog/alert-dialog.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/breadcrumb/breadcrumb.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/breadcrumb/breadcrumb.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/button/button.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/button/button.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/carousel/carousel.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/carousel/carousel.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/checkbox/checkbox.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/checkbox/checkbox.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/combobox/combobox.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/combobox/combobox.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/dialog/dialog.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/dialog/dialog.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/disclosure/disclosure.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/disclosure/disclosure.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/feed/feed.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/feed/feed.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/grid/grid.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/grid/grid.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/landmarks/landmarks.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/landmarks/landmarks.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/link/link.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/link/link.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/listbox/listbox.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/listbox/listbox.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/menu-button/menu-button.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/menu-button/menu-button.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/menubar/menubar.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/menubar/menubar.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/meter/meter.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/meter/meter.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/radio/radio.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/radio/radio.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/slider/slider.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/slider/slider.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/spinbutton/spinbutton.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/spinbutton/spinbutton.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/switch/switch.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/switch/switch.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/table/table.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/table/table.ja.md</a
+          >
+        </li>
+        <li>
+          <a href={withBase('/ja/patterns/tabs/tabs.ja.md')} class="text-primary hover:underline"
+            >/ja/patterns/tabs/tabs.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/toolbar/toolbar.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/toolbar/toolbar.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/tooltip/tooltip.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/tooltip/tooltip.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/treegrid/treegrid.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/treegrid/treegrid.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/treeview/treeview.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/treeview/treeview.ja.md</a
+          >
+        </li>
+        <li>
+          <a
+            href={withBase('/ja/patterns/windowsplitter/windowsplitter.ja.md')}
+            class="text-primary hover:underline">/ja/patterns/windowsplitter/windowsplitter.ja.md</a
+          >
+        </li>
+      </ul>
+    </div>
+  </section>
 
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">コントリビューション</h2>
-      <p class="text-muted-foreground">
-        AI 向け定義ファイルの追加にご協力ください！
-        <a
-          href="https://github.com/masuP9/apg-patterns-examples"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary hover:underline"
-        >
-          GitHub リポジトリ
-        </a>
-        からコントリビューションできます。
-      </p>
-    </section>
-  </div>
-</BaseLayout>
+  <section>
+    <h2 id="contributing" class="mb-4 text-2xl font-semibold">コントリビューション</h2>
+    <p class="text-muted-foreground">
+      AI 向け定義ファイルの追加にご協力ください！
+      <a
+        href="https://github.com/masuP9/apg-patterns-examples"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline"
+      >
+        GitHub リポジトリ
+      </a>
+      からコントリビューションできます。
+    </p>
+  </section>
+</DocLayout>

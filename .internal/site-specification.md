@@ -285,8 +285,9 @@ src/
 | ページ種別        | 実装方式                                            | 条件・例                                                              |
 | ----------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
 | 線形ドキュメント  | MDX (`content.mdx` / `content.ja.mdx`) + `DocLayout` + `Prose` | 散文・見出し・表・コード例が中心で TOC が有用。例: `/testing-strategy/` |
+| カード・一覧でページ内 TOC が有用 | `.astro` + `DocLayout`（`tocItems` を手動定義）  | セクション見出しが複数あり「On this page」が役立つ。例: `/guide/`, `/about/` |
 | Practice 詳細     | MDX + `PracticeLayout` + `Prose`                    | practice サイドバーと practice 固有 OG 画像が必要。例: `/practices/{id}/` |
-| ランディング・一覧 | `.astro` + `BaseLayout`                             | カード・CTA・データ駆動 UI が中心。例: `/guide/`, `/about/`, トップページ |
+| ランディング・一覧で TOC 不要 | `.astro` + `BaseLayout`                       | 単一スクリーンの CTA・データ駆動 UI が中心。例: トップページ, `/patterns/` 一覧 |
 | パターン詳細      | 既存の動的 `.astro`（`[pattern]/[framework]`）       | framework 切替・デモ・API・コード表示が必要                            |
 
 **補足ルール:**
@@ -294,11 +295,12 @@ src/
 - MDX 内でサイト UI コンポーネント（`Tile` など）を大量に組み立てない。UI 比率が高くなるなら `.astro` を使う
 - パターン等の一覧は手書きせず、`getPatterns()` など既存のデータ源から生成する（件数も `.length` から導出し、ハードコードしない）
 - en/ja で DOM 構造が同じページは、共有 `.astro` コンポーネントに構造を寄せ、文言だけを i18n データ（`getPatternName()` / `getPatternDescription()` 等）で分離する
+- `.astro` ページで `DocLayout` を使う場合、MDX の `getHeadings()` は使えないため `tocItems`（`{ id, text }[]`）を frontmatter で手動定義し、各 `<h2>` に同じ `id` を付与する。en/ja で `id` を揃え、`text` だけ各言語にする
 - 3つ目の類似レイアウトを足す前に、既存レイアウトの再利用、または「TOC 付き本文枠」だけの内部コンポーネント抽出を検討する
 
 **レイアウトの責務:**
 
-- **`DocLayout`**: サイドバーなしの汎用文書レイアウト（`BaseLayout` + `Prose` + 右 TOC）。独立した長文ドキュメント向け
+- **`DocLayout`**: サイドバーなしの TOC 付き汎用文書レイアウト（`BaseLayout` + 右 TOC + 本文 slot, 本文幅 `max-w-3xl`）。MDX / `.astro` の両方から使える。`Prose` は呼び出し側が必要に応じて自分で包む任意責務で、`DocLayout` 自体は `Prose` に依存しない。`tocItems` が空なら 1 カラム、あれば右 TOC 付き 2 カラムになる。TOC の見出し（"On this page" / "このページの内容"）は `locale` に応じて i18n される
 - **`PracticeLayout`**: practice 専用（必須 `practice` prop + `PracticeSidebar` + practice 固有 OG + 左サイドバー前提のグリッド）
 - 両者は責務が異なるため統合しない。`showSidebar` 的な boolean prop での統合は practice 固有知識を汎用レイアウトに漏らすため避ける
 
