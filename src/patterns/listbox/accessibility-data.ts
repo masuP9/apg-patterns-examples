@@ -709,7 +709,6 @@ export const listboxAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-
   },
 
   // Test checklist for llm.md

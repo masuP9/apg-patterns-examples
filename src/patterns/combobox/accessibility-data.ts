@@ -751,7 +751,6 @@ export const comboboxAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-
   },
 
   // Test checklist for llm.md

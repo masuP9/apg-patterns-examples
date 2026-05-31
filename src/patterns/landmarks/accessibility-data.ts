@@ -547,7 +547,6 @@ export const landmarksAccessibilityData: PatternAccessibilityData = {
         },
       },
     ],
-
   },
 
   // Test checklist for llm.md
