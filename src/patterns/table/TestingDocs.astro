@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import fs from 'node:fs';
@@ -153,4 +154,6 @@ const titles = sectionTitles[locale];
     lang="typescript"
     title="e2e/table.spec.ts"
   />
+
+  <TestingStrategyLink locale={locale} />
 </Prose>

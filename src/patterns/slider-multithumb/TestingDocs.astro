@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '@/components/ui/ExternalLink.astro';
+import TestingStrategyLink from '@/components/ui/TestingStrategyLink.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import CodeBlock from '@/components/ui/CodeBlock.astro';
 import { sliderMultithumbAccessibilityData } from './accessibility-data';
@@ -149,4 +150,6 @@ npm run test:e2e:astro:pattern --pattern=slider-multithumb`}</code></pre>
       ))
     }
   </ul>
+
+  <TestingStrategyLink locale={locale} />
 </Prose>
