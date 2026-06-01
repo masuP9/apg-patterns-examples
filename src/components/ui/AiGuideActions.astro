@@ -1,6 +1,7 @@
 ---
 import { withBase } from '@/lib/utils';
 import { type Locale, getLocaleFromUrl, useTranslation } from '@/i18n';
+import { getPatternDefinitionFileName, getPatternDefinitionPath } from '@/lib/pattern-paths';
 import DownloadIcon from 'lucide-static/icons/download.svg';
 import ChevronDownIcon from 'lucide-static/icons/chevron-down.svg';
 
@@ -17,10 +18,8 @@ const t = useTranslation(locale);
 // Use locale-aware URL with consistent filename:
 // EN: /patterns/{pattern}/{pattern}.md
 // JA: /ja/patterns/{pattern}/{pattern}.ja.md
-const mdFileName = locale === 'ja' ? `${pattern}.ja.md` : `${pattern}.md`;
-const llmMdUrl = withBase(
-  locale === 'ja' ? `/ja/patterns/${pattern}/${mdFileName}` : `/patterns/${pattern}/${mdFileName}`
-);
+const mdFileName = getPatternDefinitionFileName(pattern, locale);
+const llmMdUrl = withBase(getPatternDefinitionPath(pattern, locale));
 ---
 
 <div
