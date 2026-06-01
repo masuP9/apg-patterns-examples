@@ -1,0 +1,276 @@
+---
+import DocLayout from '@/layouts/DocLayout.astro';
+import { Tile, TileContent, TileTitle, TileDescription } from '@/components/ui/tile';
+import { withBase } from '@/lib/utils';
+import { getPatterns } from '@/lib/patterns';
+import { getPatternDefinitionPath } from '@/lib/pattern-paths';
+import { type Locale, getLocalizedPath, getPatternName, getPatternDescription } from '@/i18n';
+import type { TocItem } from '@/components/ui/toc';
+
+interface Props {
+  locale: Locale;
+}
+
+interface GuideStep {
+  title: string;
+  desc: string;
+  code: string;
+}
+
+interface GuideCopy {
+  title: string;
+  lead: string;
+  toc: { aiAssistants: string; available: string; directLinks: string; contributing: string };
+  aiAssistants: {
+    title: string;
+    introBefore: string;
+    introCode: string;
+    introAfter: string;
+    includedTitle: string;
+    includedItems: string[];
+    howToTitle: string;
+    steps: GuideStep[];
+  };
+  available: { title: string; countPrefix: string; countSuffix: string };
+  directLinks: { title: string; intro: string };
+  contributing: { title: string; before: string; linkText: string; after: string };
+}
+
+const PROJECT_TREE = `my-project/
+├── .ai/
+│   └── apg-patterns/
+│       ├── tabs.md
+│       ├── dialog.md
+│       └── accordion.md
+└── src/`;
+
+const copy = {
+  en: {
+    title: 'Guide',
+    lead: 'How to use APG Patterns Examples for building accessible components.',
+    toc: {
+      aiAssistants: 'Using with AI Code Assistants',
+      available: 'Available Patterns',
+      directLinks: 'Direct Links to Pattern Definitions',
+      contributing: 'Contributing',
+    },
+    aiAssistants: {
+      title: 'Using with AI Code Assistants',
+      introBefore: 'Each pattern includes an AI-friendly definition file (',
+      introCode: '{pattern}.md',
+      introAfter:
+        ') that can be used as context when implementing similar components with AI coding assistants like Claude, Cursor, or GitHub Copilot.',
+      includedTitle: "What's included in definition files",
+      includedItems: [
+        'ARIA roles, properties, and states requirements',
+        'Keyboard interaction specifications',
+        'Focus management rules',
+        'Test checklist for verification',
+        'Example test code snippets',
+      ],
+      howToTitle: 'How to use',
+      steps: [
+        {
+          title: '1. Copy & paste into prompt',
+          desc: 'Copy the content and include it in your prompt when asking AI to implement a component.',
+          code: 'Implement a Tabs component in Angular following this specification:\n\n[paste definition file content here]',
+        },
+        {
+          title: '2. Add to project context',
+          desc: 'For Claude Code or Cursor, place definition files in your project for automatic context.',
+          code: PROJECT_TREE,
+        },
+        {
+          title: '3. Use for test generation',
+          desc: 'The test checklist helps AI generate comprehensive accessibility tests.',
+          code: 'Generate Jest tests for my Tabs component based on this checklist:\n\n## Test Checklist\n- [ ] ArrowRight moves to next tab\n- [ ] Selected tab has aria-selected="true"\n- [ ] Only selected tab has tabIndex="0"',
+        },
+      ],
+    },
+    available: {
+      title: 'Available Patterns',
+      countPrefix: 'All ',
+      countSuffix: ' patterns have AI-friendly definition files:',
+    },
+    directLinks: {
+      title: 'Direct Links to Pattern Definitions',
+      intro: 'Copy these URLs directly or fetch them with AI tools:',
+    },
+    contributing: {
+      title: 'Contributing',
+      before: 'Help us add more AI-friendly definitions! Visit our',
+      linkText: 'GitHub repository',
+      after: 'to contribute.',
+    },
+  },
+  ja: {
+    title: 'ガイド',
+    lead: 'APG パターン実装例を使って、アクセシブルなコンポーネントを構築する方法を紹介します。',
+    toc: {
+      aiAssistants: 'AI コーディングアシスタントとの連携',
+      available: '利用可能なパターン',
+      directLinks: 'パターン定義への直接リンク',
+      contributing: 'コントリビューション',
+    },
+    aiAssistants: {
+      title: 'AI コーディングアシスタントとの連携',
+      introBefore: '各パターンには AI 向けの定義ファイル（',
+      introCode: '{pattern}.ja.md',
+      introAfter:
+        '）が含まれており、Claude、Cursor、GitHub Copilot などの AI コーディングアシスタントで類似コンポーネントを実装する際のコンテキストとして利用できます。',
+      includedTitle: '定義ファイルに含まれる内容',
+      includedItems: [
+        'ARIA role、property、state の要件',
+        'キーボード操作の仕様',
+        'フォーカス管理のルール',
+        '検証用のテストチェックリスト',
+        'テストコードのサンプル',
+      ],
+      howToTitle: '使い方',
+      steps: [
+        {
+          title: '1. プロンプトにコピー&ペースト',
+          desc: '内容をコピーして、AI にコンポーネント実装を依頼する際のプロンプトに含めます。',
+          code: '以下の仕様に従って Angular で Tabs コンポーネントを実装してください:\n\n[定義ファイルの内容をここにペースト]',
+        },
+        {
+          title: '2. プロジェクトコンテキストに追加',
+          desc: 'Claude Code や Cursor では、定義ファイルをプロジェクトに配置することで自動的にコンテキストとして参照されます。',
+          code: PROJECT_TREE,
+        },
+        {
+          title: '3. テスト生成に活用',
+          desc: 'テストチェックリストを使って、AI に包括的なアクセシビリティテストを生成させることができます。',
+          code: '以下のチェックリストに基づいて Tabs コンポーネントの Jest テストを生成してください:\n\n## Test Checklist\n- [ ] ArrowRight で次のタブに移動する\n- [ ] 選択中のタブは aria-selected="true" を持つ\n- [ ] 選択中のタブのみ tabIndex="0" を持つ',
+        },
+      ],
+    },
+    available: {
+      title: '利用可能なパターン',
+      countPrefix: '全 ',
+      countSuffix: ' パターンに AI 向け定義ファイルが用意されています:',
+    },
+    directLinks: {
+      title: 'パターン定義への直接リンク',
+      intro: 'これらの URL を直接コピーするか、AI ツールでフェッチできます:',
+    },
+    contributing: {
+      title: 'コントリビューション',
+      before: 'AI 向け定義ファイルの追加にご協力ください！',
+      linkText: 'GitHub リポジトリ',
+      after: 'からコントリビューションできます。',
+    },
+  },
+} satisfies Record<Locale, GuideCopy>;
+
+const { locale } = Astro.props;
+const text = copy[locale];
+const patterns = getPatterns();
+
+const tocItems: TocItem[] = [
+  { id: 'ai-code-assistants', text: text.toc.aiAssistants },
+  { id: 'available-patterns', text: text.toc.available },
+  { id: 'direct-links', text: text.toc.directLinks },
+  { id: 'contributing', text: text.toc.contributing },
+];
+---
+
+<DocLayout title={text.title} locale={locale} tocItems={tocItems}>
+  <header class="mb-8">
+    <h1 class="mb-4 text-3xl font-bold">{text.title}</h1>
+    <p class="text-muted-foreground text-lg">{text.lead}</p>
+  </header>
+
+  <section class="mb-12">
+    <h2 id="ai-code-assistants" class="mb-4 text-2xl font-semibold">{text.aiAssistants.title}</h2>
+    <p class="text-muted-foreground mb-4">
+      {text.aiAssistants.introBefore}<code class="bg-muted rounded px-1.5 py-0.5 text-sm"
+        >{text.aiAssistants.introCode}</code
+      >{text.aiAssistants.introAfter}
+    </p>
+
+    <h3 class="mt-6 mb-3 text-xl font-medium">{text.aiAssistants.includedTitle}</h3>
+    <ul class="text-muted-foreground mb-6 list-inside list-disc space-y-2">
+      {text.aiAssistants.includedItems.map((item) => <li>{item}</li>)}
+    </ul>
+
+    <h3 class="mt-6 mb-3 text-xl font-medium">{text.aiAssistants.howToTitle}</h3>
+
+    <div class="space-y-6">
+      {
+        text.aiAssistants.steps.map((step) => (
+          <div class="border-border rounded-lg border p-4">
+            <h4 class="mb-2 font-medium">{step.title}</h4>
+            <p class="text-muted-foreground mb-3 text-sm">{step.desc}</p>
+            <div class="bg-muted rounded-md p-3">
+              <pre class="overflow-x-auto text-sm">
+                <code>{step.code}</code>
+              </pre>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="available-patterns" class="mb-4 text-2xl font-semibold">{text.available.title}</h2>
+    <p class="text-muted-foreground mb-4">
+      {text.available.countPrefix}{patterns.length}{text.available.countSuffix}
+    </p>
+    <div class="grid gap-4 md:grid-cols-2" data-testid="guide-pattern-cards">
+      {
+        patterns.map((pattern) => (
+          <Tile
+            variant="floating"
+            href={withBase(getLocalizedPath(`/patterns/${pattern.id}/`, locale))}
+          >
+            <TileContent>
+              <TileTitle>{getPatternName(pattern.id, pattern.name, locale)}</TileTitle>
+              <TileDescription>
+                {getPatternDescription(pattern.id, pattern.description, locale)}
+              </TileDescription>
+            </TileContent>
+          </Tile>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 id="direct-links" class="mb-4 text-2xl font-semibold">{text.directLinks.title}</h2>
+    <p class="text-muted-foreground mb-4">{text.directLinks.intro}</p>
+    <div class="bg-muted rounded-md p-4">
+      <ul class="space-y-1 text-sm" data-testid="guide-definition-links">
+        {
+          patterns.map((pattern) => {
+            const path = getPatternDefinitionPath(pattern.id, locale);
+            return (
+              <li>
+                <a href={withBase(path)} class="text-primary hover:underline">
+                  {path}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="contributing" class="mb-4 text-2xl font-semibold">{text.contributing.title}</h2>
+    <p class="text-muted-foreground">
+      {text.contributing.before}
+      <a
+        href="https://github.com/masuP9/apg-patterns-examples"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary hover:underline"
+      >
+        {text.contributing.linkText}
+      </a>
+      {text.contributing.after}
+    </p>
+  </section>
+</DocLayout>
