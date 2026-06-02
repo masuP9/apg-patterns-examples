@@ -51,7 +51,7 @@ jobs:
       contents: write
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # GITHUB_TOKEN を git config に永続化しない。state fetch / push step で
           # 必要なときだけ remote URL に inline credential として渡す。
@@ -74,7 +74,7 @@ jobs:
             echo '{"schemaVersion":1,"lastRun":null,"patterns":{}}' > "${APG_STATE_FILE_LOCAL}"
           fi
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: npm
