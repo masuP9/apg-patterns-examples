@@ -5,7 +5,7 @@
  * Displays the alternate language as a link.
  * Accessible with proper lang and hreflang attributes.
  */
-import { withBase } from '@/lib/utils';
+import { withBase, removeBasePath } from '@/lib/utils';
 import { type Locale, languages, getLangFromUrl, getAlternatePath } from '@/i18n';
 import GlobeIcon from 'lucide-static/icons/globe.svg';
 
@@ -15,9 +15,8 @@ interface Props {
 }
 
 const locale = Astro.props.locale ?? getLangFromUrl(Astro.url);
-const currentPath = Astro.url.pathname;
 // Remove base path for alternate path calculation
-const pathWithoutBase = currentPath.replace(/^\/apg-patterns-examples/, '');
+const pathWithoutBase = removeBasePath(Astro.url.pathname);
 const alternatePath = getAlternatePath(pathWithoutBase, locale);
 const alternateLocale: Locale = locale === 'en' ? 'ja' : 'en';
 const alternateLanguageName = languages[alternateLocale];

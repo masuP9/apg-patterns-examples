@@ -18,7 +18,7 @@ const practice = getPracticeById(practiceId);
 const t = useTranslation('en');
 
 if (!practice) {
-  return Astro.redirect('/404');
+  return Astro.redirect(withBase('/404'));
 }
 
 // Get related patterns info

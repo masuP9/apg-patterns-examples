@@ -6,6 +6,7 @@
  */
 
 import { languages, defaultLang, showDefaultLang, type Locale } from './ui';
+import { removeBasePath } from '@/lib/utils';
 
 // Re-export for convenience
 export type { Locale };
@@ -31,9 +32,8 @@ export const locales = getLocaleKeys();
  * /patterns/... -> 'en'
  */
 export function getLangFromUrl(url: URL): Locale {
-  const pathname = url.pathname;
-  // Handle base path (e.g., /apg-patterns-examples/)
-  const pathWithoutBase = pathname.replace(/^\/apg-patterns-examples/, '');
+  // Strip the configured base path (e.g. /apg-patterns-examples/) before parsing.
+  const pathWithoutBase = removeBasePath(url.pathname);
   const segments = pathWithoutBase.split('/').filter(Boolean);
 
   const firstSegment = segments[0];

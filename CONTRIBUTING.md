@@ -61,7 +61,9 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 5. **Start development server**:
    ```bash
    npm run dev
-   # Opens at http://localhost:4321
+   # The port is derived from the worktree path (Astro prints the exact URL),
+   # and the site is served under the base path, e.g.
+   #   http://localhost:<port>/apg-patterns-examples/
    ```
 
 ## Development Workflow

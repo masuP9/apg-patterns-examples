@@ -7,50 +7,13 @@ import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 
-/** @typedef {'github-pages' | 'cloudflare-pages'} DeployTarget */
-
-/**
- * Get dev server port from environment variable or generate from worktree path
- * This allows multiple worktrees to run dev servers simultaneously
- */
-function getDevPort() {
-  // Explicit port from environment
-  if (process.env.DEV_PORT) {
-    return parseInt(process.env.DEV_PORT, 10);
-  }
-
-  // Auto-generate port based on worktree path hash
-  // This ensures each worktree gets a consistent, unique port
-  const cwd = process.cwd();
-  let hash = 0;
-  for (let i = 0; i < cwd.length; i++) {
-    hash = (hash * 31 + cwd.charCodeAt(i)) >>> 0;
-  }
-  // Port range: 4321-4399 (Astro default is 4321)
-  return 4321 + (hash % 79);
-}
+import { getDevPort, getSiteConfig } from './scripts/deploy-target.mjs';
 
 const devPort = getDevPort();
 
-/** @type {Record<DeployTarget, { site: string; base: string }>} */
-const siteConfig = {
-  'github-pages': {
-    site: 'https://masup9.github.io',
-    base: '/apg-patterns-examples',
-  },
-  'cloudflare-pages': {
-    site: process.env.CF_PAGES_URL || 'https://apg-patterns-examples.pages.dev',
-    base: '/',
-  },
-};
-
-const deployTargetEnv = process.env.DEPLOY_TARGET || 'github-pages';
-
-/** @type {DeployTarget} */
-const deployTarget =
-  deployTargetEnv in siteConfig ? /** @type {DeployTarget} */ (deployTargetEnv) : 'github-pages';
-
-const { site, base } = siteConfig[deployTarget];
+// Single source of truth for the deploy-target → (site, base) contract.
+// Shared with playwright.config.ts and scripts/axe-check.mjs (see deploy-target.mjs).
+const { site, basePath: base } = getSiteConfig();
 
 // https://astro.build/config
 export default defineConfig({
