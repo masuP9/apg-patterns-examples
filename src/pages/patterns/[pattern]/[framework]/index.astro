@@ -21,6 +21,7 @@ import Prose from '@/components/ui/Prose.astro';
 import FrameworkTabs from '@/components/ui/FrameworkTabs.astro';
 import { ResponsiveTable } from '@/components/ui/table';
 import Heading from '@/components/ui/Heading.astro';
+import { withBase } from '@/lib/utils';
 import { FRAMEWORKS, FRAMEWORK_INFO, isValidFramework } from '@/lib/frameworks';
 import { getPatterns } from '@/lib/patterns';
 import type { PatternMeta } from '@/lib/pattern-meta-types';
@@ -85,7 +86,7 @@ export function getStaticPaths() {
 const { pattern, framework } = Astro.params;
 const { meta } = Astro.props as { meta: PatternMeta };
 if (!pattern || !framework || !isValidFramework(framework)) {
-  return Astro.redirect('/patterns/');
+  return Astro.redirect(withBase('/patterns/'));
 }
 
 const locale = 'en';

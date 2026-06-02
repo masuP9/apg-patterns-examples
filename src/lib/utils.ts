@@ -16,3 +16,16 @@ export function withBase(path: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${normalizedBase}${normalizedPath}`;
 }
+
+/**
+ * Strips the configured base URL prefix from a pathname (inverse of withBase).
+ * `/apg-patterns-examples/ja/patterns` → `/ja/patterns`; root deploys are no-ops.
+ * Derived from `import.meta.env.BASE_URL`, so it works for any deploy target.
+ */
+export function removeBasePath(pathname: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+  if (base && (pathname === base || pathname.startsWith(`${base}/`))) {
+    return pathname.slice(base.length) || '/';
+  }
+  return pathname;
+}

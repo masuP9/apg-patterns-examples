@@ -26,7 +26,7 @@ const { practice: practiceId } = Astro.params;
 const practice = getPracticeById(practiceId);
 
 if (!practice) {
-  return Astro.redirect('/404');
+  return Astro.redirect(withBase('/404'));
 }
 
 const practiceName = getPracticeName(practice.id, practice.name, locale);

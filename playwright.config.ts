@@ -1,36 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Single source of truth for the deploy-target → (base path, dev port) contract,
+// shared with astro.config.mjs so local dev and e2e can never disagree on the base.
+import { getDevPort, getLocalBaseUrl } from './scripts/deploy-target.mjs';
+
 const isCI = !!process.env.CI;
 
 // Skip webServer when running as part of parallel execution (server managed externally)
 const skipWebServer = !!process.env.E2E_SKIP_SERVER;
 
-// Base path depends on deploy target:
-// - DEPLOY_TARGET=github-pages: /apg-patterns-examples
-// - Otherwise: /
-const basePath = process.env.DEPLOY_TARGET === 'github-pages' ? '/apg-patterns-examples' : '';
-
 // Framework filter from environment variable (for CI parallel execution)
 const frameworkFilter = process.env.E2E_FRAMEWORK;
 
-/**
- * Get dev server port from environment variable or generate from worktree path
- * This must match the logic in astro.config.mjs
- */
-function getDevPort(): number {
-  if (process.env.DEV_PORT) {
-    return parseInt(process.env.DEV_PORT, 10);
-  }
-
-  const cwd = process.cwd();
-  let hash = 0;
-  for (let i = 0; i < cwd.length; i++) {
-    hash = (hash * 31 + cwd.charCodeAt(i)) >>> 0;
-  }
-  return 4321 + (hash % 79);
-}
-
 const devPort = getDevPort();
+// Includes the base path, e.g. http://localhost:4336/apg-patterns-examples/
+// (DEPLOY_TARGET unset → github-pages → /apg-patterns-examples/, matching prod).
+const baseUrl = getLocalBaseUrl();
 
 /**
  * Playwright E2E Test Configuration
@@ -57,7 +42,7 @@ export default defineConfig({
   // Filter tests by framework if E2E_FRAMEWORK is set
   grep: frameworkFilter ? new RegExp(`\\(${frameworkFilter}\\)`) : undefined,
   use: {
-    baseURL: `http://localhost:${devPort}${basePath}/`,
+    baseURL: baseUrl,
     trace: 'on-first-retry',
   },
 
@@ -74,7 +59,7 @@ export default defineConfig({
         // CI: Use preview server (serves pre-built dist/)
         // Local: Use dev server (hot reload)
         command: isCI ? `npx astro preview --host 0.0.0.0 --port ${devPort}` : 'npm run dev',
-        url: `http://localhost:${devPort}${basePath}/`,
+        url: baseUrl,
         reuseExistingServer: !isCI,
         timeout: 180 * 1000, // 3 minutes for CI
         stdout: 'pipe',

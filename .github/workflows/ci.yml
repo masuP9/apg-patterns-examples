@@ -38,7 +38,7 @@ jobs:
           path: |
             .astro
             node_modules/.vite
-          key: astro-${{ runner.os }}-${{ hashFiles('astro.config.mjs', 'package-lock.json') }}
+          key: astro-${{ runner.os }}-${{ hashFiles('astro.config.mjs', 'scripts/deploy-target.mjs', 'package-lock.json') }}
           restore-keys: |
             astro-${{ runner.os }}-
 
