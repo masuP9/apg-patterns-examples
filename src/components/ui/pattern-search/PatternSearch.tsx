@@ -315,36 +315,36 @@ export function PatternSearch({
 
   return (
     <div ref={containerRef} className={cn('pattern-search relative', className)}>
-      <label id={labelId} htmlFor={inputId} className="sr-only">
-        {label}
-      </label>
       <div className="relative">
-        <Search
-          className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
-          aria-hidden="true"
-        />
-        <input
-          ref={inputRef}
-          id={inputId}
-          type="text"
-          role="combobox"
-          className={cn(
-            'bg-background border-input placeholder:text-muted-foreground focus-visible:ring-foreground',
-            'flex h-9 w-full rounded-md border py-2 pr-3 pl-9 text-sm',
-            'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-            'disabled:cursor-not-allowed disabled:opacity-50'
-          )}
-          aria-autocomplete="list"
-          aria-expanded={isOpen}
-          aria-controls={listboxId}
-          aria-labelledby={labelId}
-          aria-activedescendant={activeDescendantId}
-          value={query}
-          placeholder={placeholder}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={handleFocus}
-        />
+        <label>
+          <Search
+            aria-label={label}
+            role="img"
+            className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
+          />
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="text"
+            role="combobox"
+            className={cn(
+              'bg-background border-input placeholder:text-muted-foreground focus-visible:ring-foreground',
+              'flex h-9 w-full rounded-md border py-2 pr-3 pl-9 text-sm',
+              'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+              'disabled:cursor-not-allowed disabled:opacity-50'
+            )}
+            autoComplete="off"
+            aria-autocomplete="list"
+            aria-expanded={isOpen}
+            aria-controls={listboxId}
+            aria-activedescendant={activeDescendantId}
+            value={query}
+            placeholder={placeholder}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
+          />
+        </label>
         <kbd
           className={cn(
             'pointer-events-none absolute top-1/2 right-2 -translate-y-1/2',
