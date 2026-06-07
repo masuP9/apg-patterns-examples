@@ -260,6 +260,84 @@ for (const framework of frameworks) {
         const expandedValue = await splitter.getAttribute('aria-valuenow');
         expect(expandedValue).toBe('50');
       });
+
+      test('initially collapsed splitter expands via an expand-direction arrow key', async ({
+        page,
+      }) => {
+        const splitter = page.locator('[data-testid="collapsed-splitter"]');
+
+        await splitter.focus();
+        expect(await splitter.getAttribute('aria-valuenow')).toBe('0');
+
+        // Expand direction wakes the collapsed splitter and restores to expandedPosition (50)
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(50);
+
+        expect(await splitter.getAttribute('aria-valuenow')).toBe('50');
+      });
+
+      test('initially collapsed splitter ignores a shrink-direction arrow key', async ({
+        page,
+      }) => {
+        const splitter = page.locator('[data-testid="collapsed-splitter"]');
+
+        await splitter.focus();
+
+        await page.keyboard.press('ArrowLeft');
+        await page.waitForTimeout(50);
+
+        // Shrink direction is a no-op while collapsed
+        expect(await splitter.getAttribute('aria-valuenow')).toBe('0');
+      });
+
+      test('expanding a collapsed splitter visually widens the primary pane', async ({ page }) => {
+        const splitter = page.locator('[data-testid="collapsed-splitter"]');
+        const primaryPane = page.locator('#collapsed-primary');
+
+        // Primary pane starts collapsed (width ~0)
+        const initialBox = await primaryPane.boundingBox();
+        if (!initialBox) throw new Error('Collapsed primary pane not found');
+        expect(initialBox.width).toBeLessThan(5);
+
+        // Expand via an expand-direction arrow key
+        await splitter.focus();
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(50);
+
+        // The pane must actually grow, not just aria-valuenow
+        const expandedBox = await primaryPane.boundingBox();
+        if (!expandedBox) throw new Error('Collapsed primary pane not found after expand');
+        expect(expandedBox.width).toBeGreaterThan(100);
+
+        // Re-collapsing via Enter shrinks the pane back to ~0
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(50);
+        const recollapsedBox = await primaryPane.boundingBox();
+        if (!recollapsedBox) throw new Error('Collapsed primary pane not found after re-collapse');
+        expect(recollapsedBox.width).toBeLessThan(5);
+      });
+
+      test('Expand popup button visually widens a collapsed primary pane', async ({ page }) => {
+        const collapsedDemo = page.locator('[data-testid="collapsed-demo"]');
+        const splitter = page.locator('[data-testid="collapsed-splitter"]');
+        const primaryPane = page.locator('#collapsed-primary');
+        const expandButton = collapsedDemo.getByRole('button', { name: 'Expand', exact: true });
+
+        const initialBox = await primaryPane.boundingBox();
+        if (!initialBox) throw new Error('Collapsed primary pane not found');
+        expect(initialBox.width).toBeLessThan(5);
+
+        // Reveal the popup, then click the Expand chevron button
+        await splitter.hover();
+        await expect(expandButton).toBeVisible();
+        await expandButton.click();
+        await page.waitForTimeout(50);
+
+        expect(await splitter.getAttribute('aria-valuenow')).toBe('50');
+        const expandedBox = await primaryPane.boundingBox();
+        if (!expandedBox) throw new Error('Collapsed primary pane not found after expand');
+        expect(expandedBox.width).toBeGreaterThan(100);
+      });
     });
 
     // 🔴 High Priority: Disabled State

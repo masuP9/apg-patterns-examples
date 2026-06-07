@@ -296,6 +296,9 @@ const isVertical = orientation === 'vertical';
         this.popup.addEventListener('keydown', this.boundHandlePopupKeyDown);
         this.popup.addEventListener('click', this.boundHandlePopupButtonClick);
       }
+
+      // Reflect the initial collapsed/min/max state on the popup buttons.
+      this.updatePopupButtonStates();
     }
 
     disconnectedCallback() {
@@ -405,17 +408,21 @@ const isVertical = orientation === 'vertical';
       const decreaseBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="decrease"]');
       const increaseBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="increase"]');
       const maximizeBtn = this.popup.querySelector<HTMLButtonElement>('[data-adjust="maximize"]');
+      // While collapsed the splitter sits below `min`, so the shrink direction is
+      // disabled (already minimal) and the expand direction stays enabled.
+      const shrinkDisabled = this.collapsed || pos <= this.min;
+      const expandDisabled = !this.collapsed && pos >= this.max;
       if (collapseBtn) {
-        collapseBtn.setAttribute('aria-disabled', String(pos <= this.min));
+        collapseBtn.setAttribute('aria-disabled', String(shrinkDisabled));
       }
       if (decreaseBtn) {
-        decreaseBtn.setAttribute('aria-disabled', String(pos <= this.min));
+        decreaseBtn.setAttribute('aria-disabled', String(shrinkDisabled));
       }
       if (increaseBtn) {
-        increaseBtn.setAttribute('aria-disabled', String(pos >= this.max));
+        increaseBtn.setAttribute('aria-disabled', String(expandDisabled));
       }
       if (maximizeBtn) {
-        maximizeBtn.setAttribute('aria-disabled', String(pos >= this.max));
+        maximizeBtn.setAttribute('aria-disabled', String(expandDisabled));
       }
     }
 
@@ -455,72 +462,80 @@ const isVertical = orientation === 'vertical';
       );
     }
 
+    // Expand from the collapsed state, restoring to the previous/expanded position.
+    // Shared by the collapse toggle, popup buttons and keyboard handlers.
+    private expandFromCollapsed() {
+      if (!this.separator) return;
+
+      const restorePosition =
+        this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
+      const clampedRestore = this.clamp(restorePosition);
+
+      this.dispatchEvent(
+        new CustomEvent('collapsedchange', {
+          detail: { collapsed: false, previousPosition: this.currentPosition },
+          bubbles: true,
+        })
+      );
+
+      this.collapsed = false;
+      this.separator.setAttribute('aria-valuenow', String(clampedRestore));
+
+      if (this.container) {
+        this.container.style.setProperty('--splitter-position', `${clampedRestore}%`);
+      }
+
+      let sizeInPx = 0;
+      if (this.container) {
+        sizeInPx =
+          (clampedRestore / 100) *
+          (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
+      }
+
+      this.updatePopupButtonStates();
+
+      this.dispatchEvent(
+        new CustomEvent('positionchange', {
+          detail: { position: clampedRestore, sizeInPx },
+          bubbles: true,
+        })
+      );
+    }
+
     private handleToggleCollapse() {
       if (!this.isCollapsible || this.isDisabled || this.isReadonly) return;
       if (!this.separator) return;
 
       if (this.collapsed) {
-        // Expand
-        const restorePosition =
-          this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
-        const clampedRestore = this.clamp(restorePosition);
-
-        this.dispatchEvent(
-          new CustomEvent('collapsedchange', {
-            detail: { collapsed: false, previousPosition: this.currentPosition },
-            bubbles: true,
-          })
-        );
-
-        this.collapsed = false;
-        this.separator.setAttribute('aria-valuenow', String(clampedRestore));
-
-        if (this.container) {
-          this.container.style.setProperty('--splitter-position', `${clampedRestore}%`);
-        }
-
-        let sizeInPx = 0;
-        if (this.container) {
-          sizeInPx =
-            (clampedRestore / 100) *
-            (this.isHorizontal ? this.container.offsetWidth : this.container.offsetHeight);
-        }
-
-        this.updatePopupButtonStates();
-
-        this.dispatchEvent(
-          new CustomEvent('positionchange', {
-            detail: { position: clampedRestore, sizeInPx },
-            bubbles: true,
-          })
-        );
-      } else {
-        // Collapse
-        this.previousPosition = this.currentPosition;
-
-        this.dispatchEvent(
-          new CustomEvent('collapsedchange', {
-            detail: { collapsed: true, previousPosition: this.currentPosition },
-            bubbles: true,
-          })
-        );
-
-        this.collapsed = true;
-        this.separator.setAttribute('aria-valuenow', '0');
-
-        if (this.container) {
-          this.container.style.setProperty('--splitter-position', '0%');
-        }
-
-        this.updatePopupButtonStates();
-
-        this.dispatchEvent(
-          new CustomEvent('positionchange', {
-            detail: { position: 0, sizeInPx: 0 },
-            bubbles: true,
-          })
-        );
+        this.expandFromCollapsed();
+        return;
       }
+
+      // Collapse
+      this.previousPosition = this.currentPosition;
+
+      this.dispatchEvent(
+        new CustomEvent('collapsedchange', {
+          detail: { collapsed: true, previousPosition: this.currentPosition },
+          bubbles: true,
+        })
+      );
+
+      this.collapsed = true;
+      this.separator.setAttribute('aria-valuenow', '0');
+
+      if (this.container) {
+        this.container.style.setProperty('--splitter-position', '0%');
+      }
+
+      this.updatePopupButtonStates();
+
+      this.dispatchEvent(
+        new CustomEvent('positionchange', {
+          detail: { position: 0, sizeInPx: 0 },
+          bubbles: true,
+        })
+      );
     }
 
     private calcPopupPosition(clientX: number, clientY: number): { x: number; y: number } | null {
@@ -648,12 +663,17 @@ const isVertical = orientation === 'vertical';
           break;
 
         case 'Home':
-          this.updatePosition(this.min);
+          // Shrink direction is a no-op while collapsed (already at minimum).
+          if (!this.collapsed) this.updatePosition(this.min);
           handled = true;
           break;
 
         case 'End':
-          this.updatePosition(this.max);
+          if (this.collapsed) {
+            this.expandFromCollapsed();
+          } else {
+            this.updatePosition(this.max);
+          }
           handled = true;
           break;
       }
@@ -661,7 +681,12 @@ const isVertical = orientation === 'vertical';
       if (handled) {
         event.preventDefault();
         if (delta !== 0) {
-          this.updatePosition(this.currentPosition + delta);
+          if (this.collapsed) {
+            // Only the expand direction wakes a collapsed splitter; shrink is a no-op.
+            if (delta > 0) this.expandFromCollapsed();
+          } else {
+            this.updatePosition(this.currentPosition + delta);
+          }
         }
       }
     }
@@ -704,11 +729,10 @@ const isVertical = orientation === 'vertical';
 
       if (!this.container) return;
 
-      // Use demo container for stable measurement if available
-      const demoContainer = this.container.closest(
-        '.apg-window-splitter-demo-container'
-      ) as HTMLElement | null;
-      const measureElement = demoContainer || this.container.parentElement || this.container;
+      // Measure the containing layout (the consumer positions the panes there).
+      // The visual update is driven solely by the positionchange event, keeping
+      // the component agnostic of how the consumer renders its panes.
+      const measureElement = this.container.parentElement || this.container;
       const rect = measureElement.getBoundingClientRect();
 
       let percent: number;
@@ -718,14 +742,6 @@ const isVertical = orientation === 'vertical';
       } else {
         const y = event.clientY - rect.top;
         percent = (y / rect.height) * 100;
-      }
-
-      // Clamp the percent to min/max
-      const clampedPercent = this.clamp(percent);
-
-      // Update CSS variable directly for smooth dragging
-      if (demoContainer) {
-        demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
       }
 
       this.updatePosition(percent);
@@ -830,34 +846,8 @@ const isVertical = orientation === 'vertical';
       }
     }
 
-    private handlePopupButtonClick(event: Event) {
-      const target = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-adjust]');
-      if (!target) return;
-      if (this.isDisabled || this.isReadonly) return;
-
-      const adjustType = target.dataset.adjust;
-      let delta: number;
-      switch (adjustType) {
-        case 'collapse':
-          delta = this.min - this.currentPosition;
-          break;
-        case 'decrease':
-          delta = -this.step;
-          break;
-        case 'increase':
-          delta = this.step;
-          break;
-        case 'maximize':
-          delta = this.max - this.currentPosition;
-          break;
-        default:
-          return;
-      }
-      const newPos = this.currentPosition + delta;
-
-      if (newPos < this.min || newPos > this.max) return;
-
-      this.updatePosition(newPos);
+    // Mark the popup as actively adjusting, then settle back to the showing state.
+    private markPopupActive() {
       if (this.popupState !== 'active') {
         this.popupState = 'active';
         document.addEventListener('pointerdown', this.boundHandleOutsidePointerDown);
@@ -879,6 +869,45 @@ const isVertical = orientation === 'vertical';
           this.popupState = 'showing';
         }
       }, ACTIVE_SETTLE_DELAY);
+    }
+
+    private handlePopupButtonClick(event: Event) {
+      const target = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-adjust]');
+      if (!target) return;
+      if (this.isDisabled || this.isReadonly) return;
+      if (target.getAttribute('aria-disabled') === 'true') return;
+
+      const adjustType = target.dataset.adjust;
+
+      if (this.collapsed) {
+        // Shrink direction is a no-op while collapsed (already at minimum).
+        if (adjustType !== 'increase' && adjustType !== 'maximize') return;
+        this.expandFromCollapsed();
+        if (adjustType === 'maximize') this.updatePosition(this.max);
+        this.markPopupActive();
+        return;
+      }
+
+      let targetPos: number;
+      switch (adjustType) {
+        case 'collapse':
+          targetPos = this.min;
+          break;
+        case 'decrease':
+          targetPos = this.currentPosition - this.step;
+          break;
+        case 'increase':
+          targetPos = this.currentPosition + this.step;
+          break;
+        case 'maximize':
+          targetPos = this.max;
+          break;
+        default:
+          return;
+      }
+
+      this.updatePosition(targetPos);
+      this.markPopupActive();
     }
 
     // Public method to update position programmatically

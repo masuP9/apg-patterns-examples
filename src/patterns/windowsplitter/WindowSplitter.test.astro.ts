@@ -120,61 +120,67 @@ describe('WindowSplitter (Web Component)', () => {
       );
     }
 
+    private expandFromCollapsed() {
+      if (!this.separator) return;
+
+      const restorePosition =
+        this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
+      const clampedRestore = this.clamp(restorePosition);
+
+      this.dispatchEvent(
+        new CustomEvent('collapsedchange', {
+          detail: { collapsed: false, previousPosition: this.currentPosition },
+          bubbles: true,
+        })
+      );
+
+      this.collapsed = false;
+      this.separator.setAttribute('aria-valuenow', String(clampedRestore));
+
+      if (this.containerEl) {
+        this.containerEl.style.setProperty('--splitter-position', `${clampedRestore}%`);
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('positionchange', {
+          detail: { position: clampedRestore },
+          bubbles: true,
+        })
+      );
+    }
+
     private handleToggleCollapse() {
       if (!this.isCollapsible || this.isDisabled || this.isReadonly) return;
       if (!this.separator) return;
 
       if (this.collapsed) {
-        // Expand
-        const restorePosition =
-          this.previousPosition ?? this.expandedPosition ?? this.defaultPosition ?? 50;
-        const clampedRestore = this.clamp(restorePosition);
-
-        this.dispatchEvent(
-          new CustomEvent('collapsedchange', {
-            detail: { collapsed: false, previousPosition: this.currentPosition },
-            bubbles: true,
-          })
-        );
-
-        this.collapsed = false;
-        this.separator.setAttribute('aria-valuenow', String(clampedRestore));
-
-        if (this.containerEl) {
-          this.containerEl.style.setProperty('--splitter-position', `${clampedRestore}%`);
-        }
-
-        this.dispatchEvent(
-          new CustomEvent('positionchange', {
-            detail: { position: clampedRestore },
-            bubbles: true,
-          })
-        );
-      } else {
-        // Collapse
-        this.previousPosition = this.currentPosition;
-
-        this.dispatchEvent(
-          new CustomEvent('collapsedchange', {
-            detail: { collapsed: true, previousPosition: this.currentPosition },
-            bubbles: true,
-          })
-        );
-
-        this.collapsed = true;
-        this.separator.setAttribute('aria-valuenow', '0');
-
-        if (this.containerEl) {
-          this.containerEl.style.setProperty('--splitter-position', '0%');
-        }
-
-        this.dispatchEvent(
-          new CustomEvent('positionchange', {
-            detail: { position: 0, sizeInPx: 0 },
-            bubbles: true,
-          })
-        );
+        this.expandFromCollapsed();
+        return;
       }
+
+      // Collapse
+      this.previousPosition = this.currentPosition;
+
+      this.dispatchEvent(
+        new CustomEvent('collapsedchange', {
+          detail: { collapsed: true, previousPosition: this.currentPosition },
+          bubbles: true,
+        })
+      );
+
+      this.collapsed = true;
+      this.separator.setAttribute('aria-valuenow', '0');
+
+      if (this.containerEl) {
+        this.containerEl.style.setProperty('--splitter-position', '0%');
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('positionchange', {
+          detail: { position: 0, sizeInPx: 0 },
+          bubbles: true,
+        })
+      );
     }
 
     private handleKeyDown(event: KeyboardEvent) {
@@ -217,12 +223,17 @@ describe('WindowSplitter (Web Component)', () => {
           break;
 
         case 'Home':
-          this.updatePosition(this.min);
+          // Shrink direction is a no-op while collapsed (already at minimum).
+          if (!this.collapsed) this.updatePosition(this.min);
           handled = true;
           break;
 
         case 'End':
-          this.updatePosition(this.max);
+          if (this.collapsed) {
+            this.expandFromCollapsed();
+          } else {
+            this.updatePosition(this.max);
+          }
           handled = true;
           break;
       }
@@ -230,7 +241,12 @@ describe('WindowSplitter (Web Component)', () => {
       if (handled) {
         event.preventDefault();
         if (delta !== 0) {
-          this.updatePosition(this.currentPosition + delta);
+          if (this.collapsed) {
+            // Only the expand direction wakes a collapsed splitter; shrink is a no-op.
+            if (delta > 0) this.expandFromCollapsed();
+          } else {
+            this.updatePosition(this.currentPosition + delta);
+          }
         }
       }
     }
@@ -597,6 +613,34 @@ describe('WindowSplitter (Web Component)', () => {
       pressKey(separator, 'Enter');
 
       expect(separator.getAttribute('aria-valuenow')).toBe('50');
+    });
+
+    it('expands to expandedPosition via an expand-direction arrow key while collapsed', async () => {
+      container.innerHTML = createSplitterHTML({ collapsed: true, expandedPosition: 50 });
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
+      await customElements.whenDefined('apg-window-splitter');
+      element.connectedCallback();
+
+      const separator = element._separator!;
+      expect(separator.getAttribute('aria-valuenow')).toBe('0');
+
+      pressKey(separator, 'ArrowRight');
+
+      expect(separator.getAttribute('aria-valuenow')).toBe('50');
+      expect(element._collapsed).toBe(false);
+    });
+
+    it('ignores a shrink-direction arrow key while collapsed', async () => {
+      container.innerHTML = createSplitterHTML({ collapsed: true, expandedPosition: 50 });
+      const element = container.querySelector('apg-window-splitter') as TestApgWindowSplitter;
+      await customElements.whenDefined('apg-window-splitter');
+      element.connectedCallback();
+
+      const separator = element._separator!;
+      pressKey(separator, 'ArrowLeft');
+
+      expect(separator.getAttribute('aria-valuenow')).toBe('0');
+      expect(element._collapsed).toBe(true);
     });
   });
 

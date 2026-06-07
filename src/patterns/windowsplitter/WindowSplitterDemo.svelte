@@ -5,6 +5,7 @@
   let verticalPosition = $state(50);
   let horizontalCollapsed = $state(false);
   let verticalCollapsed = $state(false);
+  let collapsedPosition = $state(0);
 </script>
 
 <div class="apg-window-splitter-demo-wrapper">
@@ -159,7 +160,7 @@
     <div
       class="apg-window-splitter-demo-container"
       data-testid="collapsed-demo"
-      style="--splitter-position: 0%"
+      style="--splitter-position: {collapsedPosition}%"
     >
       <div class="apg-window-splitter-pane" id="collapsed-primary">
         <div class="apg-window-splitter-pane-content">Primary Pane</div>
@@ -171,6 +172,7 @@
         data-testid="collapsed-splitter"
         defaultCollapsed={true}
         expandedPosition={50}
+        onpositionchange={(pos) => (collapsedPosition = pos)}
       />
       <div class="apg-window-splitter-pane" id="collapsed-secondary">
         <div class="apg-window-splitter-pane-content">Secondary Pane</div>

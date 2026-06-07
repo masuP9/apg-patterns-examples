@@ -241,68 +241,116 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
     [min, max, isHorizontal, onPositionChange]
   );
 
-  const handlePopupButtonClick = useCallback(
-    (delta: number) => {
-      if (disabled || readonly) return;
-      const currentPos = positionRef.current;
-      const newPos = currentPos + delta;
-      if (newPos < min || newPos > max) return;
-      updatePosition(newPos);
-      setPopupState('active');
-      if (activeSettleTimerRef.current) clearTimeout(activeSettleTimerRef.current);
-      activeSettleTimerRef.current = setTimeout(() => {
-        setPopupState((prev) => {
-          if (prev === 'active') {
-            if (!isMouseOverPopupRef.current) {
-              const pos = hoverPosRef.current;
-              if (pos) {
-                const newPopupPos = calcPopupPosition(pos.x, pos.y);
-                if (newPopupPos) setPopupPos(newPopupPos);
-              }
+  const markPopupActive = useCallback(() => {
+    setPopupState('active');
+    if (activeSettleTimerRef.current) clearTimeout(activeSettleTimerRef.current);
+    activeSettleTimerRef.current = setTimeout(() => {
+      setPopupState((prev) => {
+        if (prev === 'active') {
+          if (!isMouseOverPopupRef.current) {
+            const pos = hoverPosRef.current;
+            if (pos) {
+              const newPopupPos = calcPopupPosition(pos.x, pos.y);
+              if (newPopupPos) setPopupPos(newPopupPos);
             }
-            return 'showing';
           }
-          return prev;
-        });
-      }, ACTIVE_SETTLE_DELAY);
-    },
-    [disabled, readonly, min, max, updatePosition, calcPopupPosition]
-  );
+          return 'showing';
+        }
+        return prev;
+      });
+    }, ACTIVE_SETTLE_DELAY);
+  }, [calcPopupPosition]);
 
-  const handleToggleCollapse = useCallback(() => {
-    if (!collapsible || disabled || readonly) return;
+  // Expand from the collapsed state, restoring to the previous/expanded position.
+  // Shared by the collapse toggle, popup buttons and keyboard handlers.
+  const expandFromCollapsed = useCallback(() => {
     const currentPos = positionRef.current;
-    if (collapsed) {
-      const restorePosition =
-        previousPositionRef.current ?? expandedPosition ?? defaultPosition ?? 50;
-      const clampedRestore = clamp(restorePosition, min, max);
-      onCollapsedChange?.(false, currentPos);
-      setCollapsed(false);
-      positionRef.current = clampedRestore;
-      setPosition(clampedRestore);
-      const container = containerRef.current;
-      const sizeInPx = container
-        ? (clampedRestore / 100) * (isHorizontal ? container.offsetWidth : container.offsetHeight)
-        : 0;
-      onPositionChange?.(clampedRestore, sizeInPx);
-    } else {
-      previousPositionRef.current = currentPos;
-      onCollapsedChange?.(true, currentPos);
-      setCollapsed(true);
-      positionRef.current = 0;
-      setPosition(0);
-      onPositionChange?.(0, 0);
-    }
+    const restorePosition =
+      previousPositionRef.current ?? expandedPosition ?? defaultPosition ?? 50;
+    const clampedRestore = clamp(restorePosition, min, max);
+    onCollapsedChange?.(false, currentPos);
+    setCollapsed(false);
+    positionRef.current = clampedRestore;
+    setPosition(clampedRestore);
+    const container = containerRef.current;
+    const sizeInPx = container
+      ? (clampedRestore / 100) * (isHorizontal ? container.offsetWidth : container.offsetHeight)
+      : 0;
+    onPositionChange?.(clampedRestore, sizeInPx);
   }, [
-    collapsed,
-    collapsible,
-    disabled,
-    readonly,
     expandedPosition,
     defaultPosition,
     min,
     max,
     isHorizontal,
+    onCollapsedChange,
+    onPositionChange,
+  ]);
+
+  const handlePopupAdjust = useCallback(
+    (kind: 'collapse' | 'shrink' | 'expand' | 'maximize') => {
+      if (disabled || readonly) return;
+
+      if (collapsed) {
+        // Shrink direction is a no-op while collapsed (already at minimum).
+        if (kind === 'collapse' || kind === 'shrink') return;
+        expandFromCollapsed();
+        if (kind === 'maximize') updatePosition(max);
+        markPopupActive();
+        return;
+      }
+
+      const currentPos = positionRef.current;
+      let target = currentPos;
+      switch (kind) {
+        case 'collapse':
+          target = min;
+          break;
+        case 'shrink':
+          target = currentPos - step;
+          break;
+        case 'expand':
+          target = currentPos + step;
+          break;
+        case 'maximize':
+          target = max;
+          break;
+      }
+      updatePosition(target);
+      markPopupActive();
+    },
+    [
+      disabled,
+      readonly,
+      collapsed,
+      expandFromCollapsed,
+      updatePosition,
+      markPopupActive,
+      min,
+      max,
+      step,
+    ]
+  );
+
+  const handleToggleCollapse = useCallback(() => {
+    if (!collapsible || disabled || readonly) return;
+    if (collapsed) {
+      expandFromCollapsed();
+      return;
+    }
+    const currentPos = positionRef.current;
+    previousPositionRef.current = currentPos;
+    onCollapsedChange?.(true, currentPos);
+    setCollapsed(true);
+    positionRef.current = 0;
+    setPosition(0);
+    onPositionChange?.(0, 0);
+  }, [
+    collapsed,
+    collapsible,
+    disabled,
+    readonly,
+    expandFromCollapsed,
     onCollapsedChange,
     onPositionChange,
   ]);
@@ -357,12 +405,17 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
           break;
 
         case 'Home':
-          updatePosition(min);
+          // Shrink direction is a no-op while collapsed (already at minimum).
+          if (!collapsed) updatePosition(min);
           handled = true;
           break;
 
         case 'End':
-          updatePosition(max);
+          if (collapsed) {
+            expandFromCollapsed();
+          } else {
+            updatePosition(max);
+          }
           handled = true;
           break;
       }
@@ -370,7 +423,12 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
       if (handled) {
         event.preventDefault();
         if (delta !== 0) {
-          updatePosition(positionRef.current + delta);
+          if (collapsed) {
+            // Only the expand direction wakes a collapsed splitter; shrink is a no-op.
+            if (delta > 0) expandFromCollapsed();
+          } else {
+            updatePosition(positionRef.current + delta);
+          }
         }
       }
     },
@@ -378,6 +436,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
       disabled,
       readonly,
       popupState,
+      collapsed,
+      expandFromCollapsed,
       isHorizontal,
       isVertical,
       isRTL,
@@ -434,10 +494,10 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
       const container = containerRef.current;
       if (!container) return;
 
-      const demoContainerElement = container.closest('.apg-window-splitter-demo-container');
-      const demoContainer =
-        demoContainerElement instanceof HTMLElement ? demoContainerElement : null;
-      const measureElement = demoContainer || container.parentElement || container;
+      // Measure the containing layout (the consumer positions the panes there).
+      // The visual update is driven solely by onPositionChange, keeping the
+      // component agnostic of how the consumer renders its panes.
+      const measureElement = container.parentElement || container;
       const rect = measureElement.getBoundingClientRect();
 
       let percent: number;
@@ -449,13 +509,9 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
         percent = (y / rect.height) * 100;
       }
 
-      const clampedPercent = clamp(percent, min, max);
-      if (demoContainer) {
-        demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
-      }
       updatePosition(percent);
     },
-    [isHorizontal, min, max, updatePosition, popupState, hidePopup]
+    [isHorizontal, updatePosition, popupState, hidePopup]
   );
 
   const handlePointerUp = useCallback(
@@ -569,8 +625,12 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
 
   const ariaControls = secondaryPaneId ? `${primaryPaneId} ${secondaryPaneId}` : primaryPaneId;
 
-  const isAtMin = position <= min;
-  const isAtMax = position >= max;
+  // While collapsed the splitter sits below `min`, so the shrink direction is
+  // disabled (already minimal) and the expand direction stays enabled.
+  const shrinkDisabled = collapsed || position <= min;
+  const collapseDisabled = collapsed || position <= min;
+  const expandDisabled = !collapsed && position >= max;
+  const maxDisabled = !collapsed && position >= max;
 
   return (
     <div
@@ -638,8 +698,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
             className="apg-window-splitter__popup-button"
             tabIndex={-1}
             aria-label={`Collapse ${splitterLabel}`}
-            aria-disabled={isAtMin}
-            onClick={() => !isAtMin && handlePopupButtonClick(min - positionRef.current)}
+            aria-disabled={collapseDisabled}
+            onClick={() => !collapseDisabled && handlePopupAdjust('collapse')}
           >
             <ChevronIcon {...icons.collapse} />
           </button>
@@ -648,8 +708,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
             className="apg-window-splitter__popup-button"
             tabIndex={-1}
             aria-label={`Shrink ${splitterLabel}`}
-            aria-disabled={isAtMin}
-            onClick={() => !isAtMin && handlePopupButtonClick(-step)}
+            aria-disabled={shrinkDisabled}
+            onClick={() => !shrinkDisabled && handlePopupAdjust('shrink')}
           >
             <ChevronIcon {...icons.shrink} />
           </button>
@@ -658,8 +718,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
             className="apg-window-splitter__popup-button"
             tabIndex={-1}
             aria-label={`Expand ${splitterLabel}`}
-            aria-disabled={isAtMax}
-            onClick={() => !isAtMax && handlePopupButtonClick(step)}
+            aria-disabled={expandDisabled}
+            onClick={() => !expandDisabled && handlePopupAdjust('expand')}
           >
             <ChevronIcon {...icons.expand} />
           </button>
@@ -668,8 +728,8 @@ export const WindowSplitter: React.FC<WindowSplitterProps> = ({
             className="apg-window-splitter__popup-button"
             tabIndex={-1}
             aria-label={`Expand ${splitterLabel} to maximum`}
-            aria-disabled={isAtMax}
-            onClick={() => !isAtMax && handlePopupButtonClick(max - positionRef.current)}
+            aria-disabled={maxDisabled}
+            onClick={() => !maxDisabled && handlePopupAdjust('maximize')}
           >
             <ChevronIcon {...icons.max} />
           </button>
