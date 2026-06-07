@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 type Props = VariantProps<typeof variants> & HTMLAttributes<'div'> & HTMLAttributes<'a'>;
 
 const variants = cva(
-  'group/tile focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:ring-accent/50 relative flex flex-col items-start gap-6 outline-none focus-visible:ring-[3px] [a]:transition-all',
+  'group/tile focus-ring [a]:hover:ring-accent/50 relative flex flex-col items-start gap-6 [a]:transition-all',
   {
     variants: {
       variant: {

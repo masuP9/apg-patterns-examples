@@ -31,7 +31,7 @@ const currentPattern = getPatternById(pattern);
     <li class="relative">
       <Collapsible class="inline-block">
         <CollapsibleTrigger
-          class="text-primary focus-visible:ring-ring inline-flex items-center gap-1 rounded-sm hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+          class="text-primary focus-ring inline-flex items-center gap-1 rounded-sm hover:underline"
           showChevron={false}
         >
           <span>{t('patterns.title')}</span>
@@ -44,7 +44,7 @@ const currentPattern = getPatternById(pattern);
         >
           <a
             href={withBase(getLocalizedPath('/patterns/', locale))}
-            class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+            class="hover:bg-muted/50 focus:bg-muted focus-ring-inset flex items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors"
           >
             <span class="inline-flex w-5 justify-center text-base" aria-hidden="true">📚</span>
             <span>{t('patterns.available')}</span>
@@ -57,7 +57,7 @@ const currentPattern = getPatternById(pattern);
                   <a
                     href={withBase(getLocalizedPath(`/patterns/${p.id}/${framework}/`, locale))}
                     class:list={[
-                      'hover:bg-muted/50 focus:bg-muted focus:ring-primary flex items-center gap-2 px-4 py-2 text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset',
+                      'hover:bg-muted/50 focus:bg-muted focus-ring-inset flex items-center gap-2 px-4 py-2 text-sm transition-colors',
                       pattern === p.id && 'bg-muted font-medium',
                     ]}
                     aria-current={pattern === p.id ? 'page' : undefined}
