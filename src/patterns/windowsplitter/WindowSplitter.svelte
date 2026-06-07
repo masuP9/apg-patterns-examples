@@ -116,8 +116,12 @@
 
   const splitterLabel = $derived((restProps['aria-label'] as string) || '');
 
-  const isAtMin = $derived(position <= min);
-  const isAtMax = $derived(position >= max);
+  // While collapsed the splitter sits below `min`, so the shrink direction is
+  // disabled (already minimal) and the expand direction stays enabled.
+  const shrinkDisabled = $derived(collapsed || position <= min);
+  const collapseDisabled = $derived(collapsed || position <= min);
+  const expandDisabled = $derived(!collapsed && position >= max);
+  const maxDisabled = $derived(!collapsed && position >= max);
 
   const icons = $derived(
     isVertical
@@ -238,13 +242,8 @@
     }
   }
 
-  // Handle popup button click
-  function handlePopupButtonClick(delta: number) {
-    if (disabled || readonly) return;
-    const currentPos = latestPosition;
-    const newPos = currentPos + delta;
-    if (newPos < min || newPos > max) return;
-    updatePosition(newPos);
+  // Mark the popup as actively adjusting, then settle back to the showing state.
+  function markPopupActive() {
     popupState = 'active';
     if (activeSettleTimer) clearTimeout(activeSettleTimer);
     activeSettleTimer = setTimeout(() => {
@@ -261,36 +260,73 @@
     }, ACTIVE_SETTLE_DELAY);
   }
 
+  // Expand from the collapsed state, restoring to the previous/expanded position.
+  // Shared by the collapse toggle, popup buttons and keyboard handlers.
+  function expandFromCollapsed() {
+    const currentPos = latestPosition;
+    const restorePosition = previousPosition ?? expandedPosition ?? defaultPosition ?? 50;
+    const clampedRestore = clamp(restorePosition, min, max);
+
+    oncollapsedchange?.(false, currentPos);
+    collapsed = false;
+    latestPosition = clampedRestore;
+    position = clampedRestore;
+
+    const sizeInPx = containerEl
+      ? (clampedRestore / 100) * (isHorizontal ? containerEl.offsetWidth : containerEl.offsetHeight)
+      : 0;
+    onpositionchange?.(clampedRestore, sizeInPx);
+  }
+
+  // Handle popup button (collapse / shrink / expand / maximize)
+  function handlePopupAdjust(kind: 'collapse' | 'shrink' | 'expand' | 'maximize') {
+    if (disabled || readonly) return;
+
+    if (collapsed) {
+      // Shrink direction is a no-op while collapsed (already at minimum).
+      if (kind === 'collapse' || kind === 'shrink') return;
+      expandFromCollapsed();
+      if (kind === 'maximize') updatePosition(max);
+      markPopupActive();
+      return;
+    }
+
+    const currentPos = latestPosition;
+    let target = currentPos;
+    switch (kind) {
+      case 'collapse':
+        target = min;
+        break;
+      case 'shrink':
+        target = currentPos - step;
+        break;
+      case 'expand':
+        target = currentPos + step;
+        break;
+      case 'maximize':
+        target = max;
+        break;
+    }
+    updatePosition(target);
+    markPopupActive();
+  }
+
   // Handle collapse/expand
   function handleToggleCollapse() {
     if (!collapsible || disabled || readonly) return;
 
-    const currentPos = latestPosition;
-
     if (collapsed) {
-      // Expand: restore to previous or fallback
-      const restorePosition = previousPosition ?? expandedPosition ?? defaultPosition ?? 50;
-      const clampedRestore = clamp(restorePosition, min, max);
-
-      oncollapsedchange?.(false, currentPos);
-      collapsed = false;
-      latestPosition = clampedRestore;
-      position = clampedRestore;
-
-      const sizeInPx = containerEl
-        ? (clampedRestore / 100) *
-          (isHorizontal ? containerEl.offsetWidth : containerEl.offsetHeight)
-        : 0;
-      onpositionchange?.(clampedRestore, sizeInPx);
-    } else {
-      // Collapse: save current position, set to 0
-      previousPosition = currentPos;
-      oncollapsedchange?.(true, currentPos);
-      collapsed = true;
-      latestPosition = 0;
-      position = 0;
-      onpositionchange?.(0, 0);
+      expandFromCollapsed();
+      return;
     }
+    // Collapse: save current position, set to 0
+    const currentPos = latestPosition;
+    previousPosition = currentPos;
+    oncollapsedchange?.(true, currentPos);
+    collapsed = true;
+    latestPosition = 0;
+    position = 0;
+    onpositionchange?.(0, 0);
   }
 
   // Keyboard handler
@@ -344,12 +380,17 @@
         break;
 
       case 'Home':
-        updatePosition(min);
+        // Shrink direction is a no-op while collapsed (already at minimum).
+        if (!collapsed) updatePosition(min);
         handled = true;
         break;
 
       case 'End':
-        updatePosition(max);
+        if (collapsed) {
+          expandFromCollapsed();
+        } else {
+          updatePosition(max);
+        }
         handled = true;
         break;
     }
@@ -357,7 +398,12 @@
     if (handled) {
       event.preventDefault();
       if (delta !== 0) {
-        updatePosition(latestPosition + delta);
+        if (collapsed) {
+          // Only the expand direction wakes a collapsed splitter; shrink is a no-op.
+          if (delta > 0) expandFromCollapsed();
+        } else {
+          updatePosition(latestPosition + delta);
+        }
       }
     }
   }
@@ -402,10 +448,10 @@
 
     if (!containerEl) return;
 
-    // Use demo container for stable measurement if available
-    const demoContainerElement = containerEl.closest('.apg-window-splitter-demo-container');
-    const demoContainer = demoContainerElement instanceof HTMLElement ? demoContainerElement : null;
-    const measureElement = demoContainer || containerEl.parentElement || containerEl;
+    // Measure the containing layout (the consumer positions the panes there).
+    // The visual update is driven solely by onpositionchange, keeping the
+    // component agnostic of how the consumer renders its panes.
+    const measureElement = containerEl.parentElement || containerEl;
     const rect = measureElement.getBoundingClientRect();
 
     let percent: number;
@@ -415,14 +461,6 @@
     } else {
       const y = event.clientY - rect.top;
       percent = (y / rect.height) * 100;
-    }
-
-    // Clamp the percent to min/max
-    const clampedPercent = clamp(percent, min, max);
-
-    // Update CSS variable directly for smooth dragging
-    if (demoContainer) {
-      demoContainer.style.setProperty('--splitter-position', `${clampedPercent}%`);
     }
 
     updatePosition(percent);
@@ -587,8 +625,8 @@
         class="apg-window-splitter__popup-button"
         tabindex={-1}
         aria-label={`Collapse ${splitterLabel}`}
-        aria-disabled={isAtMin}
-        onclick={() => !isAtMin && handlePopupButtonClick(min - latestPosition)}
+        aria-disabled={collapseDisabled}
+        onclick={() => !collapseDisabled && handlePopupAdjust('collapse')}
       >
         <svg
           width="12"
@@ -609,8 +647,8 @@
         class="apg-window-splitter__popup-button"
         tabindex={-1}
         aria-label={`Shrink ${splitterLabel}`}
-        aria-disabled={isAtMin}
-        onclick={() => !isAtMin && handlePopupButtonClick(-step)}
+        aria-disabled={shrinkDisabled}
+        onclick={() => !shrinkDisabled && handlePopupAdjust('shrink')}
       >
         <svg
           width="12"
@@ -631,8 +669,8 @@
         class="apg-window-splitter__popup-button"
         tabindex={-1}
         aria-label={`Expand ${splitterLabel}`}
-        aria-disabled={isAtMax}
-        onclick={() => !isAtMax && handlePopupButtonClick(step)}
+        aria-disabled={expandDisabled}
+        onclick={() => !expandDisabled && handlePopupAdjust('expand')}
       >
         <svg
           width="12"
@@ -653,8 +691,8 @@
         class="apg-window-splitter__popup-button"
         tabindex={-1}
         aria-label={`Expand ${splitterLabel} to maximum`}
-        aria-disabled={isAtMax}
-        onclick={() => !isAtMax && handlePopupButtonClick(max - latestPosition)}
+        aria-disabled={maxDisabled}
+        onclick={() => !maxDisabled && handlePopupAdjust('maximize')}
       >
         <svg
           width="12"

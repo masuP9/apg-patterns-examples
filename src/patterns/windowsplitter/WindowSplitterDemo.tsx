@@ -52,6 +52,7 @@ export function WindowSplitterDemo() {
   const [verticalPosition, setVerticalPosition] = useState(50);
   const [horizontalCollapsed, setHorizontalCollapsed] = useState(false);
   const [verticalCollapsed, setVerticalCollapsed] = useState(false);
+  const [collapsedPosition, setCollapsedPosition] = useState(0);
 
   return (
     <div className="apg-window-splitter-demo-wrapper">
@@ -182,7 +183,7 @@ export function WindowSplitterDemo() {
         <div
           className="apg-window-splitter-demo-container"
           data-testid="collapsed-demo"
-          style={{ '--splitter-position': '0%' } satisfies SplitterStyle}
+          style={{ '--splitter-position': `${collapsedPosition}%` } satisfies SplitterStyle}
         >
           <div className="apg-window-splitter-pane" id="collapsed-primary">
             <div className="apg-window-splitter-pane-content">Primary Pane</div>
@@ -194,6 +195,7 @@ export function WindowSplitterDemo() {
             data-testid="collapsed-splitter"
             defaultCollapsed
             expandedPosition={50}
+            onPositionChange={(pos) => setCollapsedPosition(pos)}
           />
           <div className="apg-window-splitter-pane" id="collapsed-secondary">
             <div className="apg-window-splitter-pane-content">Secondary Pane</div>

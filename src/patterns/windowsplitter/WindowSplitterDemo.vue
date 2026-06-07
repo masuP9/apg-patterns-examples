@@ -117,7 +117,7 @@
       <div
         class="apg-window-splitter-demo-container"
         data-testid="collapsed-demo"
-        style="--splitter-position: 0%"
+        :style="{ '--splitter-position': `${collapsedPosition}%` }"
       >
         <div class="apg-window-splitter-pane" id="collapsed-primary">
           <div class="apg-window-splitter-pane-content">Primary Pane</div>
@@ -129,6 +129,7 @@
           data-testid="collapsed-splitter"
           default-collapsed
           :expanded-position="50"
+          @position-change="(pos) => (collapsedPosition = pos)"
         />
         <div class="apg-window-splitter-pane" id="collapsed-secondary">
           <div class="apg-window-splitter-pane-content">Secondary Pane</div>
@@ -147,4 +148,5 @@ const horizontalPosition = ref(50);
 const verticalPosition = ref(50);
 const horizontalCollapsed = ref(false);
 const verticalCollapsed = ref(false);
+const collapsedPosition = ref(0);
 </script>

@@ -476,6 +476,134 @@ describe('WindowSplitter (Svelte)', () => {
     });
   });
 
+  // 🔴 High Priority: Operating the separator while collapsed
+  describe('Operating the separator while collapsed', () => {
+    it('expands to expandedPosition via the Expand popup button and un-collapses', async () => {
+      const user = userEvent.setup();
+      let capturedCollapsed: boolean | undefined;
+      let capturedPreviousPosition: number | undefined;
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultCollapsed: true,
+          expandedPosition: 50,
+          'aria-label': 'Resize panels',
+          oncollapsedchange: (collapsed: boolean, prevPos: number) => {
+            capturedCollapsed = collapsed;
+            capturedPreviousPosition = prevPos;
+          },
+        },
+      });
+      const separator = screen.getByRole('separator');
+      expect(separator).toHaveAttribute('aria-valuenow', '0');
+
+      await user.click(screen.getByRole('button', { name: 'Expand Resize panels' }));
+
+      expect(separator).toHaveAttribute('aria-valuenow', '50');
+      expect(capturedCollapsed).toBe(false);
+      expect(capturedPreviousPosition).toBe(0);
+    });
+
+    it('expands straight to max via the Maximize popup button while collapsed', async () => {
+      const user = userEvent.setup();
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultCollapsed: true,
+          expandedPosition: 50,
+          max: 90,
+          'aria-label': 'Resize panels',
+        },
+      });
+      const separator = screen.getByRole('separator');
+
+      await user.click(screen.getByRole('button', { name: 'Expand Resize panels to maximum' }));
+
+      expect(separator).toHaveAttribute('aria-valuenow', '90');
+    });
+
+    it('expands via an expand-direction arrow key while collapsed', async () => {
+      const user = userEvent.setup();
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultCollapsed: true,
+          expandedPosition: 50,
+          'aria-label': 'Resize panels',
+        },
+      });
+      const separator = screen.getByRole('separator');
+
+      await user.click(separator);
+      await user.keyboard('{ArrowRight}');
+
+      expect(separator).toHaveAttribute('aria-valuenow', '50');
+    });
+
+    it('ignores a shrink-direction arrow key while collapsed', async () => {
+      const user = userEvent.setup();
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultCollapsed: true,
+          expandedPosition: 50,
+          'aria-label': 'Resize panels',
+        },
+      });
+      const separator = screen.getByRole('separator');
+
+      await user.click(separator);
+      await user.keyboard('{ArrowLeft}');
+
+      expect(separator).toHaveAttribute('aria-valuenow', '0');
+    });
+
+    it('disables the Collapse and Shrink buttons while collapsed, keeps expand enabled', () => {
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultCollapsed: true,
+          expandedPosition: 50,
+          'aria-label': 'Resize panels',
+        },
+      });
+
+      expect(screen.getByRole('button', { name: 'Collapse Resize panels' })).toHaveAttribute(
+        'aria-disabled',
+        'true'
+      );
+      expect(screen.getByRole('button', { name: 'Shrink Resize panels' })).toHaveAttribute(
+        'aria-disabled',
+        'true'
+      );
+      expect(screen.getByRole('button', { name: 'Expand Resize panels' })).toHaveAttribute(
+        'aria-disabled',
+        'false'
+      );
+      expect(
+        screen.getByRole('button', { name: 'Expand Resize panels to maximum' })
+      ).toHaveAttribute('aria-disabled', 'false');
+    });
+
+    it('clamps to max when an Expand step would overshoot (no silent reject)', async () => {
+      const user = userEvent.setup();
+      render(WindowSplitter, {
+        props: {
+          primaryPaneId: 'primary',
+          defaultPosition: 88,
+          step: 5,
+          max: 90,
+          'aria-label': 'Resize panels',
+        },
+      });
+      const separator = screen.getByRole('separator');
+
+      await user.click(screen.getByRole('button', { name: 'Expand Resize panels' }));
+
+      expect(separator).toHaveAttribute('aria-valuenow', '90');
+    });
+  });
+
   // 🔴 High Priority: Keyboard Interaction - Home/End
   describe('Keyboard Interaction - Home/End', () => {
     it('sets min value on Home', async () => {
