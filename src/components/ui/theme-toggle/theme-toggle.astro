@@ -33,20 +33,12 @@ const buttonStyles = cn(
   // Checked state
   'aria-checked:bg-background',
   'aria-checked:shadow-sm',
-  // Focus state
-  'focus-visible:outline-none',
-  'focus-visible:ring-2',
-  'focus-visible:ring-offset-2',
-  'focus-visible:ring-foreground',
+  // Focus state (outline + var(--ring); forced-colors でシステム色に追従)
+  'focus-ring',
   // Forced colors: checked state
   'forced-colors:aria-checked:outline-2',
   'forced-colors:aria-checked:outline-[SelectedItem]',
-  'forced-colors:aria-checked:-outline-offset-2',
-  // Forced colors: focus state
-  'forced-colors:focus-visible:outline-2',
-  'forced-colors:focus-visible:outline-[Highlight]',
-  'forced-colors:focus-visible:-outline-offset-2',
-  'forced-colors:focus-visible:ring-0'
+  'forced-colors:aria-checked:-outline-offset-2'
 );
 ---
 

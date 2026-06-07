@@ -29,7 +29,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
   >
     <button
       type="button"
-      class="download-btn inline-flex items-center gap-1.5 rounded-l-md px-3 py-1.5 text-sm text-blue-700 transition-colors hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-blue-300 dark:hover:bg-blue-900"
+      class="download-btn focus-ring inline-flex items-center gap-1.5 rounded-l-md px-3 py-1.5 text-sm text-blue-700 transition-colors hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-blue-900"
       data-action="download"
     >
       <DownloadIcon class="relative -top-px size-4" aria-hidden="true" />
@@ -40,7 +40,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
 
     <details class="dropdown relative">
       <summary
-        class="dropdown-trigger inline-flex size-8 items-center justify-center rounded-r-md text-blue-700 transition-colors hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:text-blue-300 dark:hover:bg-blue-900"
+        class="dropdown-trigger focus-ring inline-flex size-8 items-center justify-center rounded-r-md text-blue-700 transition-colors hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-blue-900"
         aria-label={t('ai.moreActions')}
         aria-haspopup="menu"
       >
@@ -52,7 +52,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
       >
         <button
           type="button"
-          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 rounded-t-lg px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          class="hover:bg-muted/50 focus:bg-muted focus-ring-inset flex w-full items-center gap-2 rounded-t-lg px-4 py-2.5 text-left text-sm transition-colors"
           role="menuitem"
           data-action="copy"
         >
@@ -61,7 +61,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
         </button>
         <button
           type="button"
-          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          class="hover:bg-muted/50 focus:bg-muted focus-ring-inset flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors"
           role="menuitem"
           data-action="chatgpt"
         >
@@ -70,7 +70,7 @@ const mdFileName = locale === 'ja' ? `${practice}.ja.md` : `${practice}.md`;
         </button>
         <button
           type="button"
-          class="hover:bg-muted/50 focus:bg-muted focus:ring-primary flex w-full items-center gap-2 rounded-b-lg px-4 py-2.5 text-left text-sm transition-colors focus:ring-2 focus:outline-none focus:ring-inset"
+          class="hover:bg-muted/50 focus:bg-muted focus-ring-inset flex w-full items-center gap-2 rounded-b-lg px-4 py-2.5 text-left text-sm transition-colors"
           role="menuitem"
           data-action="claude"
         >
