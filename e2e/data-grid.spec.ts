@@ -510,6 +510,41 @@ for (const framework of frameworks) {
         await expectCellOrChildFocused(page, editableCell);
       });
 
+      test('edited cell value is rendered as plain text, not HTML (astro regression)', async ({
+        page,
+      }) => {
+        // This test only applies to the Astro implementation, which previously used innerHTML
+        if (framework !== 'astro') return;
+
+        const grid = page.getByRole('grid');
+        const editableCells = grid.locator('[role="gridcell"][aria-readonly="false"]');
+        const count = await editableCells.count();
+
+        if (count === 0) {
+          test.skip();
+          return;
+        }
+
+        const editableCell = editableCells.first();
+        await focusCell(page, editableCell);
+        await expect(editableCell).toBeFocused();
+        await editableCell.press('Enter');
+
+        const input = editableCell.locator('input').first();
+        await expect(input).toBeFocused();
+
+        // Type markup that would be parsed as HTML if innerHTML were used
+        await input.fill('<b>x</b>');
+
+        // Commit by pressing Enter
+        await page.keyboard.press('Enter');
+
+        // The cell should contain the literal string, not a parsed <b> element
+        await expect(editableCell.locator('b')).toHaveCount(0);
+        const cellText = await editableCell.textContent();
+        expect(cellText).toContain('<b>x</b>');
+      });
+
       test('edit mode disables grid navigation', async ({ page }) => {
         const grid = page.getByRole('grid');
         const editableCells = grid.locator('[role="gridcell"][aria-readonly="false"]');

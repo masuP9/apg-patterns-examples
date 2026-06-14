@@ -1334,7 +1334,7 @@ const initialFocusedId = getInitialFocusedId();
       const finalValue = cancelled ? this.originalEditValue : this.editValue;
 
       // Restore cell content
-      cell.innerHTML = finalValue;
+      cell.textContent = finalValue;
       cell.classList.remove('editing');
 
       this.dispatchEvent(
