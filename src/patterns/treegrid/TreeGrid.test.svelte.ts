@@ -15,14 +15,22 @@ import type { TreeGridColumnDef, TreeGridNodeData } from './TreeGrid.svelte';
 // - The Svelte TreeGrid sets up focusable-element tabindex via an $effect, so `renderTree`
 //   awaits a tick after mounting (mirrors React's synchronous render) before assertions.
 //
-// All titles are ported 1:1, but 9 expand/collapse/selection interaction cases are it.skip
-// (NOT React-specific). They PASS when run in isolation but FAIL when a preceding test in the
-// same file collapses a `defaultExpandedIds` node: the Svelte 5 reactivity scheduler leaks
-// across testing-library/svelte cleanup so the next instance's first expand/collapse/selection
-// keyboard or click action does not flush to the DOM. cleanup() + flushSync() + extra tick()s
-// in afterEach do not resolve it. This is an environmental Svelte-5-under-jsdom interaction
-// (the same family as the two treeview skips), not an APG/component defect — verified by the
-// identical cases passing standalone and by the Vue/Astro ports passing. Reported for the reviewer.
+// All titles are ported 1:1. 8 expand/collapse/selection interaction cases are it.skip because
+// they expose a REAL Svelte-only component reactivity bug (NOT an environment/scheduler issue —
+// they fail identically run alone or in the full file, verified). Mechanism: TreeGrid.svelte
+// declares `internalExpandedIds` / `internalSelectedRowIds` as plain `let` bindings (not `$state`)
+// holding `SvelteSet`s. Every expand/collapse/select handler creates a NEW `SvelteSet` and
+// REASSIGNS the binding (`internalExpandedIds = newSet`, `internalSelectedRowIds = newSet`).
+// In Svelte 5 runes mode a plain-`let` reassignment is not tracked, so the `$derived`
+// `expandedIds`/`selectedRowIds` never re-run and `aria-expanded`/`aria-selected` never update in
+// the DOM. The `onExpandedChange`/`onSelectionChange` callbacks DO fire with the right payload
+// (the logic is correct; only the view binding is dead), which is why the callback-only tests
+// pass. `await tick()`/`flushSync()` cannot rescue a non-reactive reassignment. React/Vue update
+// the DOM. Fix is component-side (declare the bindings with `$state`, or mutate the existing
+// SvelteSet via add/delete like TreeView does) — out of scope here. Reported for the reviewer.
+// (The 9th originally-skipped case, "clicking a non-rowheader cell does not toggle expansion",
+// was a test-side query bug — gridcell textContent is " -- " with whitespace, so the exact
+// `=== '--'` match found nothing — now fixed with `.trim()` and un-skipped.)
 const renderTree = async (
   ...args: Parameters<typeof render>
 ): Promise<ReturnType<typeof render>> => {
@@ -514,7 +522,11 @@ describe('TreeGrid (Svelte)', () => {
   });
 
   describe('Keyboard - Tree Operations', () => {
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('ArrowRight expands collapsed parent row at rowheader', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -553,7 +565,11 @@ describe('TreeGrid (Svelte)', () => {
       expect(screen.getByRole('gridcell', { name: '4 KB' })).toHaveFocus();
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('ArrowLeft collapses expanded parent row at rowheader', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -631,7 +647,11 @@ describe('TreeGrid (Svelte)', () => {
       expect(parentRow).toHaveAttribute('aria-expanded', 'false');
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('Space toggles row selection', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -670,7 +690,11 @@ describe('TreeGrid (Svelte)', () => {
       expect(row).toHaveAttribute('aria-selected', 'false');
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('Ctrl+A selects all visible rows (multiselectable)', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -690,7 +714,11 @@ describe('TreeGrid (Svelte)', () => {
       });
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('single selection clears previous on Space', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -964,7 +992,11 @@ describe('TreeGrid (Svelte)', () => {
   });
 
   describe('Mouse interactions', () => {
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('clicking a rowheader of a collapsed parent expands it', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -977,7 +1009,11 @@ describe('TreeGrid (Svelte)', () => {
       expect(screen.getByRole('rowheader', { name: 'report.pdf' })).toBeInTheDocument();
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('clicking a rowheader of an expanded parent collapses it', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
@@ -995,17 +1031,18 @@ describe('TreeGrid (Svelte)', () => {
       expect(screen.queryByRole('rowheader', { name: 'report.pdf' })).not.toBeInTheDocument();
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
-    it.skip('clicking a non-rowheader cell does not toggle expansion', async () => {
+    it('clicking a non-rowheader cell does not toggle expansion', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
         props: { columns: createBasicColumns(), nodes: createBasicNodes(), ariaLabel: 'Files' },
       });
+      // Svelte renders the cell value with surrounding template whitespace, so the gridcell's
+      // textContent is " -- " (not "--"); trim before the exact match (React's JSX has no padding).
       const sizeCell = screen
         .getAllByRole('gridcell')
         .find(
           (el) =>
-            el.textContent === '--' &&
+            el.textContent?.trim() === '--' &&
             el.closest('[role="row"]')?.getAttribute('aria-level') === '1'
         );
       expect(sizeCell).toBeDefined();
@@ -1047,7 +1084,11 @@ describe('TreeGrid (Svelte)', () => {
       expect(onExpandedChange).not.toHaveBeenCalled();
     });
 
-    // SKIP: see file header — Svelte-5 reactivity scheduler leak across tests (passes in isolation; not an APG/component defect).
+    // SKIP: real Svelte component reactivity bug (see file header). The expand/collapse/select
+    // handler reassigns the plain-`let` `internal*Ids` binding to a new SvelteSet; in runes mode
+    // that reassignment is not tracked, so the `aria-expanded`/`aria-selected` `$derived` never
+    // re-runs. The callback fires with the correct payload but the DOM attribute never updates.
+    // Fails alone and in the full run alike. Component-side fix needed — do not weaken the assertion.
     it.skip('clicking the chevron icon inside a rowheader also toggles expansion', async () => {
       const user = userEvent.setup();
       await renderTree(TreeGrid, {
