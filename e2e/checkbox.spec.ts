@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 /**
@@ -247,6 +248,21 @@ for (const framework of frameworks) {
         await page.keyboard.press('Tab');
         const focusedId = await page.evaluate(() => document.activeElement?.id);
         expect(focusedId).not.toBe('demo-disabled');
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const firstCheckbox = page.locator('.apg-checkbox').first();
+        await firstCheckbox.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include('.apg-checkbox')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });

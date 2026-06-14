@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
@@ -991,6 +992,21 @@ for (const framework of frameworks) {
         // Focus should be outside the grid
         const gridContainsFocus = await grid.evaluate((el) => el.contains(document.activeElement));
         expect(gridContainsFocus).toBe(false);
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const grid = page.locator('.apg-data-grid');
+        await grid.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include('.apg-data-grid')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });

@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
@@ -619,6 +620,21 @@ for (const framework of frameworks) {
 
         // Selection should persist
         await expect(firstCell).toHaveAttribute('aria-selected', 'true');
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const grid = page.locator('.apg-grid').first();
+        await grid.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include('.apg-grid')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });

@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 /**
@@ -618,6 +619,21 @@ for (const framework of frameworks) {
         if ((await saveItem.count()) > 0) {
           await expect(saveItem).toBeFocused();
         }
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const menubar = page.locator('.apg-menubar');
+        await menubar.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include('.apg-menubar')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });
