@@ -37,6 +37,12 @@ export default getViteConfig({
       'src/patterns/dialog/Dialog.test.astro.ts',
       'src/patterns/tabs/Tabs.test.astro.ts',
       'src/patterns/toolbar/Toolbar.test.astro.ts',
+      'src/patterns/alert/Alert.test.astro.ts',
+      'src/patterns/data-grid/DataGrid.test.astro.ts',
+      'src/patterns/radio/RadioGroup.test.astro.ts',
+      'src/patterns/slider-multithumb/MultiThumbSlider.test.astro.ts',
+      'src/patterns/treegrid/TreeGrid.test.astro.ts',
+      'src/patterns/treeview/TreeView.test.astro.ts',
     ],
   },
 });
