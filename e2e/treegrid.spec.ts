@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
@@ -713,6 +714,21 @@ for (const framework of frameworks) {
         // After navigation, tabindex should update
         await expect(firstCell).toHaveAttribute('tabindex', '-1');
         await expect(secondCell).toHaveAttribute('tabindex', '0');
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const treegrid = page.locator('[role="treegrid"]');
+        await treegrid.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include('[role="treegrid"]')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });

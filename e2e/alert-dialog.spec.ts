@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 /**
@@ -286,6 +287,20 @@ for (const framework of frameworks) {
         // Should NOT have close button like regular Dialog
         const closeButton = page.getByRole('button', { name: /close dialog/i });
         await expect(closeButton).toHaveCount(0);
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        await openAlertDialog(page);
+
+        const results = await new AxeBuilder({ page })
+          .include('[role="alertdialog"]')
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });

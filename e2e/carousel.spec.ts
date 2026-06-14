@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 /**
@@ -294,6 +295,21 @@ for (const framework of frameworks) {
 
         // Button should be present on auto-rotate carousel
         await expect(playPauseButton).toBeVisible();
+      });
+    });
+
+    // 🟢 Low Priority: Accessibility
+    test.describe('Accessibility', () => {
+      test('has no axe-core violations', async ({ page }) => {
+        const carousel = page.locator(manualCarouselSelector);
+        await carousel.waitFor();
+
+        const results = await new AxeBuilder({ page })
+          .include(manualCarouselSelector)
+          .disableRules(['color-contrast'])
+          .analyze();
+
+        expect(results.violations).toEqual([]);
       });
     });
   });
