@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "lastRun": "2026-06-22T23:46:23.568Z",
+  "lastRun": "2026-06-23T23:38:15.751Z",
   "patterns": {
     "accordion": {
       "lastSeenSha": "7b134ce6d19497cce8a67db4a9f59980baf853dc",
@@ -99,8 +99,8 @@
       "lastSeenDate": "2025-09-02T16:41:49Z"
     },
     "tabs": {
-      "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
-      "lastSeenDate": "2026-01-20T06:18:35Z"
+      "lastSeenSha": "1acc0420bca1cba7c6df029454c37b719e3380f6",
+      "lastSeenDate": "2026-06-23T21:59:15Z"
     },
     "toolbar": {
       "lastSeenSha": "457f47a33e274b84c9965cd79615975d4282438a",
