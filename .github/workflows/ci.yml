@@ -153,8 +153,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      # DIAGNOSTIC: temporarily pinned to Node 22 to test whether the post-download
-      # extraction hang in `playwright install` is a Node 24 incompatibility.
+      # Pinned to Node 22 (rest of CI uses Node 24): on Node 24, `playwright install`
+      # (Playwright 1.59.1) hangs indefinitely after the browser download completes,
+      # during the extraction/post-processing phase. Node 22 installs the same browser
+      # binary in ~1 min. The e2e jobs still run on Node 24 against the cached binary.
+      # Revisit once a Playwright release fixes Node 24 install compatibility.
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -179,16 +182,12 @@ jobs:
 
       # Only the browser binary is cached here; OS deps are installed in the e2e jobs
       # via `playwright install-deps`, so `--with-deps` is intentionally omitted.
-      # Each attempt is bounded by `timeout` and retried so a stalled CDN download
+      # Each attempt is bounded by `timeout` and retried so a stalled install
       # fails fast and recovers instead of hanging the job for hours.
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         timeout-minutes: 12
-        env:
-          DEBUG: pw:install
         run: |
-          node -v
-          df -h /
           for attempt in 1 2 3; do
             if timeout 300 npx playwright install chromium; then
               exit 0
