@@ -153,10 +153,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      # DIAGNOSTIC: temporarily pinned to Node 22 to test whether the post-download
+      # extraction hang in `playwright install` is a Node 24 incompatibility.
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -182,7 +184,11 @@ jobs:
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         timeout-minutes: 12
+        env:
+          DEBUG: pw:install
         run: |
+          node -v
+          df -h /
           for attempt in 1 2 3; do
             if timeout 300 npx playwright install chromium; then
               exit 0
