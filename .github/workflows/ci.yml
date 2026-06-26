@@ -148,29 +148,55 @@ jobs:
   # Setup Playwright browsers once, cache for E2E jobs
   setup-playwright:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
+      # Pinned to Node 22 (rest of CI uses Node 24): on Node 24, `playwright install`
+      # (Playwright 1.59.1) hangs indefinitely after the browser download completes,
+      # during the extraction/post-processing phase. Node 22 installs the same browser
+      # binary in ~1 min. The e2e jobs still run on Node 24 against the cached binary.
+      # Revisit once a Playwright release fixes Node 24 install compatibility.
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci --prefer-offline
+
+      # Key the browser cache on the Playwright version, not the full lockfile hash,
+      # so unrelated dependency changes don't bust the cache and force a re-download.
+      - name: Resolve Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright browsers
         uses: actions/cache@v5
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
 
+      # Only the browser binary is cached here; OS deps are installed in the e2e jobs
+      # via `playwright install-deps`, so `--with-deps` is intentionally omitted.
+      # Each attempt is bounded by `timeout` and retried so a stalled install
+      # fails fast and recovers instead of hanging the job for hours.
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        timeout-minutes: 12
+        run: |
+          for attempt in 1 2 3; do
+            if timeout 300 npx playwright install chromium; then
+              exit 0
+            fi
+            echo "::warning::playwright install chromium attempt ${attempt} failed or timed out; retrying..."
+            sleep 15
+          done
+          echo "::error::playwright install chromium failed after 3 attempts"
+          exit 1
 
   test-e2e-framework:
     runs-on: ubuntu-latest
@@ -196,6 +222,10 @@ jobs:
       - name: Install dependencies
         run: npm ci --prefer-offline
 
+      - name: Resolve Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
       - name: Restore dist from cache
         uses: actions/cache/restore@v5
         with:
@@ -207,7 +237,7 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
           fail-on-cache-miss: true
 
       - name: Install Playwright system dependencies
