@@ -99,4 +99,19 @@ For general security questions or concerns, please open a [Discussion](https://g
 
 ---
 
+## Known Advisories (deferred — force-only fixes)
+
+As of 2026-06-15, `npm audit fix` (non-breaking) reduced the total from **21** to **11** vulnerabilities. The remaining items all require `npm audit fix --force` or a major upstream version bump and are deferred until the project migrates away from the intentional alpha dependencies.
+
+| Advisory ID | Severity | Package | Direct dependency pulling it in | Why deferred |
+|---|---|---|---|---|
+| GHSA-g7r4-m6w7-qqqr | high | esbuild ≤0.28.0 | `astro@7.0.0-alpha.0` | Requires `astro@7.0.0-beta.3+`; outside stated alpha range |
+| GHSA-gv7w-rqvm-qjhr | high | esbuild ≤0.28.0 | `astro@7.0.0-alpha.0` | Same as above |
+| GHSA-48c2-rrv3-qjmp | moderate | yaml (nested in yaml-language-server) | `@astrojs/check` | Fix installs `@astrojs/check@0.9.2`, flagged as breaking change |
+| GHSA-2h32-95rg-cppp | critical | `@vitest/browser` 4.0.17–4.1.5 | `@vitest/browser-playwright` | Affects browser-mode dev tooling only; fix available via `npm audit fix` but did not apply in this run — re-run after upstream vitest release stabilizes |
+
+Per its advisory, the esbuild file-read issue (GHSA-g7r4-m6w7-qqqr) is described as Windows-specific and reachable via the dev server. All items will be resolved when `astro` and `@astrojs/*` alpha pins are advanced to stable or beta releases.
+
+---
+
 Thank you for helping keep APG Patterns Examples and its users safe!
