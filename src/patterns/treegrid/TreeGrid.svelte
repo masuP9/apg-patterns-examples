@@ -101,6 +101,14 @@
 
   let internalExpandedIds = new SvelteSet<string>(untrack(() => defaultExpandedIds));
   let internalSelectedRowIds = new SvelteSet<string>(untrack(() => defaultSelectedRowIds));
+
+  // Helper function to sync SvelteSet with new values (using mutation for reactivity)
+  function syncSvelteSet<T>(target: SvelteSet<T>, source: Iterable<T>) {
+    target.clear();
+    for (const item of source) {
+      target.add(item);
+    }
+  }
   let focusedCellIdState = $state<string | null>(null);
   let initialized = $state(false);
 
@@ -197,8 +205,8 @@
 
   $effect(() => {
     if (!initialized && nodes.length > 0) {
-      internalExpandedIds = new SvelteSet(defaultExpandedIds);
-      internalSelectedRowIds = new SvelteSet(defaultSelectedRowIds);
+      syncSvelteSet(internalExpandedIds, defaultExpandedIds);
+      syncSvelteSet(internalSelectedRowIds, defaultSelectedRowIds);
       initialized = true;
     }
   });
@@ -250,7 +258,7 @@
 
   function updateExpandedIds(newExpandedIds: Set<string>) {
     if (!controlledExpandedIds) {
-      internalExpandedIds = newExpandedIds;
+      syncSvelteSet(internalExpandedIds, newExpandedIds);
     }
     onExpandedChange?.([...newExpandedIds]);
   }
@@ -300,7 +308,7 @@
 
   function updateSelectedRowIds(newSelectedIds: Set<string>) {
     if (!controlledSelectedRowIds) {
-      internalSelectedRowIds = newSelectedIds;
+      syncSvelteSet(internalSelectedRowIds, newSelectedIds);
     }
     onSelectionChange?.([...newSelectedIds]);
   }
