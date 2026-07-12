@@ -99,18 +99,24 @@ For general security questions or concerns, please open a [Discussion](https://g
 
 ---
 
-## Known Advisories (deferred — force-only fixes)
+## Known Advisories
 
-As of 2026-06-15, `npm audit fix` (non-breaking) reduced the total from **21** to **11** vulnerabilities. The remaining items all require `npm audit fix --force` or a major upstream version bump and are deferred until the project migrates away from the intentional alpha dependencies.
+As of 2026-07-12, on the stable Astro 7 toolchain, applying `npm audit fix`
+(non-breaking, **no** `--force`) reduces the audit to **5 findings** (4 critical,
+1 low). Only **1** (low) appears in the production dependency tree; the rest are
+development/build tooling. The remaining findings have no non-breaking fix — they
+require a `--force` major upgrade — and are deferred to maintainer-owned upgrade
+work.
 
-| Advisory ID | Severity | Package | Direct dependency pulling it in | Why deferred |
+| Advisory ID | Severity | Package | How it enters the tree | Status / why deferred |
 |---|---|---|---|---|
-| GHSA-g7r4-m6w7-qqqr | high | esbuild ≤0.28.0 | `astro@7.0.0-alpha.0` | Requires `astro@7.0.0-beta.3+`; outside stated alpha range |
-| GHSA-gv7w-rqvm-qjhr | high | esbuild ≤0.28.0 | `astro@7.0.0-alpha.0` | Same as above |
-| GHSA-48c2-rrv3-qjmp | moderate | yaml (nested in yaml-language-server) | `@astrojs/check` | Fix installs `@astrojs/check@0.9.2`, flagged as breaking change |
-| GHSA-2h32-95rg-cppp | critical | `@vitest/browser` 4.0.17–4.1.5 | `@vitest/browser-playwright` | Affects browser-mode dev tooling only; fix available via `npm audit fix` but did not apply in this run — re-run after upstream vitest release stabilizes |
+| GHSA-g8mr-85jm-7xhm | critical | `@vitest/browser` | `@vitest/browser-playwright` / `@vitest/coverage-v8` / `vitest` (dev; browser-mode test tooling) | No non-breaking fix; needs a `--force` major bump of the Vitest browser packages. Exercised only by `npm run test:browser`, not shipped as part of the static site. |
+| GHSA-2h32-95rg-cppp | critical | `@vitest/browser` | same as above | same as above |
+| GHSA-g7r4-m6w7-qqqr | low | esbuild | `astro` → `vite` (transitive; esbuild version pinned upstream) | esbuild's version is pinned transitively by Vite/Astro, so a non-breaking bump does not apply. Per its advisory the issue is Windows-specific and reachable via the dev server. Clears when Vite/Astro advance their pinned esbuild. |
 
-Per its advisory, the esbuild file-read issue (GHSA-g7r4-m6w7-qqqr) is described as Windows-specific and reachable via the dev server. All items will be resolved when `astro` and `@astrojs/*` alpha pins are advanced to stable or beta releases.
+Re-run `npm audit fix` (non-breaking) periodically to keep the noise floor low.
+The remaining `--force` upgrades (Vitest browser majors; a Vite/Astro bump that
+moves the pinned esbuild) are tracked as separate maintainer-owned work.
 
 ---
 
