@@ -56,7 +56,8 @@
 | `Up Arrow` | 前のアイテムにフォーカスを移動（最初から最後にラップ） |
 | `Right Arrow` | サブメニューがあれば開く、またはトップレベルメニューでは次のメニューバーアイテムのメニューに移動 |
 | `Left Arrow` | サブメニューを閉じて親に戻る、またはトップレベルメニューでは前のメニューバーアイテムのメニューに移動 |
-| `Enter / Space` | アイテムを実行してメニューを閉じる；チェックボックス/ラジオは状態を切り替えてメニューを開いたままにする |
+| `Enter` | アイテムを実行してメニューを閉じる（チェックボックス/ラジオは状態を切り替えてからメニューを閉じる） |
+| `Space` | アイテムを実行してメニューを閉じる；チェックボックス/ラジオは状態を切り替えてメニューを開いたままにする（任意） |
 | `Escape` | メニューを閉じてフォーカスを親（メニューバーアイテムまたは親menuitem）に戻す |
 | `Home` | 最初のアイテムにフォーカスを移動 |
 | `End` | 最後のアイテムにフォーカスを移動 |
@@ -95,8 +96,9 @@
 - [ ] ArrowUp opens submenu, focuses last item
 - [ ] Enter/Space opens submenu
 - [ ] Tab/Shift+Tab moves out, closes all menus
-- [ ] Checkbox toggle does not close menu
-- [ ] Radio selection does not close menu
+- [ ] Space on checkbox toggles state and does not close menu
+- [ ] Space on radio selects it and does not close menu
+- [ ] Enter on checkbox/radio changes state, closes menu, and returns focus to menubar item
 - [ ] Only one radio in group can be checked
 
 ### 高優先度: フォーカス管理
@@ -166,7 +168,7 @@ Critical Implementation Points:
 1. All <li> must have role="none" to hide list semantics
 2. aria-haspopup="menu" - use explicit "menu", not true
 3. Submenu aria-labelledby - must reference parent menuitem ID
-4. Checkbox/radio activation keeps menu open - unlike regular menuitem
+4. Checkbox/radio: Space changes state and keeps menu open (APG optional); Enter changes state and closes menu like a regular menuitem
 5. Hover menu switching - only when a menu is already open
 6. Context-dependent ←/→ - behavior differs in menubar vs menu vs submenu
 

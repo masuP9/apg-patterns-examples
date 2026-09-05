@@ -360,6 +360,10 @@ const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
       if (!trigger || !menu) return;
 
       this.openMenuIndex = menubarIndex;
+      // Keep roving tabindex / focusedMenubarIndex in sync with the open menu so that
+      // closing (Enter, Escape) returns focus to the correct menubar item, even when
+      // the menu was opened by click or hover rather than keyboard.
+      this.updateMenubarTabindex(menubarIndex);
       trigger.setAttribute('aria-expanded', 'true');
       menu.setAttribute('aria-hidden', 'false');
 
@@ -628,9 +632,14 @@ const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
         case ' ': {
           event.preventDefault();
           if (isSubmenuTrigger) {
-            this.openSubmenu(target);
+            // Disabled submenu triggers are focusable but must not open (matches click path)
+            if (target.getAttribute('aria-disabled') !== 'true') {
+              this.openSubmenu(target);
+            }
           } else {
-            this.activateItem(target);
+            // Enter activates the item and closes the menu (including checkbox/radio).
+            // Space toggles checkbox/radio without closing the menu (APG optional behavior).
+            this.activateItem(target, event.key === 'Enter');
           }
           break;
         }
@@ -684,7 +693,9 @@ const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
       submenu.setAttribute('aria-hidden', 'true');
     }
 
-    private activateItem(item: HTMLElement) {
+    // closeAfterToggle: for checkbox/radio, whether to close the menu after changing state.
+    // APG: Enter always closes the menu; Space (optional) keeps it open for checkbox/radio.
+    private activateItem(item: HTMLElement, closeAfterToggle = false) {
       // Disabled items should not be activatable
       if (item.getAttribute('aria-disabled') === 'true') {
         return;
@@ -707,7 +718,10 @@ const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
             bubbles: true,
           })
         );
-        // Don't close menu for checkbox
+        if (closeAfterToggle) {
+          this.closeAllMenus();
+          this.menubarItems[this.focusedMenubarIndex]?.focus();
+        }
         return;
       }
 
@@ -734,7 +748,10 @@ const instanceId = `menubar-${Math.random().toString(36).slice(2, 11)}`;
             })
           );
         }
-        // Don't close menu for radio
+        if (closeAfterToggle) {
+          this.closeAllMenus();
+          this.menubarItems[this.focusedMenubarIndex]?.focus();
+        }
         return;
       }
 

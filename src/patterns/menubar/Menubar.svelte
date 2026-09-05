@@ -369,25 +369,33 @@
     }
   }
 
-  function activateMenuItem(item: MenuItem, radioGroupName?: string) {
+  // closeAfterToggle: for checkbox/radio, whether to close the menu after changing state.
+  // APG: Enter always closes the menu; Space (optional) keeps it open for checkbox/radio.
+  function activateMenuItem(item: MenuItem, radioGroupName?: string, closeAfterToggle = false) {
     if ('disabled' in item && item.disabled) return;
+
+    const closeAndRestoreFocus = () => {
+      // Capture before closeAllMenus() resets openMenubarIndex to -1
+      const menubarIndex = openMenubarIndex;
+      closeAllMenus();
+      tick().then(() => {
+        menubarItemRefs.get(menubarIndex)?.focus();
+      });
+    };
 
     if (item.type === 'item') {
       onItemSelect(item.id);
-      closeAllMenus();
-      tick().then(() => {
-        menubarItemRefs.get(openMenubarIndex)?.focus();
-      });
+      closeAndRestoreFocus();
     } else if (item.type === 'checkbox') {
       const newChecked = !checkboxStates.get(item.id);
       checkboxStates.set(item.id, newChecked);
       checkboxStates = new SvelteMap(checkboxStates); // trigger reactivity
       item.onCheckedChange?.(newChecked);
-      // Menu stays open
+      if (closeAfterToggle) closeAndRestoreFocus();
     } else if (item.type === 'radio' && radioGroupName) {
       radioStates.set(radioGroupName, item.id);
       radioStates = new SvelteMap(radioStates); // trigger reactivity
-      // Menu stays open
+      if (closeAfterToggle) closeAndRestoreFocus();
     } else if (item.type === 'submenu') {
       // Open submenu and focus first item
       const firstItem = getFirstFocusableItem(item.items);
@@ -505,10 +513,16 @@
         closeAllMenus();
         break;
       }
-      case 'Enter':
+      case 'Enter': {
+        event.preventDefault();
+        // Enter activates the item and closes the menu (including checkbox/radio)
+        activateMenuItem(item, radioGroupName, true);
+        break;
+      }
       case ' ': {
         event.preventDefault();
-        activateMenuItem(item, radioGroupName);
+        // Space toggles checkbox/radio without closing the menu (APG optional behavior)
+        activateMenuItem(item, radioGroupName, false);
         break;
       }
       default: {

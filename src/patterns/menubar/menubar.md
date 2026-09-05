@@ -56,7 +56,8 @@ Menubar is a horizontal menu bar that provides application-style navigation. Eac
 | `Up Arrow` | Move focus to previous item (wraps to last) |
 | `Right Arrow` | Open submenu if present, or move to next menubar item's menu (in top-level menu) |
 | `Left Arrow` | Close submenu and return to parent, or move to previous menubar item's menu (in top-level menu) |
-| `Enter / Space` | Activate item and close menu; for checkbox/radio, toggle state and keep menu open |
+| `Enter` | Activate item and close menu (checkbox/radio: change state, then close menu) |
+| `Space` | Activate item and close menu; for checkbox/radio, change state without closing menu (optional) |
 | `Escape` | Close menu and return focus to parent (menubar item or parent menuitem) |
 | `Home` | Move focus to first item |
 | `End` | Move focus to last item |
@@ -95,8 +96,9 @@ Menubar is a horizontal menu bar that provides application-style navigation. Eac
 - [ ] ArrowUp opens submenu, focuses last item
 - [ ] Enter/Space opens submenu
 - [ ] Tab/Shift+Tab moves out, closes all menus
-- [ ] Checkbox toggle does not close menu
-- [ ] Radio selection does not close menu
+- [ ] Space on checkbox toggles state and does not close menu
+- [ ] Space on radio selects it and does not close menu
+- [ ] Enter on checkbox/radio changes state, closes menu, and returns focus to menubar item
 - [ ] Only one radio in group can be checked
 
 ### High Priority: Focus Management
@@ -166,7 +168,7 @@ Critical Implementation Points:
 1. All <li> must have role="none" to hide list semantics
 2. aria-haspopup="menu" - use explicit "menu", not true
 3. Submenu aria-labelledby - must reference parent menuitem ID
-4. Checkbox/radio activation keeps menu open - unlike regular menuitem
+4. Checkbox/radio: Space changes state and keeps menu open (APG optional); Enter changes state and closes menu like a regular menuitem
 5. Hover menu switching - only when a menu is already open
 6. Context-dependent ←/→ - behavior differs in menubar vs menu vs submenu
 

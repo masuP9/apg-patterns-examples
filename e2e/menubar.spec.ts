@@ -462,25 +462,30 @@ for (const framework of frameworks) {
         await expect(firstRadio).toHaveAttribute('aria-checked', 'false');
       });
 
-      test('Enter toggles checkbox and menu stays open', async ({ page }) => {
+      test('Enter toggles checkbox, closes menu, and returns focus to menubar', async ({
+        page,
+      }) => {
         const viewItem = page.getByRole('menuitem', { name: 'View' });
         await viewItem.click();
 
         const checkbox = page.getByRole('menuitemcheckbox').first();
+        const checkboxName = await checkbox.textContent();
         const initialChecked = await checkbox.getAttribute('aria-checked');
         await checkbox.focus();
         await expect(checkbox).toBeFocused();
         await checkbox.press('Enter');
 
-        // Menu should still be open
-        await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+        // APG: Enter activates the item and closes the menu (no checkbox exception)
+        await expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+        await expect(viewItem).toBeFocused();
 
-        // aria-checked should have toggled
-        const newChecked = await checkbox.getAttribute('aria-checked');
-        expect(newChecked).not.toBe(initialChecked);
+        // aria-checked should have toggled (reopen to inspect)
+        await viewItem.click();
+        const toggled = page.getByRole('menuitemcheckbox', { name: checkboxName! });
+        await expect(toggled).not.toHaveAttribute('aria-checked', initialChecked!);
       });
 
-      test('Enter selects radio and menu stays open', async ({ page }) => {
+      test('Enter selects radio, closes menu, and returns focus to menubar', async ({ page }) => {
         const viewItem = page.getByRole('menuitem', { name: 'View' });
         await viewItem.click();
 
@@ -491,10 +496,12 @@ for (const framework of frameworks) {
         await expect(uncheckedRadio).toBeFocused();
         await uncheckedRadio.press('Enter');
 
-        // Menu should still be open
-        await expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+        // APG: Enter activates the item and closes the menu (no radio exception)
+        await expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+        await expect(viewItem).toBeFocused();
 
-        // Radio should now be checked - use stable locator by name
+        // Radio should now be checked (reopen to inspect)
+        await viewItem.click();
         const targetRadio = page.getByRole('menuitemradio', { name: radioName! });
         await expect(targetRadio).toHaveAttribute('aria-checked', 'true');
       });
