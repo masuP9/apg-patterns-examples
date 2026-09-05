@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, waitFor } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, expect, it, vi, afterEach } from 'vitest';
@@ -261,6 +261,7 @@ describe('Menubar (Svelte)', () => {
 
       expect(onItemSelect).toHaveBeenCalledWith('new');
       expect(fileItem).toHaveAttribute('aria-expanded', 'false');
+      await waitFor(() => expect(fileItem).toHaveFocus());
     });
   });
 
@@ -281,6 +282,74 @@ describe('Menubar (Svelte)', () => {
 
       // Menu should still be open
       expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('Space on radio does not close menu', async () => {
+      const user = userEvent.setup();
+      render(Menubar, {
+        props: { items: createItemsWithCheckboxRadio(), 'aria-label': 'Application' },
+      });
+
+      const viewItem = screen.getByRole('menuitem', { name: 'View' });
+      await user.click(viewItem);
+
+      const darkRadio = screen.getByRole('menuitemradio', { name: 'Dark' });
+      darkRadio.focus();
+      await user.keyboard(' ');
+
+      // Menu should still be open
+      expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+      expect(darkRadio).toHaveAttribute('aria-checked', 'true');
+    });
+
+    it('Enter on checkbox toggles state, closes menu, and returns focus to menubar', async () => {
+      const user = userEvent.setup();
+      render(Menubar, {
+        props: { items: createItemsWithCheckboxRadio(), 'aria-label': 'Application' },
+      });
+
+      const viewItem = screen.getByRole('menuitem', { name: 'View' });
+      await user.click(viewItem);
+
+      const autoSave = screen.getByRole('menuitemcheckbox', { name: 'Auto Save' });
+      autoSave.focus();
+      await user.keyboard('{Enter}');
+
+      // APG: Enter activates the item and closes the menu (no checkbox exception)
+      expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+      await waitFor(() => expect(viewItem).toHaveFocus());
+
+      // State change is still applied
+      await user.click(viewItem);
+      expect(screen.getByRole('menuitemcheckbox', { name: 'Auto Save' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
+    });
+
+    it('Enter on radio selects it, closes menu, and returns focus to menubar', async () => {
+      const user = userEvent.setup();
+      render(Menubar, {
+        props: { items: createItemsWithCheckboxRadio(), 'aria-label': 'Application' },
+      });
+
+      const viewItem = screen.getByRole('menuitem', { name: 'View' });
+      await user.click(viewItem);
+
+      const darkRadio = screen.getByRole('menuitemradio', { name: 'Dark' });
+      darkRadio.focus();
+      await user.keyboard('{Enter}');
+
+      // APG: Enter activates the item and closes the menu (no radio exception)
+      expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+      await waitFor(() => expect(viewItem).toHaveFocus());
+
+      // Selection is still applied
+      await user.click(viewItem);
+      expect(screen.getByRole('menuitemradio', { name: 'Dark' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
     });
 
     it('only one radio in group can be checked', async () => {

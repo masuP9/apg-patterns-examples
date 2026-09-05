@@ -452,23 +452,31 @@ const handleMenubarHover = (index: number) => {
 };
 
 // Handle menu item activation
-const handleActivate = (item: MenuItem, radioGroupName?: string) => {
+// closeAfterToggle: for checkbox/radio, whether to close the menu after changing state.
+// APG: Enter always closes the menu; Space (optional) keeps it open for checkbox/radio.
+const handleActivate = (item: MenuItem, radioGroupName?: string, closeAfterToggle = false) => {
   if ('disabled' in item && item.disabled) return;
+
+  const closeAndRestoreFocus = () => {
+    // Capture before closeAllMenus() resets openMenubarIndex to -1
+    const menubarIndex = state.openMenubarIndex;
+    closeAllMenus();
+    nextTick(() => {
+      menubarItemRefs.value[menubarIndex]?.focus();
+    });
+  };
 
   if (item.type === 'item') {
     emit('itemSelect', item.id);
-    closeAllMenus();
-    nextTick(() => {
-      menubarItemRefs.value[state.openMenubarIndex]?.focus();
-    });
+    closeAndRestoreFocus();
   } else if (item.type === 'checkbox') {
     const newChecked = !checkboxStates.value.get(item.id);
     checkboxStates.value.set(item.id, newChecked);
     item.onCheckedChange?.(newChecked);
-    // Menu stays open
+    if (closeAfterToggle) closeAndRestoreFocus();
   } else if (item.type === 'radio' && radioGroupName) {
     radioStates.value.set(radioGroupName, item.id);
-    // Menu stays open
+    if (closeAfterToggle) closeAndRestoreFocus();
   } else if (item.type === 'submenu') {
     // Open submenu and focus first item
     const firstItem = getFirstFocusableItem(item.items);
@@ -588,10 +596,16 @@ const handleMenuKeyDown = async (
       closeAllMenus();
       break;
     }
-    case 'Enter':
+    case 'Enter': {
+      event.preventDefault();
+      // Enter activates the item and closes the menu (including checkbox/radio)
+      handleActivate(item, radioGroupName, true);
+      break;
+    }
     case ' ': {
       event.preventDefault();
-      handleActivate(item, radioGroupName);
+      // Space toggles checkbox/radio without closing the menu (APG optional behavior)
+      handleActivate(item, radioGroupName, false);
       break;
     }
     default: {

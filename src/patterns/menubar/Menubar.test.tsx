@@ -695,7 +695,7 @@ describe('Menubar', () => {
       expect(viewItem).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('Enter on checkbox does not close menu', async () => {
+    it('Enter on checkbox toggles state, closes menu, and returns focus to menubar', async () => {
       const user = userEvent.setup();
       render(<Menubar items={createItemsWithCheckboxRadio()} aria-label="Application" />);
 
@@ -706,8 +706,16 @@ describe('Menubar', () => {
       autoSave.focus();
       await user.keyboard('{Enter}');
 
-      // Menu should still be open
-      expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+      // APG: Enter activates the item and closes the menu (no checkbox exception)
+      expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+      expect(viewItem).toHaveFocus();
+
+      // State change is still applied
+      await user.click(viewItem);
+      expect(screen.getByRole('menuitemcheckbox', { name: 'Auto Save' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
     });
 
     it('updates aria-checked on toggle', async () => {
@@ -755,7 +763,7 @@ describe('Menubar', () => {
       expect(viewItem).toHaveAttribute('aria-expanded', 'true');
     });
 
-    it('Enter on radio does not close menu', async () => {
+    it('Enter on radio selects it, closes menu, and returns focus to menubar', async () => {
       const user = userEvent.setup();
       render(<Menubar items={createItemsWithCheckboxRadio()} aria-label="Application" />);
 
@@ -766,8 +774,16 @@ describe('Menubar', () => {
       darkRadio.focus();
       await user.keyboard('{Enter}');
 
-      // Menu should still be open
-      expect(viewItem).toHaveAttribute('aria-expanded', 'true');
+      // APG: Enter activates the item and closes the menu (no radio exception)
+      expect(viewItem).toHaveAttribute('aria-expanded', 'false');
+      expect(viewItem).toHaveFocus();
+
+      // Selection is still applied
+      await user.click(viewItem);
+      expect(screen.getByRole('menuitemradio', { name: 'Dark' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
     });
 
     it('only one radio in group can be checked', async () => {
