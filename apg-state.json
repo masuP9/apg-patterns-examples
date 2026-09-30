@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "lastRun": "2026-09-29T23:25:51.033Z",
+  "lastRun": "2026-09-30T23:26:53.379Z",
   "patterns": {
     "accordion": {
       "lastSeenSha": "7b134ce6d19497cce8a67db4a9f59980baf853dc",
@@ -87,8 +87,8 @@
       "lastSeenDate": "2025-09-02T16:41:49Z"
     },
     "spinbutton": {
-      "lastSeenSha": "84b921a0c6646d2ddabaa94d918e165a1093daeb",
-      "lastSeenDate": "2025-10-28T16:52:34Z"
+      "lastSeenSha": "0f765e4dc33e966026114ac12a8380db1de3b787",
+      "lastSeenDate": "2026-09-30T05:17:08Z"
     },
     "switch": {
       "lastSeenSha": "d847aad4a09e8a75f8af0d205f178d59807d2322",
