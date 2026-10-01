@@ -45,7 +45,7 @@ src/
 │       ├── Button.astro       # Astro 実装（Web Components）
 │       ├── ButtonDemo.tsx     # React デモラッパー（必要時）
 │       ├── Button.test.tsx    # テスト
-│       └── button.md          # AI向け定義ファイル（llm.md）
+│       └── button.md          # AI向け定義ファイル（生成物。ja は button.ja.md）
 ├── content/
 │   └── accessibility-docs/    # アクセシビリティ解説（MDX）
 │       └── button/
@@ -146,7 +146,11 @@ defineOptions({ inheritAttrs: false })
 **Svelte**:
 
 ```svelte
-<button {...$$restProps}>
+<script lang="ts">
+  let { children, ...restProps } = $props();
+</script>
+
+<button {...restProps}>
 ```
 
 **Astro** (Web Components):
@@ -205,28 +209,11 @@ defineOptions({ inheritAttrs: false })
 - Meter → `<meter>`
 - Spinbutton → `<input type="number">`
 
-#### 4. AI 向け定義ファイル（llm.md）
+#### 4. AI 向け定義ファイル（`{pattern}.md` / `{pattern}.ja.md`）
 
-各パターンには AI コーディングアシスタント向けの定義ファイル `llm.md` を作成する。これにより、Claude Code や Cursor などで類似コンポーネントを実装する際に参照できる。
-
-**配置場所**: `src/patterns/{pattern}/llm.md`
-
-**必須セクション**:
-
-1. **Overview** - パターンの概要（1-2文）
-2. **ARIA Requirements** - Roles, Properties, States を表形式で
-3. **Keyboard Support** - キーボード操作一覧
-4. **Focus Management** - フォーカス管理ルール
-5. **Test Checklist** - 優先度別テスト項目（High/Medium）
-6. **Implementation Notes** - 実装上の注意点、構造図
-7. **Example Test Code** - テストコードのサンプル
-
-**作成時の注意**:
-
-- トークン効率を考慮し、簡潔に記述
-- 表形式を活用して情報を整理
-- APG 公式リファレンスへのリンクを含める
-- テンプレートは [.internal/llm-md-template.md](.internal/llm-md-template.md) を参照
+各パターンの AI コーディングアシスタント向け定義ファイル `src/patterns/{pattern}/{pattern}.md`（英語）と `{pattern}.ja.md`（日本語）は手書きしない。
+各パターンの `accessibility-data.ts` を真実源として `npm run generate:llm-md` が生成する。内容を変えるときは `accessibility-data.ts` を直してから再生成する。
+生成されるファイルの構造は [.internal/llm-md-template.md](.internal/llm-md-template.md) を参照。
 
 #### 5. shadcn/ui の使い分け
 
@@ -311,7 +298,7 @@ Astro テンプレート内で React/Vue/Svelte の子コンポーネントを�
 
 ### 必要環境
 
-- Node.js 20+
+- Node.js 22.12+（`package.json` の `engines`。CI と `.node-version` は 24）
 - npm
 
 ### 開発サーバー
