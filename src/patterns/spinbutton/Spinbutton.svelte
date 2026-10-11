@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { untrack } from 'svelte';
+  import { onDestroy, untrack } from 'svelte';
   import { cn } from '@/lib/utils';
 
   interface SpinbuttonProps {
@@ -98,13 +98,34 @@
   });
 
   // Update value and dispatch event
-  function updateValue(newValue: number) {
+  function updateValue(newValue: number): number {
     const clampedValue = clamp(roundToStep(newValue, step, min), min, max);
     if (clampedValue !== value) {
       value = clampedValue;
       inputValue = String(clampedValue);
       onvaluechange?.(clampedValue);
     }
+    return clampedValue;
+  }
+
+  // Announce the value after a button click, since the value change itself
+  // may not be reported. Uses ariaNotify when available, otherwise a live region.
+  let announcement = $state('');
+  let announceTimer: ReturnType<typeof setTimeout> | undefined;
+  onDestroy(() => clearTimeout(announceTimer));
+
+  function announce(newValue: number) {
+    const message = valueText ?? formatValueText(newValue, format, min, max);
+    const input: (HTMLElement & { ariaNotify?: (m: string) => void }) | null = inputEl;
+    if (typeof input?.ariaNotify === 'function') {
+      input.ariaNotify(message);
+      return;
+    }
+    announcement = message;
+    clearTimeout(announceTimer);
+    announceTimer = setTimeout(() => {
+      announcement = '';
+    }, 1000);
   }
 
   // Keyboard handler
@@ -213,14 +234,14 @@
   function handleIncrement(event: MouseEvent) {
     event.preventDefault();
     if (disabled || readOnly) return;
-    updateValue(value + step);
+    announce(updateValue(value + step));
     inputEl?.focus();
   }
 
   function handleDecrement(event: MouseEvent) {
     event.preventDefault();
     if (disabled || readOnly) return;
-    updateValue(value - step);
+    announce(updateValue(value - step));
     inputEl?.focus();
   }
 </script>
@@ -286,4 +307,7 @@
       </button>
     {/if}
   </div>
+  {#if showButtons}
+    <span role="status" class="apg-spinbutton-live">{announcement}</span>
+  {/if}
 </div>

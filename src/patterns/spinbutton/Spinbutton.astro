@@ -176,6 +176,7 @@ const effectiveLargeStep = largeStep ?? step * 10;
         )
       }
     </div>
+    {showButtons && <span role="status" class="apg-spinbutton-live" />}
   </div>
 </apg-spinbutton>
 
@@ -184,6 +185,8 @@ const effectiveLargeStep = largeStep ?? step * 10;
     private input: HTMLInputElement | null = null;
     private incrementBtn: HTMLButtonElement | null = null;
     private decrementBtn: HTMLButtonElement | null = null;
+    private liveRegion: HTMLElement | null = null;
+    private announceTimer: ReturnType<typeof setTimeout> | undefined;
     private isComposing = false;
     private previousValidValue = 0;
 
@@ -201,6 +204,7 @@ const effectiveLargeStep = largeStep ?? step * 10;
       this.input = this.querySelector('[role="spinbutton"]');
       this.incrementBtn = this.querySelector('.apg-spinbutton-increment');
       this.decrementBtn = this.querySelector('.apg-spinbutton-decrement');
+      this.liveRegion = this.querySelector('.apg-spinbutton-live');
 
       if (this.input) {
         this.previousValidValue = this.currentValue;
@@ -223,6 +227,8 @@ const effectiveLargeStep = largeStep ?? step * 10;
     }
 
     disconnectedCallback() {
+      clearTimeout(this.announceTimer);
+
       if (this.input) {
         this.input.removeEventListener('keydown', this.boundHandleKeyDown);
         this.input.removeEventListener('input', this.boundHandleInput);
@@ -448,10 +454,29 @@ const effectiveLargeStep = largeStep ?? step * 10;
       this.handleInput();
     }
 
+    // Announce the value after a button click, since the value change itself
+    // may not be reported. Uses ariaNotify when available, otherwise a live region.
+    private announce() {
+      const input: (HTMLElement & { ariaNotify?: (m: string) => void }) | null = this.input;
+      if (!input) return;
+      const message = input.getAttribute('aria-valuetext') ?? String(this.currentValue);
+      if (typeof input.ariaNotify === 'function') {
+        input.ariaNotify(message);
+        return;
+      }
+      if (!this.liveRegion) return;
+      this.liveRegion.textContent = message;
+      clearTimeout(this.announceTimer);
+      this.announceTimer = setTimeout(() => {
+        if (this.liveRegion) this.liveRegion.textContent = '';
+      }, 1000);
+    }
+
     private handleIncrement(event: MouseEvent) {
       event.preventDefault();
       if (this.isDisabled || this.isReadOnly) return;
       this.updateValue(this.currentValue + this.step);
+      this.announce();
       this.input?.focus();
     }
 
@@ -459,6 +484,7 @@ const effectiveLargeStep = largeStep ?? step * 10;
       event.preventDefault();
       if (this.isDisabled || this.isReadOnly) return;
       this.updateValue(this.currentValue - this.step);
+      this.announce();
       this.input?.focus();
     }
 

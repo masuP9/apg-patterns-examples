@@ -34,6 +34,7 @@ A spinbutton allows users to select a value from a discrete set or range. Contai
 | Role | Element | Description |
 | --- | --- | --- |
 | `spinbutton` | Input element | Identifies the element as a spin button that allows users to select a value from a discrete set or range by incrementing/decrementing or typing directly. (required) |
+| `status` | Visually hidden live region | Announces the new value when an increment/decrement button is clicked. Used only as a fallback in browsers that do not support Element.ariaNotify(). Rendered only when the buttons are shown. |
 
 ### Properties
 
@@ -78,6 +79,7 @@ A spinbutton allows users to select a value from a discrete set or range. Contai
 - [ ] aria-valuetext set when valueText/format provided
 - [ ] aria-disabled="true" when disabled
 - [ ] aria-readonly="true" when readOnly
+- [ ] Button click announces new value (ariaNotify, or live region fallback)
 
 ### Medium Priority: ARIA
 
@@ -154,6 +156,8 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 │     />                                                      │
 │     <button tabindex="-1" aria-label="Increment">+</button> │
 │   </div>                                                    │
+│   <span role="status" class="apg-spinbutton-live" />        │
+│     ← visually hidden; fallback when ariaNotify unsupported │
 │ </div>                                                      │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -165,6 +169,7 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 3. **IME input handling**: Don't update aria-valuenow during composition
 4. **Button focus steal**: Buttons must not receive focus on click
 5. **Floating-point precision**: Round to step to avoid precision errors
+6. **Silent button clicks**: Announce the new value on button click via `ariaNotify()` (feature-detected), falling back to a live region that is cleared after 1 second
 
 ## Example Test Code (React + Testing Library)
 
