@@ -43,6 +43,7 @@ export default getViteConfig({
       'src/patterns/slider-multithumb/MultiThumbSlider.test.astro.ts',
       'src/patterns/treegrid/TreeGrid.test.astro.ts',
       'src/patterns/treeview/TreeView.test.astro.ts',
+      'src/patterns/spinbutton/Spinbutton.test.astro.ts',
     ],
   },
 });

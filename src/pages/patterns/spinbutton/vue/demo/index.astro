@@ -41,6 +41,20 @@ import Spinbutton from '@patterns/spinbutton/Spinbutton.vue';
         </div>
       </section>
       <section>
+        <h2 class="mb-4 text-lg font-semibold">Decimal Step Spinbutton</h2>
+        <div class="apg-spinbutton-demo">
+          <Spinbutton
+            client:only="vue"
+            defaultValue={0.5}
+            min={0}
+            max={1}
+            step={0.1}
+            largeStep={0.3}
+            label="Opacity"
+          />
+        </div>
+      </section>
+      <section>
         <h2 class="mb-4 text-lg font-semibold">Disabled Spinbutton</h2>
         <div class="apg-spinbutton-demo">
           <Spinbutton
