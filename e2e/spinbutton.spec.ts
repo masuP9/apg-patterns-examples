@@ -25,6 +25,10 @@ const getRangeSpinbutton = (page: import('@playwright/test').Page) => {
   return page.getByRole('spinbutton', { name: /volume/i });
 };
 
+const getDecimalSpinbutton = (page: import('@playwright/test').Page) => {
+  return page.getByRole('spinbutton', { name: /opacity/i });
+};
+
 const getDisabledSpinbutton = (page: import('@playwright/test').Page) => {
   return page.getByRole('spinbutton', { name: /disabled/i });
 };
@@ -55,11 +59,11 @@ const getDecrementButton = (
     .or(spinbutton.locator('..').locator('button').first());
 };
 
-// Wait for hydration to complete
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated. (aria-valuenow is
+// already present in the SSR HTML, so it cannot be used as a signal.)
 const waitForHydration = async (page: import('@playwright/test').Page) => {
-  const spinbutton = getBasicSpinbutton(page);
-  await expect(spinbutton).toHaveAttribute('aria-valuenow', /.+/);
-  await page.waitForTimeout(100);
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
 };
 
 // ============================================
@@ -71,11 +75,7 @@ for (const framework of frameworks) {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/spinbutton/${framework}/demo/`);
       await getBasicSpinbutton(page).waitFor();
-
-      // Wait for hydration in frameworks that need it
-      if (framework === 'svelte' || framework === 'vue') {
-        await waitForHydration(page);
-      }
+      await waitForHydration(page);
     });
 
     // ------------------------------------------
@@ -289,6 +289,56 @@ for (const framework of frameworks) {
         // Value should remain unchanged
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '25');
       });
+
+      test('Home sets value to min when read-only', async ({ page }) => {
+        const spinbutton = getReadOnlySpinbutton(page);
+        await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('Home');
+
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
+      });
+
+      test('End sets value to max when read-only', async ({ page }) => {
+        const spinbutton = getReadOnlySpinbutton(page);
+        await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('End');
+
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '100');
+      });
+
+      test('PageDown goes below zero when min is undefined', async ({ page }) => {
+        const spinbutton = getBasicSpinbutton(page);
+        await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('PageDown');
+
+        // 5 - (1 × 10) = -5
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '-5');
+      });
+
+      test('ArrowUp increases value by decimal step without floating-point error', async ({
+        page,
+      }) => {
+        const spinbutton = getDecimalSpinbutton(page);
+        await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('ArrowUp');
+
+        // 0.5 + 0.1 = 0.6 (not 0.6000000000000001)
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '0.6');
+      });
+
+      test('PageUp increases value by custom largeStep', async ({ page }) => {
+        const spinbutton = getDecimalSpinbutton(page);
+        await spinbutton.click();
+        await expect(spinbutton).toBeFocused();
+        await spinbutton.press('PageUp');
+
+        // largeStep=0.3: 0.5 + 0.3 = 0.8
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '0.8');
+      });
     });
 
     // ------------------------------------------
@@ -416,6 +466,24 @@ for (const framework of frameworks) {
           await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
         }
       });
+
+      test('increment button has no effect when read-only', async ({ page }) => {
+        const spinbutton = getReadOnlySpinbutton(page);
+
+        await getIncrementButton(page, spinbutton).first().click();
+
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '25');
+      });
+
+      test('increment button is disabled and has no effect when disabled', async ({ page }) => {
+        const spinbutton = getDisabledSpinbutton(page);
+        const incrementBtn = getIncrementButton(page, spinbutton).first();
+
+        await expect(incrementBtn).toBeDisabled();
+        await incrementBtn.click({ force: true });
+
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '10');
+      });
     });
 
     // ------------------------------------------
@@ -437,8 +505,7 @@ for (const framework of frameworks) {
         });
         await page.reload();
         const spinbutton = getRangeSpinbutton(page);
-        await expect(spinbutton).toHaveAttribute('aria-valuenow', /.+/);
-        await page.waitForTimeout(100);
+        await waitForHydration(page);
 
         await getIncrementButton(page, spinbutton).first().click();
 
@@ -457,8 +524,7 @@ for (const framework of frameworks) {
         });
         await page.reload();
         const spinbutton = getBasicSpinbutton(page);
-        await expect(spinbutton).toHaveAttribute('aria-valuenow', /.+/);
-        await page.waitForTimeout(100);
+        await waitForHydration(page);
         const liveRegion = page
           .locator('.apg-spinbutton')
           .filter({ has: spinbutton })
@@ -508,6 +574,68 @@ for (const framework of frameworks) {
 
         // Should be clamped to min (0)
         await expect(spinbutton).toHaveAttribute('aria-valuenow', '0');
+      });
+
+      test('reverts to previous value on blur with invalid input', async ({ page }) => {
+        const spinbutton = getBasicSpinbutton(page);
+        await spinbutton.click();
+
+        await spinbutton.fill('abc');
+        await spinbutton.blur();
+
+        await expect(spinbutton).toHaveValue('5');
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '5');
+      });
+
+      test('rounds value to step on blur', async ({ page }) => {
+        const spinbutton = getRangeSpinbutton(page);
+        await spinbutton.click();
+
+        // step=5: 52 rounds to 50
+        await spinbutton.fill('52');
+        await spinbutton.blur();
+
+        await expect(spinbutton).toHaveValue('50');
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '50');
+      });
+    });
+
+    // ------------------------------------------
+    // 🟡 Medium Priority: IME Composition
+    // ------------------------------------------
+    test.describe('IME Composition', () => {
+      test('does not update aria-valuenow while composing', async ({ page }) => {
+        const spinbutton = getBasicSpinbutton(page);
+        await spinbutton.click();
+
+        // Dispatch each event in its own task, as a real IME does,
+        // so framework state updates (e.g. React's isComposing) are flushed in between
+        await spinbutton.dispatchEvent('compositionstart');
+        await spinbutton.evaluate((el: HTMLInputElement) => {
+          // Use the native setter so React's value tracker sees the change
+          Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set?.call(el, '12');
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+
+        await expect(spinbutton).toHaveValue('12');
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '5');
+      });
+
+      test('updates aria-valuenow when composition ends', async ({ page }) => {
+        const spinbutton = getBasicSpinbutton(page);
+        await spinbutton.click();
+
+        // Dispatch each event in its own task, as a real IME does,
+        // so framework state updates (e.g. React's isComposing) are flushed in between
+        await spinbutton.dispatchEvent('compositionstart');
+        await spinbutton.evaluate((el: HTMLInputElement) => {
+          // Use the native setter so React's value tracker sees the change
+          Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set?.call(el, '12');
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        await spinbutton.dispatchEvent('compositionend');
+
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', '12');
       });
     });
 
@@ -571,6 +699,69 @@ for (const framework of frameworks) {
 }
 
 // ============================================
+// Astro-specific: valuechange CustomEvent
+// ============================================
+
+test.describe('Spinbutton (astro) - valuechange event', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/spinbutton/astro/demo/');
+    await getBasicSpinbutton(page).waitFor();
+    await page.evaluate(() => {
+      const events: number[] = [];
+      (window as unknown as { __valueChanges: number[] }).__valueChanges = events;
+      document.addEventListener('valuechange', (e) => {
+        events.push((e as CustomEvent<{ value: number }>).detail.value);
+      });
+    });
+  });
+
+  test('dispatches valuechange with the new value on ArrowUp', async ({ page }) => {
+    const spinbutton = getBasicSpinbutton(page);
+    await spinbutton.click();
+    await spinbutton.press('ArrowUp');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([6]);
+  });
+
+  test('does not dispatch valuechange when the value does not change', async ({ page }) => {
+    const spinbutton = getRangeSpinbutton(page);
+    await spinbutton.click();
+    await spinbutton.press('End');
+    await spinbutton.press('ArrowUp');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([100]);
+  });
+
+  test('dispatches valuechange on text input', async ({ page }) => {
+    const spinbutton = getBasicSpinbutton(page);
+    await spinbutton.click();
+    await spinbutton.fill('42');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([42]);
+  });
+
+  test('dispatches valuechange on increment button click', async ({ page }) => {
+    const spinbutton = getBasicSpinbutton(page);
+
+    await getIncrementButton(page, spinbutton).first().click();
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([6]);
+  });
+});
+
+// ============================================
 // Cross-framework Consistency Tests
 // ============================================
 
@@ -600,10 +791,7 @@ test.describe('Spinbutton - Cross-framework Consistency', () => {
       await page.goto(`patterns/spinbutton/${framework}/demo/`);
       await getBasicSpinbutton(page).waitFor();
 
-      // Wait for hydration
-      if (framework === 'svelte' || framework === 'vue') {
-        await waitForHydration(page);
-      }
+      await waitForHydration(page);
 
       const spinbutton = getBasicSpinbutton(page);
       await spinbutton.click();
@@ -619,10 +807,7 @@ test.describe('Spinbutton - Cross-framework Consistency', () => {
       await page.goto(`patterns/spinbutton/${framework}/demo/`);
       await getBasicSpinbutton(page).waitFor();
 
-      // Wait for hydration
-      if (framework === 'svelte' || framework === 'vue') {
-        await waitForHydration(page);
-      }
+      await waitForHydration(page);
 
       const spinbutton = getBasicSpinbutton(page);
       await spinbutton.click();
