@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, useId } from 'vue';
 import { cn } from '@/lib/utils';
 
 defineOptions({
@@ -144,8 +144,7 @@ const formatValueText = (val: number, formatStr: string | undefined): string => 
 
 // Refs
 const inputRef = ref<HTMLInputElement | null>(null);
-// Use crypto.randomUUID() for unique IDs in Astro Islands (Vue's useId() returns same value for all instances)
-const labelId = `spinbutton-label-${crypto.randomUUID().slice(0, 8)}`;
+const labelId = useId();
 const isComposing = ref(false);
 
 // State

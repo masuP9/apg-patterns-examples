@@ -1,9 +1,9 @@
-import { createApp, defineComponent, h, useId } from 'vue';
+import { createApp, defineComponent, h, useId, type App } from 'vue';
 import { describe, expect, it } from 'vitest';
 import setupVueApp from './vue-app';
 
 // Mounts a one-component Vue app and returns the id useId() produced in it.
-const mountAndGetId = (configure: (app: ReturnType<typeof createApp>) => void) => {
+const mountAndGetId = (configure: (app: App) => void) => {
   let id: string | undefined;
   const app = createApp(
     defineComponent({
@@ -25,6 +25,12 @@ describe('Vue appEntrypoint (setupVueApp)', () => {
     const second = mountAndGetId((app) => setupVueApp(app));
 
     expect(first).not.toBe(second);
+  });
+
+  it('idPrefix のないアプリの useId() は、SSR の island が使う "s" で始まる prefix ではなく "c" で始まる', () => {
+    const id = mountAndGetId((app) => setupVueApp(app));
+
+    expect(id).toMatch(/^c\d+-0$/);
   });
 
   it('SSR から引き継いだ idPrefix "s1" があるアプリでは、その prefix のまま useId() が "s1-0" を返す', () => {

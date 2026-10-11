@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, useId } from 'vue';
 
 export interface TabItem {
   id: string;
@@ -76,11 +76,7 @@ const selectedId = ref<string>('');
 const focusedIndex = ref<number>(0);
 const tablistRef = ref<HTMLElement>();
 const tabRefs = ref<Record<string, HTMLButtonElement>>({});
-const tablistId = ref('');
-
-onMounted(() => {
-  tablistId.value = `tabs-${Math.random().toString(36).substr(2, 9)}`;
-});
+const tablistId = useId();
 
 const setTabRef = (id: string, el: unknown) => {
   if (el instanceof HTMLButtonElement) {

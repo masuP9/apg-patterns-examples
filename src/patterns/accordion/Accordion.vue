@@ -43,7 +43,7 @@
  *
  * @see https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
  */
-import { ref, computed } from 'vue';
+import { ref, computed, useId } from 'vue';
 
 /**
  * Accordion item configuration
@@ -106,7 +106,7 @@ const getInitialExpandedIds = () => {
 };
 
 const expandedIds = ref<string[]>(getInitialExpandedIds());
-const instanceId = ref(`accordion-${Math.random().toString(36).substr(2, 9)}`);
+const instanceId = useId();
 
 // Use role="region" only for 6 or fewer panels (APG recommendation)
 const useRegion = computed(() => props.items.length <= 6);

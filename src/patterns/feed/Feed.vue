@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, useId } from 'vue';
 
 /**
  * Feed Article data structure
@@ -102,10 +102,7 @@ const emit = defineEmits<{
 }>();
 
 // Generate unique base ID
-const baseId = ref('');
-onMounted(() => {
-  baseId.value = `feed-${Math.random().toString(36).slice(2, 9)}`;
-});
+const baseId = useId();
 
 // Refs
 const containerRef = ref<HTMLDivElement | null>(null);
