@@ -35,23 +35,18 @@ const openMenu = async (page: import('@playwright/test').Page) => {
   return button;
 };
 
-// Wait for hydration to complete
-// This is necessary for frameworks like Svelte where event handlers are attached after hydration
+const getAllDisabledMenuButton = (page: import('@playwright/test').Page) => {
+  return page.getByRole('button', { name: 'Tools' });
+};
+
+const getEmptyMenuButton = (page: import('@playwright/test').Page) => {
+  return page.getByRole('button', { name: 'Bookmarks' });
+};
+
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated.
 const waitForHydration = async (page: import('@playwright/test').Page) => {
-  const button = getMenuButton(page);
-  // Wait for aria-controls to be set (basic check)
-  await expect(button).toHaveAttribute('aria-controls', /.+/);
-  // Poll until a click actually opens the menu (ensures handlers are attached)
-  await expect
-    .poll(async () => {
-      await button.click();
-      const isOpen = await getMenu(page).isVisible();
-      if (isOpen) {
-        await page.keyboard.press('Escape');
-      }
-      return isOpen;
-    })
-    .toBe(true);
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
 };
 
 // ============================================
@@ -63,12 +58,7 @@ for (const framework of frameworks) {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/menu-button/${framework}/demo/`);
       await getMenuButton(page).waitFor();
-
-      // Wait for hydration in frameworks that need it (Svelte)
-      // This ensures event handlers are attached before tests run
-      if (framework === 'svelte') {
-        await waitForHydration(page);
-      }
+      await waitForHydration(page);
     });
 
     // ------------------------------------------
@@ -126,6 +116,20 @@ for (const framework of frameworks) {
         const button = getMenuButton(page);
         const buttonId = await button.getAttribute('id');
         expect(labelledby).toBe(buttonId);
+      });
+
+      test('menu is named by its own button when several menu buttons are on the page', async ({
+        page,
+      }) => {
+        // BUG (vue): each client:only island is a separate Vue app, so useId()
+        // returns the same "v-0" prefix in every island. The File menu's
+        // aria-labelledby="v-0-button" then resolves to the first island's
+        // "Actions" button, and the ids are duplicated across the page.
+        test.fixme(framework === 'vue', 'Vue useId() collides across islands');
+
+        await page.getByRole('button', { name: /file/i }).click();
+
+        await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();
       });
 
       test('menu items have role="menuitem"', async ({ page }) => {
@@ -199,10 +203,50 @@ for (const framework of frameworks) {
         await button.press('ArrowUp');
 
         await expect(getMenu(page)).toBeVisible();
+        await expect(page.getByRole('menuitem', { name: 'Delete' })).toBeFocused();
+      });
+    });
 
-        // Find the last enabled item by checking focus
-        const focusedItem = page.locator(':focus');
-        await expect(focusedItem).toHaveRole('menuitem');
+    // ------------------------------------------
+    // 🟡 Medium Priority: Menus without enabled items
+    // ------------------------------------------
+    test.describe('Menus without enabled items', () => {
+      test('Enter opens a menu whose items are all disabled and keeps focus on the button', async ({
+        page,
+      }) => {
+        const button = getAllDisabledMenuButton(page);
+        await button.focus();
+        await button.press('Enter');
+
+        await expect(getMenu(page)).toBeVisible();
+        await expect(button).toHaveAttribute('aria-expanded', 'true');
+        await expect(button).toBeFocused();
+      });
+
+      test('items of a menu whose items are all disabled keep tabindex="-1" when opened', async ({
+        page,
+      }) => {
+        const button = getAllDisabledMenuButton(page);
+        await button.click();
+
+        await expect(page.getByRole('menuitem', { name: 'Undo' })).toHaveAttribute(
+          'tabindex',
+          '-1'
+        );
+        await expect(page.getByRole('menuitem', { name: 'Redo' })).toHaveAttribute(
+          'tabindex',
+          '-1'
+        );
+      });
+
+      test('Enter opens an empty menu and keeps focus on the button', async ({ page }) => {
+        const button = getEmptyMenuButton(page);
+        await button.focus();
+        await button.press('Enter');
+
+        await expect(getMenu(page)).toBeVisible();
+        await expect(button).toHaveAttribute('aria-expanded', 'true');
+        await expect(button).toBeFocused();
       });
     });
 
@@ -445,6 +489,17 @@ for (const framework of frameworks) {
         await expect(getMenu(page)).not.toBeVisible();
       });
 
+      test('click on a disabled item keeps the menu open', async ({ page }) => {
+        const fileButton = page.getByRole('button', { name: /file/i });
+        await fileButton.click();
+        await getMenu(page).waitFor({ state: 'visible' });
+
+        await page.getByRole('menuitem', { name: 'Export' }).click({ force: true });
+
+        await expect(getMenu(page)).toBeVisible();
+        await expect(fileButton).toHaveAttribute('aria-expanded', 'true');
+      });
+
       test('click outside menu closes it', async ({ page }) => {
         await openMenu(page);
 
@@ -545,6 +600,19 @@ for (const framework of frameworks) {
           })
           .toBe(true);
       });
+
+      test('repeated same character cycles through matching items', async ({ page }) => {
+        await openMenu(page);
+        const cutItem = page.getByRole('menuitem', { name: 'Cut' });
+        const copyItem = page.getByRole('menuitem', { name: 'Copy' });
+        await expect(cutItem).toBeFocused();
+
+        await cutItem.press('c');
+        await expect(copyItem).toBeFocused();
+
+        await copyItem.press('c');
+        await expect(cutItem).toBeFocused();
+      });
     });
 
     // ------------------------------------------
@@ -575,6 +643,65 @@ for (const framework of frameworks) {
 }
 
 // ============================================
+// Astro-specific: itemselect CustomEvent
+// ============================================
+
+test.describe('Menu Button (astro) - itemselect event', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/menu-button/astro/demo/');
+    await getMenuButton(page).waitFor();
+    await page.evaluate(() => {
+      const selected: string[] = [];
+      (window as unknown as { __selectedItems: string[] }).__selectedItems = selected;
+      document.addEventListener('itemselect', (e) => {
+        selected.push((e as CustomEvent<{ itemId: string }>).detail.itemId);
+      });
+    });
+  });
+
+  test('dispatches itemselect with the item id on item click', async ({ page }) => {
+    await openMenu(page);
+    await page.getByRole('menuitem', { name: 'Copy' }).click();
+
+    const selected = await page.evaluate(
+      () => (window as unknown as { __selectedItems: string[] }).__selectedItems
+    );
+    expect(selected).toEqual(['copy']);
+  });
+
+  test('dispatches itemselect with the item id on Enter', async ({ page }) => {
+    await openMenu(page);
+    await page.getByRole('menuitem', { name: 'Cut' }).press('Enter');
+
+    const selected = await page.evaluate(
+      () => (window as unknown as { __selectedItems: string[] }).__selectedItems
+    );
+    expect(selected).toEqual(['cut']);
+  });
+
+  test('dispatches itemselect with the item id on Space', async ({ page }) => {
+    await openMenu(page);
+    await page.getByRole('menuitem', { name: 'Cut' }).press('Space');
+
+    const selected = await page.evaluate(
+      () => (window as unknown as { __selectedItems: string[] }).__selectedItems
+    );
+    expect(selected).toEqual(['cut']);
+  });
+
+  test('does not dispatch itemselect on disabled item click', async ({ page }) => {
+    await page.getByRole('button', { name: /file/i }).click();
+    await getMenu(page).waitFor({ state: 'visible' });
+    await page.getByRole('menuitem', { name: 'Export' }).click({ force: true });
+
+    const selected = await page.evaluate(
+      () => (window as unknown as { __selectedItems: string[] }).__selectedItems
+    );
+    expect(selected).toEqual([]);
+  });
+});
+
+// ============================================
 // Cross-framework Consistency Tests
 // ============================================
 
@@ -583,6 +710,7 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/menu-button/${framework}/demo/`);
       await getMenuButton(page).waitFor();
+      await waitForHydration(page);
 
       const button = getMenuButton(page);
       await expect(button).toHaveAttribute('aria-haspopup', 'menu');
@@ -593,6 +721,7 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/menu-button/${framework}/demo/`);
       await getMenuButton(page).waitFor();
+      await waitForHydration(page);
 
       const button = getMenuButton(page);
       await button.click();
@@ -609,6 +738,7 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/menu-button/${framework}/demo/`);
       await getMenuButton(page).waitFor();
+      await waitForHydration(page);
 
       await openMenu(page);
       await expect(getMenu(page)).toBeVisible();
@@ -622,11 +752,7 @@ test.describe('Menu Button - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/menu-button/${framework}/demo/`);
       await getMenuButton(page).waitFor();
-
-      // Wait for hydration (especially needed for Svelte)
-      if (framework === 'svelte') {
-        await waitForHydration(page);
-      }
+      await waitForHydration(page);
 
       const button = getMenuButton(page);
       await button.focus();

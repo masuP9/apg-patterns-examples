@@ -20,11 +20,20 @@ const getMeters = (page: import('@playwright/test').Page) => {
   return page.locator('[role="meter"]');
 };
 
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated.
+// Scoped to meter islands: this page also has site UI islands (e.g. pattern search)
+// whose hydration is unrelated to the meters under test.
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]:has([role="meter"])')).toHaveCount(0);
+};
+
 for (const framework of frameworks) {
   test.describe(`Meter (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/meter/${framework}/`);
-      await page.waitForLoadState('networkidle');
+      await getMeters(page).first().waitFor();
+      await waitForHydration(page);
     });
 
     // 🔴 High Priority: ARIA Structure
@@ -216,6 +225,78 @@ for (const framework of frameworks) {
   });
 }
 
+// Astro-only: Web Component updateValue() API and valuechange event
+test.describe('Meter (astro) - updateValue', () => {
+  type ApgMeterElement = HTMLElement & { updateValue: (value: number) => void };
+
+  const getCpuMeterElement = (page: import('@playwright/test').Page) => {
+    return page
+      .locator('apg-meter')
+      .filter({ has: page.getByRole('meter', { name: 'CPU Usage' }) });
+  };
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/meter/astro/');
+    await getMeters(page).first().waitFor();
+    await page.waitForFunction(() => customElements.get('apg-meter') !== undefined);
+  });
+
+  test('updates aria-valuenow when updateValue is called', async ({ page }) => {
+    await getCpuMeterElement(page).evaluate((el) => (el as ApgMeterElement).updateValue(50));
+
+    await expect(page.getByRole('meter', { name: 'CPU Usage' })).toHaveAttribute(
+      'aria-valuenow',
+      '50'
+    );
+  });
+
+  test('updates aria-valuetext from format when updateValue is called', async ({ page }) => {
+    await getCpuMeterElement(page).evaluate((el) => (el as ApgMeterElement).updateValue(50));
+
+    await expect(page.getByRole('meter', { name: 'CPU Usage' })).toHaveAttribute(
+      'aria-valuetext',
+      '50%'
+    );
+  });
+
+  test('clamps a value above max to max when updateValue is called', async ({ page }) => {
+    await getCpuMeterElement(page).evaluate((el) => (el as ApgMeterElement).updateValue(150));
+
+    await expect(page.getByRole('meter', { name: 'CPU Usage' })).toHaveAttribute(
+      'aria-valuenow',
+      '100'
+    );
+  });
+
+  test('updates the fill width when updateValue is called', async ({ page }) => {
+    await getCpuMeterElement(page).evaluate((el) => (el as ApgMeterElement).updateValue(50));
+
+    await expect(getCpuMeterElement(page).locator('.apg-meter-fill')).toHaveAttribute(
+      'style',
+      'width: 50%;'
+    );
+  });
+
+  test('updates the value display when updateValue is called', async ({ page }) => {
+    await getCpuMeterElement(page).evaluate((el) => (el as ApgMeterElement).updateValue(50));
+
+    await expect(getCpuMeterElement(page).locator('.apg-meter-value')).toHaveText('50%');
+  });
+
+  test('dispatches valuechange with the new value when updateValue is called', async ({ page }) => {
+    const detail = await getCpuMeterElement(page).evaluate((el) => {
+      let received: unknown = null;
+      el.addEventListener('valuechange', (e) => {
+        received = (e as CustomEvent<{ value: number }>).detail;
+      });
+      (el as ApgMeterElement).updateValue(50);
+      return received;
+    });
+
+    expect(detail).toEqual({ value: 50 });
+  });
+});
+
 // Cross-framework consistency tests
 test.describe('Meter - Cross-framework Consistency', () => {
   test('all frameworks have same meter count', async ({ page }) => {
@@ -223,7 +304,8 @@ test.describe('Meter - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/meter/${framework}/`);
-      await page.waitForLoadState('networkidle');
+      await getMeters(page).first().waitFor();
+      await waitForHydration(page);
       const meters = page.locator('[role="meter"]');
       meterCounts[framework] = await meters.count();
     }
@@ -240,7 +322,8 @@ test.describe('Meter - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/meter/${framework}/`);
-      await page.waitForLoadState('networkidle');
+      await getMeters(page).first().waitFor();
+      await waitForHydration(page);
 
       ariaStructures[framework] = await page.evaluate(() => {
         const meters = document.querySelectorAll('[role="meter"]');

@@ -21,13 +21,20 @@ import AxeBuilder from '@axe-core/playwright';
 
 const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated. (aria-valuenow is
+// already present in the SSR HTML, so it cannot be used as a signal.)
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
+};
+
 for (const framework of frameworks) {
   test.describe(`Window Splitter (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/windowsplitter/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
       // Wait for splitter to be mounted (attached is sufficient, visible requires CSS)
       await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+      await waitForHydration(page);
     });
 
     // 🔴 High Priority: ARIA Structure
@@ -174,6 +181,90 @@ for (const framework of frameworks) {
 
         const value = await horizontalSplitter.getAttribute('aria-valuenow');
         expect(value).toBe('50'); // Unchanged
+      });
+
+      test('ArrowDown is ignored on horizontal splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('ArrowDown');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+      });
+
+      test('ArrowLeft is ignored on vertical splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="vertical-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('ArrowLeft');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+      });
+
+      test('ArrowRight is ignored on vertical splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="vertical-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('ArrowRight');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '50');
+      });
+
+      test('ArrowRight does not exceed the maximum position', async ({ page }) => {
+        const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('End');
+        await expect(splitter).toHaveAttribute('aria-valuenow', '90');
+        await splitter.press('ArrowRight');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '90');
+      });
+
+      test('ArrowLeft does not go below the minimum position', async ({ page }) => {
+        const splitter = page.locator('[data-testid="horizontal-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('Home');
+        await expect(splitter).toHaveAttribute('aria-valuenow', '10');
+        await splitter.press('ArrowLeft');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '10');
+      });
+
+      test('ArrowLeft increases position on RTL splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="rtl-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('ArrowLeft');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '55');
+      });
+
+      test('ArrowRight decreases position on RTL splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="rtl-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('ArrowRight');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '45');
+      });
+
+      test('Enter does not collapse a non-collapsible splitter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="non-collapsible-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('Enter');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '50');
       });
 
       test('Shift+Arrow moves by large step', async ({ page }) => {
@@ -364,6 +455,17 @@ for (const framework of frameworks) {
         const newValue = await splitter.getAttribute('aria-valuenow');
         expect(newValue).toBe(initialValue); // Unchanged
       });
+
+      test('disabled splitter does not collapse on Enter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="disabled-splitter"]');
+
+        // Programmatic focus (tabindex="-1" is still focusable by script)
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('Enter');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '30');
+      });
     });
 
     // 🔴 High Priority: Readonly State
@@ -395,6 +497,16 @@ for (const framework of frameworks) {
 
         const newValue = await splitter.getAttribute('aria-valuenow');
         expect(newValue).toBe('70'); // Unchanged
+      });
+
+      test('readonly splitter does not collapse on Enter', async ({ page }) => {
+        const splitter = page.locator('[data-testid="readonly-splitter"]');
+
+        await splitter.focus();
+        await expect(splitter).toBeFocused();
+        await splitter.press('Enter');
+
+        await expect(splitter).toHaveAttribute('aria-valuenow', '70');
       });
     });
 
@@ -588,12 +700,107 @@ for (const framework of frameworks) {
   });
 }
 
+// Astro-specific: positionchange / collapsedchange CustomEvents and public methods
+test.describe('Window Splitter (astro) - Web Component API', () => {
+  type SplitterEvent = { type: string; detail: Record<string, unknown> };
+  type SplitterElement = HTMLElement & {
+    setPosition(position: number): void;
+    toggleCollapse(): void;
+  };
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/windowsplitter/astro/demo/');
+    await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+    await page.evaluate(() => {
+      const events: SplitterEvent[] = [];
+      (window as unknown as { __splitterEvents: SplitterEvent[] }).__splitterEvents = events;
+      for (const type of ['positionchange', 'collapsedchange']) {
+        document.addEventListener(type, (event) => {
+          events.push({ type, detail: (event as CustomEvent<Record<string, unknown>>).detail });
+        });
+      }
+    });
+  });
+
+  test('dispatches positionchange with the new position on ArrowRight', async ({ page }) => {
+    const splitter = page.locator('[data-testid="horizontal-splitter"]');
+    await splitter.focus();
+    await splitter.press('ArrowRight');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __splitterEvents: SplitterEvent[] }).__splitterEvents
+    );
+    expect(events).toEqual([
+      { type: 'positionchange', detail: expect.objectContaining({ position: 55 }) },
+    ]);
+  });
+
+  test('dispatches collapsedchange with the previous position on collapse', async ({ page }) => {
+    const splitter = page.locator('[data-testid="horizontal-splitter"]');
+    await splitter.focus();
+    await splitter.press('Enter');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __splitterEvents: SplitterEvent[] }).__splitterEvents
+    );
+    expect(events).toEqual([
+      { type: 'collapsedchange', detail: { collapsed: true, previousPosition: 50 } },
+      { type: 'positionchange', detail: { position: 0, sizeInPx: 0 } },
+    ]);
+  });
+
+  test('dispatches collapsedchange with collapsed=false on expand', async ({ page }) => {
+    const splitter = page.locator('[data-testid="collapsed-splitter"]');
+    await splitter.focus();
+    await splitter.press('Enter');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __splitterEvents: SplitterEvent[] }).__splitterEvents
+    );
+    expect(events).toEqual([
+      { type: 'collapsedchange', detail: { collapsed: false, previousPosition: 0 } },
+      { type: 'positionchange', detail: expect.objectContaining({ position: 50 }) },
+    ]);
+  });
+
+  test('setPosition() updates the position and widens the primary pane', async ({ page }) => {
+    const demoContainer = page.locator('[data-testid="horizontal-demo"]');
+    const splitter = page.locator('[data-testid="horizontal-splitter"]');
+    const primaryPane = page.locator('#horizontal-primary');
+
+    await page
+      .locator('[data-testid="horizontal-demo"] apg-window-splitter')
+      .evaluate((el) => (el as SplitterElement).setPosition(70));
+
+    await expect(splitter).toHaveAttribute('aria-valuenow', '70');
+    const containerBox = await demoContainer.boundingBox();
+    const paneBox = await primaryPane.boundingBox();
+    if (!containerBox || !paneBox) throw new Error('Horizontal demo not found');
+    expect(paneBox.width).toBeGreaterThan(containerBox.width * 0.6);
+  });
+
+  test('toggleCollapse() collapses the splitter and the primary pane', async ({ page }) => {
+    const splitter = page.locator('[data-testid="horizontal-splitter"]');
+    const primaryPane = page.locator('#horizontal-primary');
+
+    await page
+      .locator('[data-testid="horizontal-demo"] apg-window-splitter')
+      .evaluate((el) => (el as SplitterElement).toggleCollapse());
+
+    await expect(splitter).toHaveAttribute('aria-valuenow', '0');
+    const paneBox = await primaryPane.boundingBox();
+    if (!paneBox) throw new Error('Horizontal primary pane not found');
+    expect(paneBox.width).toBeLessThan(5);
+  });
+});
+
 // Cross-framework consistency tests
 test.describe('Window Splitter - Cross-framework Consistency', () => {
   test('all frameworks have same initial ARIA attributes', async ({ page }) => {
     for (const framework of frameworks) {
       await page.goto(`patterns/windowsplitter/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+      await waitForHydration(page);
 
       const splitter = page.locator('[data-testid="horizontal-splitter"]');
 
@@ -611,7 +818,8 @@ test.describe('Window Splitter - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/windowsplitter/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+      await waitForHydration(page);
 
       const splitter = page.locator('[data-testid="horizontal-splitter"]');
       await splitter.focus();
@@ -634,7 +842,8 @@ test.describe('Window Splitter - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/windowsplitter/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await page.locator('[data-testid="horizontal-splitter"]').waitFor({ state: 'attached' });
+      await waitForHydration(page);
 
       const splitter = page.locator('[data-testid="horizontal-splitter"]');
       await splitter.focus();

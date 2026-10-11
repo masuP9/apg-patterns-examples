@@ -7,6 +7,7 @@
  */
 import '@/styles/global.css';
 import WindowSplitterDemo from '@patterns/windowsplitter/WindowSplitterDemo.vue';
+import WindowSplitter from '@patterns/windowsplitter/WindowSplitter.vue';
 ---
 
 <!doctype html>
@@ -19,5 +20,63 @@ import WindowSplitterDemo from '@patterns/windowsplitter/WindowSplitterDemo.vue'
   </head>
   <body>
     <WindowSplitterDemo client:load />
+    <!--
+      Additional instances for E2E (keyboard and ARIA behavior only).
+      Pane sizes are owned by the demo and are not wired to these splitters
+      (except in the Astro demo, whose script listens to every demo container).
+    -->
+    <div class="mx-auto flex max-w-[800px] flex-col gap-8 px-6 pb-6">
+      <section class="apg-window-splitter-demo-section">
+        <h2 class="apg-window-splitter-demo-title" id="non-collapsible-demo-label">
+          Non-collapsible Splitter
+        </h2>
+        <div
+          class="apg-window-splitter-demo-container"
+          data-testid="non-collapsible-demo"
+          style="--splitter-position: 50%"
+        >
+          <div class="apg-window-splitter-pane" id="non-collapsible-primary">
+            <div class="apg-window-splitter-pane-content">Primary Pane</div>
+          </div>
+          <WindowSplitter
+            client:load
+            primaryPaneId="non-collapsible-primary"
+            secondaryPaneId="non-collapsible-secondary"
+            aria-labelledby="non-collapsible-demo-label"
+            data-testid="non-collapsible-splitter"
+            defaultPosition={50}
+            collapsible={false}
+          />
+          <div class="apg-window-splitter-pane" id="non-collapsible-secondary">
+            <div class="apg-window-splitter-pane-content">Secondary Pane</div>
+          </div>
+        </div>
+      </section>
+      <section class="apg-window-splitter-demo-section">
+        <h2 class="apg-window-splitter-demo-title" id="rtl-demo-label">RTL Splitter</h2>
+        <div
+          class="apg-window-splitter-demo-container"
+          dir="rtl"
+          data-testid="rtl-demo"
+          style="--splitter-position: 50%"
+        >
+          <div class="apg-window-splitter-pane" id="rtl-primary">
+            <div class="apg-window-splitter-pane-content">Primary Pane</div>
+          </div>
+          <WindowSplitter
+            client:load
+            primaryPaneId="rtl-primary"
+            secondaryPaneId="rtl-secondary"
+            aria-labelledby="rtl-demo-label"
+            data-testid="rtl-splitter"
+            defaultPosition={50}
+            dir="rtl"
+          />
+          <div class="apg-window-splitter-pane" id="rtl-secondary">
+            <div class="apg-window-splitter-pane-content">Secondary Pane</div>
+          </div>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

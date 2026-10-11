@@ -24,6 +24,13 @@ const getSliderByLabel = (page: import('@playwright/test').Page, label: string) 
   return page.getByRole('slider', { name: label });
 };
 
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated. (aria-valuenow is
+// already present in the SSR HTML, so it cannot be used as a signal.)
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
+};
+
 // ============================================
 // Framework-specific Tests
 // ============================================
@@ -33,15 +40,7 @@ for (const framework of frameworks) {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/slider/${framework}/demo/`);
       await getSlider(page).first().waitFor();
-
-      // Wait for hydration - slider should have aria-valuenow
-      const firstSlider = getSlider(page).first();
-      await expect
-        .poll(async () => {
-          const valuenow = await firstSlider.getAttribute('aria-valuenow');
-          return valuenow !== null;
-        })
-        .toBe(true);
+      await waitForHydration(page);
     });
 
     // ------------------------------------------
@@ -249,6 +248,18 @@ for (const framework of frameworks) {
         await slider.press('ArrowRight');
         await expect(slider).toHaveAttribute('aria-valuenow', '5');
       });
+
+      test('ArrowRight increases a decimal step value without floating-point error', async ({
+        page,
+      }) => {
+        const slider = getSliderByLabel(page, 'Opacity');
+        await slider.focus();
+        await expect(slider).toHaveAttribute('aria-valuenow', '0.5');
+
+        await slider.press('ArrowRight');
+
+        await expect(slider).toHaveAttribute('aria-valuenow', '0.6');
+      });
     });
 
     // ------------------------------------------
@@ -396,6 +407,47 @@ for (const framework of frameworks) {
 }
 
 // ============================================
+// Astro-specific: valuechange CustomEvent
+// ============================================
+
+test.describe('Slider (astro) - valuechange event', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/slider/astro/demo/');
+    await getSlider(page).first().waitFor();
+    await page.evaluate(() => {
+      const events: number[] = [];
+      (window as unknown as { __valueChanges: number[] }).__valueChanges = events;
+      document.addEventListener('valuechange', (e) => {
+        events.push((e as CustomEvent<{ value: number }>).detail.value);
+      });
+    });
+  });
+
+  test('dispatches valuechange with the new value on ArrowRight', async ({ page }) => {
+    const slider = getSliderByLabel(page, 'Volume');
+    await slider.focus();
+    await slider.press('ArrowRight');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([51]);
+  });
+
+  test('does not dispatch valuechange when the value does not change', async ({ page }) => {
+    const slider = getSliderByLabel(page, 'Volume');
+    await slider.focus();
+    await slider.press('End');
+    await slider.press('ArrowRight');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __valueChanges: number[] }).__valueChanges
+    );
+    expect(events).toEqual([100]);
+  });
+});
+
+// ============================================
 // Cross-framework Consistency Tests
 // ============================================
 
@@ -417,14 +469,7 @@ test.describe('Slider - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/slider/${framework}/demo/`);
       await getSlider(page).first().waitFor();
-
-      // Wait for hydration
-      await expect
-        .poll(async () => {
-          const valuenow = await getSlider(page).first().getAttribute('aria-valuenow');
-          return valuenow !== null;
-        })
-        .toBe(true);
+      await waitForHydration(page);
 
       // Check Volume slider
       const volumeSlider = getSliderByLabel(page, 'Volume');
@@ -455,14 +500,7 @@ test.describe('Slider - Cross-framework Consistency', () => {
     for (const framework of frameworks) {
       await page.goto(`patterns/slider/${framework}/demo/`);
       await getSlider(page).first().waitFor();
-
-      // Wait for hydration
-      await expect
-        .poll(async () => {
-          const valuenow = await getSlider(page).first().getAttribute('aria-valuenow');
-          return valuenow !== null;
-        })
-        .toBe(true);
+      await waitForHydration(page);
 
       const slider = getSliderByLabel(page, 'Volume');
       await slider.click();

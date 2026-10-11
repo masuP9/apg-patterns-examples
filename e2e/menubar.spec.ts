@@ -16,11 +16,18 @@ import { test, expect } from '@playwright/test';
 
 const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated.
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
+};
+
 for (const framework of frameworks) {
   test.describe(`Menubar (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/menubar/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await page.getByRole('menubar').waitFor();
+      await waitForHydration(page);
     });
 
     test.describe('ARIA Attributes', () => {
@@ -581,6 +588,25 @@ for (const framework of frameworks) {
 
         await editItem.hover();
 
+        await expect(fileItem).toHaveAttribute('aria-expanded', 'false');
+        await expect(editItem).toHaveAttribute('aria-expanded', 'true');
+      });
+
+      test('click on another menubar item while a menu is open switches menu', async ({ page }) => {
+        // FIXME: In Vue, Svelte and Astro, the pointer passing over "Edit" first
+        // switches the open menu via hover, and the following click then sees
+        // "Edit" as the already-open menu and closes it, leaving every menu
+        // closed. React passes only because its click handler still holds the
+        // pre-hover state. The handlers need to agree on the intended behavior.
+        test.fixme(
+          framework !== 'react',
+          'Hover-then-click on another menubar item closes all menus (vue/svelte/astro)'
+        );
+        const fileItem = page.getByRole('menuitem', { name: 'File' });
+        const editItem = page.getByRole('menuitem', { name: 'Edit' });
+        await fileItem.click();
+        await expect(fileItem).toHaveAttribute('aria-expanded', 'true');
+        await editItem.click();
         await expect(fileItem).toHaveAttribute('aria-expanded', 'false');
         await expect(editItem).toHaveAttribute('aria-expanded', 'true');
       });

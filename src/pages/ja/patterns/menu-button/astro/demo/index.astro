@@ -23,6 +23,11 @@ const fileItems = [
   { id: 'export', label: 'Export', disabled: true },
   { id: 'print', label: 'Print' },
 ];
+
+const allDisabledItems = [
+  { id: 'undo', label: 'Undo', disabled: true },
+  { id: 'redo', label: 'Redo', disabled: true },
+];
 ---
 
 <!doctype html>
@@ -52,6 +57,14 @@ const fileItems = [
             注: "Export" は無効で、キーボードナビゲーション時にスキップされます
           </p>
         </div>
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">すべての項目が無効なメニューボタン</h2>
+        <MenuButton items={allDisabledItems} label="Tools" />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">項目のないメニューボタン</h2>
+        <MenuButton items={[]} label="Bookmarks" />
       </section>
     </div>
   </body>
