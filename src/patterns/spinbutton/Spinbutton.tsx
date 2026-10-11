@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 // Label: one of these required (exclusive)
@@ -114,13 +114,33 @@ export function Spinbutton(props: SpinbuttonProps) {
   const computedValueText = getAriaValueText();
 
   // Update value and call callback
-  const updateValue = (newValue: number) => {
+  const updateValue = (newValue: number): number => {
     const clampedValue = clamp(roundToStep(newValue, step, min), min, max);
     if (clampedValue !== value) {
       setValue(clampedValue);
       setInputValue(String(clampedValue));
       onValueChange?.(clampedValue);
     }
+    return clampedValue;
+  };
+
+  // Announce the value after a button click, since the value change itself
+  // may not be reported. Uses ariaNotify when available, otherwise a live region.
+  const [announcement, setAnnouncement] = useState('');
+  const announceTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(announceTimerRef.current), []);
+
+  const announce = (newValue: number) => {
+    const message =
+      valueText ?? (format ? formatValueText(format, newValue, min, max) : String(newValue));
+    const input: (HTMLElement & { ariaNotify?: (m: string) => void }) | null = inputRef.current;
+    if (typeof input?.ariaNotify === 'function') {
+      input.ariaNotify(message);
+      return;
+    }
+    setAnnouncement(message);
+    clearTimeout(announceTimerRef.current);
+    announceTimerRef.current = setTimeout(() => setAnnouncement(''), 1000);
   };
 
   // Handle keyboard events
@@ -229,14 +249,14 @@ export function Spinbutton(props: SpinbuttonProps) {
   const handleIncrement = (event: React.MouseEvent) => {
     event.preventDefault();
     if (disabled || readOnly) return;
-    updateValue(value + step);
+    announce(updateValue(value + step));
     inputRef.current?.focus();
   };
 
   const handleDecrement = (event: React.MouseEvent) => {
     event.preventDefault();
     if (disabled || readOnly) return;
-    updateValue(value - step);
+    announce(updateValue(value - step));
     inputRef.current?.focus();
   };
 
@@ -302,6 +322,11 @@ export function Spinbutton(props: SpinbuttonProps) {
           </button>
         )}
       </div>
+      {showButtons && (
+        <span role="status" className="apg-spinbutton-live">
+          {announcement}
+        </span>
+      )}
     </div>
   );
 }

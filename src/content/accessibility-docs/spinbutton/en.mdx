@@ -11,6 +11,7 @@ import { KeyValueList, KeyValueListItem } from '@/components/ui/key-value-list';
 | Role         | Target Element | Description                                                                                                                                               |
 | ------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `spinbutton` | Input element  | Identifies the element as a spin button that allows users to select a value from a discrete set or range by incrementing/decrementing or typing directly. |
+| `status` | Visually hidden live region | Announces the new value when an increment/decrement button is clicked. Used only as a fallback in browsers that do not support `Element.ariaNotify()`. Rendered only when the buttons are shown. |
 
 ### WAI-ARIA Properties
 
@@ -111,6 +112,15 @@ References an external element as the label
 | Disabled input              | `tabindex="-1"`                                     |
 | Increment/decrement buttons | `tabindex="-1"` (not in tab order)                  |
 | Button click                | Focus stays on spinbutton (does NOT move to button) |
+
+### Value Announcement on Button Click
+
+When an increment/decrement button is clicked, the new value (`aria-valuetext` if set, otherwise the number) is announced using one of these two techniques:
+
+- If the browser supports <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/Element/ariaNotify">`Element.ariaNotify()`</ExternalLink>, it is called on the spinbutton. This is a progressive enhancement applied only after confirming support at runtime.
+- Otherwise, the value is written to a visually hidden `role="status"` live region. The live region is emptied after 1 second to avoid leaving stale content in the document.
+
+Keyboard changes are not announced this way because the focused spinbutton already reports its own value changes.
 
 ### Visual Design
 

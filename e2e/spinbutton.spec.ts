@@ -419,6 +419,59 @@ for (const framework of frameworks) {
     });
 
     // ------------------------------------------
+    // 🔴 High Priority: Button Click Announcement
+    // ------------------------------------------
+    test.describe('Button Click Announcement', () => {
+      test('calls ariaNotify with the new value text when ariaNotify is supported', async ({
+        page,
+      }) => {
+        await page.addInitScript(() => {
+          const calls: string[] = [];
+          (window as unknown as { __ariaNotifyCalls: string[] }).__ariaNotifyCalls = calls;
+          Object.defineProperty(Element.prototype, 'ariaNotify', {
+            configurable: true,
+            value(message: string) {
+              calls.push(message);
+            },
+          });
+        });
+        await page.reload();
+        const spinbutton = getRangeSpinbutton(page);
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', /.+/);
+        await page.waitForTimeout(100);
+
+        await getIncrementButton(page, spinbutton).first().click();
+
+        const expectedText = await spinbutton.getAttribute('aria-valuetext');
+        const calls = await page.evaluate(
+          () => (window as unknown as { __ariaNotifyCalls: string[] }).__ariaNotifyCalls
+        );
+        expect(calls).toEqual([expectedText]);
+      });
+
+      test('writes the new value to a live region when ariaNotify is unsupported', async ({
+        page,
+      }) => {
+        await page.addInitScript(() => {
+          delete (Element.prototype as { ariaNotify?: unknown }).ariaNotify;
+        });
+        await page.reload();
+        const spinbutton = getBasicSpinbutton(page);
+        await expect(spinbutton).toHaveAttribute('aria-valuenow', /.+/);
+        await page.waitForTimeout(100);
+        const liveRegion = page
+          .locator('.apg-spinbutton')
+          .filter({ has: spinbutton })
+          .getByRole('status');
+
+        await getIncrementButton(page, spinbutton).first().click();
+
+        await expect(liveRegion).toHaveText('6');
+        await expect(liveRegion).toHaveText('', { timeout: 3000 });
+      });
+    });
+
+    // ------------------------------------------
     // 🟡 Medium Priority: Text Input
     // ------------------------------------------
     test.describe('Text Input', () => {

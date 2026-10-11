@@ -34,6 +34,7 @@
 | ロール | 要素 | 説明 |
 | --- | --- | --- |
 | `spinbutton` | 入力要素 | ユーザーがインクリメント/デクリメントまたは直接入力によって、離散的なセットまたは範囲から値を選択できるスピンボタンとして要素を識別します。 (required) |
+| `status` | 視覚的に非表示のライブリージョン | 増加/減少ボタンをクリックしたときに新しい値を読み上げさせます。Element.ariaNotify() に対応していないブラウザでのみ使う代替手段です。ボタンを表示しているときだけ描画します。 |
 
 ### プロパティ
 
@@ -78,6 +79,7 @@
 - [ ] aria-valuetext set when valueText/format provided
 - [ ] aria-disabled="true" when disabled
 - [ ] aria-readonly="true" when readOnly
+- [ ] Button click announces new value (ariaNotify, or live region fallback)
 
 ### 中優先度: ARIA
 
@@ -154,6 +156,8 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 │     />                                                      │
 │     <button tabindex="-1" aria-label="Increment">+</button> │
 │   </div>                                                    │
+│   <span role="status" class="apg-spinbutton-live" />        │
+│     ← visually hidden; fallback when ariaNotify unsupported │
 │ </div>                                                      │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -165,6 +169,7 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 3. **IME input handling**: Don't update aria-valuenow during composition
 4. **Button focus steal**: Buttons must not receive focus on click
 5. **Floating-point precision**: Round to step to avoid precision errors
+6. **Silent button clicks**: Announce the new value on button click via `ariaNotify()` (feature-detected), falling back to a live region that is cleared after 1 second
 
 ## テストコード例 (React + Testing Library)
 

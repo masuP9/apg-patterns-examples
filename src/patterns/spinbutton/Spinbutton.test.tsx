@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Spinbutton } from './Spinbutton';
 
 describe('Spinbutton', () => {
@@ -431,6 +431,93 @@ describe('Spinbutton', () => {
       await user.keyboard('{ArrowUp}');
 
       expect(spinbutton).toHaveAttribute('aria-valuenow', '6');
+    });
+  });
+
+  // 🔴 High Priority: Value announcement on button click
+  describe('Button Click Announcement', () => {
+    afterEach(() => {
+      vi.useRealTimers();
+      // @ts-expect-error -- ariaNotify is not in lib.dom yet
+      delete HTMLElement.prototype.ariaNotify;
+    });
+
+    it('announces the new value via ariaNotify on increment click when ariaNotify is supported', async () => {
+      const ariaNotify = vi.fn();
+      // @ts-expect-error -- ariaNotify is not in lib.dom yet
+      HTMLElement.prototype.ariaNotify = ariaNotify;
+      const user = userEvent.setup();
+      render(<Spinbutton defaultValue={5} aria-label="Quantity" />);
+
+      await user.click(screen.getByLabelText(/increment/i));
+
+      expect(ariaNotify).toHaveBeenCalledWith('6');
+      expect(screen.getByRole('status')).toHaveTextContent('');
+    });
+
+    it('announces the formatted value text on decrement click when format is set', async () => {
+      const ariaNotify = vi.fn();
+      // @ts-expect-error -- ariaNotify is not in lib.dom yet
+      HTMLElement.prototype.ariaNotify = ariaNotify;
+      const user = userEvent.setup();
+      render(<Spinbutton defaultValue={5} format="{value} items" aria-label="Quantity" />);
+
+      await user.click(screen.getByLabelText(/decrement/i));
+
+      expect(ariaNotify).toHaveBeenCalledWith('4 items');
+    });
+
+    it('announces the max value again on increment click at max', async () => {
+      const ariaNotify = vi.fn();
+      // @ts-expect-error -- ariaNotify is not in lib.dom yet
+      HTMLElement.prototype.ariaNotify = ariaNotify;
+      const user = userEvent.setup();
+      render(<Spinbutton defaultValue={10} max={10} aria-label="Quantity" />);
+
+      await user.click(screen.getByLabelText(/increment/i));
+
+      expect(ariaNotify).toHaveBeenCalledWith('10');
+    });
+
+    it('does not call ariaNotify on ArrowUp key', async () => {
+      const ariaNotify = vi.fn();
+      // @ts-expect-error -- ariaNotify is not in lib.dom yet
+      HTMLElement.prototype.ariaNotify = ariaNotify;
+      const user = userEvent.setup();
+      render(<Spinbutton defaultValue={5} aria-label="Quantity" />);
+
+      await user.click(screen.getByRole('spinbutton'));
+      await user.keyboard('{ArrowUp}');
+
+      expect(ariaNotify).not.toHaveBeenCalled();
+    });
+
+    it('writes the new value to the live region on increment click when ariaNotify is unsupported', async () => {
+      const user = userEvent.setup();
+      render(<Spinbutton defaultValue={5} aria-label="Quantity" />);
+
+      await user.click(screen.getByLabelText(/increment/i));
+
+      expect(screen.getByRole('status')).toHaveTextContent('6');
+    });
+
+    it('clears the live region 1 second after the announcement', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(<Spinbutton defaultValue={5} aria-label="Quantity" />);
+
+      await user.click(screen.getByLabelText(/increment/i));
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      expect(screen.getByRole('status')).toHaveTextContent('');
+    });
+
+    it('does not render the live region when showButtons is false', () => {
+      render(<Spinbutton aria-label="Quantity" showButtons={false} />);
+
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
   });
 

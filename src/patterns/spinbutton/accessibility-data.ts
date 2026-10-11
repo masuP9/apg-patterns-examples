@@ -68,6 +68,15 @@ export const spinbuttonAccessibilityData: PatternAccessibilityData = {
       },
       required: true,
     },
+    {
+      name: 'status',
+      element: { en: 'Visually hidden live region', ja: '視覚的に非表示のライブリージョン' },
+      description: {
+        en: 'Announces the new value when an increment/decrement button is clicked. Used only as a fallback in browsers that do not support Element.ariaNotify(). Rendered only when the buttons are shown.',
+        ja: '増加/減少ボタンをクリックしたときに新しい値を読み上げさせます。Element.ariaNotify() に対応していないブラウザでのみ使う代替手段です。ボタンを表示しているときだけ描画します。',
+      },
+      required: false,
+    },
   ],
 
   properties: [
@@ -242,6 +251,10 @@ export const spinbuttonAccessibilityData: PatternAccessibilityData = {
     {
       en: 'Spinbuttons must have an accessible name. This can be provided through a visible label using the label prop, aria-label for an invisible label, or aria-labelledby to reference an external element.',
       ja: 'スピンボタンにはアクセシブルな名前が必要です。これはlabelプロパティを使用した表示されるラベル、見えないラベルのためのaria-label、または外部要素を参照するaria-labelledbyによって提供できます。',
+    },
+    {
+      en: 'When an increment/decrement button is clicked, the new value (aria-valuetext if set, otherwise the number) is announced. If the browser supports Element.ariaNotify(), it is called on the spinbutton as a progressive enhancement; otherwise the value is written to a visually hidden role="status" live region, which is emptied after 1 second so stale content does not remain. Keyboard changes are not announced this way because the focused spinbutton already reports its own value changes.',
+      ja: '増加/減少ボタンをクリックすると、新しい値（aria-valuetext があればその文言、なければ数値）を読み上げさせます。ブラウザが Element.ariaNotify() に対応していればスピンボタン上で呼び出し（プログレッシブエンハンスメント）、対応していなければ視覚的に非表示の role="status" ライブリージョンに値を書き込みます。古い内容が残らないよう、ライブリージョンは1秒後に空にします。キーボードでの変更はフォーカス中のスピンボタン自身が値の変化を伝えるため、この方法では読み上げません。',
     },
   ],
 
@@ -505,6 +518,13 @@ export const spinbuttonAccessibilityData: PatternAccessibilityData = {
               ja: '無効または読み取り専用の場合、ボタンがブロックされる',
             },
           },
+          {
+            name: 'Value announcement',
+            description: {
+              en: 'Button click calls ariaNotify() with the new value text when supported, otherwise writes it to the live region and clears it after 1 second',
+              ja: 'ボタンのクリックで、ariaNotify() 対応時は新しい値の文言で呼び出し、非対応時はライブリージョンに書き込んで1秒後に空にする',
+            },
+          },
         ],
       },
       {
@@ -760,6 +780,11 @@ export const spinbuttonAccessibilityData: PatternAccessibilityData = {
     },
     { description: 'Buttons have tabindex="-1"', priority: 'high', category: 'focus' },
     { description: 'Focus stays on input after button click', priority: 'high', category: 'focus' },
+    {
+      description: 'Button click announces new value (ariaNotify, or live region fallback)',
+      priority: 'high',
+      category: 'aria',
+    },
 
     // Medium Priority
     { description: 'No axe-core violations', priority: 'medium', category: 'accessibility' },
@@ -818,6 +843,8 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 │     />                                                      │
 │     <button tabindex="-1" aria-label="Increment">+</button> │
 │   </div>                                                    │
+│   <span role="status" class="apg-spinbutton-live" />        │
+│     ← visually hidden; fallback when ariaNotify unsupported │
 │ </div>                                                      │
 └─────────────────────────────────────────────────────────────┘
 \`\`\`
@@ -828,7 +855,8 @@ export type SpinbuttonProps = SpinbuttonBaseProps & LabelProps;
 2. **Unconditional aria-valuemin/max**: Only set when min/max props are defined
 3. **IME input handling**: Don't update aria-valuenow during composition
 4. **Button focus steal**: Buttons must not receive focus on click
-5. **Floating-point precision**: Round to step to avoid precision errors`,
+5. **Floating-point precision**: Round to step to avoid precision errors
+6. **Silent button clicks**: Announce the new value on button click via \`ariaNotify()\` (feature-detected), falling back to a live region that is cleared after 1 second`,
 
   exampleTestCodeReact: `import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

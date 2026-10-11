@@ -56,11 +56,12 @@
         +
       </button>
     </div>
+    <span v-if="showButtons" role="status" class="apg-spinbutton-live">{{ announcement }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import { cn } from '@/lib/utils';
 
 defineOptions({
@@ -178,13 +179,34 @@ const ariaLabelledby = computed(() => {
 import { getCurrentInstance } from 'vue';
 
 // Update value and emit
-const updateValue = (newValue: number) => {
+const updateValue = (newValue: number): number => {
   const clampedValue = clamp(roundToStep(newValue, props.step, props.min), props.min, props.max);
   if (clampedValue !== value.value) {
     value.value = clampedValue;
     inputValue.value = String(clampedValue);
     emit('valueChange', clampedValue);
   }
+  return clampedValue;
+};
+
+// Announce the value after a button click, since the value change itself
+// may not be reported. Uses ariaNotify when available, otherwise a live region.
+const announcement = ref('');
+let announceTimer: ReturnType<typeof setTimeout> | undefined;
+onBeforeUnmount(() => clearTimeout(announceTimer));
+
+const announce = (newValue: number) => {
+  const message = props.valueText ?? formatValueText(newValue, props.format);
+  const input: (HTMLElement & { ariaNotify?: (m: string) => void }) | null = inputRef.value;
+  if (typeof input?.ariaNotify === 'function') {
+    input.ariaNotify(message);
+    return;
+  }
+  announcement.value = message;
+  clearTimeout(announceTimer);
+  announceTimer = setTimeout(() => {
+    announcement.value = '';
+  }, 1000);
 };
 
 // Keyboard handler
@@ -294,14 +316,14 @@ const handleCompositionEnd = () => {
 const handleIncrement = (event: MouseEvent) => {
   event.preventDefault();
   if (props.disabled || props.readOnly) return;
-  updateValue(value.value + props.step);
+  announce(updateValue(value.value + props.step));
   inputRef.value?.focus();
 };
 
 const handleDecrement = (event: MouseEvent) => {
   event.preventDefault();
   if (props.disabled || props.readOnly) return;
-  updateValue(value.value - props.step);
+  announce(updateValue(value.value - props.step));
   inputRef.value?.focus();
 };
 </script>
