@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, useId } from 'vue';
 
 export interface DialogProps {
   /** Dialog title (required for accessibility) */
@@ -76,11 +76,9 @@ const emit = defineEmits<{
 
 const dialogRef = ref<HTMLDialogElement>();
 const previousActiveElement = ref<HTMLElement | null>(null);
-const instanceId = ref('');
+const instanceId = useId();
 
 onMounted(() => {
-  instanceId.value = `dialog-${Math.random().toString(36).substr(2, 9)}`;
-
   // Open on mount if defaultOpen
   if (props.defaultOpen && dialogRef.value) {
     dialogRef.value.showModal();
@@ -88,8 +86,8 @@ onMounted(() => {
   }
 });
 
-const titleId = computed(() => `${instanceId.value}-title`);
-const descriptionId = computed(() => `${instanceId.value}-description`);
+const titleId = computed(() => `${instanceId}-title`);
+const descriptionId = computed(() => `${instanceId}-description`);
 
 const openDialog = () => {
   if (dialogRef.value) {

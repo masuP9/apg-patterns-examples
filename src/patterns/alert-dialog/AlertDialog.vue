@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick } from 'vue';
+import { ref, onMounted, computed, nextTick, useId } from 'vue';
 
 export interface AlertDialogProps {
   /** Dialog title (required for accessibility) */
@@ -74,11 +74,9 @@ const emit = defineEmits<{
 const dialogRef = ref<HTMLDialogElement>();
 const cancelButtonRef = ref<HTMLButtonElement>();
 const previousActiveElement = ref<HTMLElement | null>(null);
-const instanceId = ref('');
+const instanceId = useId();
 
 onMounted(() => {
-  instanceId.value = `alert-dialog-${Math.random().toString(36).substr(2, 9)}`;
-
   // Open on mount if defaultOpen
   if (props.defaultOpen && dialogRef.value) {
     dialogRef.value.showModal();
@@ -86,8 +84,8 @@ onMounted(() => {
   }
 });
 
-const titleId = computed(() => `${instanceId.value}-title`);
-const messageId = computed(() => `${instanceId.value}-message`);
+const titleId = computed(() => `${instanceId}-title`);
+const messageId = computed(() => `${instanceId}-message`);
 
 const confirmButtonClass = computed(() => {
   const base = 'apg-alert-dialog-confirm';

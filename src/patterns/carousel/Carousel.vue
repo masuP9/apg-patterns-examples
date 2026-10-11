@@ -166,7 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted } from 'vue';
+import { ref, computed, watch, onUnmounted, useId } from 'vue';
 
 export interface CarouselSlide {
   /** Unique identifier for the slide */
@@ -214,17 +214,9 @@ const validInitialSlide = computed(() => {
     : 0;
 });
 
-// Generate ID - use prop if provided for SSR stability, otherwise generate
-let generatedId: string | undefined;
-if (typeof props.id === 'string' && props.id.length > 0) {
-  generatedId = props.id;
-} else if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-  // Use crypto.randomUUID for better uniqueness when available
-  generatedId = `carousel-${crypto.randomUUID().slice(0, 8)}`;
-} else {
-  generatedId = `carousel-${Math.random().toString(36).slice(2, 11)}`;
-}
-const carouselId = ref(generatedId);
+// Use the id prop if provided, otherwise an SSR-stable id from useId()
+const generatedId = useId();
+const carouselId = props.id || generatedId;
 
 // Helper to get initial auto-rotate mode
 const getInitialAutoRotateMode = (): boolean => {
@@ -260,7 +252,7 @@ const isDragging = ref(false);
 const dragOffset = ref(0);
 
 // Computed
-const slidesContainerId = computed(() => `${carouselId.value}-slides`);
+const slidesContainerId = computed(() => `${carouselId}-slides`);
 const isActuallyRotating = computed(() => autoRotateMode.value && !isPausedByInteraction.value);
 const containerClass = computed(() => `apg-carousel ${props.class}`.trim());
 const slidesContainerClass = computed(

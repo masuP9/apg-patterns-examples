@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted, nextTick, useId } from 'vue';
 import TreeNode from './TreeNode.vue';
 
 export interface TreeNodeData {
@@ -69,7 +69,7 @@ const emit = defineEmits<{
   activate: [nodeId: string];
 }>();
 
-const instanceId = ref('');
+const instanceId = useId();
 const nodeRefs = ref<Record<string, HTMLLIElement>>({});
 const typeAheadBuffer = ref('');
 const typeAheadTimeoutId = ref<number | null>(null);
@@ -162,8 +162,6 @@ const containerClass = computed(() => `apg-treeview ${props.className}`.trim());
 
 // Initialize on mount
 onMounted(() => {
-  instanceId.value = `treeview-${Math.random().toString(36).slice(2, 11)}`;
-
   // Initialize expansion
   internalExpandedIds.value = new Set(props.defaultExpandedIds);
 

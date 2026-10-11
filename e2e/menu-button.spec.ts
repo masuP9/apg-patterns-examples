@@ -121,12 +121,6 @@ for (const framework of frameworks) {
       test('menu is named by its own button when several menu buttons are on the page', async ({
         page,
       }) => {
-        // BUG (vue): each client:only island is a separate Vue app, so useId()
-        // returns the same "v-0" prefix in every island. The File menu's
-        // aria-labelledby="v-0-button" then resolves to the first island's
-        // "Actions" button, and the ids are duplicated across the page.
-        test.fixme(framework === 'vue', 'Vue useId() collides across islands');
-
         await page.getByRole('button', { name: /file/i }).click();
 
         await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();

@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted, nextTick, useId } from 'vue';
 
 export interface ListboxOption {
   id: string;
@@ -67,7 +67,7 @@ const emit = defineEmits<{
 
 const listboxRef = ref<HTMLElement>();
 const optionRefs = ref<Record<string, HTMLLIElement>>({});
-const instanceId = ref('');
+const instanceId = useId();
 const selectedIds = ref<Set<string>>(new Set());
 const focusedIndex = ref(0);
 const selectionAnchor = ref(0);
@@ -84,8 +84,6 @@ const availableIndexMap = computed(() => {
 });
 
 onMounted(() => {
-  instanceId.value = `listbox-${Math.random().toString(36).slice(2, 11)}`;
-
   // Initialize selection
   if (props.defaultSelectedIds.length > 0) {
     selectedIds.value = new Set(props.defaultSelectedIds);
@@ -119,7 +117,7 @@ const setOptionRef = (id: string, el: unknown) => {
 // If no available options, listbox itself needs tabIndex for keyboard access
 const listboxTabIndex = computed(() => (availableOptions.value.length === 0 ? 0 : undefined));
 
-const getOptionId = (optionId: string) => `${instanceId.value}-option-${optionId}`;
+const getOptionId = (optionId: string) => `${instanceId}-option-${optionId}`;
 
 const containerClass = computed(() => {
   const classes = ['apg-listbox'];

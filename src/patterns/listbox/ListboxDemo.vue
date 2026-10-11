@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, useId } from 'vue';
 import Listbox, { type ListboxOption } from './Listbox.vue';
 
 interface Props {
@@ -38,11 +38,10 @@ const props = withDefaults(defineProps<Props>(), {
   defaultSelectedIds: () => [],
 });
 
-const labelId = ref('');
+const labelId = useId();
 const selectedIds = ref<string[]>([]);
 
 onMounted(() => {
-  labelId.value = `listbox-label-${Math.random().toString(36).substr(2, 9)}`;
   selectedIds.value = props.defaultSelectedIds;
 });
 

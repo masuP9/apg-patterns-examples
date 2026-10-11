@@ -29,6 +29,8 @@ export default defineConfig({
     vue({
       // Disable HMR to avoid __VUE_HMR_RUNTIME__ error in development
       devtools: false,
+      // Gives client:only islands a unique useId() prefix (see the file for details)
+      appEntrypoint: '/src/lib/vue-app.ts',
     }),
     svelte(),
     mdx(),

@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, useId } from 'vue';
 
 export interface RadioOption {
   id: string;
@@ -80,7 +80,7 @@ const emit = defineEmits<{
 }>();
 
 // Generate unique ID for this instance
-const instanceId = `radio-${Math.random().toString(36).slice(2, 9)}`;
+const instanceId = useId();
 
 // Filter enabled options
 const enabledOptions = computed(() => props.options.filter((opt) => !opt.disabled));

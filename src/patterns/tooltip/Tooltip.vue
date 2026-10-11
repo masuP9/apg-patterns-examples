@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onUnmounted, watch, useId } from 'vue';
 import { cn } from '@/lib/utils';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -40,14 +40,8 @@ const emit = defineEmits<{
   'update:open': [value: boolean];
 }>();
 
-// Generate unique ID
-let uid = '';
-onMounted(() => {
-  uid = props.id ?? `tooltip-${crypto.randomUUID().slice(0, 8)}`;
-  tooltipId.value = uid;
-});
-
-const tooltipId = ref(props.id ?? '');
+const generatedId = useId();
+const tooltipId = computed(() => props.id ?? generatedId);
 
 const internalOpen = ref(props.defaultOpen);
 const isControlled = computed(() => props.open !== undefined);
