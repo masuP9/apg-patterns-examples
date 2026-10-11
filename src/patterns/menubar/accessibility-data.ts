@@ -303,10 +303,17 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
           },
         },
         {
-          key: 'Enter / Space',
+          key: 'Enter',
           action: {
-            en: 'Activate item and close menu; for checkbox/radio, toggle state and keep menu open',
-            ja: 'アイテムを実行してメニューを閉じる；チェックボックス/ラジオは状態を切り替えてメニューを開いたままにする',
+            en: 'Activate item and close menu (checkbox/radio: change state, then close menu)',
+            ja: 'アイテムを実行してメニューを閉じる（チェックボックス/ラジオは状態を切り替えてからメニューを閉じる）',
+          },
+        },
+        {
+          key: 'Space',
+          action: {
+            en: 'Activate item and close menu; for checkbox/radio, change state without closing menu (optional)',
+            ja: 'アイテムを実行してメニューを閉じる；チェックボックス/ラジオは状態を切り替えてメニューを開いたままにする（任意）',
           },
         },
         {
@@ -692,7 +699,10 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
           },
           {
             name: 'Checkbox keeps open',
-            description: { en: 'Toggle does not close menu', ja: '切り替えでメニューが閉じない' },
+            description: {
+              en: 'Space toggle does not close menu; Enter toggles and closes menu',
+              ja: 'Spaceでの切り替えではメニューが閉じない。Enterは切り替えてからメニューを閉じる',
+            },
           },
           {
             name: 'aria-checked update',
@@ -707,7 +717,10 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
           },
           {
             name: 'Radio keeps open',
-            description: { en: 'Selection does not close menu', ja: '選択でメニューが閉じない' },
+            description: {
+              en: 'Space selection does not close menu; Enter selects and closes menu',
+              ja: 'Spaceでの選択ではメニューが閉じない。Enterは選択してからメニューを閉じる',
+            },
           },
           {
             name: 'Exclusive selection',
@@ -945,8 +958,22 @@ export const menubarAccessibilityData: PatternAccessibilityData = {
       priority: 'high',
       category: 'keyboard',
     },
-    { description: 'Checkbox toggle does not close menu', priority: 'high', category: 'keyboard' },
-    { description: 'Radio selection does not close menu', priority: 'high', category: 'keyboard' },
+    {
+      description: 'Space on checkbox toggles state and does not close menu',
+      priority: 'high',
+      category: 'keyboard',
+    },
+    {
+      description: 'Space on radio selects it and does not close menu',
+      priority: 'high',
+      category: 'keyboard',
+    },
+    {
+      description:
+        'Enter on checkbox/radio changes state, closes menu, and returns focus to menubar item',
+      priority: 'high',
+      category: 'keyboard',
+    },
     {
       description: 'Only one radio in group can be checked',
       priority: 'high',
@@ -1014,7 +1041,7 @@ Critical Implementation Points:
 1. All <li> must have role="none" to hide list semantics
 2. aria-haspopup="menu" - use explicit "menu", not true
 3. Submenu aria-labelledby - must reference parent menuitem ID
-4. Checkbox/radio activation keeps menu open - unlike regular menuitem
+4. Checkbox/radio: Space changes state and keeps menu open (APG optional); Enter changes state and closes menu like a regular menuitem
 5. Hover menu switching - only when a menu is already open
 6. Context-dependent ←/→ - behavior differs in menubar vs menu vs submenu
 `,
