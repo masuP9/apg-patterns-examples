@@ -22,11 +22,39 @@ const getCustomLinks = (page: import('@playwright/test').Page) => {
   return page.locator('[role="link"]');
 };
 
+const getLinkByName = (page: import('@playwright/test').Page, name: string) => {
+  return page.getByRole('link', { name });
+};
+
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated. The Astro Web Component
+// (apg-link) attaches its listeners in a requestAnimationFrame after upgrade,
+// so also wait for the next frames.
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      )
+  );
+};
+
+// Fulfill requests to the demo's external URLs so navigation can be
+// asserted without hitting the network.
+const stubExternalSites = async (page: import('@playwright/test').Page) => {
+  await page
+    .context()
+    .route(/^https:\/\/(www\.w3\.org|example\.com)\//, (route) =>
+      route.fulfill({ contentType: 'text/html', body: '<title>Stub</title>' })
+    );
+};
+
 for (const framework of frameworks) {
   test.describe(`Link (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/link/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await waitForHydration(page);
     });
 
     // 🔴 High Priority: ARIA Structure
@@ -73,68 +101,46 @@ for (const framework of frameworks) {
 
     // 🔴 High Priority: Keyboard Interaction
     test.describe('APG: Keyboard Interaction', () => {
-      test('activates on Enter key', async ({ page }) => {
-        // Get the first enabled link
-        const link = page.locator('[role="link"]:not([aria-disabled="true"])').first();
-        await link.waitFor();
-
-        // Track keydown event and prevent navigation
-        await page.evaluate(() => {
-          const links = document.querySelectorAll('[role="link"]:not([aria-disabled="true"])');
-          links.forEach((link) => {
-            (link as HTMLElement).dataset.enterPressed = 'false';
-            link.addEventListener(
-              'keydown',
-              (e) => {
-                if ((e as KeyboardEvent).key === 'Enter') {
-                  e.preventDefault(); // Prevent navigation
-                  (link as HTMLElement).dataset.enterPressed = 'true';
-                }
-              },
-              { capture: true }
-            );
-          });
-        });
-
+      test('Enter navigates to the href', async ({ page }) => {
+        await stubExternalSites(page);
+        const link = getLinkByName(page, 'WAI-ARIA APG Documentation');
         await link.focus();
         await expect(link).toBeFocused();
+
         await link.press('Enter');
 
-        // Verify Enter key was detected
-        const enterPressed = await link.getAttribute('data-enter-pressed');
-        expect(enterPressed).toBe('true');
+        await expect(page).toHaveURL('https://www.w3.org/WAI/ARIA/apg/');
       });
 
-      test('does NOT activate on Space key', async ({ page }) => {
-        // Get the first enabled link
-        const link = page.locator('[role="link"]:not([aria-disabled="true"])').first();
-        await link.waitFor();
-
-        // Track keydown event for Space key
-        await page.evaluate(() => {
-          const links = document.querySelectorAll('[role="link"]:not([aria-disabled="true"])');
-          links.forEach((link) => {
-            (link as HTMLElement).dataset.spaceActivated = 'false';
-            // The component should NOT have any handler that activates on Space
-            // We listen to verify Space does NOT trigger the component's activation
-            link.addEventListener('keydown', (e) => {
-              if ((e as KeyboardEvent).key === ' ') {
-                // Check if the event would have been handled (i.e., if stopPropagation was called)
-                // For now, we just track that Space was pressed
-                (link as HTMLElement).dataset.spacePressed = 'true';
-              }
-            });
-          });
-        });
-
+      test('Space does not navigate', async ({ page }) => {
+        const link = getLinkByName(page, 'Link with hash href');
         await link.focus();
         await expect(link).toBeFocused();
-        await link.press('Space');
-        await page.waitForTimeout(100);
 
-        // The link should still be on the page (no navigation happened)
-        // Space should NOT activate links according to APG
-        await expect(link).toBeVisible();
+        await link.press('Space');
+
+        // Navigating to "#" is a synchronous same-document navigation, so the
+        // URL would already end with "#" if Space had activated the link.
+        const url = await page.evaluate(() => window.location.href);
+        expect(url).not.toMatch(/#$/);
+      });
+
+      test('Enter during IME composition does not navigate', async ({ page }) => {
+        const link = getLinkByName(page, 'Link with hash href');
+
+        await link.evaluate((el) => {
+          el.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: 'Enter',
+              isComposing: true,
+              bubbles: true,
+              cancelable: true,
+            })
+          );
+        });
+
+        const url = await page.evaluate(() => window.location.href);
+        expect(url).not.toMatch(/#$/);
       });
 
       test('is focusable via Tab', async ({ page }) => {
@@ -156,38 +162,50 @@ for (const framework of frameworks) {
 
     // 🔴 High Priority: Click Interaction
     test.describe('APG: Click Interaction', () => {
-      test('activates on click', async ({ page }) => {
-        // Get the first enabled link
-        const link = page.locator('[role="link"]:not([aria-disabled="true"])').first();
-        await link.waitFor();
-
-        // Track click event and prevent navigation by intercepting at capture phase
-        await page.evaluate(() => {
-          // Prevent window.open
-          window.open = () => null;
-
-          const links = document.querySelectorAll('[role="link"]:not([aria-disabled="true"])');
-          links.forEach((link) => {
-            (link as HTMLElement).dataset.clicked = 'false';
-            link.addEventListener(
-              'click',
-              (e) => {
-                // Prevent navigation
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                (link as HTMLElement).dataset.clicked = 'true';
-              },
-              { capture: true }
-            );
-          });
-        });
+      test('click navigates to the href', async ({ page }) => {
+        await stubExternalSites(page);
+        const link = getLinkByName(page, 'WAI-ARIA APG Documentation');
 
         await link.click();
 
-        // Verify the link was clicked
-        const wasClicked = await link.getAttribute('data-clicked');
-        expect(wasClicked).toBe('true');
+        await expect(page).toHaveURL('https://www.w3.org/WAI/ARIA/apg/');
+      });
+
+      test('link with target="_blank" opens the href in a new tab', async ({ page }) => {
+        await stubExternalSites(page);
+        const link = getLinkByName(page, 'External Link (opens in new tab)');
+
+        const newPagePromise = page.context().waitForEvent('page');
+        await link.click();
+        const newPage = await newPagePromise;
+
+        await expect(newPage).toHaveURL('https://example.com/');
+      });
+
+      test('link with target="_blank" opens the new tab without window.opener', async ({
+        page,
+      }) => {
+        await stubExternalSites(page);
+        const link = getLinkByName(page, 'External Link (opens in new tab)');
+
+        const newPagePromise = page.context().waitForEvent('page');
+        await link.click();
+        const newPage = await newPagePromise;
+        await newPage.waitForLoadState();
+
+        const hasOpener = await newPage.evaluate(() => window.opener !== null);
+        expect(hasOpener).toBe(false);
+      });
+
+      test('link with target="_blank" keeps the current page', async ({ page }) => {
+        await stubExternalSites(page);
+        const link = getLinkByName(page, 'External Link (opens in new tab)');
+
+        const newPagePromise = page.context().waitForEvent('page');
+        await link.click();
+        await newPagePromise;
+
+        await expect(page).toHaveURL(/\/patterns\/link\/[a-z]+\/demo\/$/);
       });
     });
 
@@ -228,6 +246,27 @@ for (const framework of frameworks) {
           }
         }
       });
+
+      test('clicking a disabled link does not navigate', async ({ page }) => {
+        const disabledLink = getLinkByName(page, 'Disabled Link');
+
+        // force: Playwright treats aria-disabled="true" elements as not actionable
+        await disabledLink.click({ force: true });
+
+        const url = await page.evaluate(() => window.location.href);
+        expect(url).not.toMatch(/#$/);
+      });
+
+      test('pressing Enter on a disabled link does not navigate', async ({ page }) => {
+        const disabledLink = getLinkByName(page, 'Disabled Link');
+        // Programmatic focus: tabindex="-1" keeps it out of the Tab order only
+        await disabledLink.focus();
+
+        await disabledLink.press('Enter');
+
+        const url = await page.evaluate(() => window.location.href);
+        expect(url).not.toMatch(/#$/);
+      });
     });
 
     // 🟡 Medium Priority: Accessibility
@@ -246,12 +285,68 @@ for (const framework of frameworks) {
   });
 }
 
+// Astro-specific: link-activate CustomEvent
+test.describe('Link (astro) - link-activate event', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/link/astro/demo/');
+    await waitForHydration(page);
+    await page.evaluate(() => {
+      const events: (string | undefined)[] = [];
+      (window as unknown as { __linkActivations: (string | undefined)[] }).__linkActivations =
+        events;
+      document.addEventListener('link-activate', (e) => {
+        events.push((e as CustomEvent<{ href?: string }>).detail.href);
+      });
+    });
+  });
+
+  test('dispatches link-activate with the href on click', async ({ page }) => {
+    await getLinkByName(page, 'Link with hash href').click();
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __linkActivations: string[] }).__linkActivations
+    );
+    expect(events).toEqual(['#']);
+  });
+
+  test('dispatches link-activate with the href on Enter', async ({ page }) => {
+    const link = getLinkByName(page, 'Link with hash href');
+    await link.focus();
+    await link.press('Enter');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __linkActivations: string[] }).__linkActivations
+    );
+    expect(events).toEqual(['#']);
+  });
+
+  test('does not dispatch link-activate on Space', async ({ page }) => {
+    const link = getLinkByName(page, 'Link with hash href');
+    await link.focus();
+    await link.press('Space');
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __linkActivations: string[] }).__linkActivations
+    );
+    expect(events).toEqual([]);
+  });
+
+  test('does not dispatch link-activate when a disabled link is clicked', async ({ page }) => {
+    await getLinkByName(page, 'Disabled Link').click({ force: true });
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __linkActivations: string[] }).__linkActivations
+    );
+    expect(events).toEqual([]);
+  });
+});
+
 // Cross-framework consistency tests
 test.describe('Link - Cross-framework Consistency', () => {
   test('all frameworks have custom link elements', async ({ page }) => {
     for (const framework of frameworks) {
       await page.goto(`patterns/link/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await waitForHydration(page);
 
       const links = page.locator('[role="link"]');
       const count = await links.count();
@@ -264,7 +359,7 @@ test.describe('Link - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/link/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await waitForHydration(page);
 
       const links = page.locator('[role="link"]');
       linkCounts[framework] = await links.count();
@@ -282,7 +377,7 @@ test.describe('Link - Cross-framework Consistency', () => {
 
     for (const framework of frameworks) {
       await page.goto(`patterns/link/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await waitForHydration(page);
 
       ariaStructures[framework] = await page.evaluate(() => {
         const links = document.querySelectorAll('[role="link"]');

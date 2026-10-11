@@ -1,291 +1,259 @@
 /**
- * AlertDialog Web Component Tests
+ * AlertDialog Astro Component Tests using Container API
  *
- * Note: These are limited unit tests for the Web Component class.
- * Full keyboard navigation and focus management tests require E2E testing
- * with Playwright due to jsdom limitations with focus events and <dialog> element.
+ * These tests verify the initial server-rendered HTML of AlertDialog.astro.
+ * Web Component behavior (opening via showModal, initial focus on Cancel,
+ * focus trap, Escape handling, focus restoration and the cancel/confirm
+ * events) is covered by E2E tests in e2e/alert-dialog.spec.ts.
+ *
+ * @see https://docs.astro.build/en/reference/container-reference/
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { JSDOM } from 'jsdom';
+import AlertDialog from './AlertDialog.astro';
 
-describe('AlertDialog (Web Component)', () => {
-  let container: HTMLElement;
+describe('AlertDialog (Astro Container API)', () => {
+  let container: AstroContainer;
 
-  // Web Component class extracted for testing
-  class TestApgAlertDialog extends HTMLElement {
-    private dialog: HTMLDialogElement | null = null;
-    private triggerRef: HTMLElement | null = null;
-    private cancelButton: HTMLButtonElement | null = null;
-    private confirmButton: HTMLButtonElement | null = null;
-    private rafId: number | null = null;
+  beforeEach(async () => {
+    container = await AstroContainer.create();
+  });
 
-    connectedCallback() {
-      this.rafId = requestAnimationFrame(() => this.initialize());
-    }
+  async function renderAlertDialog(props: Record<string, unknown>): Promise<Document> {
+    const html = await container.renderToString(AlertDialog, { props });
+    return new JSDOM(html).window.document;
+  }
 
-    private initialize() {
-      this.rafId = null;
-      this.dialog = this.querySelector('dialog');
-      this.cancelButton = this.querySelector('[data-cancel]');
-      this.confirmButton = this.querySelector('[data-confirm]');
-
-      if (!this.dialog) return;
-
-      // Set up event listeners
-      this.dialog.addEventListener('keydown', this.handleKeyDown);
-      this.cancelButton?.addEventListener('click', this.handleCancel);
-      this.confirmButton?.addEventListener('click', this.handleConfirm);
-    }
-
-    disconnectedCallback() {
-      if (this.rafId !== null) {
-        cancelAnimationFrame(this.rafId);
-        this.rafId = null;
-      }
-      this.dialog?.removeEventListener('keydown', this.handleKeyDown);
-      this.cancelButton?.removeEventListener('click', this.handleCancel);
-      this.confirmButton?.removeEventListener('click', this.handleConfirm);
-    }
-
-    open(triggerElement?: HTMLElement) {
-      if (!this.dialog) return;
-      this.triggerRef = triggerElement || null;
-      this.dialog.showModal();
-
-      // Focus cancel button (safest action)
-      requestAnimationFrame(() => {
-        this.cancelButton?.focus();
+  // 🔴 High Priority: HTML Structure
+  describe('HTML Structure', () => {
+    it('renders apg-alert-dialog custom element wrapper', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
       });
-    }
+      expect(doc.querySelector('apg-alert-dialog')).not.toBeNull();
+    });
 
-    close() {
-      if (!this.dialog) return;
-      this.dialog.close();
-      this.triggerRef?.focus();
-    }
+    it('renders a trigger button with type="button" and triggerText', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      const trigger = doc.querySelector('.apg-alert-dialog-trigger');
+      expect(trigger?.tagName).toBe('BUTTON');
+      expect(trigger?.getAttribute('type')).toBe('button');
+      expect(trigger?.textContent?.trim()).toBe('Delete');
+    });
 
-    private handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        const allowEscapeClose = this.dataset.allowEscapeClose === 'true';
-        if (!allowEscapeClose) {
-          event.preventDefault();
-        } else {
-          this.dispatchEvent(new CustomEvent('cancel', { bubbles: true }));
-        }
-      }
-    };
-
-    private handleCancel = () => {
-      this.dispatchEvent(new CustomEvent('cancel', { bubbles: true }));
-      this.close();
-    };
-
-    private handleConfirm = () => {
-      this.dispatchEvent(new CustomEvent('confirm', { bubbles: true }));
-      this.close();
-    };
-  }
-
-  function createAlertDialogHTML(
-    options: {
-      title?: string;
-      message?: string;
-      confirmLabel?: string;
-      cancelLabel?: string;
-      allowEscapeClose?: boolean;
-      open?: boolean;
-    } = {}
-  ) {
-    const {
-      title = 'Confirm Action',
-      message = 'Are you sure?',
-      confirmLabel = 'Confirm',
-      cancelLabel = 'Cancel',
-      allowEscapeClose = false,
-      open = false,
-    } = options;
-
-    const titleId = 'alert-title';
-    const messageId = 'alert-message';
-
-    return `
-      <apg-alert-dialog ${allowEscapeClose ? 'data-allow-escape-close="true"' : ''}>
-        <dialog
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="${titleId}"
-          aria-describedby="${messageId}"
-          class="apg-alert-dialog"
-          ${open ? 'open' : ''}
-        >
-          <h1 id="${titleId}" class="apg-alert-dialog-title">${title}</h1>
-          <p id="${messageId}" class="apg-alert-dialog-message">${message}</p>
-          <div class="apg-alert-dialog-actions">
-            <button type="button" data-cancel class="apg-alert-dialog-cancel">${cancelLabel}</button>
-            <button type="button" data-confirm class="apg-alert-dialog-confirm">${confirmLabel}</button>
-          </div>
-        </dialog>
-      </apg-alert-dialog>
-    `;
-  }
-
-  beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    // Register custom element if not already registered
-    if (!customElements.get('apg-alert-dialog')) {
-      customElements.define('apg-alert-dialog', TestApgAlertDialog);
-    }
+    it('renders a native dialog element that is closed initially', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      const dialog = doc.querySelector('dialog');
+      expect(dialog).not.toBeNull();
+      expect(dialog?.hasAttribute('open')).toBe(false);
+    });
   });
 
-  afterEach(() => {
-    container.remove();
-    vi.restoreAllMocks();
-  });
-
+  // 🔴 High Priority: ARIA Attributes
   describe('ARIA Attributes', () => {
     it('has role="alertdialog" (NOT dialog)', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const dialog = container.querySelector('dialog');
-      expect(dialog?.getAttribute('role')).toBe('alertdialog');
-    });
-
-    it('has aria-modal="true"', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const dialog = container.querySelector('dialog');
-      expect(dialog?.getAttribute('aria-modal')).toBe('true');
-    });
-
-    it('has aria-labelledby referencing title', async () => {
-      container.innerHTML = createAlertDialogHTML({ title: 'Delete Item' });
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const dialog = container.querySelector('dialog');
-      const titleId = dialog?.getAttribute('aria-labelledby');
-
-      expect(titleId).toBeTruthy();
-      expect(document.getElementById(titleId!)?.textContent).toBe('Delete Item');
-    });
-
-    it('has aria-describedby referencing message (required)', async () => {
-      container.innerHTML = createAlertDialogHTML({ message: 'This cannot be undone.' });
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const dialog = container.querySelector('dialog');
-      const messageId = dialog?.getAttribute('aria-describedby');
-
-      expect(messageId).toBeTruthy();
-      expect(document.getElementById(messageId!)?.textContent).toBe('This cannot be undone.');
-    });
-  });
-
-  describe('Escape Key Behavior', () => {
-    it('prevents close on Escape by default', async () => {
-      container.innerHTML = createAlertDialogHTML({ allowEscapeClose: false });
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const dialog = container.querySelector('dialog');
-      const event = new KeyboardEvent('keydown', {
-        key: 'Escape',
-        bubbles: true,
-        cancelable: true,
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
       });
-
-      dialog?.dispatchEvent(event);
-
-      expect(event.defaultPrevented).toBe(true);
+      expect(doc.querySelector('dialog')?.getAttribute('role')).toBe('alertdialog');
     });
 
-    it('allows close on Escape when allowEscapeClose=true', async () => {
-      container.innerHTML = createAlertDialogHTML({ allowEscapeClose: true });
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const element = container.querySelector('apg-alert-dialog') as HTMLElement;
-      const dialog = container.querySelector('dialog');
-      const cancelHandler = vi.fn();
-
-      element.addEventListener('cancel', cancelHandler);
-
-      const event = new KeyboardEvent('keydown', {
-        key: 'Escape',
-        bubbles: true,
-        cancelable: true,
+    it('has aria-labelledby referencing the title', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
       });
-      dialog?.dispatchEvent(event);
+      const titleId = doc.querySelector('dialog')?.getAttribute('aria-labelledby') ?? '';
+      expect(doc.getElementById(titleId)?.textContent?.trim()).toBe('Delete item?');
+    });
 
-      expect(event.defaultPrevented).toBe(false);
-      expect(cancelHandler).toHaveBeenCalledTimes(1);
+    it('has aria-describedby referencing the message (required)', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      const messageId = doc.querySelector('dialog')?.getAttribute('aria-describedby') ?? '';
+      expect(doc.getElementById(messageId)?.textContent?.trim()).toBe('This cannot be undone.');
+    });
+
+    it('generates unique title ids for each instance', async () => {
+      const first = await renderAlertDialog({
+        title: 'First',
+        message: 'First message',
+        triggerText: 'Open first',
+      });
+      const second = await renderAlertDialog({
+        title: 'Second',
+        message: 'Second message',
+        triggerText: 'Open second',
+      });
+      expect(first.querySelector('dialog')?.getAttribute('aria-labelledby')).not.toBe(
+        second.querySelector('dialog')?.getAttribute('aria-labelledby')
+      );
     });
   });
 
-  describe('Button Actions', () => {
-    it('dispatches cancel event on cancel button click', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const element = container.querySelector('apg-alert-dialog') as HTMLElement;
-      const cancelButton = container.querySelector('[data-cancel]') as HTMLButtonElement;
-      const cancelHandler = vi.fn();
-
-      element.addEventListener('cancel', cancelHandler);
-      cancelButton.click();
-
-      expect(cancelHandler).toHaveBeenCalledTimes(1);
+  // 🔴 High Priority: Escape Key Configuration
+  describe('Escape Key Configuration', () => {
+    it('sets data-allow-escape-close="false" by default', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(doc.querySelector('apg-alert-dialog')?.getAttribute('data-allow-escape-close')).toBe(
+        'false'
+      );
     });
 
-    it('dispatches confirm event on confirm button click', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const element = container.querySelector('apg-alert-dialog') as HTMLElement;
-      const confirmButton = container.querySelector('[data-confirm]') as HTMLButtonElement;
-      const confirmHandler = vi.fn();
-
-      element.addEventListener('confirm', confirmHandler);
-      confirmButton.click();
-
-      expect(confirmHandler).toHaveBeenCalledTimes(1);
+    it('sets data-allow-escape-close="true" when allowEscapeClose is true', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Notice',
+        message: 'Maintenance on Sunday.',
+        triggerText: 'Show Notice',
+        allowEscapeClose: true,
+      });
+      expect(doc.querySelector('apg-alert-dialog')?.getAttribute('data-allow-escape-close')).toBe(
+        'true'
+      );
     });
   });
 
-  describe('Button Labels', () => {
-    it('displays custom button labels', async () => {
-      container.innerHTML = createAlertDialogHTML({
+  // 🔴 High Priority: Action Buttons
+  describe('Action Buttons', () => {
+    it('renders Cancel and OK buttons by default', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(doc.querySelector('.apg-alert-dialog-cancel')?.textContent?.trim()).toBe('Cancel');
+      expect(doc.querySelector('.apg-alert-dialog-confirm')?.textContent?.trim()).toBe('OK');
+    });
+
+    it('renders custom button labels', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
         confirmLabel: 'Delete',
         cancelLabel: 'Keep',
       });
-      await new Promise((r) => requestAnimationFrame(r));
+      expect(doc.querySelector('.apg-alert-dialog-cancel')?.textContent?.trim()).toBe('Keep');
+      expect(doc.querySelector('.apg-alert-dialog-confirm')?.textContent?.trim()).toBe('Delete');
+    });
 
-      const cancelButton = container.querySelector('[data-cancel]');
-      const confirmButton = container.querySelector('[data-confirm]');
+    it('renders Cancel before Confirm in the dialog', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+        confirmLabel: 'Delete',
+        cancelLabel: 'Cancel',
+      });
+      const labels = Array.from(doc.querySelectorAll('dialog button')).map((button) =>
+        button.textContent?.trim()
+      );
+      expect(labels).toEqual(['Cancel', 'Delete']);
+    });
 
-      expect(cancelButton?.textContent).toBe('Keep');
-      expect(confirmButton?.textContent).toBe('Delete');
+    it('renders action buttons with type="button"', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(doc.querySelector('.apg-alert-dialog-cancel')?.getAttribute('type')).toBe('button');
+      expect(doc.querySelector('.apg-alert-dialog-confirm')?.getAttribute('type')).toBe('button');
+    });
+
+    it('applies the danger class to the confirm button when confirmVariant is "danger"', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+        confirmVariant: 'danger',
+      });
+      expect(
+        doc
+          .querySelector('.apg-alert-dialog-confirm')
+          ?.classList.contains('apg-alert-dialog-confirm--danger')
+      ).toBe(true);
+    });
+
+    it('does not apply the danger class to the confirm button by default', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(
+        doc
+          .querySelector('.apg-alert-dialog-confirm')
+          ?.classList.contains('apg-alert-dialog-confirm--danger')
+      ).toBe(false);
     });
   });
 
+  // 🔴 High Priority: Alert Dialog Specific
   describe('Alert Dialog Specific', () => {
     it('does NOT have a close button (×)', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      // Alert dialog should not have the typical close button
-      const closeButton = container.querySelector(
-        '[aria-label*="close" i], [aria-label*="Close" i]'
-      );
-      expect(closeButton).toBeNull();
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(doc.querySelector('dialog [aria-label*="close" i]')).toBeNull();
     });
 
-    it('has only Cancel and Confirm buttons', async () => {
-      container.innerHTML = createAlertDialogHTML();
-      await new Promise((r) => requestAnimationFrame(r));
+    it('has only the Cancel and Confirm buttons inside the dialog', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+      });
+      expect(doc.querySelectorAll('dialog button')).toHaveLength(2);
+    });
+  });
 
-      const buttons = container.querySelectorAll('button');
-      expect(buttons.length).toBe(2);
+  // 🟢 Low Priority: HTML Attribute Inheritance
+  describe('HTML Attributes', () => {
+    it('applies triggerClass to the trigger button', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+        triggerClass: 'custom-trigger',
+      });
+      expect(
+        doc.querySelector('.apg-alert-dialog-trigger')?.classList.contains('custom-trigger')
+      ).toBe(true);
+    });
+
+    it('applies a custom class to the dialog', async () => {
+      const doc = await renderAlertDialog({
+        title: 'Delete item?',
+        message: 'This cannot be undone.',
+        triggerText: 'Delete',
+        class: 'custom-dialog',
+      });
+      expect(doc.querySelector('dialog')?.classList.contains('custom-dialog')).toBe(true);
+      expect(doc.querySelector('dialog')?.classList.contains('apg-alert-dialog')).toBe(true);
     });
   });
 });

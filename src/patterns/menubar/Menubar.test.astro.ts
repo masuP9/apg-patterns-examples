@@ -1,412 +1,304 @@
 /**
- * Menubar Web Component Tests
+ * Menubar Astro Component Tests using Container API
  *
- * Note: These are limited unit tests for the Web Component class.
- * Full keyboard navigation and focus management tests require E2E testing
- * with Playwright due to jsdom limitations with focus events.
+ * These tests verify the initial server-rendered HTML of Menubar.astro.
+ * Web Component behavior (opening/closing menus, keyboard navigation,
+ * pointer interaction, checkbox/radio state changes and type-ahead) is
+ * covered by E2E tests in e2e/menubar.spec.ts.
+ *
+ * @see https://docs.astro.build/en/reference/container-reference/
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { JSDOM } from 'jsdom';
+import Menubar from './Menubar.astro';
+// tsc cannot read types exported from .astro frontmatter; the React type has the same shape
+import type { MenubarItem } from './Menubar';
 
-describe('Menubar (Web Component)', () => {
-  let container: HTMLElement;
+// Shared menubar definition used as render input (not as an expectation source)
+const items: MenubarItem[] = [
+  {
+    id: 'file',
+    label: 'File',
+    items: [
+      { type: 'item', id: 'new', label: 'New' },
+      { type: 'item', id: 'open', label: 'Open' },
+      { type: 'separator', id: 'sep1' },
+      { type: 'item', id: 'save', label: 'Save', disabled: true },
+    ],
+  },
+  {
+    id: 'view',
+    label: 'View',
+    items: [
+      { type: 'checkbox', id: 'toolbar', label: 'Show Toolbar', checked: true },
+      { type: 'checkbox', id: 'statusbar', label: 'Show Status Bar', checked: false },
+      {
+        type: 'radiogroup',
+        id: 'theme',
+        name: 'theme',
+        label: 'Theme',
+        items: [
+          { type: 'radio', id: 'light', label: 'Light', checked: true },
+          { type: 'radio', id: 'dark', label: 'Dark', checked: false },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'edit',
+    label: 'Edit',
+    items: [
+      {
+        type: 'submenu',
+        id: 'find',
+        label: 'Find',
+        items: [
+          { type: 'item', id: 'find-next', label: 'Find Next' },
+          { type: 'item', id: 'replace', label: 'Replace' },
+        ],
+      },
+    ],
+  },
+];
 
-  // Simplified mock for testing basic structure
-  // Full behavior tests are in E2E tests
-  class TestApgMenubar extends HTMLElement {
-    private menubar: HTMLUListElement | null = null;
-    private openMenuIndex: number = -1;
+describe('Menubar (Astro Container API)', () => {
+  let container: AstroContainer;
 
-    connectedCallback() {
-      requestAnimationFrame(() => this.initialize());
-    }
-
-    private initialize() {
-      this.menubar = this.querySelector('[role="menubar"]');
-      if (!this.menubar) return;
-
-      this.menubar.addEventListener('click', this.handleClick);
-      this.menubar.addEventListener('keydown', this.handleKeyDown);
-    }
-
-    disconnectedCallback() {
-      this.menubar?.removeEventListener('click', this.handleClick);
-      this.menubar?.removeEventListener('keydown', this.handleKeyDown);
-    }
-
-    private getMenubarItems(): HTMLElement[] {
-      if (!this.menubar) return [];
-      return Array.from(
-        this.menubar.querySelectorAll<HTMLElement>(':scope > li > [role="menuitem"]')
-      );
-    }
-
-    private handleClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const menuitem = target.closest('[role="menuitem"]');
-      if (!menuitem) return;
-
-      const menubarItems = this.getMenubarItems();
-      const index = menubarItems.indexOf(menuitem as HTMLElement);
-
-      if (index >= 0) {
-        this.toggleMenu(index);
-      }
-    };
-
-    private handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement;
-      const menuitem = target.closest('[role="menuitem"]');
-      if (!menuitem) return;
-
-      const menubarItems = this.getMenubarItems();
-      const index = menubarItems.indexOf(menuitem as HTMLElement);
-
-      if (index < 0) return;
-
-      switch (event.key) {
-        case 'ArrowRight': {
-          event.preventDefault();
-          const nextIndex = (index + 1) % menubarItems.length;
-          menubarItems[nextIndex]?.focus();
-          break;
-        }
-        case 'ArrowLeft': {
-          event.preventDefault();
-          const prevIndex = index === 0 ? menubarItems.length - 1 : index - 1;
-          menubarItems[prevIndex]?.focus();
-          break;
-        }
-        case 'ArrowDown':
-        case 'Enter':
-        case ' ': {
-          event.preventDefault();
-          this.openMenu(index);
-          break;
-        }
-      }
-    };
-
-    private toggleMenu(index: number) {
-      if (this.openMenuIndex === index) {
-        this.closeMenu();
-      } else {
-        this.openMenu(index);
-      }
-    }
-
-    private openMenu(index: number) {
-      const menubarItems = this.getMenubarItems();
-      const item = menubarItems[index];
-      if (!item) return;
-
-      // Close previous menu
-      if (this.openMenuIndex >= 0) {
-        const prevItem = menubarItems[this.openMenuIndex];
-        prevItem?.setAttribute('aria-expanded', 'false');
-        const prevMenu = prevItem?.parentElement?.querySelector('[role="menu"]');
-        prevMenu?.setAttribute('hidden', '');
-      }
-
-      // Open new menu
-      item.setAttribute('aria-expanded', 'true');
-      const menu = item.parentElement?.querySelector('[role="menu"]');
-      menu?.removeAttribute('hidden');
-      this.openMenuIndex = index;
-
-      // Focus first menu item
-      const firstItem = menu?.querySelector('[role="menuitem"]') as HTMLElement;
-      firstItem?.focus();
-    }
-
-    private closeMenu() {
-      if (this.openMenuIndex >= 0) {
-        const menubarItems = this.getMenubarItems();
-        const item = menubarItems[this.openMenuIndex];
-        item?.setAttribute('aria-expanded', 'false');
-        const menu = item?.parentElement?.querySelector('[role="menu"]');
-        menu?.setAttribute('hidden', '');
-        this.openMenuIndex = -1;
-      }
-    }
-  }
-
-  function createMenubarHTML() {
-    return `
-      <apg-menubar>
-        <ul role="menubar" aria-label="Application">
-          <li role="none">
-            <span
-              id="file-menu-trigger"
-              role="menuitem"
-              tabindex="0"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              File
-            </span>
-            <ul role="menu" aria-labelledby="file-menu-trigger" hidden>
-              <li role="none">
-                <span role="menuitem" tabindex="-1" data-item-id="new">New</span>
-              </li>
-              <li role="none">
-                <span role="menuitem" tabindex="-1" data-item-id="open">Open</span>
-              </li>
-              <li role="none">
-                <span role="menuitem" tabindex="-1" data-item-id="save">Save</span>
-              </li>
-            </ul>
-          </li>
-          <li role="none">
-            <span
-              id="edit-menu-trigger"
-              role="menuitem"
-              tabindex="-1"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              Edit
-            </span>
-            <ul role="menu" aria-labelledby="edit-menu-trigger" hidden>
-              <li role="none">
-                <span role="menuitem" tabindex="-1" data-item-id="cut">Cut</span>
-              </li>
-              <li role="none">
-                <span role="menuitem" tabindex="-1" data-item-id="copy">Copy</span>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </apg-menubar>
-    `;
-  }
-
-  beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
-    if (!customElements.get('apg-menubar')) {
-      customElements.define('apg-menubar', TestApgMenubar);
-    }
+  beforeEach(async () => {
+    container = await AstroContainer.create();
   });
 
-  afterEach(() => {
-    container.remove();
-    vi.restoreAllMocks();
-  });
+  async function renderMenubar(props: Record<string, unknown> = {}): Promise<Document> {
+    const html = await container.renderToString(Menubar, {
+      props: { items, 'aria-label': 'Application', ...props },
+    });
+    return new JSDOM(html).window.document;
+  }
 
-  describe('Initial Rendering', () => {
-    it('renders with role="menubar" on container', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
+  function getMenubarItem(doc: Document, label: string): Element | undefined {
+    return Array.from(doc.querySelectorAll('[role="menubar"] > li > [role="menuitem"]')).find(
+      (el) => el.textContent?.trim() === label
+    );
+  }
 
-      const menubar = container.querySelector('[role="menubar"]');
-      expect(menubar).toBeTruthy();
+  function getMenuOf(doc: Document, label: string): Element | null {
+    const trigger = getMenubarItem(doc, label);
+    return doc.querySelector(`[role="menu"][aria-labelledby="${trigger?.id}"]`);
+  }
+
+  // 🔴 High Priority: HTML Structure
+  describe('HTML Structure', () => {
+    it('renders apg-menubar custom element wrapper', async () => {
+      const doc = await renderMenubar();
+      expect(doc.querySelector('apg-menubar')).not.toBeNull();
     });
 
-    it('renders with aria-label on menubar', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
+    it('renders a ul with role="menubar"', async () => {
+      const doc = await renderMenubar();
+      expect(doc.querySelector('ul[role="menubar"]')).not.toBeNull();
+    });
 
-      const menubar = container.querySelector('[role="menubar"]');
-      expect(menubar?.getAttribute('aria-label')).toBe('Application');
+    it('renders one menubar item per top-level entry', async () => {
+      const doc = await renderMenubar();
+      const labels = Array.from(
+        doc.querySelectorAll('[role="menubar"] > li > [role="menuitem"]')
+      ).map((el) => el.textContent?.trim());
+      expect(labels).toEqual(['File', 'View', 'Edit']);
     });
 
     it('has role="none" on all li elements', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const listItems = container.querySelectorAll('li');
-      listItems.forEach((li) => {
-        expect(li.getAttribute('role')).toBe('none');
-      });
+      const doc = await renderMenubar();
+      const roles = Array.from(doc.querySelectorAll('li')).map((li) => li.getAttribute('role'));
+      expect(roles.length).toBeGreaterThan(0);
+      expect(roles.every((role) => role === 'none')).toBe(true);
     });
 
-    it('has aria-haspopup="menu" on menubar items (not "true")', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const menubar = container.querySelector('[role="menubar"]');
-      const items = menubar?.querySelectorAll(':scope > li > [role="menuitem"]');
-
-      items?.forEach((item) => {
-        expect(item.getAttribute('aria-haspopup')).toBe('menu');
-      });
-    });
-
-    it('has aria-expanded="false" on menubar items', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const menubar = container.querySelector('[role="menubar"]');
-      const items = menubar?.querySelectorAll(':scope > li > [role="menuitem"]');
-
-      items?.forEach((item) => {
-        expect(item.getAttribute('aria-expanded')).toBe('false');
-      });
-    });
-
-    it('has hidden dropdown menus', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const menus = container.querySelectorAll('[role="menu"]');
-      menus.forEach((menu) => {
-        expect(menu.hasAttribute('hidden')).toBe(true);
-      });
-    });
-
-    it('first menubar item has tabindex="0"', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const menubar = container.querySelector('[role="menubar"]');
-      const items = menubar?.querySelectorAll(':scope > li > [role="menuitem"]');
-
-      expect(items?.[0].getAttribute('tabindex')).toBe('0');
-    });
-
-    it('other menubar items have tabindex="-1"', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const menubar = container.querySelector('[role="menubar"]');
-      const items = menubar?.querySelectorAll(':scope > li > [role="menuitem"]');
-
-      expect(items?.[1].getAttribute('tabindex')).toBe('-1');
-    });
-
-    it('dropdown menu has aria-labelledby referencing parent menuitem', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileMenu = container.querySelector('[aria-labelledby="file-menu-trigger"]');
-      expect(fileMenu).toBeTruthy();
-      expect(fileMenu?.getAttribute('role')).toBe('menu');
+    it('hides the decorative chevron icons from assistive technology', async () => {
+      const doc = await renderMenubar();
+      const svgs = Array.from(doc.querySelectorAll('svg'));
+      expect(svgs.length).toBeGreaterThan(0);
+      expect(svgs.every((svg) => svg.getAttribute('aria-hidden') === 'true')).toBe(true);
     });
   });
 
-  describe('Menu Open/Close', () => {
-    it('opens menu on menubar item click', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-      fileItem.click();
-
-      expect(fileItem.getAttribute('aria-expanded')).toBe('true');
-      const menu = container.querySelector('[aria-labelledby="file-menu-trigger"]');
-      expect(menu?.hasAttribute('hidden')).toBe(false);
+  // 🔴 High Priority: Accessible Name
+  describe('Accessible Name', () => {
+    it('has aria-label on the menubar when provided', async () => {
+      const doc = await renderMenubar({ 'aria-label': 'Application' });
+      expect(doc.querySelector('[role="menubar"]')?.getAttribute('aria-label')).toBe('Application');
     });
 
-    it('closes menu on second click (toggle)', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-      fileItem.click(); // Open
-      fileItem.click(); // Close
-
-      expect(fileItem.getAttribute('aria-expanded')).toBe('false');
-      const menu = container.querySelector('[aria-labelledby="file-menu-trigger"]');
-      expect(menu?.hasAttribute('hidden')).toBe(true);
-    });
-
-    it('closes previous menu when opening another', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-      const editItem = container.querySelector('#edit-menu-trigger') as HTMLElement;
-
-      fileItem.click();
-      expect(fileItem.getAttribute('aria-expanded')).toBe('true');
-
-      editItem.click();
-      expect(fileItem.getAttribute('aria-expanded')).toBe('false');
-      expect(editItem.getAttribute('aria-expanded')).toBe('true');
+    it('has aria-labelledby on the menubar when provided', async () => {
+      const doc = await renderMenubar({ 'aria-label': undefined, 'aria-labelledby': 'app-title' });
+      expect(doc.querySelector('[role="menubar"]')?.getAttribute('aria-labelledby')).toBe(
+        'app-title'
+      );
     });
   });
 
-  describe('Keyboard Navigation', () => {
-    it('ArrowRight moves to next menubar item', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-      const editItem = container.querySelector('#edit-menu-trigger') as HTMLElement;
-
-      fileItem.focus();
-      fileItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
-
-      // Check that edit item would receive focus (jsdom limitation)
-      // In real browser, editItem.focus() is called
-      expect(editItem).toBeTruthy();
+  // 🔴 High Priority: Menubar Items
+  describe('Menubar Items', () => {
+    it('has aria-haspopup="menu" (not "true") on menubar items', async () => {
+      const doc = await renderMenubar();
+      expect(getMenubarItem(doc, 'File')?.getAttribute('aria-haspopup')).toBe('menu');
     });
 
-    it('ArrowDown opens submenu', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-
-      fileItem.focus();
-      fileItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
-
-      expect(fileItem.getAttribute('aria-expanded')).toBe('true');
+    it('has aria-expanded="false" on menubar items initially', async () => {
+      const doc = await renderMenubar();
+      expect(getMenubarItem(doc, 'File')?.getAttribute('aria-expanded')).toBe('false');
+      expect(getMenubarItem(doc, 'View')?.getAttribute('aria-expanded')).toBe('false');
+      expect(getMenubarItem(doc, 'Edit')?.getAttribute('aria-expanded')).toBe('false');
     });
 
-    it('Enter opens submenu', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-
-      fileItem.focus();
-      fileItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-
-      expect(fileItem.getAttribute('aria-expanded')).toBe('true');
-    });
-
-    it('Space opens submenu', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-
-      fileItem.focus();
-      fileItem.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
-
-      expect(fileItem.getAttribute('aria-expanded')).toBe('true');
+    it('gives each menubar item a unique id per component instance', async () => {
+      const first = await renderMenubar();
+      const second = await renderMenubar();
+      expect(getMenubarItem(first, 'File')?.id).not.toBe(getMenubarItem(second, 'File')?.id);
     });
   });
 
-  describe('Menu Items', () => {
-    it('dropdown menu contains menuitem elements', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
-
-      const fileItem = container.querySelector('#file-menu-trigger') as HTMLElement;
-      fileItem.click();
-
-      const menu = container.querySelector('[aria-labelledby="file-menu-trigger"]');
-      const items = menu?.querySelectorAll('[role="menuitem"]');
-
-      expect(items?.length).toBe(3);
-      expect(items?.[0].textContent?.trim()).toBe('New');
-      expect(items?.[1].textContent?.trim()).toBe('Open');
-      expect(items?.[2].textContent?.trim()).toBe('Save');
+  // 🔴 High Priority: Focus Management (roving tabindex)
+  describe('Focus Management', () => {
+    it('has tabindex="0" on the first menubar item', async () => {
+      const doc = await renderMenubar();
+      expect(getMenubarItem(doc, 'File')?.getAttribute('tabindex')).toBe('0');
     });
 
-    it('menu items have tabindex="-1" when menu opens', async () => {
-      container.innerHTML = createMenubarHTML();
-      await new Promise((r) => requestAnimationFrame(r));
+    it('has tabindex="-1" on the other menubar items', async () => {
+      const doc = await renderMenubar();
+      expect(getMenubarItem(doc, 'View')?.getAttribute('tabindex')).toBe('-1');
+      expect(getMenubarItem(doc, 'Edit')?.getAttribute('tabindex')).toBe('-1');
+    });
 
-      const menu = container.querySelector('[aria-labelledby="file-menu-trigger"]');
-      const items = menu?.querySelectorAll('[role="menuitem"]');
+    it('has tabindex="-1" on all items inside menus', async () => {
+      const doc = await renderMenubar();
+      const tabindexes = Array.from(
+        doc.querySelectorAll(
+          '[role="menu"] [role="menuitem"], [role="menu"] [role="menuitemcheckbox"], [role="menu"] [role="menuitemradio"]'
+        )
+      ).map((el) => el.getAttribute('tabindex'));
+      expect(tabindexes.length).toBe(10);
+      expect(tabindexes.every((tabindex) => tabindex === '-1')).toBe(true);
+    });
+  });
 
-      items?.forEach((item) => {
-        expect(item.getAttribute('tabindex')).toBe('-1');
-      });
+  // 🔴 High Priority: Menus
+  describe('Menus', () => {
+    it('renders a role="menu" labelled by its menubar item', async () => {
+      const doc = await renderMenubar();
+      const menu = getMenuOf(doc, 'File');
+      const labelId = menu?.getAttribute('aria-labelledby') ?? '';
+      expect(doc.getElementById(labelId)?.textContent?.trim()).toBe('File');
+    });
+
+    it('has aria-hidden="true" on menus initially', async () => {
+      const doc = await renderMenubar();
+      expect(getMenuOf(doc, 'File')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('renders the menu items in order', async () => {
+      const doc = await renderMenubar();
+      const labels = Array.from(
+        getMenuOf(doc, 'File')?.querySelectorAll('[role="menuitem"]') ?? []
+      ).map((el) => el.textContent?.trim());
+      expect(labels).toEqual(['New', 'Open', 'Save']);
+    });
+
+    it('renders a separator as hr with role="separator"', async () => {
+      const doc = await renderMenubar();
+      const separator = getMenuOf(doc, 'File')?.querySelector('[role="separator"]');
+      expect(separator?.tagName).toBe('HR');
+    });
+
+    it('has aria-disabled="true" on disabled items', async () => {
+      const doc = await renderMenubar();
+      const save = Array.from(doc.querySelectorAll('[role="menuitem"]')).find(
+        (el) => el.textContent?.trim() === 'Save'
+      );
+      expect(save?.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('does not have aria-disabled on enabled items', async () => {
+      const doc = await renderMenubar();
+      const newItem = Array.from(doc.querySelectorAll('[role="menuitem"]')).find(
+        (el) => el.textContent?.trim() === 'New'
+      );
+      expect(newItem?.hasAttribute('aria-disabled')).toBe(false);
+    });
+  });
+
+  // 🟡 Medium Priority: Checkbox and Radio Items
+  describe('Checkbox and Radio Items', () => {
+    it('renders checkbox items with role="menuitemcheckbox"', async () => {
+      const doc = await renderMenubar();
+      const labels = Array.from(doc.querySelectorAll('[role="menuitemcheckbox"]')).map((el) =>
+        el.textContent?.trim()
+      );
+      expect(labels).toEqual(['Show Toolbar', 'Show Status Bar']);
+    });
+
+    it('has aria-checked="true" on a checked checkbox item', async () => {
+      const doc = await renderMenubar();
+      const toolbar = doc.querySelector('[role="menuitemcheckbox"][data-item-id="toolbar"]');
+      expect(toolbar?.getAttribute('aria-checked')).toBe('true');
+    });
+
+    it('has aria-checked="false" on an unchecked checkbox item', async () => {
+      const doc = await renderMenubar();
+      const statusbar = doc.querySelector('[role="menuitemcheckbox"][data-item-id="statusbar"]');
+      expect(statusbar?.getAttribute('aria-checked')).toBe('false');
+    });
+
+    it('wraps radio items in role="group" with aria-label', async () => {
+      const doc = await renderMenubar();
+      const group = doc.querySelector('[role="group"]');
+      expect(group?.getAttribute('aria-label')).toBe('Theme');
+      expect(group?.querySelectorAll('[role="menuitemradio"]').length).toBe(2);
+    });
+
+    it('has aria-checked reflecting the checked radio item', async () => {
+      const doc = await renderMenubar();
+      const light = doc.querySelector('[role="menuitemradio"][data-item-id="light"]');
+      const dark = doc.querySelector('[role="menuitemradio"][data-item-id="dark"]');
+      expect(light?.getAttribute('aria-checked')).toBe('true');
+      expect(dark?.getAttribute('aria-checked')).toBe('false');
+    });
+  });
+
+  // 🟡 Medium Priority: Submenus
+  describe('Submenus', () => {
+    it('has aria-haspopup="menu" and aria-expanded="false" on a submenu trigger', async () => {
+      const doc = await renderMenubar();
+      const trigger = doc.querySelector('[role="menuitem"][data-item-id="find"]');
+      expect(trigger?.getAttribute('aria-haspopup')).toBe('menu');
+      expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('renders a submenu labelled by its trigger with aria-hidden="true"', async () => {
+      const doc = await renderMenubar();
+      const trigger = doc.querySelector('[role="menuitem"][data-item-id="find"]');
+      const submenu = doc.querySelector(`[role="menu"][aria-labelledby="${trigger?.id}"]`);
+      expect(submenu?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('renders the submenu items in order', async () => {
+      const doc = await renderMenubar();
+      const trigger = doc.querySelector('[role="menuitem"][data-item-id="find"]');
+      const submenu = doc.querySelector(`[role="menu"][aria-labelledby="${trigger?.id}"]`);
+      const labels = Array.from(submenu?.querySelectorAll('[role="menuitem"]') ?? []).map((el) =>
+        el.textContent?.trim()
+      );
+      expect(labels).toEqual(['Find Next', 'Replace']);
+    });
+  });
+
+  // 🟢 Low Priority: HTML Attribute Inheritance
+  describe('HTML Attributes', () => {
+    it('applies a custom class to the nav container', async () => {
+      const doc = await renderMenubar({ class: 'custom-class' });
+      const nav = doc.querySelector('nav.apg-menubar');
+      expect(nav?.classList.contains('custom-class')).toBe(true);
     });
   });
 });

@@ -7,6 +7,12 @@
  */
 import '@/styles/global.css';
 import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.vue';
+import MenuButton from '@patterns/menu-button/MenuButton.vue';
+
+const allDisabledItems = [
+  { id: 'undo', label: 'Undo', disabled: true },
+  { id: 'redo', label: 'Redo', disabled: true },
+];
 ---
 
 <!doctype html>
@@ -27,6 +33,14 @@ import MenuButtonDemo from '@patterns/menu-button/MenuButtonDemo.vue';
       <section>
         <h2 class="mb-4 text-lg font-semibold">Menu Button with Disabled Items</h2>
         <MenuButtonDemo client:only="vue" variant="disabled-items" />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Menu Button with All Items Disabled</h2>
+        <MenuButton client:only="vue" items={allDisabledItems} label="Tools" />
+      </section>
+      <section>
+        <h2 class="mb-4 text-lg font-semibold">Menu Button with No Items</h2>
+        <MenuButton client:only="vue" items={[]} label="Bookmarks" />
       </section>
     </div>
   </body>

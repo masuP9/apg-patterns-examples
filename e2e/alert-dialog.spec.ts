@@ -15,11 +15,18 @@ import { test, expect } from '@playwright/test';
 
 const frameworks = ['react', 'vue', 'svelte', 'astro'] as const;
 
+// Wait for hydration to complete: Astro removes the `ssr` attribute from
+// each <astro-island> once its component has hydrated.
+const waitForHydration = async (page: import('@playwright/test').Page) => {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0);
+};
+
 for (const framework of frameworks) {
   test.describe(`Alert Dialog (${framework})`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`patterns/alert-dialog/${framework}/demo/`);
-      await page.waitForLoadState('networkidle');
+      await page.getByRole('button', { name: 'Delete Item' }).waitFor();
+      await waitForHydration(page);
     });
 
     // Helper to open alert dialog
@@ -95,6 +102,17 @@ for (const framework of frameworks) {
 
         // Should still be visible
         await expect(alertDialog).toBeVisible();
+      });
+
+      test('Escape closes dialog when allowEscapeClose is enabled', async ({ page }) => {
+        // "Show Notice" is the demo instance with allowEscapeClose enabled
+        await page.getByRole('button', { name: 'Show Notice' }).click();
+        const alertDialog = page.getByRole('alertdialog');
+        await expect(alertDialog).toBeVisible();
+
+        await page.keyboard.press('Escape');
+
+        await expect(alertDialog).toHaveCount(0);
       });
 
       test('Tab moves focus between buttons', async ({ page }) => {
@@ -216,25 +234,16 @@ for (const framework of frameworks) {
       test('returns focus to trigger on close via Escape (when allowEscapeClose=true)', async ({
         page,
       }) => {
-        // Note: Default AlertDialog disables Escape close.
-        // This test verifies focus restoration IF Escape close is enabled.
-        const trigger = page.getByRole('button', { name: /open alert|delete|confirm/i }).first();
+        // "Show Notice" is the demo instance with allowEscapeClose enabled
+        const trigger = page.getByRole('button', { name: 'Show Notice' });
         await trigger.click();
-        await page.waitForSelector('[role="alertdialog"]');
-
         const alertDialog = page.getByRole('alertdialog');
+        await expect(alertDialog).toBeVisible();
 
-        // Press Escape
         await page.keyboard.press('Escape');
 
-        // Check if dialog closed (depends on allowEscapeClose prop)
-        const dialogCount = await alertDialog.count();
-
-        if (dialogCount === 0) {
-          // Dialog closed - verify focus restoration
-          await expect(trigger).toBeFocused();
-        }
-        // If dialog didn't close, that's expected behavior (allowEscapeClose=false)
+        await expect(alertDialog).toHaveCount(0);
+        await expect(trigger).toBeFocused();
       });
 
       test('traps focus within dialog', async ({ page }) => {
@@ -305,3 +314,64 @@ for (const framework of frameworks) {
     });
   });
 }
+
+// ============================================
+// Astro-specific: cancel / confirm CustomEvents
+// ============================================
+
+test.describe('Alert Dialog (astro) - cancel and confirm events', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('patterns/alert-dialog/astro/demo/');
+    await page.getByRole('button', { name: 'Delete Item' }).waitFor();
+    await page.evaluate(() => {
+      const events: string[] = [];
+      (window as unknown as { __alertDialogEvents: string[] }).__alertDialogEvents = events;
+      document.addEventListener('cancel', () => events.push('cancel'));
+      document.addEventListener('confirm', () => events.push('confirm'));
+    });
+  });
+
+  test('dispatches cancel on Cancel button click', async ({ page }) => {
+    await page.getByRole('button', { name: 'Delete Item' }).click();
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Cancel' }).click();
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __alertDialogEvents: string[] }).__alertDialogEvents
+    );
+    expect(events).toEqual(['cancel']);
+  });
+
+  test('dispatches confirm on Confirm button click', async ({ page }) => {
+    await page.getByRole('button', { name: 'Delete Item' }).click();
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Delete' }).click();
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __alertDialogEvents: string[] }).__alertDialogEvents
+    );
+    expect(events).toEqual(['confirm']);
+  });
+
+  test('dispatches cancel on Escape when allowEscapeClose is enabled', async ({ page }) => {
+    await page.getByRole('button', { name: 'Show Notice' }).click();
+    await expect(page.getByRole('alertdialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('alertdialog')).toHaveCount(0);
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __alertDialogEvents: string[] }).__alertDialogEvents
+    );
+    expect(events).toEqual(['cancel']);
+  });
+
+  test('does not dispatch cancel on Escape by default', async ({ page }) => {
+    await page.getByRole('button', { name: 'Delete Item' }).click();
+    await expect(page.getByRole('alertdialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('alertdialog')).toBeVisible();
+
+    const events = await page.evaluate(
+      () => (window as unknown as { __alertDialogEvents: string[] }).__alertDialogEvents
+    );
+    expect(events).toEqual([]);
+  });
+});
